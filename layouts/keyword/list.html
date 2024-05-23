@@ -3,17 +3,17 @@
     <aside class="tags-list">
         <h2>Tags</h2>
         <ul>
-            {{ range $index, $tag := .Site.Taxonomies.tags }}
-            <li><a href="#{{ $tag.Name | urlize }}">{{ $tag.Name }} ({{ len $tag.Pages }})</a></li>
+            {{ range $index, $taxonomy := .Site.Taxonomies.tags }}
+            <li><a href="#{{ $taxonomy.Term | urlize }}">{{ $taxonomy.Term }} ({{ len $taxonomy.Pages }})</a></li>
             {{ end }}
         </ul>
     </aside>
     <div class="articles-list">
         <h2>Articles</h2>
-        {{ range $index, $tag := .Site.Taxonomies.tags }}
-            <section id="{{ $tag.Name | urlize }}">
-                <h3>{{ $tag.Name }}</h3>
-                {{ range $tag.Pages }}
+        {{ range $index, $taxonomy := .Site.Taxonomies.tags }}
+            <section id="{{ $taxonomy.Term | urlize }}">
+                <h3>{{ $taxonomy.Term }}</h3>
+                {{ range $taxonomy.Pages }}
                     <article id="{{ .Title | urlize }}">
                         <h4>{{ .Title }}</h4>
                         <div>{{ .Content }}</div>
