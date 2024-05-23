@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: main  # ブランチ名を指定
+  branch: main  # 使用しているブランチ名を指定
 
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
