@@ -1,0 +1,6 @@
+/* main.css */
+@import url('common/common.css');
+@import url('pages/about.css');
+@import url('pages/works.css');
+@import url('pages/diary.css');
+@import url('pages/keyword.css');
