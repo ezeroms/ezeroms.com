@@ -20,17 +20,22 @@
                 {{ end }}
             {{ end }}
             {{ range $months }}
-                <li><a href="#{{ . }}">{{ . }}</a></li>
+                <li><a href="/diary/{{ . }}">{{ . }}</a></li>
             {{ end }}
         </ul>
     </aside>
-    <div class="article-content">
-        <h2>{{ .Title }}</h2>
-        <div class="content">
-            {{ .Content }}
-        </div>
+    <div class="articles-list">
+        <h2>Articles for {{ .Title }}</h2>
+        {{ range (where .Site.RegularPages "Section" "diary") }}
+            {{ if eq (.Date.Format "2006-01") .Title }}
+                <article id="{{ .Title | urlize }}" class="article">
+                    <a href="{{ .Permalink }}" class="article-link">
+                        <div class="article-content">
+                            {{ .Content }}
+                        </div>
+                    </a>
+                </article>
+            {{ end }}
+        {{ end }}
     </div>
 </div>
-</body>
-</html>
-{{ end }}

@@ -1,2 +1,69 @@
-/* diary.css */
-/* Diaryページ固有のスタイルをここに追加 */
+/* CSS for Diary Page */
+.diary-page {
+    display: flex;
+    flex-direction: row;
+}
+
+.month-list {
+    width: 200px;
+    margin-right: 20px;
+}
+
+.month-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.month-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.month-list ul li {
+    margin-bottom: 5px;
+}
+
+.month-list ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.month-list ul li a:hover {
+    text-decoration: underline;
+}
+
+.articles-list, .article-content {
+    flex: 1;
+}
+
+.articles-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.articles-list h3 {
+    font-size: 1.3em;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.article {
+    margin-bottom: 20px;
+}
+
+.article-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-content {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.article-content:hover {
+    background-color: #f0f0f0;
+}

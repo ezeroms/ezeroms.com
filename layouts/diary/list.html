@@ -1,20 +1,48 @@
 {{ define "main" }}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/css/pages/diary.css">
+</head>
+<body>
 <div class="diary-page">
-    <!-- 月ごとのメニューを追加 -->
-    <nav class="diary-menu">
-        {{ partial "partials/diary_menu.html" . }}
-    </nav>
-
+    <aside class="month-list">
+        <h2>Months</h2>
+        <ul>
+            {{ $months := slice }}
+            {{ range (where .Pages "Section" "diary") }}
+                {{ $month := .Date.Format "2006-01" }}
+                {{ if not (in $months $month) }}
+                    {{ $months = $months | append $month }}
+                {{ end }}
+            {{ end }}
+            {{ range $months }}
+                <li><a href="#{{ . }}">{{ . }}</a></li>
+            {{ end }}
+        </ul>
+    </aside>
     <div class="articles-list">
-        <h2>All Diary Entries</h2>
-        {{ range .Pages }}
-            <article class="diary-entry">
-                <h3>{{ .Title }}</h3>
-                <div class="diary-content">
-                    {{ .Content }}
-                </div>
-            </article>
+        <h2>All Diary Articles</h2>
+        {{ $pages := .Pages }}
+        {{ range $months }}
+            <h3 id="{{ . }}">{{ . }}</h3>
+            {{ $month := . }}
+            {{ range (where $pages "Section" "diary") }}
+                {{ if eq $month (.Date.Format "2006-01") }}
+                    <article id="{{ .Title | urlize }}" class="article">
+                        <a href="{{ .Permalink }}" class="article-link">
+                            <div class="article-title">{{ .Title }}</div>
+                            <div class="article-date">{{ .Date.Format "2006-01-02" }}</div>
+                        </a>
+                    </article>
+                {{ end }}
+            {{ end }}
         {{ end }}
     </div>
 </div>
+</body>
+</html>
 {{ end }}

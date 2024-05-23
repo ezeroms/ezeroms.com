@@ -4,6 +4,7 @@ title = "ezeroms.com"
 
 [taxonomies]
   tag = "tags"
+  month = "months"
 
 [params]
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
