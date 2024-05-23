@@ -1,6 +1,9 @@
-baseURL = "https://ezeroms.com/"
+baseURL = "https://ezeroms.netlify.app/"
 languageCode = "ja"
 title = "ezeroms.com"
+
+[taxonomies]
+  tag = "tags"
 
 [params]
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
