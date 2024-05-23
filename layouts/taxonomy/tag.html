@@ -9,15 +9,15 @@
         </ul>
     </aside>
     <div class="articles-list">
-        <h2>All Articles</h2>
-        {{ $allPages := (where .Site.RegularPages "Section" "keyword") }}
-        {{ $allPages = shuffle $allPages }}
-        {{ range $index, $page := $allPages }}
-            <article id="{{ $page.Title | urlize }}" class="article">
-                <div class="article-content" onclick="copyLink('{{ $page.Permalink }}')">
-                    {{ $page.Content }}
-                </div>
-            </article>
+        <h2>Articles tagged with "{{ .Title }}"</h2>
+        {{ range .Pages }}
+            {{ if eq .Section "keyword" }}
+                <article id="{{ .Title | urlize }}" class="article">
+                    <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
+                        {{ .Content }}
+                    </div>
+                </article>
+            {{ end }}
         {{ end }}
     </div>
 </div>

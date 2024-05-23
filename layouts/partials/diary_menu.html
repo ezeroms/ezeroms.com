@@ -1,0 +1,13 @@
+{{ define "main" }}
+<ul>
+    {{ $diaryPages := where .Site.RegularPages "Section" "diary" }}
+    {{ $lastDate := "" }}
+    {{ range $diaryPages.ByDate.Reverse }}
+        {{ $date := .Date.Format "2006/01" }}
+        {{ if ne $date $lastDate }}
+            <li><a href="{{ printf "/diary/%s/" $date }}">{{ $date }}</a></li>
+            {{ $lastDate = $date }}  <!-- ここを修正 -->
+        {{ end }}
+    {{ end }}
+</ul>
+{{ end }}

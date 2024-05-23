@@ -3,24 +3,52 @@
     <aside class="tags-list">
         <h2>Tags</h2>
         <ul>
-            {{ range .Site.Taxonomies.tags }}
-            <li><a href="#{{ .Page.Title | urlize }}">{{ .Page.Title }} ({{ len .Pages }})</a></li>
+            {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+            <li><a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}">{{ $name }} ({{ len $taxonomy }})</a></li>
             {{ end }}
         </ul>
     </aside>
-    <div class="articles-list">
-        <h2>Articles</h2>
-        {{ range .Site.Taxonomies.tags }}
-            <section id="{{ .Page.Title | urlize }}">
-                <h3>{{ .Page.Title }}</h3>
-                {{ range .Pages }}
-                    <article id="{{ .Title | urlize }}">
-                        <h4>{{ .Title }}</h4>
-                        <div>{{ .Content }}</div>
-                    </article>
-                {{ end }}
-            </section>
+    <div class="articles-list" id="articles-list">
+        <h2>All Articles</h2>
+        {{ range (where .Site.RegularPages "Section" "keyword") }}
+            <article class="article">
+                <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
+                    {{ .Content }}
+                </div>
+            </article>
         {{ end }}
     </div>
 </div>
+
+<script>
+function copyLink(link) {
+    navigator.clipboard.writeText(link).then(() => {
+        alert('Link copied to clipboard: ' + link);
+    });
+}
+
+// Shuffle articles on page load
+document.addEventListener("DOMContentLoaded", function() {
+    var articles = document.querySelectorAll('.article');
+    var articlesArray = Array.prototype.slice.call(articles);
+    shuffleArray(articlesArray);
+
+    var articlesList = document.getElementById('articles-list');
+    articlesList.innerHTML = '';
+
+    articlesArray.forEach(function(article) {
+        articlesList.appendChild(article);
+    });
+});
+
+// Shuffle array function
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+</script>
 {{ end }}

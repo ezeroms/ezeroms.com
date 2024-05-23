@@ -1,0 +1,20 @@
+{{ define "main" }}
+<div class="diary-page">
+    <!-- 月ごとのメニューを追加 -->
+    <nav class="diary-menu">
+        {{ partial "partials/diary_menu.html" . }}
+    </nav>
+
+    <div class="articles-list">
+        <h2>All Diary Entries</h2>
+        {{ range .Pages }}
+            <article class="diary-entry">
+                <h3>{{ .Title }}</h3>
+                <div class="diary-content">
+                    {{ .Content }}
+                </div>
+            </article>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
