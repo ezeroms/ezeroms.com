@@ -1,0 +1,6 @@
+baseURL = "https://ezeroms.com/"
+languageCode = "ja"
+title = "ezeroms.com"
+
+[params]
+  description = "これは私のブログです。ここで考えたことや仕事をシェアします。"

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="{{ "css/styles.css" | relURL }}">
+</head>
+<body>
+    <header>
+        <h1>{{ .Site.Title }}</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ "/" | relLangURL }}">Home</a></li>
+                <li><a href="{{ "/about" | relLangURL }}">About</a></li>
+                <li><a href="{{ "/works" | relLangURL }}">Works</a></li>
+                <li><a href="{{ "/diary" | relLangURL }}">Diary</a></li>
+                <li><a href="{{ "/keyword" | relLangURL }}">Keyword</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {{ block "main" . }}{{ end }}
+    </main>
+    <footer>
+        <p>&copy; {{ now.Year }} {{ .Site.Title }}</p>
+    </footer>
+</body>
+</html>
