@@ -4,24 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Title }}ddd</title>
+    <title>{{ .Title }}</title>
     <link rel="stylesheet" href="/css/pages/keyword.css">
 </head>
 <body>
 <div class="keyword-page">
     {{ partial "keyword_menu.html" . }}
     <div class="articles-list">
-        <h2>Articles for {{ .Title }}</h2>
+        <div class="articles-heading">
+            <p>Ideas for thinking about</p>
+            <h2>{{ .Title }}</h2>
+        </div>
         {{ $wordParam := .Title }}
         {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
         {{ if gt (len $articles) 0 }}
             {{ range $articles }}
                 <article id="{{ .Title | urlize }}" class="article">
-                    <a href="{{ .Permalink }}" class="article-link">
-                        <div class="article-title">{{ .Title }}</div>
-                        <div class="article-date">{{ .Date.Format "2006-01-02" }}</div>
-                        <div class="article-content">{{ .Content }}</div>
-                    </a>
+                    <div class="article-content">{{ .Content }}</div>
                 </article>
             {{ end }}
         {{ else }}
@@ -29,9 +28,7 @@
         {{ end }}
     </div>
 </div>
-<div class="debug-info">
-    <p>keyword/list.html</p>
-</div>
+<p class="debug-info">keyword/list.html</p>
 </body>
 </html>
 {{ end }}

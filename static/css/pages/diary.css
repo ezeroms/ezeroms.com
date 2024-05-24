@@ -38,8 +38,8 @@
 }
 
 .articles-list h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+    font-size: 20px;
+    margin: 0 0 24px;
 }
 
 .articles-list h3 {
@@ -68,4 +68,31 @@
 .article-content:hover {
     border: 1px solid #6E6D79;
     transition-duration: 0.4s;
+}
+
+.articles-heading {
+    background-color: #F8F7F4;
+    padding: 24px 24px;
+    margin: 0 0 24px 0;
+    max-width: 880px;
+    width: calc(100% - 88px);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: start;
+}
+
+.articles-heading h2 {
+    margin: 0;
+    color: #050317;
+}
+
+.articles-heading p {
+    font-size: 14px;
+    margin: 0 0 8px 0;
+    font-family: "Helvetica Neue";
+    font-style: italic;
+    color: #050317;
+    opacity: 0.7;
 }
