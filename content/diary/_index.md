@@ -1,6 +1,4 @@
 ---
 title: "Diary"
-date: 2024-01-01
+description: "This is the diary section"
 ---
-
-これは日記のセクションです。ここには月ごとに分類された日記の記事が表示されます。

@@ -1,13 +1,15 @@
-{{ define "main" }}
-<ul>
-    {{ $diaryPages := where .Site.RegularPages "Section" "diary" }}
-    {{ $lastDate := "" }}
-    {{ range $diaryPages.ByDate.Reverse }}
-        {{ $date := .Date.Format "2006/01" }}
-        {{ if ne $date $lastDate }}
-            <li><a href="{{ printf "/diary/%s/" $date }}">{{ $date }}</a></li>
-            {{ $lastDate = $date }}  <!-- ここを修正 -->
+<aside class="month-list">
+    <h2>Months</h2>
+    <ul>
+        {{ $months := slice }}
+        {{ range (where .Site.RegularPages "Section" "diary") }}
+            {{ $month := .Date.Format "2006-01" }}
+            {{ if not (in $months $month) }}
+                {{ $months = $months | append $month }}
+            {{ end }}
         {{ end }}
-    {{ end }}
-</ul>
-{{ end }}
+        {{ range $months }}
+            <li><a href="{{ printf "/diary/month/%s" . }}">{{ . }}</a></li>
+        {{ end }}
+    </ul>
+</aside>

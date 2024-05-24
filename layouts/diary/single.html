@@ -9,21 +9,7 @@
 </head>
 <body>
 <div class="diary-page">
-    <aside class="month-list">
-        <h2>Months</h2>
-        <ul>
-            {{ $months := slice }}
-            {{ range (where .Site.RegularPages "Section" "diary") }}
-                {{ $month := .Date.Format "2006-01" }}
-                {{ if not (in $months $month) }}
-                    {{ $months = $months | append $month }}
-                {{ end }}
-            {{ end }}
-            {{ range $months }}
-                <li><a href="#{{ . }}">{{ . }}</a></li>
-            {{ end }}
-        </ul>
-    </aside>
+    {{ partial "diary_menu.html" . }}
     <div class="article-content">
         <h2>{{ .Title }}</h2>
         <div class="content">
