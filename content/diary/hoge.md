@@ -1,5 +1,5 @@
 ---
 title: hoge
-months: ["2024-05"]
+month: ["2024-05"]
 ---
 h﻿ogegegegeg

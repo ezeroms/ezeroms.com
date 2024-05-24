@@ -10,4 +10,4 @@ title = "ezeroms.com"
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
 
 [permalinks]
-  diary = "/diary/:title/"
+  diary = "/diary/:year/:month/:slug/"
