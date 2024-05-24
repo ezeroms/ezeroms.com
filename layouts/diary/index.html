@@ -1,0 +1,50 @@
+{{ define "main" }}
+<div class="keyword-page">
+    {{ partial "keyword_menu.html" . }}
+    <div class="articles-list" id="articles-list">
+        <h2>All Articles layout/keyword/list.html</h2>
+        {{ range (where .Site.RegularPages "Section" "keyword") }}
+            <article class="article">
+                <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
+                    {{ .Content }}
+                </div>
+            </article>
+        {{ end }}
+    </div>
+    <div class="debug-info">
+        <p>diary/index.html</p>
+    </div>
+</div>
+
+<script>
+function copyLink(link) {
+    navigator.clipboard.writeText(link).then(() => {
+        alert('Link copied to clipboard: ' + link);
+    });
+}
+
+// Shuffle articles on page load
+document.addEventListener("DOMContentLoaded", function() {
+    var articles = document.querySelectorAll('.article');
+    var articlesArray = Array.prototype.slice.call(articles);
+    shuffleArray(articlesArray);
+
+    var articlesList = document.getElementById('articles-list');
+    articlesList.innerHTML = '';
+
+    articlesArray.forEach(function(article) {
+        articlesList.appendChild(article);
+    });
+});
+
+// Shuffle array function
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+</script>
+{{ end }}

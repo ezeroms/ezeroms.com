@@ -1,7 +1,4 @@
 ---
-title: "Keyword"
-description: "キーワードに関する記事の一覧"
-date: 2024-05-23
+title: "Keywords"
+layout: "index"
 ---
-
-このページでは、キーワードに関するすべての記事を表示します。

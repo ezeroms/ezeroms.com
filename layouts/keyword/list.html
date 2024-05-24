@@ -2,7 +2,7 @@
 <div class="keyword-page">
     {{ partial "keyword_menu.html" . }}
     <div class="articles-list" id="articles-list">
-        <h2>All Articles</h2>
+        <h2>All Articles layout/keyword/list.html</h2>
         {{ range (where .Site.RegularPages "Section" "keyword") }}
             <article class="article">
                 <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
@@ -10,6 +10,9 @@
                 </div>
             </article>
         {{ end }}
+    </div>
+    <div class="debug-info">
+        <p>keyword/list.html</p>
     </div>
 </div>
 

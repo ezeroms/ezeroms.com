@@ -1,7 +1,27 @@
 {{ define "main" }}
-<section>
-    <h2>Welcome to {{ .Site.Title }}</h2>
-    <p>{{ .Site.Params.description }}</p>
-    <img src="/images/welcome.jpg" alt="Welcome Image">
-</section>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <main>
+        <h1>{{ .Title }}</h1>
+        <ul>
+            {{ range .Pages }}
+                <li>
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                </li>
+            {{ end }}
+        </ul>
+    </main>
+    <footer>
+        layouts/index.html
+        <p>&copy; {{ now.Year }} {{ .Site.Title }}</p>
+    </footer>
+</body>
+</html>
 {{ end }}

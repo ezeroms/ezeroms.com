@@ -1,7 +1,7 @@
 ---
-title: "Project 1"
-date: 2024-05-23T12:00:00Z
-draft: false
+title: works-1
+date: 2024-03-23T00:00:00+09:00
+categories: ["works"]
 ---
 
 ## Project 1

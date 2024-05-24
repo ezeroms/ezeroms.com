@@ -3,13 +3,13 @@
     <ul>
         {{ $months := slice }}
         {{ range (where .Site.RegularPages "Section" "diary") }}
-            {{ $month := .Date.Format "2006-01" }}
+            {{ $month := index .Params.months 0 }}
             {{ if not (in $months $month) }}
                 {{ $months = $months | append $month }}
             {{ end }}
         {{ end }}
         {{ range $months }}
-            <li><a href="{{ printf "/diary/month/%s" . }}">{{ . }}</a></li>
+            <li><a href="{{ printf "/diary/month/%s" (replace . "/" "/") }}">{{ . }}</a></li>
         {{ end }}
     </ul>
 </aside>

@@ -1,13 +1,13 @@
 baseURL = "https://ezeroms.netlify.app/"
 languageCode = "ja"
 title = "ezeroms.com"
+enableDebug = true
 
 [taxonomies]
+  category = "categories"
+  keyword = "keywords"
+  diary = "diaries"
   tag = "tags"
-  month = "months"
 
 [params]
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
-
-[permalinks]
-  diary = "/diary/:year/:month/:slug/"

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Diary on ezeroms.com</title>
+    <link>http://localhost:1313/categories/diary/</link>
+    <description>Recent content in Diary on ezeroms.com</description>
+    <generator>Hugo</generator>
+    <language>ja</language>
+    <lastBuildDate>Wed, 01 May 2024 00:00:00 +0900</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/diary/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Post 1</title>
+      <link>http://localhost:1313/diary/2024-05-01/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/diary/2024-05-01/</guid>
+      <description>これは2024年5月の記事です。</description>
+    </item>
+    <item>
+      <title>Post 2</title>
+      <link>http://localhost:1313/diary/2024-04-01/</link>
+      <pubDate>Mon, 01 Apr 2024 00:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/diary/2024-04-01/</guid>
+      <description>これは2024年4月の記事です。</description>
+    </item>
+    <item>
+      <title>Post 3</title>
+      <link>http://localhost:1313/diary/2024-03-01/</link>
+      <pubDate>Fri, 01 Mar 2024 00:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/diary/2024-03-01/</guid>
+      <description>これは2024年4月の記事です。</description>
+    </item>
+  </channel>
+</rss>
