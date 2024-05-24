@@ -6,8 +6,10 @@ enableDebug = true
 [taxonomies]
   category = "categories"
   keyword = "keywords"
-  diary = "diaries"
-  tag = "tags"
+  diary = "diaries"  # 正しいか再確認
 
 [params]
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
+
+[permalinks]
+  diary = "/diary/:title/"

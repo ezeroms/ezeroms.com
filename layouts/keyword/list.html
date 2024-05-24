@@ -1,50 +1,37 @@
 {{ define "main" }}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/css/pages/keyword.css">
+</head>
+<body>
 <div class="keyword-page">
     {{ partial "keyword_menu.html" . }}
-    <div class="articles-list" id="articles-list">
-        <h2>All Articles layout/keyword/list.html</h2>
-        {{ range (where .Site.RegularPages "Section" "keyword") }}
-            <article class="article">
-                <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
-                    {{ .Content }}
-                </div>
-            </article>
+    <div class="articles-list">
+        <h2>Articles for {{ .Title }}</h2>
+        {{ $wordParam := .Title }}
+        {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
+        {{ if gt (len $articles) 0 }}
+            {{ range $articles }}
+                <article id="{{ .Title | urlize }}" class="article">
+                    <a href="{{ .Permalink }}" class="article-link">
+                        <div class="article-title">{{ .Title }}</div>
+                        <div class="article-date">{{ .Date.Format "2006-01-02" }}</div>
+                        <div class="article-content">{{ .Content }}</div>
+                    </a>
+                </article>
+            {{ end }}
+        {{ else }}
+            <p>No articles found for {{ $wordParam }}.</p>
         {{ end }}
     </div>
-    <div class="debug-info">
-        <p>keyword/list.html</p>
-    </div>
 </div>
-
-<script>
-function copyLink(link) {
-    navigator.clipboard.writeText(link).then(() => {
-        alert('Link copied to clipboard: ' + link);
-    });
-}
-
-// Shuffle articles on page load
-document.addEventListener("DOMContentLoaded", function() {
-    var articles = document.querySelectorAll('.article');
-    var articlesArray = Array.prototype.slice.call(articles);
-    shuffleArray(articlesArray);
-
-    var articlesList = document.getElementById('articles-list');
-    articlesList.innerHTML = '';
-
-    articlesArray.forEach(function(article) {
-        articlesList.appendChild(article);
-    });
-});
-
-// Shuffle array function
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-</script>
+<div class="debug-info">
+    <p>keyword/list.html</p>
+</div>
+</body>
+</html>
 {{ end }}

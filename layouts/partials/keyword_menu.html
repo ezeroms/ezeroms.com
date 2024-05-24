@@ -1,8 +1,7 @@
 <aside class="tags-list">
-    <h2>Tags</h2>
     <ul>
-        {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
-        <li><a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}">{{ $name }}</a></li>
+        {{ range $name, $taxonomy := .Site.Taxonomies.keywords }}
+        <li><a href="{{ "/keywords/" | relLangURL }}{{ $name | urlize }}">{{ $name }}</a></li>
         {{ end }}
     </ul>
 </aside>

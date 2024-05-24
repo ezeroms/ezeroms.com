@@ -1,15 +1,17 @@
 <aside class="month-list">
-    <h2>Months</h2>
     <ul>
         {{ $months := slice }}
         {{ range (where .Site.RegularPages "Section" "diary") }}
-            {{ $month := index .Params.months 0 }}
+            {{ $month := index .Params.diaries 0 }}
             {{ if not (in $months $month) }}
                 {{ $months = $months | append $month }}
             {{ end }}
         {{ end }}
-        {{ range $months }}
-            <li><a href="{{ printf "/diary/month/%s" (replace . "/" "/") }}">{{ . }}</a></li>
+        {{ $sortedMonths := sort $months }}
+        {{ $total := len $sortedMonths }}
+        {{ range $index := (seq 0 (sub $total 1)) }}
+            {{ $i := sub (sub $total 1) $index }}
+            <li><a href="{{ printf "/diaries/%s" (urlize (index $sortedMonths $i)) }}">{{ index $sortedMonths $i }}</a></li>
         {{ end }}
     </ul>
 </aside>

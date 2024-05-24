@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 01 Mar 2024 00:00:00 +0900</lastBuildDate>
     <atom:link href="http://localhost:1313/diaries/2024-03/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Post 3</title>
-      <link>http://localhost:1313/diary/2024-03-01/</link>
+      <title>diary 3</title>
+      <link>http://localhost:1313/diary/diary-3/</link>
       <pubDate>Fri, 01 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/diary/2024-03-01/</guid>
+      <guid>http://localhost:1313/diary/diary-3/</guid>
       <description>これは2024年4月の記事です。</description>
     </item>
   </channel>

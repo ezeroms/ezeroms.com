@@ -1,9 +1,9 @@
 {{ define "main" }}
-<div class="keyword-page">
-    {{ partial "keyword_menu.html" . }}
+<div class="diary-page">
+    {{ partial "diary_menu.html" . }}
     <div class="articles-list" id="articles-list">
-        <h2>All Articles layout/keyword/list.html</h2>
-        {{ range (where .Site.RegularPages "Section" "keyword") }}
+        <h2>All Articles layout/diary/index.html</h2>
+        {{ range (where .Site.RegularPages "Section" "diary") }}
             <article class="article">
                 <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
                     {{ .Content }}

@@ -11,16 +11,21 @@
 <div class="diary-page">
     {{ partial "diary_menu.html" . }}
     <div class="articles-list">
-        <h2>最新の記事</h2>
-        {{ $latest := first 1 (sort (where .Site.RegularPages "Section" "diary") "Date" "desc") }}
-        {{ range $latest }}
-            <article id="{{ .Title | urlize }}" class="article">
-                <a href="{{ .Permalink }}" class="article-link">
-                    <div class="article-title">{{ .Title }}</div>
-                    <div class="article-date">{{ .Date.Format "2006-01-02" }}</div>
-                    <div class="article-content">{{ .Summary }}</div>
-                </a>
-            </article>
+        <h2>Articles for {{ .Title }}</h2>
+        {{ $monthParam := .Title }}
+        {{ $articles := where .Site.RegularPages "Params.diaries" "intersect" (slice $monthParam) }}
+        {{ if gt (len $articles) 0 }}
+            {{ range $articles }}
+                <article id="{{ .Title | urlize }}" class="article">
+                    <a href="{{ .Permalink }}" class="article-link">
+                        <div class="article-title">{{ .Title }}</div>
+                        <div class="article-date">{{ .Date.Format "2006-01-02" }}</div>
+                        <div class="article-content">{{ .Content }}</div>
+                    </a>
+                </article>
+            {{ end }}
+        {{ else }}
+            <p>No articles found for {{ $monthParam }}.</p>
         {{ end }}
     </div>
 </div>
