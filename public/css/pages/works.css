@@ -1,2 +1,51 @@
 /* works.css */
-/* Worksページ固有のスタイルをここに追加 */
+
+.works-page {
+    padding: 20px;
+}
+
+.works-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.work-item {
+    width: calc(33.333% - 10px);
+}
+
+.work-item img {
+    width: 100%;
+    height: auto;
+}
+
+.work-detail-page {
+    padding: 20px;
+}
+
+.work-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.work-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.works-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.works-footer a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.debug-info {
+    display: none;
+}

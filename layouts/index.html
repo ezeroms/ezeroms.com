@@ -8,20 +8,40 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <main>
-        <h1>{{ .Title }}</h1>
-        <ul>
-            {{ range .Pages }}
-                <li>
-                    <a href="{{ .Permalink }}">{{ .Title }}</a>
-                </li>
+    <main class="main-top">
+        <a href="{{ "/" | relLangURL }}">
+            <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo">
+        </a>
+        <h2 class="top-message">One thing I can tell you is you got to be free!</h2>
+
+        <div class="random-image">
+            {{ $images := readDir "static/images/top" }}
+            {{ $imageNames := slice }}
+            {{ range $images }}
+                {{ $imageNames = $imageNames | append (dict "Name" .Name) }}
             {{ end }}
-        </ul>
+            <div id="image-container" data-images='{{ $imageNames | jsonify }}'></div>
+            <img id="randomImage" src="" alt="Random Image" class="top-photo">
+        </div>
+        <!-- layouts/index.html -->
     </main>
-    <footer>
-        layouts/index.html
-        <p>&copy; {{ now.Year }} {{ .Site.Title }}</p>
-    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var imageContainer = document.getElementById("image-container");
+            var imagesData = imageContainer.getAttribute("data-images");
+            try {
+                var images = JSON.parse(imagesData);
+                if (images.length > 0) {
+                    var randomIndex = Math.floor(Math.random() * images.length);
+                    var randomImage = images[randomIndex].Name;
+                    var timestamp = new Date().getTime(); // キャッシュバスティングのためにタイムスタンプを追加
+                    document.getElementById("randomImage").src = "/images/top/" + randomImage + "?v=" + timestamp;
+                }
+            } catch (e) {
+                console.error("Error parsing images data:", e);
+            }
+        });
+    </script>
 </body>
 </html>
 {{ end }}

@@ -1,9 +1,28 @@
 {{ define "main" }}
-<article>
-    <h1>{{ .Title }}</h1>
-    <div>{{ .Content }}</div>
-    <div class="debug-info">
-        <p>works/index.html</p>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Works</title>
+    <link rel="stylesheet" href="/css/pages/works.css">
+</head>
+<body>
+<div class="works-page">
+    <h1>Works</h1>
+    <div class="works-gallery">
+        {{ range .Pages }}
+            <div class="work-item">
+                <a href="{{ .Permalink }}">
+                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                </a>
+            </div>
+        {{ end }}
     </div>
-</article>
+</div>
+<div class="debug-info">
+    <p>works/index.html</p>
+</div>
+</body>
+</html>
 {{ end }}

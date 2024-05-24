@@ -1,0 +1,26 @@
+{{ define "main" }}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="/css/pages/works.css">
+</head>
+<body>
+<div class="work-detail-page">
+    <h1>{{ .Title }}</h1>
+    <div class="work-content">
+        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+        <div class="work-description">
+            {{ .Content }}
+        </div>
+    </div>
+    {{ partial "works_footer.html" . }}
+</div>
+<div class="debug-info">
+    <p>works/single.html</p>
+</div>
+</body>
+</html>
+{{ end }}

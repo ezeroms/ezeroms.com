@@ -59,11 +59,13 @@
 
 .article-content {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    border: 1px solid #E7E7E9;
+    border-radius: 24px;
+    background-color: #fff;
+    transition-duration: 0.4s;
 }
 
 .article-content:hover {
-    background-color: #f0f0f0;
+    border: 1px solid #6E6D79;
+    transition-duration: 0.4s;
 }

@@ -11,17 +11,9 @@
             </article>
         {{ end }}
     </div>
-    <div class="debug-info">
-        <p>keyword/index.html</p>
-    </div>
 </div>
 
 <script>
-function copyLink(link) {
-    navigator.clipboard.writeText(link).then(() => {
-        alert('Link copied to clipboard: ' + link);
-    });
-}
 
 // Shuffle articles on page load
 document.addEventListener("DOMContentLoaded", function() {

@@ -7,19 +7,20 @@
 </head>
 <body>
     <header>
-        <h1>{{ .Site.Title }}</h1>
         <nav>
             <ul>
-                <li><a href="{{ "/" | relLangURL }}">Home</a></li>
-                <li><a href="{{ "/about" | relLangURL }}">About</a></li>
-                <li><a href="{{ "/works" | relLangURL }}">Works</a></li>
-                <li><a href="{{ "/diary" | relLangURL }}">Diary</a></li>
-                <li><a href="{{ "/keyword" | relLangURL }}">Keyword</a></li>
+                <li><a href="{{ "/about" | relLangURL }}" class="header__nav">About</a></li>
+                <li><a href="{{ "/works" | relLangURL }}" class="header__nav">Works</a></li>
+                <li><a href="{{ "/diary" | relLangURL }}" class="header__nav">Diary</a></li>
             </ul>
         </nav>
+        {{ if ne .RelPermalink "/" }}
+        <a href="{{ "/" | relLangURL }}" class="header__logo-link">
+            <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="header__logo">
+        </a>
+        {{ end }}
+        <a href="{{ "/keyword" | relLangURL }}" class="header__button">Let's think together</a>
     </header>
-    <main>
-        {{ block "main" . }}{{ end }}
-    </main>
+    {{ block "main" . }}{{ end }}
 </body>
 </html>

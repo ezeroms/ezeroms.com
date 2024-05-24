@@ -22,5 +22,12 @@
       <guid>http://localhost:1313/works/project2/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
+    <item>
+      <title>works-3</title>
+      <link>http://localhost:1313/works/project3/</link>
+      <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/works/project3/</guid>
+      <description>Project 1 Description of project 1.</description>
+    </item>
   </channel>
 </rss>

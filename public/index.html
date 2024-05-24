@@ -8,19 +8,17 @@
 </head>
 <body>
     <header>
-        <h1>ezeroms.com</h1>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/works">Works</a></li>
-                <li><a href="/diary">Diary</a></li>
-                <li><a href="/keyword">Keyword</a></li>
+                <li><a href="/about" class="header__nav">About</a></li>
+                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
-    </header>
-    <main>
         
+        <a href="/keyword" class="header__button">Let's think together</a>
+    </header>
+    
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -30,35 +28,64 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <main>
-        <h1>ezeroms.com</h1>
-        <ul>
+    <main class="main-top">
+        <a href="/">
+            <img src="/images/common/logo.svg" alt="ezeroms.com" class="top-logo">
+        </a>
+        <h2 class="top-message">One thing I can tell you is you got to be free!</h2>
+
+        <div class="random-image">
             
-                <li>
-                    <a href="http://localhost:1313/diary/">Diary</a>
-                </li>
             
-                <li>
-                    <a href="http://localhost:1313/keyword/">Keywords</a>
-                </li>
             
-                <li>
-                    <a href="http://localhost:1313/works/">Works</a>
-                </li>
+                
             
-                <li>
-                    <a href="http://localhost:1313/about/">About</a>
-                </li>
+                
             
-        </ul>
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+            <div id="image-container" data-images='[{&#34;Name&#34;:&#34;1.png&#34;},{&#34;Name&#34;:&#34;10.png&#34;},{&#34;Name&#34;:&#34;11.png&#34;},{&#34;Name&#34;:&#34;12.png&#34;},{&#34;Name&#34;:&#34;2.png&#34;},{&#34;Name&#34;:&#34;3.png&#34;},{&#34;Name&#34;:&#34;4.png&#34;},{&#34;Name&#34;:&#34;5.png&#34;},{&#34;Name&#34;:&#34;6.png&#34;},{&#34;Name&#34;:&#34;7.png&#34;},{&#34;Name&#34;:&#34;8.png&#34;},{&#34;Name&#34;:&#34;9.png&#34;}]'></div>
+            <img id="randomImage" src="" alt="Random Image" class="top-photo">
+        </div>
+        
     </main>
-    <footer>
-        layouts/index.html
-        <p>&copy; 2024 ezeroms.com</p>
-    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var imageContainer = document.getElementById("image-container");
+            var imagesData = imageContainer.getAttribute("data-images");
+            try {
+                var images = JSON.parse(imagesData);
+                if (images.length > 0) {
+                    var randomIndex = Math.floor(Math.random() * images.length);
+                    var randomImage = images[randomIndex].Name;
+                    var timestamp = new Date().getTime(); 
+                    document.getElementById("randomImage").src = "/images/top/" + randomImage + "?v=" + timestamp;
+                }
+            } catch (e) {
+                console.error("Error parsing images data:", e);
+            }
+        });
+    </script>
 </body>
 </html>
 
-    </main>
 </body>
 </html>
