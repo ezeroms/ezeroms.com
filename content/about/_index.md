@@ -3,6 +3,9 @@ title: "About"
 layout: "index"
 ---
 
-## About Me
-This is the about page where you can write about yourself.
-This is the about page where you can write about yourself.
+## イワモトユウ / ezeroms
+1989年生まれ、横須賀市出身。スマートフォンアプリやWebサービスのデザイン、開発を行っています。現在は、音楽SNS「Chooning」や、オンライン営業システム「bellFace」を作っています。
+
+😍 デザイン、インターネット、ポピュラー音楽、楽器の演奏、散歩、麻雀、野菜、花、果物
+
+🏠 横浜 / 佐渡島

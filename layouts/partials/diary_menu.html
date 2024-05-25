@@ -11,7 +11,8 @@
         {{ $total := len $sortedMonths }}
         {{ range $index := (seq 0 (sub $total 1)) }}
             {{ $i := sub (sub $total 1) $index }}
-            <li><a href="{{ printf "/diaries/%s" (urlize (index $sortedMonths $i)) }}">{{ index $sortedMonths $i }}</a></li>
+            {{ $monthFormatted := partial "convert_date.html" (index $sortedMonths $i) }}
+            <li><a href="{{ printf "/diaries/%s" (urlize (index $sortedMonths $i)) }}">{{ $monthFormatted }}</a></li>
         {{ end }}
     </ul>
 </aside>

@@ -1,7 +1,47 @@
 {{ define "main" }}
 <main class="content-area">
     <div class="content-area__main">
-        <div>{{ .Content }}</div>
+        <div class="about">
+            <div class="about__profile">
+                <img src="{{ "images/about/profile.png" | relURL }}" alt="Profile Picture">
+            </div>
+            <div class="about__content">
+                {{ .Content }}
+            </div>
+            <div class="about__awards">
+                <h2>Award</h2>
+                {{ range .Site.Data.awards.awards }}
+                    <p>{{ . }}</p>
+                {{ end }}
+            </div>
+            <div class="about__media-coverage">
+                <h2>Media Coverage</h2>
+                <div class="media-cards">
+                    {{ range .Site.Data.media_coverage.media }}
+                        <div class="media-card">
+                            <a href="{{ .url }}" target="_blank">
+                                <h3>{{ .title }}</h3>
+                                <p>{{ .description }}</p>
+                            </a>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="about__contact">
+                <h2>Contact</h2>
+                <div class="contact-icons">
+                    <a href="https://line.me"><img src="{{ "images/contact/line.png" | relURL }}" alt="LINE"></a>
+                    <a href="https://twitter.com"><img src="{{ "images/contact/twitter.png" | relURL }}" alt="X (Twitter)"></a>
+                    <a href="https://www.whatsapp.com"><img src="{{ "images/contact/whatsapp.png" | relURL }}" alt="WhatsApp"></a>
+                    <a href="https://www.threads.net"><img src="{{ "images/contact/threads.png" | relURL }}" alt="Threads"></a>
+                    <a href="https://www.facebook.com"><img src="{{ "images/contact/facebook.png" | relURL }}" alt="Facebook"></a>
+                    <a href="https://bsky.app"><img src="{{ "images/contact/bluesky.png" | relURL }}" alt="Bluesky"></a>
+                    <a href="https://www.bereal.com"><img src="{{ "images/contact/bereal.png" | relURL }}" alt="BeReal"></a>
+                    <a href="https://www.tiktok.com"><img src="{{ "images/contact/tiktok.png" | relURL }}" alt="TikTok"></a>
+                    <a href="https://www.instagram.com"><img src="{{ "images/contact/instagram.png" | relURL }}" alt="Instagram"></a>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 

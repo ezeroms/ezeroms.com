@@ -30,29 +30,80 @@
     <title>works-3</title>
     <link rel="stylesheet" href="/css/pages/works.css">
 </head>
+
 <body>
-<div class="work-detail-page">
-    <h1>works-3</h1>
-    <div class="work-content">
-        <img src="/images/works/sample-work.jpg" alt="works-3">
-        <div class="work-description">
-            <h2 id="project-1">Project 1</h2>
+
+
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="content-area">
+    <div class="content-area__main">
+        <div class="works-hero">
+            <img src="/images/works/2.png" alt="works-3" class="works-hero__image">
+        </div>
+        <div class="works-article">
+
+            <ul class="articles-list" id="articles-list">
+                <div class="article-heading">
+                    <div class="article-heading__text">
+                        <p>
+                            2024-03-23
+                        </p>
+                        <h2>works-3</h2>
+                    </div>
+    
+                    
+                    <button class="article-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
+                </div>
+                <article class="article no-hover-effect">
+                    <h2 id="project-1">Project 1</h2>
 <p>Description of project 1.</p>
 
-        </div>
-    </div>
-    <div class="works-footer">
+                </article>
+            </ul>
+
+            <div class="works-footer">
+    
+        <a href="http://localhost:1313/works/project1/">前へ</a>
     
     
-        <a href="http://localhost:1313/works/project2/">次へ</a>
+        <a href="http://localhost:1313/works/project11/">次へ</a>
     
     <a href="/works">一覧に戻る</a>
 </div>
 
-</div>
-<div class="debug-info">
-    <p>works/single.html</p>
-</div>
+
+        </div>
+
+
+    </div>    
+</main>
+
+
+<p class="debug-info">Template : /layouts/works/single.html</p>
+
 </body>
 </html>
 

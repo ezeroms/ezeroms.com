@@ -1,9 +1,10 @@
 ---
-title: works-1
+title: コピーライター・奥祐一朗 ポートフォリオサイト
 date: 2024-03-23T00:00:00+09:00
 categories: ["works"]
-image: "/images/works/sample-work.jpg"
+image: "/images/works/2.png"
 ---
 
-## Project 1
-Description of project 1.
+博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂
+
+奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉

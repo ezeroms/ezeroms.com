@@ -59,7 +59,9 @@
             {{ if gt (len $articles) 0 }}
                 {{ range $articles }}
                 <article id="{{ .Title | urlize }}" class="article no-hover-effect">
-                    <a href="{{ .Permalink }}" class="article-title">{{ .Title }}</a>
+                    <a href="{{ .Permalink }}" class="article-title">
+                        {{ .Date | dateFormat "2006-01-02" }}
+                    </a>
                     {{ .Content }}
                 </article>
                 {{ end }}

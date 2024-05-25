@@ -1,2 +1,43 @@
-/* about.css */
-/* Aboutページ固有のスタイルをここに追加 */
+.about {
+    width: 672px;
+    margin: 64px auto 0;
+    text-align: center;
+}
+
+.about__profile img {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.about__content {
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+.about__awards, .about__media-coverage, .about__contact {
+    margin-bottom: 40px;
+}
+
+.about__awards p, .about__media-coverage p {
+    text-align: center;
+}
+
+.media-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.media-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 300px;
+    text-align: left;
+}
+
+.contact-icons a img {
+    width: 40px;
+    margin: 10px;
+}

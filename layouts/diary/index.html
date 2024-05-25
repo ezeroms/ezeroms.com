@@ -6,7 +6,9 @@
         <ul class="articles-list" id="articles-list">
         {{ range (where .Site.RegularPages "Section" "diary") }}
             <article class="article no-hover-effect">
-                <a href="{{ .Permalink }}" class="article-title">{{ .Title }}</a>
+                <a href="{{ .Permalink }}" class="article-title">
+                    {{ .Date | dateFormat "2006-01-02" }}
+                </a>
                 {{ .Content }}
             </article>
         {{ end }}
