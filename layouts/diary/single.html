@@ -8,18 +8,54 @@
     <link rel="stylesheet" href="/css/pages/diary.css">
 </head>
 <body>
-<div class="diary-page">
+<!-- 通知 -->
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="content-area">
     {{ partial "diary_menu.html" . }}
-    <div class="article-content">
-        <h2>{{ .Title }}</h2>
-        <div class="content">
-            {{ .Content }}
-        </div>
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="article-heading">
+                <div class="article-heading__text">
+                    <p>YYYY-MM-DD</p>
+                    <h2>{{ .Title }}</h2>
+                </div>
+
+                <!-- ボタンここから -->
+                <button class="article-heading__button" onclick="copyToClipboard()">
+                    <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                <!-- ボタンここまで -->        
+            </div>
+            <article class="article no-hover-effect">
+                {{ .Content }}
+            </article>
+        </ul>
     </div>
-</div>
-<div class="debug-info">
-    <p>diary/single.html</p>
-</div>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/diary/single.html</p>
+
 </body>
 </html>
 {{ end }}

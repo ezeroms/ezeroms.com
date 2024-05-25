@@ -170,10 +170,10 @@
                     <h2>読書</h2>
                 </div>
 
+                
                 <button class="article-heading__button" onclick="copyToClipboard()">
                     <img src="/images/common/icon_link.svg" alt="Get article url">
                 </button>
-
                 <script>
                     function copyToClipboard() {
                         const url = window.location.href;
@@ -183,7 +183,6 @@
                             console.error('リンクの保存に失敗しました: ', err);
                         });
                     }
-                    
                     function showNotification() {
                         var notification = document.getElementById("notification");
                         notification.className = "notification show";
@@ -191,9 +190,10 @@
                             notification.className = notification.className.replace(" show", "");
                         }, 3000);
                     }
-                    </script>
-                    
+                </script>
+                        
             </div>
+
             
             
             

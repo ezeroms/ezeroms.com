@@ -1,13 +1,16 @@
 {{ define "main" }}
+
 <main class="content-area">
     {{ partial "diary_menu.html" . }}
-    <div class="content-area__main" id="articles-list">
-        <h2>All Articles layout/diary/index.html</h2>
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
         {{ range (where .Site.RegularPages "Section" "diary") }}
-            <article class="article">
+            <article class="article no-hover-effect">
+                <a href="{{ .Permalink }}" class="article-title">{{ .Title }}</a>
                 {{ .Content }}
             </article>
         {{ end }}
+        </ul>
     </div>
 </main>
 

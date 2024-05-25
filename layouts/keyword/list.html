@@ -24,10 +24,10 @@
                     <h2>{{ .Title }}</h2>
                 </div>
 
+                <!-- ボタンここから -->
                 <button class="article-heading__button" onclick="copyToClipboard()">
                     <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
                 </button>
-
                 <script>
                     function copyToClipboard() {
                         const url = window.location.href;
@@ -37,7 +37,6 @@
                             console.error('リンクの保存に失敗しました: ', err);
                         });
                     }
-                    
                     function showNotification() {
                         var notification = document.getElementById("notification");
                         notification.className = "notification show";
@@ -45,9 +44,10 @@
                             notification.className = notification.className.replace(" show", "");
                         }, 3000);
                     }
-                    </script>
-                    
+                </script>
+                <!-- ボタンここまで -->        
             </div>
+
             {{ $wordParam := .Title }}
             {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
             {{ if gt (len $articles) 0 }}

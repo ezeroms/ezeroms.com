@@ -8,30 +8,71 @@
     <link rel="stylesheet" href="/css/pages/diary.css">
 </head>
 <body>
-<div class="diary-page">
+
+<!-- 通知 -->
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="content-area">
     {{ partial "diary_menu.html" . }}
-    <div class="articles-list">
-        <h2>Articles for {{ .Title }}</h2>
-        {{ $monthParam := .Title }}
-        {{ $articles := where .Site.RegularPages "Params.diaries" "intersect" (slice $monthParam) }}
-        {{ if gt (len $articles) 0 }}
-            {{ range $articles }}
-                <article id="{{ .Title | urlize }}" class="article">
-                    <a href="{{ .Permalink }}" class="article-link">
-                        <div class="article-title">{{ .Title }}</div>
-                        <div class="article-date">{{ .Date.Format "2006-01-02" }}</div>
-                        <div class="article-content">{{ .Content }}</div>
-                    </a>
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="article-heading">
+                <div class="article-heading__text">
+                    <p>Reflections and moments from</p>
+                    {{ $path := .Permalink }}
+                    {{ $diariesDate := replaceRE `.*\/diaries\/([0-9]{4}-[0-9]{2})\/.*` "$1" $path }}
+                    {{ if eq $diariesDate $path }}
+                        {{ $diariesDate = "2024-04" }}
+                    {{ end }}
+                    <h2>{{ partial "convert_date.html" $diariesDate }} Diaries</h2>
+                </div>
+
+                <!-- ボタンここから -->
+                <button class="article-heading__button" onclick="copyToClipboard()">
+                    <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                <!-- ボタンここまで -->        
+            </div>
+
+            {{ $path := .Permalink }}
+            {{ $monthParam := replaceRE `^.*/diaries/([0-9]{4}-[0-9]{2})/.*$` "$1" $path | default "2024-04" }}
+            {{ $articles := where .Site.RegularPages "Params.diaries" "intersect" (slice $monthParam) }}
+            {{ if gt (len $articles) 0 }}
+                {{ range $articles }}
+                <article id="{{ .Title | urlize }}" class="article no-hover-effect">
+                    <a href="{{ .Permalink }}" class="article-title">{{ .Title }}</a>
+                    {{ .Content }}
                 </article>
+                {{ end }}
+            {{ else }}
+                <p>No articles found for {{ partial "convert_date.html" $monthParam }}.</p>
             {{ end }}
-        {{ else }}
-            <p>No articles found for {{ $monthParam }}.</p>
-        {{ end }}
+        </ul>
     </div>
-</div>
-<div class="debug-info">
-    <p>diary/list.html</p>
-</div>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/diary/list.html</p>
+
 </body>
 </html>
 {{ end }}

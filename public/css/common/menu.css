@@ -16,7 +16,7 @@
   /* background-color: #ddd; */
   border-radius: 40px;
   transition-duration: 0.4s;
-  display: block;
+  display: inline-block;
 }
 
 .menu a:hover {

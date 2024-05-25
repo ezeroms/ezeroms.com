@@ -31,7 +31,13 @@
     <link rel="stylesheet" href="/css/pages/diary.css">
 </head>
 <body>
-<div class="diary-page">
+
+
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="content-area">
     <aside class="content-area__sub menu">
     <ul>
         
@@ -42,6 +48,13 @@
             
         
             
+            
+                
+            
+        
+            
+            
+                
             
         
             
@@ -58,39 +71,69 @@
             
             <li><a href="/diaries/2024-03">2024-03</a></li>
         
+            
+            <li><a href="/diaries/2024-02">2024-02</a></li>
+        
+            
+            <li><a href="/diaries/2023-04">2023-04</a></li>
+        
     </ul>
 </aside>
 
-    <div class="articles-list">
-        <h2>Articles for 2024-04</h2>
-        
-        
-        
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="article-heading">
+                <div class="article-heading__text">
+                    <p>Reflections and moments from</p>
+                    
+                    
+                    
+                    <h2>April 2024 Diaries</h2>
+                </div>
+
+                
+                <button class="article-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
             
-                <article id="diary-3" class="article">
-                    <a href="http://localhost:1313/diary/diary-3/" class="article-link">
-                        <div class="article-title">diary 3</div>
-                        <div class="article-date">2024-05-01</div>
-                        <div class="article-content"><p>これは2024年4の記事です。</p>
-</div>
-                    </a>
+            
+            
+            
+                
+                <article id="%E5%91%BD%E3%82%92%E8%A8%88%E7%94%BB%E3%81%AE%E5%A4%96%E5%81%B4%E3%81%8B%E3%82%89%E8%A6%8B%E3%81%A4%E3%82%81%E7%9B%B4%E3%81%99%E6%98%A0%E7%94%BBplan-75%E6%84%9F%E6%83%B3%E6%96%87" class="article no-hover-effect">
+                    <a href="http://localhost:1313/diary/%E5%91%BD%E3%82%92%E8%A8%88%E7%94%BB%E3%81%AE%E5%A4%96%E5%81%B4%E3%81%8B%E3%82%89%E8%A6%8B%E3%81%A4%E3%82%81%E7%9B%B4%E3%81%99%E6%98%A0%E7%94%BBplan-75%E6%84%9F%E6%83%B3%E6%96%87/" class="article-title">命を、計画の外側から見つめ直す（映画『PLAN 75』感想文）</a>
+                    <p>これは2024年4月の記事です。</p>
+
                 </article>
+                
             
-                <article id="diary-2" class="article">
-                    <a href="http://localhost:1313/diary/diary-2/" class="article-link">
-                        <div class="article-title">diary 2</div>
-                        <div class="article-date">2024-04-01</div>
-                        <div class="article-content"><p>これは2024年4月の記事です。</p>
-</div>
-                    </a>
-                </article>
-            
-        
+        </ul>
     </div>
-</div>
-<div class="debug-info">
-    <p>diary/list.html</p>
-</div>
+</main>
+
+
+<p class="debug-info">Template : /layouts/diary/list.html</p>
+
 </body>
 </html>
 

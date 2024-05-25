@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>2024-03-01</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/about" class="header__nav">About</a></li>
+                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/diary" class="header__nav">Diary</a></li>
+            </ul>
+        </nav>
+        
+        <a href="/" class="header__logo-link">
+            <img src="/images/common/logo.svg" alt="ezeroms.com" class="header__logo">
+        </a>
+        
+        <a href="/keyword" class="header__button">Let's think together</a>
+    </header>
+    
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024-03-01</title>
+    <link rel="stylesheet" href="/css/pages/diary.css">
+</head>
+<body>
+
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="content-area">
+    <aside class="content-area__sub menu">
+    <ul>
+        
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+        
+        
+        
+            
+            <li><a href="/diaries/2024-04">2024-04</a></li>
+        
+            
+            <li><a href="/diaries/2024-03">2024-03</a></li>
+        
+            
+            <li><a href="/diaries/2024-02">2024-02</a></li>
+        
+            
+            <li><a href="/diaries/2023-04">2023-04</a></li>
+        
+    </ul>
+</aside>
+
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="article-heading">
+                <div class="article-heading__text">
+                    <p>YYYY-MM-DD</p>
+                    <h2>2024-03-01</h2>
+                </div>
+
+                
+                <button class="article-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+            <article class="article no-hover-effect">
+                <p>これは2024年3月の記事です。</p>
+
+            </article>
+        </ul>
+    </div>
+</main>
+
+
+<p class="debug-info">Template : /layouts/diary/single.html</p>
+
+</body>
+</html>
+
+</body>
+</html>

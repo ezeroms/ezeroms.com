@@ -31,7 +31,13 @@
     <link rel="stylesheet" href="/css/pages/diary.css">
 </head>
 <body>
-<div class="diary-page">
+
+
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="content-area">
     <aside class="content-area__sub menu">
     <ul>
         
@@ -42,6 +48,13 @@
             
         
             
+            
+                
+            
+        
+            
+            
+                
             
         
             
@@ -58,30 +71,69 @@
             
             <li><a href="/diaries/2024-03">2024-03</a></li>
         
+            
+            <li><a href="/diaries/2024-02">2024-02</a></li>
+        
+            
+            <li><a href="/diaries/2023-04">2023-04</a></li>
+        
     </ul>
 </aside>
 
-    <div class="articles-list">
-        <h2>Articles for 2024-03</h2>
-        
-        
-        
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="article-heading">
+                <div class="article-heading__text">
+                    <p>Reflections and moments from</p>
+                    
+                    
+                    
+                    <h2>March 2024 Diaries</h2>
+                </div>
+
+                
+                <button class="article-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
             
-                <article id="diary-3" class="article">
-                    <a href="http://localhost:1313/diary/diary-3/" class="article-link">
-                        <div class="article-title">diary 3</div>
-                        <div class="article-date">2024-03-01</div>
-                        <div class="article-content"><p>これは2024年4月の記事です。</p>
-</div>
-                    </a>
+            
+            
+            
+                
+                <article id="%E5%83%95%E3%81%9F%E3%81%A1%E3%81%8C%E6%9D%B1%E4%BA%AC%E3%81%A8%E3%81%86%E3%81%BE%E3%81%8F%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F%E3%81%9F%E3%82%81%E3%81%AE%E5%8F%82%E8%80%83%E6%9B%B8%E5%B0%8F%E8%AA%AC%E3%81%93%E3%81%AE%E9%83%A8%E5%B1%8B%E3%81%8B%E3%82%89%E6%9D%B1%E4%BA%AC%E3%82%BF%E3%83%AF%E3%83%BC%E3%81%AF%E6%B0%B8%E9%81%A0%E3%81%AB%E8%A6%8B%E3%81%88%E3%81%AA%E3%81%84%E6%84%9F%E6%83%B3%E6%96%87" class="article no-hover-effect">
+                    <a href="http://localhost:1313/diary/%E5%83%95%E3%81%9F%E3%81%A1%E3%81%8C%E6%9D%B1%E4%BA%AC%E3%81%A8%E3%81%86%E3%81%BE%E3%81%8F%E3%82%84%E3%81%A3%E3%81%A6%E3%81%84%E3%81%8F%E3%81%9F%E3%82%81%E3%81%AE%E5%8F%82%E8%80%83%E6%9B%B8%E5%B0%8F%E8%AA%AC%E3%81%93%E3%81%AE%E9%83%A8%E5%B1%8B%E3%81%8B%E3%82%89%E6%9D%B1%E4%BA%AC%E3%82%BF%E3%83%AF%E3%83%BC%E3%81%AF%E6%B0%B8%E9%81%A0%E3%81%AB%E8%A6%8B%E3%81%88%E3%81%AA%E3%81%84%E6%84%9F%E6%83%B3%E6%96%87/" class="article-title">僕たちが東京とうまくやっていくための参考書（小説『この部屋から東京タワーは永遠に見えない』感想文）</a>
+                    <p>これは2024年3月の記事です。</p>
+
                 </article>
+                
             
-        
+        </ul>
     </div>
-</div>
-<div class="debug-info">
-    <p>diary/list.html</p>
-</div>
+</main>
+
+
+<p class="debug-info">Template : /layouts/diary/list.html</p>
+
 </body>
 </html>
 
