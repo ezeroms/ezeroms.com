@@ -87,7 +87,8 @@
   font-size: 14px;
   margin: 0;
   font-style: italic;
-  color: #5D5D5F;
+  color: #050317;
+  opacity: 0.7;
 }
 
 .article-heading__button {
@@ -97,24 +98,15 @@
   justify-content: center;
   align-items: center;
   background-color: #EFEDE6;
-  border: 1px solid #F0EFEC;
+  border: 1px solid #F8F7F4;
   border-radius: 100%;
   cursor: pointer;
   transition-duration: 0.2s;
 }
 
 .article-heading__button:hover {
-  background-color: #F0EFEC;
+  background-color: #EFEDE6;
   border: 1px solid #6E6D79;
   cursor: pointer;
   transition-duration: 0.2s;
-}
-
-.article-heading__button {
-  transition: transform 0.2s, background-color 0.2s;
-}
-
-.article-heading__button:active {
-  transform: scale(0.95);
-  background-color: #DEDDDA;
 }

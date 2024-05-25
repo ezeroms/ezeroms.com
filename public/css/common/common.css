@@ -1,6 +1,5 @@
 /* common.css */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
@@ -40,23 +39,28 @@ header {
   transition-duration: 0s;
 }
 
-.header__logo-link {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition-duration: 0.4s;
-}
-
-.header__logo-link:hover {
-  opacity: 0.7;
-  transition-duration: 0s;
-}
 
 .header__logo {
   display: block;
   width: 200px;
   height: auto;
+}
+
+.header__logo-link {
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 100px);
+  /* transform: translate(-50%, -50%); */
+  transition-duration: 0.4s;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.header__logo-link:hover {
+  opacity: 0.6;
+}
+
+.header__logo-link:active {
+  transform: scale(0.95);
 }
 
 .header__button {
@@ -76,11 +80,17 @@ header {
   line-height: 100%;
   letter-spacing: 0.6px;
   transition-duration: 0.4s;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .header__button:hover {
-  opacity: 0.7;
+  background-color: #39393D;
   transition-duration: 0.1s;
+}
+
+.header__button:active {
+  transform: scale(0.95);
+  background-color: #5D5D5F;
 }
 
 nav ul {
@@ -111,12 +121,19 @@ nav ul li a {
 .top-logo {
   width: 310px;
   transition-duration: 0.4s;
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .top-logo:hover {
   opacity: 0.6;
-  transition-duration: 0s;
 }
+
+.top-logo:active {
+  transform: scale(0.95);
+}
+
+
+
 
 .top-message {
   color: #050317;
