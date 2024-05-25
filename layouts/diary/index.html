@@ -1,50 +1,17 @@
 {{ define "main" }}
-<div class="diary-page">
+<main class="content-area">
     {{ partial "diary_menu.html" . }}
-    <div class="articles-list" id="articles-list">
+    <div class="content-area__main" id="articles-list">
         <h2>All Articles layout/diary/index.html</h2>
         {{ range (where .Site.RegularPages "Section" "diary") }}
             <article class="article">
-                <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
-                    {{ .Content }}
-                </div>
+                {{ .Content }}
             </article>
         {{ end }}
     </div>
-    <div class="debug-info">
-        <p>diary/index.html</p>
-    </div>
-</div>
+</main>
 
-<script>
-function copyLink(link) {
-    navigator.clipboard.writeText(link).then(() => {
-        alert('Link copied to clipboard: ' + link);
-    });
-}
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/diary/index.html</p>
 
-// Shuffle articles on page load
-document.addEventListener("DOMContentLoaded", function() {
-    var articles = document.querySelectorAll('.article');
-    var articlesArray = Array.prototype.slice.call(articles);
-    shuffleArray(articlesArray);
-
-    var articlesList = document.getElementById('articles-list');
-    articlesList.innerHTML = '';
-
-    articlesArray.forEach(function(article) {
-        articlesList.appendChild(article);
-    });
-});
-
-// Shuffle array function
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-</script>
 {{ end }}

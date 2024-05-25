@@ -1,0 +1,134 @@
+/* common.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fff;
+  color: white;
+  text-align: center;
+  width: calc(100vw - 64px);
+  height: 96px;
+  align-items: center;
+  padding: 0 32px;
+  position: relative;
+  text-align: center;
+}
+
+.header__nav {
+  color: #050317;
+  text-decoration: none;
+  font-family: "Helvetica Neue";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0.6px;
+  transition-duration: 0.4s;
+}
+
+.header__nav:hover {
+  opacity: 0.6;
+  transition-duration: 0s;
+}
+
+.header__logo-link {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition-duration: 0.4s;
+}
+
+.header__logo-link:hover {
+  opacity: 0.7;
+  transition-duration: 0s;
+}
+
+.header__logo {
+  display: block;
+  width: 200px;
+  height: auto;
+}
+
+.header__button {
+  background-color: #050317;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  border-radius: 80px;
+
+  text-decoration: none;
+  color: #fff;
+  font-family: "Helvetica Neue";
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0.6px;
+  transition-duration: 0.4s;
+}
+
+.header__button:hover {
+  opacity: 0.7;
+  transition-duration: 0.1s;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 2.5rem 0 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.main-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(100vw - 64px);
+  height: calc(100vh - 96px);
+  padding: 0 32px;
+}
+
+.top-logo {
+  width: 310px;
+  transition-duration: 0.4s;
+}
+
+.top-logo:hover {
+  opacity: 0.6;
+  transition-duration: 0s;
+}
+
+.top-message {
+  color: #050317;
+  text-align: center;
+  font-family: "Helvetica Neue";
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 160%; /* 38.4px */
+  margin: 32px 0 96px;
+}
+
+.top-photo {
+  width: 906px;
+  height: 514px;
+  display: block;
+  margin: 0 auto 32px;
+}

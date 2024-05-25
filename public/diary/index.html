@@ -22,8 +22,8 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<div class="diary-page">
-    <aside class="month-list">
+<main class="content-area">
+    <aside class="content-area__sub menu">
     <ul>
         
         
@@ -52,67 +52,30 @@
     </ul>
 </aside>
 
-    <div class="articles-list" id="articles-list">
+    <div class="content-area__main" id="articles-list">
         <h2>All Articles layout/diary/index.html</h2>
         
             <article class="article">
-                <div class="article-content" onclick="copyLink('http:\/\/localhost:1313\/diary\/diary-3\/')">
-                    <p>これは2024年4の記事です。</p>
+                <p>これは2024年4の記事です。</p>
 
-                </div>
             </article>
         
             <article class="article">
-                <div class="article-content" onclick="copyLink('http:\/\/localhost:1313\/diary\/diary-2\/')">
-                    <p>これは2024年4月の記事です。</p>
+                <p>これは2024年4月の記事です。</p>
 
-                </div>
             </article>
         
             <article class="article">
-                <div class="article-content" onclick="copyLink('http:\/\/localhost:1313\/diary\/diary-3\/')">
-                    <p>これは2024年4月の記事です。</p>
+                <p>これは2024年4月の記事です。</p>
 
-                </div>
             </article>
         
     </div>
-    <div class="debug-info">
-        <p>diary/index.html</p>
-    </div>
-</div>
-
-<script>
-function copyLink(link) {
-    navigator.clipboard.writeText(link).then(() => {
-        alert('Link copied to clipboard: ' + link);
-    });
-}
+</main>
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    var articles = document.querySelectorAll('.article');
-    var articlesArray = Array.prototype.slice.call(articles);
-    shuffleArray(articlesArray);
+<p class="debug-info">Template : /layouts/diary/index.html</p>
 
-    var articlesList = document.getElementById('articles-list');
-    articlesList.innerHTML = '';
-
-    articlesArray.forEach(function(article) {
-        articlesList.appendChild(article);
-    });
-});
-
-
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-</script>
 
 </body>
 </html>

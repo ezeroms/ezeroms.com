@@ -1,9 +1,11 @@
 {{ define "main" }}
-<article>
-    <h1>{{ .Title }}</h1>
-    <div>{{ .Content }}</div>
-</article>
-<div class="debug-info">
-    <p>about/index.html</p>
-</div>
+<main class="content-area">
+    <div class="content-area__main">
+        <div>{{ .Content }}</div>
+    </div>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/about/index.html</p>
+
 {{ end }}

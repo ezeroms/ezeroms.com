@@ -1,0 +1,116 @@
+.articles-list {
+  max-width: 907px;
+  width: 100%;
+  padding: 0;
+  margin: 64px 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.article {
+  width: calc(100% - 64px);
+  margin: 0;
+  padding: 32px;
+  border: 1px solid #E7E7E9;
+  border-radius: 24px;
+  background-color: #fff;
+  transition-duration: 0.4s;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.article:hover {
+  border: 1px solid #6E6D79;
+  transition-duration: 0.4s;
+}
+
+.article p{
+  margin: 0;
+  padding: 0;
+  gap: 32px;
+  width: 100%;
+  color: #050317;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 180%; /* 28.8px */
+}
+
+
+
+
+
+.month-list {
+  width: 200px;
+  margin-right: 20px;
+}
+
+.month-list h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.month-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.month-list ul li {
+  margin-bottom: 5px;
+}
+
+.month-list ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2em;
+}
+
+.month-list ul li a:hover {
+  text-decoration: underline;
+}
+
+.article-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+.articles-heading {
+  background-color: #F8F7F4;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: start;
+  border: 1px solid #F5F2EB;
+
+  width: calc(100% - 64px);
+  margin: 0;
+  padding: 24px 32px;
+  /* border: 1px solid #E7E7E9; */
+  border-radius: 24px;
+  transition-duration: 0.4s;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.articles-heading h2 {
+  margin: 0;
+  color: #050317;
+  font-size: 20px;
+}
+
+.articles-heading p {
+  font-size: 14px;
+  margin: 0;
+  font-family: "Helvetica Neue";
+  font-style: italic;
+  color: #050317;
+  opacity: 0.7;
+}

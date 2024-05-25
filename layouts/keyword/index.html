@@ -1,21 +1,25 @@
 {{ define "main" }}
-<div class="keyword-page">
+<main class="content-area">
     {{ partial "keyword_menu.html" . }}
-    <div class="articles-list" id="articles-list">
-        <h2>All Articles layout/keyword/list.html</h2>
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
         {{ range (where .Site.RegularPages "Section" "keyword") }}
             <article class="article">
-                <div class="article-content" onclick="copyLink('{{ .Permalink }}')">
-                    {{ .Content }}
-                </div>
+                {{ .Content }}
             </article>
         {{ end }}
+        </ul>
+
     </div>
-</div>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/keyword/index.html</p>
 
 <script>
 
 // Shuffle articles on page load
+// キーワードをランダムで並び替えている
 document.addEventListener("DOMContentLoaded", function() {
     var articles = document.querySelectorAll('.article');
     var articlesArray = Array.prototype.slice.call(articles);

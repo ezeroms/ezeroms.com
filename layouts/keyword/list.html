@@ -8,27 +8,34 @@
     <link rel="stylesheet" href="/css/pages/keyword.css">
 </head>
 <body>
-<div class="keyword-page">
+
+<main class="content-area">
     {{ partial "keyword_menu.html" . }}
-    <div class="articles-list">
-        <div class="articles-heading">
-            <p>Ideas for thinking about</p>
-            <h2>{{ .Title }}</h2>
-        </div>
-        {{ $wordParam := .Title }}
-        {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
-        {{ if gt (len $articles) 0 }}
-            {{ range $articles }}
-                <article id="{{ .Title | urlize }}" class="article">
-                    <div class="article-content">{{ .Content }}</div>
-                </article>
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="articles-heading">
+                <p>Ideas for thinking about</p>
+                <h2>{{ .Title }}</h2>
+            </div>
+            {{ $wordParam := .Title }}
+            {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
+            {{ if gt (len $articles) 0 }}
+                {{ range $articles }}
+                    <article class="article">
+                        {{ .Content }}
+                    </article>
+                {{ end }}
+            {{ else }}
+                <p>No articles found for {{ $wordParam }}.</p>
             {{ end }}
-        {{ else }}
-            <p>No articles found for {{ $wordParam }}.</p>
-        {{ end }}
+        </ul>
+
     </div>
-</div>
-<p class="debug-info">keyword/list.html</p>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/keyword/list.html</p>
+
 </body>
 </html>
 {{ end }}

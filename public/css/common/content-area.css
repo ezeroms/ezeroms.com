@@ -1,0 +1,37 @@
+.content-area {
+  display: flex;
+  max-width: 1440px;
+  min-width: 960px;
+  width: 100vw;
+  height: calc(100dvh - 96px); //ヘッダーの高さを引いている
+}
+
+/* content-area__sub */
+.content-area__sub {
+  width: calc(352px);
+  padding: 0 0 0 32px;
+  background-color: #fff;
+  height: calc(100dvh - 96px);
+  overflow-y: auto;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.content-area__sub::-webkit-scrollbar {
+  display: none;
+}
+
+/* content-area__main */
+.content-area__main {
+  width: calc(100% - 64px);
+  padding: 0 32px;
+  overflow-y: auto;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.content-area__main::-webkit-scrollbar {
+  display: none;
+}

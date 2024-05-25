@@ -8,21 +8,24 @@
     <link rel="stylesheet" href="/css/pages/works.css">
 </head>
 <body>
-<div class="works-page">
-    <h1>Works</h1>
-    <div class="works-gallery">
-        {{ range .Pages }}
-            <div class="work-item">
-                <a href="{{ .Permalink }}">
-                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                </a>
-            </div>
-        {{ end }}
+<main class="content-area">
+    <div class="content-area__main">
+        <h1>Works</h1>
+        <div class="works-gallery">
+            {{ range .Pages }}
+                <div class="work-item">
+                    <a href="{{ .Permalink }}">
+                        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                    </a>
+                </div>
+            {{ end }}
+        </div>
     </div>
-</div>
-<div class="debug-info">
-    <p>works/index.html</p>
-</div>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/works/index.html</p>
+
 </body>
 </html>
 {{ end }}

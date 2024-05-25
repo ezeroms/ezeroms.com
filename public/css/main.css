@@ -1,5 +1,10 @@
 /* main.css */
 @import url('common/common.css');
+@import url('common/content-area.css');
+@import url('common/article.css');
+@import url('common/debug-info.css');
+@import url('common/menu.css');
+
 @import url('pages/about.css');
 @import url('pages/works.css');
 @import url('pages/diary.css');
