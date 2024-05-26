@@ -1,35 +1,153 @@
 {{ define "main" }}
-<main class="content-area">
-    <div class="content-area__main">
+
+
+<main class="main">
+    <div class="main-container">
+        <section class="main-item-primary">
+
         <div class="about">
-            <div class="about__profile">
-                <img src="{{ "images/about/profile.png" | relURL }}" alt="Profile Picture">
-            </div>
+
+            <!-- 写真とプロフィール -->
             <div class="about__content">
-                {{ .Content }}
+                <img src="{{ "images/about/profile.png" | relURL }}" alt="Profile Picture">
+                <article class="article-item">
+                    {{ .Content }}
+                    <p>
+                        アイコン小さく
+                        FB, X, Insta, Threads, BLSKY, Bereal, TikTok, 
+                    </p>
+                </article>
             </div>
+
+            <!-- 受賞歴 -->
             <div class="about__awards">
-                <h2>Award</h2>
-                {{ range .Site.Data.awards.awards }}
-                    <p>{{ . }}</p>
-                {{ end }}
+
+                <div class="article-item-heading">
+                    <p class="article-item-heading__eye-catch">
+                        🏆
+                    </p>
+                    <div class="article-item-heading__label">
+                        <h2 class="article-item-heading__label__h2">
+                            受賞歴
+                        </h2>
+                    </div>
+                    <p class="article-item-heading__sub-label">
+                        Awards
+                    </p>
+                </div>
+            
+                <article class="article-item">
+                    <p>Student Freepaper Forum 2010 最優秀賞、オーディエンス賞（2010年）</p>
+                    <p>マンガ倉庫 CMコンテスト 優秀賞（2014年）</p>
+                    <p>my Japan Award「Creatrive Summer Camp」CMコンテスト 地域最優秀賞（2016年）</p>
+                    <p>my Japan Award 2016 伊藤直樹賞（2016年）</p>
+                    <p>佐渡ビジネスコンテスト2022 最優秀賞（2022年）</p>
+                </article>
+
             </div>
+
+            <!-- メディア掲載 -->
             <div class="about__media-coverage">
-                <h2>Media Coverage</h2>
-                <div class="media-cards">
+
+                <div class="article-item-heading">
+                    <p class="article-item-heading__eye-catch">
+                        📰
+                    </p>
+                    <div class="article-item-heading__label">
+                        <h2 class="article-item-heading__label__h2">
+                            メディア掲載
+                        </h2>
+                    </div>
+                    <p class="article-item-heading__sub-label">
+                        Media Coverage
+                    </p>
+                </div>
+
+                <div class="about__media-coverage__list">
                     {{ range .Site.Data.media_coverage.media }}
-                        <div class="media-card">
-                            <a href="{{ .url }}" target="_blank">
-                                <h3>{{ .title }}</h3>
-                                <p>{{ .description }}</p>
-                            </a>
-                        </div>
+                        <a href="{{ .url }}" target="_blank">
+                            <div class="link-card">
+                                <div class="link-card__left">
+                                    <h2 class="link-card__left__h2">
+                                        {{ .title }}
+                                    </h2>
+                                    <p class="link-card__left__p">
+                                        {{ .description }}
+                                    </p>
+                                </div>
+                                <img src="" alt="" class="link-card__right">
+                            </div>
+                        </a>
                     {{ end }}
                 </div>
             </div>
+
+
             <div class="about__contact">
-                <h2>Contact</h2>
-                <div class="contact-icons">
+
+                <div class="article-item-heading">
+                    <p class="article-item-heading__eye-catch">
+                        📩
+                    </p>
+                    <div class="article-item-heading__label">
+                        <h2 class="article-item-heading__label__h2">
+                            ご連絡・お問い合わせ
+                        </h2>
+                    </div>
+                    <p class="article-item-heading__sub-label">
+                        Contact
+                    </p>
+                </div>
+
+                <div class="about__contact__list">
+                    
+                        <a href="#" target="_blank" class="link-card contact">
+                            <div>
+                                <div class="link-card__left">
+                                    <p class="link-card__left__p">
+                                        Google form
+                                    </p>
+                                </div>
+                                <img src="" alt="" class="link-card__right">
+                            </div>
+                        </a>
+
+                        <a href="#" target="_blank" class="link-card contact">
+                            <div>
+                                <div class="link-card__left">
+                                    <p class="link-card__left__p">
+                                        LINE
+                                    </p>
+                                </div>
+                                <img src="" alt="" class="link-card__right">
+                            </div>
+                        </a>
+
+                        <a href="#" target="_blank" class="link-card contact">
+                            <div>
+                                <div class="link-card__left">
+                                    <p class="link-card__left__p">
+                                        WhatsUp
+                                    </p>
+                                </div>
+                                <img src="" alt="" class="link-card__right">
+                            </div>
+                        </a>
+
+                        <a href="#" target="_blank" class="link-card contact">
+                            <div >
+                                <div class="link-card__left">
+                                    <p class="link-card__left__p">
+                                        Signal
+                                    </p>
+                                </div>
+                                <img src="" alt="" class="link-card__right">
+                            </div>
+                        </a>
+                    
+                </div>
+
+                <!-- <div class="contact-icons">
                     <a href="https://line.me"><img src="{{ "images/contact/line.png" | relURL }}" alt="LINE"></a>
                     <a href="https://twitter.com"><img src="{{ "images/contact/twitter.png" | relURL }}" alt="X (Twitter)"></a>
                     <a href="https://www.whatsapp.com"><img src="{{ "images/contact/whatsapp.png" | relURL }}" alt="WhatsApp"></a>
@@ -39,11 +157,20 @@
                     <a href="https://www.bereal.com"><img src="{{ "images/contact/bereal.png" | relURL }}" alt="BeReal"></a>
                     <a href="https://www.tiktok.com"><img src="{{ "images/contact/tiktok.png" | relURL }}" alt="TikTok"></a>
                     <a href="https://www.instagram.com"><img src="{{ "images/contact/instagram.png" | relURL }}" alt="Instagram"></a>
-                </div>
+                </div> -->
             </div>
         </div>
+
+
+        </section>
     </div>
 </main>
+
+
+
+
+
+
 
 <!-- debug-info -->
 <p class="debug-info">Template : /layouts/about/index.html</p>

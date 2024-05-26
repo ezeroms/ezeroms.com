@@ -5,6 +5,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 header {
@@ -12,7 +13,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   background-color: #fff;
-  color: white;
+  color: #fff;
   text-align: center;
   width: calc(100vw - 64px);
   height: 96px;
@@ -20,6 +21,10 @@ header {
   padding: 0 32px;
   position: relative;
   text-align: center;
+  position: fixed;
+  background-color: #fff;
+  z-index: 10;
+  /* margin: 0 0 64px; */
 }
 
 .header__nav {
@@ -48,7 +53,7 @@ header {
 
 .header__logo-link {
   position: absolute;
-  top: 50%;
+  top: calc(50% - 10px);
   left: calc(50% - 100px);
   /* transform: translate(-50%, -50%); */
   transition-duration: 0.4s;
@@ -108,54 +113,13 @@ nav ul li a {
   text-decoration: none;
 }
 
-.main-top {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: calc(100vw - 64px);
-  height: calc(100vh - 96px);
-  padding: 0 32px;
-}
-
-.top-logo {
-  width: 310px;
-  transition-duration: 0.4s;
-  transition: transform 0.2s, background-color 0.2s;
-}
-
-.top-logo:hover {
-  opacity: 0.6;
-}
-
-.top-logo:active {
-  transform: scale(0.95);
-}
-
-
-
-
-.top-message {
-  color: #050317;
-  text-align: center;
-  font-family: "Helvetica Neue";
-  font-size: 24px;
-  font-style: italic;
-  font-weight: 400;
-  line-height: 160%; /* 38.4px */
-  margin: 32px 0 96px;
-}
-
-.top-photo {
-  width: 906px;
-  height: 514px;
-  display: block;
-  margin: 0 auto 32px;
-}
-
 ::-moz-selection {
   background: #FCEDC3;
 }
 ::selection {
   background: #FCEDC3;
+}
+
+a {
+  text-decoration: none;
 }

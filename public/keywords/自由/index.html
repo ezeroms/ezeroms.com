@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自由</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,67 +155,74 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>自由</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            自由
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>そもそも、人間にはなぜ自由が必要なのでしょうか。ミルの考えでは、それは人間の可謬性と高い修正能力ゆえです。つまり、人間はえてして判断を誤るが、それを自由な討論によって修正する能力にも富んでいるというのです。それゆえ、ミルは自由の確保を「自分自身の可謬性に対して予防策をとる」ことと見なします。これは一種の「リスクヘッジ」と言い換えてもよいでしょう。（中略）</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>そもそも、人間にはなぜ自由が必要なのでしょうか。ミルの考えでは、それは人間の可謬性と高い修正能力ゆえです。つまり、人間はえてして判断を誤るが、それを自由な討論によって修正する能力にも富んでいるというのです。それゆえ、ミルは自由の確保を「自分自身の可謬性に対して予防策をとる」ことと見なします。これは一種の「リスクヘッジ」と言い換えてもよいでしょう。（中略）</p>
 <p>人間は誰でも失敗する。この誤謬の可能性を織り込んで、人間の考えを最大限に多様にし、オープンな討論を経て意見を修正してゆくことが、ミル的な自由主義の基本的な考え方です。</p>
 <p>（福嶋亮大、2022『思考の庭のつくりかた はじめての人文学ガイド』星海社）</p>
 
-                    </article>
-                
-                    <article class="article">
-                        <p>〈本来的なもの〉は大変危険なイメージである。なぜならそれは強制的だからである。何かが〈本来的なもの〉と決定されてしまうと、あらゆる人間に対してその「本来的」な姿が強制されることになる。本来性の概念は人から自由を奪う。</p>
+                        </article>
+                    
+                        <article class="article-item hover-effect">
+                            <p>〈本来的なもの〉は大変危険なイメージである。なぜならそれは強制的だからである。何かが〈本来的なもの〉と決定されてしまうと、あらゆる人間に対してその「本来的」な姿が強制されることになる。本来性の概念は人から自由を奪う。</p>
 <p>それだけではない。〈本来的なもの〉が強制的であるということは、そこから外れる人は排除されるということでもある。何かによって人間の「本来の姿」が決定されたなら、人々にはそれが強制され、どうしてもそこに入れない人間は、人間にあらざる者として排除されることになる。</p>
 <p>（國分功一郎、2011『暇と退屈の倫理学』朝日出版社）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

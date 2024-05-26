@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>過去</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,68 +155,75 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>過去</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            過去
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>しかし、その一方で、私が本当に付き合いに悔いを残している人、謝りたい、お礼が言いたいけど叶わない―――、望まぬ形で別れてしまった人たちというのは、絶対に連絡をしてこない。</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>しかし、その一方で、私が本当に付き合いに悔いを残している人、謝りたい、お礼が言いたいけど叶わない―――、望まぬ形で別れてしまった人たちというのは、絶対に連絡をしてこない。</p>
 <p>けれど、それでもなお、今の私が小説を書いていられるのは、急に連絡してくる“親友”たちではなく、もう二度と会うことはないかもしれないその人たちのおかげだ。もう連絡できないくらいの後悔や過ちの記憶まで含め、彼らが、私と、私の小説を作ってくれた。</p>
 <p>（辻村深月、2015『図書室で暮らしたい』講談社）</p>
 
-                    </article>
-                
-                    <article class="article">
-                        <p>精神分析とは、ごく大ざっぱに言うと、今の自分の人間関係のトラブルや不安の根源には幼少期の家族関係の問題があるのだという仮説を立て、自由連想で記憶を手繰っていくことで、かつての自分のなかにあるトラウマに向き合う、そうすると現在の問題が解消されるという実践です。「トラウマ」は、大変つらい事故に遭ったとか、被害を受けたとか、重大な場合に使われることが多いと思いますが、ここではすごく広く、「何らかの意味での心の引っかかり」くらいの意味でとってください。そういう意味でのトラウマを中心に、雪だるま式に心のなかの構築物が積み重なることによって、今の自分の心的傾向ができあがっているのだ、と考えるのが精神分析です。</p>
+                        </article>
+                    
+                        <article class="article-item hover-effect">
+                            <p>精神分析とは、ごく大ざっぱに言うと、今の自分の人間関係のトラブルや不安の根源には幼少期の家族関係の問題があるのだという仮説を立て、自由連想で記憶を手繰っていくことで、かつての自分のなかにあるトラウマに向き合う、そうすると現在の問題が解消されるという実践です。「トラウマ」は、大変つらい事故に遭ったとか、被害を受けたとか、重大な場合に使われることが多いと思いますが、ここではすごく広く、「何らかの意味での心の引っかかり」くらいの意味でとってください。そういう意味でのトラウマを中心に、雪だるま式に心のなかの構築物が積み重なることによって、今の自分の心的傾向ができあがっているのだ、と考えるのが精神分析です。</p>
 <p>それに対してドゥルーズ＋ガタリが行った批判は、すごく簡単に言えば、人間の振る舞いはそんな小さい頃の家族のことだけで決まってるわけじゃない、ということです。自分自身をごく狭い範囲＝家族における同一性だけで考えるのはリアルじゃない、というのです。</p>
 <p>世界は多方向の関係性に開かれていて、しかもそれは変動しているはずであって、自分自身の心あるいは身体をそのような変動のなかにある仮固定のものと捉えるなら、昔からずっとあるトラウマを想起するなんてそもそもおかしな話ではないか。むしろそれは、そのような基準点があると仮説を立てて、そこに向けて自分自身を固めていくような運動で、自分をむしろ硬直化させて治ったような気にさせるまやかしの技法だ、と。</p>
 <p>（千葉雅也、2022『現代思想入門』講談社）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

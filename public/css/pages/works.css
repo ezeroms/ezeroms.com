@@ -9,6 +9,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+    max-width: 1440px;
+    width: calc(100vw - 64px);
+    padding: 0 32px 0;
 }
 
 .work-item {

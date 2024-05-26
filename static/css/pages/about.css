@@ -1,43 +1,133 @@
 .about {
     width: 672px;
     margin: 64px auto 0;
-    text-align: center;
-}
-
-.about__profile img {
-    width: 100%;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    padding: 0 0 40px;
 }
 
 .about__content {
-    text-align: left;
-    margin-bottom: 40px;
-}
-
-.about__awards, .about__media-coverage, .about__contact {
-    margin-bottom: 40px;
-}
-
-.about__awards p, .about__media-coverage p {
-    text-align: center;
-}
-
-.media-cards {
+    margin: 0;
     display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0;
+}
+
+.about__content img {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+
+
+
+/* アワード */
+.about__awards {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0;
+}
+
+
+
+/* メディア掲載 */
+.about__media-coverage {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0;
+}
+
+.about__media-coverage__list {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+/* コンタクト */
+.about__contact {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0;
+}
+
+.about__contact__list {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
 }
 
-.media-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    max-width: 300px;
-    text-align: left;
-}
-
+/* 
 .contact-icons a img {
     width: 40px;
     margin: 10px;
-}
+} */
+
+
+.link-card {
+    width: auto;
+    /* min-width: calc(100% - 64px); */
+    margin: 0;
+    padding: 32px;
+    border: 1px solid #E7E7E9;
+    border-radius: 24px;
+    background-color: #fff;
+    transition-duration: 0.4s;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .link-card:hover {
+    border: 1px solid #6E6D79;
+    transition-duration: 0.2s;
+  }
+
+  .link-card__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .link-card__right {
+    width: 80px;
+  }
+
+  .link-card__left__h2 {
+    margin: 0;
+    padding: 0;
+    color: #050317;
+    width: 100%;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 180%; /* 28.8px */
+  }
+
+  .link-card__left__p {
+    margin: 0;
+    padding: 0;
+    color: #5D5D5F;
+    width: 100%;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 180%; /* 28.8px */
+  }
+  
+  .contact {
+    width: 40%;
+  }

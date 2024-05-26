@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>目的</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,59 +155,66 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>目的</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            目的
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>本を読むのが苦手な人は、本を読んで「考える」ことのおもしろさを知らない人がほとんどだ。本を読むと、他人の考えに触れて思うこと、考えることが自然と湧いて出る。これがおもしろいのだ。しかし本を「知識を得る」ことを「目的」に読んでしまうと、書いてあることを頭に入れることでいっぱいいっぱいになってしまい、勝手に湧いてくる自分の考えを膨らませることをしなくなってしまう。実はほとんどの人は、知識を得るという「目的」をもって本を読んでいるために、本を読むことそのもののおもしろさを見失っていると思う。</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>本を読むのが苦手な人は、本を読んで「考える」ことのおもしろさを知らない人がほとんどだ。本を読むと、他人の考えに触れて思うこと、考えることが自然と湧いて出る。これがおもしろいのだ。しかし本を「知識を得る」ことを「目的」に読んでしまうと、書いてあることを頭に入れることでいっぱいいっぱいになってしまい、勝手に湧いてくる自分の考えを膨らませることをしなくなってしまう。実はほとんどの人は、知識を得るという「目的」をもって本を読んでいるために、本を読むことそのもののおもしろさを見失っていると思う。</p>
 <p>（宇野常寛、2023『ひとりあそびの教科書』河出書房新社）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

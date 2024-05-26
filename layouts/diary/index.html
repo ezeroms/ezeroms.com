@@ -1,18 +1,20 @@
 {{ define "main" }}
 
-<main class="content-area">
-    {{ partial "diary_menu.html" . }}
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-        {{ range (where .Site.RegularPages "Section" "diary") }}
-            <article class="article no-hover-effect">
-                <a href="{{ .Permalink }}" class="article-title">
-                    {{ .Date | dateFormat "2006-01-02" }}
-                </a>
-                {{ .Content }}
-            </article>
-        {{ end }}
-        </ul>
+<main class="main">
+    <div class="main-container">
+        {{ partial "diary_menu.html" . }}
+        <section class="main-item-primary">
+            <ul class="article-container" id="articles-list">
+            {{ range (where .Site.RegularPages "Section" "diary") }}
+                <article class="article-item">
+                    <a href="{{ .Permalink }}">
+                        <h1>{{ .Date | dateFormat "2006-01-02" }}</h1>
+                    </a>
+                    {{ .Content }}
+                </article>
+            {{ end }}
+            </ul>
+        </section>
     </div>
 </main>
 

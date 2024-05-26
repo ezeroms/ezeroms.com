@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>疎外</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,65 +155,72 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>疎外</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            疎外
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>疎外は，社会学の言説から抜け出して，メデイアの解説や日常言語に入り込んでいる．たとえば，一つの世代全体が「社会から疎外」されている，とか，若者のサブカルチャーは，主流の文化から若い人びとが疎外されている状態を表している，などという言い方を耳にするであろう．この場合，隔たりや分離といった観念が含まれていることは明らかであるが，社会学において疎外といえば，資本主義社会の不平等と関連していることに注意したい．マルクスの史的唯物論のアプローチは，人びとが仕事を組織して財とサービスをつくり出す方法から始まる．マルクスにとって，「疎外されている」とは，真の帰結へと至る客観的条件のもとにおかれていることであり，その条件を変える鍵は，私たちの考えや信念を変えることではなく，自分の状態をコントロールする力を増し加えるために，生きる方法を変えることなのである．かつての労働生活とは，より骨の折れる肉体的労役であったように思われるが，小作農や職人など多くの社会集団にとっては，熟練を要する，それ自体満足できる仕事であり，現代の製造業や大規模なオフイス環境，コールセンターやファストフード店などよりも，仕事に対するコントロールの幅が大きかった．今日の仕事は，肉体的には以前ほど重労働ではないかもしれないが，コントロールの余地を与えられていないため，より大きな疎外を生み出し続けているのである.</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>疎外は，社会学の言説から抜け出して，メデイアの解説や日常言語に入り込んでいる．たとえば，一つの世代全体が「社会から疎外」されている，とか，若者のサブカルチャーは，主流の文化から若い人びとが疎外されている状態を表している，などという言い方を耳にするであろう．この場合，隔たりや分離といった観念が含まれていることは明らかであるが，社会学において疎外といえば，資本主義社会の不平等と関連していることに注意したい．マルクスの史的唯物論のアプローチは，人びとが仕事を組織して財とサービスをつくり出す方法から始まる．マルクスにとって，「疎外されている」とは，真の帰結へと至る客観的条件のもとにおかれていることであり，その条件を変える鍵は，私たちの考えや信念を変えることではなく，自分の状態をコントロールする力を増し加えるために，生きる方法を変えることなのである．かつての労働生活とは，より骨の折れる肉体的労役であったように思われるが，小作農や職人など多くの社会集団にとっては，熟練を要する，それ自体満足できる仕事であり，現代の製造業や大規模なオフイス環境，コールセンターやファストフード店などよりも，仕事に対するコントロールの幅が大きかった．今日の仕事は，肉体的には以前ほど重労働ではないかもしれないが，コントロールの余地を与えられていないため，より大きな疎外を生み出し続けているのである.</p>
 <p>（友枝敏雄・友枝久美子、2018『ギデンズ 社会学コンセプト事典』丸善出版）</p>
 
-                    </article>
-                
-                    <article class="article">
-                        <p>もっと簡単に言えば、ポストモダン政治思想の中心的な信念の一つは、有力な社会的権力が、自分たちの利益になるような形で社会をカテゴリーとヒエラルキーに秩序分けする、というものだ。それを実現するため、その有力者たちは社会とその特性についての語られ方や、何を事実として受容できるかを押しつける。例えば、主張の証拠と論拠を提供しろという要求は、ポストモダニズム〈理論〉のレンズを通して見ると、権力を持つ人々が構築した言説システムと知識生産の中に参加しろという要求と見なされる。権力者たちは、そうしたアプローチを重視し、他のコミュニケーションと「知識」生産手段を排除するようにそれを設計したのだ。言い換えれば、科学はそれを確立した権力者たち──西洋白人男性──の利益に奉仕するように構築されており、同時に他者の参加を阻む障壁となるようにまとめられているのだ、と〈理論〉は見なしている。</p>
+                        </article>
+                    
+                        <article class="article-item hover-effect">
+                            <p>もっと簡単に言えば、ポストモダン政治思想の中心的な信念の一つは、有力な社会的権力が、自分たちの利益になるような形で社会をカテゴリーとヒエラルキーに秩序分けする、というものだ。それを実現するため、その有力者たちは社会とその特性についての語られ方や、何を事実として受容できるかを押しつける。例えば、主張の証拠と論拠を提供しろという要求は、ポストモダニズム〈理論〉のレンズを通して見ると、権力を持つ人々が構築した言説システムと知識生産の中に参加しろという要求と見なされる。権力者たちは、そうしたアプローチを重視し、他のコミュニケーションと「知識」生産手段を排除するようにそれを設計したのだ。言い換えれば、科学はそれを確立した権力者たち──西洋白人男性──の利益に奉仕するように構築されており、同時に他者の参加を阻む障壁となるようにまとめられているのだ、と〈理論〉は見なしている。</p>
 <p>（ヘレン・プラックローズ、2022『「社会正義」はいつも正しい　人種、ジェンダー、アイデンティティにまつわる捏造のすべて』早川書房）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

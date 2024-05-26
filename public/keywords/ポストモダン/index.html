@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ポストモダン</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,59 +155,66 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>ポストモダン</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            ポストモダン
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>もっと簡単に言えば、ポストモダン政治思想の中心的な信念の一つは、有力な社会的権力が、自分たちの利益になるような形で社会をカテゴリーとヒエラルキーに秩序分けする、というものだ。それを実現するため、その有力者たちは社会とその特性についての語られ方や、何を事実として受容できるかを押しつける。例えば、主張の証拠と論拠を提供しろという要求は、ポストモダニズム〈理論〉のレンズを通して見ると、権力を持つ人々が構築した言説システムと知識生産の中に参加しろという要求と見なされる。権力者たちは、そうしたアプローチを重視し、他のコミュニケーションと「知識」生産手段を排除するようにそれを設計したのだ。言い換えれば、科学はそれを確立した権力者たち──西洋白人男性──の利益に奉仕するように構築されており、同時に他者の参加を阻む障壁となるようにまとめられているのだ、と〈理論〉は見なしている。</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>もっと簡単に言えば、ポストモダン政治思想の中心的な信念の一つは、有力な社会的権力が、自分たちの利益になるような形で社会をカテゴリーとヒエラルキーに秩序分けする、というものだ。それを実現するため、その有力者たちは社会とその特性についての語られ方や、何を事実として受容できるかを押しつける。例えば、主張の証拠と論拠を提供しろという要求は、ポストモダニズム〈理論〉のレンズを通して見ると、権力を持つ人々が構築した言説システムと知識生産の中に参加しろという要求と見なされる。権力者たちは、そうしたアプローチを重視し、他のコミュニケーションと「知識」生産手段を排除するようにそれを設計したのだ。言い換えれば、科学はそれを確立した権力者たち──西洋白人男性──の利益に奉仕するように構築されており、同時に他者の参加を阻む障壁となるようにまとめられているのだ、と〈理論〉は見なしている。</p>
 <p>（ヘレン・プラックローズ、2022『「社会正義」はいつも正しい　人種、ジェンダー、アイデンティティにまつわる捏造のすべて』早川書房）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

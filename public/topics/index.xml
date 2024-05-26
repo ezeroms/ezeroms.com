@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Topics on ezeroms.com</title>
+    <link>http://localhost:1313/topics/</link>
+    <description>Recent content in Topics on ezeroms.com</description>
+    <generator>Hugo</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 04 Apr 2024 00:00:00 +0900</lastBuildDate>
+    <atom:link href="http://localhost:1313/topics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ゲーム</title>
+      <link>http://localhost:1313/topics/%E3%82%B2%E3%83%BC%E3%83%A0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/topics/%E3%82%B2%E3%83%BC%E3%83%A0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>デザイン</title>
+      <link>http://localhost:1313/topics/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/topics/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>人文・社会科学</title>
+      <link>http://localhost:1313/topics/%E4%BA%BA%E6%96%87%E7%A4%BE%E4%BC%9A%E7%A7%91%E5%AD%A6/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/topics/%E4%BA%BA%E6%96%87%E7%A4%BE%E4%BC%9A%E7%A7%91%E5%AD%A6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>自然科学</title>
+      <link>http://localhost:1313/topics/%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%A6/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/topics/%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%A6/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

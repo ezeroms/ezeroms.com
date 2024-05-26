@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>村上春樹</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,59 +155,66 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>村上春樹</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            村上春樹
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>村上春樹の主人公が特定のパートナーと継続的な関係を維持できず、次々と別の女性と関係を持つことに象徴されるように「所有」は一過性の欲望だ。対して「関係性」は持続性を要求する欲望だ。二者間の双方向的なコミュニケーションの結果として事後的に立ち上がる関係性は、その二者の間だけに発生する固有のもので、それが触れ続けられていることによってのみ維持し、確認される。仮にたった一度の触れ合いで得た体験の記憶が特権化されたとき、それは既に名付けられたものであり、所有されたものであり、そして一方向的なものだ。その相手が同じように記憶の中で、その一回の接触を特別なものと位置づけているとは限らないからだ。関係性は持続され、反復されることによってのみ成立する。「関係性」とは一定の距離感と進入角度のことを指すのではなく、二者の接触によってその都度、距離感と進入角度が共創的に試行錯誤し続けられる「状態」のことを指すのだ。</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>村上春樹の主人公が特定のパートナーと継続的な関係を維持できず、次々と別の女性と関係を持つことに象徴されるように「所有」は一過性の欲望だ。対して「関係性」は持続性を要求する欲望だ。二者間の双方向的なコミュニケーションの結果として事後的に立ち上がる関係性は、その二者の間だけに発生する固有のもので、それが触れ続けられていることによってのみ維持し、確認される。仮にたった一度の触れ合いで得た体験の記憶が特権化されたとき、それは既に名付けられたものであり、所有されたものであり、そして一方向的なものだ。その相手が同じように記憶の中で、その一回の接触を特別なものと位置づけているとは限らないからだ。関係性は持続され、反復されることによってのみ成立する。「関係性」とは一定の距離感と進入角度のことを指すのではなく、二者の接触によってその都度、距離感と進入角度が共創的に試行錯誤し続けられる「状態」のことを指すのだ。</p>
 <p>（宇野常寛、2022『砂漠と異人たち』朝日新聞出版）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

@@ -1,0 +1,18 @@
+{{ define "main" }}
+
+<main class="main">
+        <div class="works-gallery">
+            {{ range .Pages }}
+                <div class="work-item">
+                    <a href="{{ .Permalink }}">
+                        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                    </a>
+                </div>
+            {{ end }}
+        </div>
+</main>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/works/index.html</p>
+
+{{ end }}

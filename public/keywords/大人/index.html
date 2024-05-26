@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大人</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,73 +155,80 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>大人</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            大人
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>自分の小説に冠ができることを喜ぶ気持ちより、受賞したことで、それまで自分なりにエッジが立った気持ちで書いてきた小説が鋭さを失ってしまうのではないかという不安の方が、ずっとずっと強かった。「大人が薦める本」の一つになどなってたまるか、という意地があった。</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>自分の小説に冠ができることを喜ぶ気持ちより、受賞したことで、それまで自分なりにエッジが立った気持ちで書いてきた小説が鋭さを失ってしまうのではないかという不安の方が、ずっとずっと強かった。「大人が薦める本」の一つになどなってたまるか、という意地があった。</p>
 <p>（辻村深月、2015『図書室で暮らしたい』講談社）</p>
 
-                    </article>
-                
-                    <article class="article">
-                        <p>子どもの頃のほうが大人の今よりも自由だった人がどれくらいいるだろうか。扶養されていたぶん、労働せずに済んだという意味で自由だった人はいるだろうけど、代わりに多くの義務を背負わされていたはずだ。</p>
+                        </article>
+                    
+                        <article class="article-item hover-effect">
+                            <p>子どもの頃のほうが大人の今よりも自由だった人がどれくらいいるだろうか。扶養されていたぶん、労働せずに済んだという意味で自由だった人はいるだろうけど、代わりに多くの義務を背負わされていたはずだ。</p>
 <p>私が大人だなぁと思うのは、その種の義務全般から自由であるような人である。たとえば仕事をほっぽり出して失踪しちゃうような人は「大人〜」って感じる。もちろん、学校をほっぽりだして失踪しちゃう子どもにも「大人〜」と思う。</p>
 <p>「大人＝無責任」という単純な話ではない。義務のたぐいがあるということを理解していて、その上で、そんなのはゲームのルールに過ぎない、とわかっている人――心の底からはゲームを信じていない人――が大人だと感じる。遊びに心から没頭するのは子どもっぽい。だから、大人は責任や義務からも醒めていなければならない。</p>
 <p>（品田遊、2022『キリンに雷が落ちてどうする 少し考える日々』朝日新聞出版）</p>
 
-                    </article>
-                
-                    <article class="article">
-                        <p>サプライズのために消してくれていたハロゲンライトが再び点灯し、引率者たちの顔が夜の山に浮かび上がった。こちらに向けられている笑顔をまじまじと見てみたが、全員驚くほど馴染みがない。曲がりなりにも今日1日を一緒に過ごした仲だというのに。怒られなくて済んだし、こんな私のためにケーキを用意してくれたのも嬉しいけれど、一度しかない19歳の誕生日を全然知らない人と過ごしているなぁ、としみじみ思ったのを覚えている。こういうのが、大人の世界なのかもしれない、とも。</p>
+                        </article>
+                    
+                        <article class="article-item hover-effect">
+                            <p>サプライズのために消してくれていたハロゲンライトが再び点灯し、引率者たちの顔が夜の山に浮かび上がった。こちらに向けられている笑顔をまじまじと見てみたが、全員驚くほど馴染みがない。曲がりなりにも今日1日を一緒に過ごした仲だというのに。怒られなくて済んだし、こんな私のためにケーキを用意してくれたのも嬉しいけれど、一度しかない19歳の誕生日を全然知らない人と過ごしているなぁ、としみじみ思ったのを覚えている。こういうのが、大人の世界なのかもしれない、とも。</p>
 <p>（藤岡みなみ、2022『パンダのうんこはいい匂い』左右社）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

@@ -1,72 +1,67 @@
 {{ define "main" }}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Title }}</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
 
 <!-- 通知 -->
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    {{ partial "keyword_menu.html" . }}
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>{{ .Title }}</h2>
+<main class="main">
+    <div class="main-container">
+        {{ partial "keyword_menu.html" . }}
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            {{ .Title }}
+                        </h2>
+                    </div>
+    
+                    <!-- ボタンここから -->
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                    <!-- ボタンここまで -->        
                 </div>
-
-                <!-- ボタンここから -->
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                <!-- ボタンここまで -->        
-            </div>
-
-            {{ $wordParam := .Title }}
-            {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
-            {{ if gt (len $articles) 0 }}
-                {{ range $articles }}
-                    <article class="article">
-                        {{ .Content }}
-                    </article>
+    
+                {{ $wordParam := .Title }}
+                {{ $articles := where .Site.RegularPages "Params.keywords" "intersect" (slice $wordParam) }}
+                {{ if gt (len $articles) 0 }}
+                    {{ range $articles }}
+                        <article class="article-item hover-effect">
+                            {{ .Content }}
+                        </article>
+                    {{ end }}
+                {{ else }}
+                    <p>No articles found for {{ $wordParam }}.</p>
                 {{ end }}
-            {{ else }}
-                <p>No articles found for {{ $wordParam }}.</p>
-            {{ end }}
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 <!-- debug-info -->
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 {{ end }}

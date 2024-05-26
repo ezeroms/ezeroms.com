@@ -2,14 +2,23 @@ baseURL = "https://ezeroms.netlify.app/"
 languageCode = "ja"
 title = "ezeroms.com"
 enableDebug = true
+disableAliases = true
 
 [taxonomies]
   category = "categories"
   keyword = "keywords"
-  diary = "diaries"  # 正しいか再確認
+  diary = "diaries"
+  topic = "topics"
 
 [params]
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
 
 [permalinks]
   diary = "/diary/:title/"
+  topics = "/topics/:slug/"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS", "JSON"]
+  taxonomy = ["HTML", "RSS", "JSON"]
+  taxonomyTerm = ["HTML", "RSS", "JSON"]

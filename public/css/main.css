@@ -1,8 +1,15 @@
 /* main.css */
 @import url('common/common.css');
-@import url('common/content-area.css');
-@import url('common/article.css');
 @import url('common/debug-info.css');
+
+@import url('common/main.css');
+
+@import url('common/article/article-container.css');
+@import url('common/article/article-item.css');
+@import url('common/article/article-item-heading.css');
+
+@import url('pages/index.css');
+
 @import url('common/menu.css');
 @import url('common/font.css');
 @import url('common/notification.css');

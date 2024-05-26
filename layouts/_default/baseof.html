@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="{{ "/about" | relLangURL }}" class="header__nav">About</a></li>
-                <li><a href="{{ "/works" | relLangURL }}" class="header__nav">Works</a></li>
+                <li><a href="{{ "/work" | relLangURL }}" class="header__nav">Work</a></li>
                 <li><a href="{{ "/diary" | relLangURL }}" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -21,6 +21,11 @@
         {{ end }}
         <a href="{{ "/keyword" | relLangURL }}" class="header__button">Let's think together</a>
     </header>
+    
     {{ block "main" . }}{{ end }}
 </body>
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>

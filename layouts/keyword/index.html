@@ -1,14 +1,17 @@
 {{ define "main" }}
-<main class="content-area">
-    {{ partial "keyword_menu.html" . }}
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-        {{ range (where .Site.RegularPages "Section" "keyword") }}
-            <article class="article">
-                {{ .Content }}
-            </article>
-        {{ end }}
-        </ul>
+
+<main class="main">
+    <div class="main-container">
+        {{ partial "keyword_menu.html" . }}
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+            {{ range (where .Site.RegularPages "Section" "keyword") }}
+                <article class="article-item hover-effect">
+                    {{ .Content }}
+                </article>
+            {{ end }}
+            </ul>
+        </section>
     </div>
 </main>
 
@@ -20,11 +23,11 @@
 // Shuffle articles on page load
 // キーワードをランダムで並び替えている
 document.addEventListener("DOMContentLoaded", function() {
-    var articles = document.querySelectorAll('.article');
+    var articles = document.querySelectorAll('.article-item');
     var articlesArray = Array.prototype.slice.call(articles);
     shuffleArray(articlesArray);
 
-    var articlesList = document.getElementById('articles-list');
+    var articlesList = document.getElementById('article-container');
     articlesList.innerHTML = '';
 
     articlesArray.forEach(function(article) {

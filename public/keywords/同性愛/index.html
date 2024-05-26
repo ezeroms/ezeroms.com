@@ -10,7 +10,7 @@
         <nav>
             <ul>
                 <li><a href="/about" class="header__nav">About</a></li>
-                <li><a href="/works" class="header__nav">Works</a></li>
+                <li><a href="/work" class="header__nav">Work</a></li>
                 <li><a href="/diary" class="header__nav">Diary</a></li>
             </ul>
         </nav>
@@ -22,23 +22,16 @@
         <a href="/keyword" class="header__button">Let's think together</a>
     </header>
     
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>同性愛</title>
-    <link rel="stylesheet" href="/css/pages/keyword.css">
-</head>
-<body>
+    
 
 
 <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="content-area__sub menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -162,59 +155,66 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Ideas for thinking about</p>
-                    <h2>同性愛</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Ideas for thinking about
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            同性愛
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
-
+    
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
                 
-                    <article class="article">
-                        <p>「要するに、同性愛者を『気持ち悪い』なんて言う人間は、頭の中で、同性愛者の体と過剰に一体化して、男同士でキスしたりするところを想像するからなんだよ。だから、そういう連中は、誰かがスゴい婆さんとつきあってるって聞いても、やっぱり『気持ち悪い』って言うよ。人の勝手だって、思えないんだよ。これはさ、AVを見てるとわかるんだ。性に関しては、人間は、簡単に他人をアバター化するから。俺はさ、中年のオッサンのアソコをじっと見つめてろなんて言われても、まあ、絶対にイヤだね。だけど、AVで女優と絡んでる時には、嬉々として凝視してるんだよ。その関係性に入り込んで、その男優の体と一体化して。」</p>
+                
+                    
+                        <article class="article-item hover-effect">
+                            <p>「要するに、同性愛者を『気持ち悪い』なんて言う人間は、頭の中で、同性愛者の体と過剰に一体化して、男同士でキスしたりするところを想像するからなんだよ。だから、そういう連中は、誰かがスゴい婆さんとつきあってるって聞いても、やっぱり『気持ち悪い』って言うよ。人の勝手だって、思えないんだよ。これはさ、AVを見てるとわかるんだ。性に関しては、人間は、簡単に他人をアバター化するから。俺はさ、中年のオッサンのアソコをじっと見つめてろなんて言われても、まあ、絶対にイヤだね。だけど、AVで女優と絡んでる時には、嬉々として凝視してるんだよ。その関係性に入り込んで、その男優の体と一体化して。」</p>
 <p>（朝井リョウ、2021『正欲』コルク）</p>
 
-                    </article>
+                        </article>
+                    
                 
-            
-        </ul>
-
+            </ul>
+        </section>
     </div>
 </main>
 
 
 <p class="debug-info">Template : /layouts/keyword/list.html</p>
 
-</body>
-</html>
 
 </body>
+
+
+<p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
 </html>
