@@ -3,6 +3,7 @@
 @import url('common/debug-info.css');
 
 @import url('common/main.css');
+@import url('common/header.css');
 
 @import url('common/article/article-container.css');
 @import url('common/article/article-item.css');

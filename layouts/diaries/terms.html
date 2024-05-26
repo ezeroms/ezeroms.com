@@ -1,13 +1,6 @@
 {{ define "main" }}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Title }}</title>
-    <link rel="stylesheet" href="/css/pages/diary.css">
-</head>
-<body>
+{{ partial "header.html" . }}
+
 <div class="diary-page">
     <h1>Month Template Applied</h1>
     {{ partial "diary_menu.html" . }}
@@ -30,6 +23,5 @@
 <div class="debug-info">
     <p>taxonomy/diaries.html</p>
 </div>
-</body>
-</html>
+
 {{ end }}

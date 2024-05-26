@@ -1,15 +1,6 @@
 {{ define "main" }}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Title }}</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
 
-
-<body>
+    {{ partial "header_top.html" . }}
     <main class="main-top">
         <a href="{{ "/" | relLangURL }}" class="top-logo">
             <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo">
@@ -44,6 +35,5 @@
             }
         });
     </script>
-</body>
-</html>
+
 {{ end }}

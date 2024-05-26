@@ -1,0 +1,133 @@
+/* --------------------
+デバイス共通のスタイル
+-------------------- */
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fff;
+  /* text-align: center; */
+
+  /* width: calc(100vw - 64px);
+  height: 96px; */
+  align-items: center;
+  padding: 0 32px;
+  /* position: relative; */
+  /* text-align: center; */
+  position: fixed;
+  background-color: #fff;
+  z-index: 10;
+  /* margin: 0 0 64px; */
+}
+
+
+.header__nav {
+  display: flex;
+  width: 30%;
+  gap: 40px;
+}
+
+.header__nav a {
+  color: #050317;
+  text-decoration: none;
+  font-family: "Helvetica Neue";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0.6px;
+  transition-duration: 0.4s;
+}
+
+.header__nav a:hover {
+  opacity: 0.6;
+  transition-duration: 0s;
+}
+
+
+.header__logo {
+  width: auto;
+}
+
+.header__logo img {
+  display: block;
+  width: 200px;
+  height: auto;
+  /* position: absolute; */
+  /* top: calc(50% - 10px);
+  left: calc(50% - 100px); */
+  /* transform: translate(-50%, -50%); */
+  transition-duration: 0.4s;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.header__logo:hover {
+  opacity: 0.6;
+}
+
+.header__logo:active {
+  transform: scale(0.95);
+}
+
+
+
+
+
+.header__button {
+  width: 30%;
+  display: flex;
+  justify-content: end;
+}
+
+.header__button a {
+  background-color: #050317;
+  padding: 16px 20px;
+  border-radius: 64px;
+  transition-duration: 0.4s;
+  transition: transform 0.2s, background-color 0.2s;
+  width: max-content;
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0.6px;
+}
+
+.header__button a:hover {
+  background-color: #39393D;
+  transition-duration: 0.1s;
+}
+
+.header__button a:active {
+  transform: scale(0.95);
+  background-color: #5D5D5F;
+}
+
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+  .header__button {
+    display: none;
+  }
+
+  .header__nav {
+    display: none;
+  }
+}
+
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+@media (min-width: 961px) {
+  header {
+    width: calc(100vw - 64px);
+    height: 96px;
+  }
+}
+
+
