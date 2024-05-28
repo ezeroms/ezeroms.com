@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hoge on ezeroms.com</title>
+    <link>http://localhost:1313/topics/hoge/</link>
+    <description>Recent content in Hoge on ezeroms.com</description>
+    <generator>Hugo</generator>
+    <language>ja</language>
+    <lastBuildDate>Fri, 01 Mar 2024 00:00:00 +0900</lastBuildDate>
+    <atom:link href="http://localhost:1313/topics/hoge/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>僕たちが東京とうまくやっていくための参考書（小説『この部屋から東京タワーは永遠に見えない』感想文）</title>
+      <link>http://localhost:1313/diary/tokyo/</link>
+      <pubDate>Fri, 01 Mar 2024 00:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/diary/tokyo/</guid>
+      <description>これは2024年3月の記事です。</description>
+    </item>
+  </channel>
+</rss>

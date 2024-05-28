@@ -14,8 +14,7 @@ disableAliases = true
   description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
 
 [permalinks]
-  diary = "/diary/:title/"
-  topics = "/topics/:slug/"
+  diary = "/diary/:slug/"
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

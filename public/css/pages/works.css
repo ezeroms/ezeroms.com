@@ -38,12 +38,6 @@
     padding: 20px;
 }
 
-
-
-
-
-
-
 .works-footer {
     display: flex;
     justify-content: space-between;
@@ -54,10 +48,6 @@
     margin: 0 10px;
     text-decoration: none;
     color: #007BFF;
-}
-
-.debug-info {
-    display: none;
 }
 
 .works-hero {

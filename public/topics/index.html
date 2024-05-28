@@ -29,8 +29,9 @@
     Link copied to clipboard!
 </div>
 
-<main class="content-area">
-    <aside class="main-item-secondary menu">
+<main class="main">
+    <div class="main-container">
+        <aside class="main-item-secondary menu">
     <ul>
         <li><a href="/topics/ニュース/">ニュース</a></li>
         <li><a href="/topics/音楽/">音楽</a></li>
@@ -84,54 +85,71 @@
     </ul>
 </aside>
 
-    <div class="content-area__main">
-        <ul class="articles-list" id="articles-list">
-            <div class="article-heading">
-                <div class="article-heading__text">
-                    <p>Thoughts on the topic of</p>
-                    <h2>Topics</h2>
+        <section class="main-item-primary">
+            <ul class="article-container" id="article-container">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            Reflections and moments from
+                        </p>
+
+                        
+                        
+                        
+                            
+                        
+                        <h2 class="article-item-heading__label__h2">
+                            April 2024 diaries
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
                 </div>
 
+
                 
-                <button class="article-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-            
-                <p>No articles found for Topics.</p>
-            
-        </ul>
+                
+                
+                
+                    <p>No articles found for .</p>
+                
+            </ul>
+        </section>
     </div>
-
-    
-<p class="debug-info">Template : /layouts/topics/list.html</p>
 </main>
 
 
+
+
+<p class="debug-info">Template : /layouts/topic/list.html</p>
+
 </body>
+</html>
 
 
-<p class="debug-info">Template : /layouts/_default/baseof.html</p>
-
+    
+    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+</body>
 </html>

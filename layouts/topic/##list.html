@@ -1,0 +1,60 @@
+{{ define "main" }}
+{{ partial "header.html" . }}
+{{ partial "notification.html" . }}
+
+<main class="content-area">
+    {{ partial "diary_menu.html" . }}
+    <div class="content-area__main">
+        <ul class="articles-list" id="articles-list">
+            <div class="article-heading">
+                <div class="article-heading__text">
+                    <p>Thoughts on the topic of</p>
+                    <h2>{{ .Title }}</h2>
+                </div>
+
+                <!-- ボタンここから -->
+                <button class="article-heading__button" onclick="copyToClipboard()">
+                    <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                <!-- ボタンここまで -->        
+            </div>
+
+            {{ $topicParam := .Title }}
+            {{ $articles := where .Site.RegularPages "Params.topics" "intersect" (slice $topicParam) }}
+            {{ if gt (len $articles) 0 }}
+                {{ range $articles }}
+                    <article class="article no-hover-effect">
+                        <a href="{{ .Permalink }}" class="article-title">
+                            {{ .Date | dateFormat "2006-01-02" }}
+                        </a>
+                        {{ .Content }}
+                    </article>
+                {{ end }}
+            {{ else }}
+                <p>No articles found for {{ $topicParam }}.</p>
+            {{ end }}
+        </ul>
+    </div>
+
+    <!-- debug-info -->
+<p class="debug-info">Template : /layouts/topics/list.html</p>
+</main>
+
+{{ end }}

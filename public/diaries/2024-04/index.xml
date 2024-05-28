@@ -10,9 +10,9 @@
     <atom:link href="http://localhost:1313/diaries/2024-04/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>命を、計画の外側から見つめ直す（映画『PLAN 75』感想文）</title>
-      <link>http://localhost:1313/diary/%E5%91%BD%E3%82%92%E8%A8%88%E7%94%BB%E3%81%AE%E5%A4%96%E5%81%B4%E3%81%8B%E3%82%89%E8%A6%8B%E3%81%A4%E3%82%81%E7%9B%B4%E3%81%99%E6%98%A0%E7%94%BBplan-75%E6%84%9F%E6%83%B3%E6%96%87/</link>
+      <link>http://localhost:1313/diary/eiga/</link>
       <pubDate>Mon, 01 Apr 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/diary/%E5%91%BD%E3%82%92%E8%A8%88%E7%94%BB%E3%81%AE%E5%A4%96%E5%81%B4%E3%81%8B%E3%82%89%E8%A6%8B%E3%81%A4%E3%82%81%E7%9B%B4%E3%81%99%E6%98%A0%E7%94%BBplan-75%E6%84%9F%E6%83%B3%E6%96%87/</guid>
+      <guid>http://localhost:1313/diary/eiga/</guid>
       <description>これは2024年4月の記事です。</description>
     </item>
   </channel>
