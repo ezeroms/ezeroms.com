@@ -8,14 +8,22 @@
         <div class="about">
 
             <!-- 写真とプロフィール -->
-            <div class="about__content">
+            <div class="about__profile">
                 <img src="{{ "images/about/profile.png" | relURL }}" alt="Profile Picture">
                 <article class="article-item">
                     {{ .Content }}
-                    <p>
-                        アイコン小さく
-                        FB, X, Insta, Threads, BLSKY, Bereal, TikTok, 
-                    </p>
+                    <ul class="about__profile__sns">
+                        <!-- <p>👀 Find me here too:</p> -->
+                        <li><a href="#"><img src="/images/about/icon_facebook.svg" alt="Facebook"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_x.svg" alt="X"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_instagram.svg" alt="Instagram"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_tiktok.svg" alt="TikTok"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_bereal.svg" alt="BeReal"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_bluesky.svg" alt="Bluesky"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_threads.svg" alt="Threads"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_discord.svg" alt="Discord"></a></li>
+                        <li><a href="#"><img src="/images/about/icon_spotify.svg" alt="Spotify"></a></li>
+                    </ul>
                 </article>
             </div>
 
@@ -75,7 +83,7 @@
                                         {{ .description }}
                                     </p>
                                 </div>
-                                <img src="" alt="" class="link-card__right">
+                                <img src="/images/about/icon_exit.svg" alt="" class="link-card__right">
                             </div>
                         </a>
                     {{ end }}
@@ -101,50 +109,51 @@
 
                 <div class="about__contact__list">
                     
-                        <a href="#" target="_blank" class="link-card contact">
-                            <div>
-                                <div class="link-card__left">
-                                    <p class="link-card__left__p">
-                                        Google form
-                                    </p>
-                                </div>
-                                <img src="" alt="" class="link-card__right">
-                            </div>
-                        </a>
+                    <a href="#" target="_blank" class="link-card in-contact">
+                        <div class="link-card__left">
+                            <h2 class="link-card__left__h2">
+                                Google Form
+                            </h2>
+                        </div>
+                        <img src="/images/about/icon_google.svg" alt="" class="link-card__right">
+                    </a>
 
-                        <a href="#" target="_blank" class="link-card contact">
-                            <div>
-                                <div class="link-card__left">
-                                    <p class="link-card__left__p">
-                                        LINE
-                                    </p>
-                                </div>
-                                <img src="" alt="" class="link-card__right">
-                            </div>
-                        </a>
+                    <a href="#" target="_blank" class="link-card in-contact">
+                        <div class="link-card__left">
+                            <h2 class="link-card__left__h2">
+                                Messenger
+                            </h2>
+                        </div>
+                        <img src="/images/about/icon_messenger.svg" alt="Messenger" class="link-card__right">
+                    </a>
 
-                        <a href="#" target="_blank" class="link-card contact">
-                            <div>
-                                <div class="link-card__left">
-                                    <p class="link-card__left__p">
-                                        WhatsUp
-                                    </p>
-                                </div>
-                                <img src="" alt="" class="link-card__right">
-                            </div>
-                        </a>
+                    <a href="#" target="_blank" class="link-card in-contact">
+                        <div class="link-card__left">
+                            <h2 class="link-card__left__h2">
+                                LINE
+                            </h2>
+                        </div>
+                        <img src="/images/about/icon_line.svg" alt="" class="link-card__right">
+                    </a>
 
-                        <a href="#" target="_blank" class="link-card contact">
-                            <div >
-                                <div class="link-card__left">
-                                    <p class="link-card__left__p">
-                                        Signal
-                                    </p>
-                                </div>
-                                <img src="" alt="" class="link-card__right">
-                            </div>
-                        </a>
-                    
+                    <a href="#" target="_blank" class="link-card in-contact">
+                        <div class="link-card__left">
+                            <h2 class="link-card__left__h2">
+                                WhatsApp
+                            </h2>
+                        </div>
+                        <img src="/images/about/icon_exit.svg" alt="" class="link-card__right">
+                    </a>
+
+                    <a href="#" target="_blank" class="link-card in-contact">
+                        <div class="link-card__left">
+                            <h2 class="link-card__left__h2">
+                                Signal
+                            </h2>
+                        </div>
+                        <img src="/images/about/icon_signal.svg" alt="" class="link-card__right">
+                    </a>
+
                 </div>
 
                 <!-- <div class="contact-icons">
