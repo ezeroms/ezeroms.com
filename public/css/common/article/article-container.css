@@ -1,6 +1,7 @@
 /* --------------------
 デバイス共通のスタイル
 -------------------- */
+
 .article-container {
   width: 100%;
   padding: 0;
@@ -8,4 +9,17 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+
+  .article-container {
+    width: 100dvw;
+  }
 }

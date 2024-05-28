@@ -18,7 +18,11 @@
 -------------------- */
 
 @media (max-width: 960px) {
-
+  .main-section {
+    top: 104px;
+    left: 0;
+    height: calc(100dvh - 104px);
+  }
 }
 
 

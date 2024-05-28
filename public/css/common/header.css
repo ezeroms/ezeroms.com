@@ -6,20 +6,14 @@ header {
   flex-direction: row;
   justify-content: space-between;
   background-color: #fff;
-  /* text-align: center; */
-
-  /* width: calc(100vw - 64px);
-  height: 96px; */
   align-items: center;
   padding: 0 32px;
-  /* position: relative; */
-  /* text-align: center; */
   position: fixed;
   background-color: #fff;
   z-index: 10;
-  /* margin: 0 0 64px; */
+  width: calc(100vw - 64px);
+  height: 96px;
 }
-
 
 .header__nav {
   display: flex;
@@ -53,10 +47,6 @@ header {
   display: block;
   width: 200px;
   height: auto;
-  /* position: absolute; */
-  /* top: calc(50% - 10px);
-  left: calc(50% - 100px); */
-  /* transform: translate(-50%, -50%); */
   transition-duration: 0.4s;
   transition: transform 0.2s, background-color 0.2s;
 }
@@ -112,7 +102,46 @@ header {
 -------------------- */
 @media (max-width: 960px) {
   header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    align-items: center;
+    padding: 0 16px;
+    position: fixed;
+    background-color: #fff;
+    z-index: 10;
+    width: calc(100dvw - 32px);
+    height: 104px;
+  }
+
+  .header-top {
     display: none;
+  }
+
+  .header__nav {
+    display: none;
+  }
+  
+  .header__button {
+    display: none;
+  }
+
+  .header__logo img {
+    width: 30dvw;
+  }
+
+  .header__nav-sp {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 18px 0 0;
+  }
+
+  .header__nav-sp a {
+    font-size: 14px;
+    color: #050317;
+    margin: 0 24px 0;
   }
 }
 
@@ -120,9 +149,8 @@ header {
 パソコン用のスタイル
 -------------------- */
 @media (min-width: 961px) {
-  header {
-    width: calc(100vw - 64px);
-    height: 96px;
+  .header__nav-sp {
+    display: none;
   }
 }
 
