@@ -16,8 +16,16 @@
             <div id="image-container" data-images='{{ $imageNames | jsonify }}'></div>
             <img id="randomImage" src="" alt="Random Image" class="top-photo">
         </div>
-        <!-- layouts/index.html -->
+
+        <nav class="nav-sp">
+            <a href="/about">About</a>
+            <a href="/work">Work</a>
+            <a href="/diary">Diary</a>
+        </nav>
+
     </main>
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var imageContainer = document.getElementById("image-container");
