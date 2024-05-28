@@ -114,17 +114,6 @@ header {
   header {
     display: none;
   }
-
-  .nav-sp {
-    display: flex;
-    flex-direction: row;
-    width: calc(100vw - 32px);
-  }
-
-  .nav-sp a {
-    font-size: 16px;
-    color: #050317;
-  }
 }
 
 /* --------------------
@@ -134,10 +123,6 @@ header {
   header {
     width: calc(100vw - 64px);
     height: 96px;
-  }
-
-  .nav-sp {
-    display: none;
   }
 }
 
