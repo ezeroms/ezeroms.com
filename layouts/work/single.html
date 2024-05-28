@@ -2,24 +2,28 @@
 {{ partial "header.html" . }}
 {{ partial "notification.html" . }}
 
-<main class="content-area">
-    <div class="content-area__main">
-        <div class="works-hero">
-            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="works-hero__image">
-        </div>
-        <div class="works-article">
+<main class="main-section">
+    <section class="main-section-1column">
+        <div class="work">
+            
+            <div class="work-hero">
+                <img src="{{ .Params.image }}" alt="{{ .Title }}">
+            </div>
+    
+            <ul class="article-container work-single">
 
-            <ul class="articles-list" id="articles-list">
-                <div class="article-heading">
-                    <div class="article-heading__text">
-                        <p>
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
                             {{ .Date | dateFormat "2006-01-02" }}
                         </p>
-                        <h2>{{ .Title }}</h2>
+                        <h2 class="article-item-heading__label__h2">
+                            {{ .Title }}
+                        </h2>
                     </div>
     
                     <!-- ボタンここから -->
-                    <button class="article-heading__button" onclick="copyToClipboard()">
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
                         <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
                     </button>
                     <script>
@@ -41,20 +45,17 @@
                     </script>
                     <!-- ボタンここまで -->        
                 </div>
-                <article class="article no-hover-effect">
+    
+                <article class="article-item no-hover-effect">
                     {{ .Content }}
                 </article>
             </ul>
 
-            {{ partial "works_footer.html" . }}
-
         </div>
-
-
-    </div>    
+    </section>    
 </main>
 
 <!-- debug-info -->
-<p class="debug-info">Template : /layouts/works/single.html</p>
+<p class="debug-info">Template : /layouts/work/single.html</p>
 
 {{ end }}

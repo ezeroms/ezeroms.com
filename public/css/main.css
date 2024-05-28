@@ -2,8 +2,17 @@
 @import url('common/common.css');
 @import url('common/debug-info.css');
 
-@import url('common/main.css');
+
 @import url('common/header.css');
+
+
+
+/* main-section */
+@import url('common/main-section/main-section.css');
+@import url('common/main-section/main-section-1column.css');
+@import url('common/main-section/main-section-2column__right.css');
+@import url('common/main-section/main-section-2column__left.css');
+
 
 @import url('common/tooltip.css');
 

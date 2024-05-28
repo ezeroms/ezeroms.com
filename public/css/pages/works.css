@@ -1,17 +1,13 @@
 /* works.css */
 
-.works-page {
-    padding: 20px;
-}
-
-.works-gallery {
-    margin: 64px 0 40px;
+.work {
+    margin: 64px 0 0;
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     max-width: 1440px;
     width: calc(100vw - 64px);
-    padding: 0 32px 0;
+    padding: 0 0 40px;
 }
 
 .work-item {
@@ -34,6 +30,13 @@
     transform: scale(0.95);
 }
 
+
+
+
+
+
+
+
 .work-detail-page {
     padding: 20px;
 }
@@ -50,26 +53,27 @@
     color: #007BFF;
 }
 
-.works-hero {
+
+
+
+
+.work-hero {
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 1440px;
     width: 100%;
-    margin: 64px auto 0;
+    margin: 0;
 }
 
-.works-hero__image {
+.work-hero img {
     max-width: 100%;
     height: auto;
 }
 
-.works-article {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 1440px;
-    width: 100%;
-    margin:64px auto;
-    background-color: #fff;
+
+
+.work-single {
+    width: 688px;
+    margin: 48px auto 0;
 }

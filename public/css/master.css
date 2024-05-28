@@ -1,0 +1,24 @@
+/* main.css */
+@import url('common/common.css');
+@import url('common/debug-info.css');
+
+@import url('common/main.css');
+@import url('common/header.css');
+
+@import url('common/tooltip.css');
+
+@import url('common/article/article-container.css');
+@import url('common/article/article-item.css');
+@import url('common/article/article-item-heading.css');
+
+@import url('pages/index.css');
+
+@import url('common/menu.css');
+@import url('common/font.css');
+@import url('common/notification.css');
+
+@import url('pages/about.css');
+@import url('pages/works.css');
+
+@import url('pages/diary.css');
+@import url('pages/keyword.css');

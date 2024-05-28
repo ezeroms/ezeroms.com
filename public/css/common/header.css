@@ -111,11 +111,7 @@ header {
 スマホ用のスタイル
 -------------------- */
 @media (max-width: 960px) {
-  .header__button {
-    display: none;
-  }
-
-  .header__nav {
+  header {
     display: none;
   }
 }

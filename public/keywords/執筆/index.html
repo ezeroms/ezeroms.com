@@ -29,9 +29,8 @@
     Link copied to clipboard!
 </div>
 
-<main class="main">
-    <div class="main-container">
-        <aside class="main-item-secondary menu">
+<main class="main-section">
+    <aside class="main-section-2column__left">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -136,6 +135,8 @@
         
         <li><a href="/keywords/%E7%B5%84%E7%B9%94">組織</a></li>
         
+        <li><a href="/keywords/%E8%87%AA%E5%B7%B1">自己</a></li>
+        
         <li><a href="/keywords/%E8%87%AA%E7%94%B1">自由</a></li>
         
         <li><a href="/keywords/%E8%87%AA%E7%AB%8B">自立</a></li>
@@ -155,58 +156,57 @@
     </ul>
 </aside>
 
-        <section class="main-item-primary">
-            <ul class="article-container" id="article-container">
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
 
-                <div class="article-item-heading">
-                    <div class="article-item-heading__label">
-                        <p class="article-item-heading__label__p">
-                            Ideas for thinking about
-                        </p>
-                        <h2 class="article-item-heading__label__h2">
-                            執筆
-                        </h2>
-                    </div>
-    
-                    
-                    <button class="article-item-heading__button" onclick="copyToClipboard()">
-                        <img src="/images/common/icon_link.svg" alt="Get article url">
-                    </button>
-                    <script>
-                        function copyToClipboard() {
-                            const url = window.location.href;
-                            navigator.clipboard.writeText(url).then(function() {
-                                showNotification();
-                            }, function(err) {
-                                console.error('リンクの保存に失敗しました: ', err);
-                            });
-                        }
-                        function showNotification() {
-                            var notification = document.getElementById("notification");
-                            notification.className = "notification show";
-                            setTimeout(function() {
-                                notification.className = notification.className.replace(" show", "");
-                            }, 3000);
-                        }
-                    </script>
-                            
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        Ideas for thinking about
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        執筆
+                    </h2>
                 </div>
-    
+
                 
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
+            
+            
+            
                 
-                
-                    
-                        <article class="article-item hover-effect">
-                            <p>結局、書くというのは、言葉をよりふさわしいものに修正し続けるプロセスです。これは時間と労力を要します。学生だけではなくプロの書き手にとっても、あれでもない、これでもないと言葉の迷宮をさまようのは、ときに苦痛でしょう。しかし、この難所でこそ、丁寧で粘り強い思考が要求される。しっくりくる言葉を見つけるのに数日悩むこともありますが、この苦労を省略すると、精神的にも技術的にも成長しません。</p>
+                    <article class="article-item hover-effect">
+                        <p>結局、書くというのは、言葉をよりふさわしいものに修正し続けるプロセスです。これは時間と労力を要します。学生だけではなくプロの書き手にとっても、あれでもない、これでもないと言葉の迷宮をさまようのは、ときに苦痛でしょう。しかし、この難所でこそ、丁寧で粘り強い思考が要求される。しっくりくる言葉を見つけるのに数日悩むこともありますが、この苦労を省略すると、精神的にも技術的にも成長しません。</p>
 <p>要するに「このへんでいいや」と雑に乗り切ってしまうのでは、考えたことにならないのです。さっき「粗雑さは精神の敵」と言ったのは、まさにそのためです。ものごとを雑に処理している限り、思考の真似事の先には進めない。考えるとは、頭脳に日常とは違う負荷をかけることです。</p>
 <p>（福嶋亮大、2022『思考の庭のつくりかた はじめての人文学ガイド』星海社）</p>
 
-                        </article>
-                    
+                    </article>
                 
-            </ul>
-        </section>
-    </div>
+            
+        </ul>
+    </section>
 </main>
 
 

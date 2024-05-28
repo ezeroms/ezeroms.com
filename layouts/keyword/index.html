@@ -1,19 +1,17 @@
 {{ define "main" }}
 {{ partial "header.html" . }}
 
-<main class="main">
-    <div class="main-container">
-        {{ partial "keyword_menu.html" . }}
-        <section class="main-item-primary">
-            <ul class="article-container" id="article-container">
-            {{ range (where .Site.RegularPages "Section" "keyword") }}
-                <article class="article-item hover-effect">
-                    {{ .Content }}
-                </article>
-            {{ end }}
-            </ul>
-        </section>
-    </div>
+<main class="main-section">
+    {{ partial "keyword_menu.html" . }}
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
+        {{ range (where .Site.RegularPages "Section" "keyword") }}
+            <article class="article-item hover-effect">
+                {{ .Content }}
+            </article>
+        {{ end }}
+        </ul>
+    </section>
 </main>
 
 <!-- debug-info -->

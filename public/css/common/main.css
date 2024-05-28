@@ -6,41 +6,46 @@
   display: flex;
   flex-direction: row;
   width: 100dvw;
-  justify-content: center;  
-}
-
-.main-container {
-  display: flex;
   justify-content: center;
+  position: absolute;
 }
 
-.main-item-primary {
+.main-1column {
+  
+}
+
+.main-1column::-webkit-scrollbar {
+  display: none;
+}
+
+
+.main-2column__left {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-left: calc((100dvw - 960px) / 2);
+  padding-right: 32px;
+}
+
+.main-2column__left::-webkit-scrollbar {
+  display: none;
+}
+
+
+.main-2column__right {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   position: relative;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  width: 100%;
+  width: 688px;
+  padding-right: calc((100dvw - 960px) / 2);
 }
 
-.main-item-primary::-webkit-scrollbar {
-  display: none;
-}
-
-.main-item-secondary {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  position: -webkit-sticky; /* For Safari */
-  position: sticky;
-  top: 0; /* スクロール時に固定される位置 */
-  align-self: flex-start; /* スクロール時に上に固定されるようにします */
-}
-
-.main-item-secondary::-webkit-scrollbar {
+.main-2column__right::-webkit-scrollbar {
   display: none;
 }
 
@@ -72,13 +77,15 @@
 -------------------- */
 @media (min-width: 961px) {
   .main {
-    padding-top: 96px;
-  }
-
-  .main-container {
-    width: 960px;
+    top: 96px;
+    left: 0;
     height: calc(100dvh - 96px);
   }
+
+  .main-item-primary {
+    width: 688px;
+  }
+  
 
   .main-item-secondary {
     min-width: 240px;

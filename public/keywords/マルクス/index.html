@@ -29,9 +29,8 @@
     Link copied to clipboard!
 </div>
 
-<main class="main">
-    <div class="main-container">
-        <aside class="main-item-secondary menu">
+<main class="main-section">
+    <aside class="main-section-2column__left">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -136,6 +135,8 @@
         
         <li><a href="/keywords/%E7%B5%84%E7%B9%94">組織</a></li>
         
+        <li><a href="/keywords/%E8%87%AA%E5%B7%B1">自己</a></li>
+        
         <li><a href="/keywords/%E8%87%AA%E7%94%B1">自由</a></li>
         
         <li><a href="/keywords/%E8%87%AA%E7%AB%8B">自立</a></li>
@@ -155,57 +156,56 @@
     </ul>
 </aside>
 
-        <section class="main-item-primary">
-            <ul class="article-container" id="article-container">
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
 
-                <div class="article-item-heading">
-                    <div class="article-item-heading__label">
-                        <p class="article-item-heading__label__p">
-                            Ideas for thinking about
-                        </p>
-                        <h2 class="article-item-heading__label__h2">
-                            マルクス
-                        </h2>
-                    </div>
-    
-                    
-                    <button class="article-item-heading__button" onclick="copyToClipboard()">
-                        <img src="/images/common/icon_link.svg" alt="Get article url">
-                    </button>
-                    <script>
-                        function copyToClipboard() {
-                            const url = window.location.href;
-                            navigator.clipboard.writeText(url).then(function() {
-                                showNotification();
-                            }, function(err) {
-                                console.error('リンクの保存に失敗しました: ', err);
-                            });
-                        }
-                        function showNotification() {
-                            var notification = document.getElementById("notification");
-                            notification.className = "notification show";
-                            setTimeout(function() {
-                                notification.className = notification.className.replace(" show", "");
-                            }, 3000);
-                        }
-                    </script>
-                            
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        Ideas for thinking about
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        マルクス
+                    </h2>
                 </div>
-    
+
                 
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
+            
+            
+            
                 
-                
-                    
-                        <article class="article-item hover-effect">
-                            <p>疎外は，社会学の言説から抜け出して，メデイアの解説や日常言語に入り込んでいる．たとえば，一つの世代全体が「社会から疎外」されている，とか，若者のサブカルチャーは，主流の文化から若い人びとが疎外されている状態を表している，などという言い方を耳にするであろう．この場合，隔たりや分離といった観念が含まれていることは明らかであるが，社会学において疎外といえば，資本主義社会の不平等と関連していることに注意したい．マルクスの史的唯物論のアプローチは，人びとが仕事を組織して財とサービスをつくり出す方法から始まる．マルクスにとって，「疎外されている」とは，真の帰結へと至る客観的条件のもとにおかれていることであり，その条件を変える鍵は，私たちの考えや信念を変えることではなく，自分の状態をコントロールする力を増し加えるために，生きる方法を変えることなのである．かつての労働生活とは，より骨の折れる肉体的労役であったように思われるが，小作農や職人など多くの社会集団にとっては，熟練を要する，それ自体満足できる仕事であり，現代の製造業や大規模なオフイス環境，コールセンターやファストフード店などよりも，仕事に対するコントロールの幅が大きかった．今日の仕事は，肉体的には以前ほど重労働ではないかもしれないが，コントロールの余地を与えられていないため，より大きな疎外を生み出し続けているのである.</p>
+                    <article class="article-item hover-effect">
+                        <p>疎外は，社会学の言説から抜け出して，メデイアの解説や日常言語に入り込んでいる．たとえば，一つの世代全体が「社会から疎外」されている，とか，若者のサブカルチャーは，主流の文化から若い人びとが疎外されている状態を表している，などという言い方を耳にするであろう．この場合，隔たりや分離といった観念が含まれていることは明らかであるが，社会学において疎外といえば，資本主義社会の不平等と関連していることに注意したい．マルクスの史的唯物論のアプローチは，人びとが仕事を組織して財とサービスをつくり出す方法から始まる．マルクスにとって，「疎外されている」とは，真の帰結へと至る客観的条件のもとにおかれていることであり，その条件を変える鍵は，私たちの考えや信念を変えることではなく，自分の状態をコントロールする力を増し加えるために，生きる方法を変えることなのである．かつての労働生活とは，より骨の折れる肉体的労役であったように思われるが，小作農や職人など多くの社会集団にとっては，熟練を要する，それ自体満足できる仕事であり，現代の製造業や大規模なオフイス環境，コールセンターやファストフード店などよりも，仕事に対するコントロールの幅が大きかった．今日の仕事は，肉体的には以前ほど重労働ではないかもしれないが，コントロールの余地を与えられていないため，より大きな疎外を生み出し続けているのである.</p>
 <p>（友枝敏雄・友枝久美子、2018『ギデンズ 社会学コンセプト事典』丸善出版）</p>
 
-                        </article>
-                    
+                    </article>
                 
-            </ul>
-        </section>
-    </div>
+            
+        </ul>
+    </section>
 </main>
 
 

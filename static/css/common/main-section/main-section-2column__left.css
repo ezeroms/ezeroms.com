@@ -1,0 +1,75 @@
+/* --------------------
+デバイス共通のスタイル
+-------------------- */
+
+.main-section-2column__left {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.main-section-2column__left::-webkit-scrollbar {
+  display: none;
+}
+
+.main-section-2column__left ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 64px 0 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.main-section-2column__left a {
+  text-decoration: none;
+  color: #050317;
+  font-size: 14px;
+  padding: 0;
+  /* background-color: #ddd; */
+  border-radius: 40px;
+  transition-duration: 0.4s;
+  display: inline-block;
+}
+
+.main-section-2column__left a:hover {
+  opacity: 0.6;
+  transition-duration: 0s;
+}
+
+
+
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+
+@media (max-width: 960px) {
+
+}
+
+
+
+
+
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+
+@media (min-width: 961px) {
+  .main-section-2column__left {
+    width: 240px;
+    padding-left: calc((100dvw - 960px) / 2);
+    padding-right: 32px;
+  }
+}
+
+
+
+
+
+

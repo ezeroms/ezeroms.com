@@ -1,4 +1,4 @@
-<aside class="main-item-secondary menu">
+<aside class="main-section-2column__left">
     <ul>
         {{ range $name, $taxonomy := .Site.Taxonomies.keywords }}
         <li><a href="{{ "/keywords/" | relLangURL }}{{ $name | urlize }}">{{ $name }}</a></li>

@@ -1,0 +1,45 @@
+/* --------------------
+デバイス共通のスタイル
+-------------------- */
+
+.main-section {
+  display: flex;
+  flex-direction: row;
+  width: 100dvw;
+  justify-content: center;
+  position: absolute;
+}
+
+
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+
+@media (max-width: 960px) {
+
+}
+
+
+
+
+
+
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+
+@media (min-width: 961px) {
+  .main-section {
+    top: 96px;
+    left: 0;
+    height: calc(100dvh - 96px);
+  }
+}
+
+
+
+
+
+

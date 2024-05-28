@@ -29,9 +29,8 @@
     Link copied to clipboard!
 </div>
 
-<main class="main">
-    <div class="main-container">
-        <aside class="main-item-secondary menu">
+<main class="main-section">
+    <aside class="main-section-2column__left">
     <ul>
         <li><a href="/topics/news/">ニュース</a></li>
         <li><a href="/topics/music/">音楽</a></li>
@@ -41,9 +40,10 @@
         <li><a href="/topics/gaming/">ゲーム</a></li>
         <li><a href="/topics/sports/">スポーツ</a></li>
         <li><a href="/topics/books-and-magazines/">本・雑誌</a></li>
+        <li><a href="/topics/languages-and-foreign-cultures/">言語・海外文化</a></li>
         <li><a href="/topics/design/">デザイン</a></li>
         <li><a href="/topics/internet-and-technology/">インターネット・技術</a></li>
-        <li><a href="/topics/languages-and-foreign-cultures/">言語・海外文化</a></li>
+        
         <li><a href="/topics/natural-science/">自然科学</a></li>
         <li><a href="/topics/humanities-and-social-sciences/">人文・社会科学</a></li>
     </ul>
@@ -86,68 +86,63 @@
     </ul>
 </aside>
 
-        <section class="main-item-primary">
-            <ul class="article-container" id="article-container">
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
 
-                <div class="article-item-heading">
-                    <div class="article-item-heading__label">
-                        <p class="article-item-heading__label__p">
-                            Reflections and moments from
-                        </p>
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        Reflections and moments from
+                    </p>
 
-                        
-                        
-                        
-                            
-                        
-                        <h2 class="article-item-heading__label__h2">
-                            April 2024 diaries
-                        </h2>
-                    </div>
-    
                     
-                    <button class="article-item-heading__button" onclick="copyToClipboard()">
-                        <img src="/images/common/icon_link.svg" alt="Get article url">
-                    </button>
-                    <script>
-                        function copyToClipboard() {
-                            const url = window.location.href;
-                            navigator.clipboard.writeText(url).then(function() {
-                                showNotification();
-                            }, function(err) {
-                                console.error('リンクの保存に失敗しました: ', err);
-                            });
-                        }
-                        function showNotification() {
-                            var notification = document.getElementById("notification");
-                            notification.className = "notification show";
-                            setTimeout(function() {
-                                notification.className = notification.className.replace(" show", "");
-                            }, 3000);
-                        }
-                    </script>
-                            
+                    
+                    
+                        
+                    
+                    <h2 class="article-item-heading__label__h2">
+                        April 2024 diaries
+                    </h2>
                 </div>
 
+                
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
 
-                
-                
-                
-                
-                    <p>No articles found for .</p>
-                
-            </ul>
-        </section>
-    </div>
+
+            
+            
+            
+            
+                <p>No articles found for .</p>
+            
+        </ul>
+    </section>
 </main>
-
-
 
 
 <p class="debug-info">Template : /layouts/topic/list.html</p>
 
-</body>
-</html>
 
 
     

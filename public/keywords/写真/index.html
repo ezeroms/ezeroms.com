@@ -29,9 +29,8 @@
     Link copied to clipboard!
 </div>
 
-<main class="main">
-    <div class="main-container">
-        <aside class="main-item-secondary menu">
+<main class="main-section">
+    <aside class="main-section-2column__left">
     <ul>
         
         <li><a href="/keywords/20%E4%B8%96%E7%B4%80">20世紀</a></li>
@@ -136,6 +135,8 @@
         
         <li><a href="/keywords/%E7%B5%84%E7%B9%94">組織</a></li>
         
+        <li><a href="/keywords/%E8%87%AA%E5%B7%B1">自己</a></li>
+        
         <li><a href="/keywords/%E8%87%AA%E7%94%B1">自由</a></li>
         
         <li><a href="/keywords/%E8%87%AA%E7%AB%8B">自立</a></li>
@@ -155,57 +156,56 @@
     </ul>
 </aside>
 
-        <section class="main-item-primary">
-            <ul class="article-container" id="article-container">
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
 
-                <div class="article-item-heading">
-                    <div class="article-item-heading__label">
-                        <p class="article-item-heading__label__p">
-                            Ideas for thinking about
-                        </p>
-                        <h2 class="article-item-heading__label__h2">
-                            写真
-                        </h2>
-                    </div>
-    
-                    
-                    <button class="article-item-heading__button" onclick="copyToClipboard()">
-                        <img src="/images/common/icon_link.svg" alt="Get article url">
-                    </button>
-                    <script>
-                        function copyToClipboard() {
-                            const url = window.location.href;
-                            navigator.clipboard.writeText(url).then(function() {
-                                showNotification();
-                            }, function(err) {
-                                console.error('リンクの保存に失敗しました: ', err);
-                            });
-                        }
-                        function showNotification() {
-                            var notification = document.getElementById("notification");
-                            notification.className = "notification show";
-                            setTimeout(function() {
-                                notification.className = notification.className.replace(" show", "");
-                            }, 3000);
-                        }
-                    </script>
-                            
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        Ideas for thinking about
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        写真
+                    </h2>
                 </div>
-    
+
                 
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
+            
+            
+            
                 
-                
-                    
-                        <article class="article-item hover-effect">
-                            <p>かつて写真は非常に限られたタイミングでしか撮られず、それが現在との断絶を印象づけ、写真に備わる一種の「思い出性」とでも呼べる性質を支えていた。これは人間の記憶に似ている。大部分を忘れてしまうからこそ、覚えているごく少数の記憶が思い出として重宝される。思い出とは、その少なさに支えられている。</p>
+                    <article class="article-item hover-effect">
+                        <p>かつて写真は非常に限られたタイミングでしか撮られず、それが現在との断絶を印象づけ、写真に備わる一種の「思い出性」とでも呼べる性質を支えていた。これは人間の記憶に似ている。大部分を忘れてしまうからこそ、覚えているごく少数の記憶が思い出として重宝される。思い出とは、その少なさに支えられている。</p>
 <p>（大山顕、2020『新写真論 スマホと顔』株式会社ゲンロン）</p>
 
-                        </article>
-                    
+                    </article>
                 
-            </ul>
-        </section>
-    </div>
+            
+        </ul>
+    </section>
 </main>
 
 

@@ -1,0 +1,109 @@
+/* --------------------
+デバイス共通のスタイル
+-------------------- */
+
+.main-section {
+  display: flex;
+  flex-direction: row;
+  width: 100dvw;
+  justify-content: center;
+  position: absolute;
+}
+
+.main-section-1column {
+  
+}
+
+.main-section-1column::-webkit-scrollbar {
+  display: none;
+}
+
+.main-section-2column__left {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.main-section-2column__left::-webkit-scrollbar {
+  display: none;
+}
+
+.main-section-2column__right {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  position: relative;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.main-section-2column__right::-webkit-scrollbar {
+  display: none;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #050317;
+  font-size: 14px;
+  padding: 0;
+  /* background-color: #ddd; */
+  border-radius: 40px;
+  transition-duration: 0.4s;
+  display: inline-block;
+}
+
+.menu a:hover {
+  opacity: 0.6;
+  transition-duration: 0s;
+}
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+
+@media (max-width: 960px) {
+
+}
+
+
+
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+@media (min-width: 961px) {
+  .main-section {
+    top: 96px;
+    left: 0;
+    height: calc(100dvh - 96px);
+  }
+
+  .main-section-2column__left {
+    width: 240px;
+    padding-left: calc((100dvw - 960px) / 2);
+    padding-right: 32px;
+  }
+
+  .main-section-2column__right {
+    width: 688px;
+    padding-right: calc((100dvw - 960px) / 2);
+  }
+}
+
+
+
+
+
+

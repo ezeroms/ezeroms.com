@@ -1,8 +1,9 @@
 {{ define "main" }}
 {{ partial "header.html" . }}
 
-<main class="main">
-        <div class="works-gallery">
+<main class="main-section">
+    <section class="main-section-1column">
+        <div class="work">
             {{ range .Pages }}
                 <div class="work-item">
                     <a href="{{ .Permalink }}">
@@ -11,6 +12,7 @@
                 </div>
             {{ end }}
         </div>
+    </section>
 </main>
 
 <!-- debug-info -->

@@ -2,72 +2,70 @@
 {{ partial "header.html" . }}
 {{ partial "notification.html" . }}
 
-<main class="main">
-    <div class="main-container">
-        {{ partial "diary_menu.html" . }}
-        <section class="main-item-primary">
-            <ul class="article-container" id="article-container">
+<main class="main-section">
+    {{ partial "diary_menu.html" . }}
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
 
-                <div class="article-item-heading">
-                    <div class="article-item-heading__label">
-                        <p class="article-item-heading__label__p">
-                            Reflections and moments from
-                        </p>
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        Reflections and moments from
+                    </p>
 
-                        {{ $path := .Permalink }}
-                        {{ $diariesDate := replaceRE `.*\/diaries\/([0-9]{4}-[0-9]{2})\/.*` "$1" $path }}
-                        {{ if eq $diariesDate $path }}
-                            {{ $diariesDate = "2024-04" }}
-                        {{ end }}
-                        <h2 class="article-item-heading__label__h2">
-                            {{ partial "convert_date.html" $diariesDate }} diaries
-                        </h2>
-                    </div>
-    
-                    <!-- ボタンここから -->
-                    <button class="article-item-heading__button" onclick="copyToClipboard()">
-                        <img src="/images/common/icon_link.svg" alt="Get article url">
-                    </button>
-                    <script>
-                        function copyToClipboard() {
-                            const url = window.location.href;
-                            navigator.clipboard.writeText(url).then(function() {
-                                showNotification();
-                            }, function(err) {
-                                console.error('リンクの保存に失敗しました: ', err);
-                            });
-                        }
-                        function showNotification() {
-                            var notification = document.getElementById("notification");
-                            notification.className = "notification show";
-                            setTimeout(function() {
-                                notification.className = notification.className.replace(" show", "");
-                            }, 3000);
-                        }
-                    </script>
-                    <!-- ボタンここまで -->        
-                </div>
-    
-                {{ $path := .Permalink }}
-                {{ $monthParam := replaceRE `^.*/diaries/([0-9]{4}-[0-9]{2})/.*$` "$1" $path | default "2024-04" }}
-                {{ $articles := where .Site.RegularPages "Params.diaries" "intersect" (slice $monthParam) }}
-                {{ if gt (len $articles) 0 }}
-                    {{ range $articles }}
-                    <article id="{{ .Title | urlize }}" class="article-item">
-                        <a href="{{ .Permalink }}">
-                            <h1>
-                                {{ .Date | dateFormat "2006-01-02" }}
-                            </h1>
-                        </a>
-                        {{ .Content }}
-                    </article>
+                    {{ $path := .Permalink }}
+                    {{ $diariesDate := replaceRE `.*\/diaries\/([0-9]{4}-[0-9]{2})\/.*` "$1" $path }}
+                    {{ if eq $diariesDate $path }}
+                        {{ $diariesDate = "2024-04" }}
                     {{ end }}
-                {{ else }}
-                    <p>No articles found for {{ partial "convert_date.html" $monthParam }}.</p>
+                    <h2 class="article-item-heading__label__h2">
+                        {{ partial "convert_date.html" $diariesDate }} diaries
+                    </h2>
+                </div>
+
+                <!-- ボタンここから -->
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                <!-- ボタンここまで -->        
+            </div>
+
+            {{ $path := .Permalink }}
+            {{ $monthParam := replaceRE `^.*/diaries/([0-9]{4}-[0-9]{2})/.*$` "$1" $path | default "2024-04" }}
+            {{ $articles := where .Site.RegularPages "Params.diaries" "intersect" (slice $monthParam) }}
+            {{ if gt (len $articles) 0 }}
+                {{ range $articles }}
+                <article id="{{ .Title | urlize }}" class="article-item">
+                    <a href="{{ .Permalink }}">
+                        <h1>
+                            {{ .Date | dateFormat "2006-01-02" }}
+                        </h1>
+                    </a>
+                    {{ .Content }}
+                </article>
                 {{ end }}
-            </ul>
-        </section>
-    </div>
+            {{ else }}
+                <p>No articles found for {{ partial "convert_date.html" $monthParam }}.</p>
+            {{ end }}
+        </ul>
+    </section>
 </main>
 
 
