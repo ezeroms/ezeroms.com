@@ -67,7 +67,7 @@
 
   .top-logo {
     width: calc(50vw);
-    margin-top: 32px;
+    /* margin-top: 32px; */
   }
 
   .top-message {
