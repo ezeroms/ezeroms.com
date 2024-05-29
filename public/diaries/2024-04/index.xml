@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2024-04 on ezeroms.com</title>
-    <link>http://localhost:1313/diaries/2024-04/</link>
+    <link>http://localhost:61515/diaries/2024-04/</link>
     <description>Recent content in 2024-04 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
     <lastBuildDate>Mon, 01 Apr 2024 00:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:1313/diaries/2024-04/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:61515/diaries/2024-04/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>命を、計画の外側から見つめ直す（映画『PLAN 75』感想文）</title>
-      <link>http://localhost:1313/diary/eiga/</link>
+      <link>http://localhost:61515/diary/eiga/</link>
       <pubDate>Mon, 01 Apr 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/diary/eiga/</guid>
+      <guid>http://localhost:61515/diary/eiga/</guid>
       <description>これは2024年4月の記事です。</description>
     </item>
   </channel>

@@ -33,3 +33,15 @@ nav ul li a {
 a {
   text-decoration: none;
 }
+
+
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+  body {
+    height: 100dvh;
+  }
+}

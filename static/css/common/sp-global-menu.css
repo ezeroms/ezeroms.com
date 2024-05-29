@@ -6,12 +6,13 @@
     position: absolute;
     width: calc(100dvw - 10%);
     left: 0;
-    bottom: -64px;
+    bottom: 0;
     background-color: #fff;
     height: 64px;
     display: flex;
     justify-content: space-between;
     padding: 0 5%;
+    z-index: 200;
   }
   
   .global-nav a {
@@ -21,12 +22,12 @@
     background-color: #fff;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 45%;
+    background-size: 50%;
     transition-duration: 0.2s;
   }
 
   .global-nav a:active {
-    background-size: 35%;
+    background-size: 40%;
     transition-duration: 0.2s;
   }
   

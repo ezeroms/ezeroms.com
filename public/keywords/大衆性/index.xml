@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>大衆性 on ezeroms.com</title>
-    <link>http://localhost:1313/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</link>
+    <link>http://localhost:61515/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</link>
     <description>Recent content in 大衆性 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:1313/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:61515/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:1313/keyword/24/</link>
+      <link>http://localhost:61515/keyword/24/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keyword/24/</guid>
+      <guid>http://localhost:61515/keyword/24/</guid>
       <description>悪いポップはコビだけど、いいポップは思いやり&#xA;（宇多田ヒカル、2009『点 -ten-』インタビュー）</description>
     </item>
   </channel>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2024-02 on ezeroms.com</title>
-    <link>http://localhost:1313/diaries/2024-02/</link>
+    <link>http://localhost:61515/diaries/2024-02/</link>
     <description>Recent content in 2024-02 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
     <lastBuildDate>Thu, 01 Feb 2024 00:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:1313/diaries/2024-02/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:61515/diaries/2024-02/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>世の中を良くする不快のデザイン展</title>
-      <link>http://localhost:1313/diary/hukai-deisgn/</link>
+      <link>http://localhost:61515/diary/hukai-deisgn/</link>
       <pubDate>Thu, 01 Feb 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/diary/hukai-deisgn/</guid>
+      <guid>http://localhost:61515/diary/hukai-deisgn/</guid>
       <description>これは2024年2月の記事です。</description>
     </item>
   </channel>

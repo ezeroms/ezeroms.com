@@ -2,87 +2,87 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Works on ezeroms.com</title>
-    <link>http://localhost:1313/work/</link>
+    <link>http://localhost:61515/work/</link>
     <description>Recent content in Works on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
     <lastBuildDate>Sat, 23 Mar 2024 00:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:1313/work/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:61515/work/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>works-1</title>
-      <link>http://localhost:1313/work/project4/</link>
+      <link>http://localhost:61515/work/project4/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project4/</guid>
+      <guid>http://localhost:61515/work/project4/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-1</title>
-      <link>http://localhost:1313/work/project5/</link>
+      <link>http://localhost:61515/work/project5/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project5/</guid>
+      <guid>http://localhost:61515/work/project5/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-1</title>
-      <link>http://localhost:1313/work/project6/</link>
+      <link>http://localhost:61515/work/project6/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project6/</guid>
+      <guid>http://localhost:61515/work/project6/</guid>
       <description>お台場横にあり、まるで「墜落した宇宙船」のようだと評判の建物。行政の施設でありながら、なんと“20年以上休館中”だと言います。昨年、ネット上で解体の可能性がささやかれましたが、今も建物は残っています。管理する東京都港湾局を取材しました。（朝日新聞デジタル企画報道部・朽木誠一郎） 【PR】「あの時、学校でR-1飲んでたね」 「墜落した宇宙船」の今 りんかい線の国際展示場駅から徒歩で約10分のところにある建物。周囲は立ち入り禁止の柵で囲まれ、特に何の説明もありません。&#xA;見かけた人からは「まるで墜落した宇宙船のよう」などと評判になっていました。最近は近づく道も封鎖され、窓にはヒビ、外壁は破損してネットがかけられています。&#xA;建物を管理するのは東京都港湾局。これは『共同溝展示館（通称・K－MUSEUM）』という展示館でした。&#xA;共同溝展示館は、1997年4月に開館。96年に開催予定だった世界都市博で公開されるはずでしたが、都市博自体が中止に。利用者数の低迷などが理由で、2001年4月1日から、20年以上に渡り無期休館になっています。設計したのは世界的な建築家の渡辺誠さんです。&#xA;同展示館は、その名前の通り、臨海副都心の共同溝を紹介する目的で建設されました。共同溝とは、道路の地下に、電気やガス、上下水道などのライフラインをまとめて収容したもの。&#xA;臨海副都心の共同溝はやや特殊で、中に「ゴミ収集管」も入っています。地域内にあるビルなどのゴミ置き場と清掃工場とが結ばれ、一定量のゴミがたまると、清掃工場からの遠隔操作で、収集管から掃除機のように吸い取ることができるそうです。&#xA;『新建築』（新建築社）1997年1月号への寄稿『海の向うに見える街から』で、渡辺さんはこの大規模な共同溝システムを「土木工学の誇るそのインフラストラクチュア」と評し、「その共同溝の理解を深めてもらうというのが、この建築の役割である」と述べています。&#xA;今は見ることのできない内部は、アクリルハニカムパネルを使用した、いわゆるSF映画を思い起こさせるもの。トイレブースも展示の一環として人工大理石を一体成形するなど、各所に工夫が凝らされていたそうです。&#xA;その共同溝展示館の解</description>
     </item>
     <item>
       <title>works-2</title>
-      <link>http://localhost:1313/work/project2/</link>
+      <link>http://localhost:61515/work/project2/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project2/</guid>
+      <guid>http://localhost:61515/work/project2/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-2</title>
-      <link>http://localhost:1313/work/project7/</link>
+      <link>http://localhost:61515/work/project7/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project7/</guid>
+      <guid>http://localhost:61515/work/project7/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-2</title>
-      <link>http://localhost:1313/work/project8/</link>
+      <link>http://localhost:61515/work/project8/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project8/</guid>
+      <guid>http://localhost:61515/work/project8/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-2</title>
-      <link>http://localhost:1313/work/project9/</link>
+      <link>http://localhost:61515/work/project9/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project9/</guid>
+      <guid>http://localhost:61515/work/project9/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-3</title>
-      <link>http://localhost:1313/work/project10/</link>
+      <link>http://localhost:61515/work/project10/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project10/</guid>
+      <guid>http://localhost:61515/work/project10/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-3</title>
-      <link>http://localhost:1313/work/project11/</link>
+      <link>http://localhost:61515/work/project11/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project11/</guid>
+      <guid>http://localhost:61515/work/project11/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>works-3</title>
-      <link>http://localhost:1313/work/project3/</link>
+      <link>http://localhost:61515/work/project3/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project3/</guid>
+      <guid>http://localhost:61515/work/project3/</guid>
       <description>Project 1 Description of project 1.</description>
     </item>
     <item>
       <title>コピーライター・奥祐一朗 ポートフォリオサイト</title>
-      <link>http://localhost:1313/work/project1/</link>
+      <link>http://localhost:61515/work/project1/</link>
       <pubDate>Sat, 23 Mar 2024 00:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/work/project1/</guid>
+      <guid>http://localhost:61515/work/project1/</guid>
       <description>博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂&#xA;奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉 博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂&#xA;奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂&#xA;奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂&#xA;奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉</description>
     </item>
   </channel>

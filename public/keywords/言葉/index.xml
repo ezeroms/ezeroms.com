@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>言葉 on ezeroms.com</title>
-    <link>http://localhost:1313/keywords/%E8%A8%80%E8%91%89/</link>
+    <link>http://localhost:61515/keywords/%E8%A8%80%E8%91%89/</link>
     <description>Recent content in 言葉 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:1313/keywords/%E8%A8%80%E8%91%89/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:61515/keywords/%E8%A8%80%E8%91%89/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:1313/keyword/29/</link>
+      <link>http://localhost:61515/keyword/29/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keyword/29/</guid>
+      <guid>http://localhost:61515/keyword/29/</guid>
       <description>言葉は光だ。私が目で世界を見ているのは、光があるから。同じように言葉で照らせばそこに世界が浮かぶ。&#xA;（藤岡みなみ、2022『パンダのうんこはいい匂い』左右社）</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:1313/keyword/30/</link>
+      <link>http://localhost:61515/keyword/30/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keyword/30/</guid>
+      <guid>http://localhost:61515/keyword/30/</guid>
       <description>ZINEやリトルプレスと呼ばれるような小さな出版物をよく手に取ります。とりわけ惹かれるのは日記です。日常を綴るための言葉、普段遣いの言葉は、辞書には載っていなかったり、文法的に見たらおかしなところがあったりするかもしれないけれど、いわんとすることは実感としてたしかに伝わってくる。このうねり、グルーヴ感に身を委ねていたいと感じるような言葉。校正を通した出版物ではあまり見ることのない、野の言葉とでも呼びたいような言葉にふれると、書くことはもっと自由でいいのにと思います。&#xA;（牟田都子、2022『文にあたる』亜紀書房）</description>
     </item>
   </channel>

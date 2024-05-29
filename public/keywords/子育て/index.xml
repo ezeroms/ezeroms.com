@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>子育て on ezeroms.com</title>
-    <link>http://localhost:1313/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</link>
+    <link>http://localhost:61515/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</link>
     <description>Recent content in 子育て on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:1313/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:61515/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:1313/keyword/25/</link>
+      <link>http://localhost:61515/keyword/25/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keyword/25/</guid>
+      <guid>http://localhost:61515/keyword/25/</guid>
       <description>「もちろん、人に迷惑をかけない大人になることは大事なんだけど、最近、子育ての正解ってそこにないんじゃないかって思うこともあって」 「じゃ、どんなことが正解なの？」 「成長した子どもが、大人になってから親の子育てを肯定できるかどうか」&#xA;（辻村深月、2018『噛みあわない会話と、ある過去について』講談社）</description>
     </item>
   </channel>
