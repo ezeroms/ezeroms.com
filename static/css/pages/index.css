@@ -54,7 +54,7 @@
 @media (max-width: 960px) {
   .main-top {
     width: calc(100dvw - 16px);
-    height: 100dvh;
+    height: calc(100dvh - 64px);
     padding: 0 8px;
   }
 
@@ -67,6 +67,7 @@
 
   .top-logo {
     width: calc(50vw);
+    margin-top: 32px;
   }
 
   .top-message {

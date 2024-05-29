@@ -1,0 +1,82 @@
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+  .global-nav {
+    position: absolute;
+    width: 100dvw;
+    left: 0;
+    bottom: -64px;
+    background-color: #fff;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .global-nav a {
+    width: 20%;
+    height: 64px;
+    display: block;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+    transition-duration: 0.2s;
+  }
+
+  .global-nav a:active {
+    background-size: 30%;
+    transition-duration: 0.2s;
+  }
+  
+  .global-nav__home {
+    background-image: url('/images/common/icon_home_off.svg');
+  }
+
+  .global-nav__home.on {
+    background-image: url('/images/common/icon_home_on.svg');
+  }
+  
+  .global-nav__about {
+    background-image: url('/images/common/icon_about_off.svg');
+  }
+
+  .global-nav__about.on {
+    background-image: url('/images/common/icon_about_on.svg');
+  }
+  
+  .global-nav__work {
+    background-image: url('/images/common/icon_work_off.svg');
+  }
+
+  .global-nav__work.on {
+    background-image: url('/images/common/icon_work_on.svg');
+  }
+  
+  .global-nav__diary {
+    background-image: url('/images/common/icon_diary_off.svg');
+  }
+
+  .global-nav__diary.on {
+    background-image: url('/images/common/icon_diary_on.svg');
+  }
+  
+  .global-nav__think {
+    background-image: url('/images/common/icon_think_off.svg');
+  }
+
+  .global-nav__think.on {
+    background-image: url('/images/common/icon_think_on.svg');
+  }
+}
+
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+@media (min-width: 961px) {
+  .global-nav {
+    display: none;
+  }
+}
+
+

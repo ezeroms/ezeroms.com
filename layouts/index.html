@@ -3,7 +3,7 @@
     {{ partial "header_top.html" . }}
     <main class="main-top">
         <a href="/" class="top-logo">
-            <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo">
+            <img src="images/common/logo.svg" alt="ezeroms.com" class="top-logo">
         </a>
         <h2 class="top-message">One thing I can tell you is you got to be free!</h2>
 
@@ -19,20 +19,15 @@
                 <img id="randomImage" src="" alt="Random Image" class="top-photo">
                 </a>
             </div>
-        
-
-        <nav class="nav-sp">
-            <a href="/about">About</a>
-            <a href="/work">Work</a>
-            <a href="/diary">Diary</a>
-        </nav>
-
-        <div class="button-sp">
-            <a href="/keyword">
-              Let's think together
-            </a>
-        </div>
     </main>
+
+    <nav class="global-nav">
+        <a href="/" class="global-nav__home on"></a>
+        <a href="/about" class="global-nav__about"></a>
+        <a href="/work" class="global-nav__work"></a>
+        <a href="/diary" class="global-nav__diary"></a>
+        <a href="/keyword" class="global-nav__think"></a>
+    </nav>
 
 
     <script>
