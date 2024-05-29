@@ -83,26 +83,47 @@
 }
 
 
-
-/* 
-.article-title {
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-  color: #050317;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0;
-  text-decoration: none;
-  transition-duration: 0.4s;
-}
-
 .article-title:hover {
   opacity: 0.6;
   transition-duration: 0s;
-} */
+}
 
 
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+  .article-item-heading {
+    width: calc(100% - 48px);
+    margin: 0;
+    padding: 24px;
+    border-radius: 24px;
+    transition-duration: 0.4s;
+    gap: 12px;
+  }
+
+  .article-item-heading__eye-catch {
+    font-size: 24px!important;
+  }
+
+  .article-item-heading__label {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: start; 
+  }
+  
+  .article-item-heading__label__h2 {
+    margin: 0;
+    color: #050317;
+    font-size: 18px;
+  }
+
+  .article-item-heading__sub-label {
+    width: 30%;
+  }
+}
+  

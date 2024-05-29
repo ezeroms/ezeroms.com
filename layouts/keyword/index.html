@@ -1,5 +1,6 @@
 {{ define "main" }}
 {{ partial "header.html" . }}
+{{ partial "sp-header/think" . }}
 
 <main class="main-section">
     {{ partial "keyword_menu.html" . }}
@@ -14,7 +15,7 @@
     </section>
 </main>
 
-{{ partial "global-nav.html" . }}
+{{ partial "global-nav_think.html" . }}
 
 <!-- debug-info -->
 <p class="debug-info">Template : /layouts/keyword/index.html</p>

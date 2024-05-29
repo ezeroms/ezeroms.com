@@ -49,7 +49,9 @@
 -------------------- */
 
 @media (max-width: 960px) {
-
+  .main-section-2column__left {
+    display: none;
+  }
 }
 
 

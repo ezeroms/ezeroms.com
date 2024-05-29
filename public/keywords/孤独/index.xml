@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>孤独 on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/%E5%AD%A4%E7%8B%AC/</link>
+    <link>http://localhost:1313/keywords/%E5%AD%A4%E7%8B%AC/</link>
     <description>Recent content in 孤独 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/%E5%AD%A4%E7%8B%AC/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/%E5%AD%A4%E7%8B%AC/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/22/</link>
+      <link>http://localhost:1313/keyword/22/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/22/</guid>
+      <guid>http://localhost:1313/keyword/22/</guid>
       <description>孤独というのは、つまりは、この世界への影響力の欠如の意識だった。自分の存在が、他者に対して、まったく影響を持ち得ないということ。持ち得なかったと知ること。──同時代に対する水平的な影響力だけでなく、次の時代への時間的な、垂直的な影響力。それが、他者の存在のどこを探ってみても、見出せないということ。&#xA;（平野啓一郎、2019『マチネの終わりに』コルク）</description>
     </item>
   </channel>

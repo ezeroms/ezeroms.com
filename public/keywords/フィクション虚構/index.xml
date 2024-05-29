@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>フィクション（虚構） on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</link>
+    <link>http://localhost:1313/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</link>
     <description>Recent content in フィクション（虚構） on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/28/</link>
+      <link>http://localhost:1313/keyword/28/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/28/</guid>
+      <guid>http://localhost:1313/keyword/28/</guid>
       <description>そして繰り返すが、「仮想現実から拡張現実へ」というキャッチフレーズは情報産業のトレンドの変化を表現するもの以上の意味を帯びている。それは僕たちの虚構観そのものの変化でもあるのだ。20世紀的な劇映画は、ディズニーのプリンセスストーリーたちや『スター・ウォーズ』、そしてMCUが代表するように半ばグローバルなコミュニケーションツールとなり、そして『ポケモンGO』が代表する21世紀的なアプリゲームは通勤や買い物といった生活そのものを娯楽化する。「ここではない、どこか」に、外部に越境することではなく「ここ」に、内部に深く潜るための回路を、いま、僕たちは情報技術に、そして虚構そのものに求めつつあるのだ。&#xA;（宇野常寛、2020『遅いインターネット』幻冬舎）</description>
     </item>
   </channel>

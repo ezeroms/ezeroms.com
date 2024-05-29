@@ -101,18 +101,8 @@ header {
 スマホ用のスタイル
 -------------------- */
 @media (max-width: 960px) {
-  header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #fff;
-    align-items: center;
-    padding: 0 16px;
-    position: fixed;
-    background-color: #fff;
-    z-index: 10;
-    width: calc(100dvw - 32px);
-    height: 104px;
+  .header {
+    display: none;
   }
 
   .header-top {
@@ -143,13 +133,15 @@ header {
     color: #050317;
     margin: 0 24px 0;
   }
+
+
 }
 
 /* --------------------
 パソコン用のスタイル
 -------------------- */
 @media (min-width: 961px) {
-  .header__nav-sp {
+  .header_sp {
     display: none;
   }
 }

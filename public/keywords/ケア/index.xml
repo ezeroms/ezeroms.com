@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>ケア on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/%E3%82%B1%E3%82%A2/</link>
+    <link>http://localhost:1313/keywords/%E3%82%B1%E3%82%A2/</link>
     <description>Recent content in ケア on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/%E3%82%B1%E3%82%A2/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/%E3%82%B1%E3%82%A2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/2/</link>
+      <link>http://localhost:1313/keyword/2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/2/</guid>
+      <guid>http://localhost:1313/keyword/2/</guid>
       <description>欧米でも日本でも、個が「自律/自立する」ことを重んじる価値観が多数派である一方、「依存する」あるいは「関係性をむすぶ」というケアの価値観はまだまだ少数派のものである。資本主義社会において新自由主義的な文化が支配的な文脈では、〈ケア〉の価値が貶められてきたからだ。&#xA;（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/3/</link>
+      <link>http://localhost:1313/keyword/3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/3/</guid>
+      <guid>http://localhost:1313/keyword/3/</guid>
       <description>ケアの倫理は、抽象的な理念ではなく、目の前の状況を敏感に感じ取る能力、生き物に対する気づかい、真の共感を要する倫理でもある。&#xA;（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
     </item>
   </channel>

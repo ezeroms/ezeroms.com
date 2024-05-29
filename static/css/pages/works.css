@@ -77,3 +77,29 @@
     width: 688px;
     margin: 48px auto 0;
 }
+
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+    .work {
+        margin: 16px auto 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: calc(100vw - 32px);
+        padding: 0 0 40px;
+    }
+
+    .work-item {
+        width: 100%;
+    }
+
+    .work-single {
+        width: calc(100dvw - 32px);
+        margin: 48px auto 0;
+        padding: 0;
+    }
+}

@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on ezeroms.com</title>
-    <link>http://localhost:61515/categories/</link>
+    <link>http://localhost:1313/categories/</link>
     <description>Recent content in Categories on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
     <lastBuildDate>Thu, 04 Apr 2024 00:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:61515/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Diary</title>
-      <link>http://localhost:61515/categories/diary/</link>
+      <link>http://localhost:1313/categories/diary/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/categories/diary/</guid>
+      <guid>http://localhost:1313/categories/diary/</guid>
       <description></description>
     </item>
     <item>
       <title>Works</title>
-      <link>http://localhost:61515/categories/works/</link>
+      <link>http://localhost:1313/categories/works/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/categories/works/</guid>
+      <guid>http://localhost:1313/categories/works/</guid>
       <description></description>
     </item>
     <item>
       <title>Keyword</title>
-      <link>http://localhost:61515/categories/keyword/</link>
+      <link>http://localhost:1313/categories/keyword/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/categories/keyword/</guid>
+      <guid>http://localhost:1313/categories/keyword/</guid>
       <description></description>
     </item>
   </channel>

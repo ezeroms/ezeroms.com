@@ -8,6 +8,7 @@
   width: 100dvw;
   justify-content: center;
   position: absolute;
+  
 }
 
 
@@ -19,9 +20,10 @@
 
 @media (max-width: 960px) {
   .main-section {
-    top: 104px;
+    top: 72px;
     left: 0;
-    height: calc(100dvh - 104px);
+    /* height: calc(100dvh - 72px - 64px); */
+    /* position: fixed; */
   }
 }
 

@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>記憶 on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/%E8%A8%98%E6%86%B6/</link>
+    <link>http://localhost:1313/keywords/%E8%A8%98%E6%86%B6/</link>
     <description>Recent content in 記憶 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/%E8%A8%98%E6%86%B6/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/%E8%A8%98%E6%86%B6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/31/</link>
+      <link>http://localhost:1313/keyword/31/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/31/</guid>
+      <guid>http://localhost:1313/keyword/31/</guid>
       <description>かつて写真は非常に限られたタイミングでしか撮られず、それが現在との断絶を印象づけ、写真に備わる一種の「思い出性」とでも呼べる性質を支えていた。これは人間の記憶に似ている。大部分を忘れてしまうからこそ、覚えているごく少数の記憶が思い出として重宝される。思い出とは、その少なさに支えられている。&#xA;（大山顕、2020『新写真論 スマホと顔』株式会社ゲンロン）</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/32/</link>
+      <link>http://localhost:1313/keyword/32/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/32/</guid>
+      <guid>http://localhost:1313/keyword/32/</guid>
       <description>幼い日の畑で、祖父母が飲んでいた水筒の中のポカリスエットは、きっと少し生ぬるかったろう。毎朝、日課のようにそれを缶から水筒に移しかえていた祖母の姿も、むわっとした暑さに満ちた畑で空を仰ぐようにカップを傾けていた祖父の姿も、時が経てば経つほど、なぜか、歳月に補われるように逆に鮮明になっていく。覚えていたい、と思うからかもしれない。&#xA;（辻村深月、2015『図書室で暮らしたい』講談社）</description>
     </item>
   </channel>

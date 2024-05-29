@@ -2,429 +2,429 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Keywords on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/</link>
+    <link>http://localhost:1313/keywords/</link>
     <description>Recent content in Keywords on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>20世紀</title>
-      <link>http://localhost:61515/keywords/20%E4%B8%96%E7%B4%80/</link>
+      <link>http://localhost:1313/keywords/20%E4%B8%96%E7%B4%80/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/20%E4%B8%96%E7%B4%80/</guid>
+      <guid>http://localhost:1313/keywords/20%E4%B8%96%E7%B4%80/</guid>
       <description></description>
     </item>
     <item>
       <title>アーキテクチャ</title>
-      <link>http://localhost:61515/keywords/%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3/</link>
+      <link>http://localhost:1313/keywords/%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3/</guid>
       <description></description>
     </item>
     <item>
       <title>アイデンティティ（同一性）</title>
-      <link>http://localhost:61515/keywords/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3%E5%90%8C%E4%B8%80%E6%80%A7/</link>
+      <link>http://localhost:1313/keywords/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3%E5%90%8C%E4%B8%80%E6%80%A7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3%E5%90%8C%E4%B8%80%E6%80%A7/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3%E5%90%8C%E4%B8%80%E6%80%A7/</guid>
       <description></description>
     </item>
     <item>
       <title>イノベーション</title>
-      <link>http://localhost:61515/keywords/%E3%82%A4%E3%83%8E%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</link>
+      <link>http://localhost:1313/keywords/%E3%82%A4%E3%83%8E%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%A4%E3%83%8E%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%A4%E3%83%8E%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</guid>
       <description></description>
     </item>
     <item>
       <title>インタビュー</title>
-      <link>http://localhost:61515/keywords/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%93%E3%83%A5%E3%83%BC/</link>
+      <link>http://localhost:1313/keywords/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%93%E3%83%A5%E3%83%BC/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%93%E3%83%A5%E3%83%BC/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%93%E3%83%A5%E3%83%BC/</guid>
       <description></description>
     </item>
     <item>
       <title>クリエイティビティ（創造性）</title>
-      <link>http://localhost:61515/keywords/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E5%89%B5%E9%80%A0%E6%80%A7/</link>
+      <link>http://localhost:1313/keywords/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E5%89%B5%E9%80%A0%E6%80%A7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E5%89%B5%E9%80%A0%E6%80%A7/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E5%89%B5%E9%80%A0%E6%80%A7/</guid>
       <description></description>
     </item>
     <item>
       <title>ケア</title>
-      <link>http://localhost:61515/keywords/%E3%82%B1%E3%82%A2/</link>
+      <link>http://localhost:1313/keywords/%E3%82%B1%E3%82%A2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%B1%E3%82%A2/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%B1%E3%82%A2/</guid>
       <description></description>
     </item>
     <item>
       <title>コミュニケーション</title>
-      <link>http://localhost:61515/keywords/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</link>
+      <link>http://localhost:1313/keywords/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</guid>
       <description></description>
     </item>
     <item>
       <title>コモンズ</title>
-      <link>http://localhost:61515/keywords/%E3%82%B3%E3%83%A2%E3%83%B3%E3%82%BA/</link>
+      <link>http://localhost:1313/keywords/%E3%82%B3%E3%83%A2%E3%83%B3%E3%82%BA/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%B3%E3%83%A2%E3%83%B3%E3%82%BA/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%B3%E3%83%A2%E3%83%B3%E3%82%BA/</guid>
       <description></description>
     </item>
     <item>
       <title>システム</title>
-      <link>http://localhost:61515/keywords/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/</link>
+      <link>http://localhost:1313/keywords/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/</guid>
       <description></description>
     </item>
     <item>
       <title>セックス</title>
-      <link>http://localhost:61515/keywords/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9/</link>
+      <link>http://localhost:1313/keywords/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9/</guid>
+      <guid>http://localhost:1313/keywords/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9/</guid>
       <description></description>
     </item>
     <item>
       <title>デリダ</title>
-      <link>http://localhost:61515/keywords/%E3%83%87%E3%83%AA%E3%83%80/</link>
+      <link>http://localhost:1313/keywords/%E3%83%87%E3%83%AA%E3%83%80/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%87%E3%83%AA%E3%83%80/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%87%E3%83%AA%E3%83%80/</guid>
       <description></description>
     </item>
     <item>
       <title>ドゥルーズ＋ガタリ</title>
-      <link>http://localhost:61515/keywords/%E3%83%89%E3%82%A5%E3%83%AB%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%BF%E3%83%AA/</link>
+      <link>http://localhost:1313/keywords/%E3%83%89%E3%82%A5%E3%83%AB%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%BF%E3%83%AA/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%89%E3%82%A5%E3%83%AB%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%BF%E3%83%AA/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%89%E3%82%A5%E3%83%AB%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%BF%E3%83%AA/</guid>
       <description></description>
     </item>
     <item>
       <title>トラウマ</title>
-      <link>http://localhost:61515/keywords/%E3%83%88%E3%83%A9%E3%82%A6%E3%83%9E/</link>
+      <link>http://localhost:1313/keywords/%E3%83%88%E3%83%A9%E3%82%A6%E3%83%9E/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%88%E3%83%A9%E3%82%A6%E3%83%9E/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%88%E3%83%A9%E3%82%A6%E3%83%9E/</guid>
       <description></description>
     </item>
     <item>
       <title>ネオリベラリズム（新自由主義）</title>
-      <link>http://localhost:61515/keywords/%E3%83%8D%E3%82%AA%E3%83%AA%E3%83%99%E3%83%A9%E3%83%AA%E3%82%BA%E3%83%A0%E6%96%B0%E8%87%AA%E7%94%B1%E4%B8%BB%E7%BE%A9/</link>
+      <link>http://localhost:1313/keywords/%E3%83%8D%E3%82%AA%E3%83%AA%E3%83%99%E3%83%A9%E3%83%AA%E3%82%BA%E3%83%A0%E6%96%B0%E8%87%AA%E7%94%B1%E4%B8%BB%E7%BE%A9/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%8D%E3%82%AA%E3%83%AA%E3%83%99%E3%83%A9%E3%83%AA%E3%82%BA%E3%83%A0%E6%96%B0%E8%87%AA%E7%94%B1%E4%B8%BB%E7%BE%A9/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%8D%E3%82%AA%E3%83%AA%E3%83%99%E3%83%A9%E3%83%AA%E3%82%BA%E3%83%A0%E6%96%B0%E8%87%AA%E7%94%B1%E4%B8%BB%E7%BE%A9/</guid>
       <description></description>
     </item>
     <item>
       <title>フィクション（虚構）</title>
-      <link>http://localhost:61515/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</link>
+      <link>http://localhost:1313/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</guid>
       <description></description>
     </item>
     <item>
       <title>ポストモダン</title>
-      <link>http://localhost:61515/keywords/%E3%83%9D%E3%82%B9%E3%83%88%E3%83%A2%E3%83%80%E3%83%B3/</link>
+      <link>http://localhost:1313/keywords/%E3%83%9D%E3%82%B9%E3%83%88%E3%83%A2%E3%83%80%E3%83%B3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%9D%E3%82%B9%E3%83%88%E3%83%A2%E3%83%80%E3%83%B3/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%9D%E3%82%B9%E3%83%88%E3%83%A2%E3%83%80%E3%83%B3/</guid>
       <description></description>
     </item>
     <item>
       <title>ポップカルチャー</title>
-      <link>http://localhost:61515/keywords/%E3%83%9D%E3%83%83%E3%83%97%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC/</link>
+      <link>http://localhost:1313/keywords/%E3%83%9D%E3%83%83%E3%83%97%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%9D%E3%83%83%E3%83%97%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%9D%E3%83%83%E3%83%97%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC/</guid>
       <description></description>
     </item>
     <item>
       <title>マイノリティ</title>
-      <link>http://localhost:61515/keywords/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3/</link>
+      <link>http://localhost:1313/keywords/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3/</guid>
       <description></description>
     </item>
     <item>
       <title>マジョリティ</title>
-      <link>http://localhost:61515/keywords/%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3/</link>
+      <link>http://localhost:1313/keywords/%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3/</guid>
       <description></description>
     </item>
     <item>
       <title>マルクス</title>
-      <link>http://localhost:61515/keywords/%E3%83%9E%E3%83%AB%E3%82%AF%E3%82%B9/</link>
+      <link>http://localhost:1313/keywords/%E3%83%9E%E3%83%AB%E3%82%AF%E3%82%B9/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E3%83%9E%E3%83%AB%E3%82%AF%E3%82%B9/</guid>
+      <guid>http://localhost:1313/keywords/%E3%83%9E%E3%83%AB%E3%82%AF%E3%82%B9/</guid>
       <description></description>
     </item>
     <item>
       <title>交通</title>
-      <link>http://localhost:61515/keywords/%E4%BA%A4%E9%80%9A/</link>
+      <link>http://localhost:1313/keywords/%E4%BA%A4%E9%80%9A/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E4%BA%A4%E9%80%9A/</guid>
+      <guid>http://localhost:1313/keywords/%E4%BA%A4%E9%80%9A/</guid>
       <description></description>
     </item>
     <item>
       <title>人間関係</title>
-      <link>http://localhost:61515/keywords/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82/</link>
+      <link>http://localhost:1313/keywords/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82/</guid>
+      <guid>http://localhost:1313/keywords/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82/</guid>
       <description></description>
     </item>
     <item>
       <title>介護</title>
-      <link>http://localhost:61515/keywords/%E4%BB%8B%E8%AD%B7/</link>
+      <link>http://localhost:1313/keywords/%E4%BB%8B%E8%AD%B7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E4%BB%8B%E8%AD%B7/</guid>
+      <guid>http://localhost:1313/keywords/%E4%BB%8B%E8%AD%B7/</guid>
       <description></description>
     </item>
     <item>
       <title>体験</title>
-      <link>http://localhost:61515/keywords/%E4%BD%93%E9%A8%93/</link>
+      <link>http://localhost:1313/keywords/%E4%BD%93%E9%A8%93/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E4%BD%93%E9%A8%93/</guid>
+      <guid>http://localhost:1313/keywords/%E4%BD%93%E9%A8%93/</guid>
       <description></description>
     </item>
     <item>
       <title>写真</title>
-      <link>http://localhost:61515/keywords/%E5%86%99%E7%9C%9F/</link>
+      <link>http://localhost:1313/keywords/%E5%86%99%E7%9C%9F/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%86%99%E7%9C%9F/</guid>
+      <guid>http://localhost:1313/keywords/%E5%86%99%E7%9C%9F/</guid>
       <description></description>
     </item>
     <item>
       <title>労働</title>
-      <link>http://localhost:61515/keywords/%E5%8A%B4%E5%83%8D/</link>
+      <link>http://localhost:1313/keywords/%E5%8A%B4%E5%83%8D/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%8A%B4%E5%83%8D/</guid>
+      <guid>http://localhost:1313/keywords/%E5%8A%B4%E5%83%8D/</guid>
       <description></description>
     </item>
     <item>
       <title>可能性</title>
-      <link>http://localhost:61515/keywords/%E5%8F%AF%E8%83%BD%E6%80%A7/</link>
+      <link>http://localhost:1313/keywords/%E5%8F%AF%E8%83%BD%E6%80%A7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%8F%AF%E8%83%BD%E6%80%A7/</guid>
+      <guid>http://localhost:1313/keywords/%E5%8F%AF%E8%83%BD%E6%80%A7/</guid>
       <description></description>
     </item>
     <item>
       <title>同性愛</title>
-      <link>http://localhost:61515/keywords/%E5%90%8C%E6%80%A7%E6%84%9B/</link>
+      <link>http://localhost:1313/keywords/%E5%90%8C%E6%80%A7%E6%84%9B/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%90%8C%E6%80%A7%E6%84%9B/</guid>
+      <guid>http://localhost:1313/keywords/%E5%90%8C%E6%80%A7%E6%84%9B/</guid>
       <description></description>
     </item>
     <item>
       <title>執筆</title>
-      <link>http://localhost:61515/keywords/%E5%9F%B7%E7%AD%86/</link>
+      <link>http://localhost:1313/keywords/%E5%9F%B7%E7%AD%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%9F%B7%E7%AD%86/</guid>
+      <guid>http://localhost:1313/keywords/%E5%9F%B7%E7%AD%86/</guid>
       <description></description>
     </item>
     <item>
       <title>変化</title>
-      <link>http://localhost:61515/keywords/%E5%A4%89%E5%8C%96/</link>
+      <link>http://localhost:1313/keywords/%E5%A4%89%E5%8C%96/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%A4%89%E5%8C%96/</guid>
+      <guid>http://localhost:1313/keywords/%E5%A4%89%E5%8C%96/</guid>
       <description></description>
     </item>
     <item>
       <title>大人</title>
-      <link>http://localhost:61515/keywords/%E5%A4%A7%E4%BA%BA/</link>
+      <link>http://localhost:1313/keywords/%E5%A4%A7%E4%BA%BA/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%A4%A7%E4%BA%BA/</guid>
+      <guid>http://localhost:1313/keywords/%E5%A4%A7%E4%BA%BA/</guid>
       <description></description>
     </item>
     <item>
       <title>大衆性</title>
-      <link>http://localhost:61515/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</link>
+      <link>http://localhost:1313/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</guid>
+      <guid>http://localhost:1313/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</guid>
       <description></description>
     </item>
     <item>
       <title>子育て</title>
-      <link>http://localhost:61515/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</link>
+      <link>http://localhost:1313/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</guid>
+      <guid>http://localhost:1313/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</guid>
       <description></description>
     </item>
     <item>
       <title>孤独</title>
-      <link>http://localhost:61515/keywords/%E5%AD%A4%E7%8B%AC/</link>
+      <link>http://localhost:1313/keywords/%E5%AD%A4%E7%8B%AC/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%AD%A4%E7%8B%AC/</guid>
+      <guid>http://localhost:1313/keywords/%E5%AD%A4%E7%8B%AC/</guid>
       <description></description>
     </item>
     <item>
       <title>尊厳死</title>
-      <link>http://localhost:61515/keywords/%E5%B0%8A%E5%8E%B3%E6%AD%BB/</link>
+      <link>http://localhost:1313/keywords/%E5%B0%8A%E5%8E%B3%E6%AD%BB/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%B0%8A%E5%8E%B3%E6%AD%BB/</guid>
+      <guid>http://localhost:1313/keywords/%E5%B0%8A%E5%8E%B3%E6%AD%BB/</guid>
       <description></description>
     </item>
     <item>
       <title>差異</title>
-      <link>http://localhost:61515/keywords/%E5%B7%AE%E7%95%B0/</link>
+      <link>http://localhost:1313/keywords/%E5%B7%AE%E7%95%B0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E5%B7%AE%E7%95%B0/</guid>
+      <guid>http://localhost:1313/keywords/%E5%B7%AE%E7%95%B0/</guid>
       <description></description>
     </item>
     <item>
       <title>思考</title>
-      <link>http://localhost:61515/keywords/%E6%80%9D%E8%80%83/</link>
+      <link>http://localhost:1313/keywords/%E6%80%9D%E8%80%83/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%80%9D%E8%80%83/</guid>
+      <guid>http://localhost:1313/keywords/%E6%80%9D%E8%80%83/</guid>
       <description></description>
     </item>
     <item>
       <title>性愛</title>
-      <link>http://localhost:61515/keywords/%E6%80%A7%E6%84%9B/</link>
+      <link>http://localhost:1313/keywords/%E6%80%A7%E6%84%9B/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%80%A7%E6%84%9B/</guid>
+      <guid>http://localhost:1313/keywords/%E6%80%A7%E6%84%9B/</guid>
       <description></description>
     </item>
     <item>
       <title>排除</title>
-      <link>http://localhost:61515/keywords/%E6%8E%92%E9%99%A4/</link>
+      <link>http://localhost:1313/keywords/%E6%8E%92%E9%99%A4/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%8E%92%E9%99%A4/</guid>
+      <guid>http://localhost:1313/keywords/%E6%8E%92%E9%99%A4/</guid>
       <description></description>
     </item>
     <item>
       <title>文章</title>
-      <link>http://localhost:61515/keywords/%E6%96%87%E7%AB%A0/</link>
+      <link>http://localhost:1313/keywords/%E6%96%87%E7%AB%A0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%96%87%E7%AB%A0/</guid>
+      <guid>http://localhost:1313/keywords/%E6%96%87%E7%AB%A0/</guid>
       <description></description>
     </item>
     <item>
       <title>旅</title>
-      <link>http://localhost:61515/keywords/%E6%97%85/</link>
+      <link>http://localhost:1313/keywords/%E6%97%85/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%97%85/</guid>
+      <guid>http://localhost:1313/keywords/%E6%97%85/</guid>
       <description></description>
     </item>
     <item>
       <title>村上春樹</title>
-      <link>http://localhost:61515/keywords/%E6%9D%91%E4%B8%8A%E6%98%A5%E6%A8%B9/</link>
+      <link>http://localhost:1313/keywords/%E6%9D%91%E4%B8%8A%E6%98%A5%E6%A8%B9/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%9D%91%E4%B8%8A%E6%98%A5%E6%A8%B9/</guid>
+      <guid>http://localhost:1313/keywords/%E6%9D%91%E4%B8%8A%E6%98%A5%E6%A8%B9/</guid>
       <description></description>
     </item>
     <item>
       <title>権利</title>
-      <link>http://localhost:61515/keywords/%E6%A8%A9%E5%88%A9/</link>
+      <link>http://localhost:1313/keywords/%E6%A8%A9%E5%88%A9/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%A8%A9%E5%88%A9/</guid>
+      <guid>http://localhost:1313/keywords/%E6%A8%A9%E5%88%A9/</guid>
       <description></description>
     </item>
     <item>
       <title>歴史</title>
-      <link>http://localhost:61515/keywords/%E6%AD%B4%E5%8F%B2/</link>
+      <link>http://localhost:1313/keywords/%E6%AD%B4%E5%8F%B2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E6%AD%B4%E5%8F%B2/</guid>
+      <guid>http://localhost:1313/keywords/%E6%AD%B4%E5%8F%B2/</guid>
       <description></description>
     </item>
     <item>
       <title>現代思想</title>
-      <link>http://localhost:61515/keywords/%E7%8F%BE%E4%BB%A3%E6%80%9D%E6%83%B3/</link>
+      <link>http://localhost:1313/keywords/%E7%8F%BE%E4%BB%A3%E6%80%9D%E6%83%B3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E7%8F%BE%E4%BB%A3%E6%80%9D%E6%83%B3/</guid>
+      <guid>http://localhost:1313/keywords/%E7%8F%BE%E4%BB%A3%E6%80%9D%E6%83%B3/</guid>
       <description></description>
     </item>
     <item>
       <title>疎外</title>
-      <link>http://localhost:61515/keywords/%E7%96%8E%E5%A4%96/</link>
+      <link>http://localhost:1313/keywords/%E7%96%8E%E5%A4%96/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E7%96%8E%E5%A4%96/</guid>
+      <guid>http://localhost:1313/keywords/%E7%96%8E%E5%A4%96/</guid>
       <description></description>
     </item>
     <item>
       <title>目的</title>
-      <link>http://localhost:61515/keywords/%E7%9B%AE%E7%9A%84/</link>
+      <link>http://localhost:1313/keywords/%E7%9B%AE%E7%9A%84/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E7%9B%AE%E7%9A%84/</guid>
+      <guid>http://localhost:1313/keywords/%E7%9B%AE%E7%9A%84/</guid>
       <description></description>
     </item>
     <item>
       <title>社会</title>
-      <link>http://localhost:61515/keywords/%E7%A4%BE%E4%BC%9A/</link>
+      <link>http://localhost:1313/keywords/%E7%A4%BE%E4%BC%9A/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E7%A4%BE%E4%BC%9A/</guid>
+      <guid>http://localhost:1313/keywords/%E7%A4%BE%E4%BC%9A/</guid>
       <description></description>
     </item>
     <item>
       <title>精神分析</title>
-      <link>http://localhost:61515/keywords/%E7%B2%BE%E7%A5%9E%E5%88%86%E6%9E%90/</link>
+      <link>http://localhost:1313/keywords/%E7%B2%BE%E7%A5%9E%E5%88%86%E6%9E%90/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E7%B2%BE%E7%A5%9E%E5%88%86%E6%9E%90/</guid>
+      <guid>http://localhost:1313/keywords/%E7%B2%BE%E7%A5%9E%E5%88%86%E6%9E%90/</guid>
       <description></description>
     </item>
     <item>
       <title>組織</title>
-      <link>http://localhost:61515/keywords/%E7%B5%84%E7%B9%94/</link>
+      <link>http://localhost:1313/keywords/%E7%B5%84%E7%B9%94/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E7%B5%84%E7%B9%94/</guid>
+      <guid>http://localhost:1313/keywords/%E7%B5%84%E7%B9%94/</guid>
       <description></description>
     </item>
     <item>
       <title>自己</title>
-      <link>http://localhost:61515/keywords/%E8%87%AA%E5%B7%B1/</link>
+      <link>http://localhost:1313/keywords/%E8%87%AA%E5%B7%B1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%87%AA%E5%B7%B1/</guid>
+      <guid>http://localhost:1313/keywords/%E8%87%AA%E5%B7%B1/</guid>
       <description></description>
     </item>
     <item>
       <title>自由</title>
-      <link>http://localhost:61515/keywords/%E8%87%AA%E7%94%B1/</link>
+      <link>http://localhost:1313/keywords/%E8%87%AA%E7%94%B1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%87%AA%E7%94%B1/</guid>
+      <guid>http://localhost:1313/keywords/%E8%87%AA%E7%94%B1/</guid>
       <description></description>
     </item>
     <item>
       <title>自立</title>
-      <link>http://localhost:61515/keywords/%E8%87%AA%E7%AB%8B/</link>
+      <link>http://localhost:1313/keywords/%E8%87%AA%E7%AB%8B/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%87%AA%E7%AB%8B/</guid>
+      <guid>http://localhost:1313/keywords/%E8%87%AA%E7%AB%8B/</guid>
       <description></description>
     </item>
     <item>
       <title>言葉</title>
-      <link>http://localhost:61515/keywords/%E8%A8%80%E8%91%89/</link>
+      <link>http://localhost:1313/keywords/%E8%A8%80%E8%91%89/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%A8%80%E8%91%89/</guid>
+      <guid>http://localhost:1313/keywords/%E8%A8%80%E8%91%89/</guid>
       <description></description>
     </item>
     <item>
       <title>記憶</title>
-      <link>http://localhost:61515/keywords/%E8%A8%98%E6%86%B6/</link>
+      <link>http://localhost:1313/keywords/%E8%A8%98%E6%86%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%A8%98%E6%86%B6/</guid>
+      <guid>http://localhost:1313/keywords/%E8%A8%98%E6%86%B6/</guid>
       <description></description>
     </item>
     <item>
       <title>読書</title>
-      <link>http://localhost:61515/keywords/%E8%AA%AD%E6%9B%B8/</link>
+      <link>http://localhost:1313/keywords/%E8%AA%AD%E6%9B%B8/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%AA%AD%E6%9B%B8/</guid>
+      <guid>http://localhost:1313/keywords/%E8%AA%AD%E6%9B%B8/</guid>
       <description></description>
     </item>
     <item>
       <title>身体</title>
-      <link>http://localhost:61515/keywords/%E8%BA%AB%E4%BD%93/</link>
+      <link>http://localhost:1313/keywords/%E8%BA%AB%E4%BD%93/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E8%BA%AB%E4%BD%93/</guid>
+      <guid>http://localhost:1313/keywords/%E8%BA%AB%E4%BD%93/</guid>
       <description></description>
     </item>
     <item>
       <title>過去</title>
-      <link>http://localhost:61515/keywords/%E9%81%8E%E5%8E%BB/</link>
+      <link>http://localhost:1313/keywords/%E9%81%8E%E5%8E%BB/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E9%81%8E%E5%8E%BB/</guid>
+      <guid>http://localhost:1313/keywords/%E9%81%8E%E5%8E%BB/</guid>
       <description></description>
     </item>
     <item>
       <title>食事</title>
-      <link>http://localhost:61515/keywords/%E9%A3%9F%E4%BA%8B/</link>
+      <link>http://localhost:1313/keywords/%E9%A3%9F%E4%BA%8B/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keywords/%E9%A3%9F%E4%BA%8B/</guid>
+      <guid>http://localhost:1313/keywords/%E9%A3%9F%E4%BA%8B/</guid>
       <description></description>
     </item>
   </channel>

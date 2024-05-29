@@ -88,3 +88,23 @@
 .article-link {
 
 }
+
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+  .article-item {
+    width: calc(100dvw - 48px - 32px);
+    padding: 24px;
+    gap: 12px;
+  }
+
+  .article-item h1 {
+    font-size: 16px;
+  }
+
+  .article-item p {
+    font-size: 14px;
+  }
+}

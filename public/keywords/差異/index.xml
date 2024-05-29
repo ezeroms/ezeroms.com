@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>差異 on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/%E5%B7%AE%E7%95%B0/</link>
+    <link>http://localhost:1313/keywords/%E5%B7%AE%E7%95%B0/</link>
     <description>Recent content in 差異 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/%E5%B7%AE%E7%95%B0/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/%E5%B7%AE%E7%95%B0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/38/</link>
+      <link>http://localhost:1313/keyword/38/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/38/</guid>
+      <guid>http://localhost:1313/keyword/38/</guid>
       <description>「差異」は、「同一性」すなわち「アイデンティティ」と対立しています。同一性とは、物事を「これはこういうものである」とする固定的な定義です。逆に、差異の哲学とは、必ずしも定義に当てはまらないようなズレや変化を重視する思考です。[…]&#xA;今、同一性と差異が二項対立をなすと言いましたが、その二項対立において差異の方を強調し、ひとつの定まった状態ではなく、ズレや変化が大事だと考えるのが現代思想の大方針なのです。&#xA;（千葉雅也、2022『現代思想入門』講談社）</description>
     </item>
   </channel>

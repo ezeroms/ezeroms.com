@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>自立 on ezeroms.com</title>
-    <link>http://localhost:61515/keywords/%E8%87%AA%E7%AB%8B/</link>
+    <link>http://localhost:1313/keywords/%E8%87%AA%E7%AB%8B/</link>
     <description>Recent content in 自立 on ezeroms.com</description>
     <generator>Hugo</generator>
     <language>ja</language>
-    <atom:link href="http://localhost:61515/keywords/%E8%87%AA%E7%AB%8B/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/keywords/%E8%87%AA%E7%AB%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/11/</link>
+      <link>http://localhost:1313/keyword/11/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/11/</guid>
+      <guid>http://localhost:1313/keyword/11/</guid>
       <description>たとえば誰かを介護しなければならないとして、そのときその人に自分の全生活を捧げてしまったら、介護者は生きていけなくなってしまいます。あるいは、介護される側からしても、援助は必要だけれど、それが過剰になると監視されていると感じるようになってしまいます。たとえ人間関係においてつながりが必要だとしても、そこには一定の距離、より強く言えば、無関係性がなければ、我々は互いの自律性を維持できないのです。つまり、無関係性こそが存在の自律性を可能にしているのです。&#xA;（千葉雅也、2022『現代思想入門』講談社）</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:61515/keyword/2/</link>
+      <link>http://localhost:1313/keyword/2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:61515/keyword/2/</guid>
+      <guid>http://localhost:1313/keyword/2/</guid>
       <description>欧米でも日本でも、個が「自律/自立する」ことを重んじる価値観が多数派である一方、「依存する」あるいは「関係性をむすぶ」というケアの価値観はまだまだ少数派のものである。資本主義社会において新自由主義的な文化が支配的な文脈では、〈ケア〉の価値が貶められてきたからだ。&#xA;（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
     </item>
   </channel>
