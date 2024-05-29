@@ -1,6 +1,19 @@
 <header class="sp-header">
-  <img src="/images/common/diary.svg" alt="" class="logo_diary">
+  <img src="/images/common/diary.svg" alt="" class="logo_diary" onclick="topFunction()" id="scrollTopButton" title="Go to top">
   <button>
     <img src="/images/common/icon_list.svg">
   </button>
 </header>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+      // スクロールトップのボタンがクリックされたときの処理
+      $('#scrollTopButton').click(function(){
+          // アニメーションを追加してスクロール
+          $('html, body').animate({scrollTop : 0},800);
+          return false;
+      });
+  });
+  </script>

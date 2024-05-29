@@ -27,8 +27,21 @@
   </div>
 </header>
 <header class="sp-header">
-  <img src="/images/common/work.svg" alt="" class="logo_work">
+  <img src="/images/common/work.svg" alt="" class="logo_work" onclick="topFunction()" id="scrollTopButton" title="Go to top">
 </header>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+      
+      $('#scrollTopButton').click(function(){
+          
+          $('html, body').animate({scrollTop : 0},800);
+          return false;
+      });
+  });
+  </script>
 
 <main class="main-section">
     <section class="main-section-1column">

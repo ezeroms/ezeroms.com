@@ -1,0 +1,143 @@
+/* --------------------
+デバイス共通のスタイル
+-------------------- */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+#modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-color: #fff;
+  z-index: 1000;
+  display: none;
+
+
+  border-radius: 24px 24px 0 0;
+  /* display: flex; */
+  flex-direction: column;
+  overflow-y: scroll; /* コンテンツが表示領域より大きい場合にスクロール可能にする */
+  /* gap: 16px; */
+}
+
+
+
+#modalContent {
+  padding: 72px 16px 16px;
+
+
+}
+
+
+#modal ul {
+  width: calc(100dvw - 32px);
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #E7E7E9;
+  background-color: #E7E7E9;
+}
+
+#modal li {
+  list-style: none;
+  background: #fff;
+}
+
+#modal .a-link {
+  width: calc(100dvw - 32px - 32px);
+  padding: 16px;
+  color: #050317;
+  display: block;
+  font-size: 14px;
+}
+
+.modal_close-list {
+  width: calc(100dvw - 32px);
+  position: fixed; 
+  background-color: #fff;
+  border-radius: 24px 24px 0 0;
+  display: flex;
+  overflow: hidden;
+  padding: 16px 16px 16px;
+  gap: 12px;
+  
+}
+
+.modal_close-list img {
+  width: 16px;
+  margin: 0 8px 0 0;
+}
+
+
+#closeModal {
+  background-color: #F8F7F4;
+  border: 0;
+  width: 50%;
+  color: #050317;
+  font-size: 14px;
+  font-weight: 400;
+  height: 40px;
+  border-radius: 40px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid #F0EFEC; */
+}
+
+
+.shuffle {
+  background-color: #F8F7F4;
+  width: 50%;
+  border: 0;
+  color: #050317;
+  font-size: 14px;
+  font-weight: 400;
+  height: 40px;
+  border-radius: 40px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid #F0EFEC; */
+}
+
+/* --------------------
+スマホ用のスタイル
+-------------------- */
+@media (max-width: 960px) {
+
+}
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+@media (min-width: 961px) {
+  /* #sp-half-modal {
+    display: none;
+  }
+
+  #sp-half-modal {
+    display: none;
+  } */
+}
+
+
+body.modal-open {
+  overflow: hidden;
+}
