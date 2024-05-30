@@ -36,6 +36,12 @@
   background-color: #F8F7F4;
   border-radius: 40px;
   margin: 0;
+  transition-duration: 0.2s;
+}
+
+.sp-header button:active {
+  background-color: #DEDDDA;
+  transition-duration: 0s;
 }
 
 .sp-header button img {

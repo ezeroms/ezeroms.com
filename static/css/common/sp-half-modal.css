@@ -65,6 +65,10 @@
   font-size: 14px;
 }
 
+#modal .a-link:active {
+  opacity: 0.6;
+}
+
 .modal_close-list {
   width: calc(100dvw - 32px);
   position: fixed; 
@@ -97,7 +101,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid #F0EFEC; */
+  transition-duration: 0.2s;
+
+}
+
+#closeModal:active {
+  background-color: #DEDDDA;
+  transition-duration: 0s;
 }
 
 
@@ -115,7 +125,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid #F0EFEC; */
+  transition-duration: 0.2s;
+}
+
+.shuffle:active {
+  background-color: #DEDDDA;
+  transition-duration: 0s;
 }
 
 /* --------------------

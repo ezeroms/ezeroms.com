@@ -76,7 +76,6 @@
   transition-duration: 0.2s;
 }
 
-
 .article-item-heading__button:active {
   transform: scale(0.95);
   background-color: #DEDDDA;
@@ -125,5 +124,26 @@
   .article-item-heading__sub-label {
     width: 30%;
   }
+
+  .article-item-heading__button {
+    width: auto!important;
+    height: auto!important;
+    padding: 6px;
+  }
+
+  .article-item-heading__button img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .article-item-heading__button:hover {
+    border: 1px solid transparent;
+  }
+  
+  .article-item-heading__button:active {
+    transform: scale(0.95);
+    background-color: #DEDDDA;
+  }
+  
 }
   

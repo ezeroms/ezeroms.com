@@ -107,4 +107,8 @@
   .article-item p {
     font-size: 14px;
   }
+
+  .hover-effect:hover {
+    border: 1px solid #E7E7E9;
+  }
 }
