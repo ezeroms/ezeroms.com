@@ -67,10 +67,8 @@ $(document).ready(function(){
         $('#overlay').fadeOut();
         $('#modal').slideUp(function() {
             // モーダルが完全に閉じられた後にページをリロード
-            location.reload();
+            window.location.href = "/keyword/";
         });
-        // スクロールロックを解除
-        $('body').removeClass('modal-open');
     });
 
 });

@@ -208,6 +208,19 @@
 スマホ用のスタイル
 -------------------- */
 @media (max-width: 960px) {
+  .about__profile__sns {
+  width: 90% !important;
+  flex-wrap: wrap;
+  }
+
+  /* .about__profile__sns a {
+    width: 24px;
+  }
+
+  .about__profile__sns li {
+    width: 24px;
+  } */
+
   .about {
     margin: 16px auto 40px;
     width: calc(100dvw - 32px);

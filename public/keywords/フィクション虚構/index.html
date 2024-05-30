@@ -213,10 +213,8 @@ $(document).ready(function(){
         $('#overlay').fadeOut();
         $('#modal').slideUp(function() {
             
-            location.reload();
+            window.location.href = "/keyword/";
         });
-        
-        $('body').removeClass('modal-open');
     });
 
 });

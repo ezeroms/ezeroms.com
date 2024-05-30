@@ -145,5 +145,8 @@
     background-color: #DEDDDA;
   }
   
+  .article-item-heading__label__p {
+    font-size: 12px;
+  }
 }
   
