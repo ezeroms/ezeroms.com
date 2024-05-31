@@ -30,7 +30,7 @@ collections:
       - { label: "Slug", name: "slug", widget: "string" }
       - { label: "Topics", name: "topics", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{date}}\n{{title}}\n{{body | truncate(280, '...')}}"
+    summary: "{{date | date('YYYY-MM-DD')}}\n{{title}}\n{{body | truncate(280, '...')}}"
     sort:
       field: "date"
       direction: "desc"
@@ -47,7 +47,7 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Image", name: "image", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{date}}\n{{title}}"
+    summary: "{{date | date('YYYY-MM-DD')}}\n{{title}}"
     sort:
       field: "date"
       direction: "desc"
@@ -65,3 +65,6 @@ collections:
     sort:
       field: "body"
       direction: "asc"
+
+# カスタムCSSファイルを指定
+custom_css: "admin/custom.css"
