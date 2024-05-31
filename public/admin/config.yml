@@ -27,7 +27,7 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Diaries", name: "diaries", widget: "list" }
       - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Topics", name: "topics", widget: "list"}
+      - { label: "Topics", name: "topics", widget: "select", multiple: true, options: ["news", "music", "manga-and-anime", "movies-and-dramas", "comedy", "gaming", "sports", "books-and-magazines", "languages-and-foreign-cultures", "design", "internet-and-technology", "natural-science", "humanities-and-social-sciences"] }
       - { label: "Body", name: "body", widget: "markdown" }
     summary: "{{date | date('YYYY-MM-DD')}} | {{body | truncate(280, '...')}}"
     sort:
