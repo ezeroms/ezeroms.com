@@ -57,7 +57,6 @@ collections:
     create: true
     slug: "{{fields.slug}}"
     fields:
-      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Keywords", name: "keywords", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
     summary: "{{body | truncate(280, '...')}}　　Keyword {{keywords}}"
