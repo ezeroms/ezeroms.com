@@ -29,7 +29,7 @@ collections:
       - { label: "Slug", name: "slug", widget: "string" }
       - { label: "Topics", name: "topics", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{date | date('YYYY-MM-DD')}}\n{{title}}\n{{body | truncate(280, '...')}}"
+    summary: "{{date | date('YYYY-MM-DD')}} | {{body | truncate(280, '...')}}"
     sort:
       field: "date"
       direction: "desc"
@@ -46,7 +46,7 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Image", name: "image", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{date | date('YYYY-MM-DD')}}\n{{title}}"
+    summary: "{{date | date('YYYY-MM-DD')}} | {{title}}"
     sort:
       field: "date"
       direction: "desc"
@@ -60,10 +60,7 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Keywords", name: "keywords", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{body | truncate(280, '...')}}\nKeywords: {{keywords}}"
+    summary: "{{body | truncate(280, '...')}} | {{keywords}}"
     sort:
       field: "body"
       direction: "asc"
-
-# カスタムCSSファイルを指定
-custom_css: "admin/custom.css"
