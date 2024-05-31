@@ -25,7 +25,7 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Diaries", name: "diaries", widget: "list", field: {label: "Diary", name: "diary", widget: "string"} }
+      - { label: "Diaries", name: "diaries", widget: "list" }
       - { label: "Slug", name: "slug", widget: "string" }
       - { label: "Topics", name: "topics", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
