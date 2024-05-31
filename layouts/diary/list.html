@@ -66,6 +66,8 @@
                 <p>No articles found for {{ partial "convert_date.html" $monthParam }}.</p>
             {{ end }}
         </ul>
+
+        {{ partial "pagination-buttons.html" . }}
     </section>
 </main>
 

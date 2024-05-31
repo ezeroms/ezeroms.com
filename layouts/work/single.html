@@ -50,6 +50,31 @@
                 <article class="article-item no-hover-effect">
                     {{ .Content }}
                 </article>
+
+                <div class="pagination-buttons">
+
+
+                        <a href="/work" class="pagination-button backbutton">
+                            <img src="/images/common/icon_back.svg" alt="">
+                            Back to gallery
+                        </a>
+    
+
+                    {{ if .PrevInSection }}
+                        <a href="{{ .PrevInSection.RelPermalink }}" class="pagination-button">
+                            <img src="/images/common/icon_left.svg" alt="">
+                            Prev
+                        </a>
+                    {{ end }}
+
+
+                    {{ if .NextInSection }}
+                        <a href="{{ .NextInSection.RelPermalink }}" class="pagination-button">
+                            Next
+                            <img src="/images/common/icon_right.svg" alt="">
+                        </a>
+                    {{ end }}
+                  </div>
             </ul>
 
         </div>

@@ -42,11 +42,14 @@
                 <!-- ボタンここまで -->        
             </div>
 
-        {{ range (where .Site.RegularPages "Section" "diary") }}
+
             <article class="article-item">
                 {{ .Content }}
             </article>
-        {{ end }}
+        
+
+            {{ partial "pagination-buttons.html" . }}    
+
         </ul>
     </section>
 </main>

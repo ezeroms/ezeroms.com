@@ -145,11 +145,6 @@
     transition-duration: 0.2s;
   }
 
-  .link-card:hover .link-card__right {
-    opacity: 1;
-    transition-duration: 0.2s;
-  }
-
   .link-card__left {
     display: flex;
     flex-direction: column;
@@ -167,7 +162,12 @@
     cursor: pointer;
     transition-duration: 0.4s;
     margin: 0 0 0 32px;
-    opacity: 0.1;
+    opacity: 0.2;
+  }
+
+  .link-card:hover .link-card__right {
+    opacity: 1;
+    transition-duration: 0.2s;
   }
 
 
@@ -268,5 +268,22 @@
 
   .in-contact {
     width: 100%;
+  }
+
+  .link-card__right {
+
+  }
+
+
+  .link-card:hover {
+    border: 1px solid #E7E7E9;
+  }
+
+  .about__profile__sns img:hover {
+    opacity: 0.2;
+  }
+
+  .link-card:hover .link-card__right {
+    opacity: 0.2;
   }
 }

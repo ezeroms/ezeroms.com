@@ -10,7 +10,6 @@
     display: flex;
     padding: 2px 8px!important;
     transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
     background-color: #050317;
     color: #fff!important;
     font-size: 12px!important;
@@ -31,6 +30,12 @@
 スマホ用のスタイル
 -------------------- */
 @media (max-width: 960px) {
+
+    .about__profile__sns li:hover .tooltip {
+        transform: translate(-50%, -50%) scale(0);
+        bottom: 10%;
+        opacity: 0;
+    }
 
 }
 
