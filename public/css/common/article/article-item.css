@@ -85,6 +85,10 @@
   line-height: 180%; /* 28.8px */
 }
 
+.article-item img {
+  width: 100%;
+}
+
 .article-link {
 
 }

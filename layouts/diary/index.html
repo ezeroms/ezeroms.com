@@ -6,15 +6,33 @@
     {{ partial "diary_menu.html" . }}
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
-        {{ range (where .Site.RegularPages "Section" "diary") }}
+        {{ $pages := (where .Site.RegularPages "Section" "diary") }}
+        {{ $sortedPages := sort $pages "Date" "desc" }}
+        {{ $firstPage := index $sortedPages 0 }}
+        {{ $secondPage := index $sortedPages 1 }}
+
+        {{ if $firstPage }}
             <article class="article-item">
-                <a href="{{ .Permalink }}">
-                    <h1>{{ .Date | dateFormat "2006-01-02" }}</h1>
+                <a href="{{ $firstPage.Permalink }}">
+                    <h1>{{ $firstPage.Date | dateFormat "2006-01-02" }}</h1>
                 </a>
-                {{ .Content }}
+                {{ $firstPage.Content }}
             </article>
         {{ end }}
+
+
+        <div class="pagination-buttons">
+            {{ if $secondPage }}
+                <a href="{{ $secondPage.Permalink }}" class="pagination-button">
+                    Next
+                    <img src="/images/common/icon_right.svg" alt="">
+                </a>
+            {{ end }}
+        </div>
+
         </ul>
+
+
     </section>
 </main>
 
