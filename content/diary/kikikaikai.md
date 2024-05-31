@@ -3,7 +3,7 @@ title: 『奇奇怪怪』の少年ジャンプ的な冒険心、あるいは上�
 date: 2023-08-23T11:04:17.597Z
 diaries:
   - 2023-08
-slug: kikikaikai
+slug: kikikaikai-magazine-2nd
 topics:
   - books-and-magazines
 ---
