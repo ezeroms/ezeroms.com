@@ -1,431 +1,428 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+&lt;?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0">
   <channel>
-    <title>Keywords on ezeroms.com</title>
-    <link>http://localhost:1313/keywords/</link>
-    <description>Recent content in Keywords on ezeroms.com</description>
-    <generator>Hugo</generator>
+    <title>ezeroms.com</title>
+    <link>http://localhost:1313/</link>
+    <description>One thing I can tell you is you got to be free.</description>
     <language>ja</language>
-    <atom:link href="http://localhost:1313/keywords/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>20世紀</title>
-      <link>http://localhost:1313/keywords/20%E4%B8%96%E7%B4%80/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/20%E4%B8%96%E7%B4%80/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>アーキテクチャ</title>
-      <link>http://localhost:1313/keywords/%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>アイデンティティ（同一性）</title>
-      <link>http://localhost:1313/keywords/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3%E5%90%8C%E4%B8%80%E6%80%A7/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3%E5%90%8C%E4%B8%80%E6%80%A7/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>イノベーション</title>
-      <link>http://localhost:1313/keywords/%E3%82%A4%E3%83%8E%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%A4%E3%83%8E%E3%83%99%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>インタビュー</title>
-      <link>http://localhost:1313/keywords/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%93%E3%83%A5%E3%83%BC/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%93%E3%83%A5%E3%83%BC/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>クリエイティビティ（創造性）</title>
-      <link>http://localhost:1313/keywords/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E5%89%B5%E9%80%A0%E6%80%A7/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E5%89%B5%E9%80%A0%E6%80%A7/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ケア</title>
-      <link>http://localhost:1313/keywords/%E3%82%B1%E3%82%A2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%B1%E3%82%A2/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>コミュニケーション</title>
-      <link>http://localhost:1313/keywords/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>コモンズ</title>
-      <link>http://localhost:1313/keywords/%E3%82%B3%E3%83%A2%E3%83%B3%E3%82%BA/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%B3%E3%83%A2%E3%83%B3%E3%82%BA/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>システム</title>
-      <link>http://localhost:1313/keywords/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>セックス</title>
-      <link>http://localhost:1313/keywords/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>デリダ</title>
-      <link>http://localhost:1313/keywords/%E3%83%87%E3%83%AA%E3%83%80/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%87%E3%83%AA%E3%83%80/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ドゥルーズ＋ガタリ</title>
-      <link>http://localhost:1313/keywords/%E3%83%89%E3%82%A5%E3%83%AB%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%BF%E3%83%AA/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%89%E3%82%A5%E3%83%AB%E3%83%BC%E3%82%BA%E3%82%AC%E3%82%BF%E3%83%AA/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>トラウマ</title>
-      <link>http://localhost:1313/keywords/%E3%83%88%E3%83%A9%E3%82%A6%E3%83%9E/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%88%E3%83%A9%E3%82%A6%E3%83%9E/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ネオリベラリズム（新自由主義）</title>
-      <link>http://localhost:1313/keywords/%E3%83%8D%E3%82%AA%E3%83%AA%E3%83%99%E3%83%A9%E3%83%AA%E3%82%BA%E3%83%A0%E6%96%B0%E8%87%AA%E7%94%B1%E4%B8%BB%E7%BE%A9/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%8D%E3%82%AA%E3%83%AA%E3%83%99%E3%83%A9%E3%83%AA%E3%82%BA%E3%83%A0%E6%96%B0%E8%87%AA%E7%94%B1%E4%B8%BB%E7%BE%A9/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>フィクション（虚構）</title>
-      <link>http://localhost:1313/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%95%E3%82%A3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E8%99%9A%E6%A7%8B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ポストモダン</title>
-      <link>http://localhost:1313/keywords/%E3%83%9D%E3%82%B9%E3%83%88%E3%83%A2%E3%83%80%E3%83%B3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%9D%E3%82%B9%E3%83%88%E3%83%A2%E3%83%80%E3%83%B3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>ポップカルチャー</title>
-      <link>http://localhost:1313/keywords/%E3%83%9D%E3%83%83%E3%83%97%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%9D%E3%83%83%E3%83%97%E3%82%AB%E3%83%AB%E3%83%81%E3%83%A3%E3%83%BC/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>マイノリティ</title>
-      <link>http://localhost:1313/keywords/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>マジョリティ</title>
-      <link>http://localhost:1313/keywords/%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>マルクス</title>
-      <link>http://localhost:1313/keywords/%E3%83%9E%E3%83%AB%E3%82%AF%E3%82%B9/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E3%83%9E%E3%83%AB%E3%82%AF%E3%82%B9/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>交通</title>
-      <link>http://localhost:1313/keywords/%E4%BA%A4%E9%80%9A/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E4%BA%A4%E9%80%9A/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>人間関係</title>
-      <link>http://localhost:1313/keywords/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>介護</title>
-      <link>http://localhost:1313/keywords/%E4%BB%8B%E8%AD%B7/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E4%BB%8B%E8%AD%B7/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>体験</title>
-      <link>http://localhost:1313/keywords/%E4%BD%93%E9%A8%93/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E4%BD%93%E9%A8%93/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>写真</title>
-      <link>http://localhost:1313/keywords/%E5%86%99%E7%9C%9F/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%86%99%E7%9C%9F/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>労働</title>
-      <link>http://localhost:1313/keywords/%E5%8A%B4%E5%83%8D/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%8A%B4%E5%83%8D/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>可能性</title>
-      <link>http://localhost:1313/keywords/%E5%8F%AF%E8%83%BD%E6%80%A7/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%8F%AF%E8%83%BD%E6%80%A7/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>同性愛</title>
-      <link>http://localhost:1313/keywords/%E5%90%8C%E6%80%A7%E6%84%9B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%90%8C%E6%80%A7%E6%84%9B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>執筆</title>
-      <link>http://localhost:1313/keywords/%E5%9F%B7%E7%AD%86/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%9F%B7%E7%AD%86/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>変化</title>
-      <link>http://localhost:1313/keywords/%E5%A4%89%E5%8C%96/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%A4%89%E5%8C%96/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>大人</title>
-      <link>http://localhost:1313/keywords/%E5%A4%A7%E4%BA%BA/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%A4%A7%E4%BA%BA/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>大衆性</title>
-      <link>http://localhost:1313/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%A4%A7%E8%A1%86%E6%80%A7/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>子育て</title>
-      <link>http://localhost:1313/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%AD%90%E8%82%B2%E3%81%A6/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>孤独</title>
-      <link>http://localhost:1313/keywords/%E5%AD%A4%E7%8B%AC/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%AD%A4%E7%8B%AC/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>尊厳死</title>
-      <link>http://localhost:1313/keywords/%E5%B0%8A%E5%8E%B3%E6%AD%BB/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%B0%8A%E5%8E%B3%E6%AD%BB/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>差異</title>
-      <link>http://localhost:1313/keywords/%E5%B7%AE%E7%95%B0/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E5%B7%AE%E7%95%B0/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>思考</title>
-      <link>http://localhost:1313/keywords/%E6%80%9D%E8%80%83/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%80%9D%E8%80%83/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>性愛</title>
-      <link>http://localhost:1313/keywords/%E6%80%A7%E6%84%9B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%80%A7%E6%84%9B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>排除</title>
-      <link>http://localhost:1313/keywords/%E6%8E%92%E9%99%A4/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%8E%92%E9%99%A4/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>文章</title>
-      <link>http://localhost:1313/keywords/%E6%96%87%E7%AB%A0/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%96%87%E7%AB%A0/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>旅</title>
-      <link>http://localhost:1313/keywords/%E6%97%85/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%97%85/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>村上春樹</title>
-      <link>http://localhost:1313/keywords/%E6%9D%91%E4%B8%8A%E6%98%A5%E6%A8%B9/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%9D%91%E4%B8%8A%E6%98%A5%E6%A8%B9/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>権利</title>
-      <link>http://localhost:1313/keywords/%E6%A8%A9%E5%88%A9/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%A8%A9%E5%88%A9/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>歴史</title>
-      <link>http://localhost:1313/keywords/%E6%AD%B4%E5%8F%B2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E6%AD%B4%E5%8F%B2/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>現代思想</title>
-      <link>http://localhost:1313/keywords/%E7%8F%BE%E4%BB%A3%E6%80%9D%E6%83%B3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E7%8F%BE%E4%BB%A3%E6%80%9D%E6%83%B3/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>疎外</title>
-      <link>http://localhost:1313/keywords/%E7%96%8E%E5%A4%96/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E7%96%8E%E5%A4%96/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>目的</title>
-      <link>http://localhost:1313/keywords/%E7%9B%AE%E7%9A%84/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E7%9B%AE%E7%9A%84/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>社会</title>
-      <link>http://localhost:1313/keywords/%E7%A4%BE%E4%BC%9A/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E7%A4%BE%E4%BC%9A/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>精神分析</title>
-      <link>http://localhost:1313/keywords/%E7%B2%BE%E7%A5%9E%E5%88%86%E6%9E%90/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E7%B2%BE%E7%A5%9E%E5%88%86%E6%9E%90/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>組織</title>
-      <link>http://localhost:1313/keywords/%E7%B5%84%E7%B9%94/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E7%B5%84%E7%B9%94/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>自己</title>
-      <link>http://localhost:1313/keywords/%E8%87%AA%E5%B7%B1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%87%AA%E5%B7%B1/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>自由</title>
-      <link>http://localhost:1313/keywords/%E8%87%AA%E7%94%B1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%87%AA%E7%94%B1/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>自立</title>
-      <link>http://localhost:1313/keywords/%E8%87%AA%E7%AB%8B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%87%AA%E7%AB%8B/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>言葉</title>
-      <link>http://localhost:1313/keywords/%E8%A8%80%E8%91%89/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%A8%80%E8%91%89/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>記憶</title>
-      <link>http://localhost:1313/keywords/%E8%A8%98%E6%86%B6/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%A8%98%E6%86%B6/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>読書</title>
-      <link>http://localhost:1313/keywords/%E8%AA%AD%E6%9B%B8/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%AA%AD%E6%9B%B8/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>身体</title>
-      <link>http://localhost:1313/keywords/%E8%BA%AB%E4%BD%93/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E8%BA%AB%E4%BD%93/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>過去</title>
-      <link>http://localhost:1313/keywords/%E9%81%8E%E5%8E%BB/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E9%81%8E%E5%8E%BB/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>食事</title>
-      <link>http://localhost:1313/keywords/%E9%A3%9F%E4%BA%8B/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/keywords/%E9%A3%9F%E4%BA%8B/</guid>
-      <description></description>
-    </item>
-  </channel>
+    <lastBuildDate>Fri, 31 May 2024 10:21:43 JST</lastBuildDate><item>
+        <title>伊丹十三が残したかった言葉</title>
+        <link>http://localhost:1313/diary/itami/</link>
+        <description>2023年の始まりは落ち込むような出来事が多く、年初らしい穏やかさとは程遠いものだった。どれもこれも個人的なことばかりで、周りの人たちには何の関係もないことだと分かっている。
+それでも、元旦の電車に乗り込んだときには、僕の気持ちなんてお構いなしの浮かれた空気にうんざりしてしまった。ヘッドホンで耳を塞いでいても、新年を迎えたばかりの楽しげな雰囲気は嫌でも伝わってくる。僕はうつむいて、しばらくスマートフォンの画面と無為な時間を過ごしていたのだけれど、ふと顔を上げた拍子に車内広告のデカデカとした文字が飛び込んできた。そうか、正月だけじゃない。期待に溢れたムードには、きっとこの宣伝文句も一役買っていたのだ。
+「主演、安藤サクラ！　脚本、バカリズム！」
+この人が演り、この人が書く。それだけで視聴者の期待を集め、新年早々ふてくされていた僕の気持ちさえ上向かせてくれる。なんだか優しい色相に包まれた、日曜ドラマ『ブラッシュアップライフ』の広告だった。
+先週末で全十回の放送を終えたこのドラマは、冬ドラマの中でもトップクラスの視聴率を獲得し、TVerの総合ランキングでも毎週『星降る夜に』とのデッドヒートを繰り広げた。押しも押されぬ今期の代表作だ。
+物語の内容は、主人公・あーちんこと近藤麻美が、自分の人生を何度もやり直し、そのたびに生き方をブラッシュアップ（磨き直し）するというもの。初めのうちは「徳を積んで人間に生まれ変わること」を目指していたが、人生を何周もするうちに、自分の死後に親友たちが大きな事故に巻き込まれることを知ってしまい、ブラッシュアップの目的は「自分を救うため」から「親友を救うため」へと大きく変化していく―――。
+この物語では、外部からの評価（徳を積んだかどうか）を基準に生きていた主人公が、事故の回避という目的を見出すことによって、人生を自分自身の価値基準で生きるようになるまでの成長が描かれている。そしてこの成長の原動力となるのが、主人公と親友たちの「閉じた世界」だ。物語全体を通じて、この狭い世界は居心地よく、かけがえのない、美しいものとして描かれる。それは、この脚本における最大のセールスポイントであり、人気の熱源でもあると思う。しかし僕は、その世界の住民が外部に向けるまなざしを看過することができなかった。
+ここでは、このドラマにおける閉じた世界の描かれ方や、そのような方法で居心地よく生きる場所を作ろうとするアプローチの問題について考えていきたい。
+（以下、ネタバレを含みます。）
+＊
+交通事故で三十三年の生涯を終えた主人公・あーちん（近藤麻美）は、死後の世界の窓口で「あなたの来世はオオアリクイです」と告げられる。「人間に生まれ変わるためには、相応の徳を積んでいなければならない」というルールを聞かされて落胆するものの、その後のやり取りで今生のやり直し（＝ブラッシュアップ）ができることを知り、人間に生まれ変わることを目指して近藤麻美としての人生をやり直すことにする。
+二周目、三周目と、徳を積むことを心がけて生きるあーちんだが、二周目で告げられた来世はニジョウサバ、三周目ではムラサキウニと、その人生はなかなか思うように評価されない。四周目の人生では覚悟を決めて学業に専念し、医学界に貢献したこともあってか、ようやく人間としての来世を認められる。しかし、四周目の人生でなっち（門倉夏希）とみーぽん（米川美穂）が飛行機事故で亡くなる運命であること、それを防ごうとして操縦士になったうのまり（宇野真里）もまた計画に失敗して亡くなったことを知った彼女は、やっと掴んだ念願の来世を手放し、親友たちの死を防ぐために再び近藤麻美としての人生をやり直す道を選ぶ。
+このあーちんの行動の原動力になっているのが、あーちん、なっち、みーぽん、うのまりからなる「同質性によって閉じられた世界＝うちらの世界」だ。
+一周目から三周目にかけては、閉じられているがゆえの心地よさが軽妙な筆致とともに描かれ、四周目でそれが失われることによってかけがえのないものだったことに気づかされる。物語が終盤に近づくにつれ、それまでの「うちらの世界」が実は不完全であったことが明らかになり、五周目のレストランで四人の邂逅と真の「うちらの世界」が輝かしくセレブレイトされる（まさに“カタルシスを感じる”場面だ）。
+このドラマは、こうして閉じた世界の魅力を描き続けたからこそ、大きな共感を呼ぶことができたのだと思う。
+＊
+しかし僕は、物語が「うちらの世界」の輪郭をなぞるたびに、どうしても引っかかってしまうものがある。それは、その世界の外側にいる人たちに向けられた視線のことだ。
+例えば、あーちんたちには、生徒会長を務める成績優秀なうのまりに対して「近寄りがたい」と眉をひそめたり、成人式で暴れるヤンキーに対して「ああいう人って本当にいるんだ」と嘲弄したりする一面がある。
+このとき彼女たちは、うのまりやヤンキーのような異質な者たちを、同じ世界に生きる存在として認めていない。そこには、同質性の輪からはみ出た者に対して「対等に扱う必要はなく、白眼視されて当然だ」という了解さえ存在しているように見える。
+このことは、男性の性的な側面が「不倫」という記号で、嫌悪・懲罰の対象としてしか表現されないこととも無関係ではないだろう。女性であるあーちんたちにとって、男性とはまさに同質性の輪の外側に位置する存在だからだ。玲奈ちゃんのお父さん、薬局の同僚の宮岡さん、パイロットの先輩である中村機長など、この物語にはやたらと不倫する男性が登場するが、シナリオ上の必然性は感じられず、「うちらの世界」の外殻を固める役割を果たして退場するだけだ。
+「うちらの世界」は同質性によってパッキングされているので、異物を受け入れることができない。だから、彼女たちの結びつきを強調しようとすればするほど、「うちらの世界」は外界との溝を深めていくしかなかったのだ。
+問題の根底には、あーちんが来世を棄ててまで守ろうとした関係性の魅力を、同質性に頼ることでしか描けなかったという貧しさがある。あーちん、なっち、みーぽん、うのまりの関係を、個性の違いという観点から見つめ、その組み合わせの分だけ互いを補い合うような、あるいはその外側の人たちとも相互にアクセス可能な、開かれた豊かな関係性として描いていれば、こうはならなかったはずだ。
+＊
+異質な他者と世界を分断し、居心地のよい「うちらの世界」を作る。こうしたやり方がポピュラリティを帯びるのは、僕たちが直面している2023年の状況とも合致する。
+このドラマの主人公たちは、少なくともTwitterのプレイヤーではない。MastodonやDiscord、あるいはLINEグループのプレイヤーだ。同質性によって構成された世界には、異物は最初から存在しない。同質性のもたらす心地よさが追求される限り、コミュニティは閾値を超える度に何度でも分断され、際限なく細分化されていく。
+もちろんこれは情報空間に限ったことではない。トランプ政権を生んだアメリカ国内の分断、イギリスのEU離脱、中国政府による香港制圧、ロシアによるウクライナ侵攻など、地球上の至るところで「異質な他者と世界を分断する」アプローチが実行されている。
+だからこそ、僕たちには「そんな他者との関わり方を疑うような想像力」が必要なはずだ。言い換えれば「異質な他者と世界を共有しながら個々の人生を豊かにする」想像力のことだ。
+分断のアプローチにおいては、「あなたは私たちと違う」という言葉の数だけ社会は切り刻まれ、人々は異物に対して敏感にアレルギー反応を示すようになる。同質性を連帯の根拠とする価値観の下では、「他者との違い」はそのまま「個人がその社会から排除される理由」になってしまうため、その社会で居場所を得ようとする個人は全体との同質化を図るしかない。そこに居ようとする限り、個人的な変化が許されることもない。「うちらの世界」では「うちらはずっと一緒」でなければならないのだ。
+僕は、これとは逆の価値観で駆動する社会が望ましいと考えている。すなわち「あなたは私たちと違う」からこそ「必要だ」とされる社会の姿だ。自分と異質な他者も含めて同じ社会を生きる存在であることを受け入れることは、しなやかで強い社会を作ることになる。いわば包摂のアプローチだ。そこで求められるのは異物と接する免疫力であり、個人が目指すべきことは全体との同質化ではなく、他者を活かす方法と自身の役割の探求になる。そしてそれは、現実に実装することが困難だからこそ、ドラマや映画、小説、漫画といったフィクションが推進していかなければならないのだ。
+＊
+パイロットとなったあーちんは、なっちとみーぽんを飛行機事故から救った後、航空会社を退職して北熊谷の市役所に入庁する。彼女たちを救おうとして同質性の輪から外れてしまった彼女は、生活を変えることで同質化を果たしたのだ。それから数十年後、四人は同じ老人ホームへ入所し、天寿を全うした後は揃ってハトに転生。四羽が仲よく電線に止まり、北熊谷の町を望みながら歓談している光景がラストシーンとなる。
+「うちらはずっと一緒」を幸せの形として提示することに異論はない。けれど、その背景に「私たちとは違うよね」と言われて傷つくような世界があることを思うと、やはりどこか心に影が落とされてしまう。
+あーちんが例えパイロットのままでも、北熊谷で暮らしていなくても、四人がまったく違う生き物に生まれ変わっても、同じ世界を生きる他者としてお互いを受け入れる。僕たちはきっと、世界をそんな方向にブラッシュアップしていくべきだ。</description>
+        <pubDate>Thu, 04 Apr 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/diary/itami/</guid>
+      </item><item>
+        <title>命を、計画の外側から見つめ直す（映画『PLAN 75』感想文）</title>
+        <link>http://localhost:1313/diary/eiga/</link>
+        <description>これは2024年4月の記事です。</description>
+        <pubDate>Mon, 01 Apr 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/diary/eiga/</guid>
+      </item><item>
+        <title>works-1</title>
+        <link>http://localhost:1313/work/project4/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project4/</guid>
+      </item><item>
+        <title>works-1</title>
+        <link>http://localhost:1313/work/project5/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project5/</guid>
+      </item><item>
+        <title>works-1</title>
+        <link>http://localhost:1313/work/project6/</link>
+        <description>お台場横にあり、まるで「墜落した宇宙船」のようだと評判の建物。行政の施設でありながら、なんと“20年以上休館中”だと言います。昨年、ネット上で解体の可能性がささやかれましたが、今も建物は残っています。管理する東京都港湾局を取材しました。（朝日新聞デジタル企画報道部・朽木誠一郎） 【PR】「あの時、学校でR-1飲んでたね」 「墜落した宇宙船」の今 りんかい線の国際展示場駅から徒歩で約10分のところにある建物。周囲は立ち入り禁止の柵で囲まれ、特に何の説明もありません。
+見かけた人からは「まるで墜落した宇宙船のよう」などと評判になっていました。最近は近づく道も封鎖され、窓にはヒビ、外壁は破損してネットがかけられています。
+建物を管理するのは東京都港湾局。これは『共同溝展示館（通称・K－MUSEUM）』という展示館でした。
+共同溝展示館は、1997年4月に開館。96年に開催予定だった世界都市博で公開されるはずでしたが、都市博自体が中止に。利用者数の低迷などが理由で、2001年4月1日から、20年以上に渡り無期休館になっています。設計したのは世界的な建築家の渡辺誠さんです。
+同展示館は、その名前の通り、臨海副都心の共同溝を紹介する目的で建設されました。共同溝とは、道路の地下に、電気やガス、上下水道などのライフラインをまとめて収容したもの。
+臨海副都心の共同溝はやや特殊で、中に「ゴミ収集管」も入っています。地域内にあるビルなどのゴミ置き場と清掃工場とが結ばれ、一定量のゴミがたまると、清掃工場からの遠隔操作で、収集管から掃除機のように吸い取ることができるそうです。
+『新建築』（新建築社）1997年1月号への寄稿『海の向うに見える街から』で、渡辺さんはこの大規模な共同溝システムを「土木工学の誇るそのインフラストラクチュア」と評し、「その共同溝の理解を深めてもらうというのが、この建築の役割である」と述べています。
+今は見ることのできない内部は、アクリルハニカムパネルを使用した、いわゆるSF映画を思い起こさせるもの。トイレブースも展示の一環として人工大理石を一体成形するなど、各所に工夫が凝らされていたそうです。
+その共同溝展示館の解</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project6/</guid>
+      </item><item>
+        <title>works-2</title>
+        <link>http://localhost:1313/work/project2/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project2/</guid>
+      </item><item>
+        <title>works-2</title>
+        <link>http://localhost:1313/work/project7/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project7/</guid>
+      </item><item>
+        <title>works-2</title>
+        <link>http://localhost:1313/work/project8/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project8/</guid>
+      </item><item>
+        <title>works-2</title>
+        <link>http://localhost:1313/work/project9/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project9/</guid>
+      </item><item>
+        <title>works-3</title>
+        <link>http://localhost:1313/work/project10/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project10/</guid>
+      </item><item>
+        <title>works-3</title>
+        <link>http://localhost:1313/work/project11/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project11/</guid>
+      </item><item>
+        <title>works-3</title>
+        <link>http://localhost:1313/work/project3/</link>
+        <description>Project 1 Description of project 1.</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project3/</guid>
+      </item><item>
+        <title>コピーライター・奥祐一朗 ポートフォリオサイト</title>
+        <link>http://localhost:1313/work/project1/</link>
+        <description>博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂
+奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉 博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂
+奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂
+奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し、新たに「dakarayo inc.」を創業しました。その公式サイトを僕が構築しましたので、こちらで紹介します🙂
+奥君はコピーライティングに限らず、戦略立案から各種制作まで幅広く請け負っています。サイトに過去の作品を掲載していますので、是非ご覧いただき、ご用命の際はお声かけ下さい🎉</description>
+        <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/work/project1/</guid>
+      </item><item>
+        <title>僕たちが東京とうまくやっていくための参考書（小説『この部屋から東京タワーは永遠に見えない』感想文）</title>
+        <link>http://localhost:1313/diary/tokyo/</link>
+        <description>これは2024年3月の記事です。</description>
+        <pubDate>Fri, 01 Mar 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/diary/tokyo/</guid>
+      </item><item>
+        <title>世の中を良くする不快のデザイン展</title>
+        <link>http://localhost:1313/diary/hukai-deisgn/</link>
+        <description>これは2024年2月の記事です。</description>
+        <pubDate>Thu, 01 Feb 2024 00:00:00 JST</pubDate>
+        <guid>http://localhost:1313/diary/hukai-deisgn/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/1/</link>
+        <description>「アーキテクチャ」とは、英語で「建築」とか「構造」を意味する言葉だが、米国の法学者ローレンス・レッシグは主著『CODE』のなかで、人間の行動や社会秩序を規制する要素を「規範・慣習（Norms）」、「法律（Low）」、「市場（Market）」に加えて、「アーキテクチャ（あるいはコード）（Architecture）」という概念を使って整理した。人の行動を規制する必要がある場合、法による規制としては刑事罰の制定、規範・慣習による規制としては共同体あるいはコミュニティ内の説得・制裁、市場による規制としては価格に基づく経済合理的な判断、そして、アーキテクチャによる規制としては物理的・技術的な環境が存在する。音楽の違法ダウンロードを例にとれば、違法ダウンロードの刑罰化は法による規制、音楽ファン・コミュニティにおける説得は規範・慣習による規制、違法ダウンロードの楽曲を入手することの経済的なコストが高ければ（実際にはそうではないが）市場による規制、DRM（Digital Rights Management）により技術的にコピーをできなくすることはアーキテクチャによる規制である。レッシグは、情報化社会における規制として、四つの規制原理のうち法による規制とアーキテクチャによる規制の関係性に注目しつつ、特に議会が制定した法律だけでなく、このようなアーキテクチャ（コード）による規制が決定的に重要な意味を持つと論じた。
+（水野祐、2017『法のデザイン—創造性とイノベーションは法によって加速する』フィルムアート社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/1/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/10/</link>
+        <description>足が、「わたしは手ではないから、体の一部ではない」と言ったところで、体の一部でなくなるでしょうか。耳が、「わたしは目ではないから、体の一部ではない」と言ったところで、体の一部でなくなるでしょうか。もし体全体が目だったら、どこで聞きますか。もし全体が耳だったら、どこでにおいをかぎますか。そこで神は、御自分の望みのままに、体に一つ一つの部分を置かれたのです。すべてが一つの部分になってしまったら、どこに体というものがあるでしょう。
+（新約聖書「コリントの信徒への手紙」12章 15〜19節）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/10/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/11/</link>
+        <description>たとえば誰かを介護しなければならないとして、そのときその人に自分の全生活を捧げてしまったら、介護者は生きていけなくなってしまいます。あるいは、介護される側からしても、援助は必要だけれど、それが過剰になると監視されていると感じるようになってしまいます。たとえ人間関係においてつながりが必要だとしても、そこには一定の距離、より強く言えば、無関係性がなければ、我々は互いの自律性を維持できないのです。つまり、無関係性こそが存在の自律性を可能にしているのです。
+（千葉雅也、2022『現代思想入門』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/11/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/12/</link>
+        <description>村上春樹の主人公が特定のパートナーと継続的な関係を維持できず、次々と別の女性と関係を持つことに象徴されるように「所有」は一過性の欲望だ。対して「関係性」は持続性を要求する欲望だ。二者間の双方向的なコミュニケーションの結果として事後的に立ち上がる関係性は、その二者の間だけに発生する固有のもので、それが触れ続けられていることによってのみ維持し、確認される。仮にたった一度の触れ合いで得た体験の記憶が特権化されたとき、それは既に名付けられたものであり、所有されたものであり、そして一方向的なものだ。その相手が同じように記憶の中で、その一回の接触を特別なものと位置づけているとは限らないからだ。関係性は持続され、反復されることによってのみ成立する。「関係性」とは一定の距離感と進入角度のことを指すのではなく、二者の接触によってその都度、距離感と進入角度が共創的に試行錯誤し続けられる「状態」のことを指すのだ。
+（宇野常寛、2022『砂漠と異人たち』朝日新聞出版）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/12/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/13/</link>
+        <description>「鈴先生と一星と深夜は、太陽と月と地球みたいな関係だな。ああいう関係は、恋とか愛とか、単純な名前はつけられないな。一列に並んだり、陰になったり、欠けたり満ちたりしながら。三つは回り続けている。」
+（ドラマ『星降る夜に』9話、北斗千明のセリフ）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/13/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/14/</link>
+        <description>インタビューに限らず、人は本来、誰かに自分のことを聞いてもらえるのは嬉しいはずだ。仕事でも日常会話でも、「あなたに興味がある」という態度を示すことから関係は始まる。
+（辻村深月、2015『図書室で暮らしたい』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/14/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/15/</link>
+        <description>しかし、その一方で、私が本当に付き合いに悔いを残している人、謝りたい、お礼が言いたいけど叶わない―――、望まぬ形で別れてしまった人たちというのは、絶対に連絡をしてこない。
+けれど、それでもなお、今の私が小説を書いていられるのは、急に連絡してくる“親友”たちではなく、もう二度と会うことはないかもしれないその人たちのおかげだ。もう連絡できないくらいの後悔や過ちの記憶まで含め、彼らが、私と、私の小説を作ってくれた。
+（辻村深月、2015『図書室で暮らしたい』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/15/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/16/</link>
+        <description>ベトナムには「シンチャオ（こんにちは）」だけ覚えて行った。たった１語でも、意識して覚えようとしなければ頭に入らない。１語も身につかず帰った旅もある。１語でも、その国に暮らす人々の表情がよく見えた。レストランで、市場で、土産店で、とにかく「シンチャオ！」と言っていた。こんにちはの一言さえあれば、旅が見学じゃなくて体験になる。世界に触るか触らないか、くらいの大きな差があった。
+（藤岡みなみ、2022『パンダのうんこはいい匂い』左右社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/16/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/17/</link>
+        <description>疎外は，社会学の言説から抜け出して，メデイアの解説や日常言語に入り込んでいる．たとえば，一つの世代全体が「社会から疎外」されている，とか，若者のサブカルチャーは，主流の文化から若い人びとが疎外されている状態を表している，などという言い方を耳にするであろう．この場合，隔たりや分離といった観念が含まれていることは明らかであるが，社会学において疎外といえば，資本主義社会の不平等と関連していることに注意したい．マルクスの史的唯物論のアプローチは，人びとが仕事を組織して財とサービスをつくり出す方法から始まる．マルクスにとって，「疎外されている」とは，真の帰結へと至る客観的条件のもとにおかれていることであり，その条件を変える鍵は，私たちの考えや信念を変えることではなく，自分の状態をコントロールする力を増し加えるために，生きる方法を変えることなのである．かつての労働生活とは，より骨の折れる肉体的労役であったように思われるが，小作農や職人など多くの社会集団にとっては，熟練を要する，それ自体満足できる仕事であり，現代の製造業や大規模なオフイス環境，コールセンターやファストフード店などよりも，仕事に対するコントロールの幅が大きかった．今日の仕事は，肉体的には以前ほど重労働ではないかもしれないが，コントロールの余地を与えられていないため，より大きな疎外を生み出し続けているのである.
+（友枝敏雄・友枝久美子、2018『ギデンズ 社会学コンセプト事典』丸善出版）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/17/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/18/</link>
+        <description>「要するに、同性愛者を『気持ち悪い』なんて言う人間は、頭の中で、同性愛者の体と過剰に一体化して、男同士でキスしたりするところを想像するからなんだよ。だから、そういう連中は、誰かがスゴい婆さんとつきあってるって聞いても、やっぱり『気持ち悪い』って言うよ。人の勝手だって、思えないんだよ。これはさ、AVを見てるとわかるんだ。性に関しては、人間は、簡単に他人をアバター化するから。俺はさ、中年のオッサンのアソコをじっと見つめてろなんて言われても、まあ、絶対にイヤだね。だけど、AVで女優と絡んでる時には、嬉々として凝視してるんだよ。その関係性に入り込んで、その男優の体と一体化して。」
+（朝井リョウ、2021『正欲』コルク）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/18/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/19/</link>
+        <description>自分の小説に冠ができることを喜ぶ気持ちより、受賞したことで、それまで自分なりにエッジが立った気持ちで書いてきた小説が鋭さを失ってしまうのではないかという不安の方が、ずっとずっと強かった。「大人が薦める本」の一つになどなってたまるか、という意地があった。
+（辻村深月、2015『図書室で暮らしたい』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/19/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/2/</link>
+        <description>欧米でも日本でも、個が「自律/自立する」ことを重んじる価値観が多数派である一方、「依存する」あるいは「関係性をむすぶ」というケアの価値観はまだまだ少数派のものである。資本主義社会において新自由主義的な文化が支配的な文脈では、〈ケア〉の価値が貶められてきたからだ。
+（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/2/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/20/</link>
+        <description>子どもの頃のほうが大人の今よりも自由だった人がどれくらいいるだろうか。扶養されていたぶん、労働せずに済んだという意味で自由だった人はいるだろうけど、代わりに多くの義務を背負わされていたはずだ。
+私が大人だなぁと思うのは、その種の義務全般から自由であるような人である。たとえば仕事をほっぽり出して失踪しちゃうような人は「大人〜」って感じる。もちろん、学校をほっぽりだして失踪しちゃう子どもにも「大人〜」と思う。
+「大人＝無責任」という単純な話ではない。義務のたぐいがあるということを理解していて、その上で、そんなのはゲームのルールに過ぎない、とわかっている人――心の底からはゲームを信じていない人――が大人だと感じる。遊びに心から没頭するのは子どもっぽい。だから、大人は責任や義務からも醒めていなければならない。
+（品田遊、2022『キリンに雷が落ちてどうする 少し考える日々』朝日新聞出版）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/20/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/21/</link>
+        <description>サプライズのために消してくれていたハロゲンライトが再び点灯し、引率者たちの顔が夜の山に浮かび上がった。こちらに向けられている笑顔をまじまじと見てみたが、全員驚くほど馴染みがない。曲がりなりにも今日1日を一緒に過ごした仲だというのに。怒られなくて済んだし、こんな私のためにケーキを用意してくれたのも嬉しいけれど、一度しかない19歳の誕生日を全然知らない人と過ごしているなぁ、としみじみ思ったのを覚えている。こういうのが、大人の世界なのかもしれない、とも。
+（藤岡みなみ、2022『パンダのうんこはいい匂い』左右社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/21/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/22/</link>
+        <description>孤独というのは、つまりは、この世界への影響力の欠如の意識だった。自分の存在が、他者に対して、まったく影響を持ち得ないということ。持ち得なかったと知ること。──同時代に対する水平的な影響力だけでなく、次の時代への時間的な、垂直的な影響力。それが、他者の存在のどこを探ってみても、見出せないということ。
+（平野啓一郎、2019『マチネの終わりに』コルク）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/22/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/23/</link>
+        <description>「そのために、……死の予定を立てる、ということですか？ 看取ってくれる人と、スケジュールを調整するために？」
+「人生のあらゆる重大事は、そうでしょう？ 死だけは例外扱いすべきでしょうか？ 他者と死を分かち合うというのは、臨終に立ち会うだけじゃない。時間を掛けて、一緒に話し合う時間を持つ、ということです。」
+（平野啓一郎、2021『本心』コルク）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/23/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/24/</link>
+        <description>悪いポップはコビだけど、いいポップは思いやり
+（宇多田ヒカル、2009『点 -ten-』インタビュー）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/24/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/25/</link>
+        <description>「もちろん、人に迷惑をかけない大人になることは大事なんだけど、最近、子育ての正解ってそこにないんじゃないかって思うこともあって」 「じゃ、どんなことが正解なの？」 「成長した子どもが、大人になってから親の子育てを肯定できるかどうか」
+（辻村深月、2018『噛みあわない会話と、ある過去について』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/25/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/26/</link>
+        <description>そもそも、人間にはなぜ自由が必要なのでしょうか。ミルの考えでは、それは人間の可謬性と高い修正能力ゆえです。つまり、人間はえてして判断を誤るが、それを自由な討論によって修正する能力にも富んでいるというのです。それゆえ、ミルは自由の確保を「自分自身の可謬性に対して予防策をとる」ことと見なします。これは一種の「リスクヘッジ」と言い換えてもよいでしょう。（中略）
+人間は誰でも失敗する。この誤謬の可能性を織り込んで、人間の考えを最大限に多様にし、オープンな討論を経て意見を修正してゆくことが、ミル的な自由主義の基本的な考え方です。
+（福嶋亮大、2022『思考の庭のつくりかた はじめての人文学ガイド』星海社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/26/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/27/</link>
+        <description>〈本来的なもの〉は大変危険なイメージである。なぜならそれは強制的だからである。何かが〈本来的なもの〉と決定されてしまうと、あらゆる人間に対してその「本来的」な姿が強制されることになる。本来性の概念は人から自由を奪う。
+それだけではない。〈本来的なもの〉が強制的であるということは、そこから外れる人は排除されるということでもある。何かによって人間の「本来の姿」が決定されたなら、人々にはそれが強制され、どうしてもそこに入れない人間は、人間にあらざる者として排除されることになる。
+（國分功一郎、2011『暇と退屈の倫理学』朝日出版社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/27/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/28/</link>
+        <description>そして繰り返すが、「仮想現実から拡張現実へ」というキャッチフレーズは情報産業のトレンドの変化を表現するもの以上の意味を帯びている。それは僕たちの虚構観そのものの変化でもあるのだ。20世紀的な劇映画は、ディズニーのプリンセスストーリーたちや『スター・ウォーズ』、そしてMCUが代表するように半ばグローバルなコミュニケーションツールとなり、そして『ポケモンGO』が代表する21世紀的なアプリゲームは通勤や買い物といった生活そのものを娯楽化する。「ここではない、どこか」に、外部に越境することではなく「ここ」に、内部に深く潜るための回路を、いま、僕たちは情報技術に、そして虚構そのものに求めつつあるのだ。
+（宇野常寛、2020『遅いインターネット』幻冬舎）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/28/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/29/</link>
+        <description>言葉は光だ。私が目で世界を見ているのは、光があるから。同じように言葉で照らせばそこに世界が浮かぶ。
+（藤岡みなみ、2022『パンダのうんこはいい匂い』左右社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/29/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/3/</link>
+        <description>ケアの倫理は、抽象的な理念ではなく、目の前の状況を敏感に感じ取る能力、生き物に対する気づかい、真の共感を要する倫理でもある。
+（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/3/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/30/</link>
+        <description>ZINEやリトルプレスと呼ばれるような小さな出版物をよく手に取ります。とりわけ惹かれるのは日記です。日常を綴るための言葉、普段遣いの言葉は、辞書には載っていなかったり、文法的に見たらおかしなところがあったりするかもしれないけれど、いわんとすることは実感としてたしかに伝わってくる。このうねり、グルーヴ感に身を委ねていたいと感じるような言葉。校正を通した出版物ではあまり見ることのない、野の言葉とでも呼びたいような言葉にふれると、書くことはもっと自由でいいのにと思います。
+（牟田都子、2022『文にあたる』亜紀書房）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/30/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/31/</link>
+        <description>かつて写真は非常に限られたタイミングでしか撮られず、それが現在との断絶を印象づけ、写真に備わる一種の「思い出性」とでも呼べる性質を支えていた。これは人間の記憶に似ている。大部分を忘れてしまうからこそ、覚えているごく少数の記憶が思い出として重宝される。思い出とは、その少なさに支えられている。
+（大山顕、2020『新写真論 スマホと顔』株式会社ゲンロン）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/31/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/32/</link>
+        <description>幼い日の畑で、祖父母が飲んでいた水筒の中のポカリスエットは、きっと少し生ぬるかったろう。毎朝、日課のようにそれを缶から水筒に移しかえていた祖母の姿も、むわっとした暑さに満ちた畑で空を仰ぐようにカップを傾けていた祖父の姿も、時が経てば経つほど、なぜか、歳月に補われるように逆に鮮明になっていく。覚えていたい、と思うからかもしれない。
+（辻村深月、2015『図書室で暮らしたい』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/32/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/33/</link>
+        <description>何処か遠くの、自分にはまったく馴染みのない国で作られた作物を食べるということ。それは、その作物を育んだ土地の歴史を肉体の一部として所有することです。こういう言い方がロマンチック過ぎるのであるならば、少なくともその地の一定の時間的経過を物質の形で摂取することだと言い換えてもいいでしょう。その作物を育んだ土が提供する栄養は、そもそもの地質と、気象条件と、そこで起こった様々なこと（戦場であったこともあれば、荒野であったこともあるでしょうし、その後に耕され、肥料を与えられたことも含めて）とが複雑に影響しあった結果です。
+（平野啓一郎、2006『文明の憂鬱』新潮社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/33/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/34/</link>
+        <description>本を読むのが苦手な人は、本を読んで「考える」ことのおもしろさを知らない人がほとんどだ。本を読むと、他人の考えに触れて思うこと、考えることが自然と湧いて出る。これがおもしろいのだ。しかし本を「知識を得る」ことを「目的」に読んでしまうと、書いてあることを頭に入れることでいっぱいいっぱいになってしまい、勝手に湧いてくる自分の考えを膨らませることをしなくなってしまう。実はほとんどの人は、知識を得るという「目的」をもって本を読んでいるために、本を読むことそのもののおもしろさを見失っていると思う。
+（宇野常寛、2023『ひとりあそびの教科書』河出書房新社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/34/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/35/</link>
+        <description>結局、書くというのは、言葉をよりふさわしいものに修正し続けるプロセスです。これは時間と労力を要します。学生だけではなくプロの書き手にとっても、あれでもない、これでもないと言葉の迷宮をさまようのは、ときに苦痛でしょう。しかし、この難所でこそ、丁寧で粘り強い思考が要求される。しっくりくる言葉を見つけるのに数日悩むこともありますが、この苦労を省略すると、精神的にも技術的にも成長しません。
+要するに「このへんでいいや」と雑に乗り切ってしまうのでは、考えたことにならないのです。さっき「粗雑さは精神の敵」と言ったのは、まさにそのためです。ものごとを雑に処理している限り、思考の真似事の先には進めない。考えるとは、頭脳に日常とは違う負荷をかけることです。
+（福嶋亮大、2022『思考の庭のつくりかた はじめての人文学ガイド』星海社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/35/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/36/</link>
+        <description>もっと簡単に言えば、ポストモダン政治思想の中心的な信念の一つは、有力な社会的権力が、自分たちの利益になるような形で社会をカテゴリーとヒエラルキーに秩序分けする、というものだ。それを実現するため、その有力者たちは社会とその特性についての語られ方や、何を事実として受容できるかを押しつける。例えば、主張の証拠と論拠を提供しろという要求は、ポストモダニズム〈理論〉のレンズを通して見ると、権力を持つ人々が構築した言説システムと知識生産の中に参加しろという要求と見なされる。権力者たちは、そうしたアプローチを重視し、他のコミュニケーションと「知識」生産手段を排除するようにそれを設計したのだ。言い換えれば、科学はそれを確立した権力者たち──西洋白人男性──の利益に奉仕するように構築されており、同時に他者の参加を阻む障壁となるようにまとめられているのだ、と〈理論〉は見なしている。
+（ヘレン・プラックローズ、2022『「社会正義」はいつも正しい　人種、ジェンダー、アイデンティティにまつわる捏造のすべて』早川書房）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/36/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/37/</link>
+        <description>精神分析とは、ごく大ざっぱに言うと、今の自分の人間関係のトラブルや不安の根源には幼少期の家族関係の問題があるのだという仮説を立て、自由連想で記憶を手繰っていくことで、かつての自分のなかにあるトラウマに向き合う、そうすると現在の問題が解消されるという実践です。「トラウマ」は、大変つらい事故に遭ったとか、被害を受けたとか、重大な場合に使われることが多いと思いますが、ここではすごく広く、「何らかの意味での心の引っかかり」くらいの意味でとってください。そういう意味でのトラウマを中心に、雪だるま式に心のなかの構築物が積み重なることによって、今の自分の心的傾向ができあがっているのだ、と考えるのが精神分析です。
+それに対してドゥルーズ＋ガタリが行った批判は、すごく簡単に言えば、人間の振る舞いはそんな小さい頃の家族のことだけで決まってるわけじゃない、ということです。自分自身をごく狭い範囲＝家族における同一性だけで考えるのはリアルじゃない、というのです。
+世界は多方向の関係性に開かれていて、しかもそれは変動しているはずであって、自分自身の心あるいは身体をそのような変動のなかにある仮固定のものと捉えるなら、昔からずっとあるトラウマを想起するなんてそもそもおかしな話ではないか。むしろそれは、そのような基準点があると仮説を立てて、そこに向けて自分自身を固めていくような運動で、自分をむしろ硬直化させて治ったような気にさせるまやかしの技法だ、と。
+（千葉雅也、2022『現代思想入門』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/37/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/38/</link>
+        <description>「差異」は、「同一性」すなわち「アイデンティティ」と対立しています。同一性とは、物事を「これはこういうものである」とする固定的な定義です。逆に、差異の哲学とは、必ずしも定義に当てはまらないようなズレや変化を重視する思考です。[…]
+今、同一性と差異が二項対立をなすと言いましたが、その二項対立において差異の方を強調し、ひとつの定まった状態ではなく、ズレや変化が大事だと考えるのが現代思想の大方針なのです。
+（千葉雅也、2022『現代思想入門』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/38/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/39/</link>
+        <description>近代社会の自己を語る際に参考になるのが、チャールズ・テイラーの二つの対照的な自己像、すなわち「緩衝材に覆われた自己」（buffered self）と「多孔的な自己」（porous self）である。前者は、啓蒙期以降に浸透するようになった「自立した個」とも、正義論の自己像ともいえる「緩衝材に覆われた」イメージであり、「自分自身を決して脆弱ではない存在者として、つまり、自らを事物の意味の所持者であると理解することができる」（チャールズ・テイラー『世俗の時代』（上）、四七頁）。他方、後者の「多孔的な自己」は、より緩やかな輪郭をもつ、一個の主体としてではなく、自己がつねに霊性を帯び、それが内的世界と外的世界とを行き来するような、近代では希薄になっている通気性のよい自己である。この対立は、「内面的な深さ、抑圧された思想と感情のコード化された表現として理解することもできる」（同、四八頁）。
+（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/39/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/4/</link>
+        <description>昨今、多くの企業や個人が創造性やイノベーションの創出やその体系化に躍起になっている。だが、創造性やイノベーションの本質は、文化人類学者レヴィ・ストロースが言うところの「ブリコラージュ」（相互に異様で異質な物事が出会うことで新しい「構造」が生まれるという意味）にあり、創造性やイノベーションの非予定調和的な性質は体系化に馴染みづらいと私は考えている。
+一方で、創造性やイノベーションが生まれやすい、確率を高くする環境や土壌を創出することは可能である。イノベーションの打率を上げることと言ってもよい。創造性やイノベーションの本質がブリコラージュにあるとすれば、これまで出会わなかったヒト、モノ、コトが偶発的に出会い、交配する機会を最大化することが創造性やイノベーションの源泉となる（法学者ジョナサン・ジットレインの言葉を借りれば、「生成力（generativity）」を高める、ということになる）。そのためには可能な限り多くの情報、事物など、有形・無形のあらゆるリソース（資源）を誰もが自由にアクセスし、利用できること、リソースの自由利用性＝「コモンズ」を確保することが重要になる。コモンズは、他分野からの参入障壁を破壊し、価格や品質をコモディティ化することで、その分野の境界を融解し、創造性やイノベーションを促進するのである。
+（水野祐、2017『法のデザイン—創造性とイノベーションは法によって加速する』フィルムアート社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/4/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/5/</link>
+        <description>たとえばセックスから介助まで、身体の接触を伴うコミュニケーションでは、言語外の、無意識の領域も含めた双方向的なコミュニケーションが発生する。このとき相手を独立した存在として尊重しつつ、互いの身体の一部を同化させることが要求される。こうしたコミュニケーションが成功したとき、自己の一部が他者と融解することで、自己を維持したまま他者に向けて開かれる。
+セックスにおける相互の自己滅却の欲望が交錯した結果もたらされる生成から、介助者と被介助者との間に発生する生成まで、ときにロマンチックな修辞を凝らして語られるコミュニケーションの共通点は、自己を部分的に滅却し、他者と部分的に同一化することが、その対象を他の人間と交換することのできない存在であると認識させる点にある。このとき「私」は「私たち」になる。
+（宇野常寛、2022『砂漠と異人たち』朝日新聞出版）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/5/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/6/</link>
+        <description>ロマン主義時代に生きたジョン・キーツ(John Keats, 1795-1821)の「ネガティヴ・ケイパビリティ」(negative capability)という概念は、共感力をもつ自己像を表しているといえる。「ケイパビリティ=capability」とは、何かを達成する、あるいは何かを探究して結論に至ることのできる力を意味する。しかし、キーツのこの概念は、知性や論理的思考によって問題を解決してしまう、解決したと思うことではない。そういう状態に心を導くことをあえて留保することをさす。「ネガティヴ・ケイパビリティ」とは、相手の気持ちや感情に寄り添いながらも、分かった気にならない「宙づり」の状態、つまり不確かさや疑いのなかにいられる能力である。
+（小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/6/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/7/</link>
+        <description>「異性の性器に性的な関心があるのは、どうして自然なことなんですか」 寺井検事、と、越川の声が聞こえる。 「ひとりの異性に何十年も性的に興奮し続けることは、誰かにこうして取り調べられることがないくらい自然なことなんですか」
+（朝井リョウ、2021『正欲』新潮社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/7/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/8/</link>
+        <description>みんな本当は、気づいているのではないだろうか。 自分はまともである、正解であると思える唯一の拠り所が“多数派である”ということの矛盾に。 三分の二を二回続けて選ぶ確率は九分の四であるように、“多数派にずっと立ち続ける”ことは立派な少数派であることに。
+（朝井リョウ、2021『正欲』新潮社）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/8/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/keyword/9/</link>
+        <description>あまり自覚されることはないが、20世紀とは「映像の世紀」であるのと同程度には「エンジンの世紀」でもあった。そして前世紀後半のオートバイと自動車の大衆化は、先進国に「交通戦争」とすら呼ばれる状況をもたらした。つい半世紀前まで、この国でも交通事故の死者は１万人を超えていた。しかし、今日においてそれはおよそ１／３以下に減っている。自動車の安全性能の向上、政府の法規制と啓蒙の強化がその主要因と言われているが、同時に人類がエンジンのもたらすスピードという幻想、それを手にしておよそ１００年で醒めつつあることが指摘できる。片岡義男（『スローなブギにしてくれ』『彼のオートバイ、彼女の島』）からしげの秀一（『バリバリ伝説』『頭文字Ｄ』）まで、20世紀のポップカルチャーにおいて定位置を占めていたこれらの機械への欲望は大きく後退している。強く、大きく、そして「速い」機械による身体拡張の快楽に人類は酩酊し、それがつい数十年前までは工業社会下における男性性の成熟と重ね合わされていた。しかし、21世紀の今日に生活の必要とは無縁にこのような文化に親しむ人々は、次第にかつての香港のカンフー映画を愛好する人々のようにレトロな文化に親しむ趣味人と見なされつつある。
+（宇野常寛、2023「いま必要なのは「新しい生活様式」の反省と再評価だという話」note）</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/keyword/9/</guid>
+      </item></channel>
 </rss>

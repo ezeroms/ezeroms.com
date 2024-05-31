@@ -11,10 +11,18 @@ disableAliases = true
   topic = "topics"
 
 [params]
-  description = "これは私のブログです。ここで考えたことや仕事をシェアします。"
+  description = "One thing I can tell you is you got to be free."
+  keywords = ""
+  RSSLink = "index.xml"
 
 [permalinks]
   diary = "/diary/:slug/"
+
+[outputFormats]
+  [outputFormats.RSS]
+    mediatype = "application/rss+xml"
+    baseName = "index"
+    isPlainText = true
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

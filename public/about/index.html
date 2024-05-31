@@ -44,6 +44,9 @@
       });
   });
   </script>
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
 
 <main class="main-section">
     <section class="main-section-1column">
@@ -282,6 +285,108 @@
                     </div>
                     <img src="/images/about/icon_signal.svg" alt="" class="link-card__right">
                 </a>
+
+            </div>
+        </section>
+
+
+        <section class="about__contact">
+
+            <div class="article-item-heading">
+                <p class="article-item-heading__eye-catch">
+                    🔔
+                </p>
+                <div class="article-item-heading__label">
+                    <h2 class="article-item-heading__label__h2">
+                        このブログの更新通知を受け取る
+                    </h2>
+                </div>
+                <p class="article-item-heading__sub-label">
+                    Subscribe
+                </p>
+            </div>
+
+            <div class="about__contact__list">
+                                  
+
+
+                <a href="https://feedly.com/i/subscription/feed/http://localhost:1313/index.xml" target="_blank" class="link-card in-contact">
+                    <div class="link-card__left">
+                        <h2 class="link-card__left__h2">
+                            Feedly
+                        </h2>
+                    </div>
+                    
+                </a>
+
+
+                <a href="https://www.inoreader.com/feed/http://localhost:1313/index.xml" target="_blank" class="link-card in-contact">
+                    <div class="link-card__left">
+                        <h2 class="link-card__left__h2">
+                            Inoreader
+                        </h2>
+                    </div>
+                    
+                </a>
+
+
+                <a href="https://theoldreader.com/feeds/subscribe?url=http%3a%2f%2flocalhost%3a1313%2findex.xml" target="_blank" class="link-card in-contact">
+                    <div class="link-card__left">
+                        <h2 class="link-card__left__h2">
+                            The Old Reader
+                        </h2>
+                    </div>
+                    
+                </a>
+
+
+                <a href="https://www.newsblur.com/?url=http%3a%2f%2flocalhost%3a1313%2findex.xml" target="_blank" class="link-card in-contact">
+                    <div class="link-card__left">
+                        <h2 class="link-card__left__h2">
+                            NewsBlur
+                        </h2>
+                    </div>
+                    
+                </a>
+
+
+                <a href="https://www.bloglovin.com/search/http://localhost:1313/" target="_blank" class="link-card in-contact">
+                    <div class="link-card__left">
+                        <h2 class="link-card__left__h2">
+                            Bloglovin
+                        </h2>
+                    </div>
+                    
+                </a>
+
+
+                <a target="_blank" class="link-card in-contact" onclick="copyToClipboard()">
+                    <div class="link-card__left">
+                        <h2 class="link-card__left__h2">
+                            Get RSS Feed Link
+                        </h2>
+                    </div>
+                    
+                </a>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText("http:\/\/localhost:1313\/index.xml").then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+
+
 
             </div>
         </section>
