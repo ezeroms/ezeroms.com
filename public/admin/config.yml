@@ -8,13 +8,11 @@ public_folder: "/images/uploads" # 公開時のメディアファイルのURL
 collections:
   - name: "about"
     label: "About"
+    folder: "content/about"
+    fields:
     files:
-      - label: "About"
-        name: "about"
-        file: "content/about.md"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "Body", name: "body", widget: "markdown" }
+    summary: "{{body}}"
 
   - name: "diary"
     label: "Diary"
