@@ -9,8 +9,9 @@ collections:
   - name: "about"
     label: "About"
     folder: "content/about"
+    create: true
+    slug: "{{fields.slug}}"
     fields:
-    files:
       - { label: "Body", name: "body", widget: "markdown" }
     summary: "{{body}}"
 
