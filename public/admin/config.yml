@@ -2,7 +2,7 @@ backend:
   name: git-gateway
   branch: main # or your default branch
 
-media_folder: "static/images/uploads" # メディアファイルのアップロード先
+media_folder: "../../static/images/uploads" # メディアファイルのアップロード先
 public_folder: "/images/uploads" # 公開時のメディアファイルのURL
 
 collections:
@@ -20,7 +20,7 @@ collections:
     folder: "content/diary"
     create: true
     slug: "{{fields.slug}}"
-    media_folder: "static/images/diary"
+    media_folder: "../../static/images/diary"
     public_folder: "/images/diary"
     fields:
       - { label: "Title", name: "title", widget: "string" }
@@ -40,7 +40,7 @@ collections:
     create: true
     slug: "{{fields.slug}}"
     media_folder: "static/images/work"
-    public_folder: "/images/work"
+    public_folder: "../..//images/work"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
