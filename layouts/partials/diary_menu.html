@@ -25,11 +25,11 @@
         {{ end }}
         {{ $sortedMonths := sort $months }}
         {{ $total := len $sortedMonths }}
-        {{ range $index := (seq 0 (sub $total 1)) }}
-            {{ $reversedIndex := sub (sub $total 1) $index }}
-            {{ $month := index $sortedMonths $reversedIndex }}
-            <li><a href="{{ printf "/diaries/%s" (urlize $month) }}">{{ $month }}</a></li>
-        {{ end }}
+        {{ range $index := seq 0 (sub $total 1) }}
+            {{ $i := sub (sub $total 1) $index }}
+            {{ $month := index $sortedMonths $i }}
+            <li><a href="{{ printf "/diaries/%s" (urlize $month) }}">{{ partial "convert_date.html" $month }}</a></li>
+        {{ end }}        
 
         <!-- YYYY-MM を形式変換する場合
         {{ $months := slice }}
