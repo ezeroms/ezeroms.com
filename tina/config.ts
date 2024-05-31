@@ -29,9 +29,22 @@ export default defineConfig({
   schema: {
     collections: [
       {
-        name: "post",
-        label: "Posts",
-        path: "content/posts",
+        name: "about",
+        label: "About",
+        path: "content/about",
+        fields: [
+          {
+            type: "markdown",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+        ],
+      },
+      {
+        name: "diary",
+        label: "Diary",
+        path: "content/diary",
         fields: [
           {
             type: "string",
@@ -41,7 +54,88 @@ export default defineConfig({
             required: true,
           },
           {
-            type: "rich-text",
+            type: "datetime",
+            name: "date",
+            label: "Date",
+            required: true,
+            ui: {
+              dateFormat: "YYYY-MM-DD",
+              timeFormat: false,
+            },
+          },
+          {
+            type: "list",
+            name: "diaries",
+            label: "Diaries",
+          },
+          {
+            type: "string",
+            name: "slug",
+            label: "Slug",
+            required: true,
+          },
+          {
+            type: "select",
+            name: "topics",
+            label: "Topics",
+            options: ["news", "music", "manga-and-anime", "movies-and-dramas", "comedy", "gaming", "sports", "books-and-magazines", "languages-and-foreign-cultures", "design", "internet-and-technology", "natural-science", "humanities-and-social-sciences"],
+            list: true,
+          },
+          {
+            type: "markdown",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+        ],
+      },
+      {
+        name: "work",
+        label: "Work",
+        path: "content/work",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "datetime",
+            name: "date",
+            label: "Date",
+            required: true,
+            ui: {
+              dateFormat: "YYYY-MM-DD",
+              timeFormat: false,
+            },
+          },
+          {
+            type: "image",
+            name: "image",
+            label: "Image",
+          },
+          {
+            type: "markdown",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+        ],
+      },
+      {
+        name: "keyword",
+        label: "Keyword",
+        path: "content/keyword",
+        fields: [
+          {
+            type: "list",
+            name: "keywords",
+            label: "Keywords",
+          },
+          {
+            type: "markdown",
             name: "body",
             label: "Body",
             isBody: true,
