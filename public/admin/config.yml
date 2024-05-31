@@ -20,7 +20,7 @@ collections:
     folder: "content/diary"
     create: true
     slug: "{{fields.slug}}"
-    media_folder: "../../static/images/diary"
+    media_folder: "static/images/diary"
     public_folder: "/images/diary"
     fields:
       - { label: "Title", name: "title", widget: "string" }
@@ -40,7 +40,7 @@ collections:
     create: true
     slug: "{{fields.slug}}"
     media_folder: "static/images/work"
-    public_folder: "../..//images/work"
+    public_folder: "/images/work"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
