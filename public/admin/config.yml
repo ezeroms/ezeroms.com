@@ -6,6 +6,16 @@ media_folder: "static/images/uploads" # メディアファイルのアップロ�
 public_folder: "/images/uploads" # 公開時のメディアファイルのURL
 
 collections:
+  - name: "about"
+    label: "About"
+    files:
+      - label: "About"
+        name: "about"
+        file: "content/about.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Body", name: "body", widget: "markdown" }
+
   - name: "diary"
     label: "Diary"
     folder: "content/diary"
@@ -18,9 +28,9 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Diaries", name: "diaries", widget: "list", field: {label: "Diary", name: "diary", widget: "string"} }
       - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Topics", name: "topics", widget: "list", field: {label: "Topic", name: "topic", widget: "string"} }
+      - { label: "Topics", name: "topics", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{title}} - {{body | truncate(280, '...')}}"
+    summary: "{{date}}\n{{title}}\n{{body | truncate(280, '...')}}"
     sort:
       field: "date"
       direction: "desc"
@@ -37,7 +47,7 @@ collections:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Image", name: "image", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{title}}"
+    summary: "{{date}}\n{{title}}"
     sort:
       field: "date"
       direction: "desc"
@@ -49,9 +59,9 @@ collections:
     slug: "{{fields.slug}}"
     fields:
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Keywords", name: "keywords", widget: "list", field: {label: "Keyword", name: "keyword", widget: "string"} }
+      - { label: "Keywords", name: "keywords", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{body | truncate(280, '...')}} - Keywords: {{keywords}}"
+    summary: "{{body | truncate(280, '...')}}\nKeywords: {{keywords}}"
     sort:
-      field: "date"
-      direction: "desc"
+      field: "body"
+      direction: "asc"
