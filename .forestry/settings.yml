@@ -1,0 +1,11 @@
+version: 1
+site:
+  base_url: https://yourwebsite.netlify.app/
+  title: Your Hugo Site
+sections:
+  - type: pages
+    label: Pages
+    path: content/pages
+  - type: posts
+    label: Blog Posts
+    path: content/posts
