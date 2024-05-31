@@ -1,44 +1,57 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: main # or your default branch
 
-media_folder: "static/images/uploads"
-public_folder: "/images/uploads"
+media_folder: "static/images/uploads" # メディアファイルのアップロード先
+public_folder: "/images/uploads" # 公開時のメディアファイルのURL
 
 collections:
-  - name: "about"
-    label: "About"
-    files:
-      - label: "About Page"
-        name: "about"
-        file: "content/about.md"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Body", name: "body", widget: "markdown" }
-
-  - name: "works"
-    label: "Works"
-    folder: "content/works"
-    create: true
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
-
   - name: "diary"
     label: "Diary"
     folder: "content/diary"
     create: true
+    slug: "{{fields.slug}}"
+    media_folder: "static/images/diary"
+    public_folder: "/images/diary"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Diaries", name: "diaries", widget: "list", field: {label: "Diary", name: "diary", widget: "string"} }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Topics", name: "topics", widget: "list", field: {label: "Topic", name: "topic", widget: "string"} }
       - { label: "Body", name: "body", widget: "markdown" }
+    summary: "{{title}} - {{body | truncate(280, '...')}}"
+    sort:
+      field: "date"
+      direction: "desc"
+
+  - name: "work"
+    label: "Work"
+    folder: "content/work"
+    create: true
+    slug: "{{fields.slug}}"
+    media_folder: "static/images/work"
+    public_folder: "/images/work"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Body", name: "body", widget: "markdown" }
+    summary: "{{title}}"
+    sort:
+      field: "date"
+      direction: "desc"
 
   - name: "keyword"
     label: "Keyword"
     folder: "content/keyword"
     create: true
+    slug: "{{fields.slug}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Tags", name: "tags", widget: "list" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Keywords", name: "keywords", widget: "list", field: {label: "Keyword", name: "keyword", widget: "string"} }
       - { label: "Body", name: "body", widget: "markdown" }
-
+    summary: "{{body | truncate(280, '...')}} - Keywords: {{keywords}}"
+    sort:
+      field: "date"
+      direction: "desc"
