@@ -21,7 +21,7 @@ collections:
     create: true
     slug: "{{fields.slug}}"
     media_folder: "/static/images/diary/{{fields.slug}}"
-    public_folder: "/images/diary/{{fields.slug}}"
+    public_folder: "/diary/{{fields.slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
