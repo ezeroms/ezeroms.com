@@ -1,9 +1,14 @@
+{{- $monthNames := slice "January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December" -}}
 {{- $date := . -}}
 {{- if eq (len $date) 7 -}}
-  {{ $parts := split $date "-" }}
-  {{ $year := index $parts 0 }}
-  {{ $month := index $parts 1 }}
-  {{ printf "%s-%s" $year $month }}
+  {{- $year := (substr $date 0 4) -}}
+  {{- $monthStr := (substr $date 5 2) -}}
+  {{- if eq (substr $monthStr 0 1) "0" -}}
+    {{- $monthStr = (substr $monthStr 1 1) -}}
+  {{- end -}}
+  {{- $monthIndexInt := int $monthStr -}}
+  {{- $monthName := index $monthNames (sub $monthIndexInt 1) -}}
+  {{- printf "%s %s" $monthName $year -}}
 {{- else -}}
   {{- printf "Invalid date format: %s" $date -}}
 {{- end -}}

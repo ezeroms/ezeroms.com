@@ -1,24 +1,24 @@
 <aside class="main-section-2column__left">
     <ul>
-        <li><a href="/topics/news/">ニュース</a></li>
-        <li><a href="/topics/music/">音楽</a></li>
-        <li><a href="/topics/manga-and-anime/">漫画・アニメ</a></li>
-        <li><a href="/topics/movies-and-dramas/">映画・ドラマ</a></li>
-        <li><a href="/topics/comedy/">お笑い</a></li>
-        <li><a href="/topics/gaming/">ゲーム</a></li>
-        <li><a href="/topics/sports/">スポーツ</a></li>
-        <li><a href="/topics/books-and-magazines/">本・雑誌</a></li>
-        <li><a href="/topics/languages-and-foreign-cultures/">言語・海外文化</a></li>
-        <li><a href="/topics/design/">デザイン</a></li>
-        <li><a href="/topics/internet-and-technology/">インターネット・技術</a></li>
-        <li><a href="/topics/natural-science/">自然科学</a></li>
-        <li><a href="/topics/humanities-and-social-sciences/">人文・社会科学</a></li>
+        <li><a href="/subject/news/">ニュース</a></li>
+        <li><a href="/subject/music/">音楽</a></li>
+        <li><a href="/subject/manga-and-anime/">漫画・アニメ</a></li>
+        <li><a href="/subject/movies-and-dramas/">映画・ドラマ</a></li>
+        <li><a href="/subject/comedy/">お笑い</a></li>
+        <li><a href="/subject/gaming/">ゲーム</a></li>
+        <li><a href="/subject/sports/">スポーツ</a></li>
+        <li><a href="/subject/books-and-magazines/">本・雑誌</a></li>
+        <li><a href="/subject/languages-and-foreign-cultures/">言語・海外文化</a></li>
+        <li><a href="/subject/design/">デザイン</a></li>
+        <li><a href="/subject/internet-and-technology/">インターネット・技術</a></li>
+        <li><a href="/subject/natural-science/">自然科学</a></li>
+        <li><a href="/subject/humanities-and-social-sciences/">人文・社会科学</a></li>
     </ul>
 
     <ul>
         {{ $months := slice }}
         {{ range (where .Site.RegularPages "Section" "diary") }}
-            {{ $month := index .Params.diaries 0 }}
+            {{ $month := index .Params.month 0 }}
             {{ if not (in $months $month) }}
                 {{ $months = $months | append $month }}
             {{ end }}
@@ -28,23 +28,8 @@
         {{ range $index := seq 0 (sub $total 1) }}
             {{ $i := sub (sub $total 1) $index }}
             {{ $month := index $sortedMonths $i }}
-            <li><a href="{{ printf "/diaries/%s" (urlize $month) }}">{{ partial "convert_date.html" $month }}</a></li>
-        {{ end }}        
-
-        <!-- YYYY-MM を形式変換する場合
-        {{ $months := slice }}
-        {{ range (where .Site.RegularPages "Section" "diary") }}
-            {{ $month := index .Params.diaries 0 }}
-            {{ if not (in $months $month) }}
-                {{ $months = $months | append $month }}
-            {{ end }}
+            <li><a href="{{ printf "/month/%s" (urlize $month) }}">{{ $month }}</a></li>
         {{ end }}
-        {{ $sortedMonths := sort $months }}
-        {{ $total := len $sortedMonths }}
-        {{ range $index := (seq 0 (sub $total 1)) }}
-            {{ $i := sub (sub $total 1) $index }}
-            {{ $monthFormatted := partial "convert_date.html" (index $sortedMonths $i) }}
-            <li><a href="{{ printf "/diaries/%s" (urlize (index $sortedMonths $i)) }}">{{ $monthFormatted }}</a></li>
-        {{ end }} -->
+
     </ul>
 </aside>

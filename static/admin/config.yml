@@ -20,14 +20,14 @@ collections:
     folder: "content/diary"
     create: true
     slug: "{{fields.slug}}"
-    media_folder: "/static/images/diary"
+    media_folder: "static/images/diary"
     public_folder: "/images/diary"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Diaries", name: "diaries", widget: "list" }
+      - { label: "Month", name: "month", widget: "list" }
       - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Topics", name: "topics", widget: "select", multiple: true, options: ["news", "music", "manga-and-anime", "movies-and-dramas", "comedy", "gaming", "sports", "books-and-magazines", "languages-and-foreign-cultures", "design", "internet-and-technology", "natural-science", "humanities-and-social-sciences"] }
+      - { label: "Subject", name: "subject", widget: "select", multiple: true, options: ["news", "music", "manga-and-anime", "movies-and-dramas", "comedy", "gaming", "sports", "books-and-magazines", "languages-and-foreign-cultures", "design", "internet-and-technology", "natural-science", "humanities-and-social-sciences"] }
       - { label: "Body", name: "body", widget: "markdown" }
     summary: "{{date | date('YYYY-MM-DD')}} | {{body | truncate(280, '...')}}"
     sort:
@@ -51,15 +51,15 @@ collections:
       field: "date"
       direction: "desc"
 
-  - name: "keyword"
-    label: "Keyword"
-    folder: "content/keyword"
+  - name: "shoulders-of-giants"
+    label: "The shoulders of Giants"
+    folder: "content/shoulders-of-giants"
     create: true
     slug: "{{fields.slug}}"
     fields:
-      - { label: "Keywords", name: "keywords", widget: "list"}
+      - { label: "Topic", name: "topic", widget: "list"}
       - { label: "Body", name: "body", widget: "markdown" }
-    summary: "{{body | truncate(280, '...')}}　　Keyword {{keywords}}"
+    summary: "{{body | truncate(280, '...')}}　　Topic {{topic}}"
     sort:
       field: "body"
       direction: "asc"

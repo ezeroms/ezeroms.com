@@ -5,10 +5,9 @@ enableDebug = true
 disableAliases = true
 
 [taxonomies]
-  category = "categories"
-  keyword = "keywords"
-  diary = "diaries"
-  topic = "topics"
+  topic = "topic"
+  month = "month"
+  subject = "subject"
 
 [params]
   description = "One thing I can tell you is you got to be free."
