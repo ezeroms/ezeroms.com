@@ -1,4 +1,0 @@
----
-title: "Diary"
-layout: "index"
----
