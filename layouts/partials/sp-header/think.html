@@ -1,5 +1,5 @@
 <header class="sp-header">
-  <img src="/images/common/think.svg" alt="" class="logo_think" onclick="topFunction()" id="scrollTopButton" title="Go to top">
+  <img src="/images/common/the-shoulders-of-giants.svg" alt="" class="logo_think" onclick="topFunction()" id="scrollTopButton" title="Go to top">
   <button id="openModal">
     <img src="/images/common/icon_list.svg">
   </button>
@@ -36,8 +36,8 @@
     <div id="modalContent">
         
         <ul>
-          {{ range $name, $taxonomy := .Site.Taxonomies.keywords }}
-          <li><a href="{{ "/keywords/" | relLangURL }}{{ $name | urlize }}" class="a-link">{{ $name }}</a></li>
+          {{ range $name, $taxonomy := .Site.Taxonomies.topic }}
+          <li><a href="{{ "/topic/" | relLangURL }}{{ $name | urlize }}" class="a-link">{{ $name }}</a></li>
           {{ end }}
       </ul>
     </div>

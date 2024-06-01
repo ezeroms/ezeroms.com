@@ -24,7 +24,8 @@
 }
 
 .sp-header img.logo_think {
-  width: 172px;
+  width: 256px;
+  margin: 0 16px 0 8px;
 }
 
 .sp-header button {

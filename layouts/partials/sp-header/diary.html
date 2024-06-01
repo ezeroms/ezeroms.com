@@ -60,8 +60,11 @@
             {{ end }}
         {{ end }}
         {{ $sortedMonths := sort $months }}
-        {{ range $index, $month := $sortedMonths }}
-            <li ><a href="{{ printf "/diaries/%s" (urlize $month) }}" class="a-link">{{ $month }}</a></li>
+        {{ $total := len $sortedMonths }}
+        {{ range $index := seq 0 (sub $total 1) }}
+            {{ $i := sub (sub $total 1) $index }}
+            {{ $month := index $sortedMonths $i }}
+            <li><a href="{{ printf "/diaries/%s" (urlize $month) }}" class="a-link">{{ $month }}</a></li>
         {{ end }}
     </ul>
     </div>

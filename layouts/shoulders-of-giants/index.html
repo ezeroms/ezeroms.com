@@ -1,0 +1,50 @@
+{{ define "main" }}
+{{ partial "header.html" . }}
+{{ partial "sp-header/think" . }}
+
+<main class="main-section">
+    {{ partial "keyword_menu.html" . }}
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="article-container">
+        {{ range (where .Site.RegularPages "Section" "shoulders-of-giants") }}
+            <article class="article-item hover-effect">
+                {{ .Content }}
+            </article>
+        {{ end }}
+        </ul>
+    </section>
+</main>
+
+{{ partial "global-nav_think.html" . }}
+
+<!-- debug-info -->
+<p class="debug-info">Template : /layouts/keyword/index.html</p>
+
+<script>
+
+// Shuffle articles on page load
+// キーワードをランダムで並び替えている
+document.addEventListener("DOMContentLoaded", function() {
+    var articles = document.querySelectorAll('.article-item');
+    var articlesArray = Array.prototype.slice.call(articles);
+    shuffleArray(articlesArray);
+
+    var articlesList = document.getElementById('article-container');
+    articlesList.innerHTML = '';
+
+    articlesArray.forEach(function(article) {
+        articlesList.appendChild(article);
+    });
+});
+
+// Shuffle array function
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+</script>
+{{ end }}
