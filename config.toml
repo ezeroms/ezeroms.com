@@ -5,15 +5,14 @@ enableDebug = true
 disableAliases = true
 
 [taxonomies]
-  topic = "topic"
   month = "month"
   subject = "subject"
+  topic = "topic"
 
 [params]
   description = "One thing I can tell you is you got to be free."
   keywords = ""
   RSSLink = "index.xml"
-  paginate = 5  # 1ページに表示する記事の数
 
 [permalinks]
   diary = "/diary/:slug/"
