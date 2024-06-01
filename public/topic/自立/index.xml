@@ -5,7 +5,13 @@
     <link>http://localhost:1313/</link>
     <description>One thing I can tell you is you got to be free.</description>
     <language>ja</language>
-    <lastBuildDate>Sat, 01 Jun 2024 17:45:06 JST</lastBuildDate><item>
+    <lastBuildDate>Sat, 01 Jun 2024 21:12:42 JST</lastBuildDate><item>
+        <title>テスト投稿</title>
+        <link>http://localhost:1313/diary/test/</link>
+        <description>t﻿est</description>
+        <pubDate>Sat, 01 Jun 2024 08:54:07 UTC</pubDate>
+        <guid>http://localhost:1313/diary/test/</guid>
+      </item><item>
         <title></title>
         <link>http://localhost:1313/shoulders-of-giants/4/</link>
         <description>昨今、多くの企業や個人が創造性やイノベーションの創出やその体系化に躍起になっている。だが、創造性やイノベーションの本質は、文化人類学者レヴィ・ストロースが言うところの「ブリコラージュ」（相互に異様で異質な物事が出会うことで新しい「構造」が生まれるという意味）にあり、創造性やイノベーションの非予定調和的な性質は体系化に馴染みづらいと私は考えている。
@@ -34,12 +40,6 @@
 （小川公代、2021『ケアの倫理とエンパワメント』講談社）</description>
         <pubDate>Fri, 31 May 2024 04:22:27 UTC</pubDate>
         <guid>http://localhost:1313/shoulders-of-giants/2/</guid>
-      </item><item>
-        <title>命を、計画の外側から見つめ直す（映画『PLAN 75』感想文）</title>
-        <link>http://localhost:1313/diary/eiga/</link>
-        <description>これは2024年4月の記事です。</description>
-        <pubDate>Mon, 01 Apr 2024 00:00:00 JST</pubDate>
-        <guid>http://localhost:1313/diary/eiga/</guid>
       </item><item>
         <title>works-1</title>
         <link>http://localhost:1313/work/project4/</link>
@@ -119,12 +119,6 @@
         <pubDate>Sat, 23 Mar 2024 00:00:00 JST</pubDate>
         <guid>http://localhost:1313/work/project1/</guid>
       </item><item>
-        <title>僕たちが東京とうまくやっていくための参考書（小説『この部屋から東京タワーは永遠に見えない』感想文）</title>
-        <link>http://localhost:1313/diary/tokyo/</link>
-        <description>これは2024年3月の記事です。</description>
-        <pubDate>Fri, 01 Mar 2024 00:00:00 JST</pubDate>
-        <guid>http://localhost:1313/diary/tokyo/</guid>
-      </item><item>
         <title>台湾犬とちばてつや的光景</title>
         <link>http://localhost:1313/diary/taiwan-dogs-and-scenes-by-tetsuya-chiba/</link>
         <description>台湾の新北市に滞在している。台北の中心地から電車やバスで30分ほどの距離に位置するエリアだ。田舎というわけではないが、首都である台北に比べれば地元の風情が色濃く、素朴な魅力が息づいている。観光地の賑わいはなく飲食店では英語が通じにくい。ここでかれこれ一ヶ月ほど暮らしている。
@@ -136,12 +130,6 @@
 ときどき、キノコ採りの最中なんかに熊と遭遇した人が、決死の抵抗や機転によって命からがら生き延びたというニュースを見ることがあるが、僕なんか野良犬程度でこれなのだから、熊と対峙した日には腰を抜かしてしまって何もできないだろう。くれぐれも山林方面のアクティビティとは距離を置いた人生を送るよう心がけたいと思う。</description>
         <pubDate>Fri, 23 Feb 2024 04:29:17 UTC</pubDate>
         <guid>http://localhost:1313/diary/taiwan-dogs-and-scenes-by-tetsuya-chiba/</guid>
-      </item><item>
-        <title>世の中を良くする不快のデザイン展</title>
-        <link>http://localhost:1313/diary/hukai-deisgn/</link>
-        <description>これは2024年2月の記事です。</description>
-        <pubDate>Thu, 01 Feb 2024 00:00:00 JST</pubDate>
-        <guid>http://localhost:1313/diary/hukai-deisgn/</guid>
       </item><item>
         <title>『奇奇怪怪』の少年ジャンプ的な冒険心、あるいは上品さについて</title>
         <link>http://localhost:1313/diary/kikikaikai-magazine-2nd/</link>
