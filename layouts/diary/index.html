@@ -9,7 +9,6 @@
         {{ $pages := (where .Site.RegularPages "Section" "diary") }}
         {{ $sortedPages := sort $pages "Date" "desc" }}
         {{ $firstPage := index $sortedPages 0 }}
-        {{ $secondPage := index $sortedPages 1 }}
 
         {{ if $firstPage }}
             <article class="article-item">
@@ -22,10 +21,11 @@
         </ul>
 
         <div class="pagination-buttons">
-            {{ if $secondPage }}
-                <a href="{{ $secondPage.Permalink }}" class="pagination-button">
-                    Next
-                    <img src="/images/common/icon_right.svg" alt="">
+            {{ if gt (len $sortedPages) 1 }}
+                {{ $previousPage := index $sortedPages 1 }}
+                <a href="{{ $previousPage.Permalink }}" class="pagination-button">
+                    <img src="/images/common/icon_left.svg" alt="">
+                    Prev
                 </a>
             {{ end }}
         </div>
