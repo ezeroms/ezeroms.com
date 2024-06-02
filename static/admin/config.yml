@@ -25,8 +25,8 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
-      - { label: "Month", name: "month", widget: "list" }
       - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Month", name: "month", widget: "list" }
       - { label: "Subject", name: "subject", widget: "select", multiple: true, options: ["news", "music", "manga-and-anime", "movies-and-dramas", "comedy", "gaming", "sports", "books-and-magazines", "languages-and-foreign-cultures", "design", "internet-and-technology", "natural-science", "humanities-and-social-sciences"] }
       - { label: "Body", name: "body", widget: "markdown" }
     summary: "{{date | date('YYYY-MM-DD')}} | {{body | truncate(280, '...')}}"
@@ -44,6 +44,7 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Slug", name: "slug", widget: "string" }
       - { label: "Image", name: "image", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
     summary: "{{date | date('YYYY-MM-DD')}} | {{title}}"
