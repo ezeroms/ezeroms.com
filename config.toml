@@ -1,4 +1,4 @@
-baseURL = "https://ezeroms.netlify.app/"
+baseURL = "https://ezeroms.com/"
 languageCode = "ja"
 title = "ezeroms.com"
 enableDebug = true
@@ -13,6 +13,9 @@ disableAliases = true
   description = "One thing I can tell you is you got to be free."
   keywords = ""
   RSSLink = "index.xml"
+  og_image = "images/common/og-image.png"
+#  twitter = "@your_twitter_handle"
+#  facebook_app_id = "your_facebook_app_id"
 
 [permalinks]
   diary = "/diary/:slug/"
