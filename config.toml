@@ -14,8 +14,6 @@ disableAliases = true
   keywords = ""
   RSSLink = "index.xml"
   og_image = "images/common/og-image.png"
-#  twitter = "@your_twitter_handle"
-#  facebook_app_id = "your_facebook_app_id"
 
 [permalinks]
   diary = "/diary/:slug/"
