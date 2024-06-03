@@ -32,6 +32,12 @@
     <loc>http://localhost:1313/subject/books-and-magazines/</loc>
     <lastmod>2023-08-23T11:04:17+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/work/dakarayo/</loc>
+    <lastmod>2022-10-01T00:22:10+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/work/</loc>
+    <lastmod>2022-10-01T00:22:10+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/shoulders-of-giants/-1/</loc>
   </url><url>
     <loc>http://localhost:1313/shoulders-of-giants/-10/</loc>
@@ -103,8 +109,6 @@
     <loc>http://localhost:1313/shoulders-of-giants/</loc>
   </url><url>
     <loc>http://localhost:1313/topic/</loc>
-  </url><url>
-    <loc>http://localhost:1313/work/</loc>
   </url><url>
     <loc>http://localhost:1313/topic/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3/</loc>
   </url><url>
