@@ -51,8 +51,9 @@
             {{ $path := .Permalink }}
             {{ $monthParam := replaceRE `^.*/month/([0-9]{4}-[0-9]{2})/.*$` "$1" $path | default "2024-04" }}
             {{ $articles := where .Site.RegularPages "Params.month" "intersect" (slice $monthParam) }}
-            {{ if gt (len $articles) 0 }}
-                {{ range $articles }}
+            {{ $sortedArticles := sort $articles "Date" "asc" }}
+            {{ if gt (len $sortedArticles) 0 }}
+                {{ range $sortedArticles }}
                 <article id="{{ .Title | urlize }}" class="article-item">
                     <a href="{{ .Permalink }}">
                         <h1>
