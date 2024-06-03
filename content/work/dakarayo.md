@@ -1,5 +1,5 @@
 ---
-title: 「dakarayo」Webサイト
+title: 「dakarayo inc.」Webサイト
 date: 2022-10-01T10:38:15.770Z
 slug: dakarayo
 image: /images/work/dakarayo/03.webp
