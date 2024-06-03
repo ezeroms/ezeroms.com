@@ -1,5 +1,5 @@
 ---
-title: ロコネ
+title: スマートフォンアプリ「ロコネ」
 date: 2023-08-22T09:43:54.181Z
 slug: locone
 image: /images/work/locone/02.webp
