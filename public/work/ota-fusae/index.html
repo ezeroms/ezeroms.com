@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>参議院議員・太田房江 リーフレット</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="参議院議員・太田房江 リーフレット">
+    <meta property="og:description" content="One thing I can tell you is you got to be free.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/work/ota-fusae/">
+    <meta property="og:image" content="images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+
+</head>
+<body>
+    
+<header class="header">
+  <nav class="header__nav">
+      <a href="/about">About</a>
+      <a href="/work">Work</a>
+      <a href="/diary">Diary</a>
+      </ul>
+  </nav>
+
+  <a href="/" class="header__logo">
+      <img src="/images/common/logo.svg" alt="ezeroms.com">
+  </a>
+
+  <div class="header__button">
+    <a href="/shoulders-of-giants">
+      The shoulders of Giants
+    </a>
+  </div>
+</header>
+<header class="sp-header">
+  <img src="/images/common/work.svg" alt="" class="logo_work" onclick="topFunction()" id="scrollTopButton" title="Go to top">
+</header>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+      
+      $('#scrollTopButton').click(function(){
+          
+          $('html, body').animate({scrollTop : 0},800);
+          return false;
+      });
+  });
+  </script>
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="main-section">
+    <section class="main-section-1column">
+        <div class="work">
+            
+            <div class="work-hero">
+                <img src="/images/work/ota-fusae/19.webp" alt="参議院議員・太田房江 リーフレット">
+            </div>
+    
+            <ul class="article-container work-single">
+
+                <div class="article-item-heading">
+                    <div class="article-item-heading__label">
+                        <p class="article-item-heading__label__p">
+                            2019-06-10
+                        </p>
+                        <h2 class="article-item-heading__label__h2">
+                            参議院議員・太田房江 リーフレット
+                        </h2>
+                    </div>
+    
+                    
+                    <button class="article-item-heading__button" onclick="copyToClipboard()">
+                        <img src="/images/common/icon_link.svg" alt="Get article url">
+                    </button>
+                    <script>
+                        function copyToClipboard() {
+                            const url = window.location.href;
+                            navigator.clipboard.writeText(url).then(function() {
+                                showNotification();
+                            }, function(err) {
+                                console.error('リンクの保存に失敗しました: ', err);
+                            });
+                        }
+                        function showNotification() {
+                            var notification = document.getElementById("notification");
+                            notification.className = "notification show";
+                            setTimeout(function() {
+                                notification.className = notification.className.replace(" show", "");
+                            }, 3000);
+                        }
+                    </script>
+                            
+                </div>
+    
+                <article class="article-item no-hover-effect">
+                    <p>Role : Director, DTP Designer</p>
+<hr>
+<p>Client : 太田房江事務所</p>
+<p>Agency : 株式会社POTETO Media</p>
+
+                </article>
+
+                <div class="pagination-buttons">    
+
+                    
+                        <a href="/work/yoshikawa-yumi/" class="pagination-button">
+                            <img src="/images/common/icon_left.svg" alt="">
+                            Prev
+                        </a>
+                    
+
+                    <a href="/work" class="pagination-button">
+                        <img src="/images/common/icon_back.svg" alt="">
+                        Back to gallery
+                    </a>
+
+                    
+                        <a href="/work/coolish/" class="pagination-button">
+                            Next
+                            <img src="/images/common/icon_right.svg" alt="">
+                        </a>
+                    
+                  </div>
+            </ul>
+
+        </div>
+    </section>    
+</main>
+
+<nav class="global-nav">
+  <a href="/" class="global-nav__home"></a>
+  <a href="/about" class="global-nav__about"></a>
+  <a href="/work" class="global-nav__work on"></a>
+  <a href="/diary" class="global-nav__diary"></a>
+  <a href="/shoulders-of-giants" class="global-nav__think"></a>
+</nav>
+
+
+<p class="debug-info">Template : /layouts/work/single.html</p>
+
+
+
+    
+    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+</body>
+</html>
