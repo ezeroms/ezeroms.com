@@ -18,7 +18,6 @@
                 {{ $firstPage.Content }}
             </article>
         {{ end }}
-        </ul>
 
         <div class="pagination-buttons">
             {{ if gt (len $sortedPages) 1 }}
@@ -29,6 +28,7 @@
                 </a>
             {{ end }}
         </div>
+        </ul>
 
     </section>
 </main>
