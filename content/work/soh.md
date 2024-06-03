@@ -4,7 +4,9 @@ date: 2021-05-11T09:51:15.242Z
 slug: soh
 image: /images/work/soh/08.png
 ---
-UI/UX Design, Develop (HTML/CSS, JavaScript, PHP) 
+Role : UI/UX Designer, Engineer (HTML/CSS, JavaScript, PHP)
+
+- - -
 
 Client : 株式会社ロッテ
 
