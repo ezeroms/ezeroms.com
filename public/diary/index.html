@@ -107,6 +107,8 @@
         
             
             
+                
+            
         
             
             
@@ -119,6 +121,10 @@
             
             
             <li><a href="/month/2024-03" class="a-link">2024-03</a></li>
+        
+            
+            
+            <li><a href="/month/2024-02" class="a-link">2024-02</a></li>
         
             
             
@@ -188,6 +194,8 @@ $(document).ready(function(){
         
             
             
+                
+            
         
             
             
@@ -203,6 +211,10 @@ $(document).ready(function(){
         
             
             
+            <li><a href="/month/2024-02">2024-02</a></li>
+        
+            
+            
             <li><a href="/month/2023-08">2023-08</a></li>
         
 
@@ -211,6 +223,42 @@ $(document).ready(function(){
 
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        2024-03-12
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        Diary
+                    </h2>
+                </div>
+
+                
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
+
+            
         
         
         
