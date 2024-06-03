@@ -49,6 +49,13 @@
   width: 100%;
 }
 
+.article-item hr {
+  background-color: #E7E7E9;
+  height: 1px;
+  width: 100%;
+  border: none;
+}
+
 .article-item p {
   margin: 0;
   padding: 0;
