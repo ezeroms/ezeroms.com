@@ -1,6 +1,6 @@
 ---
 title: 裏目り百景
-date: 2024-06-03T10:41:43.938Z
+date: 2022-09-28T10:41:43.938Z
 slug: urameri
 image: /images/work/urameri/04.webp
 ---
