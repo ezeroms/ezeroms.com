@@ -1,5 +1,5 @@
 ---
-title: ロッテ「爽」
+title: ロッテ「爽」（商品サイト）
 date: 2021-05-11T09:51:15.242Z
 slug: soh
 image: /images/work/soh/08.png
