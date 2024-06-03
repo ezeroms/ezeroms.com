@@ -6,6 +6,42 @@
     {{ partial "diary_menu.html" . }}
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        {{ .Date | dateFormat "2006-01-02" }}
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        {{ .Title }}
+                    </h2>
+                </div>
+
+                <!-- ボタンここから -->
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                <!-- ボタンここまで -->        
+            </div>
+
+
+            
         {{ $pages := (where .Site.RegularPages "Section" "diary") }}
         {{ $sortedPages := sort $pages "Date" "desc" }}
         {{ $firstPage := index $sortedPages 0 }}
