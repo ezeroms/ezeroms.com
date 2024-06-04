@@ -425,80 +425,113 @@
   }
 
 
-  .link-card__right.icon_exit {
+  /* .link-card__right.icon_exit {
     background-image: url('/images/about/icon_exit_off.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_exit {
     background-image: url('/images/about/icon_exit_off.svg');
   }
 
-  .link-card__right.icon_google {
+  /* .link-card__right.icon_google {
     background-image: url('/images/about/icon_google_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_google {
-    background-image: url('/images/about/icon_google_on.svg');
+    background-image: url('/images/about/icon_google_off.svg');
   }
 
-  .link-card__right.icon_messenger {
+  /* .link-card__right.icon_messenger {
     background-image: url('/images/about/icon_messenger_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_messenger {
-    background-image: url('/images/about/icon_messenger_on.svg');
+    background-image: url('/images/about/icon_messenger_off.svg');
   }
 
-  .link-card__right.icon_line {
+  /* .link-card__right.icon_line {
     background-image: url('/images/about/icon_line_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_line {
-    background-image: url('/images/about/icon_line_on.svg');
+    background-image: url('/images/about/icon_line_off.svg');
   }
 
-  .link-card__right.icon_whatsapp {
+  /* .link-card__right.icon_whatsapp {
     background-image: url('/images/about/icon_whatsapp_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_whatsapp {
-    background-image: url('/images/about/icon_whatsapp_on.svg');
+    background-image: url('/images/about/icon_whatsapp_off.svg');
   }
 
-  .link-card__right.icon_signal {
+  /* .link-card__right.icon_signal {
     background-image: url('/images/about/icon_signal_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_signal {
-    background-image: url('/images/about/icon_signal_on.svg');
+    background-image: url('/images/about/icon_signal_off.svg');
   }
 
-  .link-card__right.icon_feedly {
+  /* .link-card__right.icon_feedly {
     background-image: url('/images/about/icon_feedly_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_feedly {
-    background-image: url('/images/about/icon_feedly_on.svg');
+    background-image: url('/images/about/icon_feedly_off.svg');
   }
 
 
-  .link-card__right.icon_rss {
+  /* .link-card__right.icon_rss {
     background-image: url('/images/about/icon_rss_on.svg');
-  }
+  } */
 
   .link-card:hover .link-card__right.icon_rss {
-    background-image: url('/images/about/icon_rss_on.svg');
+    background-image: url('/images/about/icon_rss_off.svg');
   }
-
-
-
-
-
-
-
 
   .link-card:hover {
     border: 1px solid #E7E7E9;
   }
 
+
+  .about__profile__sns a.icon_facebook:hover {
+    background-image: url('/images/about/icon_facebook_off.svg');
+  }
+  
+  .about__profile__sns a.icon_x:hover {
+    background-image: url('/images/about/icon_x_off.svg');
+  }
+  
+  .about__profile__sns a.icon_instagram:hover {
+    background-image: url('/images/about/icon_instagram_off.svg');
+  }
+  
+  .about__profile__sns a.icon_tiktok:hover {
+    background-image: url('/images/about/icon_tiktok_off.svg');
+  }
+  
+  .about__profile__sns a.icon_bereal:hover {
+    background-image: url('/images/about/icon_bereal_off.svg');
+  }
+   
+  .about__profile__sns a.icon_bluesky:hover {
+    background-image: url('/images/about/icon_bluesky_off.svg');
+  }
+   
+  .about__profile__sns a.icon_threads:hover {
+    background-image: url('/images/about/icon_threads_off.svg');
+  }
+  
+  .about__profile__sns a.icon_chooning:hover {
+    background-image: url('/images/about/icon_chooning_off.svg');
+  }
+  
+  .about__profile__sns a.icon_discord:hover {
+    background-image: url('/images/about/icon_discord_off.svg');
+  }
+    
+  .about__profile__sns a.icon_spotify:hover {
+    background-image: url('/images/about/icon_spotify_off.svg');
+  }
 }
