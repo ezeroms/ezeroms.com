@@ -261,8 +261,11 @@
   }
 
 
+  .hoge {
+    background-image: url('/images/about/icon_exit_on.svg'), url('/images/about/icon_google_on.svg');
+  }
+
   .link-card__right.icon_exit {
-    background-image: url('/images/about/icon_exit_on.svg');
     background-image: url('/images/about/icon_exit_off.svg');
   }
 
@@ -271,7 +274,6 @@
   }
 
   .link-card__right.icon_google {
-    background-image: url('/images/about/icon_google_on.svg');
     background-image: url('/images/about/icon_google_off.svg');
   }
 
