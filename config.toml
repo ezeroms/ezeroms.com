@@ -10,10 +10,13 @@ disableAliases = true
   topic = "topic"
 
 [params]
-  description = "One thing I can tell you is you got to be free."
+  description = "One thing I can tell you is you got to be free!"
   keywords = ""
   RSSLink = "index.xml"
   og_image = "/images/common/og-image.png"
+
+[author]
+  name = "ezeroms"
 
 [permalinks]
   diary = "/diary/:slug/"
