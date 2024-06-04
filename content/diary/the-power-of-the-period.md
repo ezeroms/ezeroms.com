@@ -1,5 +1,5 @@
 ---
-title: 必殺仕事記号
+title: 必殺仕事句点記号
 date: 2024-03-14T13:34:01.305Z
 slug: the-power-of-the-period
 month:
