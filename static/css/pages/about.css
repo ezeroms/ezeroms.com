@@ -43,8 +43,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
+  width: 24px!important;
+  height: 24px!important;
   transition-duration: 0.2s;
 }
 
@@ -179,19 +179,19 @@
 
 /* メディア掲載 */
 .about__media-coverage {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0;
 }
 
 .about__media-coverage__list {
-    width: 100%;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 
@@ -222,19 +222,19 @@
 
 
 .link-card {
-    width: auto;
-    margin: 0;
-    padding: 32px;
-    border: 1px solid #E7E7E9;
-    border-radius: 24px;
-    background-color: #fff;
-    transition-duration: 0.4s;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+  width: auto;
+  margin: 0;
+  padding: 32px;
+  border: 1px solid #E7E7E9;
+  border-radius: 24px;
+  background-color: #fff;
+  transition-duration: 0.4s;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
   .link-card:hover {
     border: 1px solid #6E6D79;
     transition-duration: 0.2s;
@@ -248,8 +248,8 @@
   }
 
   .link-card__right {
-    width: 24px;
-    height: 24px;
+    width: 24px!important;
+    height: 24px!important;
     transition-duration: 0.4s;
     margin: 0 0 0 32px;
   }
@@ -298,7 +298,6 @@
   .link-card:hover .link-card__right.icon_whatsapp {
     background-image: url('/images/about/icon_whatsapp_on.svg');
   }
-
 
   .link-card__right.icon_signal {
     background-image: url('/images/about/icon_signal_off.svg');
@@ -360,8 +359,8 @@
 -------------------- */
 @media (max-width: 960px) {
   .about__profile__sns {
-  width: 90% !important;
-  flex-wrap: wrap;
+    width: 90% !important;
+    flex-wrap: wrap;
   }
 
   /* .about__profile__sns a {
@@ -377,7 +376,6 @@
     width: calc(100dvw - 32px);
   }
 
-
   .about__profile {
     gap: 16px;
   }
@@ -392,13 +390,18 @@
 
   .about__media-coverage__list {
     gap: 16px;
-}
+  }
 
 
   .link-card {
     padding: 24px;
     border-radius: 24px;
   }
+
+  .link-card__left {
+    width: calc(100% - 48px - 32px + 24px);
+  }
+
 
   .link-card__left__h2 {
     font-size: 14px;
@@ -421,20 +424,81 @@
     width: 100%;
   }
 
-  .link-card__right {
 
+  .link-card__right.icon_exit {
+    background-image: url('/images/about/icon_exit_off.svg');
   }
+
+  .link-card:hover .link-card__right.icon_exit {
+    background-image: url('/images/about/icon_exit_off.svg');
+  }
+
+  .link-card__right.icon_google {
+    background-image: url('/images/about/icon_google_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_google {
+    background-image: url('/images/about/icon_google_on.svg');
+  }
+
+  .link-card__right.icon_messenger {
+    background-image: url('/images/about/icon_messenger_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_messenger {
+    background-image: url('/images/about/icon_messenger_on.svg');
+  }
+
+  .link-card__right.icon_line {
+    background-image: url('/images/about/icon_line_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_line {
+    background-image: url('/images/about/icon_line_on.svg');
+  }
+
+  .link-card__right.icon_whatsapp {
+    background-image: url('/images/about/icon_whatsapp_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_whatsapp {
+    background-image: url('/images/about/icon_whatsapp_on.svg');
+  }
+
+  .link-card__right.icon_signal {
+    background-image: url('/images/about/icon_signal_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_signal {
+    background-image: url('/images/about/icon_signal_on.svg');
+  }
+
+  .link-card__right.icon_feedly {
+    background-image: url('/images/about/icon_feedly_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_feedly {
+    background-image: url('/images/about/icon_feedly_on.svg');
+  }
+
+
+  .link-card__right.icon_rss {
+    background-image: url('/images/about/icon_rss_on.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_rss {
+    background-image: url('/images/about/icon_rss_on.svg');
+  }
+
+
+
+
+
+
 
 
   .link-card:hover {
     border: 1px solid #E7E7E9;
   }
 
-  .about__profile__sns img:hover {
-    opacity: 0.2;
-  }
-
-  .link-card:hover .link-card__right {
-    opacity: 0.2;
-  }
 }
