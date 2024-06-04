@@ -44,11 +44,105 @@
   justify-content: center;
   align-items: center;
   width: 24px;
+  height: 24px;
+  transition-duration: 0.2s;
 }
 
+
 .about__profile__sns a:hover {
+  transition-duration: 0.2s;
+}
+
+.about__profile__sns a.icon_facebook {
+  background-image: url('/images/about/icon_facebook_off.svg');
+}
+
+.about__profile__sns a.icon_facebook:hover {
+  background-image: url('/images/about/icon_facebook_on.svg');
   opacity: 1;
 }
+
+.about__profile__sns a.icon_x {
+  background-image: url('/images/about/icon_x_off.svg');
+}
+
+.about__profile__sns a.icon_x:hover {
+  background-image: url('/images/about/icon_x_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_instagram {
+  background-image: url('/images/about/icon_instagram_off.svg');
+}
+
+.about__profile__sns a.icon_instagram:hover {
+  background-image: url('/images/about/icon_instagram_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_tiktok {
+  background-image: url('/images/about/icon_tiktok_off.svg');
+}
+
+.about__profile__sns a.icon_tiktok:hover {
+  background-image: url('/images/about/icon_tiktok_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_bereal {
+  background-image: url('/images/about/icon_bereal_off.svg');
+}
+
+.about__profile__sns a.icon_bereal:hover {
+  background-image: url('/images/about/icon_bereal_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_bluesky {
+  background-image: url('/images/about/icon_bluesky_off.svg');
+}
+
+.about__profile__sns a.icon_bluesky:hover {
+  background-image: url('/images/about/icon_bluesky_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_threads {
+  background-image: url('/images/about/icon_threads_off.svg');
+}
+
+.about__profile__sns a.icon_threads:hover {
+  background-image: url('/images/about/icon_threads_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_chooning {
+  background-image: url('/images/about/icon_chooning_off.svg');
+}
+
+.about__profile__sns a.icon_chooning:hover {
+  background-image: url('/images/about/icon_chooning_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_discord {
+  background-image: url('/images/about/icon_discord_off.svg');
+}
+
+.about__profile__sns a.icon_discord:hover {
+  background-image: url('/images/about/icon_discord_on.svg');
+  opacity: 1;
+}
+
+.about__profile__sns a.icon_spotify {
+  background-image: url('/images/about/icon_spotify_off.svg');
+}
+
+.about__profile__sns a.icon_spotify:hover {
+  background-image: url('/images/about/icon_spotify_on.svg');
+  opacity: 1;
+}
+
 
 .about__profile__sns li {
   list-style: none;
@@ -56,19 +150,20 @@
   justify-content: center;
   align-items: center;
   width: 24px;
+  height: 24px;
   position: relative;
 }
 
-.about__profile__sns img {
+/* .about__profile__sns img {
   margin: 0!important;
   opacity: 0.2;
   transition-duration: 0.2s;
-}
+} */
 
-.about__profile__sns img:hover {
+/* .about__profile__sns img:hover {
   opacity: 1;
   transition-duration: 0.2s;
-}
+} */
 
 
 /* アワード */
@@ -155,25 +250,81 @@
   .link-card__right {
     width: 24px;
     height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 100%;
-    cursor: pointer;
     transition-duration: 0.4s;
     margin: 0 0 0 32px;
-    opacity: 0.2;
   }
 
   .link-card:hover .link-card__right {
-    opacity: 1;
     transition-duration: 0.2s;
   }
 
 
-  /* .article-item-heading__button {
+  .link-card__right.icon_exit {
+    background-image: url('/images/about/icon_exit_off.svg');
+  }
 
-  } */
+  .link-card:hover .link-card__right.icon_exit {
+    background-image: url('/images/about/icon_exit_on.svg');
+  }
+
+  .link-card__right.icon_google {
+    background-image: url('/images/about/icon_google_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_google {
+    background-image: url('/images/about/icon_google_on.svg');
+  }
+
+  .link-card__right.icon_messenger {
+    background-image: url('/images/about/icon_messenger_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_messenger {
+    background-image: url('/images/about/icon_messenger_on.svg');
+  }
+
+  .link-card__right.icon_line {
+    background-image: url('/images/about/icon_line_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_line {
+    background-image: url('/images/about/icon_line_on.svg');
+  }
+
+  .link-card__right.icon_whatsapp {
+    background-image: url('/images/about/icon_whatsapp_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_whatsapp {
+    background-image: url('/images/about/icon_whatsapp_on.svg');
+  }
+
+
+  .link-card__right.icon_signal {
+    background-image: url('/images/about/icon_signal_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_signal {
+    background-image: url('/images/about/icon_signal_on.svg');
+  }
+
+  .link-card__right.icon_feedly {
+    background-image: url('/images/about/icon_feedly_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_feedly {
+    background-image: url('/images/about/icon_feedly_on.svg');
+  }
+
+
+  .link-card__right.icon_rss {
+    background-image: url('/images/about/icon_rss_off.svg');
+  }
+
+  .link-card:hover .link-card__right.icon_rss {
+    background-image: url('/images/about/icon_rss_on.svg');
+  }
+
 
   .link-card__left__h2 {
     margin: 0;
