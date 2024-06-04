@@ -54,7 +54,6 @@
 }
 
 .about__profile__sns a.icon_facebook {
-  background-image: url('/images/about/icon_facebook_on.svg');
   background-image: url('/images/about/icon_facebook_off.svg');
 }
 
@@ -261,8 +260,27 @@
   }
 
 
-  .hoge {
-    background-image: url('/images/about/icon_exit_on.svg'), url('/images/about/icon_google_on.svg');
+  .image-loader {
+    background-image: 
+    url('/images/about/icon_facebook_on.svg'),
+    url('/images/about/icon_x_on.svg'),
+    url('/images/about/icon_instagram_on.svg'),
+    url('/images/about/icon_tiktok_on.svg'),
+    url('/images/about/icon_bereal_on.svg'),
+    url('/images/about/icon_bluesky_on.svg'),
+    url('/images/about/icon_threads_on.svg'),
+    url('/images/about/icon_chooning_on.svg'),
+    url('/images/about/icon_discord_on.svg'),
+    url('/images/about/icon_spotify_on.svg'),
+    url('/images/about/icon_exit_on.svg'), 
+    url('/images/about/icon_google_on.svg'),
+    url('/images/about/icon_messenger_on.svg'),
+    url('/images/about/icon_line_on.svg'),
+    url('/images/about/icon_whatsapp_on.svg'),
+    url('/images/about/icon_signal_on.svg'),
+    url('/images/about/icon_feedly_on.svg'),
+    url('/images/about/icon_rss_on.svg');
+    opacity: 0;
   }
 
   .link-card__right.icon_exit {
@@ -282,7 +300,6 @@
   }
 
   .link-card__right.icon_messenger {
-    background-image: url('/images/about/icon_messenger_on.svg');
     background-image: url('/images/about/icon_messenger_off.svg');
   }
 
@@ -291,7 +308,6 @@
   }
 
   .link-card__right.icon_line {
-    background-image: url('/images/about/icon_line_on.svg');
     background-image: url('/images/about/icon_line_off.svg');
   }
 
@@ -300,7 +316,6 @@
   }
 
   .link-card__right.icon_whatsapp {
-    background-image: url('/images/about/icon_whatsapp_on.svg');
     background-image: url('/images/about/icon_whatsapp_off.svg');
   }
 
