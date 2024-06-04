@@ -281,6 +281,10 @@
     url('/images/about/icon_feedly_on.svg'),
     url('/images/about/icon_rss_on.svg');
     opacity: 0;
+    position: absolute;
+    z-index: -1000;
+    width: 0;
+    height: 0;
   }
 
   .link-card__right.icon_exit {
