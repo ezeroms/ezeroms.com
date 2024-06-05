@@ -1,7 +1,7 @@
 ---
 title: 『奇奇怪怪』の少年ジャンプ的な冒険心、あるいは上品さについて
 date: 2023-08-23T11:04:17.597Z
-slug: kikikaikai-magazine-2nd
+slug: kikikaikai-book-2
 month:
   - 2023-08
 subject:
