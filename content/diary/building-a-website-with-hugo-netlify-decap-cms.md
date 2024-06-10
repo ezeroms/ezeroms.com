@@ -103,12 +103,13 @@ ezeroms.com
 
 ### 1. GitHub リポジトリの作成
 
-``` ``sh
+```sh
 git init
 git add .
 git commit -m "Initial commit"
 git remote add origin <GITHUB_REPO_URL>
-git push -u origin main```﻿
+git push -u origin main
+```
 
 ### 2. Netlify アカウントの作成
 
