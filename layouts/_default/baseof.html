@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ .Title }}</title>
+
+    <!-- PrismJSのテーマCSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
+
     <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -22,10 +26,20 @@
     <meta property="og:image" content="{{ if .Params.og_image }}{{ .Params.og_image }}{{ else }}{{ .Site.Params.og_image }}{{ end }}">
     <meta property="og:site_name" content="{{ .Site.Title }}">
     <meta property="og:locale" content="ja_JP">
-
 </head>
 <body>
     {{ block "main" . }}{{ end }}
+
+
+
+    <!-- PrismJSのメインJavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <!-- PrismJSの初期化 -->
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        Prism.highlightAll();
+      });
+    </script>
 
     <!-- debug-info -->
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>
