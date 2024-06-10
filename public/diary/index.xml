@@ -5,7 +5,19 @@
     <link>http://localhost:1313/</link>
     <description>One thing I can tell you is you got to be free!</description>
     <language>ja</language>
-    <lastBuildDate>Sun, 09 Jun 2024 10:59:26 JST</lastBuildDate><item>
+    <lastBuildDate>Tue, 11 Jun 2024 00:14:14 JST</lastBuildDate><item>
+        <title>Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築</title>
+        <link>http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/</link>
+        <description>35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。
+以前より、Hugo &#43; Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。つまり、静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。
+Github リポジトリを pull する。（僕は複数台のマシンを使っているので、ローカルを最新状態に同期する必要がある。） mdファイルを追加し、そこにブログ記事を書く。 Github に push する。 Netlify が更新を検知し、build → deploy を実行する。（＝サイトが更新される） この手順から、Github に対する操作を省きたい。つまり、一般的なブログサービスのように（あるいは Wordpress サイトのように）「ブラウザで管理画面を開き、記事を更新する」という手続きにしたい。
+そこで Decap CMS（旧・Netlify CMS）を使ってみることにした。ヘッドレスCMSの代表格で、特に　という点が大きい。
+また、併せてサイトのデザインも一新することにした。以前は Hugo に不慣れなこともあり、無料配布されていた Hugo テーマを流用して改造しながら使っていたのだが、その運用を4〜5年ほどしたことで、Hugo の仕組みにもだいぶ詳しくなった。そこで、フルスクラッチで Hugo テーマを作ることにした。
+各ツールの役割の確認 Hugo : 静的サイトジェネレーター。Markdown ファイルを HTML に変換して静的なウェブサイトを生成してくれる。平成元年生まれのインターネット小僧として、静的サイトへのロマンは捨てがたい。Golangで書かれているため動作が高速で、Goテンプレートエンジンによる柔軟なテンプレートシステムが魅力的。 Netlify : 静的サイトのホスティングサービス。Git リポジトリと連携して自動デプロイを行う。 Decap CMS : オープンソースのヘッドレスCMS。GUIベースの管理画面を提供し、静的サイトジェネレーターと連携してコンテンツを管理する。実装後に重要な落とし穴が発覚する。 1. サイトの基本形を作成 まずはまっさらな状態から Hugo プロジェクトを作っていく。
+1. Hugo プロジェクトを作成 hugo new site ezeroms.com cd ezeroms.com 2. カスタムテーマの準備 Hugo プロジェクトで推奨されている形は、root ディレクトリの下に `/site` とかで区切って、テーマ等を置くディレクトリを一段下で管理する方法だ。これは、root ディレクトリでサイト設計やデプロイに関するメタ情報を管理し、具体的なサイト自身の設定や見た目と分離することで、複数テーマも管理やスケーラビリティを確保しようとするものだ。</description>
+        <pubDate>Sun, 09 Jun 2024 13:44:46 UTC</pubDate>
+        <guid>http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/</guid>
+      </item><item>
         <title>散歩のススメ</title>
         <link>http://localhost:1313/diary/an-encouragement-of-sampo/</link>
         <description>友達と散歩をしながら近況報告をするのが好きだ。

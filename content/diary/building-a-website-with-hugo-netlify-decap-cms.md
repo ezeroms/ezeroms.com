@@ -34,7 +34,7 @@ subject:
 
 ### 1. Hugo プロジェクトを作成
 
-```
+```sh
 hugo new site ezeroms.com
 cd ezeroms.com
 ```
@@ -43,7 +43,7 @@ cd ezeroms.com
 Hugo プロジェクトで推奨されている形は、root ディレクトリの下に \`/site\` とかで区切って、テーマ等を置くディレクトリを一段下で管理する方法だ。これは、root ディレクトリでサイト設計やデプロイに関するメタ情報を管理し、具体的なサイト自身の設定や見た目と分離することで、複数テーマも管理やスケーラビリティを確保しようとするものだ。
 
 しかし、今回のサイトの場合はテーマを切り替えることはない（自分でアップデートし続ける）し、プロジェクトの規模も小さいので、構造のシンプルさを優先して全て root ディレクトリ直下で管理する方法にした。
-`﻿``
+```sh
 ezeroms.com
 ├── archetypes
 │   └── index.html
@@ -91,7 +91,7 @@ ezeroms.com
 │   └── images
 ├── config.toml
 └── netlify.toml
-`﻿``
+```
 - public : hugo server  で build されたファイルが格納される場所。キャッシュが邪魔しているのか？と思ったときは全削除したりする。
 - content/*/_index.md : 一見不要そうだが、ここに index の md ファイルがないとディレクトリを正しく認識してくれない。
 - static/admin : Decap CMS の管理画面用のファイル群。
@@ -111,7 +111,7 @@ git push -u origin main
 Netlify の管理画面で「New site from Git」を選択し、GitHubリポジトリを連携。
 
 ### 4. ビルド設定
-```
+```sh
 Build Command: hugo
 Publish Directory: public
 ```
@@ -125,7 +125,7 @@ layouts 以下のテーマファイルと static/css をひらすら編集し、
 
 ### コツ : テーマファイルへのマーキング
 hugo server  で localhost を確認しながら作っていくのだが、描画されているページに適切なテーマファイルが当たっているのかどうか分からなくなる。（「このページにこのテーマファイルが当たってほしいのに当たらん〜〜〜〜」的なことが続く） 途中で全部のテーマファイルにマーキングして、config.toml とファイル名やディレクトリを弄りながら検証していった。
-```
+```html
 <!-- debug-info -->
 <p class="debug-info">File : /layouts/subject/list.html</p>
 ```
@@ -135,7 +135,7 @@ hugo server  で localhost を確認しながら作っていくのだが、描�
 写真
 
 本当はもっとURLスキームに拘りたかったのだが、どうやってもできず（Decap CMS管理の範囲外を作ることになり）断念した。いい方法を知っている人がいたら教えてほしい。
-```
+```sh
 # 理想的なURLスキーム
 ezeroms.com/diary/
 ezeroms.com/diary/subject/news/
@@ -149,14 +149,14 @@ ezeroms.com/month/2024-06/
 
 ## 4. CMSを導入してブラウザから更新できるようにする
 package.json を作成し、Decap CMSをインストール。
-```
+```sh
 npm init -y
 npm install netlify-cms-app
 ```
 static/admin ディレクトリの config.yml 、index.html を編集してセットアップし、ezeroms.com/admin にアクセスすれば管理画面が使えるようになる。めっちゃ簡単だ。
 
 管理画面の自由度がとても高く config.yml で設定すると一覧の表示項目も柔軟に変更することができる。
-```
+```yml
 backend:
   name: git-gateway
   branch: main

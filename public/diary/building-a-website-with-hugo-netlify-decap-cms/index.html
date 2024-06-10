@@ -2,7 +2,7 @@
 <html lang="en">
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
-    <title>Diary</title>
+    <title>Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築</title>
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
@@ -19,10 +19,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
 
     
-    <meta property="og:title" content="Diary">
+    <meta property="og:title" content="Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築">
     <meta property="og:description" content="One thing I can tell you is you got to be free!">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:1313/diary/">
+    <meta property="og:url" content="http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/">
     <meta property="og:image" content="/images/common/og-image.png">
     <meta property="og:site_name" content="ezeroms.com">
     <meta property="og:locale" content="ja_JP">
@@ -192,6 +192,9 @@ $(document).ready(function(){
 });
   </script>
   
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
 
 <main class="main-section">
     <aside class="main-section-2column__left">
@@ -274,16 +277,43 @@ $(document).ready(function(){
 
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
-            
-        
-        
-        
 
-        
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        2024-06-09
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築
+                    </h2>
+                </div>
+
+                
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
+
             <article class="article-item">
-                <a href="http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/">
-                    <h1>2024-06-09</h1>
-                </a>
                 <p>35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。</p>
 <p>以前より、Hugo + Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。つまり、静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。</p>
 <ul>
@@ -482,17 +512,17 @@ UpNote でコンテンツ管理（UpNote はモバイル用のネイティブア
             </article>
         
 
-        <div class="pagination-buttons">
-            
-                
-                <a href="http://localhost:1313/diary/an-encouragement-of-sampo/" class="pagination-button">
-                    <img src="/images/common/icon_left.svg" alt="">
-                    Prev
-                </a>
-            
-        </div>
-        </ul>
+            <div class="pagination-buttons">
+  
+      <a href="/diary/an-encouragement-of-sampo/" class="pagination-button">
+          <img src="/images/common/icon_left.svg" alt="">
+          Prev
+      </a>
+  
+  
+</div>    
 
+        </ul>
     </section>
 </main>
 
@@ -505,7 +535,7 @@ UpNote でコンテンツ管理（UpNote はモバイル用のネイティブア
 </nav>
 
 
-<p class="debug-info">Template : /layouts/diary/index.html</p>
+<p class="debug-info">Template : /layouts/diary/single.html</p>
 
 
 
