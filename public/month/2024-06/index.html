@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>2024-06</title>
 
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css">
 
     <link rel="stylesheet" href="/css/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -331,9 +331,7 @@ $(document).ready(function(){
                         </h1>
                     </a>
                     <p>35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">hello_world</span>():
-</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;Hello, world!&#34;</span>)
-</span></span></code></pre></div><p>以前より、Hugo + Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。つまり、静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。</p>
+<p>以前より、Hugo + Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。つまり、静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。</p>
 <ul>
 <li>Github リポジトリを pull する。（僕は複数台のマシンを使っているので、ローカルを最新状態に同期する必要がある。）</li>
 <li>mdファイルを追加し、そこにブログ記事を書く。</li>
@@ -352,13 +350,59 @@ $(document).ready(function(){
 <h2 id="1-サイトの基本形を作成">1. サイトの基本形を作成</h2>
 <p>まずはまっさらな状態から Hugo プロジェクトを作っていく。</p>
 <h3 id="1-hugo-プロジェクトを作成">1. Hugo プロジェクトを作成</h3>
-<pre tabindex="0"><code>hugo new site ezeroms.com
-cd ezeroms.com
-</code></pre><h3 id="2-カスタムテーマの準備">2. カスタムテーマの準備</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>hugo new site ezeroms.com
+</span></span><span style="display:flex;"><span>cd ezeroms.com
+</span></span></code></pre></div><h3 id="2-カスタムテーマの準備">2. カスタムテーマの準備</h3>
 <p>Hugo プロジェクトで推奨されている形は、root ディレクトリの下に `/site` とかで区切って、テーマ等を置くディレクトリを一段下で管理する方法だ。これは、root ディレクトリでサイト設計やデプロイに関するメタ情報を管理し、具体的なサイト自身の設定や見た目と分離することで、複数テーマも管理やスケーラビリティを確保しようとするものだ。</p>
-<p>しかし、今回のサイトの場合はテーマを切り替えることはない（自分でアップデートし続ける）し、プロジェクトの規模も小さいので、構造のシンプルさを優先して全て root ディレクトリ直下で管理する方法にした。
-<code>﻿`` ezeroms.com ├── archetypes │   └── index.html ├── content │   ├── about │   │   └── _index.md │   ├── diary │   │   └── _index.md │   ├── shoulders-of-giants │   │   └── _index.md │   └── work │       └── _index.md ├── layouts │   ├── _default │   │   ├── baseof.html │   │   └── rss.xml │   ├── about │   │   └── index.html │   ├── diary │   │   ├── index.html │   │   └── single.html │   ├── month │   │   └── list.html │   ├── partials │   │   ├── header.html │   │   ├── footer.html │   │   ├── global-nav.html │   │   └── ... │   ├── shoulders-of-giants │   │   └── index.html │   ├── subject │   │   └── list.html │   ├── topic │   │   └── list.html │   │── work │   │   ├── index.html │   │   └── single.html │   └── index.html ├── public ├── static │   ├── admin │   │   ├── config.yml │   │   └── index.html │   ├── css │   └── images ├── config.toml └── netlify.toml </code>﻿``</p>
-<ul>
+<p>しかし、今回のサイトの場合はテーマを切り替えることはない（自分でアップデートし続ける）し、プロジェクトの規模も小さいので、構造のシンプルさを優先して全て root ディレクトリ直下で管理する方法にした。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ezeroms.com
+</span></span><span style="display:flex;"><span>├── archetypes
+</span></span><span style="display:flex;"><span>│   └── index.html
+</span></span><span style="display:flex;"><span>├── content
+</span></span><span style="display:flex;"><span>│   ├── about
+</span></span><span style="display:flex;"><span>│   │   └── _index.md
+</span></span><span style="display:flex;"><span>│   ├── diary
+</span></span><span style="display:flex;"><span>│   │   └── _index.md
+</span></span><span style="display:flex;"><span>│   ├── shoulders-of-giants
+</span></span><span style="display:flex;"><span>│   │   └── _index.md
+</span></span><span style="display:flex;"><span>│   └── work
+</span></span><span style="display:flex;"><span>│       └── _index.md
+</span></span><span style="display:flex;"><span>├── layouts
+</span></span><span style="display:flex;"><span>│   ├── _default
+</span></span><span style="display:flex;"><span>│   │   ├── baseof.html
+</span></span><span style="display:flex;"><span>│   │   └── rss.xml
+</span></span><span style="display:flex;"><span>│   ├── about
+</span></span><span style="display:flex;"><span>│   │   └── index.html
+</span></span><span style="display:flex;"><span>│   ├── diary
+</span></span><span style="display:flex;"><span>│   │   ├── index.html
+</span></span><span style="display:flex;"><span>│   │   └── single.html
+</span></span><span style="display:flex;"><span>│   ├── month
+</span></span><span style="display:flex;"><span>│   │   └── list.html
+</span></span><span style="display:flex;"><span>│   ├── partials
+</span></span><span style="display:flex;"><span>│   │   ├── header.html
+</span></span><span style="display:flex;"><span>│   │   ├── footer.html
+</span></span><span style="display:flex;"><span>│   │   ├── global-nav.html
+</span></span><span style="display:flex;"><span>│   │   └── ...
+</span></span><span style="display:flex;"><span>│   ├── shoulders-of-giants
+</span></span><span style="display:flex;"><span>│   │   └── index.html
+</span></span><span style="display:flex;"><span>│   ├── subject
+</span></span><span style="display:flex;"><span>│   │   └── list.html
+</span></span><span style="display:flex;"><span>│   ├── topic
+</span></span><span style="display:flex;"><span>│   │   └── list.html
+</span></span><span style="display:flex;"><span>│   │── work
+</span></span><span style="display:flex;"><span>│   │   ├── index.html
+</span></span><span style="display:flex;"><span>│   │   └── single.html
+</span></span><span style="display:flex;"><span>│   └── index.html
+</span></span><span style="display:flex;"><span>├── public
+</span></span><span style="display:flex;"><span>├── static
+</span></span><span style="display:flex;"><span>│   ├── admin
+</span></span><span style="display:flex;"><span>│   │   ├── config.yml
+</span></span><span style="display:flex;"><span>│   │   └── index.html
+</span></span><span style="display:flex;"><span>│   ├── css
+</span></span><span style="display:flex;"><span>│   └── images
+</span></span><span style="display:flex;"><span>├── config.toml
+</span></span><span style="display:flex;"><span>└── netlify.toml
+</span></span></code></pre></div><ul>
 <li>public : hugo server  で build されたファイルが格納される場所。キャッシュが邪魔しているのか？と思ったときは全削除したりする。</li>
 <li>content/*/_index.md : 一見不要そうだが、ここに index の md ファイルがないとディレクトリを正しく認識してくれない。</li>
 <li>static/admin : Decap CMS の管理画面用のファイル群。</li>
@@ -374,102 +418,102 @@ git push -u origin main</p>
 <h3 id="3-githubリポジトリの連携">3. Githubリポジトリの連携</h3>
 <p>Netlify の管理画面で「New site from Git」を選択し、GitHubリポジトリを連携。</p>
 <h3 id="4-ビルド設定">4. ビルド設定</h3>
-<pre tabindex="0"><code>Build Command: hugo
-Publish Directory: public
-</code></pre><p>これで、Github の main ブランチが更新されると、Netlify側で自動デプロイが走るようになる。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Build Command: hugo
+</span></span><span style="display:flex;"><span>Publish Directory: public
+</span></span></code></pre></div><p>これで、Github の main ブランチが更新されると、Netlify側で自動デプロイが走るようになる。</p>
 <h3 id="5-ドメイン設定">5. ドメイン設定</h3>
 <p>Netlify の管理画面で <code>ezeroms.com</code> を割り当てる。</p>
 <h2 id="3-詳細なサイト構築テーマファイルの編集">3. 詳細なサイト構築（テーマファイルの編集）</h2>
 <p>layouts 以下のテーマファイルと static/css をひらすら編集し、理想的なデザインを作り上げていく。自分一人のプロジェクトということもあり、あらかじめ全てのページを Figma で作ることはせず、主だったページのレイアウト構成だけ Figma 上で検証して、スタイリングについては実装しながら検討していった。褒められた方法ではないが、こういうところがソロ・プロジェクトの爽快なところだ。</p>
 <h3 id="コツ--テーマファイルへのマーキング">コツ : テーマファイルへのマーキング</h3>
 <p>hugo server  で localhost を確認しながら作っていくのだが、描画されているページに適切なテーマファイルが当たっているのかどうか分からなくなる。（「このページにこのテーマファイルが当たってほしいのに当たらん〜〜〜〜」的なことが続く） 途中で全部のテーマファイルにマーキングして、config.toml とファイル名やディレクトリを弄りながら検証していった。</p>
-<pre tabindex="0"><code>&lt;!-- debug-info --&gt;
-&lt;p class=&#34;debug-info&#34;&gt;File : /layouts/subject/list.html&lt;/p&gt;
-</code></pre><p>最終的にこんなかんじで出来上がる。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- debug-info --&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;debug-info&#34;</span>&gt;File : /layouts/subject/list.html&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span></code></pre></div><p>最終的にこんなかんじで出来上がる。</p>
 <p>写真</p>
 <p>本当はもっとURLスキームに拘りたかったのだが、どうやってもできず（Decap CMS管理の範囲外を作ることになり）断念した。いい方法を知っている人がいたら教えてほしい。</p>
-<pre tabindex="0"><code># 理想的なURLスキーム
-ezeroms.com/diary/
-ezeroms.com/diary/subject/news/
-ezeroms.com/diary/month/2024-06/
-
-# 実際のURLスキーム
-ezeroms.com/diary/
-ezeroms.com/subject/news/
-ezeroms.com/month/2024-06/
-</code></pre><h2 id="4-cmsを導入してブラウザから更新できるようにする">4. CMSを導入してブラウザから更新できるようにする</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># 理想的なURLスキーム</span>
+</span></span><span style="display:flex;"><span>ezeroms.com/diary/
+</span></span><span style="display:flex;"><span>ezeroms.com/diary/subject/news/
+</span></span><span style="display:flex;"><span>ezeroms.com/diary/month/2024-06/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 実際のURLスキーム</span>
+</span></span><span style="display:flex;"><span>ezeroms.com/diary/
+</span></span><span style="display:flex;"><span>ezeroms.com/subject/news/
+</span></span><span style="display:flex;"><span>ezeroms.com/month/2024-06/
+</span></span></code></pre></div><h2 id="4-cmsを導入してブラウザから更新できるようにする">4. CMSを導入してブラウザから更新できるようにする</h2>
 <p>package.json を作成し、Decap CMSをインストール。</p>
-<pre tabindex="0"><code>npm init -y
-npm install netlify-cms-app
-</code></pre><p>static/admin ディレクトリの config.yml 、index.html を編集してセットアップし、ezeroms.com/admin にアクセスすれば管理画面が使えるようになる。めっちゃ簡単だ。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>npm init -y
+</span></span><span style="display:flex;"><span>npm install netlify-cms-app
+</span></span></code></pre></div><p>static/admin ディレクトリの config.yml 、index.html を編集してセットアップし、ezeroms.com/admin にアクセスすれば管理画面が使えるようになる。めっちゃ簡単だ。</p>
 <p>管理画面の自由度がとても高く config.yml で設定すると一覧の表示項目も柔軟に変更することができる。</p>
-<pre tabindex="0"><code>backend:
-  name: git-gateway
-  branch: main
-
-media_folder: &#34;/static/images/uploads&#34;
-public_folder: &#34;/images/uploads&#34;
-
-collections:
-  - name: &#34;about&#34;
-    label: &#34;About&#34;
-    folder: &#34;content/about&#34;
-    create: true
-    slug: &#34;{{fields.slug}}&#34;
-    fields:
-      - { label: &#34;Body&#34;, name: &#34;body&#34;, widget: &#34;markdown&#34; }
-    summary: &#34;{{body}}&#34;
-
-  - name: &#34;diary&#34;
-    label: &#34;Diary&#34;
-    folder: &#34;content/diary&#34;
-    create: true
-    slug: &#34;{{fields.slug}}&#34;
-    media_folder: &#34;/static/images/diary/{{fields.slug}}&#34;
-    public_folder: &#34;/images/diary/{{fields.slug}}&#34;
-    fields:
-      - { label: &#34;Title&#34;, name: &#34;title&#34;, widget: &#34;string&#34; }
-      - { label: &#34;Date&#34;, name: &#34;date&#34;, widget: &#34;datetime&#34;, date_format: &#34;YYYY-MM-DD&#34;, time_format: false }
-      - { label: &#34;Slug&#34;, name: &#34;slug&#34;, widget: &#34;string&#34; }
-      - { label: &#34;Month&#34;, name: &#34;month&#34;, widget: &#34;list&#34; }
-      - { label: &#34;Subject&#34;, name: &#34;subject&#34;, widget: &#34;select&#34;, multiple: true, options: [&#34;news&#34;, &#34;music&#34;, &#34;manga-and-anime&#34;, &#34;movies-and-dramas&#34;, &#34;comedy&#34;, &#34;gaming&#34;, &#34;sports&#34;, &#34;books-and-magazines&#34;, &#34;languages-and-foreign-cultures&#34;, &#34;design-and-creative&#34;, &#34;internet-and-technology&#34;, &#34;natural-science&#34;, &#34;humanities-and-social-sciences&#34;] }
-      - { label: &#34;Body&#34;, name: &#34;body&#34;, widget: &#34;markdown&#34; }
-    summary: &#34;{{date | date(&#39;YYYY-MM-DD&#39;)}} | {{body | truncate(280, &#39;...&#39;)}}&#34;
-    sort:
-      field: &#34;date&#34;
-      direction: &#34;desc&#34;
-
-  - name: &#34;work&#34;
-    label: &#34;Work&#34;
-    folder: &#34;content/work&#34;
-    create: true
-    slug: &#34;{{fields.slug}}&#34;
-    media_folder: &#34;/static/images/work/{{fields.slug}}&#34;
-    public_folder: &#34;/images/work/{{fields.slug}}&#34;
-    fields:
-      - { label: &#34;Title&#34;, name: &#34;title&#34;, widget: &#34;string&#34; }
-      - { label: &#34;Date&#34;, name: &#34;date&#34;, widget: &#34;datetime&#34;, date_format: &#34;YYYY-MM-DD&#34;, time_format: false }
-      - { label: &#34;Slug&#34;, name: &#34;slug&#34;, widget: &#34;string&#34; }
-      - { label: &#34;Image&#34;, name: &#34;image&#34;, widget: &#34;image&#34; }
-      - { label: &#34;Body&#34;, name: &#34;body&#34;, widget: &#34;markdown&#34; }
-    summary: &#34;{{date | date(&#39;YYYY-MM-DD&#39;)}} | {{title}}&#34;
-    sort:
-      field: &#34;date&#34;
-      direction: &#34;desc&#34;
-
-  - name: &#34;shoulders-of-giants&#34;
-    label: &#34;The shoulders of Giants&#34;
-    folder: &#34;content/shoulders-of-giants&#34;
-    create: true
-    slug: &#34;{{fields.slug}}&#34;
-    fields:
-      - { label: &#34;Topic&#34;, name: &#34;topic&#34;, widget: &#34;list&#34;}
-      - { label: &#34;Body&#34;, name: &#34;body&#34;, widget: &#34;markdown&#34; }
-    summary: &#34;{{body | truncate(280, &#39;...&#39;)}}　　Topic {{topic}}&#34;
-    sort:
-      field: &#34;body&#34;
-      direction: &#34;asc&#34;
-</code></pre><h2 id="decap-cms-の落とし穴と実際のこのサイトの運用について">Decap CMS の落とし穴と、実際のこのサイトの運用について</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">backend</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">git-gateway</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">branch</span>: <span style="color:#ae81ff">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">media_folder</span>: <span style="color:#e6db74">&#34;/static/images/uploads&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">public_folder</span>: <span style="color:#e6db74">&#34;/images/uploads&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">collections</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;about&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;About&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/about&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{body}}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;diary&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Diary&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/diary&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">media_folder</span>: <span style="color:#e6db74">&#34;/static/images/diary/{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">public_folder</span>: <span style="color:#e6db74">&#34;/images/diary/{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Title&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;title&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Date&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;date&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;datetime&#34;</span><span style="color:#f92672">, date_format</span>: <span style="color:#e6db74">&#34;YYYY-MM-DD&#34;</span><span style="color:#f92672">, time_format</span>: <span style="color:#66d9ef">false</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Slug&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;slug&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Month&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;month&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;list&#34;</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Subject&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;subject&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;select&#34;</span><span style="color:#f92672">, multiple: true, options</span>: [<span style="color:#e6db74">&#34;news&#34;</span>, <span style="color:#e6db74">&#34;music&#34;</span>, <span style="color:#e6db74">&#34;manga-and-anime&#34;</span>, <span style="color:#e6db74">&#34;movies-and-dramas&#34;</span>, <span style="color:#e6db74">&#34;comedy&#34;</span>, <span style="color:#e6db74">&#34;gaming&#34;</span>, <span style="color:#e6db74">&#34;sports&#34;</span>, <span style="color:#e6db74">&#34;books-and-magazines&#34;</span>, <span style="color:#e6db74">&#34;languages-and-foreign-cultures&#34;</span>, <span style="color:#e6db74">&#34;design-and-creative&#34;</span>, <span style="color:#e6db74">&#34;internet-and-technology&#34;</span>, <span style="color:#e6db74">&#34;natural-science&#34;</span>, <span style="color:#e6db74">&#34;humanities-and-social-sciences&#34;</span>] }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{date | date(&#39;YYYY-MM-DD&#39;)}} | {{body | truncate(280, &#39;...&#39;)}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sort</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">field</span>: <span style="color:#e6db74">&#34;date&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;desc&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;work&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Work&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/work&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">media_folder</span>: <span style="color:#e6db74">&#34;/static/images/work/{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">public_folder</span>: <span style="color:#e6db74">&#34;/images/work/{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Title&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;title&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Date&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;date&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;datetime&#34;</span><span style="color:#f92672">, date_format</span>: <span style="color:#e6db74">&#34;YYYY-MM-DD&#34;</span><span style="color:#f92672">, time_format</span>: <span style="color:#66d9ef">false</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Slug&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;slug&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Image&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;image&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;image&#34;</span> }
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{date | date(&#39;YYYY-MM-DD&#39;)}} | {{title}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sort</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">field</span>: <span style="color:#e6db74">&#34;date&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;desc&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;shoulders-of-giants&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;The shoulders of Giants&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/shoulders-of-giants&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Topic&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;topic&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;list&#34;</span>}
+</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{body | truncate(280, &#39;...&#39;)}}　　Topic {{topic}}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sort</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">field</span>: <span style="color:#e6db74">&#34;body&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;asc&#34;</span>
+</span></span></code></pre></div><h2 id="decap-cms-の落とし穴と実際のこのサイトの運用について">Decap CMS の落とし穴と、実際のこのサイトの運用について</h2>
 <p>さて、これで理想的な個人ブログの運用体制が構築できた…と思っていたのだが、Decap CMS には大きな落とし穴があった。記事のテキストフィールドが、日本語入力に対応できていないのだ。漢字変換をしようとしたときにキャレットの位置がズレてしまい、正常に入力作業をすることができない。</p>
 <p>Updating Slate editor to support Korean</p>
 <p>どうやら Slate のバージョンが古いのが原因らしいく、プルリクは出ているようだがスルーされているっぽい。</p>
@@ -502,13 +546,16 @@ UpNote でコンテンツ管理（UpNote はモバイル用のネイティブア
 
 
 
+
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    
     <script>
       document.addEventListener('DOMContentLoaded', (event) => {
         Prism.highlightAll();
       });
     </script>
+
     
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>
 </body>
