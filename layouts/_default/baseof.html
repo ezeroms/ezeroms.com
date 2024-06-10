@@ -4,8 +4,15 @@
     <meta charset="UTF-8">
     <title>{{ .Title }}</title>
 
-    <!-- PrismJSのテーマCSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    <script>hljs.highlightAll();</script>
 
     <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,14 +39,6 @@
 
 
 
-    <!-- PrismJSのメインJavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <!-- PrismJSの初期化 -->
-    <script>
-      document.addEventListener('DOMContentLoaded', (event) => {
-        Prism.highlightAll();
-      });
-    </script>
 
     <!-- debug-info -->
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>

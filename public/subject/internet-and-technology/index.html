@@ -5,7 +5,7 @@
     <title>Internet-and-Technology</title>
 
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/atom-one-dark-min.css">
 
     <link rel="stylesheet" href="/css/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -334,10 +334,10 @@ $(document).ready(function(){
                         <p>35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。</p>
 <p>以前より、Hugo + Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。つまり、静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。</p>
 <ul>
-<li>Github リポジトリを pull する。（僕は複数台のマシンを使っているので、ローカルを最新状態に同期する必要がある。）</li>
-<li>mdファイルを追加し、そこにブログ記事を書く。</li>
-<li>Github に push する。</li>
-<li>Netlify が更新を検知し、build → deploy を実行する。（＝サイトが更新される）</li>
+<li>Github リポジトリを pull する（僕は複数台のマシンを使っているので、ローカルを最新状態に同期する必要がある。）</li>
+<li>mdファイルを追加し、そこにブログ記事を書く</li>
+<li>Github に push する</li>
+<li>Netlify が更新を検知し、build → deploy を実行する（＝サイトが更新される）</li>
 </ul>
 <p>この手順から、Github に対する操作を省きたい。つまり、一般的なブログサービスのように（あるいは Wordpress サイトのように）「ブラウザで管理画面を開き、記事を更新する」という手続きにしたい。</p>
 <p>そこで Decap CMS（旧・Netlify CMS）を使ってみることにした。ヘッドレスCMSの代表格で、特に　という点が大きい。</p>
@@ -410,12 +410,12 @@ $(document).ready(function(){
 </ul>
 <h2 id="2-本番環境と自動デプロイの設定">2. 本番環境と自動デプロイの設定</h2>
 <h3 id="1-github-リポジトリの作成">1. GitHub リポジトリの作成</h3>
-<p>git init
-git add .
-git commit -m &ldquo;Initial commit&rdquo;
-git remote add origin &lt;GITHUB_REPO_URL&gt;
-git push -u origin main</p>
-<h3 id="2-netlify-アカウントの作成">2. Netlify アカウントの作成</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Initial commit&#34;</span>
+</span></span><span style="display:flex;"><span>git remote add origin &lt;GITHUB_REPO_URL&gt;
+</span></span><span style="display:flex;"><span>git push -u origin main
+</span></span></code></pre></div><h3 id="2-netlify-アカウントの作成">2. Netlify アカウントの作成</h3>
 <h3 id="3-githubリポジトリの連携">3. Githubリポジトリの連携</h3>
 <p>Netlify の管理画面で「New site from Git」を選択し、GitHubリポジトリを連携。</p>
 <h3 id="4-ビルド設定">4. ビルド設定</h3>
@@ -448,7 +448,7 @@ git push -u origin main</p>
 </span></span><span style="display:flex;"><span>npm install netlify-cms-app
 </span></span></code></pre></div><p>static/admin ディレクトリの config.yml 、index.html を編集してセットアップし、ezeroms.com/admin にアクセスすれば管理画面が使えるようになる。めっちゃ簡単だ。</p>
 <p>管理画面の自由度がとても高く config.yml で設定すると一覧の表示項目も柔軟に変更することができる。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">backend</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">backend</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">git-gateway</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">branch</span>: <span style="color:#ae81ff">main</span>
 </span></span><span style="display:flex;"><span>
@@ -516,13 +516,15 @@ git push -u origin main</p>
 </span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;asc&#34;</span>
 </span></span></code></pre></div><h2 id="decap-cms-の落とし穴と実際のこのサイトの運用について">Decap CMS の落とし穴と、実際のこのサイトの運用について</h2>
 <p>さて、これで理想的な個人ブログの運用体制が構築できた…と思っていたのだが、Decap CMS には大きな落とし穴があった。記事のテキストフィールドが、日本語入力に対応できていないのだ。漢字変換をしようとしたときにキャレットの位置がズレてしまい、正常に入力作業をすることができない。</p>
-<p>Updating Slate editor to support Korean</p>
+<p><a href="https://github.com/decaporg/decap-cms/issues/1347">Updating Slate editor to support Korean</a></p>
 <p>どうやら Slate のバージョンが古いのが原因らしいく、プルリクは出ているようだがスルーされているっぽい。</p>
 <p>（写真）
 Issueが立っていたのでむなしくコメントを残しておいた。</p>
-<p>なので、実際このサイトの運用は次のようになっている。
-UpNote でコンテンツ管理（UpNote はモバイル用のネイティブアプリが用意されている。）
-更新するときは UpNote から DecapCMS にコピペ</p>
+<p>なので、実際このサイトの運用は次のようになっている。</p>
+<ul>
+<li>UpNote でコンテンツ管理（UpNote はモバイル用のネイティブアプリが用意されている。）</li>
+<li>更新するときは UpNote から DecapCMS にコピペ</li>
+</ul>
 <p>以前に比べれば格段に更新しやすくはなったものの、できればブラウザで完結するようにしたい。
 もちろん、ヘッドレスCMSには他にも有力な候補があるのだが、Netlify との相性と、無料で使えるという条件で探すと選択肢はそれほど多くはない。また、できればスマホから更新ができるように、モバイル用のインターフェースが提供されているものがあるとなお嬉しい。次の休みにもう少し調べてみようと思う。</p>
 
@@ -549,14 +551,8 @@ UpNote でコンテンツ管理（UpNote はモバイル用のネイティブア
 
 
 
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', (event) => {
-        Prism.highlightAll();
-      });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
     
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>
