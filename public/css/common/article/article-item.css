@@ -105,7 +105,9 @@
 .article-item ul {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  margin: 8px 0;
+  padding-inline-start: 24px;
 }
 
 .article-item li {
@@ -148,5 +150,24 @@
 
   .hover-effect:hover {
     border: 1px solid #E7E7E9;
+  }
+
+
+  .article-item h2 {
+    font-size: 15px;
+  }
+  
+  .article-item h3 {
+    font-size: 14px;
+  }
+
+  .article-item ul {
+    gap: 12px;
+    margin: 6px 0;
+    padding-inline-start: 16px;
+  }
+  
+  .article-item li {
+    font-size: 14px;
   }
 }
