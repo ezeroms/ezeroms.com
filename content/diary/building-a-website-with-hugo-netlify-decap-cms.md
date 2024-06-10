@@ -40,9 +40,11 @@ cd ezeroms.com
 ```
 
 ### 2. カスタムテーマの準備
+
 Hugo プロジェクトで推奨されている形は、root ディレクトリの下に \`/site\` とかで区切って、テーマ等を置くディレクトリを一段下で管理する方法だ。これは、root ディレクトリでサイト設計やデプロイに関するメタ情報を管理し、具体的なサイト自身の設定や見た目と分離することで、複数テーマも管理やスケーラビリティを確保しようとするものだ。
 
 しかし、今回のサイトの場合はテーマを切り替えることはない（自分でアップデートし続ける）し、プロジェクトの規模も小さいので、構造のシンプルさを優先して全て root ディレクトリ直下で管理する方法にした。
+
 ```sh
 ezeroms.com
 ├── archetypes
@@ -92,39 +94,49 @@ ezeroms.com
 ├── config.toml
 └── netlify.toml
 ```
-- public : hugo server  で build されたファイルが格納される場所。キャッシュが邪魔しているのか？と思ったときは全削除したりする。
-- content/*/_index.md : 一見不要そうだが、ここに index の md ファイルがないとディレクトリを正しく認識してくれない。
-- static/admin : Decap CMS の管理画面用のファイル群。
+
+* public : hugo server  で build されたファイルが格納される場所。キャッシュが邪魔しているのか？と思ったときは全削除したりする。
+* content/*/_index.md : 一見不要そうだが、ここに index の md ファイルがないとディレクトリを正しく認識してくれない。
+* static/admin : Decap CMS の管理画面用のファイル群。
 
 ## 2. 本番環境と自動デプロイの設定
 
 ### 1. GitHub リポジトリの作成
+
+``` ``sh
 git init
 git add .
 git commit -m "Initial commit"
 git remote add origin <GITHUB_REPO_URL>
-git push -u origin main
+git push -u origin main```﻿
 
 ### 2. Netlify アカウントの作成
 
 ### 3. Githubリポジトリの連携
+
 Netlify の管理画面で「New site from Git」を選択し、GitHubリポジトリを連携。
 
 ### 4. ビルド設定
+
 ```sh
 Build Command: hugo
 Publish Directory: public
 ```
+
 これで、Github の main ブランチが更新されると、Netlify側で自動デプロイが走るようになる。
 
 ### 5. ドメイン設定
+
 Netlify の管理画面で `ezeroms.com` を割り当てる。
 
 ## 3. 詳細なサイト構築（テーマファイルの編集）
+
 layouts 以下のテーマファイルと static/css をひらすら編集し、理想的なデザインを作り上げていく。自分一人のプロジェクトということもあり、あらかじめ全てのページを Figma で作ることはせず、主だったページのレイアウト構成だけ Figma 上で検証して、スタイリングについては実装しながら検討していった。褒められた方法ではないが、こういうところがソロ・プロジェクトの爽快なところだ。
 
 ### コツ : テーマファイルへのマーキング
+
 hugo server  で localhost を確認しながら作っていくのだが、描画されているページに適切なテーマファイルが当たっているのかどうか分からなくなる。（「このページにこのテーマファイルが当たってほしいのに当たらん〜〜〜〜」的なことが続く） 途中で全部のテーマファイルにマーキングして、config.toml とファイル名やディレクトリを弄りながら検証していった。
+
 ```html
 <!-- debug-info -->
 <p class="debug-info">File : /layouts/subject/list.html</p>
@@ -135,6 +147,7 @@ hugo server  で localhost を確認しながら作っていくのだが、描�
 写真
 
 本当はもっとURLスキームに拘りたかったのだが、どうやってもできず（Decap CMS管理の範囲外を作ることになり）断念した。いい方法を知っている人がいたら教えてほしい。
+
 ```sh
 # 理想的なURLスキーム
 ezeroms.com/diary/
@@ -148,15 +161,19 @@ ezeroms.com/month/2024-06/
 ```
 
 ## 4. CMSを導入してブラウザから更新できるようにする
+
 package.json を作成し、Decap CMSをインストール。
+
 ```sh
 npm init -y
 npm install netlify-cms-app
 ```
+
 static/admin ディレクトリの config.yml 、index.html を編集してセットアップし、ezeroms.com/admin にアクセスすれば管理画面が使えるようになる。めっちゃ簡単だ。
 
 管理画面の自由度がとても高く config.yml で設定すると一覧の表示項目も柔軟に変更することができる。
-```yml
+
+```yaml
 backend:
   name: git-gateway
   branch: main
@@ -225,11 +242,11 @@ collections:
       direction: "asc"
 ```
 
-##  Decap CMS の落とし穴と、実際のこのサイトの運用について
+## Decap CMS の落とし穴と、実際のこのサイトの運用について
 
 さて、これで理想的な個人ブログの運用体制が構築できた…と思っていたのだが、Decap CMS には大きな落とし穴があった。記事のテキストフィールドが、日本語入力に対応できていないのだ。漢字変換をしようとしたときにキャレットの位置がズレてしまい、正常に入力作業をすることができない。
 
-Updating Slate editor to support Korean
+[Updating Slate editor to support Korean](https://github.com/decaporg/decap-cms/issues/1347)
 
 どうやら Slate のバージョンが古いのが原因らしいく、プルリクは出ているようだがスルーされているっぽい。
 
