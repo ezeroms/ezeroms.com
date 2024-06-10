@@ -3,17 +3,26 @@
 }
 
 /* スクロールバーを非表示にする */
-pre[class*="language-"]::-webkit-scrollbar {
+pre::-webkit-scrollbar {
   display: none;
 }
 
-pre[class*="language-"] {
+pre code::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  scrollbar-width: none;  /* Firefoxでスクロールバーを非表示にする */
+  -ms-overflow-style: none;  /* Internet Explorerでスクロールバーを非表示にする */
+}
+
+pre code {
   scrollbar-width: none;  /* Firefoxでスクロールバーを非表示にする */
   -ms-overflow-style: none;  /* Internet Explorerでスクロールバーを非表示にする */
 }
 
 /* 基本的なコードブロックのスタイル */
-pre[class*="language-"] {
+pre {
   background: #050317!important;  /* 背景色をダークグレーに */
   color: #ccc;  /* 文字色を薄いグレーに */
   padding: 1em;
@@ -26,113 +35,27 @@ pre[class*="language-"] {
   width: calc(100% - 2em);
 }
 
+.hljs {
+  background: #050317!important;  /* 背景色をダークグレーに */
+}
+
 /* コードブロック内のスタイル */
-pre[class*="language-"] code {
-  background: none;
-  color: inherit;
-  font-size: inherit;
-  font-family: inherit;
+pre code {
   line-height: 1.5;  /* 行間を広げる */
 }
 
-/* PrismJSのハイライトスタイル */
-.token.comment,
-.token.block-comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: #999;  /* コメントの色 */
+pre code::-moz-selection {
+  background: #59769A;
 }
 
-.token.punctuation {
-  color: #f8f8f2;  /* 句読点の色 */
+pre code::selection {
+  background: #59769A;
 }
 
-.token.tag,
-.token.attr-name,
-.token.namespace,
-.token.deleted {
-  color: #e2777a;  /* タグと属性名の色 */
+pre code *::-moz-selection {
+  background: #59769A;
 }
 
-.token.function-name {
-  color: #6196cc;  /* 関数名の色 */
-}
-
-.token.boolean,
-.token.number,
-.token.function {
-  color: #f08d49;  /* ブール値と数字の色 */
-}
-
-.token.property,
-.token.class-name,
-.token.constant,
-.token.symbol {
-  color: #f8c555;  /* プロパティとクラス名の色 */
-}
-
-.token.selector,
-.token.important,
-.token.atrule,
-.token.keyword,
-.token.builtin {
-  color: #cc99cd;  /* セレクターとキーワードの色 */
-}
-
-.token.string,
-.token.char,
-.token.attr-value,
-.token.regex,
-.token.variable {
-  color: #7ec699;  /* 文字列と変数の色 */
-}
-
-.token.operator,
-.token.entity,
-.token.url {
-  color: #67cdcc;  /* 演算子とURLの色 */
-}
-
-.token.important,
-.token.bold {
-  font-weight: bold;  /* 太字 */
-}
-
-.token.italic {
-  font-style: italic;  /* 斜体 */
-}
-
-.token.entity {
-  cursor: help;  /* ヘルプカーソル */
-}
-
-/* 行番号のスタイル */
-pre.line-numbers {
-  position: relative;
-  padding-left: 3.8em; /* 行番号のスペース */
-}
-
-pre.line-numbers .line-numbers-rows {
-  position: absolute;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  width: 3em; /* 行番号の幅 */
-  letter-spacing: -1px;
-  border-right: 1px solid #999;
-  user-select: none;
-}
-
-pre.line-numbers .line-numbers-rows > span {
-  display: block;
-  counter-increment: linenumber;
-}
-
-pre.line-numbers .line-numbers-rows > span:before {
-  content: counter(linenumber);
-  color: #999; /* 行番号の色 */
-  display: block;
-  padding-right: 0.8em;
-  text-align: right;
+pre code *::selection {
+  background: #59769A;
 }
