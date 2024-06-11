@@ -69,6 +69,7 @@
 .article-item h6 {
   text-align: center;
   width: 100%;
+  margin: 0;
 }
 
 .article-item hr {
