@@ -149,7 +149,15 @@ hugo server  で localhost を確認しながら作っていくのだが、描�
 
 最終的にこんなかんじで出来上がる。
 
-写真
+![](/images/diary/building-a-website-with-hugo-netlify-decap-cms/01.webp)
+
+![](/images/diary/building-a-website-with-hugo-netlify-decap-cms/02.webp)
+
+![](/images/diary/building-a-website-with-hugo-netlify-decap-cms/03.webp)
+
+![](/images/diary/building-a-website-with-hugo-netlify-decap-cms/04.webp)
+
+
 
 ### 課題 : URLスキーム
 
@@ -263,8 +271,9 @@ collections:
 Issueが立っていたのでむなしくコメントを残しておいた。
 
 なので、このサイトの実際の運用は次のようになっている。
-- UpNote でコンテンツ管理（UpNote はモバイル用のネイティブアプリが用意されている）
-- UpNote から DecapCMS にコピペして記事を更新
+
+* UpNote でコンテンツ管理（UpNote はモバイル用のネイティブアプリが用意されている）
+* UpNote から DecapCMS にコピペして記事を更新
 
 記事の編集作業部分をテキストエディタに外出ししている状態だ。以前に比べれば格段に更新しやすくはなったものの、できればブラウザで完結する運用を目指したい。
 
