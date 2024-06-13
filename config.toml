@@ -13,8 +13,7 @@ disableAliases = true
   description = "One thing I can tell you is you got to be free!"
   keywords = ""
   RSSLink = "index.xml"
-  ogImage = "/images/common/og-image.png"
-  googleAnalytics = "G-K021MTL6NX"
+  ogImage = "images/common/og-image.png"
 
 [author]
   name = "ezeroms"

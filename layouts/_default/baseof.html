@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Google Analytics -->
+    {{ partial "google_analytics.html" . }}
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ "images/common/favicon/favicon.ico" | relURL }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ "images/common/favicon/favicon-16x16.png" | relURL }}">
@@ -25,16 +28,16 @@
 
     <!-- Open Graph -->
     <meta property="og:title" content="{{ .Title }}">
-    <meta property="og:description" content="{{ .Description }}">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:image" content="{{ .Site.BaseURL }}{{ .Params.ogImage }}">
+    <meta property="og:image" content="{{ .Site.BaseURL }}{{ .Site.Params.OgImage }}">
     <meta property="og:site_name" content="{{ .Site.Title }}">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ .Title }}">
-    <meta name="twitter:description" content="{{ .Description }}">
-    <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.ogImage }}">
+    <meta name="twitter:description" content="{{ .Site.Params.Description }}">
+    <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Site.Params.OgImage }}">
 
 </head>
 <body>
