@@ -62,6 +62,22 @@
                             </h1>
                         </a>
                         {{ .Content }}
+
+                        <div class="social-action">
+                            <div class="social-action__left">
+                                <div class="social-action__line">
+                                    <div class="social-action__line-icon"></div>
+                                    <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                        このブログの更新通知をLINEで受け取る
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="social-action__right">
+                                <a href="https://twitter.com/share?url={{ .Permalink }}&text={{ .Title }}" target="_blank" class="social-action__x" data-show-count="false"></a>
+                                <a href="http://b.hatena.ne.jp/entry/{{ .Permalink }}" target="_blank" class="social-action__hatena"></a>
+                                <!-- <a class="social-action__link" onclick="copyToClipboard('{{ .Permalink }}')"></a> -->
+                            </div>
+                        </div>
                     </article>
                 {{ end }}
             {{ else }}
@@ -70,6 +86,8 @@
 
         </ul>
     </section>
+
+    <div class="image-loader"></div>
 </main>
 
 {{ partial "global-nav_diary.html" . }}

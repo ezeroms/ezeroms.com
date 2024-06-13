@@ -279,7 +279,11 @@
     url('/images/about/icon_whatsapp_on.svg'),
     url('/images/about/icon_signal_on.svg'),
     url('/images/about/icon_feedly_on.svg'),
-    url('/images/about/icon_rss_on.svg');
+    url('/images/about/icon_rss_on.svg'),
+    url('/images/diary/icon_hatena_on.svg'),
+    url('/images/diary/icon_line_on.svg'),
+    url('/images/diary/icon_link_on.svg'),
+    url('/images/diary/icon_x_on.svg');
     opacity: 0;
     position: absolute;
     z-index: -1000;
