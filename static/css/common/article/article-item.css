@@ -132,6 +132,140 @@
 }
 
 
+
+
+.social-action {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 40px 0 0;
+  align-items: center;
+}
+
+.social-action__left {
+  display: flex;
+  /* width: 100%; */
+  /* padding: 24px 0; */
+}
+
+.social-action__right {
+  display: flex;
+  gap: 16px;
+  /* width: 100%; */
+  justify-content: flex-end;
+}
+
+.social-action__line {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  /* padding: 8px 16px 8px 8px; */
+  border-radius: 24px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.social-action__line a {
+  font-size: 14px;
+  text-decoration: none!important;
+  color: #5D5D5F!important;
+  font-weight: 400!important;
+  transition-duration: 0.2s;
+}
+
+.social-action__line .social-action__line-icon {
+  margin: 0!important;
+  margin-right: 0;
+  width: 40px;
+  height: 40px;
+  background-size: 84%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/diary/icon_line_off.svg');
+  border: 1px solid #E7E7E9;
+  border-radius: 24px;
+  transition-duration: 0.2s;
+}
+
+.social-action__line:hover a {
+  opacity: 1;
+  color: #06C655!important;
+  transition-duration: 0s;
+}
+
+.social-action__line:hover .social-action__line-icon {
+  border: 1px solid #C8EBCF;
+  background-image: url('/images/diary/icon_line_on.svg');
+  opacity: 1;
+  transition-duration: 0s!important;
+}
+
+.social-action__x {
+  text-decoration: none!important;
+  margin: 0!important;
+  margin-right: 0;
+  width: 40px;
+  height: 40px;
+  background-size: 65%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/diary/icon_x_off.svg');
+  border: 1px solid #E7E7E9;
+  border-radius: 24px;
+  transition-duration: 0.2s;
+}
+
+.social-action__x:hover {
+  background-image: url('/images/diary/icon_x_on.svg');
+  border: 1px solid #D0D0D1!important;
+  opacity: 1!important;
+}
+
+.social-action__hatena {
+  text-decoration: none!important;
+  margin: 0!important;
+  margin-right: 0;
+  width: 40px;
+  height: 40px;
+  background-size: 74%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/diary/icon_hatena_off.svg');
+  border: 1px solid #E7E7E9;
+  border-radius: 24px;
+  transition-duration: 0.2s;
+}
+
+.social-action__hatena:hover {
+  background-image: url('/images/diary/icon_hatena_on.svg');
+  border: 1px solid #D0D0D1!important;
+  opacity: 1!important;
+}
+
+.social-action__link {
+  text-decoration: none!important;
+  margin: 0!important;
+  margin-right: 0;
+  width: 40px;
+  height: 40px;
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('/images/diary/icon_link_off.svg');
+  border: 1px solid #E7E7E9;
+  border-radius: 24px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+}
+
+.social-action__link:hover {
+  background-image: url('/images/diary/icon_link_on.svg');
+  border: 1px solid #D0D0D1!important;
+  opacity: 1!important;
+}
+
 /* --------------------
 スマホ用のスタイル
 -------------------- */
@@ -172,4 +306,77 @@
   .article-item li {
     font-size: 14px;
   }
+
+
+  .social-action {
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column-reverse;
+    border-top: 1px solid #E7E7E9;
+    margin: 16px 0 0;
+    padding: 24px 0 0;
+  }
+
+  .social-action__line {
+    gap: 2px;
+    padding: 0 8px 0 0;
+  }
+
+  .social-action__line a {
+    font-size: 12px;
+  }
+  
+  .social-action__line .social-action__line-icon {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background-size: 100%;
+    background-image: url('/images/diary/icon_line_on.svg');
+  }
+
+  .social-action__line:hover a {
+    color: #5D5D5F!important;
+  }
+
+  .social-action__line:hover .social-action__line-icon {
+    border: none;
+    opacity: 1;
+    transition-duration: 0s!important;
+  }
+
+  .social-action__right {
+     gap: 24px;
+  }
+
+  .social-action__x {
+    width: 32px;
+    height: 32px;
+  }
+
+  .social-action__x:hover {
+    background-image: url('/images/diary/icon_x_off.svg');
+    border: 1px solid #E7E7E9!important;
+  }
+
+  .social-action__hatena {
+    width: 32px;
+    height: 32px;
+  }
+
+  .social-action__hatena:hover {
+    background-image: url('/images/diary/icon_hatena_off.svg');
+    border: 1px solid #E7E7E9!important;
+  }
+
+  .social-action__link {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .social-action__link:hover {
+    background-image: url('/images/diary/icon_link_off.svg');
+    border: 1px solid #E7E7E9!important;
+  }
+
 }
