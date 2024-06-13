@@ -14,6 +14,7 @@ disableAliases = true
   keywords = ""
   RSSLink = "index.xml"
   og_image = "/images/common/og-image.png"
+  googleAnalytics = "G-K021MTL6NX"
 
 [author]
   name = "ezeroms"

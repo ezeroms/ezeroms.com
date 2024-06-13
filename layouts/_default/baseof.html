@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <title>{{ .Title }}</title>
 
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"> -->
+    <!-- コードブロックのシンタックスハイライト -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
     <!-- and it's easy to individually load additional languages -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
-    
     <script>hljs.highlightAll();</script>
 
     <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
@@ -27,18 +25,20 @@
 
     <!-- Open Graph -->
     <meta property="og:title" content="{{ .Title }}">
-    <meta property="og:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta property="og:description" content="{{ .Description }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:image" content="{{ if .Params.og_image }}{{ .Params.og_image }}{{ else }}{{ .Site.Params.og_image }}{{ end }}">
+    <meta property="og:image" content="{{ .Site.BaseURL }}{{ .Params.ogImage }}">
     <meta property="og:site_name" content="{{ .Site.Title }}">
     <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ .Title }}">
+    <meta name="twitter:description" content="{{ .Description }}">
+    <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.ogImage }}">
+
 </head>
 <body>
     {{ block "main" . }}{{ end }}
-
-
-
 
     <!-- debug-info -->
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>
