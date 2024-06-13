@@ -15,9 +15,6 @@
     <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Analytics -->
-    {{ partial "google_analytics.html" . }}
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ "images/common/favicon/favicon.ico" | relURL }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ "images/common/favicon/favicon-16x16.png" | relURL }}">
@@ -42,6 +39,9 @@
 </head>
 <body>
     {{ block "main" . }}{{ end }}
+
+    <!-- Google Analytics -->
+    {{ partial "google_analytics.html" . }}
 
     <!-- debug-info -->
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>
