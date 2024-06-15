@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -234,6 +237,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -288,42 +294,15 @@ $(document).ready(function(){
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
 
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        2023-08-23
-                    </p>
-                    <h2 class="article-item-heading__label__h2">
-                        『奇奇怪怪』の少年ジャンプ的な冒険心、あるいは上品さについて
-                    </h2>
-                </div>
-
-                
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
+            
 
 
             <article class="article-item">
+                
+                <p class="date">2023-08-23</p>
+                <h1>『奇奇怪怪』の少年ジャンプ的な冒険心、あるいは上品さについて</h1>
+                
+
                 <p>昨日は仕事を早めに切り上げて、代官山蔦屋書店に行ってきた。発売を心待ちにしていた『奇奇怪怪』という本を手に入れるためだ。</p>
 <p><img src="/images/diary/kikikaikai-magazine-2nd/photo-aug-17-portrait.jpg" alt=""></p>
 <p><img src="/images/diary/kikikaikai-magazine-2nd/aug-17-portrait.jpg" alt=""></p>
@@ -369,6 +348,23 @@ $(document).ready(function(){
                         <a href="https://twitter.com/intent/tweet?text=%e3%80%8e%e5%a5%87%e5%a5%87%e6%80%aa%e6%80%aa%e3%80%8f%e3%81%ae%e5%b0%91%e5%b9%b4%e3%82%b8%e3%83%a3%e3%83%b3%e3%83%97%e7%9a%84%e3%81%aa%e5%86%92%e9%99%ba%e5%bf%83%e3%80%81%e3%81%82%e3%82%8b%e3%81%84%e3%81%af%e4%b8%8a%e5%93%81%e3%81%95%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fkikikaikai-book-2%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
                         <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/kikikaikai-book-2/" target="_blank" class="social-action__hatena"></a>
                         <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/kikikaikai-book-2\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
                     </div>
                 </div>
             </article>

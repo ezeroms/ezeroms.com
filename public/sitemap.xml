@@ -23,6 +23,15 @@
     <loc>http://localhost:1313/subject/</loc>
     <lastmod>2024-06-09T13:44:46+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/subject/manga-and-anime/</loc>
+    <lastmod>2024-06-06T12:15:48+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/subject/news/</loc>
+    <lastmod>2024-06-06T12:15:48+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/diary/the-imagination-of-the-brave-himmel/</loc>
+    <lastmod>2024-06-06T12:15:48+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/month/2024-05/</loc>
     <lastmod>2024-05-16T11:08:18+00:00</lastmod>
   </url><url>
@@ -39,9 +48,6 @@
     <lastmod>2024-05-13T04:01:25+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/month/2024-03/</loc>
-    <lastmod>2024-03-14T13:34:01+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/subject/manga-and-anime/</loc>
     <lastmod>2024-03-14T13:34:01+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/diary/the-power-of-the-period/</loc>

@@ -8,7 +8,7 @@
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
 
-            <div class="article-item-heading">
+            <!-- <div class="article-item-heading">
                 <div class="article-item-heading__label">
                     <p class="article-item-heading__label__p">
                         {{ .Date | dateFormat "2006-01-02" }}
@@ -18,7 +18,7 @@
                     </h2>
                 </div>
 
-                <!-- ボタンここから -->
+                
                 <button class="article-item-heading__button" onclick="copyToClipboard()">
                     <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
                 </button>
@@ -39,11 +39,16 @@
                         }, 3000);
                     }
                 </script>
-                <!-- ボタンここまで -->        
-            </div>
+                    
+            </div> -->
 
 
             <article class="article-item">
+                
+                <p class="date">{{ .Date | dateFormat "2006-01-02" }}</p>
+                <h1>{{ .Title }}</h1>
+                
+
                 {{ .Content }}
 
                 <div class="social-action">
@@ -59,6 +64,23 @@
                         <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" target="_blank" class="social-action__x" data-show-count="false"></a>
                         <a href="http://b.hatena.ne.jp/entry/{{ .Permalink }}" target="_blank" class="social-action__hatena"></a>
                         <a class="social-action__link" onclick="copyToClipboard('{{ .Permalink }}')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
                     </div>
                 </div>
             </article>

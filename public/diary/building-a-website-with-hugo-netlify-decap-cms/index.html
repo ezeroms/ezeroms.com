@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -234,6 +237,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -288,42 +294,15 @@ $(document).ready(function(){
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
 
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        2024-06-09
-                    </p>
-                    <h2 class="article-item-heading__label__h2">
-                        Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築
-                    </h2>
-                </div>
-
-                
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
+            
 
 
             <article class="article-item">
+                
+                <p class="date">2024-06-09</p>
+                <h1>Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築</h1>
+                
+
                 <p>35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。</p>
 <p>以前より、Hugo + Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。</p>
 <p>静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。</p>
@@ -542,6 +521,23 @@ Issueが立っていたのでむなしくコメントを残しておいた。</p
                         <a href="https://twitter.com/intent/tweet?text=Hugo%20%2b%20Netlify%20%2b%20DecapCMS%20%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%9f%e3%82%b5%e3%82%a4%e3%83%88%e6%a7%8b%e7%af%89&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fbuilding-a-website-with-hugo-netlify-decap-cms%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
                         <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/" target="_blank" class="social-action__hatena"></a>
                         <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/building-a-website-with-hugo-netlify-decap-cms\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
                     </div>
                 </div>
             </article>
@@ -549,7 +545,7 @@ Issueが立っていたのでむなしくコメントを残しておいた。</p
 
             <div class="pagination-buttons">
   
-      <a href="/diary/an-encouragement-of-sampo/" class="pagination-button">
+      <a href="/diary/the-imagination-of-the-brave-himmel/" class="pagination-button">
           <img src="/images/common/icon_left.svg" alt="">
           Prev
       </a>

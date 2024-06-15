@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -234,6 +237,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -288,42 +294,15 @@ $(document).ready(function(){
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
 
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        2024-05-13
-                    </p>
-                    <h2 class="article-item-heading__label__h2">
-                        「そのとき鹿はどこにいくんだ」「それは…どこか別の場所に」
-                    </h2>
-                </div>
-
-                
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
+            
 
 
             <article class="article-item">
+                
+                <p class="date">2024-05-13</p>
+                <h1>「そのとき鹿はどこにいくんだ」「それは…どこか別の場所に」</h1>
+                
+
                 <p>　伊勢佐木町にあるミニシアター・シネマリンで、映画『悪は存在しない』を観てきた。『偶然と想像』や『ドライブ・マイ・カー』で国際的な評価を得た濱口竜介監督の最新作である。</p>
 <h6 id="heading">　</h6>
 <p>　この映画で、僕は自分の鑑賞態度に関するちょっとした発見をした。</p>
@@ -350,6 +329,23 @@ $(document).ready(function(){
                         <a href="https://twitter.com/intent/tweet?text=%e3%80%8c%e3%81%9d%e3%81%ae%e3%81%a8%e3%81%8d%e9%b9%bf%e3%81%af%e3%81%a9%e3%81%93%e3%81%ab%e3%81%84%e3%81%8f%e3%82%93%e3%81%a0%e3%80%8d%e3%80%8c%e3%81%9d%e3%82%8c%e3%81%af%e2%80%a6%e3%81%a9%e3%81%93%e3%81%8b%e5%88%a5%e3%81%ae%e5%a0%b4%e6%89%80%e3%81%ab%e3%80%8d&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fevil-does-not-exist%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
                         <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/evil-does-not-exist/" target="_blank" class="social-action__hatena"></a>
                         <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/evil-does-not-exist\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
                     </div>
                 </div>
             </article>
