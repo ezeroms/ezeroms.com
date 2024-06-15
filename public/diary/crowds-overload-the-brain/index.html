@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -234,6 +237,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -288,42 +294,15 @@ $(document).ready(function(){
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
 
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        2024-03-12
-                    </p>
-                    <h2 class="article-item-heading__label__h2">
-                        人混みは脳にクる
-                    </h2>
-                </div>
-
-                
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
+            
 
 
             <article class="article-item">
+                
+                <p class="date">2024-03-12</p>
+                <h1>人混みは脳にクる</h1>
+                
+
                 <p>年始早々に台湾に渡り、約二ヶ月ぶりに日本に帰ってきた。</p>
 <p>空港からバスに乗り込んで横浜駅に到着し、冷たい冬の風を頬で感じつつ、懐かしい気持ちで駅の周りを歩いていると、なんだか胸の奥から不快感がこみ上げてきた。東口の歩道橋の端にスーツケースを置いて座り込む。それが人混みに酔ったのだと気づくまでには少し時間がかかった。僕はこれまで人混みに酔うような体質ではなく、「人混みが苦手だ」という人々の気持ちはまったく理解できなかったからだ。</p>
 <p>地面に座り込み、深呼吸をしながら目を閉じると、周囲の喧騒が一層鮮明に耳に届いてきた。通行人の会話の断片が風に乗って流れ込んでくる。そしてふと、その感覚が久しぶりであることに気づいた。また同時に、体調不良の原因もこれかもしれない、という考えがよぎった。</p>
@@ -346,6 +325,23 @@ $(document).ready(function(){
                         <a href="https://twitter.com/intent/tweet?text=%e4%ba%ba%e6%b7%b7%e3%81%bf%e3%81%af%e8%84%b3%e3%81%ab%e3%82%af%e3%82%8b&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fcrowds-overload-the-brain%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
                         <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/crowds-overload-the-brain/" target="_blank" class="social-action__hatena"></a>
                         <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/crowds-overload-the-brain\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
                     </div>
                 </div>
             </article>

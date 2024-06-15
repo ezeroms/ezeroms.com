@@ -11,7 +11,8 @@
             <div class="article-item-heading">
                 <div class="article-item-heading__label">
                     <p class="article-item-heading__label__p">
-                        Thoughts relating to
+                        <!-- Subject : -->
+                         Diary
                     </p>
 
                     {{ $path := .Permalink }}
@@ -56,10 +57,9 @@
             {{ if gt (len $articles) 0 }}
                 {{ range $articles }}
                     <article id="{{ .Title | urlize }}" class="article-item">
+                        <p class="date">{{ .Date | dateFormat "2006-01-02" }}</p>
                         <a href="{{ .Permalink }}">
-                            <h1>
-                                {{ .Date | dateFormat "2006-01-02" }}
-                            </h1>
+                            <h1>{{ .Title }}</h1>
                         </a>
                         {{ .Content }}
 

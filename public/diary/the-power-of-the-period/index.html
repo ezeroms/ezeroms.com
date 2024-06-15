@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -234,6 +237,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -288,42 +294,15 @@ $(document).ready(function(){
     <section class="main-section-2column__right">
         <ul class="article-container" id="articles-list">
 
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        2024-03-14
-                    </p>
-                    <h2 class="article-item-heading__label__h2">
-                        必殺仕事記号
-                    </h2>
-                </div>
-
-                
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
+            
 
 
             <article class="article-item">
+                
+                <p class="date">2024-03-14</p>
+                <h1>必殺仕事記号</h1>
+                
+
                 <p>　アニメ『葬送のフリーレン』の人気には、昨今のジャンプ系アニメの勢力が強大過ぎたからこそ生まれた、という側面があると思う。『SPY×FAMILY』『【推しの子】』『マッシュル』『呪術廻戦』『鬼滅の刃』など、個々にユニークな魅力はあるものの、同じ「ジャンプ味」のアニメばかり食べていたところに、サンデーから少し違った味が出されたからこそ多くの人々に深く刺さった、という見方だ。</p>
 <p>　そんな『フリーレン』の非・ジャンプ的なノリに一役買っているのが、句点記号「。（マル）」の存在である。サンデーの漫画には、セリフの最後に文末を示すマルが付く、という特徴がある。これによって このことがサンデー漫画には、特にフリーレンには深い影響を与えている。ジャンプ漫画と、サンデーマンガのノリの差に影響している。</p>
 <p>　『フリーレン』はJRPGの冒険ファンタジーの世界をベースにしており、魔族との激しい戦闘シーンもあるが、キャラクター同士の会話は文章的な言葉のやりとりを主体としている。それによって喜びも悲しみも落ち着いたトーンで穏やかに描かれ、コミカルな部分についても、キャラクターたちの訥々とした喋りが笑いを誘う形で成り立っている。こうした作風とマルの相性は非常に良い。恐らく、アニメにおいても、声優が読み上げる際の調子に影響を与えているだろう。（余談だが、なろう原作で同じく小学館からコミカライズされている『薬屋のひとりごと』でも、同様にマルがよく働いている気がする。）</p>
@@ -344,6 +323,23 @@ $(document).ready(function(){
                         <a href="https://twitter.com/intent/tweet?text=%e5%bf%85%e6%ae%ba%e4%bb%95%e4%ba%8b%e8%a8%98%e5%8f%b7&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fthe-power-of-the-period%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
                         <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/the-power-of-the-period/" target="_blank" class="social-action__hatena"></a>
                         <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/the-power-of-the-period\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
                     </div>
                 </div>
             </article>
