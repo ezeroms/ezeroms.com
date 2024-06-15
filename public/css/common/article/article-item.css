@@ -31,7 +31,7 @@
   font-weight: 700;
   line-height: 180%; /* 28.8px */
   display: inline-block;
-  margin: 0 0 24px;
+  margin: 0 0 28px;
   text-decoration: none;
   transition-duration: 0.4s;
 }
@@ -78,6 +78,8 @@
   text-align: center;
   width: 100%;
   margin: 0;
+  height: 1em;
+  padding: 0;
 }
 
 .article-item hr {
@@ -286,7 +288,7 @@
 
   .article-item h1 {
     font-size: 18px;
-    margin: 0 0 16px;
+    margin: 0 0 18px;
   }
 
   .article-item p {
