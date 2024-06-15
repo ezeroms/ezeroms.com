@@ -14,7 +14,7 @@ subject:
 
 　この「勇者ヒンメルなら〜」という台詞は、作中において、ヒンメルの仲間たちが行動の理由を問われたときに必ず口にする言葉である。人々の優しさや勇気、利他的な行動を説明する際に使われるものだ。
 
-![](/images/diary/the-imagination-of-the-brave-himmel/01.jpeg)
+![勇者ヒンメルならそうしたってことだよ。](/images/diary/the-imagination-of-the-brave-himmel/01.jpeg "勇者ヒンメルならそうしたってことだよ。")
 
 ###### 　﻿
 
