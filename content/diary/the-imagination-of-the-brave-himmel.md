@@ -1,5 +1,5 @@
 ---
-title: 勇者ヒンメルの魔法
+title: 台湾地下鉄暴漢事件と勇者ヒンメルの魔法
 date: 2024-06-06T12:15:48.228Z
 slug: the-imagination-of-the-brave-himmel
 month:
