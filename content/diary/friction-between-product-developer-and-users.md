@@ -1,5 +1,5 @@
 ---
-title: プロダクト開発者とユーザーの摩擦
+title: プロダクト開発とユーザーとの摩擦
 date: 2024-06-20T10:14:31.728Z
 slug: friction-between-product-developer-and-users
 month:
