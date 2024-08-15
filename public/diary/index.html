@@ -120,6 +120,17 @@
         
             
             
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
         
             
             
@@ -149,6 +160,10 @@
         
         
         
+        
+            
+            
+            <li><a href="/month/2024-08" class="a-link">2024-08</a></li>
         
             
             
@@ -237,6 +252,17 @@ $(document).ready(function(){
         
             
             
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
         
             
             
@@ -266,6 +292,10 @@ $(document).ready(function(){
         
         
         
+        
+            
+            
+            <li><a href="/month/2024-08">2024-08</a></li>
         
             
             
@@ -301,215 +331,30 @@ $(document).ready(function(){
         
             <article class="article-item">
                 <p class="date">
-                    2024-06-09
+                    2024-08-14
                 </p>
-                <a href="http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/">
-                    <h1>Hugo &#43; Netlify &#43; DecapCMS を使ったサイト構築</h1>
+                <a href="http://localhost:1313/diary/created-the-yellowtail-website/">
+                    <h1>テツのサイトを作った</h1>
                 </a>
 
-                <p>35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。</p>
-<p>以前より、Hugo + Netlify を使って個人サイトを配信していたのだが、この仕組みには「記事の更新作業に手間がかかる」という問題があった。</p>
-<p>静的サイトジェネレーター兼コンテンツ管理として Hugo があり、Netlify がホスティングを担っているのだが、実際に記事を更新する際は、次のような手順となる。</p>
-<ul>
-<li>Github リポジトリを pull する（僕は複数台のマシンを使っているので、ローカルを最新状態に同期する必要がある。）</li>
-<li>mdファイルを追加し、そこにブログ記事を書く</li>
-<li>Github に push する</li>
-<li>Netlify が更新を検知し、build → deploy を実行する（＝サイトが更新される）</li>
-</ul>
-<p>この手順から、Github に対する操作を省きたい。つまり、一般的なブログサービスのように（あるいは Wordpress サイトのように）「ブラウザで管理画面を開き、記事を更新する」という手続きにしたい。</p>
-<p>そこで Decap CMS（旧・Netlify CMS）を使ってみることにした。ヘッドレスCMSの代表格で、特にGitベースであるという点が大きい（コンテンツの変更履歴を Git で管理できる）。</p>
-<p>また、併せてサイトのデザインも一新することにした。以前は Hugo に不慣れなこともあり、無料配布されていた Hugo テーマを流用して改造しながら使っていたのだが、その運用を4〜5年ほどしたことで Hugo の仕組みにもだいぶ詳しくなった。そこで Hugo テーマをフルスクラッチで作ってみることにした。</p>
-<h2 id="各ツールの役割の確認">各ツールの役割の確認</h2>
-<ul>
-<li>Hugo : 静的サイトジェネレーター。Markdown ファイルを HTML に変換して静的なウェブサイトを生成してくれる。静的サイトにはロマンがある。Golangで書かれているため動作が高速で、Goテンプレートエンジンによる柔軟なテンプレートシステムが魅力的。</li>
-<li>Netlify : 静的サイトのホスティングサービス。Git リポジトリと連携して自動デプロイを行う。</li>
-<li>Decap CMS : オープンソースのヘッドレスCMS。GUIベースの管理画面を提供し、静的サイトジェネレーターと連携してコンテンツを管理する。実装後に重大な落とし穴が発覚する（後述）。</li>
-</ul>
-<h2 id="1-サイトの基本形を作成">1. サイトの基本形を作成</h2>
-<p>まずはまっさらな状態から Hugo プロジェクトを作っていく。</p>
-<h3 id="1-hugo-プロジェクトを作成">1. Hugo プロジェクトを作成</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>hugo new site ezeroms.com
-</span></span><span style="display:flex;"><span>cd ezeroms.com
-</span></span></code></pre></div><h3 id="2-カスタムテーマの準備">2. カスタムテーマの準備</h3>
-<p>Hugo プロジェクトで推奨されている形は、root ディレクトリの下に <code>/site</code> とかで区切って、テーマ等を置くディレクトリを一段下で管理する方法だ。これは、root ディレクトリでサイト設計やデプロイに関するメタ情報を管理し、具体的なサイト自身の設定や見た目と分離することで、複数テーマも管理やスケーラビリティを確保しようとするものだ。</p>
-<p>しかし、今回のサイトの場合はテーマを切り替えることはない（自分でアップデートし続ける）し、プロジェクトの規模も小さいので、構造のシンプルさを優先して全て root ディレクトリ直下で管理する方法にした。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ezeroms.com
-</span></span><span style="display:flex;"><span>├── archetypes
-</span></span><span style="display:flex;"><span>│   └── index.html
-</span></span><span style="display:flex;"><span>├── content
-</span></span><span style="display:flex;"><span>│   ├── about
-</span></span><span style="display:flex;"><span>│   │   └── _index.md
-</span></span><span style="display:flex;"><span>│   ├── diary
-</span></span><span style="display:flex;"><span>│   │   └── _index.md
-</span></span><span style="display:flex;"><span>│   ├── shoulders-of-giants
-</span></span><span style="display:flex;"><span>│   │   └── _index.md
-</span></span><span style="display:flex;"><span>│   └── work
-</span></span><span style="display:flex;"><span>│       └── _index.md
-</span></span><span style="display:flex;"><span>├── layouts
-</span></span><span style="display:flex;"><span>│   ├── _default
-</span></span><span style="display:flex;"><span>│   │   ├── baseof.html
-</span></span><span style="display:flex;"><span>│   │   └── rss.xml
-</span></span><span style="display:flex;"><span>│   ├── about
-</span></span><span style="display:flex;"><span>│   │   └── index.html
-</span></span><span style="display:flex;"><span>│   ├── diary
-</span></span><span style="display:flex;"><span>│   │   ├── index.html
-</span></span><span style="display:flex;"><span>│   │   └── single.html
-</span></span><span style="display:flex;"><span>│   ├── month
-</span></span><span style="display:flex;"><span>│   │   └── list.html
-</span></span><span style="display:flex;"><span>│   ├── partials
-</span></span><span style="display:flex;"><span>│   │   ├── header.html
-</span></span><span style="display:flex;"><span>│   │   ├── footer.html
-</span></span><span style="display:flex;"><span>│   │   ├── global-nav.html
-</span></span><span style="display:flex;"><span>│   │   └── ...
-</span></span><span style="display:flex;"><span>│   ├── shoulders-of-giants
-</span></span><span style="display:flex;"><span>│   │   └── index.html
-</span></span><span style="display:flex;"><span>│   ├── subject
-</span></span><span style="display:flex;"><span>│   │   └── list.html
-</span></span><span style="display:flex;"><span>│   ├── topic
-</span></span><span style="display:flex;"><span>│   │   └── list.html
-</span></span><span style="display:flex;"><span>│   │── work
-</span></span><span style="display:flex;"><span>│   │   ├── index.html
-</span></span><span style="display:flex;"><span>│   │   └── single.html
-</span></span><span style="display:flex;"><span>│   └── index.html
-</span></span><span style="display:flex;"><span>├── public
-</span></span><span style="display:flex;"><span>├── static
-</span></span><span style="display:flex;"><span>│   ├── admin
-</span></span><span style="display:flex;"><span>│   │   ├── config.yml
-</span></span><span style="display:flex;"><span>│   │   └── index.html
-</span></span><span style="display:flex;"><span>│   ├── css
-</span></span><span style="display:flex;"><span>│   └── images
-</span></span><span style="display:flex;"><span>├── config.toml
-</span></span><span style="display:flex;"><span>└── netlify.toml
-</span></span></code></pre></div><ul>
-<li>public : hugo server  で build されたファイルが格納される場所。キャッシュが邪魔しているのか？と思ったときは全削除したりする。</li>
-<li>content/*/_index.md : 一見不要そうだが、ここに index の md ファイルがないとディレクトリを正しく認識してくれない。</li>
-<li>static/admin : Decap CMS の管理画面用のファイル群。</li>
-</ul>
-<h2 id="2-本番環境と自動デプロイの設定">2. 本番環境と自動デプロイの設定</h2>
-<h3 id="1-github-リポジトリの作成">1. GitHub リポジトリの作成</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git init
-</span></span><span style="display:flex;"><span>git add .
-</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;Initial commit&#34;</span>
-</span></span><span style="display:flex;"><span>git remote add origin &lt;GITHUB_REPO_URL&gt;
-</span></span><span style="display:flex;"><span>git push -u origin main
-</span></span></code></pre></div><h3 id="2-netlify-アカウントの作成">2. Netlify アカウントの作成</h3>
-<h3 id="3-githubリポジトリの連携">3. Githubリポジトリの連携</h3>
-<p>Netlify の管理画面で「New site from Git」を選択し、GitHubリポジトリを連携。</p>
-<h3 id="4-ビルド設定">4. ビルド設定</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>Build Command: hugo
-</span></span><span style="display:flex;"><span>Publish Directory: public
-</span></span></code></pre></div><p>これで、Github の main ブランチが更新されると、Netlify側で自動デプロイが走るようになる。</p>
-<h3 id="5-ドメイン設定">5. ドメイン設定</h3>
-<p>Netlify の管理画面で <code>ezeroms.com</code> を割り当てる。</p>
-<h2 id="3-詳細なサイト構築テーマファイルの編集">3. 詳細なサイト構築（テーマファイルの編集）</h2>
-<p>layouts 以下のテーマファイルと static/css をひらすら編集し、理想的なデザインを作り上げていく。自分一人のプロジェクトということもあり、あらかじめ全てのページを Figma で作ることはせず、主だったページのレイアウト構成だけ Figma 上で検証して、スタイリングについては実装しながら検討していった。褒められた方法ではないが、こういうところがソロ・プロジェクトの爽快なところだ。</p>
-<h3 id="コツ--テーマファイルへのマーキング">コツ : テーマファイルへのマーキング</h3>
-<p>hugo server  で localhost を確認しながら作っていくのだが、描画されているページに適切なテーマファイルが当たっているのかどうか分からなくなる。（「このページにこのテーマファイルが当たってほしいのに当たらん〜〜〜〜」的なことが続く）</p>
-<p>そこで、すべてのテーマファイルに以下のようなマーキングした上で、config.toml の設定と、テーマファイルのディレクトリやファイル名を少しずつ弄りながら検証していった。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- debug-info --&gt;</span>
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;debug-info&#34;</span>&gt;File : /layouts/subject/list.html&lt;/<span style="color:#f92672">p</span>&gt;
-</span></span></code></pre></div><p>最終的にこんなかんじで出来上がる。</p>
-<p><img src="/images/diary/building-a-website-with-hugo-netlify-decap-cms/01.webp" alt=""></p>
-<p><img src="/images/diary/building-a-website-with-hugo-netlify-decap-cms/02.webp" alt=""></p>
-<p><img src="/images/diary/building-a-website-with-hugo-netlify-decap-cms/03.webp" alt=""></p>
-<p><img src="/images/diary/building-a-website-with-hugo-netlify-decap-cms/04.webp" alt=""></p>
-<h3 id="課題--urlスキーム">課題 : URLスキーム</h3>
-<p>本当はもっとURLスキームに拘りたかったのだが、どうやってもできず（Decap CMS管理の範囲外を作ることになり）断念した。いい方法を知っている人がいたら教えてほしい。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># 理想的なURLスキーム</span>
-</span></span><span style="display:flex;"><span>ezeroms.com/diary/
-</span></span><span style="display:flex;"><span>ezeroms.com/diary/subject/news/
-</span></span><span style="display:flex;"><span>ezeroms.com/diary/month/2024-06/
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 実際のURLスキーム</span>
-</span></span><span style="display:flex;"><span>ezeroms.com/diary/
-</span></span><span style="display:flex;"><span>ezeroms.com/subject/news/
-</span></span><span style="display:flex;"><span>ezeroms.com/month/2024-06/
-</span></span></code></pre></div><h2 id="4-cmsを導入してブラウザから更新できるようにする">4. CMSを導入してブラウザから更新できるようにする</h2>
-<p>package.json を作成し、Decap CMSをインストール。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>npm init -y
-</span></span><span style="display:flex;"><span>npm install netlify-cms-app
-</span></span></code></pre></div><p>static/admin ディレクトリの config.yml 、index.html を編集してセットアップし、ezeroms.com/admin にアクセスすれば管理画面が使えるようになる。めっちゃ簡単だ。</p>
-<p>管理画面の自由度がとても高く config.yml で設定すると一覧の表示項目も柔軟に変更することができる。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">backend</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">git-gateway</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">branch</span>: <span style="color:#ae81ff">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">media_folder</span>: <span style="color:#e6db74">&#34;/static/images/uploads&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">public_folder</span>: <span style="color:#e6db74">&#34;/images/uploads&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">collections</span>:
-</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;about&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;About&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/about&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{body}}&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;diary&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Diary&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/diary&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">media_folder</span>: <span style="color:#e6db74">&#34;/static/images/diary/{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">public_folder</span>: <span style="color:#e6db74">&#34;/images/diary/{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Title&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;title&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Date&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;date&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;datetime&#34;</span><span style="color:#f92672">, date_format</span>: <span style="color:#e6db74">&#34;YYYY-MM-DD&#34;</span><span style="color:#f92672">, time_format</span>: <span style="color:#66d9ef">false</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Slug&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;slug&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Month&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;month&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;list&#34;</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Subject&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;subject&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;select&#34;</span><span style="color:#f92672">, multiple: true, options</span>: [<span style="color:#e6db74">&#34;news&#34;</span>, <span style="color:#e6db74">&#34;music&#34;</span>, <span style="color:#e6db74">&#34;manga-and-anime&#34;</span>, <span style="color:#e6db74">&#34;movies-and-dramas&#34;</span>, <span style="color:#e6db74">&#34;comedy&#34;</span>, <span style="color:#e6db74">&#34;gaming&#34;</span>, <span style="color:#e6db74">&#34;sports&#34;</span>, <span style="color:#e6db74">&#34;books-and-magazines&#34;</span>, <span style="color:#e6db74">&#34;languages-and-foreign-cultures&#34;</span>, <span style="color:#e6db74">&#34;design-and-creative&#34;</span>, <span style="color:#e6db74">&#34;internet-and-technology&#34;</span>, <span style="color:#e6db74">&#34;natural-science&#34;</span>, <span style="color:#e6db74">&#34;humanities-and-social-sciences&#34;</span>] }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{date | date(&#39;YYYY-MM-DD&#39;)}} | {{body | truncate(280, &#39;...&#39;)}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sort</span>:
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">field</span>: <span style="color:#e6db74">&#34;date&#34;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;desc&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;work&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Work&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/work&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">media_folder</span>: <span style="color:#e6db74">&#34;/static/images/work/{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">public_folder</span>: <span style="color:#e6db74">&#34;/images/work/{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Title&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;title&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Date&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;date&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;datetime&#34;</span><span style="color:#f92672">, date_format</span>: <span style="color:#e6db74">&#34;YYYY-MM-DD&#34;</span><span style="color:#f92672">, time_format</span>: <span style="color:#66d9ef">false</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Slug&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;slug&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;string&#34;</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Image&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;image&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;image&#34;</span> }
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{date | date(&#39;YYYY-MM-DD&#39;)}} | {{title}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sort</span>:
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">field</span>: <span style="color:#e6db74">&#34;date&#34;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;desc&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;shoulders-of-giants&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;The shoulders of Giants&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">folder</span>: <span style="color:#e6db74">&#34;content/shoulders-of-giants&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slug</span>: <span style="color:#e6db74">&#34;{{fields.slug}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fields</span>:
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Topic&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;topic&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;list&#34;</span>}
-</span></span><span style="display:flex;"><span>      - { <span style="color:#f92672">label</span>: <span style="color:#e6db74">&#34;Body&#34;</span><span style="color:#f92672">, name</span>: <span style="color:#e6db74">&#34;body&#34;</span><span style="color:#f92672">, widget</span>: <span style="color:#e6db74">&#34;markdown&#34;</span> }
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">summary</span>: <span style="color:#e6db74">&#34;{{body | truncate(280, &#39;...&#39;)}}　　Topic {{topic}}&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sort</span>:
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">field</span>: <span style="color:#e6db74">&#34;body&#34;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#f92672">direction</span>: <span style="color:#e6db74">&#34;asc&#34;</span>
-</span></span></code></pre></div><h2 id="decap-cms-の落とし穴">Decap CMS の落とし穴</h2>
-<p>さて、これで理想的な個人ブログの運用体制が構築できた…と思っていたのだが、ここで Decap CMS の大きな落とし穴が発覚する。</p>
-<p>記事のテキストフィールドが、日本語入力に対応できていないのだ。漢字変換をしようとしたときにキャレットの位置がズレてしまい、正常に入力作業をすることができない。</p>
-<p><a href="https://github.com/decaporg/decap-cms/issues/1347">Updating Slate editor to support Korean</a></p>
-<p>どうやら Slate のバージョンが古いのが原因らしく、改善のためのプルリクは出ているのだがスルーされているっぽい。</p>
-<p>（写真）
-Issueが立っていたのでむなしくコメントを残しておいた。</p>
-<p>なので、このサイトの実際の運用は次のようになっている。</p>
-<ul>
-<li>UpNote でコンテンツ管理（UpNote はモバイル用のネイティブアプリが用意されている）</li>
-<li>UpNote から DecapCMS にコピペして記事を更新</li>
-</ul>
-<p>記事の編集作業部分をテキストエディタに外出ししている状態だ。以前に比べれば格段に更新しやすくはなったものの、できればブラウザで完結する運用を目指したい。</p>
-<p>もちろん、ヘッドレスCMSには Decap CMS 以外にも選択肢はあるのだが、Netlify との相性と「無料で使える」という条件で探すと少し絞られてしまう（APIでやりとりするものは使いたくない）。また、できればスマホから更新ができるように、モバイル用インターフェースが提供されているとなお嬉しい。もう少し調べてみようと思う。</p>
+                <p>大学時代のルームメイト・テツが開業したので、お盆付近の三連休を使ってWebサイトを作成した。</p>
+<p><a href="https://yellowtail-legal.com/">https://yellowtail-legal.com/</a></p>
+<p><img src="/images/diary/created-the-yellowtail-website/5.webp" alt=""></p>
+<p><img src="/images/diary/created-the-yellowtail-website/6.webp" alt=""></p>
+<h6 id="heading">﻿</h6>
+<p>Google Meetを繋ぎっぱなしにしながら、Figma上で荒っぽく構成を書いた後、そのままStudioを開いてサイト構築に取り掛かる。テキストコンテンツをテツにStudio上で入力してもらいながら、僕が同時進行でレイアウトとスタイリングを整えていく。途中で「料金表が必要かも」「問い合わせから着手までのフローチャートがあれば便利だね」といったアイデアが出るたびに、サイトマップのレベルでガシガシ変更を加えながら進めていく。まるで炭鉱を力任せに掘り進めているような作業風景だ。マトモな制作会社のPMが見たら卒倒してしまいそうだけれど、小規模のサイトを気心知れた仲間と作る場合には、こういう有機的なやり方も捨てたもんじゃない。特にStudioは、こういうダイナミックな作業においてこそ真価を発揮するツルハシだ。</p>
+<p>ただ今回は、並行して<a href="https://hello.chooning.app/">Chooningの公式サイト</a>のリニューアルを行なっていて、そちらは<a href="https://www.framer.com/">Framer</a>（海外のStudioに似たツール）を使っていたので、両者の行き来で狂いそうになった。似たようなインターフェースだが、StudioではCommand+Gでグループ化できるのにFramerではそれができないとか、Framerではmax-widthを指定することができるけどStudioではできないとか、細かな違いがいくつもあるのだ。どちらが明らかに優れているということはなくて、どちらも一長一短がある。当然のことだけど、それぞれの特徴を踏まえて、作りたいものの特性に応じてツールを選択するのがいい。（例えば、Chooningでは英語・日本語・中国語の多言語対応が必要だったため、その点でFramerが適していた、など。）</p>
+<p><img src="/images/diary/created-the-yellowtail-website/7.webp" alt=""></p>
+<h6 id="heading-1"></h6>
+<p>ものづくりを仕事にしていてよかったと思うのは、大切な友人が必要としているものを、自分の手で作って渡せることだ。</p>
+<p>今回のサイトの中にテツの略歴を掲載した箇所があって、その部分は僕が書いたのだけれど、僕はこの文章を一筆書きで、諳んじるようにして書くことができた。その時、改めて彼の存在の近さを感じて、ああ、こんな友達の門出に作品を作ることで関われてよかったなあ、と、しみじみ嬉しく感じたのだ。</p>
+<blockquote>
+<p>略歴 : 1990年、広島市に生まれる。修道中学校・高等学校を卒業後、横浜市立大学に進学。在学中、横浜市寿町にてホームレスの自立支援活動に取り組み、フィリピンで語学留学を経験。大学卒業後、大和証券株式会社に入社。その後、株式会社LITALICOに転職し、障害者の就労支援に携わる。さらに数社でキャリアを積み、シンガポールやカンボジアなど海外での就労も経験。2024年、行政書士資格を取得し、故郷の広島市にて行政書士事務所「YellowTail」を開業。</p>
+<p>中高時代は野球部で内野手を務め、現在も草野球で汗を流している。大学時代からE&amp;Jカシアス・ボクシングジムでボクシングを始め、プロライセンスを取得。今でも毎日のトレーニングを欠かさない。</p>
+</blockquote>
+<h6 id="heading-2"></h6>
+<p>テツと出会ったのは2009年、僕が横浜市大に入学して一ヶ月ほど経った頃で、僕たちはその二年後に一緒に暮らし始めた。二十代前半をラーメン屋の上の豚骨の匂いが染みついた部屋で三年間（テツが一年間語学留学していたので実質的には二年間）共に過ごした僕たちは、お互いの人間性における重要な部分を（つまりお互いがどれほど愚かな男であるかということを）かなり決定的に理解していると思う。もちろん、その後の十年で、生活習慣や人生観、社会観なんかはしっかりと変わっているはずだけれど、その変化も含めて、あの頃の実像と寸分違わないように感じられたりもする。不思議な感覚だけれど、これはきっと、数式でいうところの「傾き」を理解しているということなんだと思う。きっとこういうふうに変わっていくんだろうな、というような、変化の方向やスピードのあり方を理解できているので、変化した姿も含めて理解の範疇にあるということだ。</p>
+<p>与謝野鉄幹の「人を恋ふる歌」に「友を選ばば 書を読みて 六分の侠気 四分の熱」という僕の好きな一節がある。これは「義理人情と情熱をあわせ持ち、知的好奇心に溢れた者を友達に選びなさい」という意味だと解釈しているのだけど、テツと付き合っていると、まさにこの言葉が表す通りの人だな、と思うことがある。彼が行政書士として新たな一歩を踏み出すと聞いたとき、その人柄が、きっと本当に頼れる法律家として多くの人々を支える力になるだろうと感じた。だから、もし法律業務や行政手続きで困ったことがあれば、一人であれこれ悩む前に、ぜひテツに相談してみてほしい。きっと力になってくれるはずだ。</p>
 
 
                 <div class="social-action">
@@ -522,9 +367,9 @@ Issueが立っていたのでむなしくコメントを残しておいた。</p
                         </div>
                     </div>
                     <div class="social-action__right">
-                        <a href="https://twitter.com/intent/tweet?text=Hugo%20%2b%20Netlify%20%2b%20DecapCMS%20%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%9f%e3%82%b5%e3%82%a4%e3%83%88%e6%a7%8b%e7%af%89&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fbuilding-a-website-with-hugo-netlify-decap-cms%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
-                        <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/" target="_blank" class="social-action__hatena"></a>
-                        <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/building-a-website-with-hugo-netlify-decap-cms\/')"></a>
+                        <a href="https://twitter.com/intent/tweet?text=%e3%83%86%e3%83%84%e3%81%ae%e3%82%b5%e3%82%a4%e3%83%88%e3%82%92%e4%bd%9c%e3%81%a3%e3%81%9f&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fcreated-the-yellowtail-website%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
+                        <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/created-the-yellowtail-website/" target="_blank" class="social-action__hatena"></a>
+                        <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/created-the-yellowtail-website\/')"></a>
                     </div>
                 </div>
             </article>
@@ -533,7 +378,7 @@ Issueが立っていたのでむなしくコメントを残しておいた。</p
         <div class="pagination-buttons">
             
                 
-                <a href="http://localhost:1313/diary/the-imagination-of-the-brave-himmel/" class="pagination-button">
+                <a href="http://localhost:1313/diary/insect-food-vending-machine/" class="pagination-button">
                     <img src="/images/common/icon_left.svg" alt="">
                     Prev
                 </a>

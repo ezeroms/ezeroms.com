@@ -2,25 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/month/2024-06/</loc>
-    <lastmod>2024-06-09T13:44:46+00:00</lastmod>
+    <loc>http://localhost:1313/month/2024-08/</loc>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/subject/design-and-creative/</loc>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/diary/</loc>
-    <lastmod>2024-06-09T13:44:46+00:00</lastmod>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2024-06-09T13:44:46+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/</loc>
-    <lastmod>2024-06-09T13:44:46+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/subject/internet-and-technology/</loc>
-    <lastmod>2024-06-09T13:44:46+00:00</lastmod>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/month/</loc>
-    <lastmod>2024-06-09T13:44:46+00:00</lastmod>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/subject/</loc>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/diary/created-the-yellowtail-website/</loc>
+    <lastmod>2024-08-14T07:26:44+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/month/2024-06/</loc>
+    <lastmod>2024-06-22T19:25:39+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/subject/natural-science/</loc>
+    <lastmod>2024-06-22T19:25:39+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/diary/insect-food-vending-machine/</loc>
+    <lastmod>2024-06-22T19:25:39+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/subject/internet-and-technology/</loc>
+    <lastmod>2024-06-20T10:14:31+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/diary/friction-between-product-developer-and-users/</loc>
+    <lastmod>2024-06-20T10:14:31+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/diary/building-a-website-with-hugo-netlify-decap-cms/</loc>
     <lastmod>2024-06-09T13:44:46+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/subject/manga-and-anime/</loc>
@@ -33,9 +51,6 @@
     <lastmod>2024-06-06T12:15:48+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/month/2024-05/</loc>
-    <lastmod>2024-05-16T11:08:18+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/subject/design-and-creative/</loc>
     <lastmod>2024-05-16T11:08:18+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/diary/an-encouragement-of-sampo/</loc>
@@ -190,6 +205,10 @@
   </url><url>
     <loc>http://localhost:1313/shoulders-of-giants/-34/</loc>
   </url><url>
+    <loc>http://localhost:1313/shoulders-of-giants/-35/</loc>
+  </url><url>
+    <loc>http://localhost:1313/shoulders-of-giants/-36/</loc>
+  </url><url>
     <loc>http://localhost:1313/shoulders-of-giants/-4/</loc>
   </url><url>
     <loc>http://localhost:1313/shoulders-of-giants/-5/</loc>
@@ -209,6 +228,8 @@
     <loc>http://localhost:1313/shoulders-of-giants/</loc>
   </url><url>
     <loc>http://localhost:1313/topic/</loc>
+  </url><url>
+    <loc>http://localhost:1313/topic/%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3/</loc>
   </url><url>
     <loc>http://localhost:1313/topic/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3/</loc>
   </url><url>
@@ -237,6 +258,8 @@
     <loc>http://localhost:1313/topic/%E5%86%99%E7%9C%9F/</loc>
   </url><url>
     <loc>http://localhost:1313/topic/%E5%8A%B4%E5%83%8D/</loc>
+  </url><url>
+    <loc>http://localhost:1313/topic/%E5%8F%8B%E9%81%94/</loc>
   </url><url>
     <loc>http://localhost:1313/topic/%E5%8F%AF%E8%83%BD%E6%80%A7/</loc>
   </url><url>

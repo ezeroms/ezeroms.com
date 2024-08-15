@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>プロダクト開発とユーザーとの摩擦</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="プロダクト開発とユーザーとの摩擦">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/diary/friction-between-product-developer-and-users/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="プロダクト開発とユーザーとの摩擦">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+</head>
+<body>
+    
+<header class="header">
+  <nav class="header__nav">
+      <a href="/about">About</a>
+      <a href="/work">Work</a>
+      <a href="/diary">Diary</a>
+      </ul>
+  </nav>
+
+  <a href="/" class="header__logo">
+      <img src="/images/common/logo.svg" alt="ezeroms.com">
+  </a>
+
+  <div class="header__button">
+    <a href="/shoulders-of-giants">
+      The shoulders of Giants
+    </a>
+  </div>
+</header>
+<header class="sp-header">
+  <img src="/images/common/diary.svg" alt="" class="logo_diary" onclick="topFunction()" id="scrollTopButton" title="Go to top">
+  <button id="openModal">
+    <img src="/images/common/icon_list.svg">
+  </button>
+</header>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+      
+      $('#scrollTopButton').click(function(){
+          
+          $('html, body').animate({scrollTop : 0},800);
+          return false;
+      });
+  });
+  </script>
+
+<div id="overlay"></div>
+<div id="modal">
+  <div class="modal_close-list">
+    
+    <button class="shuffle" id="reloadPage">
+      <img src="/images/common/icon_latest.svg" alt="">
+      Latest
+    </button>
+    
+    <button id="closeModal">
+      <img src="/images/common/icon_close.svg" alt="">
+      Close
+    </button>
+  </div>
+
+    <div id="modalContent">
+        
+      <ul>
+        <li><a href="/subject/news/" class="a-link">ニュース</a></li>
+        <li><a href="/subject/music/" class="a-link">音楽</a></li>
+        <li><a href="/subject/manga-and-anime/" class="a-link">漫画・アニメ</a></li>
+        <li><a href="/subject/movies-and-dramas/" class="a-link">映画・ドラマ</a></li>
+        <li><a href="/subject/comedy/" class="a-link">お笑い</a></li>
+        <li><a href="/subject/gaming/" class="a-link">ゲーム</a></li>
+        <li><a href="/subject/sports/" class="a-link">スポーツ</a></li>
+        <li><a href="/subject/books-and-magazines/" class="a-link">本・雑誌</a></li>
+        <li><a href="/subject/languages-and-foreign-cultures/" class="a-link">言語・海外文化</a></li>
+        <li><a href="/subject/design-and-creative/" class="a-link">デザイン・クリエイティブ</a></li>
+        <li><a href="/subject/internet-and-technology/" class="a-link">インターネット・技術</a></li>
+        <li><a href="/subject/natural-science/" class="a-link">自然科学</a></li>
+        <li><a href="/subject/humanities-and-social-sciences/" class="a-link">人文・社会科学</a></li>
+    </ul>
+
+    <ul>
+        
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+        
+        
+        
+            
+            
+            <li><a href="/month/2024-08" class="a-link">2024-08</a></li>
+        
+            
+            
+            <li><a href="/month/2024-06" class="a-link">2024-06</a></li>
+        
+            
+            
+            <li><a href="/month/2024-05" class="a-link">2024-05</a></li>
+        
+            
+            
+            <li><a href="/month/2024-03" class="a-link">2024-03</a></li>
+        
+            
+            
+            <li><a href="/month/2024-02" class="a-link">2024-02</a></li>
+        
+            
+            
+            <li><a href="/month/2023-08" class="a-link">2023-08</a></li>
+        
+    </ul>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    
+    $('#openModal').click(function(){
+        $('#overlay').fadeIn();
+        $('#modal').slideDown();
+        
+        $('body').addClass('modal-open');
+    });
+
+    
+    $('#closeModal, #overlay').click(function(){
+        $('#overlay').fadeOut();
+        $('#modal').slideUp();
+        
+        $('body').removeClass('modal-open');
+    });
+
+    
+    $('#reloadPage').click(function() {
+        
+        $('#overlay').fadeOut();
+        $('#modal').slideUp(function() {
+            
+            window.location.href = "/diary/";
+        });
+    });
+
+});
+  </script>
+  
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="main-section">
+    <aside class="main-section-2column__left">
+    <ul>
+        <li><a href="/subject/news/">ニュース</a></li>
+        <li><a href="/subject/music/">音楽</a></li>
+        <li><a href="/subject/manga-and-anime/">漫画・アニメ</a></li>
+        <li><a href="/subject/movies-and-dramas/">映画・ドラマ</a></li>
+        <li><a href="/subject/comedy/">お笑い</a></li>
+        <li><a href="/subject/gaming/">ゲーム</a></li>
+        <li><a href="/subject/sports/">スポーツ</a></li>
+        <li><a href="/subject/books-and-magazines/">本・雑誌</a></li>
+        <li><a href="/subject/languages-and-foreign-cultures/">言語・海外文化</a></li>
+        <li><a href="/subject/design-and-creative/">デザイン・クリエイティブ</a></li>
+        <li><a href="/subject/internet-and-technology/">インターネット・技術</a></li>
+        <li><a href="/subject/natural-science/">自然科学</a></li>
+        <li><a href="/subject/humanities-and-social-sciences/">人文・社会科学</a></li>
+    </ul>
+
+    <ul>
+        
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+        
+        
+        
+            
+            
+            <li><a href="/month/2024-08">2024-08</a></li>
+        
+            
+            
+            <li><a href="/month/2024-06">2024-06</a></li>
+        
+            
+            
+            <li><a href="/month/2024-05">2024-05</a></li>
+        
+            
+            
+            <li><a href="/month/2024-03">2024-03</a></li>
+        
+            
+            
+            <li><a href="/month/2024-02">2024-02</a></li>
+        
+            
+            
+            <li><a href="/month/2023-08">2023-08</a></li>
+        
+
+    </ul>
+</aside>
+
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="articles-list">
+
+            
+
+
+            <article class="article-item">
+                
+                <p class="date">2024-06-20</p>
+                <h1>プロダクト開発とユーザーとの摩擦</h1>
+                
+
+                <p>　5月から6月にかけて、Chooningのアップデートを重ね、新たな機能を続々とリリースした。アーティストのアカウント認証機能、プロフィール共有機能、Spotify視聴履歴に基づいたおすすめ投稿機能などを実装し、さらに中国語（繁体字）版インターフェースもリリースして、この夏は台湾市場への進出も見据えている。</p>
+<p>　しかし、どんな施策も万人に受け入れられるわけではない。アプリのアップデートは歓迎されるばかりではなく、ときに「改悪だ」という厳しい意見も寄せられる。開発者は、データベースに記録される値や計測ツールの結果、インタビューを通じたユーザーの声など、様々な情報のもとに開発内容を決めている。それでも、すべてのユーザーを満足させることはできない。長くサービスを続けていれば、開発者とユーザーの間には大なり小なり摩擦が生じる。</p>
+<h6 id="heading">　﻿</h6>
+<p>　一般的によくあるのは、サービス側が収益性を高めようとする施策だろう。例えば、目立つ場所に広告を配置したり、広告の表示頻度を上げたりすればユーザーは不快に思う。動画や漫画の続きを見ようとして、下手くそなゲームのプレイ動画を数十秒見せられてイライラした経験をしたことのある人は多いだろう。Chooningにはそういった仕組みはないが、僕は会社員としてプロダクトを作っていたとき、この手の実装をする際には心苦しく思っていたし、実際にリリース後のSNSでユーザーの毒づく声を目にしてよく落ち込んでいた。</p>
+<p>　Chooningでは収益性を求める施策は行っていないものの、だからといってユーザーの不満を買わずにやれているわけではない。むしろ、より切実な衝突を感じることがある。例えば、ユーザーのプロフィールをシェアできるようにした件については「お互いにフォローせず、時々お邪魔するのが楽しみだったのに」といった声が上がった（恐らく相互フォローを促進する意図があると受け止められたのだろう）。また、おすすめフィードを実装した件については「ファーストビューがメジャーなアーティストで埋め尽くされてしまい、自分の好きなマイナーアーティストを紹介しても届きづらくなった」という声が上がった。</p>
+<p>　僕は常々、自分のプロダクトは技術や機能だけでなく、価値観の次元で勝負したいと思っている。Chooningでユーザーが体験できることは、「人と音楽との関わり方はこうあってほしい」という僕の価値観に基づいている。具体的には、Spotifyなどのサブスク（ストリーミング）サービスで音楽を手軽に聴きながらも、その音楽について向き合って考えたり、些細な思い出を語ったり、同好者と共感し合う時間を持って欲しい、というものだ。そのためにユーザーがスムーズに音楽を共有したり、見つけたり、交流したりできる機能を充実させている。僕のようなタイプの開発者には、そうやって価値観を形にしたものに触れてもらい、それを心地よいと感じてもらいたいと思う欲望がある。機能の追加や変更は、自分の価値観をより明確に伝えるためのメッセージでもある。</p>
+<p>　だからこそ、仕様を変更したときに、それまで支持してくれていたユーザーが「これは求めているものじゃない」と言って離れていくのを見ると、価値観に共感してもらえなかった…という極めて個人的な喪失感を感じてしまう。それは、収益性の都合でユーザーに不満を持たれるよりもはるかに悲しい。収益性の向上はサービスの存続に不可欠であり、僕も運営者としての責務の一部として割り切ることができる。しかし、価値観の相違による意見の衝突は自分の気持ちの解決が難しい。「ごめんな、でも僕はこう思うんだ。分かってくれることがあれば嬉しい」と目を閉じるしかない。</p>
+<h6 id="heading-1">　﻿</h6>
+<p>　離れていってしまったユーザーのことは、いつも少し心に棘が刺さったような気持ちで残っている。自分のプロダクトを作るということは、自分の価値観を形にして社会に届けるということだ。そこでは多くの「Not for me」の声も受けることになる。ストアからダウンロードした僕のアプリを、翌月も使い続けてくれる人がどれくらいいるだろう？　その数字を見る度に、僕は他者との価値観の違いを認識する。あえて強がってみせるなら、それこそが、本気で物を作ることの面白さだと言えるかもしれない。</p>
+<p>　プロダクトには成長していく段階があり、それに伴って作り手と使い手の関係も変わっていく。ある時期を共に過ごしたユーザーの一部が次の時期に離れていくことは避けられない。頭では理解しているのだが、それでも、一度プロダクトを気に入ってくれたユーザーには、ずっと使い続けてもらいたいと願ってしまう。</p>
+<h6 id="heading-2">　﻿</h6>
+<p>　ユーザーの声は大きい。少なくとも僕は、どんなに厳しい意見や的外れな批判でも、自分が生み出したものに対して感情を込めて意見をくれる人には感謝している。高校時代にゲームを作ったり、大学時代に友達とサービスを作っていた頃は、世の中の反応は全くなかった。それに比べれば、不満の声であったとしても「反応がある」というのは嬉しいことだ。作り手のモチベーションは、案外そんなものに支えられている。</p>
+
+
+                <div class="social-action">
+                    <div class="social-action__left">
+                        <div class="social-action__line">
+                            <div class="social-action__line-icon"></div>
+                            <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                このブログの更新通知をLINEで受け取る
+                            </a>
+                        </div>
+                    </div>
+                    <div class="social-action__right">
+                        <a href="https://twitter.com/intent/tweet?text=%e3%83%97%e3%83%ad%e3%83%80%e3%82%af%e3%83%88%e9%96%8b%e7%99%ba%e3%81%a8%e3%83%a6%e3%83%bc%e3%82%b6%e3%83%bc%e3%81%a8%e3%81%ae%e6%91%a9%e6%93%a6&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2ffriction-between-product-developer-and-users%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
+                        <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/friction-between-product-developer-and-users/" target="_blank" class="social-action__hatena"></a>
+                        <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/friction-between-product-developer-and-users\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
+                    </div>
+                </div>
+            </article>
+        
+
+            <div class="pagination-buttons">
+  
+      <a href="/diary/building-a-website-with-hugo-netlify-decap-cms/" class="pagination-button">
+          <img src="/images/common/icon_left.svg" alt="">
+          Prev
+      </a>
+  
+  
+      <a href="/diary/insect-food-vending-machine/" class="pagination-button">
+          Next
+          <img src="/images/common/icon_right.svg" alt="">
+      </a>
+  
+</div>    
+
+        </ul>
+    </section>
+
+    <div class="image-loader"></div>
+</main>
+
+<nav class="global-nav">
+  <a href="/" class="global-nav__home"></a>
+  <a href="/about" class="global-nav__about"></a>
+  <a href="/work" class="global-nav__work"></a>
+  <a href="/diary" class="global-nav__diary on"></a>
+  <a href="/shoulders-of-giants" class="global-nav__think"></a>
+</nav>
+
+
+<p class="debug-info">Template : /layouts/diary/single.html</p>
+
+
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+</body>
+</html>
