@@ -1,5 +1,5 @@
 ---
-title: テツのサイトを作った
+title: テツのWebサイトを作った
 date: 2024-08-14T07:26:44.929Z
 slug: created-the-yellowtail-website
 month:
