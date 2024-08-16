@@ -332,7 +332,6 @@ $(document).ready(function(){
                 <p class="date">2024-03-12</p>
                 <h1>人混みは脳にクる</h1>
                 
-
                 <p>年始早々に台湾に渡り、約二ヶ月ぶりに日本に帰ってきた。</p>
 <p>空港からバスに乗り込んで横浜駅に到着し、冷たい冬の風を頬で感じつつ、懐かしい気持ちで駅の周りを歩いていると、なんだか胸の奥から不快感がこみ上げてきた。東口の歩道橋の端にスーツケースを置いて座り込む。それが人混みに酔ったのだと気づくまでには少し時間がかかった。僕はこれまで人混みに酔うような体質ではなく、「人混みが苦手だ」という人々の気持ちはまったく理解できなかったからだ。</p>
 <p>地面に座り込み、深呼吸をしながら目を閉じると、周囲の喧騒が一層鮮明に耳に届いてきた。通行人の会話の断片が風に乗って流れ込んでくる。そしてふと、その感覚が久しぶりであることに気づいた。また同時に、体調不良の原因もこれかもしれない、という考えがよぎった。</p>
@@ -341,6 +340,19 @@ $(document).ready(function(){
 <p>「いいかい、こいつらの話に大した意味なんてないんだ。理解しようとしなくていいんだよ」</p>
 <p>僕は自分の脳にやさしく語りかけ、ふらふらと立ち上がって家路についたのだった。</p>
 
+            
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                            const altText = img.getAttribute('alt');
+                            if (altText) {
+                                img.parentElement.setAttribute('data-alt', altText);
+                            } else {
+                                console.log('alt属性が空のimgタグを検出しました');
+                            }
+                        });
+                    });
+                </script>
 
                 <div class="social-action">
                     <div class="social-action__left">
