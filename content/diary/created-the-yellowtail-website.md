@@ -11,8 +11,8 @@ subject:
 
 ######  ﻿
 
-障害福祉事業と外国人の在留資格に強い - 広島市の行政書士事務所・イエローテイル 
-
+障害福祉事業と外国人の在留資格に強い\
+広島市の行政書士事務所・イエローテイル\
 <https://yellowtail-legal.com/>
 
 ![](/images/diary/created-the-yellowtail-website/5.webp)
