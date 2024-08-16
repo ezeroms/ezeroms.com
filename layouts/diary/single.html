@@ -49,7 +49,7 @@
                 <h1>{{ .Title }}</h1>
                 
                 {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -58,10 +58,12 @@
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); // altが空の場合は特定のクラスを追加
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">

@@ -168,6 +168,12 @@ blockquote {
   line-height: 180%;
 }
 
+.image-wrapper.no-alt::after {
+  content: none; /* altが空の場合はafter要素を無効に */
+  display: none;
+}
+
+
 .article-link {
 
 }
