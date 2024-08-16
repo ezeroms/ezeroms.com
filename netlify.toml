@@ -2,3 +2,17 @@
   from = "/calendar"
   to = "https://calendar.app.google/dRiTMZYMWCyUv5xv9"
   status = 301
+
+[build]
+  command = "hugo --gc --minify"
+  publish = "public"
+
+[context.production.environment]
+  HUGO_VERSION = "0.132.1"
+  HUGO_ENV = "production"
+
+[context.deploy-preview.environment]
+  HUGO_VERSION = "0.132.1"
+
+[context.branch-deploy.environment]
+  HUGO_VERSION = "0.132.1"
