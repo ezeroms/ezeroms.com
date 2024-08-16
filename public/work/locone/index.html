@@ -127,6 +127,19 @@
 <hr>
 <p>Client : 株式会社ファンコミュニケーションズ</p>
 
+            
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                                const altText = img.getAttribute('alt');
+                                if (altText) {
+                                    img.parentElement.setAttribute('data-alt', altText);
+                                } else {
+                                    console.log('alt属性が空のimgタグを検出しました');
+                                }
+                            });
+                        });
+                    </script>
                 </article>
 
                 <div class="pagination-buttons">    
