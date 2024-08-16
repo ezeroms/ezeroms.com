@@ -125,6 +125,19 @@
                     <p>麻雀における「裏目り（うらめり）」を集めて選評する「裏目り百景」というプロジェクトを始めました🀄️</p>
 <p>全国から裏目った打牌の写真を集め、そこに僕が講評を加えたものをInstagramで発信していく、という企画です。</p>
 
+            
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                                const altText = img.getAttribute('alt');
+                                if (altText) {
+                                    img.parentElement.setAttribute('data-alt', altText);
+                                } else {
+                                    console.log('alt属性が空のimgタグを検出しました');
+                                }
+                            });
+                        });
+                    </script>
                 </article>
 
                 <div class="pagination-buttons">    

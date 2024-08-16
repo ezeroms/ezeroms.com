@@ -375,6 +375,7 @@ $(document).ready(function(){
                     <a href="http://localhost:1313/diary/evil-does-not-exist/">
                         <h1>「そのとき鹿はどこにいくんだ」「それは…どこか別の場所に」</h1>
                     </a>
+
                     <p>　伊勢佐木町にあるミニシアター・シネマリンで、映画『悪は存在しない』を観てきた。『偶然と想像』や『ドライブ・マイ・カー』で国際的な評価を得た濱口竜介監督の最新作である。</p>
 <h6 id="heading">　</h6>
 <p>　この映画で、僕は自分の鑑賞態度に関するちょっとした発見をした。</p>
@@ -387,6 +388,19 @@ $(document).ready(function(){
 <p>　このちょっとした裏切りが積み重なることで、鑑賞者の認知はだんだんと不安定な状態に追い込まれていく。彼の作品に齎される独特の緊張感は、そうやって鑑賞者が絶えず注意を払い続けることによって生まれるものだと思う。</p>
 <p>　「ここでシーンが切り替わるだろう」という僕の期待は、これまで様々な作品に接することで形成された単なるパターン認識に過ぎないのだが、濱口作品には、そうした普段意識しないような理解や認知のクセを自覚させられる面白さがある。</p>
 
+            
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                                const altText = img.getAttribute('alt');
+                                if (altText) {
+                                    img.parentElement.setAttribute('data-alt', altText);
+                                } else {
+                                    console.log('alt属性が空のimgタグを検出しました');
+                                }
+                            });
+                        });
+                    </script>
 
                     <div class="social-action">
                         <div class="social-action__left">
@@ -412,6 +426,7 @@ $(document).ready(function(){
                     <a href="http://localhost:1313/diary/an-encouragement-of-sampo/">
                         <h1>散歩のススメ</h1>
                     </a>
+
                     <p>　友達と散歩をしながら話すのが好きだ。「久しぶりに会って話そう」と自分から連絡をするとき、それはほとんど必ず散歩の誘いになる。友達からの連絡では、僕がお酒を飲まないので飲みの席ということはないのだけれど、レストランやカフェが指定されることは少なくない。そんな場合でも、僕はできる限り、「まず散歩をしよう」と提案するようにしている。</p>
 <h6 id="heading">　﻿</h6>
 <p>　僕が散歩を好きな理由はいくつかあるが、まず一つは、しばらく会っていなかった者同士が必要とする調整の時間を取ることができるからだ。久しぶりに会う相手とは、しばしば会話のリズムが合わずにぎこちなくなることがある。しかし、駅で待ち合わせ、適当にテイクアウトした飲み物を片手に繁華街の喧騒を並んで歩いていると、次第にその「ズレ」が解消され、適切な感覚が戻って来ることを感じる。</p>
@@ -425,6 +440,19 @@ $(document).ready(function(){
 <h6 id="heading-2">　﻿</h6>
 <p>　ときどき、一人で散歩をしていると、ふいにその道で交わした会話を思い出すことがある。会わなかった間の出来事や心境の変化など、景色と共に話した事柄が頭に浮かび、そして「ハッ」と当時は気がつかなかったことに気づく。その瞬間、僕はまるで友達に呼びかけられたような気持ちになり、またスマホを取り出して連絡先を手繰り始めているのだ。</p>
 
+            
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                                const altText = img.getAttribute('alt');
+                                if (altText) {
+                                    img.parentElement.setAttribute('data-alt', altText);
+                                } else {
+                                    console.log('alt属性が空のimgタグを検出しました');
+                                }
+                            });
+                        });
+                    </script>
 
                     <div class="social-action">
                         <div class="social-action__left">
