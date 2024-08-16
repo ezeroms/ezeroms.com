@@ -127,6 +127,19 @@
 <p>Client : 吉川ゆうみ事務所</p>
 <p>Agency : 株式会社POTETO Media</p>
 
+            
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                                const altText = img.getAttribute('alt');
+                                if (altText) {
+                                    img.parentElement.setAttribute('data-alt', altText);
+                                } else {
+                                    console.log('alt属性が空のimgタグを検出しました');
+                                }
+                            });
+                        });
+                    </script>
                 </article>
 
                 <div class="pagination-buttons">    

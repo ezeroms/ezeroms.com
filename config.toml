@@ -33,3 +33,10 @@ disableAliases = true
   section = ["HTML", "RSS", "JSON"]
   taxonomy = ["HTML", "RSS", "JSON"]
   taxonomyTerm = ["HTML", "RSS", "JSON"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.parser]
+      autoheadingid = true
+      autoheadingidtype = 'github'
+      wrapstandaloneimagewithinparagraph = false
