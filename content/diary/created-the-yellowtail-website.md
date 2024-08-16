@@ -21,9 +21,7 @@ Google Meetを繋ぎっぱなしにしながら、Figmaで荒っぽく構成を�
 
 しかし今回は、並行して[Chooningの公式サイト](https://hello.chooning.app/)のリニューアルを行なっていて、そちらは[Framer](https://www.framer.com/)（海外のStudioに似たツール）を使っていた。StudioもFramerも同じノーコードのサイト構築ツールなので、似たようなインターフェースなのだが、StudioではCommand+Gでグループ化できるのにFramerではそれができない（Option+Command+Returnになる）とか、Framerではmax-widthを指定することができるけどStudioではできないとか、レスポンシブ対応の上書きルールが異なるとか、細かな違いがいくつもある。なんならFigmaも同じような見た目をしているので、それぞれの画面を行き来していて狂いそうになった。
 
-![Framerの編集画面](/images/diary/created-the-yellowtail-website/7.webp "Framerの編集画面")
-
-（Framerの編集画面。ツールに応じてショートカットキーを使い分けていると、まるで亀田興毅がピンポン玉で反射神経を鍛える訓練をしているみたいだな、と思う。）
+![Framerの編集画面 : ツールに応じてショートカットキーを使い分けていると、まるで亀田興毅がピンポン玉で反射神経を鍛える訓練をしているみたいだな、と思う。](/images/diary/created-the-yellowtail-website/7.webp)
 
 ###### ﻿
 
