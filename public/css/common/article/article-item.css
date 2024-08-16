@@ -158,7 +158,7 @@ blockquote {
 .image-wrapper::after {
   content: attr(data-alt); /* data-alt属性の内容を表示 */
   display: block;
-  margin-top: 8px;
+  margin-top: 16px;
   font-size: 14px;
   padding: 0;
   color: #5D5D5F;
