@@ -21,7 +21,20 @@
                     <h1>{{ $firstPage.Title }}</h1>
                 </a>
 
-                {{ $firstPage.Content }}
+                {{ $firstPage.Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+            
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                            const altText = img.getAttribute('alt');
+                            if (altText) {
+                                img.parentElement.setAttribute('data-alt', altText);
+                            } else {
+                                console.log('alt属性が空のimgタグを検出しました');
+                            }
+                        });
+                    });
+                </script>
 
                 <div class="social-action">
                     <div class="social-action__left">

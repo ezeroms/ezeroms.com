@@ -144,6 +144,28 @@ blockquote {
 
 .article-item img {
   width: 100%;
+  display: block;
+  margin: 0 auto; /* 画像を中央に寄せる場合 */
+  position: relative; /* 擬似要素を正しく表示するために必要 */
+}
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+  text-align: center; /* テキストを中央寄せにします */
+}
+
+.image-wrapper::after {
+  content: attr(data-alt); /* data-alt属性の内容を表示 */
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  padding: 0;
+  color: #5D5D5F;
+  width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 180%;
 }
 
 .article-link {
@@ -289,6 +311,10 @@ blockquote {
 スマホ用のスタイル
 -------------------- */
 @media (max-width: 960px) {
+  .image-wrapper::after {
+    font-size: 12px;
+  }
+
   .article-item {
     width: calc(100dvw - 48px - 32px);
     padding: 24px;
