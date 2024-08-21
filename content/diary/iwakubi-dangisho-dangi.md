@@ -49,4 +49,4 @@ subject:
 
 　僕はこのPodcastに、友人たちの力を借りながら、岩首談義所のミームをありったけ詰め込むつもりでいる。そして岩首談義所を文化的に継承することを共通の目的として、新たな情報コミュニケーションの形を築き上げていきたい。
 
-<https://open.spotify.com/show/09rBYoieFXHcELiibVmsk6?si=1d182706bac44b15>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/09rBYoieFXHcELiibVmsk6?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
