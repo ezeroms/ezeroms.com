@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -252,6 +255,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -341,7 +347,7 @@ $(document).ready(function(){
 <p>　深夜、コンビニへ向かう小さな裏路地でギロリを光る二つの目と遭遇した。あれは野良犬というより野犬と呼んだほうが相応しい気がする。ほとんど本能的に足が竦んでしまった。</p>
 <p>　ときどき、キノコ採りの最中などに熊と遭遇した人が、決死の抵抗や機転によって命からがら生き延びたというニュースを見ることがある。犬程度でこの体たらくの僕なんかは、熊と対峙した日には腰を抜かしてしまって何もできないだろう。くれぐれも山林方面のアクティビティとは距離を置いた人生を送るよう心がけたい。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -350,10 +356,12 @@ $(document).ready(function(){
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">

@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -252,6 +255,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -345,7 +351,7 @@ $(document).ready(function(){
 <h6 id="heading-2">　﻿</h6>
 <p>　ユーザーの声は大きい。少なくとも僕は、どんなに厳しい意見や的外れな批判でも、自分が生み出したものに対して感情を込めて意見をくれる人には感謝している。高校時代にゲームを作ったり、大学時代に友達とサービスを作っていた頃は、世の中の反応は全くなかった。それに比べれば、不満の声であったとしても「反応がある」というのは嬉しいことだ。作り手のモチベーションは、案外そんなものに支えられている。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -354,10 +360,12 @@ $(document).ready(function(){
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">

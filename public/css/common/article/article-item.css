@@ -23,6 +23,7 @@ blockquote {
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
+  word-break: break-all;
 }
 
 .hover-effect:hover {
@@ -158,7 +159,7 @@ blockquote {
 .image-wrapper::after {
   content: attr(data-alt); /* data-alt属性の内容を表示 */
   display: block;
-  margin-top: 16px;
+  margin: 12px 0 2px 0;
   font-size: 14px;
   padding: 0;
   color: #5D5D5F;
@@ -319,6 +320,7 @@ blockquote {
 @media (max-width: 960px) {
   .image-wrapper::after {
     font-size: 12px;
+    margin: 8px 0 2px 0;
   }
 
   .article-item {

@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -252,6 +255,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -344,7 +350,7 @@ $(document).ready(function(){
 <p>　このちょっとした裏切りが積み重なることで、鑑賞者の認知はだんだんと不安定な状態に追い込まれていく。彼の作品に齎される独特の緊張感は、そうやって鑑賞者が絶えず注意を払い続けることによって生まれるものだと思う。</p>
 <p>　「ここでシーンが切り替わるだろう」という僕の期待は、これまで様々な作品に接することで形成された単なるパターン認識に過ぎないのだが、濱口作品には、そうした普段意識しないような理解や認知のクセを自覚させられる面白さがある。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -353,10 +359,12 @@ $(document).ready(function(){
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">

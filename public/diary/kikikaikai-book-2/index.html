@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -252,6 +255,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -361,7 +367,7 @@ $(document).ready(function(){
 <p>書籍化された文面を目で追ってみると、彼らの丁寧な言い回しや修飾語句が削られずに残っていることに気がつく。喋った内容を文字に起こして紙面に押し込むためには、それなりの文字数を削らなければならない。その選別を経てもなおこれらの言葉が残されているところに「奇奇怪怪」の品性が表れていると思う。</p>
 <p>「奇奇怪怪」は単なるエンターテインメント以上のものであり、僕たちが外の世界とどのようにコミュニケーションを取るべきかのヒントを与えてくれる場でもある。どうか悪態に惑わされず、二人の心のあり方を感じながら読んで／聴いてもらいたいと思う。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -370,10 +376,12 @@ $(document).ready(function(){
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">

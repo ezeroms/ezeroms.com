@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -252,6 +255,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -345,7 +351,7 @@ $(document).ready(function(){
 <h6 id="heading-2">　﻿</h6>
 <p>　ときどき、一人で散歩をしていると、ふいにその道で交わした会話を思い出すことがある。会わなかった間の出来事や心境の変化など、景色と共に話した事柄が頭に浮かび、そして「ハッ」と当時は気がつかなかったことに気づく。その瞬間、僕はまるで友達に呼びかけられたような気持ちになり、またスマホを取り出して連絡先を手繰り始めているのだ。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -354,10 +360,12 @@ $(document).ready(function(){
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">
