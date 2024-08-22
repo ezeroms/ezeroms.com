@@ -57,6 +57,6 @@ subject:
 
 　これらは個人がその人生の一部を共同体に捧げる態度が前提となっており、それゆえに個の自己実現を重視する現代社会では、次第に受け入れられにくくなっているように感じる。そこで、もっと僕たちにふさわしい、これまでと違った継承のあり方を模索したい。情報の伝達手段が飛躍的に進化し、日常的に接する情報量が増え、人間と情報の関係が大きく変化している時代だからこそ、きっと新しい形でミームを伝えられる可能性もあるはず。その一つが、このPodcastだ。
 
-　僕はこのPodcastに、友人たちの力を借りながら、岩首談義所のミームをありったけ詰め込むつもりでいる。そして岩首談義所という文化を継承することを共通の目的として、新たな継承のあり方を形にしていきたい。
+　僕はこのPodcastに、友人たちの力を借りながら、岩首談義所のミームをありったけ詰め込むつもりでいる。そして岩首談義所という文化を継承することを共通の目的として談義を交わし、新たな継承のあり方を形にしていきたい。
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/09rBYoieFXHcELiibVmsk6?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
