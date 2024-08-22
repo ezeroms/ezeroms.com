@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -252,6 +255,9 @@ $(document).ready(function(){
         
             
             
+        
+            
+            
                 
             
         
@@ -340,7 +346,7 @@ $(document).ready(function(){
 <p>「いいかい、こいつらの話に大した意味なんてないんだ。理解しようとしなくていいんだよ」</p>
 <p>僕は自分の脳にやさしく語りかけ、ふらふらと立ち上がって家路についたのだった。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -349,10 +355,12 @@ $(document).ready(function(){
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">

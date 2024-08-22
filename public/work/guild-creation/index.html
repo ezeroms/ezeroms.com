@@ -135,6 +135,7 @@
                                     img.parentElement.setAttribute('data-alt', altText);
                                 } else {
                                     console.log('alt属性が空のimgタグを検出しました');
+                                    img.parentElement.classList.add('no-alt'); 
                                 }
                             });
                         });

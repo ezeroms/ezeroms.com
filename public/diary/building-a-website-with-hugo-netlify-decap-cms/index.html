@@ -120,6 +120,9 @@
         
             
             
+        
+            
+            
                 
             
         
@@ -248,6 +251,9 @@ $(document).ready(function(){
             
             
                 
+            
+        
+            
             
         
             
@@ -532,7 +538,7 @@ Issueが立っていたのでむなしくコメントを残しておいた。</p
 <p>記事の編集作業部分をテキストエディタに外出ししている状態だ。以前に比べれば格段に更新しやすくはなったものの、できればブラウザで完結する運用を目指したい。</p>
 <p>もちろん、ヘッドレスCMSには Decap CMS 以外にも選択肢はあるのだが、Netlify との相性と「無料で使える」という条件で探すと少し絞られてしまう（APIでやりとりするものは使いたくない）。また、できればスマホから更新ができるように、モバイル用インターフェースが提供されているとなお嬉しい。もう少し調べてみようと思う。</p>
 
-            
+
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.image-wrapper img').forEach(function(img) {
@@ -541,10 +547,12 @@ Issueが立っていたのでむなしくコメントを残しておいた。</p
                                 img.parentElement.setAttribute('data-alt', altText);
                             } else {
                                 console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
                             }
                         });
                     });
                 </script>
+                
 
                 <div class="social-action">
                     <div class="social-action__left">
