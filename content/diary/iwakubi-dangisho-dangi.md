@@ -66,4 +66,4 @@ subject:
 
 {{< spotify type="podcast" id="09rBYoieFXHcELiibVmsk6" width="100%" height="152" >}}
 
-{{< spotify type="track id="4Nk10X45JIH1xrIWOCbA3I" width="100%" height="152" >}}
+{{< spotify type="track" id="4Nk10X45JIH1xrIWOCbA3I" width="100%" height="152" >}}
