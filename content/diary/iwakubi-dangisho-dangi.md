@@ -62,4 +62,6 @@ subject:
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/09rBYoieFXHcELiibVmsk6?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>\
 \
 
+{{< spotify type="podcast" id="09rBYoieFXHcELiibVmsk6" width="100%" height="152" >}}
+
 {{< spotify type="track id="4Nk10X45JIH1xrIWOCbA3I" width="100%" height="152" >}}
