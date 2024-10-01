@@ -3,6 +3,16 @@
   to = "https://calendar.app.google/dRiTMZYMWCyUv5xv9"
   status = 301
 
+[[redirects]]
+  from = "/book-meeting"
+  to = "https://calendar.app.google/dRiTMZYMWCyUv5xv9"
+  status = 301
+
+[[redirects]]
+  from = "/view-calendar"
+  to = "https://calendar.google.com/calendar/embed?src=ezeroms%40gmail.com&ctz=Asia%2FTokyo"
+  status = 301
+
 [build]
   command = "hugo --gc --minify"
   publish = "public"
