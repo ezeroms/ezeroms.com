@@ -5,7 +5,7 @@ slug: tinder-swipe-stories
 month:
   - 2025-02
 subject:
-  - humanities-and-social-sciences
+  - internet-and-technology
 ---
 Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderでの出会いをテーマにした体験談を集める試みだ。
 
