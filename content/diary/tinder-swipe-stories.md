@@ -17,7 +17,7 @@ Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderで
 >
 > We can’t wait for you to share your Tinder Swipe Story! Whether they are your love match made in heaven, your unexpected best friend for life, somewhere in between or none of the above, we want to hear all about it :)
 
-印象的なのは、「somewhere in between or none of the above」 というフレーズ。「運命の恋」や「生涯の親友」といった分かりやすい物語に収まらない関係が存在することをしっかりと認識し、受け止めている。曖昧なもの、一度きりのもの、後になってようやく意味を持つもの──それらも含めて「いいよね」と包み込む軽やかな姿勢には、実にTinderらしい強さがある。
+印象的なのは、「somewhere in between or none of the above」 というフレーズだ。「運命の恋」や「生涯の親友」といった分かりやすい物語に収まらない関係が存在することをしっかりと認識し、受け止めている。曖昧なもの、一度きりのもの、後になってようやく意味を持つもの──それらも含めて「いいよね」と包み込む軽やかな姿勢には、まさにTinderらしい強さがある。
 
 というのも、実は、様々なマッチングアプリが自分たちのサービスを「真面目な出会い」を提供するとプロモーションしている中で、Tinderはその「チャラい出会いに使われている」という世間のイメージを否定しようとしていない。
 
