@@ -17,8 +17,6 @@ Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderで
 >
 > We can’t wait for you to share your Tinder Swipe Story! Whether they are your love match made in heaven, your unexpected best friend for life, somewhere in between or none of the above, we want to hear all about it :)
 
-
-
 印象的なのは、「somewhere in between or none of the above」 というフレーズだ。「運命の恋」や「生涯の親友」といった分かりやすい物語に収まらない関係が存在することをしっかりと認識し、受け止めている。曖昧なもの、一度きりのもの、後になってようやく意味を持つもの──それらも含めて「いいよね」と包み込む軽やかな姿勢には、実にTinderらしい強さがある。
 
 というのも、実は、様々なマッチングアプリが自分たちのサービスを「真面目な出会い」を提供すると押し出している中で、Tinderはその「チャラい出会いに使われている」という世間のイメージを否定しようとしていない。
@@ -29,17 +27,9 @@ Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderで
 
 ![](/images/diary/tinder-swipe-stories/11.jpg)
 
-
-
 しかし、Tinderが90〜00年代の”出会い系”のように、匿名性が高く、目的がほぼ肉体関係に限定された即席マッチングサービスなのかというと、そういう訳でもない。
 
 僕がTinderから感じるのは、真剣に婚活するのも、親友を探すのも、一夜の関係を求めるのも、すべて「人が人を求める」という営みのひとつに過ぎない、という姿勢だ。Tinderが目指しているのは、それらの情欲に優劣をつけず、等しく応えようとすること。「つながりたい」というあらゆる欲求をフラットに扱うことなのだと思う。
-
-
-
-
-
-
 
 2022年の秋、Tinderが行ったマーケティング施策に「Swipe Mart」というものがあった。
 
@@ -47,11 +37,7 @@ Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderで
 
 ![](/images/diary/tinder-swipe-stories/pl-img-4.jpeg)
 
-
-
 店内には、スナック菓子や清涼飲料水を模したTinder印のオリジナル商品が並び、Tinderブランドのアパレルグッズなどが販売されていた。事前の告知を見て、スウェットや靴下を狙って行ったのだけれど、僕が着いたときには既に完売だった（開店数分で即完だったらしい）。
-
-
 
 ![](/images/diary/tinder-swipe-stories/pl-img-9.jpeg)
 
@@ -59,13 +45,7 @@ Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderで
 
 ![](/images/diary/tinder-swipe-stories/pl-img-13.jpeg)
 
-
-
-![](/images/diary/tinder-swipe-stories/07.jpg)
-
-
-
-目ぼしい商品は売り切れてしまっていたので、「スワイプブース」なるフォトブースで友達と写真を撮って帰ってきた。
+![目ぼしい商品は売り切れてしまっていたので、「スワイプブース」なるフォトブースで友達と写真を撮って帰ってきた。](/images/diary/tinder-swipe-stories/07.jpg)
 
 
 
