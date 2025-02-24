@@ -35,7 +35,7 @@ Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderで
 
 ######  ﻿
 
-2022年の秋、Tinderが行ったマーケティング施策に「Swipe Mart」というものがあった。渋谷・宇田川町に現れた、“Tinderが運営するコンビニ” というコンセプトのポップアップストアである。
+2022年の秋、Tinderが行ったマーケティング施策に「Swipe Mart」というものがあった。渋谷・宇田川町に現れた、「Tinderが運営するコンビニ」というコンセプトのポップアップストアである。
 
 ![](/images/diary/tinder-swipe-stories/pl-img-4.jpeg)
 
