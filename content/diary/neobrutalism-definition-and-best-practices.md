@@ -1,7 +1,7 @@
 ---
 title: Neobrutalism、「かわいい」論、ハローキティ
 date: 2025-04-12T02:49:42.381Z
-slug: neobrutalism-definition-and-best-practices
+slug: neobrutalism-kawii-hello-kitty
 month:
   - 2025-04
 subject:
