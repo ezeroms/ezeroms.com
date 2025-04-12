@@ -68,7 +68,7 @@ Neobrutalismはなぜユーザーにとって魅力たりうるのか。
 
 ###### ﻿ ﻿
 
-### 設計技術としてのNeobrutalism
+## 設計技術としてのNeobrutalism
 
 これらの視点は、Neobrutalismの理解にも応用できる。
 
