@@ -46,7 +46,7 @@ Neobrutalismが打ち出す「未完成さ」は、ただ粗雑なのではな�
 
 ###### ﻿
 
-{{< spotify type="show" id="4P1etOegDQ2TRJE7KD0EFP" width="100%" height="152" >}}
+{{< spotify type="episode" id="4P1etOegDQ2TRJE7KD0EFP" width="100%" height="152" >}}
 
 ###### ﻿
 
