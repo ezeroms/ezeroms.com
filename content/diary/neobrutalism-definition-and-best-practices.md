@@ -14,13 +14,15 @@ NN/gにNeobrutalismに関する記事が出ていて、ちょっと考えたこ�
 **Neobrutalism: Definition and Best Practices**\
 <https://www.nngroup.com/articles/neobrutalism/>
 
-###### ﻿
+![](/images/diary/neobrutalism-kawii-hello-kitty/21.png)
+
+
 
 > “Neobrutalism focuses on raw, unrefined elements like bold colors, simple shapes, and intentionally ‘unfinished’ aesthetics.”
 >
 > 訳：UIデザインスタイルとしてのネオブルータリズム（Neobrutalism）は、鮮やかな原色、シンプルな図形、そしてあえて「未完成」に見せるような要素など、粗さや未洗練さを前面に押し出すアプローチです。
 
-「intentionally unfinished」（あえて未完成に見せる）という言葉を目にしたとき、ふと思い出したのが、四方田犬彦の『「かわいい」論』だ。
+「intentionally unfinished」（あえて未完成に見せる）という言葉を目にしたとき、ふと思い出したのが、四方田犬彦の[『「かわいい」論』](https://amzn.asia/d/bdFw7cg)だ。
 
 この本のなかで四方田は、「かわいい」という言葉が、未熟さや不完全さを愛でる日本文化のまなざしと結びついていると語っている。
 
@@ -33,6 +35,8 @@ NN/gにNeobrutalismに関する記事が出ていて、ちょっと考えたこ�
 Neobrutalismが打ち出す「未完成さ」は、ただ粗雑なのではなく、「整っていない」という状態を肯定的に見せる「開かれた状態」の魅力であり、そこに人の感性が触れられる余白がある。
 
 デザインが「まだ途中にあること」「まだ形になりきっていないこと」をあえて見えることで、受け手に想像力や解釈の入り込む余地を生む技術だ。
+
+![](/images/diary/neobrutalism-kawii-hello-kitty/22.png)
 
 ###### ﻿
 
@@ -49,6 +53,8 @@ Neobrutalismが打ち出す「未完成さ」は、ただ粗雑なのではな�
 松嶋によると、土偶や埴輪、仏像、面人形など、日本の造形物には、左右非対称、歪み、不揃いといった「整っていない形」が伝統的に用いられてきた。そして1974年に生まれたキティちゃんも、そうした特徴をしっかり引き継いでいる。
 
 たとえば、頬のふくらみやリボンのかたちはアシンメトリーだし、ヒゲの位置も微妙にズレている。さらに、瞳のない黒目だけの目や、口が描かれていない顔立ちなどもポイントで、視線や感情の表出が制限されているため、見る者の想像や感情が自然と投影される構造になっている。まさに「未完成さ」が、受け手の感性を巻き込む構造になっているのだ。
+
+![](/images/diary/neobrutalism-kawii-hello-kitty/20.png)
 
 ###### ﻿
 
@@ -80,6 +86,4 @@ Neobrutalismとは、表現としての「完成されてなさ」を通じて�
 
 ###### ﻿
 
-Neobrutalismを、単なる視覚的な演出ではなく、構造をつくるための技術として捉え直すこと。
-
-その技術を更新し続ける実践の積み重ねが、Neobrutalismにトレンドを超えた意味を与え、これからのUIデザインに厚みと深みをもたらしていくはずだ。
+Neobrutalismを、単なる視覚的な演出ではなく、構造をつくるための技術として捉え直すこと。その技術を更新し続ける実践の積み重ねが、Neobrutalismにトレンドを超えた意味を与え、これからのUIデザインに厚みと深みをもたらしていくはずだ。
