@@ -18,6 +18,7 @@ NN/gにNeobrutalismに関する記事が出ていて、ちょっと考えたこ�
 ###### ﻿
 
 > “Neobrutalism focuses on raw, unrefined elements like bold colors, simple shapes, and intentionally ‘unfinished’ aesthetics.”
+>
 > 訳：UIデザインスタイルとしてのネオブルータリズム（Neobrutalism）は、鮮やかな原色、シンプルな図形、そしてあえて「未完成」に見せるような要素など、粗さや未洗練さを前面に押し出すアプローチです。
 
 「intentionally unfinished」（あえて未完成に見せる）という言葉を目にしたとき、ふと思い出したのが、四方田犬彦の『「かわいい」論』だ。
