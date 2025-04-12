@@ -1,5 +1,5 @@
 ---
-title: Neobrutalism、「かわいい」論、ハローキティ
+title: Neobrutalism考：「かわいい」論とハローキティ
 date: 2025-04-12T02:49:42.381Z
 slug: neobrutalism-kawii-hello-kitty
 month:
@@ -31,6 +31,8 @@ Neobrutalismはなぜユーザーにとって魅力たりうるのか。ある�
 ![](/images/diary/neobrutalism-kawii-hello-kitty/22.png)
 
 ######   
+
+# 思索：「かわいい」論とハローキティ
 
 さて、NN/gの記事では次のようなセンテンスが引用されている。
 
