@@ -38,6 +38,8 @@ Neobrutalismが打ち出す「未完成さ」は、ただ粗雑なのではな�
 
 ######  ﻿
 
+**『ハローキティ展』 について、松嶋雅人さん**
+
 <https://open.spotify.com/episode/4P1etOegDQ2TRJE7KD0EFP>
 
 ######  ﻿
