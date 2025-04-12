@@ -1,5 +1,5 @@
 ---
-title: Neobrutalismに関する記事
+title: Neobrutalism、「かわいい」論、ハローキティ
 date: 2025-04-12T02:49:42.381Z
 slug: neobrutalism-definition-and-best-practices
 month:
