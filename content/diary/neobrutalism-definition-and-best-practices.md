@@ -11,7 +11,7 @@ NN/gにNeobrutalismに関する記事が出ていて、ちょっと考えたこ�
 
 ###### ﻿
 
-Neobrutalism: Definition and Best Practices
+**Neobrutalism: Definition and Best Practices**
 
 <https://www.nngroup.com/articles/neobrutalism/>
 
