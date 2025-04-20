@@ -1,5 +1,5 @@
 ---
-title: Designing AI for Cultural Diversity、『鋼の錬金術師』、デジタルネイチャー
+title: Jo Chang「Designing AI for Cultural Diversity」と『鋼の錬金術師』、あるいはデジタルネイチャーの話
 date: 2025-04-18T16:33:19.392Z
 slug: designing-ai-for-cultural-diversity
 month:
