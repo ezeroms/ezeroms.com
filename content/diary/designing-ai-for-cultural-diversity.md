@@ -29,7 +29,7 @@ Jo Changによれば、西洋文化ではAIを「生産性を上げるツール�
 
 ## 「調和する存在」としてのAI、あるいは錬丹術
 
-一方で、同記事では、東アジア圏ではAIが「協働する存在」「人間の延長線上にあるもの」として受け入れられているとも指摘されている。アニミズム的な感覚（たとえば、道具や機械に魂が宿るというような）が影響しているのではないか、という考察だ。
+Jo Changはまた、東アジア圏におけるAIの受け入れ方にも触れており、「協働する存在」や「人間の延長」としてごく自然に受け入れられていることを指摘する。そこには、道具や機械に魂を見るようなアニミズム的感覚が影響しているのではないか、という見立てだ。
 
 > In contrast, Eastern cultures often embrace AI as a natural extension of human life, emphasizing harmony rather than control. Instead of viewing AI solely as a tool, people in these cultures are more inclined to engage with AI as a collaborator or companion that enhances their experience. This mindset aligns with an interdependent view of the self, in which the individual and the environment are deeply connected. Recent research also suggests that East Asians are more likely to anthropomorphize technology and actually view chatbots as a form of life within the natural world because of the influence of the animistic nature of Eastern religions.
 >
@@ -56,7 +56,7 @@ https://amzn.asia/d/apHmhxQ
 
 ![落合陽一が「デジタルネイチャーの要約を小学生にも伝わるようにした」などと主張する図。伝わらんと思う。](/images/diary/designing-ai-for-cultural-diversity/1666773535074-nsywdq51hx.webp)
 
-この視点をプロダクトデザインの実践に取り入れるとしたら、従来の「人間中心設計（HCD: Human-Centered Design）」的な設計思想には改善を求めなければならない。HCDでは、人間の明確なニーズや目的を起点に設計が行われるが、AIのように環境へと深く浸透し、自律的にふるまう技術の存在を扱うには、その前提そのものを見直す必要がある。
+この視点をプロダクトデザインの実践に取り入れるとしたら、従来の「人間中心設計（HCD: Human-Centered Design）」的なアプローチには改善を求めなければならない。HCDでは、人間の明確なニーズや目的を起点に設計が行われるが、AIのように環境へと深く浸透し、自律的にふるまう技術の存在を扱うには、その前提そのものを見直す必要がある。
 
 たとえば、明示的なインターフェースを持たないAIとの関係性、あるいは人とAIが共に空間や体験を生成する場面では、「操作性」ではなく「共存性」や「環境への親和性」がより重要になる。こうした状況においては、HCI（Human-Computer Interaction）ではなく、NCI（Nature-Computer Interaction）、すなわち人間も含めた自然環境全体との相互作用を設計の対象とする視点が有効となる。
 
