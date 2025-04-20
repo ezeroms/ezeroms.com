@@ -29,7 +29,7 @@ Jo Changによれば、西洋文化ではAIを「生産性を上げるツール�
 
 ## 「調和する存在」としてのAI、あるいは錬丹術
 
-また同記事では、東アジア圏ではAIが「協働する存在」「人間の延長線上にあるもの」として受け入れられているとの指摘がある。そこにはアニミズム的な感覚（たとえば、道具や機械に魂が宿るというような）が影響しているのではないか、という考察だ。
+一方で、同記事では、東アジア圏ではAIが「協働する存在」「人間の延長線上にあるもの」として受け入れられているとも指摘されている。アニミズム的な感覚（たとえば、道具や機械に魂が宿るというような）が影響しているのではないか、という考察だ。
 
 > In contrast, Eastern cultures often embrace AI as a natural extension of human life, emphasizing harmony rather than control. Instead of viewing AI solely as a tool, people in these cultures are more inclined to engage with AI as a collaborator or companion that enhances their experience. This mindset aligns with an interdependent view of the self, in which the individual and the environment are deeply connected. Recent research also suggests that East Asians are more likely to anthropomorphize technology and actually view chatbots as a form of life within the natural world because of the influence of the animistic nature of Eastern religions.
 >
