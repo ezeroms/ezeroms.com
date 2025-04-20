@@ -12,7 +12,9 @@ subject:
 **Designing AI for Cultural Diversity**\
 <https://www.uxmatters.com/mt/archives/2025/04/designing-ai-for-cultural-diversity.php>
 
-![](/images/diary/designing-ai-for-cultural-diversity/37-1-.png)
+
+[![](/images/diary/designing-ai-for-cultural-diversity/37-1-.png)](https://www.uxmatters.com/mt/archives/2025/04/designing-ai-for-cultural-diversity.php)
+
 
 読みながら思い出したのが、『鋼の錬金術師』に登場する錬金術と錬丹術の違い、そして落合陽一が提唱する「デジタルネイチャー」の考え方だ。これらは、AIという存在をどう捉えるか、もっと言えば、「テクノロジーを人間や自然とどう関係づけるか」という問いに対して、いくつかの示唆を与えてくれる。
 
