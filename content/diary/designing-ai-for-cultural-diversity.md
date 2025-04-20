@@ -60,7 +60,7 @@ https://amzn.asia/d/apHmhxQ
 
 たとえば、明示的なインターフェースを持たないAIとの関係性、あるいは人とAIが共に空間や体験を生成する場面では、「操作性」ではなく「共存性」や「環境への親和性」がより重要になる。こうした状況においては、HCI（Human-Computer Interaction）ではなく、NCI（Nature-Computer Interaction）、すなわち人間も含めた自然環境全体との相互作用を設計の対象とする視点が有効となる。
 
-2020年代に入ってから、ドナルド・ノーマン（HCDの概念を広めた認知心理学者であり [『誰のためのデザイン？』](https://amzn.asia/d/hanavCJ) の著者）も、「Human-Centered Design」という言葉の限界を認め、「Humanity-Centered Design」や「Complex Socio-Technical Systems Design」といった表現を使っているように、プロダクトデザインにおいて「人間の利便性」を中心に据えるのではなく、自然環境や非人間的存在、あるいは多様な文化的前提との共存可能性を起点に設計を考える視点は、理論分野では既に主流なものとなりつつある。
+2020年代に入ってから、ドナルド・ノーマン（HCDの概念を広めた認知心理学者であり [『誰のためのデザイン？』](https://amzn.asia/d/hanavCJ) の著者）が「Human-Centered Design」という言葉の限界を認め、「Humanity-Centered Design」や「Complex Socio-Technical Systems Design」といった表現を使っているように、プロダクトデザインにおいて「人間の利便性」を中心に据えるのではなく、自然環境や非人間的存在、あるいは多様な文化的前提との共存可能性を起点に設計を考える視点は、理論分野では既に主流なものとなりつつある。
 
 * Humanity-Centered Design: 個人の欲求だけでなく、社会・地球・未来世代を含む人類全体への影響を考える設計
 * Complex Socio-Technical Systems Design: テクノロジーだけでなく、制度・文化・法・倫理などと絡み合った社会的構造を設計の対象として扱う
