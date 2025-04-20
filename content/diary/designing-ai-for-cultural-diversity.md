@@ -50,7 +50,7 @@ AIを、制御対象ではなく、関係性の中で「共に働く存在」と
 デジタルネイチャー: 生態系を為す汎神化した計算機による侘と寂\
 https://amzn.asia/d/apHmhxQ
 
-![](/images/diary/designing-ai-for-cultural-diversity/39-1-.png)
+[![](/images/diary/designing-ai-for-cultural-diversity/39-1-.png)](https://amzn.asia/d/apHmhxQ)
 
 ![落合陽一が「デジタルネイチャーの要約を小学生にも伝わるようにした」と主張する図。伝わらんと思う。](/images/diary/designing-ai-for-cultural-diversity/1666773535074-nsywdq51hx.webp)
 
