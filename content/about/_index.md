@@ -1,6 +1,6 @@
 ---
 title: "About"
-layout: "index"
+layout: "list"
 ---
 
 # イワモトユウ / ezeroms

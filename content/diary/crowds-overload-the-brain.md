@@ -5,7 +5,7 @@ slug: crowds-overload-the-brain
 month:
   - 2024-03
 subject:
-  - languages-and-foreign-cultures
+  - foreign-cultures
 ---
 年始早々に台湾に渡り、約二ヶ月ぶりに日本に帰ってきた。
 

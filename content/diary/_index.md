@@ -1,4 +1,4 @@
 ---
 title: "Diary"
-layout: "index"
+layout: "list"
 ---

@@ -20,7 +20,23 @@
                     {{ if eq $diariesDate $path }}
                         {{ $diariesDate = "2024-04" }}
                     {{ end }}
-                    {{ $topicNames := dict "news" "ニュース" "music" "音楽" "manga-and-anime" "漫画・アニメ" "movies-and-dramas" "映画・ドラマ" "comedy" "お笑い" "gaming" "ゲーム" "sports" "スポーツ" "books-and-magazines" "本・雑誌" "languages-and-foreign-cultures" "言語・海外文化" "design-and-creative" "デザイン・クリエイティブ" "internet-and-technology" "インターネット・技術" "natural-science" "自然科学" "humanities-and-social-sciences" "人文・社会科学" }}
+                    {{ $topicNames := dict
+                        "diary" "今日のハイライト"
+                        "music" "音楽"
+                        "manga-and-anime" "漫画・アニメ"
+                        "movies-and-dramas" "映画・ドラマ"
+                        "comedy" "お笑い"
+                        "gaming" "ゲーム"
+                        "sports" "スポーツ"
+                        "books-and-magazines" "本・雑誌"
+                        "politics" "政治"
+                        "economy-and-business" "経済・ビジネス"
+                        "languages" "言葉・言語"
+                        "foreign-cultures" "海外文化"
+                        "design-and-creative" "デザイン・クリエイティブ"
+                        "internet-and-technology" "インターネット・技術"
+                        "natural-science" "自然科学"
+                        "humanities-and-social-sciences" "人文・社会科学" }}
                     {{ $url := .Permalink }}
                     {{ $topicParam := index (split $url "/") 4 }}
                     {{ $topicName := index $topicNames $topicParam }}

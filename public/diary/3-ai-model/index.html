@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>人とAIの関係性を設計しよう　Embedding / Copilot / Agent の三類型</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="人とAIの関係性を設計しよう　Embedding / Copilot / Agent の三類型">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/diary/3-ai-model/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="人とAIの関係性を設計しよう　Embedding / Copilot / Agent の三類型">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+</head>
+<body>
+    
+<header class="header">
+  <nav class="header__nav">
+      <a href="/about">About</a>
+      <a href="/work">Work</a>
+      <a href="/diary">Diary</a>
+      </ul>
+  </nav>
+
+  <a href="/" class="header__logo">
+      <img src="/images/common/logo.svg" alt="ezeroms.com">
+  </a>
+
+  <div class="header__button">
+    <a href="/shoulders-of-giants">
+      The shoulders of Giants
+    </a>
+  </div>
+</header>
+<header class="sp-header">
+  <img src="/images/common/diary.svg" alt="" class="logo_diary" onclick="topFunction()" id="scrollTopButton" title="Go to top">
+  <button id="openModal">
+    <img src="/images/common/icon_list.svg">
+  </button>
+</header>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function(){
+      
+      $('#scrollTopButton').click(function(){
+          
+          $('html, body').animate({scrollTop : 0},800);
+          return false;
+      });
+  });
+  </script>
+
+<div id="overlay"></div>
+<div id="modal">
+  <div class="modal_close-list">
+    
+    <button class="shuffle" id="reloadPage">
+      <img src="/images/common/icon_latest.svg" alt="">
+      Latest
+    </button>
+    
+    <button id="closeModal">
+      <img src="/images/common/icon_close.svg" alt="">
+      Close
+    </button>
+  </div>
+
+    <div id="modalContent">
+        
+      <ul>
+        <li><a href="/subject/diary/">今日のハイライト</a></li>
+        <li><a href="/subject/politics/">政治</a></li>
+        <li><a href="/subject/economy-and-business/">経済・ビジネス</a></li>
+        <li><a href="/subject/music/" class="a-link">音楽</a></li>
+        <li><a href="/subject/manga-and-anime/" class="a-link">漫画・アニメ</a></li>
+        <li><a href="/subject/movies-and-dramas/" class="a-link">映画・ドラマ</a></li>
+        <li><a href="/subject/comedy/" class="a-link">お笑い</a></li>
+        <li><a href="/subject/gaming/" class="a-link">ゲーム</a></li>
+        <li><a href="/subject/sports/" class="a-link">スポーツ</a></li>
+        <li><a href="/subject/books-and-magazines/" class="a-link">本・雑誌</a></li>
+        <li><a href="/subject/languages-and-foreign-cultures/" class="a-link">言語・海外文化</a></li>
+        <li><a href="/subject/design-and-creative/" class="a-link">デザイン・クリエイティブ</a></li>
+        <li><a href="/subject/internet-and-technology/" class="a-link">インターネット・技術</a></li>
+        <li><a href="/subject/natural-science/" class="a-link">自然科学</a></li>
+        <li><a href="/subject/humanities-and-social-sciences/" class="a-link">人文・社会科学</a></li>
+    </ul>
+
+    <ul>
+        
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+        
+        
+        
+            
+            
+            <li><a href="/month/2025-05" class="a-link">2025-05</a></li>
+        
+            
+            
+            <li><a href="/month/2025-04" class="a-link">2025-04</a></li>
+        
+            
+            
+            <li><a href="/month/2025-02" class="a-link">2025-02</a></li>
+        
+            
+            
+            <li><a href="/month/2024-09" class="a-link">2024-09</a></li>
+        
+            
+            
+            <li><a href="/month/2024-08" class="a-link">2024-08</a></li>
+        
+            
+            
+            <li><a href="/month/2024-06" class="a-link">2024-06</a></li>
+        
+            
+            
+            <li><a href="/month/2024-05" class="a-link">2024-05</a></li>
+        
+            
+            
+            <li><a href="/month/2024-03" class="a-link">2024-03</a></li>
+        
+            
+            
+            <li><a href="/month/2024-02" class="a-link">2024-02</a></li>
+        
+            
+            
+            <li><a href="/month/2023-08" class="a-link">2023-08</a></li>
+        
+    </ul>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    
+    $('#openModal').click(function(){
+        $('#overlay').fadeIn();
+        $('#modal').slideDown();
+        
+        $('body').addClass('modal-open');
+    });
+
+    
+    $('#closeModal, #overlay').click(function(){
+        $('#overlay').fadeOut();
+        $('#modal').slideUp();
+        
+        $('body').removeClass('modal-open');
+    });
+
+    
+    $('#reloadPage').click(function() {
+        
+        $('#overlay').fadeOut();
+        $('#modal').slideUp(function() {
+            
+            window.location.href = "/diary/";
+        });
+    });
+
+});
+  </script>
+  
+<div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+<main class="main-section">
+    <aside class="main-section-2column__left">
+    <ul>
+        <li><a href="/subject/diary/">今日のハイライト</a></li>
+        <li><a href="/subject/politics/">政治</a></li>
+        <li><a href="/subject/economy-and-business/">経済・ビジネス</a></li>
+        <li><a href="/subject/music/">音楽</a></li>
+        <li><a href="/subject/manga-and-anime/">漫画・アニメ</a></li>
+        <li><a href="/subject/movies-and-dramas/">映画・ドラマ</a></li>
+        <li><a href="/subject/comedy/">お笑い</a></li>
+        <li><a href="/subject/gaming/">ゲーム</a></li>
+        <li><a href="/subject/sports/">スポーツ</a></li>
+        <li><a href="/subject/books-and-magazines/">本・雑誌</a></li>
+        <li><a href="/subject/languages-and-foreign-cultures/">言語・海外文化</a></li>
+        <li><a href="/subject/design-and-creative/">デザイン・クリエイティブ</a></li>
+        <li><a href="/subject/internet-and-technology/">インターネット・技術</a></li>
+        <li><a href="/subject/natural-science/">自然科学</a></li>
+        <li><a href="/subject/humanities-and-social-sciences/">人文・社会科学</a></li>
+    </ul>
+
+    <ul>
+        
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+        
+        
+        
+            
+            
+            <li><a href="/month/2025-05">2025-05</a></li>
+        
+            
+            
+            <li><a href="/month/2025-04">2025-04</a></li>
+        
+            
+            
+            <li><a href="/month/2025-02">2025-02</a></li>
+        
+            
+            
+            <li><a href="/month/2024-09">2024-09</a></li>
+        
+            
+            
+            <li><a href="/month/2024-08">2024-08</a></li>
+        
+            
+            
+            <li><a href="/month/2024-06">2024-06</a></li>
+        
+            
+            
+            <li><a href="/month/2024-05">2024-05</a></li>
+        
+            
+            
+            <li><a href="/month/2024-03">2024-03</a></li>
+        
+            
+            
+            <li><a href="/month/2024-02">2024-02</a></li>
+        
+            
+            
+            <li><a href="/month/2023-08">2023-08</a></li>
+        
+
+    </ul>
+</aside>
+
+    <section class="main-section-2column__right">
+        <ul class="article-container" id="articles-list">
+
+            
+
+
+            <article class="article-item">
+                
+                <p class="date">2025-05-07</p>
+                <h1>人とAIの関係性を設計しよう　Embedding / Copilot / Agent の三類型</h1>
+                
+                <p>プロダクトの中で、AIと人間はどのような関係性を築くのか？</p>
+<p>ちょっと大げさに聞こえるかもしれないけれど、実はかなり実際的で、現場的な問いだと思っている。どんな立ち位置にAIを置き、どんな役割を担わせるか。主従なのか並走なのか、どこまで任せられるか。その設計次第で、ユーザー体験も、プロダクトの意味合いも、大きく変わってくる。</p>
+<p>この問いに向き合うためのフレームとして、僕が最近出会って腑に落ちたものを紹介したい。中国のあるデザイン系メディアで紹介されていた「人間とAIの協働における三類型」という整理だ。</p>
+<div class="image-wrapper"><img src="/images/diary/3-ai-model/40.png" alt="出典：人人都是产品经理「AIGC智能推荐系统设计」"></div><p>Embedding（裏方）、Copilot（共同作業者）、Agent（代理人）という三つの型は、人とAIが協働する際の関係性の違いに着目してまとめられている。タスクを進めるプロセスが縦に示され、それぞれの協働スタイルが横に並び、比較できるようになっている。</p>
+<p>Embeddingは、AIが部分的に人間のタスクを補助するモードだ。作業の大部分は人間が主導し、AIはその中の一部の工程、情報検索や判断材料の提示といった領域で、さりげなく手を貸す。ゴールの設計や意思決定、最終的な実行はあくまで人間が担っており、AIはタスクの断片にだけ「埋め込まれて」いる。たとえば、フォームの自動補完、スマートな並び替えの提案、画像の自動補正、検索時のキーワード補強などがその例だ。大抵の場合、ユーザーはAIを「操作している」という感覚すら持たないことも多いだろう。なんとなく便利、くらいの存在感。</p>
+<p>Copilotは、AIが人間と並走し、随時サポートや提案を行うモードだ。ユーザーは引き続き作業の主導権を持ち、AIはその過程で「一緒に考える相手」として振る舞う。タスクの中で特定の処理を代わりに行うこともあるが、その成果物はユーザーの確認・修正を経て進められる。GitHub CopilotやNotion AIのように、ユーザーが言語化した意図を受け取り、それに応じたアシストをしてくれる例がこれにあたる。</p>
+<p>Agentは、ユーザーが目的を設定したあと、AIがその達成に向けてタスクを分解し、適切なリソースや手段を選びながら自律的に進めていくモードだ。人間は起点と最終確認を担うが、途中の過程ではAIが代理人として意思決定し、進行する。AutoGPTのようなツールがこの例にあたり、ユーザーは「何をしたいか」を伝えるだけで、AIがステップを設計し実行していく。頼もしいけれど、ちょっと怖いと感じる人もいるかもしれない。SF映画ではだいたい人類を滅ぼしてくる</p>
+<div class="image-wrapper"><img src="/images/diary/3-ai-model/43.png" alt=""></div><h6 id="heading">﻿</h6>
+<p>この三類型の整理がよいのは、AIの能力の高さや技術的な洗練度ではなく、「協働の構造」にフォーカスしているところだ。</p>
+<p>つまり、AIをどのような位置に置き、どのくらいの距離感で人間と関わらせるのかを、図面のように設計的に捉えられる。その構造を見つめることで、ユーザーとAIの間にどんな関係性を築いていくべきか、その見取り図が描けるようになる。</p>
+<p>「関係を構築する」というのは、「継続的な視点を持つ」ということでもある。関係性は、静的な設定ではなく、時間の中で育っていくものだからだ。とくに、ある関係のあり方を意図して目指すのであれば、その時間の中で工夫を重ねていくことが求められる。</p>
+<p>人間同士の関係でも、最初の印象より、「どう付き合い続けるか」がずっと大切なのと同じように、AIと人間の関係だって、きっと同じように考えていくべきだ。この分類は、そうした視座を与えてくれる。</p>
+<p>また、このモデルは応用可能性も高そうだ。たとえば「関係性のフェーズ移行を設計する」なんてことも考えられるだろう。新しい機能は最初Copilot型でユーザーと一緒に試行錯誤しながら信頼を得ていき、一定の慣れが生まれたタイミングでAgent的な動きを提案していく。そういう段階的な設計もありえる。協働のあり方は固定された型ではなく、ユーザーとの関係性の成熟度に応じてシフトするものとして捉えると、より実用的な設計ができる気がする。</p>
+<p>これからいろいろプロダクトを作っていけば、より繊細な類型が見えてくるかもしれない。もとより人と他者の関係の持ち方にはグラデーションがあるし、三類型で終わる話ではないだろう。「どう協働するか」という問いを起点に、僕たちはAI機能を観察する目を養うことができそうだ。</p>
+<h6 id="heading-1">＊</h6>
+<p>これから先、プロダクトにAIを取り入れる話をするときには、「どんなふうに入れるか」ではなく、「どんなモードで人と協働させたいのか」から考え始めたい。この図は、そのきっかけになると思う。</p>
+<p>使えば使うほど馴染んでいくような関係性を、どんなふうに設計していくか。どうすればAIとの関係が、日々の営みに溶け込んで、自然にそこにあるものとして続いていくのか。そんなふうに設計された機能こそが、プロダクトの価値を確実に高めていくはずだ。</p>
+
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                            const altText = img.getAttribute('alt');
+                            if (altText) {
+                                img.parentElement.setAttribute('data-alt', altText);
+                            } else {
+                                console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
+                            }
+                        });
+                    });
+                </script>
+                
+
+                <div class="social-action">
+                    <div class="social-action__left">
+                        <div class="social-action__line">
+                            <div class="social-action__line-icon"></div>
+                            <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                このブログの更新通知をLINEで受け取る
+                            </a>
+                        </div>
+                    </div>
+                    <div class="social-action__right">
+                        <a href="https://twitter.com/intent/tweet?text=%e4%ba%ba%e3%81%a8AI%e3%81%ae%e9%96%a2%e4%bf%82%e6%80%a7%e3%82%92%e8%a8%ad%e8%a8%88%e3%81%97%e3%82%88%e3%81%86%e3%80%80Embedding%20%2f%20Copilot%20%2f%20Agent%20%e3%81%ae%e4%b8%89%e9%a1%9e%e5%9e%8b&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2f3-ai-model%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
+                        <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/3-ai-model/" target="_blank" class="social-action__hatena"></a>
+                        <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/3-ai-model\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
+                    </div>
+                </div>
+            </article>
+        
+
+            <div class="pagination-buttons">
+  
+      <a href="/diary/designing-ai-for-cultural-diversity/" class="pagination-button">
+          <img src="/images/common/icon_left.svg" alt="">
+          Prev
+      </a>
+  
+  
+</div>    
+
+        </ul>
+    </section>
+
+    <div class="image-loader"></div>
+</main>
+
+<nav class="global-nav">
+  <a href="/" class="global-nav__home"></a>
+  <a href="/about" class="global-nav__about"></a>
+  <a href="/work" class="global-nav__work"></a>
+  <a href="/diary" class="global-nav__diary on"></a>
+  <a href="/shoulders-of-giants" class="global-nav__think"></a>
+</nav>
+
+
+<p class="debug-info">Template : /layouts/diary/single.html</p>
+
+
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+</body>
+</html>
