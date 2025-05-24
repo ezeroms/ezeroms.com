@@ -125,7 +125,7 @@ services:
     environment:
       MM_SQLSETTINGS_DRIVERNAME: postgres
       MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@db:5432/mattermost?sslmode=disable
-      MM_SERVICESETTINGS_SITEURL: http://160.16.197.152:8065
+      MM_SERVICESETTINGS_SITEURL: http://<VPSのIPアドレス>:8065
     volumes:
       - ./volumes/app/mattermost:/mattermost/data
     depends_on:
@@ -148,7 +148,7 @@ sudo docker-compose up -d
 
 ## 8. 動作確認
 
-ブラウザで以下にアクセス！
+ブラウザからVPSのIPアドレスを直叩きしてアクセス！
 
 <http://160.16.197.152:8065>
 
