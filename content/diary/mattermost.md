@@ -21,7 +21,35 @@ Mattermostは、Slackに似たUIを持つ、オープンソースのコラボレ
 
 ![Slack重税 2025年5月現在](/images/diary/mattermost/44.png)
 
-###### ﻿
+## Mattermost（セルフホスティング）でできること
+
+* 基本的なチャンネルベースのチャット（Slackと同様のUI）
+* ダイレクトメッセージ
+* チャンネルの公開設定（オープンチャンネル or プライベートチャンネル）
+* スレッド形式での返信
+* メンション @here, @channel, @username など
+* 画像・PDFなどの添付＆プレビュー
+* iOS / Androidアプリあり（Mattermost公式）
+* 投稿内でのMarkdown記法対応
+* Bot / Webhook: Incoming / Outgoing webhookあり
+* Plugin / Integration: Trello、GitLab、Jiraなどの連携プラグインあり
+
+## Mattermost（セルフホスティング）でできないこと
+
+* 音声通話: Slackのハドルのようなものは標準では非搭載（プラグインが必要）
+* 画面共有: 上記のプラグインを使っても画面共有はできない
+* SAML / LDAP: Enterprise Editionならできるっぽい
+* 監査ログ / EMM連携: Enterprise Editionならできるっぽい
+
+###### 　﻿
+
+Slackの利用料を払うのが難しい規模のプロジェクトでは、Discordが使われることが多いと思う。
+
+ただ、個人的にはDiscordのスレッド返信がどうにも使いづらく、結果としてテキストでのやり取りが整然と進められないのがずっと気になっていた。Mattermostではその点がしっかり解消されており、チャンネル内での会話の整理がしやすそうという印象。一方で、Discordのような「ゆるくつながる」音声通話のスタイルを大事にしたい場合には、Mattermostは少し堅すぎるというか、そういう用途にはあまり向いていない。
+
+「本当はSlackのようなスタイルのコミュニケーションをしたいのだけど、仕方なくDiscordを使っている」というようなプロジェクトには、Mattermostはちょうどよい選択肢になると思う。
+
+###### 　﻿
 
 早速環境を用意してみたので、以下作業メモ。
 
