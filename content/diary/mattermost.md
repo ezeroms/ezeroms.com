@@ -7,10 +7,6 @@ month:
 subject:
   - internet-and-technology
 ---
-
-
-
-
 ![](/images/diary/mattermost/47.png)
 
 ## Mattermostとは
@@ -25,11 +21,9 @@ Mattermostは、Slackに似たUIを持つ、オープンソースのコラボレ
 
 ![Slack重税 2025年5月現在](/images/diary/mattermost/44.png)
 
-######   ﻿
+###### ﻿
 
 早速環境を用意してみたので、以下作業メモ。
-
-######  
 
 ## 1. サーバーを用意する
 
@@ -41,15 +35,11 @@ OSはUbuntu 22.04を選択。IPアドレスが払い出される。
 
 ![](/images/diary/mattermost/45.png)
 
-######  
-
 ###### ﻿
 
 契約後、コントロールパネルにアクセスしてサーバーを起動
 
 <https://secure.sakura.ad.jp/vps/servers>
-
-
 
 ## ﻿2. SSHでログインしてセットアップ開始
 
@@ -58,8 +48,6 @@ ssh root@<VPSのIPアドレス>
 ```
 
 最初に自動生成されたパスワードを使ってログイン
-
-
 
 ## 3. 初期設定＆Dockerの導入
 
@@ -74,16 +62,12 @@ sudo apt install -y docker.io docker-compose
 sudo systemctl enable docker
 ```
 
-
-
 ## 4﻿. Mattermost用ディレクトリの作成
 
 ```
 sudo mkdir -p /opt/mattermost
 cd /opt/mattermost
 ```
-
-
 
 ## 5. docker-compose.yml の作成
 
@@ -120,11 +104,7 @@ services:
       - db
 ```
 
-
-
 nanoの保存コマンド: Ctrl + O → Enter → Ctrl + X
-
-
 
 ## 6. コンテナの起動
 
@@ -132,15 +112,11 @@ nanoの保存コマンド: Ctrl + O → Enter → Ctrl + X
 sudo docker-compose up -d
 ```
 
-
-
 ## 7. サーバーのパケットフィルターを設定
 
 ポート 8065 でアクセスしたいので、パケットフィルターを設定する。ついでにこのあと必要なポートも登録しておく。
 
 ![](/images/diary/mattermost/48.png)
-
-
 
 ## 8. 動作確認
 
@@ -149,8 +125,6 @@ sudo docker-compose up -d
 <http://160.16.197.152:8065>
 
 ![](/images/diary/mattermost/49.png)
-
-
 
 ## 9. サブドメインの割り当て
 
@@ -162,15 +136,13 @@ type: A
 data: 160.16.197.152
 ```
 
-\
 Google Domains亡きあと、惰性でSquarespaceを使い続けているけれど、ずっとCloudflare Registrarに移行したいと思っている。（こういう地味な作業に腰が上がらなくなるの、確実に加齢の兆候だと思う。）
 
 ## 10. Nginxでリバースプロキシを設定
 
 Mattermostのポート8065番を、標準の80番/443番（HTTPS）に乗せかえる必要がある。
 
-Let’s Encryptは、ポート80（HTTP）を使って認証するため、Mattermost が直接 8065番で動いてると認証できない。\
-そこで、Nginxで80番を受付けてMattermostに中継（proxy）する形を取る。
+Let’s Encryptは、ポート80（HTTP）を使って認証するため、Mattermost が直接 8065番で動いてると認証できない。そこで、Nginxで80番を受付けてMattermostに中継（proxy）する形を取る。
 
 ```
 sudo apt install nginx
@@ -192,7 +164,7 @@ server {
 }
 ```
 
-######  ﻿
+###### ﻿
 
 有効化
 
@@ -207,7 +179,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-######  ﻿
+###### ﻿
 
 SSL化（HTTPS対応）
 
@@ -221,8 +193,6 @@ sudo certbot --nginx -d chat.chooning.app
 ```
 
 メールアドレス入力、利用規約に同意、リダイレクト（HTTP→HTTPS）を Yes に。
-
-
 
 ## 11. 動作確認
 
