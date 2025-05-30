@@ -12,7 +12,7 @@ MattermostにBoards（旧・Focalboard）のプラグインを入れる作業を
 * [Mattermost Boards plugin guide](https://developers.mattermost.com/contribute/more-info/focalboard/mattermost-boards-setup-guide/)
 * [Focalboard](https://www.focalboard.com/)
 
-######  ﻿
+###### ﻿
 
 プラグインをインストールしてBoardsのUIが表示されたまではよかったのだが、画面上部に次のようなエラーが表示された。
 
@@ -40,8 +40,6 @@ default -> /etc/nginx/sites-available/default
 mattermost -> /etc/nginx/sites-available/mattermost
 ```
 
-　﻿ ﻿
-
 設定内容を確認。
 
 ```
@@ -68,7 +66,7 @@ server {
 }
 ```
 
-設定ファイルの中に、WebSocket通信に必要なヘッダー設定が抜けていることが判る。以下を3行を追加。（HTTPからWebSocketへプロトコルをアップグレードする際に必要な設定。これがないとWebSocket接続が確立できない。
+設定ファイルの中に、WebSocket通信に必要なヘッダー設定が抜けていることが判る。HTTPからWebSocketへプロトコルをアップグレードする際に必要な設定がないため、WebSocket接続が確立できない。
 
 ###### 　﻿
 
@@ -109,8 +107,6 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-
-
 ## 原因その2：config.jsonの設定ミス
 
 Nginxの設定を修正したことで「WebSocket connection closed, connection interrupted.」のエラーは解消されたものの、BoardsのUIが動かない現象は残っていた。
@@ -133,8 +129,6 @@ cat /mattermost/config/config.json | grep -A 10 ServiceSettings
 ```
 
 この2つの値はMattermostが自身のURLやWebSocket接続先を正しく認識するために必要なもので、ここが空のままだとネイティブアプリなどからの接続が正しく行えない。
-
-
 
 ### 修正
 
