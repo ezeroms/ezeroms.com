@@ -21,7 +21,7 @@ MattermostにBoards（旧・Focalboard）のプラグインを入れる作業を
 > WebSocket connection closed, connection interrupted.\
 > If this persists, check your server or web proxy configuration.
 
-チャンネル（プロジェクト）やタスクをクリックしても何も起きない。しかしタスクの新規作成はできるが、編集ができない。いろいろと検証した結果、これは「Boardsのインターフェースは立ち上がっているが、WebSocket通信が失敗していて機能していない状態」だろうということが分かった。以下に対処方法を記録しておく。
+チャンネル（プロジェクト）やタスクをクリックしても何も起きない。タスクの新規作成はできるが編集はできないなど、部分的にできることできないことがあり、明らかに壊れている様子でもある。いろいろと検証した結果、これは「Boardsのインターフェースは立ち上がっているが、WebSocket通信が失敗していて機能していない状態」だろうということが分かった。以下に対処方法を記録しておく。
 
 ## 原因その1：NGINXの設定ミス
 
