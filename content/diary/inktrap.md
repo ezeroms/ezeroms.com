@@ -7,9 +7,11 @@ month:
 subject:
   - design-and-creative
 ---
-![Inktrap Typeface](https://i0.wp.com/zarmatype.com/wp-content/uploads/2024/12/Inktrap-Typeface-1.png?fit=1820%2C51095&ssl=1)
-
 「インクトラップ（Inktrap）」というタイポグラフィの技術に関するメモ。
+
+![](https://i0.wp.com/zarmatype.com/wp-content/uploads/2024/12/Inktrap-Typeface-1.png?fit=1820%2C51095&ssl=1)
+
+
 
 ## 作成する際のコツ
 
