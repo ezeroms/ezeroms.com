@@ -45,9 +45,7 @@ subject:
 
 近過去でいえばY2K aesthetic（1990年代後半〜2000年代前半の限られた3D表現やCG技術、Webの表示制限が生んだチープな未来感が、いまでは懐かしさとフィクショナルな未来像のミックスとして再評価されている）や[ピクセルアート](https://dribbble.com/search/pixel-art)、[チップチューン](https://youtu.be/SiTazCUPBGM)なども同じような事例といえるだろう。
 
-
-
-
+<https://www.youtube.com/watch?v=SiTazCUPBGM>
 
 ###### 　﻿
 
