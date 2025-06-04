@@ -7,4 +7,4 @@ month:
 subject:
   - music
 ---
-[https://youtu.be/oOkUwdoHdrI?si=1ocHVgfY2qHgjl-J](https://youtu.be/oOkUwdoHdrI?si=1ocHVgfY2qHgjl-J "https\://youtu.be/oOkUwdoHdrI?si=1ocHVgfY2qHgjl-J")
+{{< youtube id="oOkUwdoHdrI" >}}
