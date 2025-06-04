@@ -1,0 +1,64 @@
+_schema: _schema
+paths:
+  uploads: static/uploads
+  static: static
+collections_config:
+  about:
+    path: content/about
+    name: About
+    icon: bolt
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+  diary:
+    path: content/diary
+    name: Diary
+    icon: dry
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+  shoulders_of_giants:
+    path: content/shoulders-of-giants
+    name: Shoulders Of Giants
+    icon: conversion_path
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+  work:
+    path: content/work
+    name: Work
+    icon: work
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+  data:
+    path: data
+    name: Data
+    icon: data_usage
+    disable_add: true
+    disable_add_folder: true
+    disable_file_actions: true
+_snippets_imports:
+  hugo:
+    exclude:
+      - hugo_instagram
+timezone: Asia/Tokyo
+markdown:
+  engine: commonmark
+  options:
+    xhtml: false
+    breaks: false
+    linkify: false
+    typographer: false
+    spaced_lists: false
+    sentence_per_line: false
+    gfm: true
+    code_block_fences: '```'
+    escape_snippets_in_code_blocks: false
+    treat_indentation_as_code: true
+    table: false
+    strikethrough: false
+    subscript: false
+    superscript: false
+    heading_ids: false
+    attributes: false
