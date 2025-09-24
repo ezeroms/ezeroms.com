@@ -8,6 +8,11 @@
   to = "https://calendar.app.google/dRiTMZYMWCyUv5xv9"
   status = 301
 
+[[redirects]]
+  from = "/chooning-ringo-fes-2025"
+  to = "https://ringofes.info/?from=chooning"
+  status = 301
+
 [build]
   command = "hugo --gc --minify"
   publish = "public"
