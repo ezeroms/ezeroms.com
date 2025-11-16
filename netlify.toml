@@ -1,9 +1,4 @@
 [[redirects]]
-  from = "/calendar"
-  to = "https://calendar.google.com/calendar/embed?src=ezeroms%40gmail.com&ctz=Asia%2FTokyo"
-  status = 301
-
-[[redirects]]
   from = "/booking"
   to = "https://calendar.app.google/dRiTMZYMWCyUv5xv9"
   status = 301
@@ -14,7 +9,7 @@
   status = 200
 
 [build]
-  command = "hugo --gc --minify"
+  command = "cd scripts && npm install && cd .. && node scripts/contentful-to-markdown.js && hugo --gc --minify"
   publish = "public"
 
 [context.production.environment]
