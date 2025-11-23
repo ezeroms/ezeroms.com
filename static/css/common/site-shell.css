@@ -4,35 +4,41 @@
     --secondary-width: 280px;
 }
 
-.site-shell {
+.layout-container {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    height: 100vh;
     background: #f9f9f7;
     color: inherit;
     margin: 0;
     width: 100%;
     align-self: flex-start;
     justify-content: flex-start;
+    overflow: hidden;
 }
 
-.site-sidebar {
+.layout-sidebar {
     width: var(--sidebar-width);
     flex-shrink: 0;
     border-right: 1px solid rgba(0, 0, 0, 0.08);
     background: #ffffff;
+    padding: 24px 8px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .sidebar {
     position: sticky;
     top: 0;
-    height: calc(100vh - 96px);
-    padding: 48px 8px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
     gap: 4px;
+    flex: 1;
 }
 
 .sidebar__main {
@@ -57,61 +63,95 @@
     display: block;
 }
 
-/* The shoulders of Giants タグ目次用のスタイル */
-.giants-toc {
-    width: 216px;
+/* Table of Contents (TOC) スタイル */
+.layout-toc {
+    width: 240px;
     position: relative;
-    height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 0 32px 0;
+    padding: 40px 0 40px 40px;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
+    box-sizing: border-box;
 }
 
-.giants-toc::-webkit-scrollbar {
+/* パターン2: headerなし */
+.layout-main--with-toc .layout-toc {
+    height: 100vh;
+}
+
+/* パターン4: headerあり */
+.layout-main--with-header-toc .layout-toc {
+    height: calc(100vh - 60px);
+}
+
+.layout-toc::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }
 
-.giants-toc__nav {
+.layout-toc__nav {
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.giants-toc__list {
+.layout-toc__list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
     margin: 0;
     padding: 0;
     list-style: none;
     width: 100%;
 }
 
-.giants-toc__list a {
+.layout-toc__list > li:first-child {
+    margin-top: 0;
+}
+
+.layout-toc__list a {
     position: relative;
     text-decoration: none;
     color: rgba(0, 0, 0, 0.6);
     font-size: 0.9rem;
     line-height: 1.5;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease, background-color 0.2s ease;
     display: block;
     cursor: pointer;
-    padding: 0;
+    padding: 8px 12px;
+    margin: 0 -12px;
+    border-radius: 6px;
+    width: calc(100%);
+    box-sizing: border-box;
 }
 
-.giants-toc__list a:hover,
-.giants-toc__list a:focus-visible {
+.layout-toc__list a:hover,
+.layout-toc__list a:focus-visible {
     color: #050317;
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
-.giants-toc__list a.active,
-.giants-toc__list a.is-active {
+.layout-toc__list a.active,
+.layout-toc__list a.is-active {
     color: #050317;
     font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 空のリンクを非表示 */
+.layout-toc__list a[data-topic=""],
+.layout-toc__list a:empty {
+    display: none;
+}
+
+.layout-toc__list li:has(a[data-topic=""]),
+.layout-toc__list li:has(a:empty) {
+    display: none;
 }
 
 
@@ -151,12 +191,12 @@
 .sidebar__nav a:hover,
 .sidebar__nav a:focus-visible {
     color: #050317;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 .sidebar__nav a.is-active {
     color: #050317;
-    background-color: rgba(0, 0, 0, 0.08);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .sidebar__library {
@@ -187,7 +227,7 @@
     border: 0;
 }
 
-.site-body {
+.layout-body {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -196,12 +236,13 @@
     box-sizing: border-box;
 }
 
-.section-header {
+.layout-header {
     position: sticky;
     top: 0;
     z-index: 3;
     background: #f9f9f7;
-    padding: 12px 48px;
+    height: 60px;
+    padding: 0 40px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     transform: translateY(0);
     transition: transform 0.3s ease;
@@ -209,82 +250,134 @@
     max-width: 100%;
     overflow: hidden;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.section-header.hidden {
+.layout-header.hidden {
     transform: translateY(-100%);
 }
 
-.section-header:empty {
+.layout-header:empty {
     display: none;
 }
 
-.site-content {
-    display: grid;
-    grid-template-columns: 688px minmax(0, 1fr);
-    gap: var(--site-gap);
-    padding: 48px;
+.layout-main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     background: #f9f9f7;
-    width: calc(100% - 96px);
-    max-width: none;
+    box-sizing: border-box;
+}
+
+/* パターン1: Home/Index（中央配置型） */
+.layout-main--centered {
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+/* パターン2: About/The shoulders of Giants（TOC型） */
+.layout-main--with-toc {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 768px);
+    gap: 0;
+    height: 100vh;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* パターン3: Tweet/Diary/Column（3カラム型） */
+.layout-main--with-tags {
+    display: grid;
+    grid-template-columns: 768px minmax(0, 1fr);
+    gap: 0;
+    height: calc(100vh - 60px);
+    padding: 0;
     align-items: start;
-}
-
-.site-content.is-about {
-    grid-template-columns: 216px minmax(0, 688px) minmax(0, 1fr);
-    height: 100vh;
     overflow: hidden;
 }
 
-.site-content.is-giants {
-    grid-template-columns: 216px minmax(0, 688px) minmax(0, 1fr);
-    height: 100vh;
+/* パターン4: UI Design Book（ヘッダー+TOC型） */
+.layout-main--with-header-toc {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 688px);
+    gap: 0;
+    height: calc(100vh - 60px);
     overflow: hidden;
+    padding: 0;
 }
 
-.site-content.is-ui-design-book {
-    grid-template-columns: 216px minmax(0, 688px);
-    height: 100vh;
-    overflow: hidden;
-}
-
-.site-main {
+.layout-main__content {
     width: 100%;
     max-width: 688px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-/* The shoulders of Giantsページのメインエリアを独立したスクロール領域にする */
-.site-content.is-giants .site-main,
-.site-content.is-about .site-main,
-.site-content.is-ui-design-book .site-main {
-    width: 100%;
-    max-width: 688px;
-    height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0;
     box-sizing: border-box;
 }
 
-.site-secondary {
+/* パターン1: 中央配置 */
+.layout-main--centered .layout-main__content {
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+/* パターン2, 4: TOCあり */
+.layout-main--with-toc .layout-main__content,
+.layout-main--with-header-toc .layout-main__content {
+    width: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 40px;
+    margin: 0;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+/* パターン2: headerなし */
+.layout-main--with-toc .layout-main__content {
+    height: 100%;
+}
+
+/* パターン4: headerあり */
+.layout-main--with-header-toc .layout-main__content {
+    height: calc(100vh - 60px);
+}
+
+/* パターン3: タグあり */
+.layout-main--with-tags .layout-main__content {
+    width: 100%;
+    max-width: 100%;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 40px;
+    margin: 0;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+.layout-tags {
     flex: 1 1 0;
     width: auto;
     min-width: 0;
     max-width: none;
-    position: sticky;
-    top: 0;
-    height: 100vh;
     overflow-y: auto;
-    padding: 8px 0 32px 0;
+    overflow-x: hidden;
+    padding: 40px 40px 40px 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    box-sizing: border-box;
 }
 
-.site-secondary:empty {
+.layout-tags:empty {
     display: none;
 }
 
@@ -303,6 +396,11 @@
     padding: 0 0 80px;
     width: 100%;
     box-sizing: border-box;
+}
+
+/* The shoulders of Giantsページでは下のpaddingを削除 */
+.layout-main--with-toc .diary-main {
+    padding-bottom: 0;
 }
 
 .diary-main__content,
@@ -398,11 +496,11 @@
 
 /* タブレットビュー: 768px～1023px */
 @media (max-width: 1023px) and (min-width: 768px) {
-    .site-shell {
+    .layout-container {
         flex-direction: column;
     }
     
-    .site-sidebar {
+    .layout-sidebar {
         position: relative;
         width: 100%;
         height: auto;
@@ -416,53 +514,40 @@
         padding: 24px 20px;
     }
     
-    .site-content {
+    .layout-main {
         padding: 32px 24px;
         display: flex;
         flex-direction: column;
     }
     
-    .site-content.is-giants {
+    .layout-main--with-toc,
+    .layout-main--with-header-toc {
         grid-template-columns: 1fr;
     }
     
-    .giants-toc {
+    .layout-toc {
         display: none;
     }
     
-    .site-content.is-ui-design-book {
-        grid-template-columns: 1fr;
-    }
-    
-    .giants-toc {
-        display: none;
-    }
-    
-    .site-content.is-about {
-        grid-template-columns: 1fr;
-    }
-    
-    .site-content.is-ui-design-book {
-        grid-template-columns: 1fr;
-    }
-    
-    .site-main {
+    .layout-main__content {
         width: 100%;
         max-width: 688px;
+        height: auto;
+        padding: 0;
     }
     
-    .site-secondary {
+    .layout-tags {
         display: none;
     }
 }
 
 /* スマホビュー: ～767px */
 @media (max-width: 767px) {
-    .site-shell {
+    .layout-container {
         flex-direction: column;
     }
 
-    .site-sidebar {
+    .layout-sidebar {
         position: relative;
         width: 100%;
         height: auto;
@@ -470,42 +555,29 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
 
-    .site-content {
+    .layout-main {
         flex-direction: column;
         padding: 32px 24px;
         display: flex;
     }
     
-    .site-content.is-giants {
+    .layout-main--with-toc,
+    .layout-main--with-header-toc {
         grid-template-columns: 1fr;
     }
     
-    .giants-toc {
+    .layout-toc {
         display: none;
-    }
-    
-    .site-content.is-ui-design-book {
-        grid-template-columns: 1fr;
-    }
-    
-    .giants-toc {
-        display: none;
-    }
-    
-    .site-content.is-about {
-        grid-template-columns: 1fr;
-    }
-    
-    .site-content.is-ui-design-book {
-        grid-template-columns: 1fr;
     }
 
-    .site-main {
+    .layout-main__content {
         width: 100%;
         max-width: 100%;
+        height: auto;
+        padding: 0;
     }
 
-    .site-secondary {
+    .layout-tags {
         width: 100%;
         height: auto;
         position: static;

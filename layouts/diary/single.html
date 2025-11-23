@@ -180,16 +180,6 @@
 
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
-                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
-                            const altText = img.getAttribute('alt');
-                            if (altText) {
-                                img.parentElement.setAttribute('data-alt', altText);
-                            } else {
-                                console.log('alt属性が空のimgタグを検出しました');
-                                img.parentElement.classList.add('no-alt'); // altが空の場合は特定のクラスを追加
-                            }
-                        });
-
                         // 記事内のタグクリックイベント
                         document.querySelectorAll('.article-item .article-tag').forEach(tag => {
                             tag.addEventListener('click', function(e) {
@@ -202,7 +192,6 @@
                         });
                     });
                 </script>
-                
 
                 <div class="social-action">
                     <div class="social-action__left">
@@ -243,9 +232,6 @@
             </ul>
         </div>
     </section>
-
-    <!-- debug-info -->
-    <p class="debug-info">Template : /layouts/diary/single.html</p>
 {{ end }}
 
 {{ define "secondary" }}

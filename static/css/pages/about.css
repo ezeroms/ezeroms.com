@@ -1,5 +1,5 @@
 /* Aboutページではheaderを非表示 */
-body.is-about .section-header {
+body.is-about .layout-header {
     display: none;
 }
 

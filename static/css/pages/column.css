@@ -173,15 +173,9 @@
     color: #050317;
 }
 
-/* Columnページではsection-headerのpaddingを0にする */
-body.is-column .section-header {
-    padding: 0;
-    display: flex;
-    align-items: center;
-}
 
 .column-header {
-    padding: 0 48px;
+    padding: 0;
     background: transparent;
     width: 100%;
     max-width: 100%;
@@ -236,13 +230,20 @@ body.is-column .section-header {
     left: 0;
     right: 0;
     bottom: -1px;
-    height: 2px;
+    height: 3px;
     background: transparent;
     transition: background 0.2s ease;
 }
 
 .column-header__tab:hover {
     color: #050317;
+}
+
+.column-header__tab:hover::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    background: #050317;
 }
 
 .column-header__tab.active {

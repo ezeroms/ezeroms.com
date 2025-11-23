@@ -1,6 +1,6 @@
-<aside class="giants-toc" aria-label="The shoulders of Giants 目次">
-    <nav class="giants-toc__nav">
-        <ul class="giants-toc__list">
+<aside class="layout-toc" aria-label="The shoulders of Giants 目次">
+    <nav class="layout-toc__nav">
+        <ul class="layout-toc__list">
             {{ $giantsPages := where .Site.RegularPages "Section" "shoulders-of-giants" }}
             {{ $allTopics := slice }}
             {{ range $giantsPages }}
@@ -14,9 +14,11 @@
             {{ end }}
             {{ $sortedTopics := sort $allTopics }}
             {{ range $sortedTopics }}
+                {{ if ne . "" }}
                 <li>
                     <a href="#" data-topic="{{ . }}">{{ . }}</a>
                 </li>
+                {{ end }}
             {{ end }}
         </ul>
     </nav>

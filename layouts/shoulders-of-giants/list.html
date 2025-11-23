@@ -32,16 +32,13 @@
         </div>
     </section>
 
-    <!-- debug-info -->
-    <p class="debug-info">Template : /layouts/shoulders-of-giants/list.html</p>
-
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         const urlParams = new URLSearchParams(window.location.search);
         const selectedTopic = urlParams.get('topic') ? decodeURIComponent(urlParams.get('topic')) : null;
         
         const giantsItems = document.querySelectorAll('.giants-item');
-        const topicLinks = document.querySelectorAll('.giants-toc__list a');
+        const topicLinks = document.querySelectorAll('.layout-toc__list a');
 
         // 初期状態でフィルタリング
         if (selectedTopic) {
@@ -155,33 +152,6 @@
                 const topic = e.target.getAttribute('data-tag');
                 filterByTopic(topic);
             }
-        });
-
-        // カードクリック時に本文をクリップボードにコピー
-        giantsItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                // タグがクリックされた場合は処理をスキップ
-                if (e.target.classList.contains('article-tag') || e.target.closest('.article-tag')) {
-                    return;
-                }
-
-                // 本文コンテンツを取得（タグ部分を除外）
-                const contentDiv = this.querySelector('.giants-item__content');
-                if (!contentDiv) return;
-
-                // テキストコンテンツを取得
-                const textContent = contentDiv.innerText || contentDiv.textContent || '';
-                const trimmedText = textContent.trim();
-
-                if (trimmedText) {
-                    // クリップボードにコピー
-                    navigator.clipboard.writeText(trimmedText).then(function() {
-                        showNotification();
-                    }, function(err) {
-                        console.error('クリップボードへのコピーに失敗しました: ', err);
-                    });
-                }
-            });
         });
 
         function showNotification() {

@@ -1,8 +1,8 @@
-<aside class="giants-toc" aria-label="About 目次">
-    <nav class="giants-toc__nav">
-        <ul class="giants-toc__list">
+<aside class="layout-toc" aria-label="About 目次">
+    <nav class="layout-toc__nav">
+        <ul class="layout-toc__list">
             <li>
-                <a href="/about/" class="giants-toc__profile-link">プロフィール</a>
+                <a href="/about/" class="layout-toc__profile-link">プロフィール</a>
             </li>
             <li>
                 <a href="/about/?section=about-this-site">このサイトについて</a>
@@ -27,7 +27,7 @@
         }
 
         function handleAboutTocLinks() {
-            const profileLink = document.querySelector('.giants-toc__profile-link');
+            const profileLink = document.querySelector('.layout-toc__profile-link');
             if (profileLink) {
                 // 現在のセクションがmedia-coverageの場合、/about/に遷移
                 const currentPath = window.location.pathname;

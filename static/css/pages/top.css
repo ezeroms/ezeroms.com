@@ -1,29 +1,28 @@
 /* Top page専用スタイル */
 
 /* トップページではheaderを非表示 */
-body.is-home .section-header {
+body.is-home .layout-header {
     display: none;
 }
 
 /* トップページではサブメニューを非表示 */
-body.is-home .site-secondary {
+body.is-home .layout-tags {
     display: none;
 }
 
-/* トップページではsite-contentを1カラムに */
-body.is-home .site-content {
+/* トップページではlayout-mainを1カラムに */
+body.is-home .layout-main {
     display: flex;
     flex-direction: column;
-    grid-template-columns: none;
     align-items: center;
     justify-content: center;
-    padding: 0;
-    min-height: calc(100vh - 64px);
+    padding: 40px;
+    min-height: calc(100vh - 48px);
     background: #f9f9f7;
 }
 
-/* トップページではsite-mainを全幅に */
-body.is-home .site-main {
+/* トップページではlayout-main__contentを全幅に */
+body.is-home .layout-main__content {
     max-width: 100%;
     width: 100%;
 }
