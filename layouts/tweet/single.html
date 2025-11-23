@@ -1,0 +1,35 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container tweet-container">
+                <article class="article-item tweet-item">
+                    <div class="tweet-item__bubble">
+                        <div class="tweet-item__text{{ if .Params.voice }} tweet-item__text--{{ .Params.voice }}{{ end }}">{{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}</div>
+                        <div class="tweet-item__bottom">
+                            {{ if .Params.tags }}
+                                <div class="tweet-item__tags">
+                                    {{ $sortedTags := sort .Params.tags }}
+                                    {{ range $sortedTags }}
+                                        <span class="article-tag" data-tag="{{ . }}">{{ . }}</span>
+                                    {{ end }}
+                                </div>
+                            {{ end }}
+                            <div class="tweet-item__footer">
+                                <p class="date tweet-item__date">
+                                    {{ .Date | dateFormat "Monday, January 2, 2006" }}{{ if .Params.place }}・{{ .Params.place }}{{ end }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tweet-item__emoji" aria-label="{{ if .Params.voice }}{{ .Params.voice }}{{ else }}通常の声{{ end }}">{{ if .Params.emoji }}{{ .Params.emoji }}{{ else }}😊{{ end }}</div>
+                    </div>
+                </article>
+            </ul>
+        </div>
+    </section>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/tweet/single.html</p>
+{{ end }}
+

@@ -1,0 +1,48 @@
+<div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com">
+      </a>
+    </div>
+
+    {{ $current := .RelPermalink }}
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="{{ if strings.HasPrefix $current "/about/" }}is-active{{ end }}" href="/about/">About</a>
+        </li>
+        <li>
+          <a class="{{ if strings.HasPrefix $current "/tweet/" }}is-active{{ end }}" href="/tweet/">Tweet</a>
+        </li>
+        <li>
+          <a class="{{ if strings.HasPrefix $current "/diary/" }}is-active{{ end }}" href="/diary/">Diary</a>
+        </li>
+        <li>
+          <a class="{{ if strings.HasPrefix $current "/column/" }}is-active{{ end }}" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="{{ if strings.HasPrefix $current "/work/" }}is-active{{ end }}" href="/work/">Work</a>
+        </li>
+        {{/* Snapの導線は一時的に非表示。再表示する際は下記 li を有効化する。
+        <li>
+          <a class="{{ if strings.HasPrefix $current "/snap/" }}is-active{{ end }}" href="/snap/">Snap</a>
+        </li>
+        */}}
+      </ul>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="{{ if eq .Section "shoulders-of-giants" }}is-active{{ end }}" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          <li>
+            <a class="{{ if eq .Section "ui-design-book" }}is-active{{ end }}" href="/ui-design-book/">UI Design Book</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+

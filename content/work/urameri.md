@@ -3,6 +3,9 @@ title: 裏目り百景
 date: 2022-09-28T10:41:43.938Z
 slug: urameri
 image: /images/work/urameri/04.webp
+tags:
+  - Webサイト
+  - デザイン
 ---
 麻雀における「裏目り（うらめり）」を集めて選評する「裏目り百景」というプロジェクトを始めました🀄️
 

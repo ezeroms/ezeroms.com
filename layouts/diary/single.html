@@ -1,12 +1,111 @@
-{{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/diary" . }}
-{{ partial "notification.html" . }}
+{{ define "section_header" }}
+    {{ $currentPage := . }}
+    {{ $allMonths := slice }}
+    {{ range (where .Site.RegularPages "Section" "diary") }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+    {{ $currentMonth := $currentPage.Date | dateFormat "2006-01" }}
+    {{ $currentYear := "" }}
+    {{ $currentMonthNum := "" }}
+    {{ if $currentMonth }}
+        {{ $currentYear = index (split $currentMonth "-") 0 }}
+        {{ $currentMonthNum = index (split $currentMonth "-") 1 }}
+    {{ end }}
 
-<main class="main-section">
-    {{ partial "diary_menu.html" . }}
-    <section class="main-section-2column__right">
-        <ul class="article-container" id="articles-list">
+    <div class="tweet-header-nav">
+        <div class="tweet-year-selector">
+            <button class="tweet-year-nav" id="prev-year">‹</button>
+            <span class="tweet-year-display" id="year-display">{{ if $currentYear }}{{ $currentYear }}{{ else }}2025{{ end }}</span>
+            <button class="tweet-year-nav" id="next-year">›</button>
+        </div>
+
+        <div class="tweet-month-filters" id="tweet-month-filters">
+            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
+            {{ $displayYear := $currentYear }}
+            {{ if not $displayYear }}
+                {{ $displayYear = "2025" }}
+            {{ end }}
+            {{ range $index := seq 1 12 }}
+                {{ $monthNum := printf "%02d" $index }}
+                {{ $yearMonth := printf "%s-%s" $displayYear $monthNum }}
+                {{ $monthName := index $months (sub $index 1) }}
+                {{ $isActive := false }}
+                {{ if eq $yearMonth $currentMonth }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <button class="tweet-filter-btn {{ if $isActive }}active{{ end }}" data-year-month="{{ $yearMonth }}">{{ $monthName }}</button>
+            {{ end }}
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearDisplay = document.getElementById('year-display');
+        const prevYearBtn = document.getElementById('prev-year');
+        const nextYearBtn = document.getElementById('next-year');
+        const monthFilters = document.getElementById('tweet-month-filters');
+        
+        let currentYear = parseInt(yearDisplay.textContent);
+
+        function updateMonthButtons(year) {
+            const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+            monthFilters.innerHTML = '';
+            
+            for (let i = 1; i <= 12; i++) {
+                const monthNum = String(i).padStart(2, '0');
+                const yearMonth = `${year}-${monthNum}`;
+                const monthName = months[i - 1];
+                const button = document.createElement('button');
+                button.className = 'tweet-filter-btn';
+                button.setAttribute('data-year-month', yearMonth);
+                button.textContent = monthName;
+                
+                // 現在の記事の月をアクティブにする
+                const currentMonth = '{{ $currentMonth }}';
+                if (yearMonth === currentMonth) {
+                    button.classList.add('active');
+                }
+                
+                button.addEventListener('click', function() {
+                    window.location.href = '/diary/?month=' + yearMonth;
+                });
+                monthFilters.appendChild(button);
+            }
+        }
+
+        prevYearBtn.addEventListener('click', function() {
+            currentYear--;
+            yearDisplay.textContent = currentYear;
+            updateMonthButtons(currentYear);
+        });
+
+        nextYearBtn.addEventListener('click', function() {
+            currentYear++;
+            yearDisplay.textContent = currentYear;
+            updateMonthButtons(currentYear);
+        });
+
+        // 初期状態で月のボタンを更新
+        updateMonthButtons(currentYear);
+    });
+    </script>
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container" id="articles-list">
 
             <!-- <div class="article-item-heading">
                 <div class="article-item-heading__label">
@@ -44,9 +143,38 @@
 
 
             <article class="article-item">
-                
-                <p class="date">{{ .Date | dateFormat "2006-01-02" }}</p>
-                <h1>{{ .Title }}</h1>
+                <div class="article-header">
+                    <p class="date">Diary</p>
+                    <h1>{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "2006" }}</h1>
+                    <p class="date">
+                        {{ $parts := slice }}
+                        {{ $parts = $parts | append (.Date | dateFormat "Mon") }}
+                        {{ if .Params.place }}
+                            {{ $parts = $parts | append .Params.place }}
+                        {{ end }}
+                        {{ if and .Params.min_temp .Params.max_temp }}
+                            {{ $parts = $parts | append (printf "%d–%d°C" .Params.min_temp .Params.max_temp) }}
+                        {{ else if .Params.min_temp }}
+                            {{ $parts = $parts | append (printf "%d°C" .Params.min_temp) }}
+                        {{ else if .Params.max_temp }}
+                            {{ $parts = $parts | append (printf "%d°C" .Params.max_temp) }}
+                        {{ end }}
+                        {{ if .Params.weather }}
+                            {{ $parts = $parts | append .Params.weather }}
+                        {{ end }}
+                        {{ if gt (len $parts) 0 }}
+                            {{ delimit $parts " · " }}
+                        {{ end }}
+                    </p>
+                    {{ if .Params.tags }}
+                        <div class="column-card__tags">
+                            {{ $sortedTags := sort .Params.tags }}
+                            {{ range $sortedTags }}
+                                <a href="/diary/?tag={{ . | urlize }}" class="article-tag" data-tag="{{ . }}">{{ . }}</a>
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
                 
                 {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
 
@@ -60,6 +188,17 @@
                                 console.log('alt属性が空のimgタグを検出しました');
                                 img.parentElement.classList.add('no-alt'); // altが空の場合は特定のクラスを追加
                             }
+                        });
+
+                        // 記事内のタグクリックイベント
+                        document.querySelectorAll('.article-item .article-tag').forEach(tag => {
+                            tag.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                const tagValue = this.getAttribute('data-tag');
+                                if (tagValue) {
+                                    window.location.href = '/diary/?tag=' + encodeURIComponent(tagValue);
+                                }
+                            });
                         });
                     });
                 </script>
@@ -98,19 +237,17 @@
                     </div>
                 </div>
             </article>
-        
+            
+            {{ partial "article-navigation.html" . }}
 
-            {{ partial "pagination-buttons.html" . }}    
-
-        </ul>
+            </ul>
+        </div>
     </section>
 
-    <div class="image-loader"></div>
-</main>
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/diary/single.html</p>
+{{ end }}
 
-{{ partial "global-nav_diary.html" . }}
-
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/diary/single.html</p>
-
+{{ define "secondary" }}
+    {{ partial "diary_menu.html" . }}
 {{ end }}

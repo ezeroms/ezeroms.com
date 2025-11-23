@@ -1,0 +1,449 @@
+{{ define "section_header" }}
+    {{ $allMonths := slice }}
+    {{ range .Pages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+    {{ $latestYear := "" }}
+    {{ $latestMonthNum := "" }}
+    {{ if $latestMonth }}
+        {{ $latestYear = index (split $latestMonth "-") 0 }}
+        {{ $latestMonthNum = index (split $latestMonth "-") 1 }}
+    {{ end }}
+
+    <div class="tweet-header-nav">
+        <div class="tweet-year-selector">
+            <button class="tweet-year-nav" id="prev-year">‹</button>
+            <span class="tweet-year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
+            <button class="tweet-year-nav" id="next-year">›</button>
+        </div>
+
+        <div class="tweet-month-filters" id="tweet-month-filters">
+            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
+            {{ $currentYear := $latestYear }}
+            {{ if not $currentYear }}
+                {{ $currentYear = "2025" }}
+            {{ end }}
+            {{ range $index := seq 1 12 }}
+                {{ $monthNum := printf "%02d" $index }}
+                {{ $yearMonth := printf "%s-%s" $currentYear $monthNum }}
+                {{ $monthName := index $months (sub $index 1) }}
+                {{ $isActive := false }}
+                {{ if eq $yearMonth $latestMonth }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <button class="tweet-filter-btn {{ if $isActive }}active{{ end }}" data-year-month="{{ $yearMonth }}">{{ $monthName }}</button>
+            {{ end }}
+        </div>
+    </div>
+{{ end }}
+
+{{ define "main" }}
+    {{ $allMonths := slice }}
+    {{ range .Pages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container tweet-container" id="tweet-list">
+                {{ range .Pages }}
+                    {{ $yearMonth := .Date | dateFormat "2006-01" }}
+                    <article class="article-item tweet-item" data-year-month="{{ $yearMonth }}" data-date="{{ .Date | dateFormat "2006-01-02" }}" data-tags="{{ if .Params.tags }}{{ delimit .Params.tags " " }}{{ end }}" data-place="{{ if .Params.place }}{{ .Params.place }}{{ end }}" {{ if ne $yearMonth $latestMonth }}style="display: none;"{{ end }}>
+                        <div class="tweet-item__bubble">
+                            <div class="tweet-item__text{{ if .Params.voice }} tweet-item__text--{{ .Params.voice }}{{ end }}">{{ .Content }}</div>
+                            <div class="tweet-item__bottom">
+                                {{ if .Params.tags }}
+                                    <div class="tweet-item__tags">
+                                        {{ $sortedTags := sort .Params.tags }}
+                                        {{ range $sortedTags }}
+                                            <span class="article-tag" data-tag="{{ . }}">{{ . }}</span>
+                                        {{ end }}
+                                    </div>
+                                {{ end }}
+                                <div class="tweet-item__footer">
+                                        <p class="date tweet-item__date">
+                                            {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.place }} · {{ .Params.place }}{{ end }}
+                                        </p>
+                                </div>
+                            </div>
+                            <div class="tweet-item__emoji" aria-label="{{ if .Params.voice }}{{ .Params.voice }}{{ else }}通常の声{{ end }}">{{ if .Params.emoji }}{{ .Params.emoji }}{{ else }}😊{{ end }}</div>
+                        </div>
+                    </article>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const monthFilters = document.getElementById('tweet-month-filters');
+            const tweetTags = document.querySelectorAll('.sidebar-tag');
+            const tweetItems = document.querySelectorAll('.tweet-item');
+
+            // URLパラメータを取得
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlMonth = urlParams.get('month');
+            const urlTag = urlParams.get('tag');
+            const urlPlace = urlParams.get('place');
+
+            // 最新の月を取得
+            let latestYearMonth = '';
+            tweetItems.forEach(item => {
+                const yearMonth = item.getAttribute('data-year-month');
+                if (!latestYearMonth || yearMonth > latestYearMonth) {
+                    latestYearMonth = yearMonth;
+                }
+            });
+
+            // 初期状態の決定
+            let currentYear = parseInt(yearDisplay.textContent);
+            let selectedYearMonth = urlMonth || (urlPlace ? null : latestYearMonth);
+            let selectedTag = urlTag || null;
+            let selectedPlace = urlPlace || null;
+
+            // URLから年を取得
+            if (urlMonth) {
+                const yearFromMonth = urlMonth.split('-')[0];
+                currentYear = parseInt(yearFromMonth);
+                yearDisplay.textContent = currentYear;
+            }
+
+
+            function updateURL(month, tag, place) {
+                const params = new URLSearchParams();
+                if (month) {
+                    params.set('month', month);
+                }
+                if (tag) {
+                    params.set('tag', tag);
+                }
+                if (place) {
+                    params.set('place', place);
+                }
+                const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.history.pushState({ month: month, tag: tag, place: place }, '', newURL);
+            }
+
+            function updateMonthButtons(year) {
+                const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+                monthFilters.innerHTML = '';
+                
+                for (let i = 1; i <= 12; i++) {
+                    const monthNum = String(i).padStart(2, '0');
+                    const yearMonth = `${year}-${monthNum}`;
+                    const monthName = months[i - 1];
+                    const button = document.createElement('button');
+                    button.className = 'tweet-filter-btn';
+                    button.setAttribute('data-year-month', yearMonth);
+                    button.textContent = monthName;
+                    
+                    // その月にツイートがあるかチェック
+                    let hasTweets = false;
+                    tweetItems.forEach(item => {
+                        if (item.getAttribute('data-year-month') === yearMonth) {
+                            hasTweets = true;
+                        }
+                    });
+                    
+                    if (!hasTweets) {
+                        button.style.opacity = '0.4';
+                        button.style.cursor = 'not-allowed';
+                    }
+                    
+                    button.addEventListener('click', function() {
+                        if (hasTweets) {
+                            filterByMonth(yearMonth);
+                        }
+                    });
+                    monthFilters.appendChild(button);
+                }
+                
+                // 現在選択されている月をアクティブにする
+                if (selectedYearMonth && selectedYearMonth.startsWith(year)) {
+                    const activeBtn = monthFilters.querySelector(`[data-year-month="${selectedYearMonth}"]`);
+                    if (activeBtn) {
+                        activeBtn.classList.add('active');
+                    }
+                }
+            }
+
+            function filterByMonth(yearMonth) {
+                selectedYearMonth = yearMonth;
+                selectedTag = null; // 月を選択したらタグをリセット
+                selectedPlace = null; // 月を選択したらPlaceをリセット
+                
+                // アクティブ状態を更新
+                const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
+                allButtons.forEach(btn => {
+                    if (btn.getAttribute('data-year-month') === yearMonth) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                // タグのアクティブ状態をリセット
+                tweetTags.forEach(tagEl => {
+                    tagEl.classList.remove('active');
+                });
+
+                // ツイートをフィルタリング
+                tweetItems.forEach(item => {
+                    const itemYearMonth = item.getAttribute('data-year-month');
+                    if (itemYearMonth === yearMonth) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // URLを更新
+                updateURL(yearMonth, null, null);
+
+                // ページの先頭に戻る
+                window.scrollTo(0, 0);
+            }
+
+            function filterTweetsByTag(tag) {
+                selectedTag = tag;
+                selectedYearMonth = null; // タグを選択したら月をリセット
+                selectedPlace = null; // タグを選択したらPlaceをリセット
+                
+                // 月のボタンのアクティブ状態をリセット
+                const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
+                allButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // タグのアクティブ状態を更新（サイドバー）
+                tweetTags.forEach(tagEl => {
+                    if (tagEl.getAttribute('data-tag') === tag) {
+                        tagEl.classList.add('active');
+                    } else {
+                        tagEl.classList.remove('active');
+                    }
+                });
+
+                // タグのアクティブ状態を更新（記事内）
+                const allTweetItemTags = document.querySelectorAll('.tweet-item .article-tag');
+                allTweetItemTags.forEach(tagEl => {
+                    if (tagEl.getAttribute('data-tag') === tag) {
+                        tagEl.classList.add('active');
+                    } else {
+                        tagEl.classList.remove('active');
+                    }
+                });
+
+                // ツイートをフィルタリング
+                tweetItems.forEach(item => {
+                    const tags = item.getAttribute('data-tags');
+                    if (tags && tags.includes(tag)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // URLを更新
+                updateURL(null, tag, null);
+
+                   // ページの先頭に戻る
+                   window.scrollTo(0, 0);
+               }
+
+            function filterTweetsByPlace(place) {
+                selectedPlace = place;
+                selectedYearMonth = null; // Placeを選択したら月をリセット
+                selectedTag = null; // Placeを選択したらタグをリセット
+                
+                // 月のボタンのアクティブ状態をリセット
+                const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
+                allButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // タグのアクティブ状態をリセット
+                tweetTags.forEach(tagEl => {
+                    tagEl.classList.remove('active');
+                });
+
+                // ツイートをフィルタリング
+                tweetItems.forEach(item => {
+                    const itemPlace = item.getAttribute('data-place');
+                    if (itemPlace === place) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // URLを更新
+                updateURL(null, null, place);
+
+                   // ページの先頭に戻る
+                   window.scrollTo(0, 0);
+               }
+
+            prevYearBtn.addEventListener('click', function() {
+                currentYear--;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+                // 選択をリセット
+                selectedYearMonth = '';
+                updateURL(null, selectedTag, selectedPlace);
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                currentYear++;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+                // 選択をリセット
+                selectedYearMonth = '';
+                updateURL(null, selectedTag, selectedPlace);
+            });
+
+            // 初期状態の設定
+            if (selectedPlace) {
+                filterTweetsByPlace(selectedPlace);
+            } else if (selectedTag) {
+                filterTweetsByTag(selectedTag);
+            } else if (selectedYearMonth) {
+                filterByMonth(selectedYearMonth);
+            }
+
+            // 初期状態で月のボタンを更新
+            updateMonthButtons(currentYear);
+
+            // サイドバーのタグクリックイベント
+            tweetTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const tagValue = this.getAttribute('data-tag');
+                    filterTweetsByTag(tagValue);
+                });
+            });
+
+            // 記事内のタグクリックイベント
+            document.querySelectorAll('.tweet-item .article-tag').forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const tagValue = this.getAttribute('data-tag');
+                    if (tagValue) {
+                        filterTweetsByTag(tagValue);
+                    }
+                });
+            });
+
+            // DateとPlaceのリンククリックイベント
+            document.querySelectorAll('.tweet-item__date-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    const month = href.split('month=')[1];
+                    if (month) {
+                        const year = month.split('-')[0];
+                        currentYear = parseInt(year);
+                        yearDisplay.textContent = currentYear;
+                        updateMonthButtons(currentYear);
+                        filterByMonth(month);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.tweet-item__place-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    const place = href.split('place=')[1];
+                    if (place) {
+                        filterTweetsByPlace(place);
+                    }
+                });
+            });
+
+                   // ブラウザの戻る/進むボタンに対応
+                   window.addEventListener('popstate', function(event) {
+                       const params = new URLSearchParams(window.location.search);
+                       const month = params.get('month');
+                       const tag = params.get('tag');
+                       const place = params.get('place');
+                       
+                       if (place) {
+                           selectedPlace = place;
+                           filterTweetsByPlace(place);
+                       } else if (tag) {
+                           selectedTag = tag;
+                           filterTweetsByTag(tag);
+                       } else if (month) {
+                           selectedYearMonth = month;
+                           const year = month.split('-')[0];
+                           currentYear = parseInt(year);
+                           yearDisplay.textContent = currentYear;
+                           updateMonthButtons(currentYear);
+                           filterByMonth(month);
+                       } else {
+                           // パラメータがない場合は最新の月を表示
+                           selectedTag = null;
+                           selectedPlace = null;
+                           if (latestYearMonth) {
+                               selectedYearMonth = latestYearMonth;
+                               const year = latestYearMonth.split('-')[0];
+                               currentYear = parseInt(year);
+                               yearDisplay.textContent = currentYear;
+                               updateMonthButtons(currentYear);
+                               filterByMonth(latestYearMonth);
+                           }
+                       }
+                   });
+        });
+    </script>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/tweet/list.html</p>
+{{ end }}
+
+{{ define "secondary" }}
+    <div class="diary-secondary-nav">
+        <div class="diary-secondary-nav__section">
+            <p class="diary-secondary-nav__heading">Tags</p>
+            <div class="tweet-secondary-nav__tags">
+                {{ $allTags := slice }}
+                {{ range .Pages }}
+                    {{ if .Params.tags }}
+                        {{ range .Params.tags }}
+                            {{ if not (in $allTags .) }}
+                                {{ $allTags = $allTags | append . }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+                {{ $sortedTags := sort $allTags }}
+                {{ range $sortedTags }}
+                    <span class="sidebar-tag" data-tag="{{ . }}">{{ . }}</span>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+{{ end }}
+

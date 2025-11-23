@@ -1,0 +1,70 @@
+{{ define "section_header" }}
+    {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-book" }}
+    {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
+    {{ $firstComponent := "" }}
+    {{ if gt (len $componentsPages) 0 }}
+        {{ $sortedComponents := sort $componentsPages "Title" "asc" }}
+        {{ $firstComponent = index $sortedComponents 0 }}
+    {{ end }}
+
+    {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-book" }}
+    {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
+    {{ $firstPattern := "" }}
+    {{ if gt (len $patternsPages) 0 }}
+        {{ $sortedPatterns := sort $patternsPages "Title" "asc" }}
+        {{ $firstPattern = index $sortedPatterns 0 }}
+    {{ end }}
+
+    {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-book" }}
+    {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
+    {{ $firstPrinciple := "" }}
+    {{ if gt (len $principlesPages) 0 }}
+        {{ $sortedPrinciples := sort $principlesPages "Title" "asc" }}
+        {{ $firstPrinciple = index $sortedPrinciples 0 }}
+    {{ end }}
+
+    <div class="column-header">
+        <nav class="column-header__nav" id="ui-design-book-category-filters">
+            <a href="/ui-design-book/" class="column-header__tab active">Readme</a>
+            {{ if $firstComponent }}
+                <a href="{{ $firstComponent.RelPermalink }}" class="column-header__tab">Components</a>
+            {{ else }}
+                <span class="column-header__tab">Components</span>
+            {{ end }}
+            {{ if $firstPattern }}
+                <a href="{{ $firstPattern.RelPermalink }}" class="column-header__tab">Patterns</a>
+            {{ else }}
+                <span class="column-header__tab">Patterns</span>
+            {{ end }}
+            {{ if $firstPrinciple }}
+                <a href="{{ $firstPrinciple.RelPermalink }}" class="column-header__tab">Principles</a>
+            {{ else }}
+                <span class="column-header__tab">Principles</span>
+            {{ end }}
+        </nav>
+    </div>
+{{ end }}
+
+{{ define "main" }}
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <h1>{{ .Title }}</h1>
+                    {{ $content := .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    {{ $content := $content | replaceRE "<h2 id=\"([^\"]+)\">([^<]+)</h2>" "<h2 id=\"$1\">$2</h2>" }}
+                    {{ $content := $content | replaceRE "<h2>目的</h2>" "<h2 id=\"目的\">目的</h2>" }}
+                    {{ $content := $content | replaceRE "<h2>構成</h2>" "<h2 id=\"構成\">構成</h2>" }}
+                    {{ $content | safeHTML }}
+                </article>
+            </ul>
+        </div>
+    </section>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/ui-design-book/list.html</p>
+{{ end }}
+
+{{ define "secondary" }}
+{{ end }}
+

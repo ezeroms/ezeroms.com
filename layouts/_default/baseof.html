@@ -37,13 +37,188 @@
     <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Site.Params.OgImage }}">
 
 </head>
-<body>
-    {{ block "main" . }}{{ end }}
+<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "media-coverage" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ else if eq .Section "ui-design-book" }} class="is-ui-design-book"{{ end }}>
+    <div class="site-shell">
+        <aside class="site-sidebar" aria-label="グローバルナビゲーション">
+            {{ partial "sidebar.html" . }}
+        </aside>
+
+        <div class="site-body">
+            {{ if ne .Section "shoulders-of-giants" }}
+            <div class="section-header">
+                {{ block "section_header" . }}{{ end }}
+            </div>
+            {{ end }}
+            <div class="site-content{{ if eq .Section "shoulders-of-giants" }} is-giants{{ else if eq .Section "ui-design-book" }} is-ui-design-book{{ else if eq .Section "about" }} is-about{{ else if eq .Section "media-coverage" }} is-about{{ else if eq .Section "work" }} is-work{{ end }}">
+                {{ if eq .Section "shoulders-of-giants" }}
+                    {{ partial "giants-toc.html" . }}
+                {{ else if eq .Section "ui-design-book" }}
+                    {{ partial "ui-design-book-toc.html" . }}
+                {{ else if or (eq .Section "about") (eq .Section "media-coverage") }}
+                    {{ partial "about-toc.html" . }}
+                {{ end }}
+                <main class="site-main" id="main-content">
+                    {{ block "main" . }}{{ end }}
+                </main>
+
+                {{ if and (ne .Section "ui-design-book") (ne .Section "about") (ne .Section "media-coverage") }}
+                <aside class="site-secondary" aria-label="セカンダリーナビゲーション">
+                    {{ block "secondary" . }}{{ partial "secondary-nav.html" . }}{{ end }}
+                </aside>
+                {{ else }}
+                {{ block "secondary" . }}{{ end }}
+                {{ end }}
+            </div>
+        </div>
+    </div>
 
     <!-- Google Analytics -->
     {{ partial "google_analytics.html" . }}
 
+    <!-- External links handler -->
+    <script>
+        (function() {
+            // DOMContentLoadedを待つ
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = '{{ .Site.BaseURL }}';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                // 記事内のリンクを取得（.article-item内のリンク）
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    // hrefが空、または既にtarget属性が設定されている場合はスキップ
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    // 相対パス、または同じホストの場合は内部リンク
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        // 内部リンクはそのまま（target属性を追加しない）
+                        return;
+                    }
+                    
+                    // 外部リンクの場合
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
     <!-- debug-info -->
     <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+
+    <script>
+        (function() {
+            // DOMContentLoadedを待つ
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.section-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                // 空のheaderは処理しない
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    // スクロール位置が変わっていない場合は処理をスキップ
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    // スクロールタイムアウトをクリア
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    // ページトップ付近では常に表示
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    // 上にスクロールしたら即座に表示
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    // 下にスクロールしたら非表示
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    // スクロールが止まったら3秒後に表示（下にスクロールしていた場合のみ）
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                // 初期スクロール位置を設定
+                lastScrollTop = getScrollTop();
+
+                // スクロールイベントを監視（throttle付き）
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                // 初期状態を設定
+                handleScroll();
+            }
+        })();
+    </script>
 </body>
 </html>

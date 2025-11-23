@@ -1,12 +1,9 @@
 {{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/think" . }}
-{{ partial "notification.html" . }}
+    {{ partial "notification.html" . }}
 
-<main class="main-section">
-    {{ partial "keyword_menu.html" . }}
-    <section class="main-section-2column__right">
-        <ul class="article-container" id="article-container">
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container" id="article-container">
 
             <div class="article-item-heading">
                 <div class="article-item-heading__label">
@@ -55,13 +52,14 @@
             {{ else }}
                 <p>No articles found for {{ $wordParam }}.</p>
             {{ end }}
-        </ul>
+            </ul>
+        </div>
     </section>
-</main>
 
-{{ partial "global-nav_think.html" . }}
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/topic/list.html</p>
+{{ end }}
 
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/topic/list.html</p>
-
+{{ define "secondary" }}
+    {{ partial "keyword_menu.html" . }}
 {{ end }}

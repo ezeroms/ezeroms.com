@@ -1,0 +1,121 @@
+.article-navigation {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin: 2rem 0 0 0;
+    padding: 0;
+}
+
+.article-navigation__prev,
+.article-navigation__back,
+.article-navigation__next {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.article-navigation__prev {
+    justify-content: flex-start;
+}
+
+.article-navigation__prev:empty {
+    flex: 0;
+}
+
+.article-navigation__back {
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.article-navigation__next {
+    justify-content: flex-end;
+}
+
+.article-navigation__next:empty {
+    flex: 0;
+}
+
+.article-navigation__link {
+    text-decoration: none;
+    color: #050317;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.2s ease;
+    padding: 8px 0;
+}
+
+.article-navigation__link:hover {
+    opacity: 0.6;
+}
+
+.article-navigation__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.article-navigation__prev .article-navigation__content {
+    align-items: flex-start;
+}
+
+.article-navigation__next .article-navigation__content {
+    align-items: flex-end;
+}
+
+.article-navigation__label {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 400;
+}
+
+.article-navigation__title {
+    font-size: 1rem;
+    color: #050317;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.article-navigation__icon {
+    font-size: 1.25rem;
+    color: #050317;
+    line-height: 1;
+}
+
+
+/* スマホ用のスタイル */
+@media (max-width: 960px) {
+    .article-navigation {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .article-navigation__prev,
+    .article-navigation__back,
+    .article-navigation__next {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .article-navigation__prev .article-navigation__content,
+    .article-navigation__next .article-navigation__content {
+        align-items: center;
+    }
+    
+    .article-navigation__link {
+        font-size: 0.875rem;
+    }
+    
+    .article-navigation__title {
+        font-size: 0.875rem;
+    }
+}
+

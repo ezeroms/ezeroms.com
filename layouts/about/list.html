@@ -1,280 +1,251 @@
 {{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/about" . }}
-{{ partial "notification.html" . }}
+    {{ partial "notification.html" . }}
 
-<main class="main-section">
-    <section class="main-section-1column">
-        <div class="about">
-
-        <!-- 写真とプロフィール -->
-        <section class="about__profile">
-            <img src="/images/about/profile.webp" alt="Profile Picture">
-            <article class="article-item">
-                {{ .Content }}
-                <ul class="about__profile__sns">
-                    <li>
-                        <p class="tooltip">Facebook</p>
-                        <a href="https://www.facebook.com/ezeroms/" target="_blank" class="icon_facebook"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">X</p>
-                        <a href="https://x.com/ezeroms" target="_blank" class="icon_x"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Instagram</p>
-                        <a href="https://www.instagram.com/ezeroms/" target="_blank" class="icon_instagram"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">TikTok</p>
-                        <a href="https://www.tiktok.com/@ezeroms" target="_blank" class="icon_tiktok"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">BeReal</p>
-                        <a href="https://bere.al/ezeroms" target="_blank" class="icon_bereal"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Bluesky</p>
-                        <a href="https://bsky.app/profile/ezeroms.bsky.social" target="_blank" class="icon_bluesky"></a>
-                    </li>
-                    
-                    <li>
-                        <p class="tooltip">Threads</p>
-                        <a href="https://www.threads.net/@ezeroms" target="_blank" class="icon_threads"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Chooning</p>
-                        <a href="https://chooning.app/@ezeroms/?hl=ja" target="_blank" class="icon_chooning"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Discord</p>
-                        <a href="https://discord.gg/prmzctxtRe" target="_blank" class="icon_discord"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Spotify</p>
-                        <a href="https://open.spotify.com/user/ezeroms" target="_blank" class="icon_spotify"></a>
-                    </li>
-                </ul>
-            </article>
-        </section>
-
-        <!-- 受賞歴 -->
-        <section class="about__awards">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    🏆
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        受賞歴
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Awards
-                </p>
-            </div>
-        
-            <article class="article-item">
-                <p>Student Freepaper Forum 2010 最優秀賞、オーディエンス賞（2010年）</p>
-                <p>マンガ倉庫 CMコンテスト 優秀賞（2014年）</p>
-                <p>my Japan Award「Creatrive Summer Camp」CMコンテスト 地域最優秀賞（2016年）</p>
-                <p>my Japan Award 2016 伊藤直樹賞（2016年）</p>
-                <p>佐渡ビジネスコンテスト2022 最優秀賞（2022年）</p>
-            </article>
-
-        </section>
-
-        <!-- メディア掲載 -->
-        <section class="about__media-coverage">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    📰
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        メディア掲載
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Media Coverage
-                </p>
+    <section class="about-main">
+        <div class="about-main__content">
+            <!-- カバー画像 -->
+            <div class="about-cover">
+                <img src="/images/about/profile.webp" alt="Profile Picture" class="about-cover__image">
             </div>
 
-            <div class="about__media-coverage__list">
-                {{ range .Site.Data.media_coverage.media }}
-                    <a href="{{ .url }}" target="_blank">
-                        <div class="link-card">
-                            <div class="link-card__left">
-                                <h2 class="link-card__left__h2">
-                                    {{ .title }}
-                                </h2>
-                                <p class="link-card__left__p">
-                                    {{ .description }}
-                                </p>
-                            </div>
-                            <div class="link-card__right icon_exit"></div>
-                        </div>
-                    </a>
+            <!-- プロフィールのコンテンツ -->
+            <div id="profile-content" class="about-content">
+                <article class="article-item">
+                    <div id="profile"></div>
+                    {{ $content := .Content }}
+                    {{ $parts := split $content "## 🌏 Around the Web" }}
+                    {{ if gt (len $parts) 1 }}
+                        {{ index $parts 0 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                        <h2>🌏 Around the Web</h2>
+                        <ul class="about__sns-list">
+                            <li>
+                                <a href="https://bere.al/ezeroms" target="_blank" class="about__sns-link icon_bereal">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">BeReal</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://bsky.app/profile/ezeroms.bsky.social" target="_blank" class="about__sns-link icon_bluesky">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Bluesky</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://chooning.app/@ezeroms/?hl=ja" target="_blank" class="about__sns-link icon_chooning">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Chooning</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://discord.gg/prmzctxtRe" target="_blank" class="about__sns-link icon_discord">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Discord</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.facebook.com/ezeroms/" target="_blank" class="about__sns-link icon_facebook">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Facebook</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/ezeroms/" target="_blank" class="about__sns-link icon_instagram">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Instagram</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://open.spotify.com/user/ezeroms" target="_blank" class="about__sns-link icon_spotify">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Spotify</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.threads.net/@ezeroms" target="_blank" class="about__sns-link icon_threads">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">Threads</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.tiktok.com/@ezeroms" target="_blank" class="about__sns-link icon_tiktok">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">TikTok</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://x.com/ezeroms" target="_blank" class="about__sns-link icon_x">
+                                    <span class="about__sns-icon"></span>
+                                    <span class="about__sns-name">X (Twitter)</span>
+                                </a>
+                            </li>
+                        </ul>
+                        {{ if gt (len (index $parts 1)) 0 }}
+                            {{ index $parts 1 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                        {{ end }}
+                    {{ else }}
+                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    {{ end }}
+                </article>
+            </div>
+
+            <!-- このサイトについてのコンテンツ -->
+            <div id="about-this-site-content" class="about-content" style="display: none;">
+                {{ $aboutThisSitePage := .Site.GetPage "/about/about-this-site" }}
+                {{ if $aboutThisSitePage }}
+                    <article class="article-item">
+                        {{ $aboutThisSitePage.Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    </article>
                 {{ end }}
             </div>
-        </section>
 
-
-        <section class="about__contact">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    📩
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        ご連絡・お問い合わせ
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Contact
-                </p>
+            <!-- お問い合わせのコンテンツ -->
+            <div id="contact-content" class="about-content" style="display: none;">
+                {{ $contactPage := .Site.GetPage "/about/contact" }}
+                {{ if $contactPage }}
+                    <article class="article-item">
+                        {{ $contactPage.Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    </article>
+                {{ end }}
             </div>
 
-            <div class="about__contact__list">
-                
-                <a href="https://forms.gle/Gb6zzBPMD63YGbwR6" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Google Form
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_google"></div>
-                </a>
-
-                <a href="https://m.me/ezeroms" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Messenger
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_messenger"></div>
-                </a>
-
-                <a href="https://line.me/ti/p/Aj7KkTC6Fo" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            LINE
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_line"></div>
-                </a>
-
-                <a href="https://wa.me/qr/36R6ZQFFCIUBP1" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            WhatsApp
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_whatsapp"></div>
-                </a>
-
-                <a href="https://signal.me/#eu/b86kR2YSALTBmAF7MhH5DPm3ipGWm75xKfK6BbCQ-MyJ92vspUhKeYvBm3yXzw1C" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Signal
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_signal"></div>
-                </a>
-
+            <!-- メディア掲載のコンテンツ -->
+            <div id="media-coverage-content" class="about-content" style="display: none;">
+                <ul class="article-container column-list">
+                    {{ range where .Site.RegularPages "Section" "media-coverage" }}
+                        <li class="column-list-item media-coverage-item">
+                            <a href="{{ .RelPermalink }}" class="column-card media-coverage-card">
+                                {{ if .Params.date }}
+                                    <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                                {{ end }}
+                                <h3 class="column-card__title">{{ .Title }}</h3>
+                                {{ if .Params.lead }}
+                                    <p class="media-coverage-card__lead">{{ .Params.lead }}</p>
+                                {{ end }}
+                            </a>
+                        </li>
+                    {{ end }}
+                </ul>
             </div>
-        </section>
-
-
-        <section class="about__contact">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    🔔
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        このブログの更新通知を受け取る
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Subscribe
-                </p>
-            </div>
-
-            <div class="about__contact__list">
-                                  
-                
-                <a href="https://lin.ee/eVcRqAC" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Official LINE Account
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_line"></div>
-                </a>
-
-                <!-- <a href="" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            E-Mail
-                        </h2>
-                    </div>
-                    <img src="/images/about/icon_google.svg" alt="" class="link-card__right">
-                </a> -->
-
-                <a href="https://feedly.com/i/subscription/feed/{{ .Site.BaseURL }}index.xml" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Feedly
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_feedly"></div>
-                </a>
-
-                <a target="_blank" class="link-card in-contact" onclick="copyToClipboard()">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Get RSS Feed Link
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_rss"></div>
-                </a>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText("{{ .Site.BaseURL }}index.xml").then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-
-
-
-            </div>
-        </section>
-
-
-        <div class="image-loader"></div>
         </div>
     </section>
-</main>
 
-{{ partial "global-nav_about.html" . }}
+    <div class="image-loader"></div>
 
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/about/index.html</p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            
+            const profileContent = document.getElementById('profile-content');
+            const aboutThisSiteContent = document.getElementById('about-this-site-content');
+            const contactContent = document.getElementById('contact-content');
+            const mediaCoverageContent = document.getElementById('media-coverage-content');
+            const tocLinks = document.querySelectorAll('.giants-toc__list a');
 
+            function showSection(sectionName) {
+                const aboutCover = document.querySelector('.about-cover');
+                
+                // すべてのコンテンツを非表示
+                if (profileContent) profileContent.style.display = 'none';
+                if (aboutThisSiteContent) aboutThisSiteContent.style.display = 'none';
+                if (contactContent) contactContent.style.display = 'none';
+                if (mediaCoverageContent) mediaCoverageContent.style.display = 'none';
+
+                // 選択されたセクションを表示
+                if (sectionName === 'about-this-site') {
+                    if (aboutThisSiteContent) aboutThisSiteContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'none';
+                } else if (sectionName === 'contact') {
+                    if (contactContent) contactContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'none';
+                } else if (sectionName === 'media-coverage') {
+                    if (mediaCoverageContent) mediaCoverageContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'none';
+                } else {
+                    // profile (デフォルト)
+                    if (profileContent) profileContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'block';
+                }
+
+                // 目次のアクティブ状態を更新
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if ((sectionName === 'about-this-site' && href.includes('section=about-this-site')) ||
+                        (sectionName === 'contact' && href.includes('section=contact')) ||
+                        (sectionName === 'media-coverage' && href.includes('section=media-coverage')) ||
+                        ((sectionName === 'profile' || !sectionName) && (href === '#profile' || href === '/about/'))) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // URLパラメータに基づいてセクションを表示
+            if (section === 'about-this-site') {
+                showSection('about-this-site');
+            } else if (section === 'contact') {
+                showSection('contact');
+            } else if (section === 'media-coverage') {
+                showSection('media-coverage');
+            } else {
+                showSection('profile');
+            }
+
+            // 目次リンクのクリックイベント
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    
+                    if (href.includes('section=about-this-site')) {
+                        showSection('about-this-site');
+                        window.history.pushState({ section: 'about-this-site' }, '', '/about/?section=about-this-site');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    } else if (href.includes('section=contact')) {
+                        showSection('contact');
+                        window.history.pushState({ section: 'contact' }, '', '/about/?section=contact');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    } else if (href.includes('section=media-coverage')) {
+                        showSection('media-coverage');
+                        window.history.pushState({ section: 'media-coverage' }, '', '/about/?section=media-coverage');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    } else if (href === '#profile') {
+                        showSection('profile');
+                        window.history.pushState({ section: 'profile' }, '', '/about/');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    }
+                });
+            });
+
+            // ブラウザの戻る/進むボタンに対応
+            window.addEventListener('popstate', function(event) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const section = urlParams.get('section');
+                if (section === 'about-this-site') {
+                    showSection('about-this-site');
+                } else if (section === 'contact') {
+                    showSection('contact');
+                } else if (section === 'media-coverage') {
+                    showSection('media-coverage');
+                } else {
+                    showSection('profile');
+                }
+            });
+        });
+    </script>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/about/list.html</p>
 {{ end }}

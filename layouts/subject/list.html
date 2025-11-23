@@ -1,12 +1,9 @@
 {{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/diary" . }}
-{{ partial "notification.html" . }}
+    {{ partial "notification.html" . }}
 
-<main class="main-section">
-    {{ partial "diary_menu.html" . }}
-    <section class="main-section-2column__right">
-        <ul class="article-container" id="article-container">
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container" id="article-container">
 
             <div class="article-item-heading">
                 <div class="article-item-heading__label">
@@ -115,15 +112,14 @@
                 <p>No articles found for {{ $topicParam }}.</p>
             {{ end }}
 
-        </ul>
+            </ul>
+        </div>
     </section>
 
-    <div class="image-loader"></div>
-</main>
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/subject/list.html</p>
+{{ end }}
 
-{{ partial "global-nav_diary.html" . }}
-
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/subject/list.html</p>
-
+{{ define "secondary" }}
+    {{ partial "diary_menu.html" . }}
 {{ end }}

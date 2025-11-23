@@ -1,0 +1,32 @@
+<div class="article-navigation">
+    <div class="article-navigation__prev">
+        {{ if .PrevInSection }}
+            <a href="{{ .PrevInSection.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">←</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">戻る</span>
+                    <span class="article-navigation__title">{{ .PrevInSection.Title }}</span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    
+    <div class="article-navigation__back">
+        <a href="{{ .Section | printf "/%s/" }}" class="article-navigation__link">
+            <span class="article-navigation__label">一覧に戻る</span>
+        </a>
+    </div>
+    
+    <div class="article-navigation__next">
+        {{ if .NextInSection }}
+            <a href="{{ .NextInSection.RelPermalink }}" class="article-navigation__link">
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">進む</span>
+                    <span class="article-navigation__title">{{ .NextInSection.Title }}</span>
+                </div>
+                <span class="article-navigation__icon">→</span>
+            </a>
+        {{ end }}
+    </div>
+</div>
+

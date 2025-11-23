@@ -1,15 +1,71 @@
-.about {
-  width: 688px;
-  margin: 64px auto 0;
-  display: flex;
-  flex-direction: column;
-  gap: 64px;
-  padding: 0 0 40px;
-  justify-content: space-between;
+/* Aboutページではheaderを非表示 */
+body.is-about .section-header {
+    display: none;
+}
+
+.about-main {
+    padding: 0 0 80px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.about-main__content {
+    max-width: 688px;
+    width: 100%;
+    min-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.about-article {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.about-cover {
+    width: 100%;
+    margin: 0 0 24px;
+}
+
+.about-cover__image {
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    object-fit: cover;
+}
+
+/* .about-sectionは削除し、.article-itemの直接の子要素として配置 */
+/* アンカー用のdivは非表示にする */
+.article-item > div[id] {
+    display: none;
+}
+
+/* Aboutページのh2スタイルを明示的に適用 */
+.about-content .article-item > h2,
+.about-main .article-item > h2,
+.about-content .article-item h2,
+.about-main .article-item h2 {
+    margin: 1.5rem 0 0 !important;
+    border-bottom: 1px solid #E7E7E9 !important;
+    width: 100% !important;
+    padding: 0 0 0.5rem !important;
+    max-width: 100% !important;
+    color: #050317 !important;
+    font-size: 1.25rem !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: 1.6 !important;
+    letter-spacing: -0.01em !important;
+    display: block !important;
+    text-decoration: none !important;
 }
 
 /* プロフ */
 
+/* 旧スタイル（後方互換性のため残す） */
 .about__profile {
   margin: 0;
   display: flex;
@@ -152,6 +208,132 @@
   width: 24px;
   height: 24px;
   position: relative;
+}
+
+/* 新しいSNSリストスタイル */
+.about__sns-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.about__sns-list li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.about__sns-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #050317;
+  transition: opacity 0.2s ease;
+}
+
+.about__sns-link:hover {
+  opacity: 0.7;
+}
+
+.about__sns-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.2s ease;
+}
+
+.about__sns-name {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* 各SNSアイコンの背景画像 */
+.about__sns-link.icon_facebook .about__sns-icon {
+  background-image: url('/images/about/icon_facebook_off.svg');
+}
+
+.about__sns-link.icon_facebook:hover .about__sns-icon {
+  background-image: url('/images/about/icon_facebook_on.svg');
+}
+
+.about__sns-link.icon_x .about__sns-icon {
+  background-image: url('/images/about/icon_x_off.svg');
+}
+
+.about__sns-link.icon_x:hover .about__sns-icon {
+  background-image: url('/images/about/icon_x_on.svg');
+}
+
+.about__sns-link.icon_instagram .about__sns-icon {
+  background-image: url('/images/about/icon_instagram_off.svg');
+}
+
+.about__sns-link.icon_instagram:hover .about__sns-icon {
+  background-image: url('/images/about/icon_instagram_on.svg');
+}
+
+.about__sns-link.icon_tiktok .about__sns-icon {
+  background-image: url('/images/about/icon_tiktok_off.svg');
+}
+
+.about__sns-link.icon_tiktok:hover .about__sns-icon {
+  background-image: url('/images/about/icon_tiktok_on.svg');
+}
+
+.about__sns-link.icon_bereal .about__sns-icon {
+  background-image: url('/images/about/icon_bereal_off.svg');
+}
+
+.about__sns-link.icon_bereal:hover .about__sns-icon {
+  background-image: url('/images/about/icon_bereal_on.svg');
+}
+
+.about__sns-link.icon_bluesky .about__sns-icon {
+  background-image: url('/images/about/icon_bluesky_off.svg');
+}
+
+.about__sns-link.icon_bluesky:hover .about__sns-icon {
+  background-image: url('/images/about/icon_bluesky_on.svg');
+}
+
+.about__sns-link.icon_threads .about__sns-icon {
+  background-image: url('/images/about/icon_threads_off.svg');
+}
+
+.about__sns-link.icon_threads:hover .about__sns-icon {
+  background-image: url('/images/about/icon_threads_on.svg');
+}
+
+.about__sns-link.icon_chooning .about__sns-icon {
+  background-image: url('/images/about/icon_chooning_off.svg');
+}
+
+.about__sns-link.icon_chooning:hover .about__sns-icon {
+  background-image: url('/images/about/icon_chooning_on.svg');
+}
+
+.about__sns-link.icon_discord .about__sns-icon {
+  background-image: url('/images/about/icon_discord_off.svg');
+}
+
+.about__sns-link.icon_discord:hover .about__sns-icon {
+  background-image: url('/images/about/icon_discord_on.svg');
+}
+
+.about__sns-link.icon_spotify .about__sns-icon {
+  background-image: url('/images/about/icon_spotify_off.svg');
+}
+
+.about__sns-link.icon_spotify:hover .about__sns-icon {
+  background-image: url('/images/about/icon_spotify_on.svg');
 }
 
 /* .about__profile__sns img {

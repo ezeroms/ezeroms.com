@@ -1,50 +1,254 @@
 {{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/think" . }}
+    {{ partial "notification.html" . }}
 
-<main class="main-section">
-    {{ partial "keyword_menu.html" . }}
-    <section class="main-section-2column__right">
-        <ul class="article-container" id="article-container">
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <div class="giants-header" id="giants-header">
+                <div class="giants-header__title-wrapper">
+                    <button class="giants-header__link-button" onclick="copyGiantsPageUrl()">
+                        <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Copy page URL">
+                    </button>
+                    <h1 class="giants-header__title" id="giants-header-title">The shoulders of Giants</h1>
+                </div>
+                <img src="{{ "images/the-shoulders-of-giants/giant.svg" | relURL }}" alt="Giant" class="giants-header__image">
+            </div>
+            <ul class="article-container" id="article-container">
         {{ range (where .Site.RegularPages "Section" "shoulders-of-giants") }}
-            <article class="article-item hover-effect">
-                {{ .Content }}
+            <article class="article-item hover-effect giants-item" data-topics="{{ if .Params.topic }}{{ delimit .Params.topic " " }}{{ end }}">
+                <div class="giants-item__content">
+                    {{ .Content }}
+                </div>
+                {{ if .Params.topic }}
+                    <div class="giants-item__tags">
+                        {{ $sortedTopics := sort .Params.topic }}
+                        {{ range $sortedTopics }}
+                            <span class="article-tag" data-tag="{{ . }}">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                {{ end }}
             </article>
         {{ end }}
-        </ul>
+            </ul>
+        </div>
     </section>
-</main>
 
-{{ partial "global-nav_think.html" . }}
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/shoulders-of-giants/list.html</p>
 
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/keyword/index.html</p>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedTopic = urlParams.get('topic') ? decodeURIComponent(urlParams.get('topic')) : null;
+        
+        const giantsItems = document.querySelectorAll('.giants-item');
+        const topicLinks = document.querySelectorAll('.giants-toc__list a');
 
-<script>
+        // 初期状態でフィルタリング
+        if (selectedTopic) {
+            // 初期状態でアクティブなタグを設定
+            topicLinks.forEach(link => {
+                if (link.getAttribute('data-topic') === selectedTopic) {
+                    link.classList.add('active');
+                }
+            });
+            // カード内のタグのアクティブ状態を設定
+            const cardTags = document.querySelectorAll('.giants-item .article-tag');
+            cardTags.forEach(tag => {
+                if (tag.getAttribute('data-tag') === selectedTopic) {
+                    tag.classList.add('active');
+                }
+            });
+            // タイトルを更新
+            const headerTitle = document.getElementById('giants-header-title');
+            if (headerTitle) {
+                headerTitle.textContent = selectedTopic;
+            }
+            filterByTopic(selectedTopic);
+        } else {
+            // タグが選択されていない場合はランダムに並び替え
+            shuffleArticles();
+        }
 
-// Shuffle articles on page load
-// キーワードをランダムで並び替えている
-document.addEventListener("DOMContentLoaded", function() {
-    var articles = document.querySelectorAll('.article-item');
-    var articlesArray = Array.prototype.slice.call(articles);
-    shuffleArray(articlesArray);
+        // タグリンクにクリックイベントを追加
+        topicLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const topic = this.getAttribute('data-topic');
+                filterByTopic(topic);
+            });
+        });
 
-    var articlesList = document.getElementById('article-container');
-    articlesList.innerHTML = '';
+        // ブラウザの戻る/進むボタンに対応
+        window.addEventListener('popstate', function(event) {
+            const params = new URLSearchParams(window.location.search);
+            const topic = params.get('topic') ? decodeURIComponent(params.get('topic')) : null;
+            
+            if (topic) {
+                filterByTopic(topic);
+            } else {
+                // タグが選択されていない場合は全表示してランダムに並び替え
+                const headerTitle = document.getElementById('giants-header-title');
+                if (headerTitle) {
+                    headerTitle.textContent = 'The shoulders of Giants';
+                }
+                giantsItems.forEach(item => {
+                    item.style.display = '';
+                });
+                shuffleArticles();
+            }
+        });
 
-    articlesArray.forEach(function(article) {
-        articlesList.appendChild(article);
+        function filterByTopic(topic) {
+            // タグのアクティブ状態を更新
+            topicLinks.forEach(link => {
+                if (link.getAttribute('data-topic') === topic) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // カード内のタグのアクティブ状態を更新
+            const cardTags = document.querySelectorAll('.giants-item .article-tag');
+            cardTags.forEach(tag => {
+                if (tag.getAttribute('data-tag') === topic) {
+                    tag.classList.add('active');
+                } else {
+                    tag.classList.remove('active');
+                }
+            });
+
+            // タイトルを更新
+            const headerTitle = document.getElementById('giants-header-title');
+            if (headerTitle) {
+                headerTitle.textContent = topic;
+            }
+
+            // 記事をフィルタリング
+            giantsItems.forEach(item => {
+                const topics = item.getAttribute('data-topics');
+                if (topics && topics.includes(topic)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // URLを更新（日本語をそのまま含める）
+            const newURL = window.location.pathname + '?topic=' + encodeURIComponent(topic);
+            window.history.pushState({ topic: topic }, '', newURL);
+
+            // ページの先頭に戻る
+            const mainContent = document.querySelector('.site-content.is-giants .site-main');
+            if (mainContent) {
+                mainContent.scrollTo(0, 0);
+            } else {
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // カード内のタグにクリックイベントを追加
+        document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('article-tag') && e.target.closest('.giants-item')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const topic = e.target.getAttribute('data-tag');
+                filterByTopic(topic);
+            }
+        });
+
+        // カードクリック時に本文をクリップボードにコピー
+        giantsItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                // タグがクリックされた場合は処理をスキップ
+                if (e.target.classList.contains('article-tag') || e.target.closest('.article-tag')) {
+                    return;
+                }
+
+                // 本文コンテンツを取得（タグ部分を除外）
+                const contentDiv = this.querySelector('.giants-item__content');
+                if (!contentDiv) return;
+
+                // テキストコンテンツを取得
+                const textContent = contentDiv.innerText || contentDiv.textContent || '';
+                const trimmedText = textContent.trim();
+
+                if (trimmedText) {
+                    // クリップボードにコピー
+                    navigator.clipboard.writeText(trimmedText).then(function() {
+                        showNotification();
+                    }, function(err) {
+                        console.error('クリップボードへのコピーに失敗しました: ', err);
+                    });
+                }
+            });
+        });
+
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.textContent = 'Content copied to clipboard!';
+                notification.className = 'notification show';
+                setTimeout(function() {
+                    notification.className = notification.className.replace(' show', '');
+                }, 3000);
+            }
+        }
+
+        function copyGiantsPageUrl() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(function() {
+                showUrlNotification();
+            }, function(err) {
+                console.error('リンクの保存に失敗しました: ', err);
+            });
+        }
+
+        function showUrlNotification() {
+            const notification = document.getElementById('notification');
+            if (notification) {
+                notification.textContent = 'Link copied to clipboard!';
+                notification.className = 'notification show';
+                setTimeout(function() {
+                    notification.className = notification.className.replace(' show', '');
+                }, 3000);
+            }
+        }
+
+        function shuffleArticles() {
+            const articles = document.querySelectorAll('.giants-item');
+            const articlesArray = Array.prototype.slice.call(articles);
+            shuffleArray(articlesArray);
+
+            const articlesList = document.getElementById('article-container');
+            articlesList.innerHTML = '';
+
+            articlesArray.forEach(function(article) {
+                articlesList.appendChild(article);
+            });
+
+            // ページの先頭に戻る
+            const mainContent = document.querySelector('.site-content.is-giants .site-main');
+            if (mainContent) {
+                mainContent.scrollTo(0, 0);
+            } else {
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
     });
-});
+    </script>
+{{ end }}
 
-// Shuffle array function
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-</script>
+{{ define "secondary" }}
+    {{ partial "keyword_menu.html" . }}
 {{ end }}

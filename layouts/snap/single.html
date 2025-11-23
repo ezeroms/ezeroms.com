@@ -1,0 +1,20 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <p class="date">{{ .Date | dateFormat "2006-01-02" }}</p>
+                    <h1>{{ .Title }}</h1>
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                </article>
+            </ul>
+        </div>
+    </section>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/snap/single.html</p>
+{{ end }}
+
+

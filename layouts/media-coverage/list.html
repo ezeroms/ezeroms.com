@@ -1,0 +1,27 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container column-list">
+                {{ range .Pages }}
+                    <li class="column-list-item media-coverage-item">
+                        <a href="{{ .RelPermalink }}" class="column-card media-coverage-card">
+                            {{ if .Params.date }}
+                                <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                            {{ end }}
+                            <h3 class="column-card__title">{{ .Title }}</h3>
+                            {{ if .Params.lead }}
+                                <p class="media-coverage-card__lead">{{ .Params.lead }}</p>
+                            {{ end }}
+                        </a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/media-coverage/list.html</p>
+{{ end }}
+

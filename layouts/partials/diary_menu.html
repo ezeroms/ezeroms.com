@@ -1,38 +1,21 @@
-<aside class="main-section-2column__left">
-    <ul>
-        <li><a href="/subject/diary/">今日のハイライト</a></li>
-        <li><a href="/subject/music/">音楽</a></li>
-        <li><a href="/subject/manga-and-anime/">漫画・アニメ</a></li>
-        <li><a href="/subject/movies-and-dramas/">映画・ドラマ</a></li>
-        <li><a href="/subject/comedy/">お笑い</a></li>
-        <li><a href="/subject/gaming/">ゲーム</a></li>
-        <li><a href="/subject/sports/">スポーツ</a></li>
-        <li><a href="/subject/books-and-magazines/">本・雑誌</a></li>
-        <li><a href="/subject/politics/">政治</a></li>
-        <li><a href="/subject/economy-and-business/">経済・ビジネス</a></li>
-        <li><a href="/subject/languages/">言葉・言語</a></li>
-        <li><a href="/subject/foreign-cultures/">海外文化</a></li>
-        <li><a href="/subject/design-and-creative/">デザイン・クリエイティブ</a></li>
-        <li><a href="/subject/internet-and-technology/">インターネット・技術</a></li>
-        <li><a href="/subject/natural-science/">自然科学</a></li>
-        <li><a href="/subject/humanities-and-social-sciences/">人文・社会科学</a></li>
-    </ul>
-
-    <ul>
-        {{ $months := slice }}
-        {{ range (where .Site.RegularPages "Section" "diary") }}
-            {{ $month := index .Params.month 0 }}
-            {{ if not (in $months $month) }}
-                {{ $months = $months | append $month }}
+<div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <p class="diary-secondary-nav__heading">Tags</p>
+        <div class="tweet-secondary-nav__tags">
+            {{ $allTags := slice }}
+            {{ range (where .Site.RegularPages "Section" "diary") }}
+                {{ if .Params.tags }}
+                    {{ range .Params.tags }}
+                        {{ if not (in $allTags .) }}
+                            {{ $allTags = $allTags | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
             {{ end }}
-        {{ end }}
-        {{ $sortedMonths := sort $months }}
-        {{ $total := len $sortedMonths }}
-        {{ range $index := seq 0 (sub $total 1) }}
-            {{ $i := sub (sub $total 1) $index }}
-            {{ $month := index $sortedMonths $i }}
-            <li><a href="{{ printf "/month/%s" (urlize $month) }}">{{ $month }}</a></li>
-        {{ end }}
-
-    </ul>
-</aside>
+            {{ $sortedTags := sort $allTags }}
+            {{ range $sortedTags }}
+                <span class="sidebar-tag" data-tag="{{ . }}">{{ . }}</span>
+            {{ end }}
+        </div>
+    </div>
+</div>

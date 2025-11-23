@@ -1,0 +1,29 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="about-main">
+        <div class="about-main__content">
+            <article class="article-item">
+                <div class="article-header">
+                    {{ if .Params.date }}
+                        <p class="date">Media Coverage · {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                    {{ end }}
+                    <h1>{{ .Title }}</h1>
+                    {{ if .Params.lead }}
+                        <p class="media-coverage-detail__lead">{{ .Params.lead }}</p>
+                    {{ end }}
+                </div>
+                {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                {{ if .Params.external_url }}
+                    <p><a href="{{ .Params.external_url }}" target="_blank">{{ .Params.external_url }}</a></p>
+                {{ end }}
+            </article>
+            
+            {{ partial "article-navigation.html" . }}
+        </div>
+    </section>
+
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/media-coverage/single.html</p>
+{{ end }}
+

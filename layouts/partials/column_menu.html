@@ -1,0 +1,22 @@
+<div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <p class="diary-secondary-nav__heading">Tags</p>
+        <div class="tweet-secondary-nav__tags">
+            {{ $allTags := slice }}
+            {{ range (where .Site.RegularPages "Section" "column") }}
+                {{ if .Params.tags }}
+                    {{ range .Params.tags }}
+                        {{ if not (in $allTags .) }}
+                            {{ $allTags = $allTags | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedTags := sort $allTags }}
+            {{ range $sortedTags }}
+                <a href="/column/?tag={{ . | urlize }}" class="sidebar-tag" data-tag="{{ . }}" data-tag-urlized="{{ . | urlize }}">{{ . }}</a>
+            {{ end }}
+        </div>
+    </div>
+</div>
+

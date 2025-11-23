@@ -1,18 +1,34 @@
 /* --------------------
 デバイス共通のスタイル
 -------------------- */
-blockquote {
-  border-left: 4px solid #E7E7E9;
-  margin: 8px 0;
-  padding-left: 20px;
-  gap: 8px;
-  display: flex;
-  flex-direction: column;
+.article-item blockquote {
+  border-left: 3px solid #E7E7E9;
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+  padding-right: 0;
+  color: #5D5D5F;
+  font-style: italic;
+  display: block;
+}
+
+.article-item blockquote p {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.article-item blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* blockquoteの最後の要素のmargin-bottomを0にする */
+.article-item blockquote:last-child {
+  margin-bottom: 0;
 }
 
 .article-item {
-  width: auto;
-  /* min-width: calc(100% - 64px); */
+  width: 100%;
+  min-width: 100%;
   margin: 0;
   padding: 32px;
   border: 1px solid #E7E7E9;
@@ -22,8 +38,72 @@ blockquote {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
+  /* gapは削除し、すべての要素にmarginで制御（ネストされた要素にも適用されるため） */
   word-break: break-all;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* .article-itemの直接の子要素の最初の要素のmargin-topを0にする */
+.article-item > *:first-child {
+  margin-top: 0;
+}
+
+/* すべての記事ページでマージン相殺を防ぐため、.article-itemの直接の子要素にflow-rootを適用 */
+.article-item > * {
+  display: flow-root;
+}
+
+/* h2はblockとして表示 */
+.article-item > h2 {
+  display: block;
+}
+
+/* 記事のヘッダー部分 */
+.article-header {
+  width: 100%;
+  margin-bottom: 0;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #E7E7E9;
+  display: flow-root;
+}
+
+/* 本文がない場合（article-headerが最後の子要素の場合）はborder-bottomを非表示 */
+.article-item > .article-header:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* 記事のヘッダー内の最初の要素のmargin-topを0にする */
+.article-header > *:first-child {
+  margin-top: 0;
+}
+
+/* 記事のヘッダー内の最後の要素のmargin-bottomを0にする */
+.article-header > *:last-child {
+  margin-bottom: 0;
+}
+
+/* タイトルの上の要素とタイトルの間は1rem */
+.article-header > * + h1,
+.article-header > * + h3 {
+  margin-top: 1rem;
+}
+
+/* タグリストの上は2rem（詳細度を高くして確実に適用） */
+.article-header > .column-card__tags {
+  margin-top: 2rem !important;
+}
+
+/* タイトルの下にタグリスト以外の補足情報がある場合、それとタイトルの間を1rem */
+.article-header > h1 + *:not(.column-card__tags),
+.article-header > h3 + *:not(.column-card__tags) {
+  margin-top: 1rem;
+}
+
+/* 記事のヘッダーの下の本文部分 */
+.article-item > .article-header + * {
+  margin-top: 2rem;
 }
 
 .hover-effect:hover {
@@ -32,56 +112,114 @@ blockquote {
 }
 
 .article-item h1 {
-  margin: 0;
+  margin: 0 0 0;
   padding: 0;
   max-width: 100%;
   color: #050317;
-  font-size: 20px;
+  font-size: 1.5rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0 0 28px;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  display: block;
   text-decoration: none;
   transition-duration: 0.4s;
 }
 
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h1 + p,
+.article-item h1 + ul,
+.article-item h1 + ol,
+.article-item h1 + blockquote,
+.article-item h1 + hr {
+  margin-top: 1.75rem;
+}
+
+.article-item h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-item h1 a:hover {
+  opacity: 0.8;
+}
+
 .article-item p.date {
-  font-size: 14px;
-  margin: 0 0 -4px;
+  font-size: 0.875rem;
+  margin: 0 0 -0.25rem;
   font-style: italic;
   color: #5D5D5F;
 }
 
-
-.article-item h2 {
-  margin: 16px 0 0!important;
+.article-item h2,
+.article-item > h2 {
+  margin: 1.5rem 0 0;
   border-bottom: 1px solid #E7E7E9;
   width: 100%;
-  padding: 0 0 4px;
+  padding: 0 0 0.5rem;
   max-width: 100%;
   color: #050317;
-  font-size: 17px;
+  font-size: 1.25rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  display: block;
   text-decoration: none;
 }
 
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h2 + p,
+.article-item h2 + ul,
+.article-item h2 + ol,
+.article-item h2 + blockquote,
+.article-item h2 + hr {
+  margin-top: 1rem;
+}
+
 .article-item h3 {
-  margin: 16px 0 0!important;
+  margin: 1.25rem 0 0;
   padding: 0;
   max-width: 100%;
   color: #050317;
-  font-size: 16px;
+  font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  display: block;
   text-decoration: none;
+}
+
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h3 + p,
+.article-item h3 + ul,
+.article-item h3 + ol,
+.article-item h3 + blockquote,
+.article-item h3 + hr {
+  margin-top: 0.875rem;
+}
+
+.article-item h4 {
+  margin: 1rem 0 0;
+  padding: 0;
+  max-width: 100%;
+  color: #050317;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.6;
+  display: block;
+  text-decoration: none;
+}
+
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h4 + p,
+.article-item h4 + ul,
+.article-item h4 + ol,
+.article-item h4 + blockquote,
+.article-item h4 + hr {
+  margin-top: 0.75rem;
 }
 
 .article-item h6 {
@@ -93,23 +231,33 @@ blockquote {
 }
 
 .article-item hr {
-  background-color: #E7E7E9;
-  height: 1px;
-  width: 100%;
   border: none;
+  border-top: none;
+  margin: 0.7rem 0;
+  height: 0;
+  width: 100%;
+  background: none;
+}
+
+/* hrの最後の要素のmargin-bottomを0にする */
+.article-item hr:last-child {
+  margin-bottom: 0;
 }
 
 .article-item p {
-  margin: 0;
+  margin: 0 0 1rem;
   padding: 0;
   color: #050317;
-  
   width: 100%;
-
-  font-size: 16px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 180%; /* 28.8px */
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+
+.article-item p:last-child {
+  margin-bottom: 0;
 }
 
 .article-item a {
@@ -122,32 +270,86 @@ blockquote {
   transition-duration: 0s;
 }
 
+/* インラインコードのスタイル（Slack風） */
+.article-item code:not(pre code) {
+  background-color: #f4f4f4;
+  color: #C01443;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace;
+  font-size: 0.875em;
+  padding: 0.125em 0.375em;
+  border-radius: 3px;
+  display: inline;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.article-item ul,
+.article-item ol {
+  margin: 0 0 1.5rem 0;
+  padding-left: 1.75rem;
+  list-style-position: outside;
+}
+
+/* リストの最後の要素のmargin-bottomを0にする */
+.article-item ul:last-child,
+.article-item ol:last-child {
+  margin-bottom: 0;
+}
 
 .article-item ul {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 12px 0;
-  padding-inline-start: 1rem;
-  list-style-type: disc!important;
+  list-style-type: disc;
+}
+
+.article-item ol {
+  list-style-type: decimal;
 }
 
 .article-item li {
-  margin: 0;
-  padding: 0;
+  margin: 0.5rem 0;
+  padding: 0 0 0 0.5rem;
   width: 100%;
   color: #050317;
-  font-size: 16px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 180%; /* 28.8px */
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+
+.article-item ul ul,
+.article-item ol ol,
+.article-item ul ol,
+.article-item ol ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.article-item ul ul {
+  list-style-type: circle;
+}
+
+.article-item ul ul ul {
+  list-style-type: square;
 }
 
 .article-item img {
   width: 100%;
   display: block;
-  margin: 0 auto; /* 画像を中央に寄せる場合 */
+  margin: 1.5rem auto; /* 画像を中央に寄せる場合 */
   position: relative; /* 擬似要素を正しく表示するために必要 */
+}
+
+/* 画像の最後の要素のmargin-bottomを0にする */
+.article-item img:last-child {
+  margin-bottom: 0;
+}
+
+/* 見出しの直後に画像が来る場合のマージン調整 */
+.article-item h1 + img,
+.article-item h2 + img,
+.article-item h3 + img,
+.article-item h4 + img {
+  margin-top: 1rem;
 }
 
 .image-wrapper {
@@ -159,14 +361,14 @@ blockquote {
 .image-wrapper::after {
   content: attr(data-alt); /* data-alt属性の内容を表示 */
   display: block;
-  margin: 12px 0 2px 0;
-  font-size: 14px;
+  margin: 0.75rem 0 0.125rem;
+  font-size: 0.875rem;
   padding: 0;
   color: #5D5D5F;
   width: 100%;
   font-style: normal;
   font-weight: 400;
-  line-height: 180%;
+  line-height: 1.6;
 }
 
 .image-wrapper.no-alt::after {
@@ -216,7 +418,7 @@ blockquote {
 }
 
 .social-action__line a {
-  font-size: 14px;
+  font-size: 0.875rem;
   text-decoration: none!important;
   color: #5D5D5F!important;
   font-weight: 400!important;
@@ -319,46 +521,50 @@ blockquote {
 -------------------- */
 @media (max-width: 960px) {
   .image-wrapper::after {
-    font-size: 12px;
-    margin: 8px 0 2px 0;
+    font-size: 0.75rem;
+    margin: 0.5rem 0 0.125rem;
   }
 
   .article-item {
     width: calc(100dvw - 48px - 32px);
-    padding: 24px;
-    gap: 12px;
+    padding: 1.5rem;
+    gap: 0.75rem;
   }
 
   .article-item h1 {
-    font-size: 18px;
-    margin: 0 0 18px;
+    font-size: 1.25rem;
+    margin: 0 0 1.125rem;
   }
 
   .article-item p {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   .hover-effect:hover {
     border: 1px solid #E7E7E9;
   }
 
-
   .article-item h2 {
-    font-size: 15px;
+    font-size: 1.125rem;
   }
   
   .article-item h3 {
-    font-size: 14px;
+    font-size: 1rem;
   }
 
-  .article-item ul {
-    gap: 8px;
-    margin: 8px 0;
-    padding-inline-start: 1rem;
+  .article-item h4 {
+    font-size: 0.9375rem;
+  }
+
+  .article-item ul,
+  .article-item ol {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
   }
   
   .article-item li {
-    font-size: 14px;
+    font-size: 0.875rem;
+    margin: 0.375rem 0;
   }
 
 
@@ -434,8 +640,12 @@ blockquote {
   }
 
   .article-item p.date {
-    font-size: 12px;
-    margin: 0 0 -6px;
+    font-size: 0.75rem;
+    margin: 0 0 -0.375rem;
+  }
+
+  .social-action__line a {
+    font-size: 0.75rem;
   }
 
 }

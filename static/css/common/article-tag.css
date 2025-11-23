@@ -1,0 +1,62 @@
+/* 記事内のタグスタイル（共通） */
+/* Columnのタグスタイルを基準に統一 */
+
+.article-tag,
+a.article-tag,
+span.article-tag,
+.article-item .article-tag,
+.article-item a.article-tag,
+.article-item span.article-tag,
+.diary-item .article-tag,
+.diary-item a.article-tag,
+.diary-item span.article-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #f9f9f7;
+    border: 1px solid #E7E7E9;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    color: #050317;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+/* .article-item aのスタイルを上書き */
+.article-item a.article-tag {
+    text-decoration: none !important;
+}
+
+.article-item a.article-tag:hover {
+    opacity: 1;
+    text-decoration: none !important;
+}
+
+.article-tag:hover,
+a.article-tag:hover,
+span.article-tag:hover,
+.article-item .article-tag:hover,
+.article-item a.article-tag:hover,
+.article-item span.article-tag:hover,
+.diary-item .article-tag:hover,
+.diary-item a.article-tag:hover,
+.diary-item span.article-tag:hover {
+    background: #E7E7E9;
+    border-color: #6E6D79;
+}
+
+.article-tag.active,
+a.article-tag.active,
+span.article-tag.active,
+.article-item .article-tag.active,
+.article-item a.article-tag.active,
+.article-item span.article-tag.active,
+.diary-item .article-tag.active,
+.diary-item a.article-tag.active,
+.diary-item span.article-tag.active {
+    background: #050317;
+    color: #fff;
+    border-color: #050317;
+}
+

@@ -1,24 +1,460 @@
-{{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/work" . }}
+{{ define "section_header" }}
+    {{ $allMonths := slice }}
+    {{ range .Pages }}
+        {{ $startDate := "" }}
+        {{ $endDate := "" }}
+        {{ if .Params.start_date }}
+            {{ $startDate = .Params.start_date }}
+        {{ end }}
+        {{ if and .Params.end_date (ne .Params.end_date "") }}
+            {{ $endDate = .Params.end_date }}
+        {{ end }}
+        {{ if $startDate }}
+            {{ $start := time $startDate }}
+            {{ $end := $start }}
+            {{ if and $endDate (ne $endDate "") }}
+                {{ $end = time $endDate }}
+            {{ end }}
+            {{ $current := $start }}
+            {{ range $i := seq 0 1000 }}
+                {{ if gt $current $end }}
+                    {{ break }}
+                {{ end }}
+                {{ $monthStr := $current | dateFormat "2006-01" }}
+                {{ if not (in $allMonths $monthStr) }}
+                    {{ $allMonths = $allMonths | append $monthStr }}
+                {{ end }}
+                {{ $current = $current.AddDate 0 1 0 }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+    {{ $latestYear := "" }}
+    {{ $latestMonthNum := "" }}
+    {{ if $latestMonth }}
+        {{ $latestYear = index (split $latestMonth "-") 0 }}
+        {{ $latestMonthNum = index (split $latestMonth "-") 1 }}
+    {{ end }}
 
-<main class="main-section">
-    <section class="main-section-1column">
-        <div class="work">
-            {{ range .Pages }}
-                <div class="work-item">
-                    <a href="{{ .Permalink }}">
-                        <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                    </a>
-                </div>
+    <div class="tweet-header-nav">
+        <div class="tweet-year-selector">
+            <button class="tweet-year-nav" id="prev-year">‹</button>
+            <span class="tweet-year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
+            <button class="tweet-year-nav" id="next-year">›</button>
+        </div>
+
+        <div class="tweet-month-filters" id="work-month-filters">
+            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
+            {{ $currentYear := $latestYear }}
+            {{ if not $currentYear }}
+                {{ $currentYear = "2025" }}
+            {{ end }}
+            {{ range $index := seq 1 12 }}
+                {{ $monthNum := printf "%02d" $index }}
+                {{ $yearMonth := printf "%s-%s" $currentYear $monthNum }}
+                {{ $monthName := index $months (sub $index 1) }}
+                <button class="tweet-filter-btn" data-year-month="{{ $yearMonth }}">{{ $monthName }}</button>
             {{ end }}
         </div>
+    </div>
+{{ end }}
+
+{{ define "main" }}
+    {{ $allMonths := slice }}
+    {{ range .Pages }}
+        {{ $startDate := "" }}
+        {{ $endDate := "" }}
+        {{ if .Params.start_date }}
+            {{ $startDate = .Params.start_date }}
+        {{ end }}
+        {{ if and .Params.end_date (ne .Params.end_date "") }}
+            {{ $endDate = .Params.end_date }}
+        {{ end }}
+        {{ if $startDate }}
+            {{ $start := time $startDate }}
+            {{ $end := $start }}
+            {{ if and $endDate (ne $endDate "") }}
+                {{ $end = time $endDate }}
+            {{ end }}
+            {{ $current := $start }}
+            {{ range $i := seq 0 1000 }}
+                {{ if gt $current $end }}
+                    {{ break }}
+                {{ end }}
+                {{ $monthStr := $current | dateFormat "2006-01" }}
+                {{ if not (in $allMonths $monthStr) }}
+                    {{ $allMonths = $allMonths | append $monthStr }}
+                {{ end }}
+                {{ $current = $current.AddDate 0 1 0 }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container column-list work-list" id="work-articles-list">
+                {{ range .Pages }}
+                    {{ $tags := slice }}
+                    {{ if .Params.tags }}
+                        {{ $tags = .Params.tags }}
+                    {{ end }}
+                    {{ $startDate := "" }}
+                    {{ $endDate := "" }}
+                    {{ if .Params.start_date }}
+                        {{ $startDate = .Params.start_date }}
+                    {{ end }}
+                    {{ if and .Params.end_date (ne .Params.end_date "") }}
+                        {{ $endDate = .Params.end_date }}
+                    {{ end }}
+                    {{ $yearMonths := slice }}
+                    {{ if $startDate }}
+                        {{ $start := time $startDate }}
+                        {{ $end := $start }}
+                        {{ if and $endDate (ne $endDate "") }}
+                            {{ $end = time $endDate }}
+                        {{ end }}
+                        {{ $current := $start }}
+                        {{ range $i := seq 0 1000 }}
+                            {{ if gt $current $end }}
+                                {{ break }}
+                            {{ end }}
+                            {{ $monthStr := $current | dateFormat "2006-01" }}
+                            {{ $yearMonths = $yearMonths | append $monthStr }}
+                            {{ $current = $current.AddDate 0 1 0 }}
+                        {{ end }}
+                    {{ end }}
+                    {{ $displayDate := "" }}
+                    {{ if $startDate }}
+                        {{ $start := time $startDate }}
+                        {{ if and $endDate (ne $endDate "") }}
+                            {{ $end := time $endDate }}
+                            {{ $displayDate = printf "%s · %s – %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") ($end | dateFormat "Jan") ($end | dateFormat "2006") }}
+                        {{ else }}
+                            {{ $displayDate = printf "%s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
+                        {{ end }}
+                    {{ end }}
+                    <li class="column-list-item work-list-item" data-tags="{{ delimit $tags " " }}" data-year-months="{{ delimit $yearMonths " " }}">
+                        <a href="{{ .RelPermalink }}" class="column-card work-card">
+                            {{ if .Params.image }}
+                                <div class="work-card__image">
+                                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                                </div>
+                            {{ end }}
+                            {{ if $displayDate }}
+                                <p class="date">{{ $displayDate }}</p>
+                            {{ end }}
+                            <h3 class="column-card__title">{{ .Title }}</h3>
+                            {{ if $tags }}
+                                <div class="column-card__tags">
+                                    {{ $sortedTags := sort $tags }}
+                                    {{ range $sortedTags }}
+                                        <span class="article-tag" data-tag="{{ . }}" role="button" tabindex="0">{{ . }}</span>
+                                    {{ end }}
+                                </div>
+                            {{ end }}
+                        </a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
     </section>
-</main>
 
-{{ partial "global-nav_work.html" . }}
+    <!-- debug-info -->
+    <p class="debug-info">Template : /layouts/work/list.html</p>
 
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/work/index.html</p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const monthFilters = document.getElementById('work-month-filters');
+            const workItems = document.querySelectorAll('.work-list-item');
+            const tagFilters = document.querySelectorAll('.diary-secondary-nav .sidebar-tag');
 
+            if (!workItems.length) {
+                return;
+            }
+
+            // URLパラメータを取得
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlMonth = urlParams.get('month');
+            const urlTag = urlParams.get('tag');
+
+            // 最新の月を取得
+            let latestYearMonth = '';
+            workItems.forEach(item => {
+                const yearMonths = item.getAttribute('data-year-months');
+                if (yearMonths) {
+                    const months = yearMonths.split(' ').filter(Boolean);
+                    months.forEach(month => {
+                        if (!latestYearMonth || month > latestYearMonth) {
+                            latestYearMonth = month;
+                        }
+                    });
+                }
+            });
+
+            // 初期状態の決定（初期状態では全ての記事を表示）
+            let currentYear = parseInt(yearDisplay.textContent);
+            let selectedYearMonth = urlMonth || null;
+            let selectedTag = urlTag || null;
+
+            // URLから年を取得
+            if (urlMonth) {
+                const yearFromMonth = urlMonth.split('-')[0];
+                currentYear = parseInt(yearFromMonth);
+                yearDisplay.textContent = currentYear;
+            }
+
+            function updateURL(month, tag) {
+                const params = new URLSearchParams();
+                if (month) {
+                    params.set('month', month);
+                }
+                if (tag) {
+                    params.set('tag', tag);
+                }
+                const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.history.pushState({ month: month, tag: tag }, '', newURL);
+            }
+
+            function updateMonthButtons(year) {
+                const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+                monthFilters.innerHTML = '';
+                
+                for (let i = 1; i <= 12; i++) {
+                    const monthNum = String(i).padStart(2, '0');
+                    const yearMonth = `${year}-${monthNum}`;
+                    const monthName = months[i - 1];
+                    const button = document.createElement('button');
+                    button.className = 'tweet-filter-btn';
+                    button.setAttribute('data-year-month', yearMonth);
+                    button.textContent = monthName;
+                    
+                    // その月に作品があるかチェック
+                    let hasWorks = false;
+                    workItems.forEach(item => {
+                        const yearMonths = item.getAttribute('data-year-months');
+                        if (yearMonths) {
+                            const months = yearMonths.split(' ').filter(Boolean);
+                            if (months.includes(yearMonth)) {
+                                hasWorks = true;
+                            }
+                        }
+                    });
+                    
+                    if (!hasWorks) {
+                        button.style.opacity = '0.4';
+                        button.style.cursor = 'not-allowed';
+                    }
+                    
+                    button.addEventListener('click', function() {
+                        if (hasWorks) {
+                            filterByMonth(yearMonth);
+                        }
+                    });
+                    monthFilters.appendChild(button);
+                }
+                
+                // 現在選択されている月をアクティブにする
+                if (selectedYearMonth && selectedYearMonth.startsWith(year)) {
+                    const activeBtn = monthFilters.querySelector(`[data-year-month="${selectedYearMonth}"]`);
+                    if (activeBtn) {
+                        activeBtn.classList.add('active');
+                    }
+                }
+            }
+
+            function filterByMonth(yearMonth) {
+                selectedYearMonth = yearMonth;
+                selectedTag = null; // 月を選択したらタグをリセット
+                
+                // アクティブ状態を更新
+                const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
+                allButtons.forEach(btn => {
+                    if (btn.getAttribute('data-year-month') === yearMonth) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                // タグのアクティブ状態をリセット
+                // タグのアクティブ状態をリセット（サイドバー）
+                tagFilters.forEach(tagEl => {
+                    tagEl.classList.remove('active');
+                });
+
+                // タグのアクティブ状態をリセット（記事内）
+                const allCardTags = document.querySelectorAll('.work-card .article-tag');
+                allCardTags.forEach(tagEl => {
+                    tagEl.classList.remove('active');
+                });
+
+                // 作品をフィルタリング
+                workItems.forEach(item => {
+                    const yearMonths = item.getAttribute('data-year-months');
+                    if (yearMonths) {
+                        const months = yearMonths.split(' ').filter(Boolean);
+                        if (months.includes(yearMonth)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // URLを更新
+                updateURL(yearMonth, null);
+
+                // ページの先頭に戻る
+                window.scrollTo(0, 0);
+            }
+
+            function filterByTag(tag) {
+                selectedTag = tag;
+                selectedYearMonth = null; // タグを選択したら月をリセット
+                
+                // 月のボタンのアクティブ状態をリセット
+                const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
+                allButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // タグのアクティブ状態を更新（サイドバー）
+                tagFilters.forEach(tagEl => {
+                    if (tagEl.getAttribute('data-tag') === tag) {
+                        tagEl.classList.add('active');
+                    } else {
+                        tagEl.classList.remove('active');
+                    }
+                });
+
+                // タグのアクティブ状態を更新（記事内）
+                const allCardTags = document.querySelectorAll('.work-card .article-tag');
+                allCardTags.forEach(tagEl => {
+                    if (tagEl.getAttribute('data-tag') === tag) {
+                        tagEl.classList.add('active');
+                    } else {
+                        tagEl.classList.remove('active');
+                    }
+                });
+
+                // 作品をフィルタリング
+                workItems.forEach(item => {
+                    const tags = item.getAttribute('data-tags');
+                    if (tags && tags.includes(tag)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // URLを更新
+                updateURL(null, tag);
+
+                // ページの先頭に戻る
+                window.scrollTo(0, 0);
+            }
+
+            prevYearBtn.addEventListener('click', function() {
+                currentYear--;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+                // 選択をリセット
+                selectedYearMonth = '';
+                updateURL(null, selectedTag);
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                currentYear++;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+                // 選択をリセット
+                selectedYearMonth = '';
+                updateURL(null, selectedTag);
+            });
+
+            // 初期状態の設定（URLパラメータがある場合のみフィルタリング）
+            if (selectedTag) {
+                filterByTag(selectedTag);
+            } else if (selectedYearMonth) {
+                filterByMonth(selectedYearMonth);
+            } else {
+                // 初期状態では全ての記事を表示
+                workItems.forEach(item => {
+                    item.style.display = '';
+                });
+            }
+
+            // 初期状態で月のボタンを更新
+            updateMonthButtons(currentYear);
+
+            tagFilters.forEach(filter => {
+                filter.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const tag = this.getAttribute('data-tag');
+                    filterByTag(tag);
+                    window.scrollTo(0, 0);
+                });
+            });
+
+            // 記事内のタグクリックイベント
+            document.querySelectorAll('.work-card .article-tag').forEach(tagEl => {
+                function handleTagClick(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const tag = tagEl.getAttribute('data-tag');
+                    filterByTag(tag);
+                    window.scrollTo(0, 0);
+                }
+
+                tagEl.addEventListener('click', handleTagClick);
+                tagEl.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        handleTagClick(e);
+                    }
+                });
+            });
+
+            // ブラウザの戻る/進むボタンに対応
+            window.addEventListener('popstate', function(event) {
+                const params = new URLSearchParams(window.location.search);
+                const month = params.get('month');
+                const tag = params.get('tag');
+                
+                if (tag) {
+                    selectedTag = decodeURIComponent(tag);
+                    filterByTag(selectedTag);
+                } else if (month) {
+                    const year = month.split('-')[0];
+                    currentYear = parseInt(year);
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    selectedYearMonth = month;
+                    filterByMonth(month);
+                } else {
+                    selectedYearMonth = latestYearMonth;
+                    filterByMonth(latestYearMonth);
+                }
+            });
+        });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "work_menu.html" . }}
 {{ end }}

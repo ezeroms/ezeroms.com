@@ -1,12 +1,10 @@
 {{ define "main" }}
-
-    {{ partial "header_top.html" . }}
-    <main class="main-top">
-        <a href="/" class="top-logo">
-            <img src="images/common/logo.svg" alt="ezeroms.com" class="top-logo">
-        </a>
-        <h2 class="top-message">One thing I can tell you is you got to be free!</h2>
-
+    <section class="top-main">
+        <div class="top-main__content">
+            <a href="/" class="top-logo">
+                <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo__img">
+            </a>
+            <h2 class="top-message">One thing I can tell you is you got to be free!</h2>
 
             <div class="random-image">
                 <a href="/">
@@ -19,9 +17,8 @@
                 <img id="randomImage" src="" alt="Random Image" class="top-photo">
                 </a>
             </div>
-    </main>
-
-    {{ partial "global-nav_home.html" . }}
+        </div>
+    </section>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -32,7 +29,7 @@
                 if (images.length > 0) {
                     var randomIndex = Math.floor(Math.random() * images.length);
                     var randomImage = images[randomIndex].Name;
-                    var timestamp = new Date().getTime(); // キャッシュバスティングのためにタイムスタンプを追加
+                    var timestamp = new Date().getTime();
                     document.getElementById("randomImage").src = "/images/top/" + randomImage + "?v=" + timestamp;
                 }
             } catch (e) {
@@ -40,5 +37,7 @@
             }
         });
     </script>
+{{ end }}
 
+{{ define "secondary" }}
 {{ end }}

@@ -6,6 +6,13 @@ month:
   - 2025-08
 subject:
   - diary
+tags:
+  - 引越し
+  - 横浜
+place: "Yokohama, Kanagawa"
+min_temp: 22
+max_temp: 28
+weather: "Sunny"
 ---
 いま住んでいる横浜・関内の家を出て行かなかればならなくなった！
 
