@@ -15,6 +15,10 @@ disableAliases = true
   RSSLink = "index.xml"
   ogImage = "images/common/og-image.png"
   googleAnalytics = "G-K021MTL6NX"
+  
+  [params.chronicle]
+    defaultStartYear = 1989
+    defaultEndYear = 2025
 
 [author]
   name = "ezeroms"

@@ -37,382 +37,432 @@
     <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
 
 </head>
-<body>
+<body class="is-about">
+    <div class="layout-container">
+        <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
     
-<header class="header">
-  <nav class="header__nav">
-      <a href="/about">About</a>
-      <a href="/work">Work</a>
-      <a href="/diary">Diary</a>
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="is-active" href="/about/">About</a>
+        </li>
+        <li>
+          <a class="" href="/tweet/">Tweet</a>
+        </li>
+        <li>
+          <a class="" href="/diary/">Diary</a>
+        </li>
+        <li>
+          <a class="" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="" href="/work/">Work</a>
+        </li>
+        
       </ul>
-  </nav>
-
-  <a href="/" class="header__logo">
-      <img src="/images/common/logo.svg" alt="ezeroms.com">
-  </a>
-
-  <div class="header__button">
-    <a href="/shoulders-of-giants">
-      The shoulders of Giants
-    </a>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          <li>
+            <a class="" href="/chronicle/">Chronicle</a>
+          </li>
+          <li>
+            <a class="" href="/ui-design-guidebook/">UI Design Guidebook</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
-</header>
-<header class="sp-header">
-  <a href="/about">
-    <img src="/images/common/about.svg" alt="" class="logo_about" onclick="topFunction()" id="scrollTopButton" title="Go to top">
-  </a>
-</header>
+</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        </aside>
+
+        <div class="layout-body">
+            
+            <div class="layout-header">
+                
+            </div>
+            
+            <div class="layout-main layout-main--with-toc">
+                
+                    <aside class="layout-toc" aria-label="About 目次">
+    <nav class="layout-toc__nav">
+        <ul class="layout-toc__list">
+            <li>
+                <a href="/about/" class="layout-toc__profile-link">プロフィール</a>
+            </li>
+            <li>
+                <a href="/about/?section=about-this-site">このサイトについて</a>
+            </li>
+            <li>
+                <a href="/about/?section=media-coverage">メディア掲載</a>
+            </li>
+            <li>
+                <a href="/about/?section=contact">お問い合わせ</a>
+            </li>
+        </ul>
+    </nav>
+</aside>
 
 <script>
-  $(document).ready(function(){
-      
-      $('#scrollTopButton').click(function(){
-          
-          $('html, body').animate({scrollTop : 0},800);
-          return false;
-      });
-  });
-  </script>
-<div id="notification" class="notification">
+    (function() {
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', handleAboutTocLinks);
+        } else {
+            handleAboutTocLinks();
+        }
+
+        function handleAboutTocLinks() {
+            const profileLink = document.querySelector('.layout-toc__profile-link');
+            if (profileLink) {
+                
+                const currentPath = window.location.pathname;
+                if (currentPath.startsWith('/media-coverage/')) {
+                    profileLink.setAttribute('href', '/about/');
+                } else if (currentPath.startsWith('/about/')) {
+                    
+                    profileLink.setAttribute('href', '#profile');
+                }
+            }
+        }
+    })();
+</script>
+
+
+
+                
+                <main class="layout-main__content" id="main-content">
+                    
+    <div id="notification" class="notification">
     Link copied to clipboard!
 </div>
 
-<main class="main-section">
-    <section class="main-section-1column">
-        <div class="about">
+    <section class="about-main">
+        <div class="about-main__content">
+            
+            <div class="about-cover">
+                <img src="/images/about/profile.webp" alt="Profile Picture" class="about-cover__image">
+            </div>
 
-        
-        <section class="about__profile">
-            <img src="/images/about/profile.webp" alt="Profile Picture">
-            <article class="article-item">
-                <h1 id="イワモトユウ--ezeroms">イワモトユウ / ezeroms</h1>
-<p>1989年生まれ、横須賀市出身。スマートフォンアプリやWebサービスのデザイン、開発を行っています。現在は、音楽SNS「Chooning」や、オンライン営業システム「bellFace」を作っています。</p>
-<p>😍 : デザイン、インターネット、ポピュラー音楽、楽器の演奏、散歩、麻雀、野菜、花、果物</p>
-<p>🏠 : 横浜 / 佐渡島</p>
-
-                <ul class="about__profile__sns">
-                    <li>
-                        <p class="tooltip">Facebook</p>
-                        <a href="https://www.facebook.com/ezeroms/" target="_blank" class="icon_facebook"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">X</p>
-                        <a href="https://x.com/ezeroms" target="_blank" class="icon_x"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Instagram</p>
-                        <a href="https://www.instagram.com/ezeroms/" target="_blank" class="icon_instagram"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">TikTok</p>
-                        <a href="https://www.tiktok.com/@ezeroms" target="_blank" class="icon_tiktok"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">BeReal</p>
-                        <a href="https://bere.al/ezeroms" target="_blank" class="icon_bereal"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Bluesky</p>
-                        <a href="https://bsky.app/profile/ezeroms.bsky.social" target="_blank" class="icon_bluesky"></a>
-                    </li>
+            
+            <div id="profile-content" class="about-content">
+                <article class="article-item">
+                    <div id="profile"></div>
                     
-                    <li>
-                        <p class="tooltip">Threads</p>
-                        <a href="https://www.threads.net/@ezeroms" target="_blank" class="icon_threads"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Chooning</p>
-                        <a href="https://chooning.app/@ezeroms/?hl=ja" target="_blank" class="icon_chooning"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Discord</p>
-                        <a href="https://discord.gg/prmzctxtRe" target="_blank" class="icon_discord"></a>
-                    </li>
-                    <li>
-                        <p class="tooltip">Spotify</p>
-                        <a href="https://open.spotify.com/user/ezeroms" target="_blank" class="icon_spotify"></a>
-                    </li>
+                    
+                    
+                        <h1 id="イワモトユウ--ezeroms--gan">イワモトユウ / ezeroms / gan</h1>
+<p>1989年生まれ、横須賀市出身。Webサービスやスマートフォンアプリのデザイン、開発を行っています。</p>
+<p>これまでに、オンラインサロン・プラットフォーム「Synapse」や、オンライン商談システム「<a href="https://bell-face.com/">bellFace</a>」などを手がけてきました。最近は、音楽への思いを記録する「<a href="https://hello.chooning.app/">Chooning</a>」、人事評価制度を支える「<a href="https://www.ashita-team.com/cateras/">Cateras</a>」などのプロダクトを作っています。</p>
+<p>このサイトでは、僕が日々触れている出来事や、そこで考えたことを記録しています。思いつきのメモから、じっくり調べた記録まで、いろいろなものが混ざっていますが、どこかで誰かの視界が広がるきっかけになれば嬉しいです。</p>
+<h2 id="-favorite-things">😍 Favorite things</h2>
+<p>デザイン、インターネット、ポピュラー音楽、楽器の演奏、散歩、麻雀、野菜、花、果物</p>
+<h2 id="-based-in">🏠 Based in</h2>
+<ul>
+<li><strong>高円寺</strong>：住んでいます。「<a href="https://kosugiyu-tonari.com/">小杉湯となり</a>」で仕事してます。</li>
+<li><strong>横浜</strong>：20代から30代にかけて、15年ほど生活していました。僕が経営するチューニング株式会社は、関内の<a href="https://taiyusha.co.jp/base/taisei/">泰生ビル</a>にオフィスがあります。</li>
+<li><strong>佐渡島</strong>：<a href="https://maps.app.goo.gl/kBmej4aTK9oXvmCh9">岩首</a>という村に10年以上通い続けています。年3〜4回ほど島に渡り、田植えやお祭りに参加しています。</li>
+<li><strong>台湾</strong>：冬の間（1月〜4月）は暖かい地域で越冬しています。台北や新北に滞在していることが多いです。</li>
+</ul>
+<h2 id="-around-the-web">🌏 Around the Web</h2>
+<ul>
+<li><a href="https://bere.al/ezeroms">BeReal</a></li>
+<li><a href="https://bsky.app/profile/ezeroms.bsky.social">Bluesky</a></li>
+<li><a href="https://chooning.app/@ezeroms/?hl=ja">Chooning</a></li>
+<li><a href="https://discord.gg/prmzctxtRe">Discord</a></li>
+<li><a href="https://www.facebook.com/ezeroms/">Facebook</a></li>
+<li><a href="https://www.instagram.com/ezeroms/">Instagram</a></li>
+<li><a href="https://open.spotify.com/user/ezeroms">Spotify</a></li>
+<li><a href="https://www.threads.net/@ezeroms">Threads</a></li>
+<li><a href="https://www.tiktok.com/@ezeroms">TikTok</a></li>
+<li><a href="https://x.com/ezeroms">X (Twitter)</a></li>
+</ul>
+
+                    
+                </article>
+            </div>
+
+            
+            <div id="about-this-site-content" class="about-content" style="display: none;">
+                
+                
+                    <article class="article-item">
+                        <h1 id="このサイトについて">このサイトについて</h1>
+<h2 id="はじめに">はじめに</h2>
+<p>いまのウェブは、目的のためにきれいに整備された道のようで、僕のように道草ばかり食って歩いてしまう人間には、どこか身の置きどころがなく感じられます。</p>
+<p>そこで「自分の歩幅で散歩できて、立ち止まりたい場所で気が済むまで眺めていられる、広い庭のような場所を持とう」と思い、このサイトをつくりました。</p>
+<hr>
+<p>かつて、個人的な文章や写真が、ネットの片隅に無造作に置かれていた時代がありました。あの「私的なものが半ば公共に漂っている」不思議な感触に、少年の僕はひどく魅せられていた気がします。</p>
+<p>極めて個人的なものが、個人的がゆえに、他者に開かれていく。</p>
+<p>ここは、あの頃の気配が感じられるような、僕の大好きなインターネットがある場所にしていきたいと思っています。</p>
+<!-- いまのウェブは、目的に向かってあまりにきれいに整備されすぎていて、そこに居場所をつくろうとしても、なかなか落ち着くことができません。
+
+情報のやり取りはどんどん速く、雑然とおこなわれていくようになり、気づけば自分の考えごとに向き合う余白が失われていく。そんな居心地の悪さを覚えるようになりました。
+
+そこで「自分のペースでただ歩き回れる、小さな庭のようなサイトを持とう」と考え、この場所を作りました。 -->
+<!-- - **Tweet**：
+- **Diary**：
+- **Column**：
+- **Work**：
+- **UI Design Book**：
+- **The shoulders of Giants**： -->
+<h2 id="技術構成">技術構成</h2>
+<p>このサイトは Hugo + Netlify を中心とした、静的サイト構成でつくっています。投稿の管理には Contentful を使い、静的サイトが持つ「軽やかさ」と、CMSの「更新のしやすさ」をバランスよく取っています。</p>
+<p>静的サイトというと古い技術のようですが、サーバー側で動的処理を行わない構成は、速度・保守性・信頼性において依然として非常に強い選択肢です。</p>
+<!-- 余計な処理をせず、ただ置かれたファイルを返すだけの仕組みは、いまのウェブにおいては「贅沢な静けさが」あるとさえいえると思います。 -->
+<p>なるべくシンプルに、余計な負荷のない動きを保とうという態度や、情報を複雑に加工せず、最短距離で読み手に届ける構造には一種の美しさがあり、僕は、これもまたデザインの一部だと考えています。</p>
+<h2 id="このサイトの更新通知を受け取る">このサイトの更新通知を受け取る</h2>
+<p>更新を楽しみにしてくれる人がいると、とても励みになります。よければ登録してください！🤩</p>
+<ul>
+<li><a href="https://lin.ee/eVcRqAC">Official LINE Account</a></li>
+<li><a href="https://feedly.com/i/subscription/feed/https://ezeroms.com/index.xml">Feedly</a></li>
+<li><a href="https://ezeroms.com/index.xml">RSS Feed</a></li>
+</ul>
+
+                    </article>
+                
+            </div>
+
+            
+            <div id="contact-content" class="about-content" style="display: none;">
+                
+                
+                    <article class="article-item">
+                        <h1 id="お問い合わせ">お問い合わせ</h1>
+<p>お問い合わせは、Google Formからお願いします。</p>
+<ul>
+<li><a href="https://forms.gle/Gb6zzBPMD63YGbwR6">Google Form</a></li>
+</ul>
+<h2 id="連絡先個人">連絡先（個人）</h2>
+<ul>
+<li><a href="https://line.me/ti/p/Aj7KkTC6Fo">LINE</a></li>
+<li><a href="https://m.me/ezeroms">Messenger</a></li>
+<li><a href="https://wa.me/qr/36R6ZQFFCIUBP1">WhatsApp</a></li>
+<li><a href="https://signal.me/#eu/b86kR2YSALTBmAF7MhH5DPm3ipGWm75xKfK6BbCQ-MyJ92vspUhKeYvBm3yXzw1C">Signal</a></li>
+</ul>
+<h2 id="チューニング株式会社">チューニング株式会社</h2>
+<ul>
+<li><a href="mailto:hello@chooning.app">hello@chooning.app</a></li>
+<li><a href="https://maps.app.goo.gl/J77Zz725zmpUf3Ss7">〒231-0012 横浜市中区相生町3-61 泰生ビル2F さくらWORKS</a></li>
+</ul>
+
+                    </article>
+                
+            </div>
+
+            
+            <div id="media-coverage-content" class="about-content" style="display: none;">
+                <ul class="article-container column-list">
+                    
+                        <li class="column-list-item media-coverage-item">
+                            <a href="/media-coverage/bell-ship-2022-04-01/" class="column-card media-coverage-card">
+                                
+                                    <p class="date">Apr 1 · Fri · 2022</p>
+                                
+                                <h3 class="column-card__title">デザインマネージャーに聞く チームで生産性を高める相互理解のはじめかた</h3>
+                                
+                                    <p class="media-coverage-card__lead">Bell-Shipに掲載された記事</p>
+                                
+                            </a>
+                        </li>
+                    
+                        <li class="column-list-item media-coverage-item">
+                            <a href="/media-coverage/ohayou-nihon-2022-03-03/" class="column-card media-coverage-card">
+                                
+                                    <p class="date">Mar 3 · Thu · 2022</p>
+                                
+                                <h3 class="column-card__title">おはBiz &#34;佐渡へ佐渡へ&#34;と企業を誘致</h3>
+                                
+                                    <p class="media-coverage-card__lead">おはよう日本に掲載された記事</p>
+                                
+                            </a>
+                        </li>
+                    
+                        <li class="column-list-item media-coverage-item">
+                            <a href="/media-coverage/techable-2021-09-24/" class="column-card media-coverage-card">
+                                
+                                    <p class="date">Sep 24 · Fri · 2021</p>
+                                
+                                <h3 class="column-card__title">時代が忘れかけている音楽の価値とは？ 音楽SNS「Chooning」が提案する視聴体験の在り方</h3>
+                                
+                                    <p class="media-coverage-card__lead">TECHABLEに掲載された記事</p>
+                                
+                            </a>
+                        </li>
+                    
+                        <li class="column-list-item media-coverage-item">
+                            <a href="/media-coverage/yokohama-keizai-2020-10-11/" class="column-card media-coverage-card">
+                                
+                                    <p class="date">Oct 11 · Sun · 2020</p>
+                                
+                                <h3 class="column-card__title">横浜発のストリーミング時代の音楽アプリ「Chooning」が始動</h3>
+                                
+                                    <p class="media-coverage-card__lead">ヨコハマ経済新聞に掲載された記事</p>
+                                
+                            </a>
+                        </li>
+                    
+                        <li class="column-list-item media-coverage-item">
+                            <a href="/media-coverage/town-news-2020-04-23/" class="column-card media-coverage-card">
+                                
+                                    <p class="date">Apr 23 · Thu · 2020</p>
+                                
+                                <h3 class="column-card__title">持ち帰り店の情報集約「飲食店は街のインフラ」</h3>
+                                
+                                    <p class="media-coverage-card__lead">タウンニュースに掲載された記事</p>
+                                
+                            </a>
+                        </li>
+                    
                 </ul>
-            </article>
-        </section>
-
-        
-        <section class="about__awards">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    🏆
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        受賞歴
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Awards
-                </p>
             </div>
-        
-            <article class="article-item">
-                <p>Student Freepaper Forum 2010 最優秀賞、オーディエンス賞（2010年）</p>
-                <p>マンガ倉庫 CMコンテスト 優秀賞（2014年）</p>
-                <p>my Japan Award「Creatrive Summer Camp」CMコンテスト 地域最優秀賞（2016年）</p>
-                <p>my Japan Award 2016 伊藤直樹賞（2016年）</p>
-                <p>佐渡ビジネスコンテスト2022 最優秀賞（2022年）</p>
-            </article>
-
-        </section>
-
-        
-        <section class="about__media-coverage">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    📰
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        メディア掲載
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Media Coverage
-                </p>
-            </div>
-
-            <div class="about__media-coverage__list">
-                
-                    <a href="https://example.com/article1" target="_blank">
-                        <div class="link-card">
-                            <div class="link-card__left">
-                                <h2 class="link-card__left__h2">
-                                    持ち帰り店の情報集約「飲食店は街のインフラ」
-                                </h2>
-                                <p class="link-card__left__p">
-                                    『タウンニュース』2020年4月23日
-                                </p>
-                            </div>
-                            <div class="link-card__right icon_exit"></div>
-                        </div>
-                    </a>
-                
-                    <a href="https://example.com/article2" target="_blank">
-                        <div class="link-card">
-                            <div class="link-card__left">
-                                <h2 class="link-card__left__h2">
-                                    横浜発のストリーミング時代の音楽アプリ「Chooning」が始動
-                                </h2>
-                                <p class="link-card__left__p">
-                                    『ヨコハマ経済新聞』2020年10月11日
-                                </p>
-                            </div>
-                            <div class="link-card__right icon_exit"></div>
-                        </div>
-                    </a>
-                
-                    <a href="https://example.com/article3" target="_blank">
-                        <div class="link-card">
-                            <div class="link-card__left">
-                                <h2 class="link-card__left__h2">
-                                    時代が忘れかけている音楽の価値とは？ 音楽SNS「Chooning」が提案する視聴体験の在り方
-                                </h2>
-                                <p class="link-card__left__p">
-                                    『TECHABLE』2021年9月24日
-                                </p>
-                            </div>
-                            <div class="link-card__right icon_exit"></div>
-                        </div>
-                    </a>
-                
-                    <a href="https://example.com/article4" target="_blank">
-                        <div class="link-card">
-                            <div class="link-card__left">
-                                <h2 class="link-card__left__h2">
-                                    デザインマネージャーに聞く チームで生産性を高める相互理解のはじめかた
-                                </h2>
-                                <p class="link-card__left__p">
-                                    『Bell-Ship』2022年4月1日
-                                </p>
-                            </div>
-                            <div class="link-card__right icon_exit"></div>
-                        </div>
-                    </a>
-                
-                    <a href="https://example.com/article5" target="_blank">
-                        <div class="link-card">
-                            <div class="link-card__left">
-                                <h2 class="link-card__left__h2">
-                                    おはBiz “佐渡へ佐渡へ”と企業を誘致
-                                </h2>
-                                <p class="link-card__left__p">
-                                    『おはよう日本』2022年3月3日
-                                </p>
-                            </div>
-                            <div class="link-card__right icon_exit"></div>
-                        </div>
-                    </a>
-                
-            </div>
-        </section>
-
-
-        <section class="about__contact">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    📩
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        ご連絡・お問い合わせ
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Contact
-                </p>
-            </div>
-
-            <div class="about__contact__list">
-                
-                <a href="https://forms.gle/Gb6zzBPMD63YGbwR6" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Google Form
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_google"></div>
-                </a>
-
-                <a href="https://m.me/ezeroms" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Messenger
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_messenger"></div>
-                </a>
-
-                <a href="https://line.me/ti/p/Aj7KkTC6Fo" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            LINE
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_line"></div>
-                </a>
-
-                <a href="https://wa.me/qr/36R6ZQFFCIUBP1" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            WhatsApp
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_whatsapp"></div>
-                </a>
-
-                <a href="https://signal.me/#eu/b86kR2YSALTBmAF7MhH5DPm3ipGWm75xKfK6BbCQ-MyJ92vspUhKeYvBm3yXzw1C" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Signal
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_signal"></div>
-                </a>
-
-            </div>
-        </section>
-
-
-        <section class="about__contact">
-
-            <div class="article-item-heading">
-                <p class="article-item-heading__eye-catch">
-                    🔔
-                </p>
-                <div class="article-item-heading__label">
-                    <h2 class="article-item-heading__label__h2">
-                        このブログの更新通知を受け取る
-                    </h2>
-                </div>
-                <p class="article-item-heading__sub-label">
-                    Subscribe
-                </p>
-            </div>
-
-            <div class="about__contact__list">
-                                  
-                
-                <a href="https://lin.ee/eVcRqAC" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Official LINE Account
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_line"></div>
-                </a>
-
-                
-
-                <a href="https://feedly.com/i/subscription/feed/http://localhost:1313/index.xml" target="_blank" class="link-card in-contact">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Feedly
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_feedly"></div>
-                </a>
-
-                <a target="_blank" class="link-card in-contact" onclick="copyToClipboard()">
-                    <div class="link-card__left">
-                        <h2 class="link-card__left__h2">
-                            Get RSS Feed Link
-                        </h2>
-                    </div>
-                    <div class="link-card__right icon_rss"></div>
-                </a>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText("http:\/\/localhost:1313\/index.xml").then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-
-
-
-            </div>
-        </section>
-
-
-        <div class="image-loader"></div>
         </div>
     </section>
-</main>
 
-<nav class="global-nav">
-  <a href="/" class="global-nav__home"></a>
-  <a href="/about" class="global-nav__about on"></a>
-  <a href="/work" class="global-nav__work"></a>
-  <a href="/diary" class="global-nav__diary"></a>
-  <a href="/shoulders-of-giants" class="global-nav__think"></a>
-</nav>
+    <div class="image-loader"></div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            
+            const profileContent = document.getElementById('profile-content');
+            const aboutThisSiteContent = document.getElementById('about-this-site-content');
+            const contactContent = document.getElementById('contact-content');
+            const mediaCoverageContent = document.getElementById('media-coverage-content');
+            const tocLinks = document.querySelectorAll('.layout-toc__list a');
 
-<p class="debug-info">Template : /layouts/about/index.html</p>
+            function showSection(sectionName) {
+                const aboutCover = document.querySelector('.about-cover');
+                
+                
+                if (profileContent) profileContent.style.display = 'none';
+                if (aboutThisSiteContent) aboutThisSiteContent.style.display = 'none';
+                if (contactContent) contactContent.style.display = 'none';
+                if (mediaCoverageContent) mediaCoverageContent.style.display = 'none';
 
+                
+                if (sectionName === 'about-this-site') {
+                    if (aboutThisSiteContent) aboutThisSiteContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'none';
+                } else if (sectionName === 'contact') {
+                    if (contactContent) contactContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'none';
+                } else if (sectionName === 'media-coverage') {
+                    if (mediaCoverageContent) mediaCoverageContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'none';
+                } else {
+                    
+                    if (profileContent) profileContent.style.display = 'block';
+                    if (aboutCover) aboutCover.style.display = 'block';
+                }
 
+                
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href');
+                    if ((sectionName === 'about-this-site' && href.includes('section=about-this-site')) ||
+                        (sectionName === 'contact' && href.includes('section=contact')) ||
+                        (sectionName === 'media-coverage' && href.includes('section=media-coverage')) ||
+                        ((sectionName === 'profile' || !sectionName) && (href === '#profile' || href === '/about/'))) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            
+            if (section === 'about-this-site') {
+                showSection('about-this-site');
+            } else if (section === 'contact') {
+                showSection('contact');
+            } else if (section === 'media-coverage') {
+                showSection('media-coverage');
+            } else {
+                showSection('profile');
+            }
+
+            
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    
+                    if (href.includes('section=about-this-site')) {
+                        showSection('about-this-site');
+                        window.history.pushState({ section: 'about-this-site' }, '', '/about/?section=about-this-site');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    } else if (href.includes('section=contact')) {
+                        showSection('contact');
+                        window.history.pushState({ section: 'contact' }, '', '/about/?section=contact');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    } else if (href.includes('section=media-coverage')) {
+                        showSection('media-coverage');
+                        window.history.pushState({ section: 'media-coverage' }, '', '/about/?section=media-coverage');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    } else if (href === '#profile') {
+                        showSection('profile');
+                        window.history.pushState({ section: 'profile' }, '', '/about/');
+                        const mainContent = document.querySelector('.site-content.is-about .site-main');
+                        if (mainContent) {
+                            mainContent.scrollTo(0, 0);
+                        }
+                    }
+                });
+            });
+
+            
+            window.addEventListener('popstate', function(event) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const section = urlParams.get('section');
+                if (section === 'about-this-site') {
+                    showSection('about-this-site');
+                } else if (section === 'contact') {
+                    showSection('contact');
+                } else if (section === 'media-coverage') {
+                    showSection('media-coverage');
+                } else {
+                    showSection('profile');
+                }
+            });
+        });
+    </script>
+
+                </main>
+
+                
+                
+                
+            </div>
+        </div>
+    </div>
 
     
     
@@ -429,6 +479,190 @@
 
 
     
-    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = 'http:\/\/localhost:1313\/';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                
+                
+                updateButtonState();
+                
+                
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.layout-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                
+                lastScrollTop = getScrollTop();
+
+                
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                
+                handleScroll();
+            }
+        })();
+    </script>
 </body>
 </html>

@@ -178,21 +178,6 @@
                 
                 {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // 記事内のタグクリックイベント
-                        document.querySelectorAll('.article-item .article-tag').forEach(tag => {
-                            tag.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                const tagValue = this.getAttribute('data-tag');
-                                if (tagValue) {
-                                    window.location.href = '/diary/?tag=' + encodeURIComponent(tagValue);
-                                }
-                            });
-                        });
-                    });
-                </script>
-
                 <div class="social-action">
                     <div class="social-action__left">
                         <div class="social-action__line">
@@ -226,9 +211,8 @@
                     </div>
                 </div>
             </article>
-            
+                
             {{ partial "article-navigation.html" . }}
-
             </ul>
         </div>
     </section>

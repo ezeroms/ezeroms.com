@@ -1,5 +1,5 @@
 {{ define "section_header" }}
-    {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-book" }}
+    {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
     {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
     {{ $firstComponent := "" }}
     {{ if gt (len $componentsPages) 0 }}
@@ -7,7 +7,7 @@
         {{ $firstComponent = index $sortedComponents 0 }}
     {{ end }}
 
-    {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-book" }}
+    {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
     {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
     {{ $firstPattern := "" }}
     {{ if gt (len $patternsPages) 0 }}
@@ -15,7 +15,7 @@
         {{ $firstPattern = index $sortedPatterns 0 }}
     {{ end }}
 
-    {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-book" }}
+    {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
     {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
     {{ $firstPrinciple := "" }}
     {{ if gt (len $principlesPages) 0 }}
@@ -37,8 +37,8 @@
     {{ end }}
 
     <div class="column-header">
-        <nav class="column-header__nav" id="ui-design-book-category-filters">
-            <a href="/ui-design-book/" class="column-header__tab{{ if eq .RelPermalink "/ui-design-book/" }} active{{ end }}">Readme</a>
+        <nav class="column-header__nav" id="ui-design-guidebook-category-filters">
+            <a href="/ui-design-guidebook/" class="column-header__tab{{ if eq .RelPermalink "/ui-design-guidebook/" }} active{{ end }}">Readme</a>
             {{ if $firstComponent }}
                 <a href="{{ $firstComponent.RelPermalink }}" class="column-header__tab{{ if eq $currentCategory "components" }} active{{ end }}">Components</a>
             {{ else }}

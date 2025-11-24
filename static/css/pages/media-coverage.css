@@ -34,8 +34,7 @@ body.is-about .layout-header {
 .media-coverage-card .date {
     margin: 0 0 1rem 0;
     font-size: 0.875rem;
-    color: #5D5D5F;
-    font-style: italic;
+    color: #7a7a7a;
 }
 
 .media-coverage-card .column-card__title {

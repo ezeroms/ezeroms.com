@@ -1,8 +1,8 @@
-<aside class="layout-toc" aria-label="UI Design Book 目次">
+<aside class="layout-toc" aria-label="UI Design Guidebook 目次">
     <nav class="layout-toc__nav">
         <ul class="layout-toc__list">
             {{ $currentPage := . }}
-            {{ $isReadme := eq .RelPermalink "/ui-design-book/" }}
+            {{ $isReadme := eq .RelPermalink "/ui-design-guidebook/" }}
             
             {{ if $isReadme }}
                 <!-- Readmeページの場合は「目的」「構成」の目次 -->
@@ -35,7 +35,7 @@
                         "List Item" "Divider" "Date Picker" "Time Picker" "File Upload"
                         "Progress Bar" "Skeleton Loader"
                     }}
-                    {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-book" }}
+                    {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
                     {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
                     {{ range $componentOrder }}
                         {{ $title := . }}
@@ -63,7 +63,7 @@
                         "ページネーション・無限スクロール" "カードレイアウトの設計"
                         "ファイル管理系UI（アップロード／プレビュー）" "モバイルでのフォーム最適化"
                     }}
-                    {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-book" }}
+                    {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
                     {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
                     {{ range $patternOrder }}
                         {{ $title := . }}
@@ -91,7 +91,7 @@
                         "「説明しなくても伝わるUI」" "デザインシステムの原則"
                         "コンポーネントとコンテキストの関係"
                     }}
-                    {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-book" }}
+                    {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
                     {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
                     {{ range $principleOrder }}
                         {{ $title := . }}

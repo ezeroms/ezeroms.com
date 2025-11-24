@@ -3,6 +3,7 @@ title: 参議院議員・吉川ゆうみ リーフレット
 date: 2019-05-27T10:23:57.550Z
 slug: yoshikawa-yumi
 image: /images/work/yoshikawa-yumi/18.webp
+start_date: 2019-05-27
 tags:
   - 紙もの
   - デザイン

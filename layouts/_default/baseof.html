@@ -37,31 +37,33 @@
     <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Site.Params.OgImage }}">
 
 </head>
-<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "media-coverage" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ else if eq .Section "ui-design-book" }} class="is-ui-design-book"{{ end }}>
+<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "media-coverage" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ else if eq .Section "ui-design-guidebook" }} class="is-ui-design-guidebook"{{ end }}>
     <div class="layout-container">
         <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
             {{ partial "sidebar.html" . }}
         </aside>
 
         <div class="layout-body">
-            {{ if ne .Section "shoulders-of-giants" }}
+            {{ if and (ne .Section "shoulders-of-giants") (ne .Section "chronicle") }}
             <div class="layout-header">
                 {{ block "section_header" . }}{{ end }}
             </div>
             {{ end }}
-            <div class="layout-main{{ if .IsHome }} layout-main--centered{{ else if or (eq .Section "shoulders-of-giants") (eq .Section "about") (eq .Section "media-coverage") }} layout-main--with-toc{{ else if eq .Section "ui-design-book" }} layout-main--with-header-toc{{ else }} layout-main--with-tags{{ end }}">
+            <div class="layout-main{{ if .IsHome }} layout-main--centered{{ else if eq .Section "chronicle" }} layout-main--with-toc layout-main--chronicle{{ else if or (eq .Section "shoulders-of-giants") (eq .Section "about") (eq .Section "media-coverage") }} layout-main--with-toc{{ else if eq .Section "ui-design-guidebook" }} layout-main--with-header-toc{{ else }} layout-main--with-tags{{ end }}">
                 {{ if eq .Section "shoulders-of-giants" }}
                     {{ partial "giants-toc.html" . }}
-                {{ else if eq .Section "ui-design-book" }}
-                    {{ partial "ui-design-book-toc.html" . }}
+                {{ else if eq .Section "ui-design-guidebook" }}
+                    {{ partial "ui-design-guidebook-toc.html" . }}
                 {{ else if or (eq .Section "about") (eq .Section "media-coverage") }}
                     {{ partial "about-toc.html" . }}
+                {{ else if eq .Section "chronicle" }}
+                    {{ partial "chronicle-toc.html" . }}
                 {{ end }}
                 <main class="layout-main__content" id="main-content">
                     {{ block "main" . }}{{ end }}
                 </main>
 
-                {{ if and (ne .Section "ui-design-book") (ne .Section "about") (ne .Section "media-coverage") (ne .Section "shoulders-of-giants") (not .IsHome) }}
+                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "media-coverage") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) }}
                 <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
                     {{ block "secondary" . }}{{ partial "secondary-nav.html" . }}{{ end }}
                 </aside>
@@ -116,6 +118,50 @@
                         link.setAttribute('rel', 'noopener noreferrer');
                     }
                 });
+            }
+        })();
+    </script>
+
+    <!-- Sidebar minimize handler -->
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                // デフォルトは最大化（localStorageは使わない）
+                // 初期状態を更新
+                updateButtonState();
+                
+                // 最小化/最大化ボタンのクリックイベント
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
             }
         })();
     </script>

@@ -4,6 +4,11 @@
       <a href="/">
         <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com">
       </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
 
     {{ $current := .RelPermalink }}
@@ -38,7 +43,10 @@
             <a class="{{ if eq .Section "shoulders-of-giants" }}is-active{{ end }}" href="/shoulders-of-giants/">The shoulders of Giants</a>
           </li>
           <li>
-            <a class="{{ if eq .Section "ui-design-book" }}is-active{{ end }}" href="/ui-design-book/">UI Design Book</a>
+            <a class="{{ if eq .Section "chronicle" }}is-active{{ end }}" href="/chronicle/">Chronicle</a>
+          </li>
+          <li>
+            <a class="{{ if eq .Section "ui-design-guidebook" }}is-active{{ end }}" href="/ui-design-guidebook/">UI Design Guidebook</a>
           </li>
         </ul>
       </div>

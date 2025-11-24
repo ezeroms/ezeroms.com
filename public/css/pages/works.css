@@ -1,105 +1,133 @@
-/* works.css */
+/* Workページのsection-headerはDiaryと同じスタイルを使用 */
 
-.work {
-    margin: 64px 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    max-width: 1440px;
-    width: calc(100vw - 64px);
-    padding: 0 0 40px;
+/* Work一覧ページのカード内要素間の間隔は、各要素のmarginで制御 */
+
+.work-card__image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #f3f3f3;
 }
 
-.work-item {
-    width: calc(33.333% - 16px);
+.work-card__image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.work-item img {
+.work-card:hover .work-card__image img {
+    transform: scale(1.02);
+}
+
+.work-card__title {
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem 0;
+}
+
+/* Work一覧ページのカード内要素間の間隔をmarginで制御 */
+.work-list .column-card > *:first-child {
+    margin-top: 0;
+}
+
+.work-list .column-card > *:last-child {
+    margin-bottom: 0;
+}
+
+.work-list .column-card .work-card__image {
+    margin: 0 0 0 0;
+}
+
+.work-list .column-card .work-card__image + .date {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.work-list .column-card .date {
+    margin: 0 0 1rem 0;
+}
+
+.work-list .column-card .column-card__tags {
+    margin-top: 2rem;
+    margin-bottom: 0;
+}
+
+.work-article__thumbnail {
+    margin: 24px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f3f3f3;
+    border: 1px solid #E7E7E9;
+}
+
+.work-article__thumbnail img {
     width: 100%;
     height: auto;
-    transition: transform 0.2s, background-color 0.2s;
+    display: block;
+    object-fit: cover;
 }
 
-.work-item img:hover {
-    width: 100%;
-    height: auto;
-    opacity: 0.7;
-}
-
-.work-item img:active {
-    transform: scale(0.95);
-}
-
-
-
-
-
-
-
-
-.work-detail-page {
-    padding: 20px;
-}
-
-.works-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.works-footer a {
-    margin: 0 10px;
-    text-decoration: none;
-    color: #007BFF;
-}
-
-
-
-
-
-.work-hero {
+.work-article__meta {
+    margin-top: 24px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    max-width: 1440px;
+}
+
+.work-article__meta-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.work-article__meta-item:last-child {
+    margin-bottom: 0;
+}
+
+.work-article__meta-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #050317;
+    min-width: 80px;
+    flex-shrink: 0;
+    margin-right: 1rem;
+}
+
+.work-article__meta-value {
+    font-size: 0.875rem;
+    color: #050317;
+    line-height: 1.6;
+}
+
+.work-article .column-card__tags {
+    margin-top: 2rem;
+}
+
+/* Work詳細ページのarticle-header内のスペース調整 */
+.work-article .article-header > .date {
+    margin-bottom: 1rem;
+}
+
+.work-article__divider {
     width: 100%;
-    margin: 0;
+    height: 1px;
+    background: #E7E7E9;
+    margin-top: 24px;
+    margin-bottom: 32px;
 }
 
-.work-hero img {
-    max-width: 100%;
-    height: auto;
-}
-
-
-
-.work-single {
-    width: 688px;
-    margin: 48px auto 0;
-}
-
-
-
-/* --------------------
-スマホ用のスタイル
--------------------- */
 @media (max-width: 960px) {
-    .work {
-        margin: 16px auto 40px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        width: calc(100vw - 32px);
-        padding: 0 0 40px;
+    .work-card__image {
+        border-radius: 20px;
     }
 
-    .work-item {
-        width: 100%;
-    }
-
-    .work-single {
-        width: calc(100dvw - 32px);
-        margin: 48px auto 0;
-        padding: 0;
+    .work-article__thumbnail {
+        margin: 20px 0;
+        border-radius: 10px;
     }
 }
+

@@ -54,6 +54,12 @@
 .sidebar__logo {
     margin-bottom: 32px;
     margin-left: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 50px;
+    width: 100%;
 }
 
 .sidebar__logo img {
@@ -61,6 +67,187 @@
     max-width: 100%;
     height: auto;
     display: block;
+}
+
+.sidebar__minimize-btn {
+    display: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.7);
+    transition: all 0.2s ease;
+    opacity: 0;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sidebar:hover .sidebar__minimize-btn {
+    display: flex;
+    opacity: 1;
+}
+
+.sidebar__minimize-btn:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: #6E6D79;
+    color: #050317;
+}
+
+/* ツールチップ */
+.sidebar:hover .sidebar__minimize-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background-color: #050317;
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.sidebar:hover .sidebar__minimize-btn:hover::after {
+    opacity: 1;
+}
+
+.sidebar:hover .sidebar__minimize-btn::before {
+    content: '';
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #050317;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.sidebar:hover .sidebar__minimize-btn:hover::before {
+    opacity: 1;
+}
+
+.sidebar__minimize-btn svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
+/* 最小化状態 */
+.layout-sidebar.is-minimized {
+    width: 60px;
+    padding: 24px 8px;
+}
+
+.layout-sidebar.is-minimized .sidebar {
+    align-items: center;
+}
+
+.layout-sidebar.is-minimized .sidebar__logo a {
+    display: none;
+}
+
+.layout-sidebar.is-minimized .sidebar__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.layout-sidebar.is-minimized .sidebar__nav,
+.layout-sidebar.is-minimized .sidebar__library {
+    display: none;
+}
+
+.layout-sidebar.is-minimized .sidebar__minimize-btn {
+    display: flex !important;
+    opacity: 1 !important;
+    position: relative;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.7);
+    transition: all 0.2s ease;
+    margin: 0 auto;
+    right: auto;
+}
+
+.layout-sidebar.is-minimized .sidebar__minimize-btn:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: #6E6D79;
+    color: #050317;
+}
+
+/* 最小化時のツールチップ位置調整 */
+.layout-sidebar.is-minimized .sidebar__minimize-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background-color: #050317;
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.layout-sidebar.is-minimized .sidebar__minimize-btn:hover::after {
+    opacity: 1;
+}
+
+.layout-sidebar.is-minimized .sidebar__minimize-btn::before {
+    content: '';
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #050317;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.layout-sidebar.is-minimized .sidebar__minimize-btn:hover::before {
+    opacity: 1;
+}
+
+.layout-sidebar.is-minimized .sidebar__minimize-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
 /* Table of Contents (TOC) スタイル */
@@ -116,7 +303,7 @@
 .layout-toc__list a {
     position: relative;
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.6);
+    color: #7a7a7a;
     font-size: 0.9rem;
     line-height: 1.5;
     font-weight: 500;
@@ -289,6 +476,21 @@
     padding: 0;
 }
 
+/* Chronicleページ専用：画面横いっぱいに広げる */
+.layout-main--chronicle {
+    grid-template-columns: 240px 1fr !important;
+}
+
+.layout-main--chronicle .layout-main__content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    position: relative;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
 /* パターン3: Tweet/Diary/Column（3カラム型） */
 .layout-main--with-tags {
     display: grid;
@@ -303,7 +505,7 @@
 /* パターン4: UI Design Book（ヘッダー+TOC型） */
 .layout-main--with-header-toc {
     display: grid;
-    grid-template-columns: 240px minmax(0, 688px);
+    grid-template-columns: 240px minmax(0, 768px);
     gap: 0;
     height: calc(100vh - 60px);
     overflow: hidden;
@@ -383,7 +585,7 @@
 
 .secondary-nav-placeholder {
     font-size: 0.9rem;
-    color: rgba(0, 0, 0, 0.6);
+    color: #7a7a7a;
     background: rgba(0, 0, 0, 0.03);
     padding: 16px;
     border-radius: 8px;
@@ -446,7 +648,7 @@
     font-size: 0.85rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.6);
+    color: #7a7a7a;
     margin: 0;
 }
 
