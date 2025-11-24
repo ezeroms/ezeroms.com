@@ -2,44 +2,17 @@
     <nav class="layout-toc__nav">
         <ul class="layout-toc__list">
             <li>
-                <a href="/about/" class="layout-toc__profile-link">プロフィール</a>
+                <a href="/about/" class="layout-toc__link{{ if eq .RelPermalink "/about/" }} active{{ end }}">プロフィール</a>
             </li>
             <li>
-                <a href="/about/?section=about-this-site">このサイトについて</a>
+                <a href="/about/about-this-site/" class="layout-toc__link{{ if eq .RelPermalink "/about/about-this-site/" }} active{{ end }}">このサイトについて</a>
             </li>
             <li>
-                <a href="/about/?section=media-coverage">メディア掲載</a>
+                <a href="/about/media-coverage/" class="layout-toc__link{{ if eq .RelPermalink "/about/media-coverage/" }} active{{ end }}">メディア掲載</a>
             </li>
             <li>
-                <a href="/about/?section=contact">お問い合わせ</a>
+                <a href="/about/contact/" class="layout-toc__link{{ if eq .RelPermalink "/about/contact/" }} active{{ end }}">お問い合わせ</a>
             </li>
         </ul>
     </nav>
 </aside>
-
-<script>
-    (function() {
-        // メディア掲載の詳細ページからプロフィールに遷移する場合の処理
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', handleAboutTocLinks);
-        } else {
-            handleAboutTocLinks();
-        }
-
-        function handleAboutTocLinks() {
-            const profileLink = document.querySelector('.layout-toc__profile-link');
-            if (profileLink) {
-                // 現在のセクションがmedia-coverageの場合、/about/に遷移
-                const currentPath = window.location.pathname;
-                if (currentPath.startsWith('/media-coverage/')) {
-                    profileLink.setAttribute('href', '/about/');
-                } else if (currentPath.startsWith('/about/')) {
-                    // Aboutページ内の場合は#profileに
-                    profileLink.setAttribute('href', '#profile');
-                }
-            }
-        }
-    })();
-</script>
-
-

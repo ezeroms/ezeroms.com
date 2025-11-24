@@ -9,9 +9,8 @@
             </div>
 
             <!-- プロフィールのコンテンツ -->
-            <div id="profile-content" class="about-content">
+            <div class="about-content">
                 <article class="article-item">
-                    <div id="profile"></div>
                     {{ $content := .Content }}
                     {{ $parts := split $content "## 🌏 Around the Web" }}
                     {{ if gt (len $parts) 1 }}
@@ -87,162 +86,8 @@
                     {{ end }}
                 </article>
             </div>
-
-            <!-- このサイトについてのコンテンツ -->
-            <div id="about-this-site-content" class="about-content" style="display: none;">
-                {{ $aboutThisSitePage := .Site.GetPage "/about/about-this-site" }}
-                {{ if $aboutThisSitePage }}
-                    <article class="article-item">
-                        {{ $aboutThisSitePage.Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
-                    </article>
-                {{ end }}
-            </div>
-
-            <!-- お問い合わせのコンテンツ -->
-            <div id="contact-content" class="about-content" style="display: none;">
-                {{ $contactPage := .Site.GetPage "/about/contact" }}
-                {{ if $contactPage }}
-                    <article class="article-item">
-                        {{ $contactPage.Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
-                    </article>
-                {{ end }}
-            </div>
-
-            <!-- メディア掲載のコンテンツ -->
-            <div id="media-coverage-content" class="about-content" style="display: none;">
-                <ul class="article-container column-list">
-                    {{ range where .Site.RegularPages "Section" "media-coverage" }}
-                        <li class="column-list-item media-coverage-item">
-                            <a href="{{ .RelPermalink }}" class="column-card media-coverage-card">
-                                {{ if .Params.date }}
-                                    <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
-                                {{ end }}
-                                <h3 class="column-card__title">{{ .Title }}</h3>
-                                {{ if .Params.lead }}
-                                    <p class="media-coverage-card__lead">{{ .Params.lead }}</p>
-                                {{ end }}
-                            </a>
-                        </li>
-                    {{ end }}
-                </ul>
-            </div>
         </div>
     </section>
 
     <div class="image-loader"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const section = urlParams.get('section');
-            
-            const profileContent = document.getElementById('profile-content');
-            const aboutThisSiteContent = document.getElementById('about-this-site-content');
-            const contactContent = document.getElementById('contact-content');
-            const mediaCoverageContent = document.getElementById('media-coverage-content');
-            const tocLinks = document.querySelectorAll('.layout-toc__list a');
-
-            function showSection(sectionName) {
-                const aboutCover = document.querySelector('.about-cover');
-                
-                // すべてのコンテンツを非表示
-                if (profileContent) profileContent.style.display = 'none';
-                if (aboutThisSiteContent) aboutThisSiteContent.style.display = 'none';
-                if (contactContent) contactContent.style.display = 'none';
-                if (mediaCoverageContent) mediaCoverageContent.style.display = 'none';
-
-                // 選択されたセクションを表示
-                if (sectionName === 'about-this-site') {
-                    if (aboutThisSiteContent) aboutThisSiteContent.style.display = 'block';
-                    if (aboutCover) aboutCover.style.display = 'none';
-                } else if (sectionName === 'contact') {
-                    if (contactContent) contactContent.style.display = 'block';
-                    if (aboutCover) aboutCover.style.display = 'none';
-                } else if (sectionName === 'media-coverage') {
-                    if (mediaCoverageContent) mediaCoverageContent.style.display = 'block';
-                    if (aboutCover) aboutCover.style.display = 'none';
-                } else {
-                    // profile (デフォルト)
-                    if (profileContent) profileContent.style.display = 'block';
-                    if (aboutCover) aboutCover.style.display = 'block';
-                }
-
-                // 目次のアクティブ状態を更新
-                tocLinks.forEach(link => {
-                    link.classList.remove('active');
-                    const href = link.getAttribute('href');
-                    if ((sectionName === 'about-this-site' && href.includes('section=about-this-site')) ||
-                        (sectionName === 'contact' && href.includes('section=contact')) ||
-                        (sectionName === 'media-coverage' && href.includes('section=media-coverage')) ||
-                        ((sectionName === 'profile' || !sectionName) && (href === '#profile' || href === '/about/'))) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-
-            // URLパラメータに基づいてセクションを表示
-            if (section === 'about-this-site') {
-                showSection('about-this-site');
-            } else if (section === 'contact') {
-                showSection('contact');
-            } else if (section === 'media-coverage') {
-                showSection('media-coverage');
-            } else {
-                showSection('profile');
-            }
-
-            // 目次リンクのクリックイベント
-            tocLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const href = this.getAttribute('href');
-                    
-                    if (href.includes('section=about-this-site')) {
-                        showSection('about-this-site');
-                        window.history.pushState({ section: 'about-this-site' }, '', '/about/?section=about-this-site');
-                        const mainContent = document.querySelector('.site-content.is-about .site-main');
-                        if (mainContent) {
-                            mainContent.scrollTo(0, 0);
-                        }
-                    } else if (href.includes('section=contact')) {
-                        showSection('contact');
-                        window.history.pushState({ section: 'contact' }, '', '/about/?section=contact');
-                        const mainContent = document.querySelector('.site-content.is-about .site-main');
-                        if (mainContent) {
-                            mainContent.scrollTo(0, 0);
-                        }
-                    } else if (href.includes('section=media-coverage')) {
-                        showSection('media-coverage');
-                        window.history.pushState({ section: 'media-coverage' }, '', '/about/?section=media-coverage');
-                        const mainContent = document.querySelector('.site-content.is-about .site-main');
-                        if (mainContent) {
-                            mainContent.scrollTo(0, 0);
-                        }
-                    } else if (href === '#profile') {
-                        showSection('profile');
-                        window.history.pushState({ section: 'profile' }, '', '/about/');
-                        const mainContent = document.querySelector('.site-content.is-about .site-main');
-                        if (mainContent) {
-                            mainContent.scrollTo(0, 0);
-                        }
-                    }
-                });
-            });
-
-            // ブラウザの戻る/進むボタンに対応
-            window.addEventListener('popstate', function(event) {
-                const urlParams = new URLSearchParams(window.location.search);
-                const section = urlParams.get('section');
-                if (section === 'about-this-site') {
-                    showSection('about-this-site');
-                } else if (section === 'contact') {
-                    showSection('contact');
-                } else if (section === 'media-coverage') {
-                    showSection('media-coverage');
-                } else {
-                    showSection('profile');
-                }
-            });
-        });
-    </script>
 {{ end }}

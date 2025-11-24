@@ -28,6 +28,7 @@ layout: "list"
 - [Bluesky](https://bsky.app/profile/ezeroms.bsky.social)
 - [Chooning](https://chooning.app/@ezeroms/?hl=ja)
 - [Discord](https://discord.gg/prmzctxtRe)
+- [Duolingo](https://www.duolingo.com/profile/ezeroms)
 - [Facebook](https://www.facebook.com/ezeroms/)
 - [Instagram](https://www.instagram.com/ezeroms/)
 - [Spotify](https://open.spotify.com/user/ezeroms)
