@@ -2,6 +2,8 @@
 title: "Tabs"
 description: "Tabsに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "tabs"
+order: 21
 date: 2025-01-15T10:00:00Z
 ---
 

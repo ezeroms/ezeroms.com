@@ -2,6 +2,8 @@
 title: "Divider"
 description: "Dividerに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "divider"
+order: 27
 date: 2025-01-15T10:00:00Z
 ---
 

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>MattermostのWebSocket接続エラーを解決した</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="MattermostのWebSocket接続エラーを解決した">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/diary/mattermost-websocket-error/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MattermostのWebSocket接続エラーを解決した">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+</head>
+<body>
+    <div class="site-shell">
+        <aside class="site-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+    </div>
+
+    
+    
+
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        
+          
+          <li>
+            <a class="" href="/about/">About</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/tweet/">Tweet</a>
+          </li>
+        
+          
+          <li>
+            <a class="is-active" href="/diary/">Diary</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/column/">Column</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/snap/">Snap</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/work/">Work</a>
+          </li>
+        
+      </ul>
+    </nav>
+  </div>
+
+  <div class="sidebar__cta-group">
+    <a href="/ui-design-book/" class="sidebar__cta-button">UI Design Book</a>
+    <a href="/shoulders-of-giants/" class="sidebar__cta-button">The shoulders of Giants</a>
+  </div>
+</div>
+
+
+        </aside>
+
+        <div class="site-content">
+            <main class="site-main" id="main-content">
+                
+    <div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container" id="articles-list">
+
+            
+
+
+            <article class="article-item">
+                
+                <p class="date">2025-05-29</p>
+                <h1>MattermostのWebSocket接続エラーを解決した</h1>
+                
+                <p>MattermostにBoards（旧・Focalboard）のプラグインを入れる作業をする過程で発生したエラーに関する備忘録。</p>
+<ul>
+<li><a href="https://developers.mattermost.com/contribute/more-info/focalboard/mattermost-boards-setup-guide/">Mattermost Boards plugin guide</a></li>
+<li><a href="https://www.focalboard.com/">Focalboard</a></li>
+</ul>
+<h6 id="heading">﻿</h6>
+<p>プラグインをインストールしてBoardsのUIが表示されたまではよかったのだが、その画面上部に次のようなエラーが表示された。</p>
+<div class="image-wrapper"><img src="/images/diary/mattermost-websocket-error/tuv46xwmkyhxblz1cscp.png" alt=""></div><blockquote>
+<p>WebSocket connection closed, connection interrupted.<br>
+If this persists, check your server or web proxy configuration.</p></blockquote>
+<p>チャンネル（プロジェクト）やタスクをクリックしても何も起きない。タスクの新規作成はできるが編集はできないなど、部分的にできることできないことがあり、明らかに壊れている様子でもある。いろいろと検証した結果、これは「Boardsのインターフェースは立ち上がっているが、WebSocket通信が失敗していて機能していない状態」だろうということが分かった。以下に対処方法を記録しておく。</p>
+<h2 id="原因その1nginxの設定ミス">原因その1：NGINXの設定ミス</h2>
+<p>まず、リバースプロキシとして動作しているNginxの設定がどのようになっているかを確認する。</p>
+<p>※ Mattermostはデフォルトではポート8065番で動作しているが、それを <a href="https://chat.chooning.app">https://chat.chooning.app</a> のような独自ドメインで扱うには、外部からのリクエストをNginxで受け取り、Mattermost本体に転送する必要がある（＝リバースプロキシ）。</p>
+<h6 id="heading-1">　﻿</h6>
+<p>その設定が有効になっているかを確認するため、有効なサイト設定ファイルの一覧を表示。</p>
+<pre tabindex="0"><code>ls -l /etc/nginx/sites-enabled/
+</code></pre><p><code>/etc/nginx/sites-enabled/</code>  は、Nginxが読み込むサイト設定ファイルへのシンボリックリンクが置かれている場所。 <code>/etc/nginx/sites-available/</code> にある設定ファイルのうち、実際に有効にしたいものをシンボリックリンクとして <code>/etc/nginx/sites-enabled/</code> に格納することで、設定が反映されるようになる。</p>
+<ul>
+<li><code>/etc/nginx/sites-available/</code> ： すべてのNginx用の設定ファイルの本体を置いておく場所。まだ有効にはなっていない。</li>
+<li><code>/etc/nginx/sites-enabled/</code> ：実際にNginxが読み込んで使う設定ファイルのシンボリックリンクを置く場所。ここにあるファイルだけが、Nginx起動時に読み込まれて反映される。</li>
+</ul>
+<h6 id="heading-2">　﻿</h6>
+<p>実行結果。<code>mattermost</code> という名前の設定ファイルが <code>/etc/nginx/sites-available/mattermost</code>  からリンクされていることから、Mattermost用のNginx設定が有効になっていることが確認できる。</p>
+<pre tabindex="0"><code>default -&gt; /etc/nginx/sites-available/default
+mattermost -&gt; /etc/nginx/sites-available/mattermost
+</code></pre><h6 id="heading-3">　﻿</h6>
+<p>本体の設定ファイルの中身を確認。</p>
+<pre tabindex="0"><code>cat /etc/nginx/sites-available/mattermost
+</code></pre><pre tabindex="0"><code>server {
+    server_name chat.chooning.app;
+
+    location / {
+        proxy_pass http://localhost:8065;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/chat.chooning.app/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/chat.chooning.app/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+</code></pre><p>設定ファイルの中に、HTTPからWebSocketへプロトコルをアップグレードする際に必要なヘッダー項目が抜けていることが分かる。これがないとWebSocket接続が確立できない。</p>
+<h6 id="heading-4">　﻿</h6>
+<p>修正</p>
+<pre tabindex="0"><code>server {
+    server_name chat.chooning.app;
+
+    location / {
+        proxy_pass http://localhost:8065;
+        proxy_http_version 1.1;                           # これを追加
+        proxy_set_header Upgrade $http_upgrade;           # これを追加
+        proxy_set_header Connection &#34;upgrade&#34;;            # これを追加
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/chat.chooning.app/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/chat.chooning.app/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+</code></pre><h6 id="heading-5">　﻿</h6>
+<p>Nginxを再読み込み</p>
+<pre tabindex="0"><code># 文法チェック
+sudo nginx -t
+
+# 成功したらNginxを再起動
+sudo systemctl reload nginx
+</code></pre><h2 id="原因その2configjsonの設定ミス">原因その2：config.jsonの設定ミス</h2>
+<p>Nginxの設定を修正したことで「WebSocket connection closed, connection interrupted.」のエラーは解消されたものの、BoardsのUIが動かない現象は解決しなかった。</p>
+<h6 id="heading-6">　﻿</h6>
+<p>Dockerコンテナ内に入って、config.json（Mattermost本体の設定ファイル）の内容を確認する。</p>
+<pre tabindex="0"><code>sudo docker exec -it mattermost_app_1 /bin/bash
+cat /mattermost/config/config.json | grep -A 10 ServiceSettings
+</code></pre><h6 id="heading-7">　﻿</h6>
+<p>その結果、SiteURLとWebsocketURLが空であることが判明。この2つの値はMattermostが自身のURLやWebSocket接続先を認識するために必要なもので、ここが空だと接続が正しく行えない。</p>
+<pre tabindex="0"><code>&#34;SiteURL&#34;: &#34;&#34;,
+&#34;WebsocketURL&#34;: &#34;&#34;,
+</code></pre><h6 id="heading-8">　﻿</h6>
+<p>修正</p>
+<pre tabindex="0"><code>sed -i &#39;s|&#34;SiteURL&#34;: &#34;&#34;|&#34;SiteURL&#34;: &#34;https://chat.chooning.app&#34;|&#39; /mattermost/config/config.json
+sed -i &#39;s|&#34;WebsocketURL&#34;: &#34;&#34;|&#34;WebsocketURL&#34;: &#34;wss://chat.chooning.app&#34;|&#39; /mattermost/config/config.json
+</code></pre><h6 id="heading-9">　﻿</h6>
+<p>コンテナから出て、コンテナ再起動</p>
+<pre tabindex="0"><code>exit
+sudo docker restart mattermost_app_1
+</code></pre><h6 id="heading-10">　﻿</h6>
+<p>上記2つの修正を行ったことで、Boardが正常に使えるようになった＼(^o^)／</p>
+<h2 id="副作用的に他のエラーthe-server-is-not-reachableも解決した">副作用的に他のエラー（「The server is not reachable.」）も解決した</h2>
+<p>実はずっとネイティブアプリに「The server is not reachable.」というエラーが表示されていたのだが、WebSocket接続エラーを解決したことで偶然これも解決した。</p>
+<div class="image-wrapper"><img src="/images/diary/mattermost-websocket-error/5r1nil9wlarcbjgvu2dth6.png" alt=""></div><p>この通知、初期セットアップ時からずっと表示されていたのだが、Mattermost自体は普通に使えており、<a href="https://forum.mattermost.com/t/intermittent-the-server-is-not-reachable-for-some-users-on-mobile/16884/6">フォーラムにも同様の報告が上がっていた</a>ので、まあネイティブアプリのバグかなと思って放置していた。しかし実際にはWebSocket接続が失敗していたために表示されていたっぽい／(^o^)＼</p>
+<p>アプリがある程度は動いていたのは、WebSocketを使わない基本的なAPI通信が問題なく通っていたからではないかと思う。（通知やBoardsなどのリアルタイムUIは動かないが、通常の投稿やチャンネル閲覧などはHTTP通信だけで動作していた、ということなんじゃないかと思う。たぶん……）</p>
+<h6 id="heading-11">　﻿</h6>
+<p>何はともあれ、これでBoardsが使えるようになった。Slack的なコミュニケーションとNotion的なやつが同一アプリ内で使えるの快適すぐる！！！！！</p>
+<div class="image-wrapper"><img src="/images/diary/mattermost-websocket-error/bpgrweqlqm2x7pwvqlxy.png" alt=""></div><h6 id="heading-12">　﻿</h6>
+<p>Boardのセットアップに関する記事はこの土日に書く。この一週間ですっかりMattermostの虜や〜〜〜</p>
+
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                            const altText = img.getAttribute('alt');
+                            if (altText) {
+                                img.parentElement.setAttribute('data-alt', altText);
+                            } else {
+                                console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
+                            }
+                        });
+                    });
+                </script>
+                
+
+                <div class="social-action">
+                    <div class="social-action__left">
+                        <div class="social-action__line">
+                            <div class="social-action__line-icon"></div>
+                            <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                このブログの更新通知をLINEで受け取る
+                            </a>
+                        </div>
+                    </div>
+                    <div class="social-action__right">
+                        <a href="https://twitter.com/intent/tweet?text=Mattermost%e3%81%aeWebSocket%e6%8e%a5%e7%b6%9a%e3%82%a8%e3%83%a9%e3%83%bc%e3%82%92%e8%a7%a3%e6%b1%ba%e3%81%97%e3%81%9f&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fmattermost-websocket-error%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
+                        <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/mattermost-websocket-error/" target="_blank" class="social-action__hatena"></a>
+                        <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/mattermost-websocket-error\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
+                    </div>
+                </div>
+            </article>
+        
+
+            <div class="pagination-buttons">
+  
+      <a href="/diary/2025-05-26/" class="pagination-button">
+          <img src="/images/common/icon_left.svg" alt="">
+          Prev
+      </a>
+  
+  
+      <a href="/diary/soviet-funk/" class="pagination-button">
+          Next
+          <img src="/images/common/icon_right.svg" alt="">
+      </a>
+  
+</div>    
+
+            </ul>
+        </div>
+    </section>
+
+    
+    <p class="debug-info">Template : /layouts/diary/single.html</p>
+
+            </main>
+
+            <aside class="site-secondary" aria-label="セカンダリーナビゲーション">
+                
+    <div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <p class="diary-secondary-nav__heading">Categories</p>
+        <ul>
+            <li><a href="/subject/diary/">今日のハイライト</a></li>
+            <li><a href="/subject/music/">音楽</a></li>
+            <li><a href="/subject/manga-and-anime/">漫画・アニメ</a></li>
+            <li><a href="/subject/movies-and-dramas/">映画・ドラマ</a></li>
+            <li><a href="/subject/comedy/">お笑い</a></li>
+            <li><a href="/subject/gaming/">ゲーム</a></li>
+            <li><a href="/subject/sports/">スポーツ</a></li>
+            <li><a href="/subject/books-and-magazines/">本・雑誌</a></li>
+            <li><a href="/subject/politics/">政治</a></li>
+            <li><a href="/subject/economy-and-business/">経済・ビジネス</a></li>
+            <li><a href="/subject/languages/">言葉・言語</a></li>
+            <li><a href="/subject/foreign-cultures/">海外文化</a></li>
+            <li><a href="/subject/design-and-creative/">デザイン・クリエイティブ</a></li>
+            <li><a href="/subject/internet-and-technology/">インターネット・技術</a></li>
+            <li><a href="/subject/natural-science/">自然科学</a></li>
+            <li><a href="/subject/humanities-and-social-sciences/">人文・社会科学</a></li>
+        </ul>
+    </div>
+
+    <div class="diary-secondary-nav__section">
+        <p class="diary-secondary-nav__heading">Monthly Archive</p>
+        <ul>
+            
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+            
+            
+            
+                
+                
+                <li><a href="/month/2025-09">2025-09</a></li>
+            
+                
+                
+                <li><a href="/month/2025-08">2025-08</a></li>
+            
+                
+                
+                <li><a href="/month/2025-06">2025-06</a></li>
+            
+                
+                
+                <li><a href="/month/2025-05">2025-05</a></li>
+            
+                
+                
+                <li><a href="/month/2025-04">2025-04</a></li>
+            
+                
+                
+                <li><a href="/month/2025-03">2025-03</a></li>
+            
+                
+                
+                <li><a href="/month/2025-02">2025-02</a></li>
+            
+                
+                
+                <li><a href="/month/2024-09">2024-09</a></li>
+            
+                
+                
+                <li><a href="/month/2024-08">2024-08</a></li>
+            
+                
+                
+                <li><a href="/month/2024-06">2024-06</a></li>
+            
+                
+                
+                <li><a href="/month/2024-03">2024-03</a></li>
+            
+                
+                
+                <li><a href="/month/2024-02">2024-02</a></li>
+            
+                
+                
+                <li><a href="/month/2023-08">2023-08</a></li>
+            
+
+        </ul>
+    </div>
+</div>
+
+
+            </aside>
+        </div>
+    </div>
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+</body>
+</html>

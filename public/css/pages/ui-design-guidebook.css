@@ -1,0 +1,36 @@
+/* UI Design Guidebook 専用のスタイル */
+
+/* layout-main--with-header-tocのgrid設定を変更して、
+   メインコンテンツエリアの最大幅を768pxに設定（padding 40px * 2を考慮） */
+body.is-ui-design-guidebook .layout-main--with-header-toc {
+    grid-template-columns: 240px minmax(0, 768px) !important;
+}
+
+/* article-containerの横幅は688px（layout-main__contentのpaddingを考慮） */
+body.is-ui-design-guidebook .layout-main--with-header-toc .layout-main__content .article-container {
+    width: 688px !important;
+    max-width: 100%;
+}
+
+/* article-itemの横幅は688px（paddingは内側に含める） */
+body.is-ui-design-guidebook .article-item {
+    width: 688px !important;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* スマホ用のスタイル */
+@media (max-width: 960px) {
+    body.is-ui-design-guidebook .layout-main--with-header-toc {
+        grid-template-columns: 1fr !important;
+    }
+    
+    body.is-ui-design-guidebook .layout-main--with-header-toc .layout-main__content .article-container {
+        width: calc(100dvw - 32px) !important;
+    }
+    
+    body.is-ui-design-guidebook .article-item {
+        width: 100% !important;
+    }
+}
+

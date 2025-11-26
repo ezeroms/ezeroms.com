@@ -2,6 +2,8 @@
 title: "Tooltip"
 description: "Tooltipに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "tooltip"
+order: 14
 date: 2025-01-15T10:00:00Z
 ---
 

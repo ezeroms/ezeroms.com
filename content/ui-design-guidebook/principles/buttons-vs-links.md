@@ -2,6 +2,8 @@
 title: "Buttons vs Links：役割の違い"
 description: "ボタンとリンクの役割の違いを理解し、適切に使い分けるための原則。"
 tags: ["principles"]
+slug: "buttons-vs-links"
+order: 1
 date: 2025-01-15T10:00:00Z
 ---
 

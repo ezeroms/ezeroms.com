@@ -2,6 +2,8 @@
 title: "Input Field"
 description: "ユーザーがテキストや数値を入力するためのフォーム要素。"
 tags: ["components"]
+slug: "input-field"
+order: 4
 date: 2025-01-15T10:00:00Z
 ---
 

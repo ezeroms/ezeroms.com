@@ -2,6 +2,8 @@
 title: "Skeleton Loader"
 description: "Skeleton Loaderに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "skeleton-loader"
+order: 32
 date: 2025-01-15T10:00:00Z
 ---
 

@@ -2,6 +2,8 @@
 title: "Progressive Disclosure（段階的開示）"
 description: "Progressive Disclosure（段階的開示）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "progressive-disclosure段階的開示"
+order: 12
 date: 2025-01-15T10:00:00Z
 ---
 

@@ -2,6 +2,8 @@
 title: "Onboarding パターン"
 description: "Onboarding パターンに関するUIデザインパターンとベストプラクティス。"
 tags: ["patterns"]
+slug: "onboarding-パターン"
+order: 12
 date: 2025-01-15T10:00:00Z
 ---
 

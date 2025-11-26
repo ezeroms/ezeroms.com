@@ -2,6 +2,8 @@
 title: "設定画面（Settings UI）"
 description: "設定画面（Settings UI）に関するUIデザインパターンとベストプラクティス。"
 tags: ["patterns"]
+slug: "設定画面settings-ui"
+order: 11
 date: 2025-01-15T10:00:00Z
 ---
 

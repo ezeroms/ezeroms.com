@@ -3,7 +3,7 @@
     {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
     {{ $firstComponent := "" }}
     {{ if gt (len $componentsPages) 0 }}
-        {{ $sortedComponents := sort $componentsPages "Title" "asc" }}
+        {{ $sortedComponents := sort $componentsPages "Params.order" "asc" }}
         {{ $firstComponent = index $sortedComponents 0 }}
     {{ end }}
 
@@ -11,7 +11,7 @@
     {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
     {{ $firstPattern := "" }}
     {{ if gt (len $patternsPages) 0 }}
-        {{ $sortedPatterns := sort $patternsPages "Title" "asc" }}
+        {{ $sortedPatterns := sort $patternsPages "Params.order" "asc" }}
         {{ $firstPattern = index $sortedPatterns 0 }}
     {{ end }}
 
@@ -19,7 +19,7 @@
     {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
     {{ $firstPrinciple := "" }}
     {{ if gt (len $principlesPages) 0 }}
-        {{ $sortedPrinciples := sort $principlesPages "Title" "asc" }}
+        {{ $sortedPrinciples := sort $principlesPages "Params.order" "asc" }}
         {{ $firstPrinciple = index $sortedPrinciples 0 }}
     {{ end }}
 
@@ -52,9 +52,6 @@
                 <article class="article-item">
                     <h1>{{ .Title }}</h1>
                     {{ $content := .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
-                    {{ $content := $content | replaceRE "<h2 id=\"([^\"]+)\">([^<]+)</h2>" "<h2 id=\"$1\">$2</h2>" }}
-                    {{ $content := $content | replaceRE "<h2>目的</h2>" "<h2 id=\"目的\">目的</h2>" }}
-                    {{ $content := $content | replaceRE "<h2>構成</h2>" "<h2 id=\"構成\">構成</h2>" }}
                     {{ $content | safeHTML }}
                 </article>
             </ul>

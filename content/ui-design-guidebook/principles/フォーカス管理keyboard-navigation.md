@@ -2,6 +2,8 @@
 title: "フォーカス管理（Keyboard Navigation）"
 description: "フォーカス管理（Keyboard Navigation）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "フォーカス管理keyboard-navigation"
+order: 14
 date: 2025-01-15T10:00:00Z
 ---
 

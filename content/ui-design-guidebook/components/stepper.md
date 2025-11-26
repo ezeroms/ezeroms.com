@@ -2,6 +2,8 @@
 title: "Stepper"
 description: "Stepperに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "stepper"
+order: 13
 date: 2025-01-15T10:00:00Z
 ---
 

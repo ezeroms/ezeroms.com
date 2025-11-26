@@ -2,6 +2,8 @@
 title: "Slider"
 description: "Sliderに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "slider"
+order: 12
 date: 2025-01-15T10:00:00Z
 ---
 

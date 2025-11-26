@@ -1,0 +1,364 @@
+/* ========================================
+   SP版専用レイアウト（PC版に影響しない）
+   ======================================== */
+
+/* PC版でSP版要素を非表示（1024px以上） */
+@media (min-width: 1024px) {
+    .sp-header,
+    .sp-page-header,
+    .sp-toc,
+    .sp-main-content,
+    .sp-content,
+    #sp-global-menu-drawer,
+    #sp-global-menu-drawer-overlay {
+        display: none !important;
+    }
+}
+
+/* SP版のみ適用（767px以下） */
+@media (max-width: 767px) {
+    /* SP版コンテナ */
+    .sp-layout-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 100vh;
+        background: #f9f9f7;
+    }
+    
+    /* SP版ヘッダー（固定） */
+    .sp-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: #fff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+    }
+    
+    /* ハンバーガーメニューボタン */
+    .sp-header__hamburger {
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        z-index: 101;
+    }
+    
+    .sp-header__hamburger-line {
+        width: 100%;
+        height: 2px;
+        background-color: #050317;
+        border-radius: 10px;
+        transition: none;
+    }
+    
+    /* ページ名 */
+    .sp-header__site-name {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1rem;
+        font-weight: 700;
+        font-style: normal;
+        line-height: 1.5;
+        color: #050317;
+        text-decoration: none;
+        z-index: 1;
+    }
+    
+    /* ヘッダー右側アイコン（タグ/設定） */
+    .sp-header__icon {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+    
+    .sp-header__icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .sp-header__icon:hover {
+        color: #050317;
+    }
+    
+    /* SP版ページヘッダー（年月選択、ページ内メニューなど） */
+    .sp-page-header {
+        padding: 0 16px;
+        height: 64px;
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-bottom: 1px solid #E7E7E9;
+        z-index: 99;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Tweet/Diary/Workページの年月選択UI */
+    .sp-page-header .tweet-header-nav {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+    }
+    
+    /* SP版ページヘッダー内の年月選択UIのスタイル調整 */
+    .sp-page-header .tweet-year-selector {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex-shrink: 0;
+    }
+    
+    /* SP版で年の左右の矢印を非表示 */
+    .sp-page-header .tweet-year-nav {
+        display: none;
+    }
+    
+    /* SP版で年をクリック可能にする */
+    .sp-page-header .tweet-year-display {
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        transition: color 0.2s ease;
+    }
+    
+    .sp-page-header .tweet-year-display:hover {
+        color: #6E6D79;
+    }
+    
+    .sp-page-header .tweet-month-filters {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        flex: 1;
+        justify-content: flex-start;
+    }
+    
+    .sp-page-header .tweet-month-filters::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* ColumnページのカテゴリタブをSPヘッダー内に表示 */
+    .sp-page-header .column-header {
+        width: 100%;
+    }
+    
+    .sp-page-header .column-header__nav {
+        width: 100%;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        justify-content: flex-start;
+    }
+    
+    .sp-page-header .column-header__nav::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* SP版TOC（タブ形式） */
+    .sp-toc {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        z-index: 98;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .sp-toc::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .sp-toc .layout-toc__nav {
+        width: max-content;
+        min-width: 100%;
+        padding: 0 16px;
+    }
+    
+    .sp-toc .layout-toc__list {
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        white-space: nowrap;
+    }
+    
+    .sp-toc .layout-toc__list > li {
+        margin: 0;
+        flex-shrink: 0;
+    }
+    
+    .sp-toc .layout-toc__list a,
+    .sp-toc .layout-toc__link,
+    .sp-toc a {
+        display: block;
+        padding: 16px 20px;
+        text-decoration: none;
+        color: #7a7a7a;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    
+    .sp-toc .layout-toc__list a:hover,
+    .sp-toc .layout-toc__list a:focus-visible,
+    .sp-toc .layout-toc__link:hover,
+    .sp-toc .layout-toc__link:focus-visible,
+    .sp-toc a:hover,
+    .sp-toc a:focus-visible {
+        color: #050317;
+        background-color: transparent;
+    }
+    
+    .sp-toc .layout-toc__list a.active,
+    .sp-toc .layout-toc__list a.is-active,
+    .sp-toc .layout-toc__link.active,
+    .sp-toc a.active {
+        color: #050317;
+        font-weight: 700;
+        background-color: transparent;
+        border-bottom-color: #050317;
+    }
+    
+    /* SP版でlayout-containerとlayout-bodyのマージンを調整（ヘッダーとページヘッダー/TOCの分） */
+    .layout-container {
+        margin-top: 64px; /* SP版ヘッダーの高さ */
+    }
+    
+    /* ページヘッダーがある場合（Tweet, Diary, Work） */
+    body:has(.sp-page-header) .layout-container {
+        margin-top: 128px; /* 64px (ヘッダー) + 64px (ページヘッダー) */
+    }
+    
+    /* TOCがある場合（About, The shoulders of Giants） */
+    body:has(.sp-toc) .layout-container {
+        margin-top: 128px; /* 64px (ヘッダー) + 64px (TOC) */
+    }
+    
+    /* AboutページではTOCの下に直接コンテンツが来るように調整 */
+    body.is-about .layout-container {
+        margin-top: 128px; /* 64px (ヘッダー) + 64px (TOC) */
+    }
+    
+    body.is-about .layout-body {
+        margin-top: 0;
+    }
+    
+    body.is-about .layout-main__content {
+        padding-top: 0;
+    }
+    
+    /* SP版でPC版のサイドバーとヘッダーを非表示（コンテンツは共有） */
+    .layout-sidebar {
+        display: none !important;
+    }
+    
+    /* SP版でPC版のヘッダーを非表示（SP版専用ヘッダーを使用） */
+    .layout-header {
+        display: none !important;
+    }
+    
+    /* SP版でPC版のTOCを非表示（SP版専用TOCを使用） */
+    .layout-toc {
+        display: none !important;
+    }
+    
+    /* 旧ハンバーガーメニューボタンも非表示 */
+    .hamburger-menu-btn {
+        display: none !important;
+    }
+    
+    /* SP版でドロワーとオーバーレイを表示 */
+    .drawer-overlay,
+    .drawer {
+        display: block !important;
+    }
+    
+    /* SP版でlayout-containerとlayout-bodyを調整 */
+    .layout-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .layout-body {
+        width: 100%;
+        margin-top: 0;
+    }
+    
+    /* SP版でlayout-mainを調整 */
+    .layout-main {
+        width: 100%;
+        margin-top: 0;
+    }
+    
+    .layout-main--centered {
+        height: auto;
+        min-height: calc(100vh - 64px);
+        padding: 24px 16px 64px 16px;
+    }
+    
+    .layout-main--with-toc,
+    .layout-main--with-header-toc {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        min-height: calc(100vh - 64px);
+    }
+    
+    .layout-main--with-tags {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: calc(100vh - 64px);
+    }
+    
+    .layout-main__content {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 24px 16px 64px 16px;
+    }
+}
+

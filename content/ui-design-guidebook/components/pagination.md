@@ -2,6 +2,8 @@
 title: "Pagination"
 description: "Paginationに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "pagination"
+order: 20
 date: 2025-01-15T10:00:00Z
 ---
 

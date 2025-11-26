@@ -2,6 +2,8 @@
 title: "Table"
 description: "Tableに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "table"
+order: 24
 date: 2025-01-15T10:00:00Z
 ---
 

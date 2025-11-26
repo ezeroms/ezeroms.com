@@ -2,6 +2,8 @@
 title: "Affordance（アフォーダンス）"
 description: "Affordance（アフォーダンス）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "affordanceアフォーダンス"
+order: 10
 date: 2025-01-15T10:00:00Z
 ---
 

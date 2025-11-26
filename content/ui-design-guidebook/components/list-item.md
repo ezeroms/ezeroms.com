@@ -2,6 +2,8 @@
 title: "List Item"
 description: "List Itemに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "list-item"
+order: 26
 date: 2025-01-15T10:00:00Z
 ---
 

@@ -1,0 +1,636 @@
+/* Chronicle専用スタイル */
+
+.chronicle-main {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chronicle-main__content {
+    width: 100%;
+    max-width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-width: 0;
+    flex: 1 1 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.chronicle-header {
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.chronicle-header__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #050317;
+    margin: 0 0 24px 0;
+    line-height: 1.6;
+    letter-spacing: -0.02em;
+}
+
+.chronicle-header__controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.chronicle-year-range {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.chronicle-year-range label {
+    font-size: 0.875rem;
+    color: #7a7a7a;
+    font-weight: 500;
+}
+
+.chronicle-year-range input[type="number"] {
+    width: 80px;
+    padding: 8px 12px;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #050317;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.chronicle-year-range input[type="number"]:focus {
+    outline: none;
+    border-color: #6E6D79;
+}
+
+.chronicle-year-range__input--error {
+    border-color: #d32f2f !important;
+    background-color: #ffebee !important;
+}
+
+.chronicle-year-range__error {
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background-color: #ffebee;
+    border: 1px solid #d32f2f;
+    border-radius: 6px;
+    color: #d32f2f;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.chronicle-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    min-width: 0;
+    position: relative;
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: 100%;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+}
+
+.chronicle-table {
+    width: auto;
+    min-width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background: #fff;
+    table-layout: auto;
+    margin: 0;
+}
+
+.chronicle-table thead {
+    background: #fff;
+}
+
+.chronicle-table thead tr {
+    background: #fff;
+    box-shadow: inset 0 -1px 0 #E7E7E9;
+}
+
+.chronicle-table thead th {
+    position: sticky;
+    top: 0;
+    background: inherit;
+    z-index: 10;
+    box-shadow: inset -1px 0 0 #E7E7E9, inset 0 -1px 0 #E7E7E9;
+}
+
+.chronicle-table thead th:first-child {
+    z-index: 20;
+}
+
+.chronicle-table__year-header {
+    position: sticky;
+    left: 0;
+    top: 0;
+    z-index: 20;
+    background: #fff !important;
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #050317;
+    border-right: none;
+    border-bottom: none;
+    white-space: nowrap;
+    box-shadow: inset -1px 0 0 #E7E7E9;
+}
+
+.chronicle-table__category-header,
+.chronicle-table__subcategory-header {
+    position: sticky;
+    top: 0;
+    z-index: 11;
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #050317;
+    background: #fff !important;
+    border-right: none;
+    border-bottom: none;
+    white-space: nowrap;
+    min-width: 200px;
+    width: auto;
+    box-shadow: inset -1px 0 0 #E7E7E9, inset 0 -1px 0 #E7E7E9, 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.chronicle-table__subcategory-header {
+    position: sticky;
+}
+
+.chronicle-table__category-header .resize-handle,
+.chronicle-table__subcategory-header .resize-handle,
+.chronicle-table__subcategory-cell .resize-handle {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    width: 8px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+    z-index: 100;
+    user-select: none;
+    pointer-events: auto;
+    touch-action: none;
+}
+
+.chronicle-table__subcategory-header {
+    position: relative;
+}
+
+
+.chronicle-table__category-header .resize-handle:hover,
+.chronicle-table__subcategory-header .resize-handle:hover,
+.chronicle-table__subcategory-cell .resize-handle:hover {
+    background: rgba(5, 3, 23, 0.1) !important;
+}
+
+.chronicle-table__category-header .resize-handle.resizing,
+.chronicle-table__subcategory-header .resize-handle.resizing,
+.chronicle-table__subcategory-cell .resize-handle.resizing {
+    background: rgba(5, 3, 23, 0.2);
+}
+
+.chronicle-table__subcategory-cell {
+    position: relative;
+}
+
+.chronicle-table__category-header {
+    background: #fff !important;
+}
+
+.chronicle-table__subcategory-header {
+    background: #fff !important;
+}
+
+.chronicle-table__year-row {
+    border-bottom: 1px solid #E7E7E9;
+}
+
+/* 月単位表示のとき、同じ年の中の月と月の間は点線にする */
+.chronicle-table__year-row.chronicle-table__month-row {
+    border-bottom: 1px dashed rgba(231, 231, 233, 0.6) !important;
+}
+
+.chronicle-table__year-cell {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: #fff !important;
+    padding: 16px 24px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #050317;
+    border-right: none;
+    white-space: nowrap;
+    vertical-align: top;
+    box-shadow: inset -1px 0 0 #E7E7E9;
+}
+
+.chronicle-table__year-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chronicle-table__era-text {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #5D5D5F;
+}
+
+.chronicle-table__year-row:hover .chronicle-table__year-cell {
+    background: linear-gradient(rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02)), #fff !important;
+}
+
+.chronicle-table__year-row:hover .chronicle-table__category-cell,
+.chronicle-table__year-row:hover .chronicle-table__subcategory-cell {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.chronicle-table__category-cell,
+.chronicle-table__subcategory-cell {
+    padding: 16px 24px;
+    border-right: 1px solid #E7E7E9;
+    vertical-align: top;
+    min-width: 240px;
+    width: auto;
+}
+
+.chronicle-table__events {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chronicle-event {
+    padding: 16px;
+    border: 1px solid #E7E7E9;
+    border-radius: 8px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.chronicle-event:hover {
+    border-color: #6E6D79;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chronicle-event__date {
+    font-size: 0.75rem;
+    color: #7a7a7a;
+}
+
+.chronicle-event__date-age {
+    font-size: 0.75rem;
+    color: #7a7a7a;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.chronicle-event__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chronicle-event__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #050317;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+
+.chronicle-event__user-age {
+    font-size: 0.75rem;
+    color: #7a7a7a;
+}
+
+.chronicle-event__description {
+    font-size: 0.75rem;
+    color: #050317;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.chronicle-event__description p {
+    margin: 0 0 8px 0;
+}
+
+.chronicle-event__description p:last-child {
+    margin-bottom: 0;
+}
+
+.chronicle-event__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2rem;
+}
+
+.chronicle-event__tags .article-tag {
+    font-size: 0.625rem;
+    padding: 2px 6px;
+}
+
+.layout-toc__section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.layout-toc__section:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.layout-toc__section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 12px;
+}
+
+/* Chronicleページ専用：見出しスタイルをTAGSと同じにする */
+.chronicle-filters__title {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7a7a7a;
+    margin: 0 0 16px 0;
+    font-weight: 400;
+}
+
+/* Chronicleフィルターのスタイリング */
+.chronicle-filters {
+    width: 100%;
+}
+
+.chronicle-filters__section {
+    margin-bottom: 32px;
+}
+
+.chronicle-filters__section:last-child {
+    margin-bottom: 0;
+}
+
+.chronicle-birth {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.chronicle-birth__year-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #050317;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.chronicle-birth__year-input:focus {
+    outline: none;
+    border-color: #6E6D79;
+}
+
+.chronicle-birth__month-input {
+    width: 80px;
+    padding: 8px 12px;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #050317;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.chronicle-birth__month-input:focus {
+    outline: none;
+    border-color: #6E6D79;
+}
+
+.chronicle-year-range {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.chronicle-year-range__start-input,
+.chronicle-year-range__end-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #050317;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.chronicle-year-range__start-input:focus,
+.chronicle-year-range__end-input:focus {
+    outline: none;
+    border-color: #6E6D79;
+}
+
+.chronicle-year-range__arrow {
+    color: #7a7a7a;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.chronicle-filters__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chronicle-filters__item {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chronicle-filters__item:has(.chronicle-filters__category-checkbox) {
+    margin-bottom: 8px;
+}
+
+.chronicle-filters__item:has(.chronicle-filters__category-checkbox):last-child {
+    margin-bottom: 0;
+}
+
+.chronicle-filters__item:last-child {
+    margin-bottom: 0;
+}
+
+.chronicle-filters__sublist {
+    list-style: none;
+    margin: 4px 0 0 12px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chronicle-filters__subitem {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chronicle-filters__checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #050317;
+    line-height: 1.5;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: 8px 12px;
+    margin-right: -12px;
+    margin-bottom: 0;
+    margin-left: -12px;
+    border-radius: 6px;
+}
+
+.chronicle-filters__checkbox:hover {
+    color: #050317;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.chronicle-filters__checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 2px solid #E7E7E9;
+    border-radius: 5px;
+    background: #fff;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.chronicle-filters__checkbox input[type="checkbox"]:checked {
+    background: #050317;
+    border-color: #050317;
+}
+
+.chronicle-filters__checkbox input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    border-radius: 0 1px 1px 0;
+}
+
+.chronicle-filters__checkbox input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #E7E7E9;
+}
+
+.chronicle-filters__checkbox span {
+    flex: 1;
+}
+
+.chronicle-filters__clear-tags {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid #E7E7E9;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chronicle-filters__clear-tags:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: #6E6D79;
+    color: #050317;
+}
+
+/* スマホ用のスタイル */
+@media (max-width: 960px) {
+    .chronicle-main__content {
+        padding: 24px 16px;
+    }
+
+    .chronicle-header__controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .chronicle-year-range {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .chronicle-year-range input[type="number"] {
+        width: 100px;
+    }
+
+    .chronicle-table__year-header,
+    .chronicle-table__year-cell {
+        padding: 12px 16px;
+        font-size: 0.75rem;
+    }
+
+    .chronicle-table__category-header,
+    .chronicle-table__category-cell {
+        padding: 12px 16px;
+        min-width: 180px;
+    }
+
+    .chronicle-event {
+        padding: 12px;
+    }
+}

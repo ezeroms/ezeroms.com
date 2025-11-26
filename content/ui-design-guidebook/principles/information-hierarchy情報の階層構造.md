@@ -2,6 +2,8 @@
 title: "Information Hierarchy（情報の階層構造）"
 description: "Information Hierarchy（情報の階層構造）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "information-hierarchy情報の階層構造"
+order: 2
 date: 2025-01-15T10:00:00Z
 ---
 

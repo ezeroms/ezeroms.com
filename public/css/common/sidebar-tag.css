@@ -1,0 +1,44 @@
+/* サイドバーのタグスタイル（共通） */
+/* Columnのタグスタイルを基準に統一 */
+
+.sidebar-tag,
+a.sidebar-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #f9f9f7;
+    border: 1px solid #E7E7E9;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    color: #050317;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+    position: static;
+    transform: none;
+}
+
+.sidebar-tag:hover,
+a.sidebar-tag:hover {
+    background: #E7E7E9;
+    border-color: #6E6D79;
+}
+
+.sidebar-tag.active,
+a.sidebar-tag.active {
+    background: #050317;
+    color: #fff;
+    border-color: #050317;
+}
+
+/* セカンダリーナビゲーション内のタグには::before/::afterを表示しない */
+.diary-secondary-nav .tweet-secondary-nav__tags .sidebar-tag::before,
+.diary-secondary-nav .tweet-secondary-nav__tags .sidebar-tag::after,
+.diary-secondary-nav .tweet-secondary-nav__tags a.sidebar-tag::before,
+.diary-secondary-nav .tweet-secondary-nav__tags a.sidebar-tag::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+

@@ -2,6 +2,8 @@
 title: "ログイン画面 UI チェックリスト"
 description: "ログイン画面 UI チェックリストに関するUIデザインパターンとベストプラクティス。"
 tags: ["patterns"]
+slug: "ログイン画面-ui-チェックリスト"
+order: 2
 date: 2025-01-15T10:00:00Z
 ---
 

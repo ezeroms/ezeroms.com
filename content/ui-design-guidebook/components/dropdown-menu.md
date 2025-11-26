@@ -2,6 +2,8 @@
 title: "Dropdown Menu"
 description: "Dropdown Menuに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "dropdown-menu"
+order: 8
 date: 2025-01-15T10:00:00Z
 ---
 

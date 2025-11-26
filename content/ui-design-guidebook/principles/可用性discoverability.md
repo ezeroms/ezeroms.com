@@ -2,6 +2,8 @@
 title: "可用性（Discoverability）"
 description: "可用性（Discoverability）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "可用性discoverability"
+order: 9
 date: 2025-01-15T10:00:00Z
 ---
 

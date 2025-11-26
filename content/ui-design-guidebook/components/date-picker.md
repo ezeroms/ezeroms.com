@@ -2,6 +2,8 @@
 title: "Date Picker"
 description: "Date Pickerに関するUIデザインのガイドラインとベストプラクティス。"
 tags: ["components"]
+slug: "date-picker"
+order: 28
 date: 2025-01-15T10:00:00Z
 ---
 

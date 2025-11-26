@@ -2,6 +2,8 @@
 title: "通知設計（Notification UX）"
 description: "通知設計（Notification UX）に関するUIデザインパターンとベストプラクティス。"
 tags: ["patterns"]
+slug: "通知設計notification-ux"
+order: 13
 date: 2025-01-15T10:00:00Z
 ---
 

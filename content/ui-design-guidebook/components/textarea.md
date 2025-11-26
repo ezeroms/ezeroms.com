@@ -2,6 +2,8 @@
 title: "Textarea"
 description: "複数行のテキスト入力に使用するフォーム要素。"
 tags: ["components"]
+slug: "textarea"
+order: 5
 date: 2025-01-15T10:00:00Z
 ---
 

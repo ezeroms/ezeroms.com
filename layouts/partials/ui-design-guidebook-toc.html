@@ -2,16 +2,36 @@
     <nav class="layout-toc__nav">
         <ul class="layout-toc__list">
             {{ $currentPage := . }}
-            {{ $isReadme := eq .RelPermalink "/ui-design-guidebook/" }}
+            {{ $isReadmeIndex := or (eq .RelPermalink "/ui-design-guidebook/") (and (.IsSection) (eq .Section "ui-design-guidebook")) }}
+            {{ $isReadmePage := false }}
+            {{ if .Params.tags }}
+                {{ range .Params.tags }}
+                    {{ if eq . "readme" }}
+                        {{ $isReadmePage = true }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $isReadme := or $isReadmeIndex $isReadmePage }}
             
             {{ if $isReadme }}
                 <!-- Readmeページの場合は「目的」「構成」の目次 -->
-                <li>
-                    <a href="#目的">目的</a>
-                </li>
-                <li>
-                    <a href="#構成">構成</a>
-                </li>
+                {{ $readmePages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
+                {{ $readmePages = where $readmePages "Params.tags" "intersect" (slice "readme") }}
+                {{ $sortedReadme := sort $readmePages "Params.order" "asc" }}
+                {{ range $sortedReadme }}
+                    {{ $isActive := false }}
+                    {{ if eq $currentPage.RelPermalink .RelPermalink }}
+                        {{ $isActive = true }}
+                    {{ else if $isReadmeIndex }}
+                        {{ $firstReadme := index $sortedReadme 0 }}
+                        {{ if eq .RelPermalink $firstReadme.RelPermalink }}
+                            {{ $isActive = true }}
+                        {{ end }}
+                    {{ end }}
+                    <li>
+                        <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
+                    </li>
+                {{ end }}
             {{ else }}
                 {{ $currentCategory := "" }}
                 {{ if .Params.tags }}
@@ -27,85 +47,43 @@
                 {{ end }}
                 
                 {{ if eq $currentCategory "components" }}
-                    {{ $componentOrder := slice
-                        "Button" "Link" "Text Link" "Input Field" "Textarea" "Search Input"
-                        "Select Box" "Dropdown Menu" "Checkbox" "Radio Button" "Toggle Switch"
-                        "Slider" "Stepper" "Tooltip" "Snackbar / Toast" "Badge" "Chip" "Tag"
-                        "Avatar" "Pagination" "Tabs" "Breadcrumbs" "Accordion" "Table" "Card"
-                        "List Item" "Divider" "Date Picker" "Time Picker" "File Upload"
-                        "Progress Bar" "Skeleton Loader"
-                    }}
                     {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
                     {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
-                    {{ range $componentOrder }}
-                        {{ $title := . }}
-                        {{ range $componentsPages }}
-                            {{ if eq .Title $title }}
-                                {{ $isActive := false }}
-                                {{ if eq $currentPage.RelPermalink .RelPermalink }}
-                                    {{ $isActive = true }}
-                                {{ end }}
-                                <li>
-                                    <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
-                                </li>
-                            {{ end }}
+                    {{ $sortedComponents := sort $componentsPages "Params.order" "asc" }}
+                    {{ range $sortedComponents }}
+                        {{ $isActive := false }}
+                        {{ if eq $currentPage.RelPermalink .RelPermalink }}
+                            {{ $isActive = true }}
                         {{ end }}
+                        <li>
+                            <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
+                        </li>
                     {{ end }}
                 {{ else if eq $currentCategory "patterns" }}
-                    {{ $patternOrder := slice
-                        "Modal / Dialog / Popup の違い" "ログイン画面 UI チェックリスト"
-                        "入力フォーム設計（ベストプラクティス）" "選択式 UI（ラジオ / チェックボックス / セレクトの使い分け）"
-                        "Navigation Patterns（タブ・サイドバー・ドロワー）" "検索画面（Search + Filter UI）"
-                        "エラー表示・バリデーションパターン" "空状態（Empty State）"
-                        "404 / エラーページデザイン" "プロフィール編集" "設定画面（Settings UI）"
-                        "Onboarding パターン" "通知設計（Notification UX）"
-                        "リスト + 詳細のレイアウト（Master Detail）" "ダッシュボードデザイン"
-                        "ページネーション・無限スクロール" "カードレイアウトの設計"
-                        "ファイル管理系UI（アップロード／プレビュー）" "モバイルでのフォーム最適化"
-                    }}
                     {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
                     {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
-                    {{ range $patternOrder }}
-                        {{ $title := . }}
-                        {{ range $patternsPages }}
-                            {{ if eq .Title $title }}
-                                {{ $isActive := false }}
-                                {{ if eq $currentPage.RelPermalink .RelPermalink }}
-                                    {{ $isActive = true }}
-                                {{ end }}
-                                <li>
-                                    <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
-                                </li>
-                            {{ end }}
+                    {{ $sortedPatterns := sort $patternsPages "Params.order" "asc" }}
+                    {{ range $sortedPatterns }}
+                        {{ $isActive := false }}
+                        {{ if eq $currentPage.RelPermalink .RelPermalink }}
+                            {{ $isActive = true }}
                         {{ end }}
+                        <li>
+                            <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
+                        </li>
                     {{ end }}
                 {{ else if eq $currentCategory "principles" }}
-                    {{ $principleOrder := slice
-                        "Buttons vs Links：役割の違い" "Information Hierarchy（情報の階層構造）"
-                        "認知負荷（Cognitive Load）" "一貫性（Consistency）"
-                        "視線誘導（Visual Hierarchy）" "予測可能性（Predictability）"
-                        "アクセシビリティの基本" "マイクロインタラクション"
-                        "可用性（Discoverability）" "Affordance（アフォーダンス）"
-                        "モードレスUIの思想" "Progressive Disclosure（段階的開示）"
-                        "フィードバックとレスポンス" "フォーカス管理（Keyboard Navigation）"
-                        "「説明しなくても伝わるUI」" "デザインシステムの原則"
-                        "コンポーネントとコンテキストの関係"
-                    }}
                     {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
                     {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
-                    {{ range $principleOrder }}
-                        {{ $title := . }}
-                        {{ range $principlesPages }}
-                            {{ if eq .Title $title }}
-                                {{ $isActive := false }}
-                                {{ if eq $currentPage.RelPermalink .RelPermalink }}
-                                    {{ $isActive = true }}
-                                {{ end }}
-                                <li>
-                                    <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
-                                </li>
-                            {{ end }}
+                    {{ $sortedPrinciples := sort $principlesPages "Params.order" "asc" }}
+                    {{ range $sortedPrinciples }}
+                        {{ $isActive := false }}
+                        {{ if eq $currentPage.RelPermalink .RelPermalink }}
+                            {{ $isActive = true }}
                         {{ end }}
+                        <li>
+                            <a href="{{ .RelPermalink }}" class="{{ if $isActive }}active{{ end }}">{{ .Title }}</a>
+                        </li>
                     {{ end }}
                 {{ end }}
             {{ end }}

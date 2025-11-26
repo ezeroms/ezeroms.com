@@ -2,6 +2,8 @@
 title: "「説明しなくても伝わるUI」"
 description: "「説明しなくても伝わるUI」に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "説明しなくても伝わるui"
+order: 15
 date: 2025-01-15T10:00:00Z
 ---
 

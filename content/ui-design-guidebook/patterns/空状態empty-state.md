@@ -2,6 +2,8 @@
 title: "空状態（Empty State）"
 description: "空状態（Empty State）に関するUIデザインパターンとベストプラクティス。"
 tags: ["patterns"]
+slug: "空状態empty-state"
+order: 8
 date: 2025-01-15T10:00:00Z
 ---
 

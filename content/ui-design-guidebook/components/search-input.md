@@ -2,6 +2,8 @@
 title: "Search Input"
 description: "検索クエリを入力するための専用の入力フィールド。"
 tags: ["components"]
+slug: "search-input"
+order: 6
 date: 2025-01-15T10:00:00Z
 ---
 

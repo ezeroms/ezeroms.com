@@ -2,6 +2,8 @@
 title: "予測可能性（Predictability）"
 description: "予測可能性（Predictability）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "予測可能性predictability"
+order: 6
 date: 2025-01-15T10:00:00Z
 ---
 

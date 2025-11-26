@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>Mattermostをセルフホスティングする</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="Mattermostをセルフホスティングする">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/diary/mattermost/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mattermostをセルフホスティングする">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+</head>
+<body>
+    <div class="site-shell">
+        <aside class="site-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+    </div>
+
+    
+    
+
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        
+          
+          <li>
+            <a class="" href="/about/">About</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/tweet/">Tweet</a>
+          </li>
+        
+          
+          <li>
+            <a class="is-active" href="/diary/">Diary</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/column/">Column</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/snap/">Snap</a>
+          </li>
+        
+          
+          <li>
+            <a class="" href="/work/">Work</a>
+          </li>
+        
+      </ul>
+    </nav>
+  </div>
+
+  <div class="sidebar__cta-group">
+    <a href="/ui-design-book/" class="sidebar__cta-button">UI Design Book</a>
+    <a href="/shoulders-of-giants/" class="sidebar__cta-button">The shoulders of Giants</a>
+  </div>
+</div>
+
+
+        </aside>
+
+        <div class="site-content">
+            <main class="site-main" id="main-content">
+                
+    <div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container" id="articles-list">
+
+            
+
+
+            <article class="article-item">
+                
+                <p class="date">2025-05-22</p>
+                <h1>Mattermostをセルフホスティングする</h1>
+                
+                <div class="image-wrapper"><img src="/images/diary/mattermost/47.png" alt=""></div><h2 id="mattermostとは">Mattermostとは</h2>
+<p>Mattermostは、Slackに似たUIを持つ、オープンソースのコラボレーションツールだ。</p>
+<p>自分たちでサーバーを用意して運用する「セルフホスティング」に対応しており、ユーザー数や機能に応じて課金されることなく自由に使うことができる。すごい。これでSlack重税ともおさらばや！！</p>
+<p><a href="https://mattermost.com/">https://mattermost.com/</a></p>
+<h6 id="heading">　﻿</h6>
+<div class="image-wrapper"><img src="/images/diary/mattermost/44.png" alt="Slack重税 2025年5月現在"></div><h2 id="mattermostセルフホスティングでできること">Mattermost（セルフホスティング）でできること</h2>
+<ul>
+<li>基本的なチャンネルベースのチャット（Slackと同様のUI）</li>
+<li>ダイレクトメッセージ</li>
+<li>チャンネルの公開設定（オープンチャンネル or プライベートチャンネル）</li>
+<li>スレッド形式での返信</li>
+<li>メンション @here, @channel, @username など</li>
+<li>画像・PDFなどの添付＆プレビュー</li>
+<li>iOS / Androidアプリあり（Mattermost公式）</li>
+<li>投稿内でのMarkdown記法対応</li>
+<li>Bot / Webhook: Incoming / Outgoing webhookあり</li>
+<li>Plugin / Integration: Trello、GitLab、Jiraなどの連携プラグインあり</li>
+</ul>
+<h2 id="mattermostセルフホスティングでできないこと">Mattermost（セルフホスティング）でできないこと</h2>
+<ul>
+<li>音声通話: Slackのハドルのようなものは標準では非搭載（プラグインが必要）</li>
+<li>画面共有: 上記のプラグインを使っても画面共有はできない</li>
+<li>SAML / LDAP: Enterprise Editionならできるっぽい</li>
+<li>監査ログ / EMM連携: Enterprise Editionならできるっぽい</li>
+</ul>
+<h6 id="heading-1">　﻿</h6>
+<p>Slackの利用料を払うのが難しい規模のプロジェクトでは、Discordが使われることが多いと思う。</p>
+<p>ただ、個人的にはDiscordのスレッド返信がどうにも使いづらく、結果としてテキストでのやり取りが整然と進められないのがずっと気になっていた。Mattermostではその点がしっかり解消されており、チャンネル内での会話の整理がしやすそうという印象。一方で、Discordのような「ゆるくつながる」音声通話のスタイルを大事にしたい場合には、Mattermostは少し堅すぎるというか、そういう用途にはあまり向いていない。</p>
+<p>「本当はSlackのようなスタイルのコミュニケーションをしたいのだけど、仕方なくDiscordを使っている」というようなプロジェクトには、Mattermostはちょうどよい選択肢になると思う。</p>
+<h6 id="heading-2">　﻿</h6>
+<p>早速環境を用意してみたので、以下作業メモ。</p>
+<h2 id="1-サーバーを用意する">1. サーバーを用意する</h2>
+<p>さくらのVPSで 4Gプランを契約（記事執筆時で月額3,960円。年払いだともう少し安くなる）。</p>
+<p>OSはUbuntu 22.04を選択。IPアドレスが払い出される。</p>
+<p><a href="https://vps.sakura.ad.jp/">https://vps.sakura.ad.jp/</a></p>
+<div class="image-wrapper"><img src="/images/diary/mattermost/45.png" alt=""></div><h6 id="heading-3">﻿</h6>
+<p>契約後、コントロールパネルにアクセスしてサーバーを起動</p>
+<p><a href="https://secure.sakura.ad.jp/vps/servers">https://secure.sakura.ad.jp/vps/servers</a></p>
+<h2 id="2-sshでログインしてセットアップ開始">﻿2. SSHでログインしてセットアップ開始</h2>
+<pre tabindex="0"><code>ssh root@&lt;VPSのIPアドレス&gt;
+</code></pre><p>最初に自動生成されたパスワードを使ってログイン</p>
+<h2 id="3-初期設定dockerの導入">3. 初期設定＆Dockerの導入</h2>
+<pre tabindex="0"><code># パッケージ情報を更新
+sudo apt update &amp;&amp; sudo apt upgrade -y
+
+# Dockerとdocker-composeをインストール
+sudo apt install -y docker.io docker-compose
+
+# Dockerを自動起動するように設定
+sudo systemctl enable docker
+</code></pre><h2 id="4-mattermost用ディレクトリの作成">4﻿. Mattermost用ディレクトリの作成</h2>
+<pre tabindex="0"><code>sudo mkdir -p /opt/mattermost
+cd /opt/mattermost
+</code></pre><h2 id="5-docker-composeyml-の作成">5. docker-compose.yml の作成</h2>
+<pre tabindex="0"><code>sudo nano docker-compose.yml
+</code></pre><pre tabindex="0"><code>version: &#34;3&#34;
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: mmuser
+      POSTGRES_PASSWORD: mmuser_password
+      POSTGRES_DB: mattermost
+    volumes:
+      - ./volumes/db:/var/lib/postgresql/data
+
+  app:
+    image: mattermost/mattermost-team-edition
+    restart: always
+    ports:
+      - &#34;8065:8065&#34;
+    environment:
+      MM_SQLSETTINGS_DRIVERNAME: postgres
+      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:mmuser_password@db:5432/mattermost?sslmode=disable
+      MM_SERVICESETTINGS_SITEURL: http://&lt;VPSのIPアドレス&gt;:8065
+    volumes:
+      - ./volumes/app/mattermost:/mattermost/data
+    depends_on:
+      - db
+</code></pre><p>nanoの保存コマンド: Ctrl + O → Enter → Ctrl + X</p>
+<h2 id="6-コンテナの起動">6. コンテナの起動</h2>
+<pre tabindex="0"><code>sudo docker-compose up -d
+</code></pre><h2 id="7-サーバーのパケットフィルターを設定">7. サーバーのパケットフィルターを設定</h2>
+<p>ポート 8065 でアクセスしたいので、パケットフィルターを設定する。ついでにこのあと必要なポートも登録しておく。</p>
+<div class="image-wrapper"><img src="/images/diary/mattermost/48.png" alt=""></div><h2 id="8-動作確認">8. 動作確認</h2>
+<p>ブラウザからVPSのIPアドレスを直叩きしてアクセス！</p>
+<p><a href="http://160.16.197.152:8065">http://160.16.197.152:8065</a></p>
+<div class="image-wrapper"><img src="/images/diary/mattermost/49.png" alt=""></div><h2 id="9-サブドメインの割り当て">9. サブドメインの割り当て</h2>
+<p>ドメイン管理サービスでDNS設定</p>
+<pre tabindex="0"><code>host: chat
+type: A
+data: 160.16.197.152
+</code></pre><p>Google Domains亡きあと、惰性でSquarespaceを使い続けているけれど、ずっとCloudflare Registrarに移行したいと思っている。（こういう地味な作業に腰が上がらなくなるの、確実に加齢の兆候だと思う。）</p>
+<h2 id="10-nginxでリバースプロキシを設定">10. Nginxでリバースプロキシを設定</h2>
+<p>Mattermostのポート8065番を、標準の80番/443番（HTTPS）に乗せかえる必要がある。</p>
+<p>Let’s Encryptは、ポート80（HTTP）を使って認証するため、Mattermost が直接 8065番で動いてると認証できない。そこで、Nginxで80番を受付けてMattermostに中継（proxy）する形を取る。</p>
+<pre tabindex="0"><code>sudo apt install nginx
+sudo nano /etc/nginx/sites-available/mattermost
+</code></pre><pre tabindex="0"><code>server {
+    listen 80;
+    server_name chat.chooning.app;
+
+    location / {
+        proxy_pass http://localhost:8065;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+</code></pre><h6 id="heading-4">﻿</h6>
+<p>有効化</p>
+<pre tabindex="0"><code># sites-available に置いた設定ファイルを sites-enabled にシンボリックリンクで追加
+sudo ln -s /etc/nginx/sites-available/mattermost /etc/nginx/sites-enabled/
+
+# 設定ファイルの文法チェック
+sudo nginx -t
+
+# Nginxの再読み込み（設定反映）
+sudo systemctl reload nginx
+</code></pre><h6 id="heading-5">﻿</h6>
+<p>SSL化（HTTPS対応）</p>
+<pre tabindex="0"><code># certbot（証明書取得ツール）と nginx連携用のプラグインをインストール
+sudo apt install certbot python3-certbot-nginx
+
+# chat.chooning.app ドメインに対してSSL証明書を取得し、
+# Nginxの設定に自動で組み込む（ポート443対応も自動設定される）
+sudo certbot --nginx -d chat.chooning.app
+</code></pre><p>メールアドレス入力、利用規約に同意、リダイレクト（HTTP→HTTPS）を Yes に。</p>
+<h2 id="11-動作確認">11. 動作確認</h2>
+<p>割り当てたドメインにブラウザでアクセスして確認</p>
+<p><a href="http://chat.chooning.app">http://chat.chooning.app</a></p>
+
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
+                            const altText = img.getAttribute('alt');
+                            if (altText) {
+                                img.parentElement.setAttribute('data-alt', altText);
+                            } else {
+                                console.log('alt属性が空のimgタグを検出しました');
+                                img.parentElement.classList.add('no-alt'); 
+                            }
+                        });
+                    });
+                </script>
+                
+
+                <div class="social-action">
+                    <div class="social-action__left">
+                        <div class="social-action__line">
+                            <div class="social-action__line-icon"></div>
+                            <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                このブログの更新通知をLINEで受け取る
+                            </a>
+                        </div>
+                    </div>
+                    <div class="social-action__right">
+                        <a href="https://twitter.com/intent/tweet?text=Mattermost%e3%82%92%e3%82%bb%e3%83%ab%e3%83%95%e3%83%9b%e3%82%b9%e3%83%86%e3%82%a3%e3%83%b3%e3%82%b0%e3%81%99%e3%82%8b&url=http%3a%2f%2flocalhost%3a1313%2fdiary%2fmattermost%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
+                        <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/diary/mattermost/" target="_blank" class="social-action__hatena"></a>
+                        <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/diary\/mattermost\/')"></a>
+                        <script>
+                            function copyToClipboard() {
+                                const url = window.location.href;
+                                navigator.clipboard.writeText(url).then(function() {
+                                    showNotification();
+                                }, function(err) {
+                                    console.error('リンクの保存に失敗しました: ', err);
+                                });
+                            }
+                            function showNotification() {
+                                var notification = document.getElementById("notification");
+                                notification.className = "notification show";
+                                setTimeout(function() {
+                                    notification.className = notification.className.replace(" show", "");
+                                }, 3000);
+                            }
+                        </script>
+                    </div>
+                </div>
+            </article>
+        
+
+            <div class="pagination-buttons">
+  
+      <a href="/diary/inktrap/" class="pagination-button">
+          <img src="/images/common/icon_left.svg" alt="">
+          Prev
+      </a>
+  
+  
+      <a href="/diary/2025-05-24/" class="pagination-button">
+          Next
+          <img src="/images/common/icon_right.svg" alt="">
+      </a>
+  
+</div>    
+
+            </ul>
+        </div>
+    </section>
+
+    
+    <p class="debug-info">Template : /layouts/diary/single.html</p>
+
+            </main>
+
+            <aside class="site-secondary" aria-label="セカンダリーナビゲーション">
+                
+    <div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <p class="diary-secondary-nav__heading">Categories</p>
+        <ul>
+            <li><a href="/subject/diary/">今日のハイライト</a></li>
+            <li><a href="/subject/music/">音楽</a></li>
+            <li><a href="/subject/manga-and-anime/">漫画・アニメ</a></li>
+            <li><a href="/subject/movies-and-dramas/">映画・ドラマ</a></li>
+            <li><a href="/subject/comedy/">お笑い</a></li>
+            <li><a href="/subject/gaming/">ゲーム</a></li>
+            <li><a href="/subject/sports/">スポーツ</a></li>
+            <li><a href="/subject/books-and-magazines/">本・雑誌</a></li>
+            <li><a href="/subject/politics/">政治</a></li>
+            <li><a href="/subject/economy-and-business/">経済・ビジネス</a></li>
+            <li><a href="/subject/languages/">言葉・言語</a></li>
+            <li><a href="/subject/foreign-cultures/">海外文化</a></li>
+            <li><a href="/subject/design-and-creative/">デザイン・クリエイティブ</a></li>
+            <li><a href="/subject/internet-and-technology/">インターネット・技術</a></li>
+            <li><a href="/subject/natural-science/">自然科学</a></li>
+            <li><a href="/subject/humanities-and-social-sciences/">人文・社会科学</a></li>
+        </ul>
+    </div>
+
+    <div class="diary-secondary-nav__section">
+        <p class="diary-secondary-nav__heading">Monthly Archive</p>
+        <ul>
+            
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+                
+                
+                    
+                
+            
+            
+            
+            
+                
+                
+                <li><a href="/month/2025-09">2025-09</a></li>
+            
+                
+                
+                <li><a href="/month/2025-08">2025-08</a></li>
+            
+                
+                
+                <li><a href="/month/2025-06">2025-06</a></li>
+            
+                
+                
+                <li><a href="/month/2025-05">2025-05</a></li>
+            
+                
+                
+                <li><a href="/month/2025-04">2025-04</a></li>
+            
+                
+                
+                <li><a href="/month/2025-03">2025-03</a></li>
+            
+                
+                
+                <li><a href="/month/2025-02">2025-02</a></li>
+            
+                
+                
+                <li><a href="/month/2024-09">2024-09</a></li>
+            
+                
+                
+                <li><a href="/month/2024-08">2024-08</a></li>
+            
+                
+                
+                <li><a href="/month/2024-06">2024-06</a></li>
+            
+                
+                
+                <li><a href="/month/2024-03">2024-03</a></li>
+            
+                
+                
+                <li><a href="/month/2024-02">2024-02</a></li>
+            
+                
+                
+                <li><a href="/month/2023-08">2023-08</a></li>
+            
+
+        </ul>
+    </div>
+</div>
+
+
+            </aside>
+        </div>
+    </div>
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+</body>
+</html>

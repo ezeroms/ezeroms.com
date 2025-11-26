@@ -2,6 +2,8 @@
 title: "リスト + 詳細のレイアウト（Master Detail）"
 description: "リスト + 詳細のレイアウト（Master Detail）に関するUIデザインパターンとベストプラクティス。"
 tags: ["patterns"]
+slug: "リスト-詳細のレイアウトmaster-detail"
+order: 14
 date: 2025-01-15T10:00:00Z
 ---
 

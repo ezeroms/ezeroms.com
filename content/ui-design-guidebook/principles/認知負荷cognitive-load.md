@@ -2,6 +2,8 @@
 title: "認知負荷（Cognitive Load）"
 description: "認知負荷（Cognitive Load）に関するUIデザイン原則とベストプラクティス。"
 tags: ["principles"]
+slug: "認知負荷cognitive-load"
+order: 3
 date: 2025-01-15T10:00:00Z
 ---
 

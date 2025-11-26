@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0"><channel><title>ezeroms.com</title><link>https://ezeroms.com/</link><description>One thing I can tell you is you got to be free!</description><language>ja</language><lastBuildDate>Mon, 24 Nov 2025 15:55:45 JST</lastBuildDate><item><title>初雪の朝</title><link>https://ezeroms.com/snap/2025-11-20-snow/</link><description>静かに降り積もる初雪。街が白一色に染まる美しい朝。</description><pubDate>Thu, 20 Nov 2025 07:00:00 UTC</pubDate><guid>https://ezeroms.com/snap/2025-11-20-snow/</guid></item><item><title>Hugo + Netlify の静的ブログに Contentful で管理画面を取り付けた</title><link>https://ezeroms.com/column/6xgc8ozluvuxhgwcf68yb9/</link><description>僕のブログは、昔ながらの静的サイトという形にこだわって作っている。つまり、サイト閲覧時にサーバー側で動的なページ生成を行わず、そこに置かれていた HTML ファイルがそのままブラウザに届く仕組みだ。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0"><channel><title>ezeroms.com</title><link>https://ezeroms.com/</link><description>One thing I can tell you is you got to be free!</description><language>ja</language><lastBuildDate>Wed, 26 Nov 2025 12:39:52 JST</lastBuildDate><item><title>初雪の朝</title><link>https://ezeroms.com/snap/2025-11-20-snow/</link><description>静かに降り積もる初雪。街が白一色に染まる美しい朝。</description><pubDate>Thu, 20 Nov 2025 07:00:00 UTC</pubDate><guid>https://ezeroms.com/snap/2025-11-20-snow/</guid></item><item><title>Hugo + Netlify の静的ブログに Contentful で管理画面を取り付けた</title><link>https://ezeroms.com/column/6xgc8ozluvuxhgwcf68yb9/</link><description>僕のブログは、昔ながらの静的サイトという形にこだわって作っている。つまり、サイト閲覧時にサーバー側で動的なページ生成を行わず、そこに置かれていた HTML ファイルがそのままブラウザに届く仕組みだ。
 このことにこだわっているのは、ローディングが阿部寛的に爆速であるとか、セキュリティリスクが抑えられるとか、それっぽい理由も挙げられるが、実のところは僕の嗜好（フェティッシュ）でしかない。静的サイトにはロマンがある。そこには、昔ながらのインターネットの美しさがあり、僕はそれをいつまでも大事にしたいと思っているのだ。
 しかし、さすがに毎回 HTML ファイルを書いているわけではない。初期のウェブ文化も HTML を手書きするところから始まったが、記事が増えるにつれてそれらを効率的に管理する仕組みが求められていった。そうしてこの世に WordPress や Movable Type のような CMS が生まれたわけだが、いずれも、「書く」ことと「公開する」ことの間にある不便さを取り除くための進歩だったといえる。
 では、僕が静的サイトにこだわりながら、この更新のしやすさ問題をどうやって解決しているのか。その答えが Hugo という静的サイトジェネレーターだ。
@@ -407,7 +407,10 @@ Modal: ユーザーの注意を強制的に引き、重要な操作や情報を�
 2. 構造 [構造を記述]
 3. デザインの鉄則 [鉄則1] [鉄則2] [鉄則3] 4. よくある失敗と対策 失敗例 [失敗例を記述]
 対策 [対策を記述]
-5. 事例（一般的なUI） [事例1] [事例2] 6. 関連するコンポーネント [関連コンポーネント1] [関連コンポーネント2]</description><pubDate>Wed, 15 Jan 2025 10:00:00 UTC</pubDate><guid>https://ezeroms.com/ui-design-guidebook/patterns/%E6%A4%9C%E7%B4%A2%E7%94%BB%E9%9D%A2search-filter-ui/</guid></item><item><title>空状態（Empty State）</title><link>https://ezeroms.com/ui-design-guidebook/patterns/%E7%A9%BA%E7%8A%B6%E6%85%8Bempty-state/</link><description>空状態（Empty State） 1. 目的 / どんな体験を支えるか 空状態（Empty State）は、[目的を記述]するためのUIパターンです。
+5. 事例（一般的なUI） [事例1] [事例2] 6. 関連するコンポーネント [関連コンポーネント1] [関連コンポーネント2]</description><pubDate>Wed, 15 Jan 2025 10:00:00 UTC</pubDate><guid>https://ezeroms.com/ui-design-guidebook/patterns/%E6%A4%9C%E7%B4%A2%E7%94%BB%E9%9D%A2search-filter-ui/</guid></item><item><title>構成</title><link>https://ezeroms.com/ui-design-guidebook/structure/</link><description>構成 UI Design Bookは Components / Patterns / Principles の3階層で構成します。
+Components（UIの最小部品） UIの基本パーツ。定義・使い方・状態・誤用例・アクセシビリティなどをまとめます。
+Patterns（複数コンポーネントの組み合わせ） 画面構造・インタラクションの定番パターン。目的、構造、デザインの鉄則、よくある失敗と対策、事例をまとめます。
+Principles（デザイン原則・思想） コンポーネントやパターンを支える抽象的なルールや理論。原則の定義、重要性、適用シーン、判断基準、誤用例をまとめます。</description><pubDate>Wed, 15 Jan 2025 10:00:00 UTC</pubDate><guid>https://ezeroms.com/ui-design-guidebook/structure/</guid></item><item><title>目的</title><link>https://ezeroms.com/ui-design-guidebook/purpose/</link><description>目的 UIデザインに関する知識、コンポーネント構造、原則、設計思想を体系化して蓄積するためのコンテンツ群です。個別のTipsではなく、1テーマ＝1ファイルの百科事典スタイルでまとめています。</description><pubDate>Wed, 15 Jan 2025 10:00:00 UTC</pubDate><guid>https://ezeroms.com/ui-design-guidebook/purpose/</guid></item><item><title>空状態（Empty State）</title><link>https://ezeroms.com/ui-design-guidebook/patterns/%E7%A9%BA%E7%8A%B6%E6%85%8Bempty-state/</link><description>空状態（Empty State） 1. 目的 / どんな体験を支えるか 空状態（Empty State）は、[目的を記述]するためのUIパターンです。
 2. 構造 [構造を記述]
 3. デザインの鉄則 [鉄則1] [鉄則2] [鉄則3] 4. よくある失敗と対策 失敗例 [失敗例を記述]
 対策 [対策を記述]
@@ -875,8 +878,18 @@ Google Form 連絡先（個人） LINE Messenger WhatsApp Signal チューニン
 かつて、個人的な文章や写真が、ネットの片隅に無造作に置かれていた時代がありました。あの「私的なものが半ば公共に漂っている」不思議な感触に、少年の僕はひどく魅せられていた気がします。
 極めて個人的なものが、個人的がゆえに、他者に開かれていく。
 ここは、あの頃の気配が感じられるような、僕の大好きなインターネットがある場所にしていきたいと思っています。
-技術構成 このサイトは Hugo + Netlify を中心とした、静的サイト構成でつくっています。投稿の管理には Contentful を使い、静的サイトが持つ「軽やかさ」と、CMSの「更新のしやすさ」をバランスよく取っています。
+コンテンツの権利 このサイトに掲載している文章・写真・図版などについて、特に明記のないものはすべて、僕・イワモトユウによって制作されたものです。
+これらのコンテンツは、特別な記載がある場合を除き、「CC BY-NC-ND 4.0」に基づいて公開しています。
+CC BY-NC-ND 4.0（表示・非営利・改変禁止）
+出典を明示していただければ、非営利目的での転載・引用・共有が可能です。 営利目的での利用（媒体掲載・広告・プロモーションなど）については、事前のご相談をお願いします。 要約の範囲を超える改変や、原文の意図や意味合いを歪めることは禁止します。 文章というものは、書かれた時点の状況や、周囲の記事、前後の文章の流れの中で意味が形づくられるものですが、引用とは、性質上そうした文脈からの切り離しを避けられない行為でもあります。
+ご利用の際は、書き手がその文章に込めた意図や背景にも思いを寄せながら、その言葉が向かおうとしていた方向を損なわない形で扱うよう心がけてください。
+出典表記の例
+© 2020 イワモトユウ / ezeroms.com（CC BY-NC-ND 4.0）
+他作品の引用・転載について このサイトでは、書籍・論文・映画・漫画・ウェブ記事など、他者の知的成果物を引用することがあります。引用は著作権法に基づき、必要最小限の引用や出典の明記といった原則に従っておこなっています。
+また、僕自身が取材を受けたものについては、自分に関する事実を記録として残す目的で、転載して紹介する場合があります。こうした転載は、必要に応じて担当者の方に確認を取った上でおこなっています。
+もし、引用や転載について不適切に思われる点がある、あるいは削除・訂正をご希望される場合は、お手数ですが「お問い合わせ」からご連絡ください。必ず誠実に対応します。
+技術構成 このサイトは Hugo + Netlify を中心とした、静的サイト構成でつくっています。投稿の管理には Contentful を使い、静的サイトが持つ軽やかさと、CMSの更新のしやすさをバランスよく取っています。
 静的サイトというと古い技術のようですが、サーバー側で動的処理を行わない構成は、速度・保守性・信頼性において依然として非常に強い選択肢です。
 なるべくシンプルに、余計な負荷のない動きを保とうという態度や、情報を複雑に加工せず、最短距離で読み手に届ける構造には一種の美しさがあり、僕は、これもまたデザインの一部だと考えています。
 このサイトの更新通知を受け取る 更新を楽しみにしてくれる人がいると、とても励みになります。よければ登録してください！🤩
-Official LINE Account Feedly RSS Feed</description><pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate><guid>https://ezeroms.com/about/about-this-site/</guid></item></channel></rss>
+Official LINE Account Feedly RSS Feed</description><pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate><guid>https://ezeroms.com/about/about-this-site/</guid></item><item><title>メディア掲載</title><link>https://ezeroms.com/about/media-coverage/</link><description/><pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate><guid>https://ezeroms.com/about/media-coverage/</guid></item></channel></rss>

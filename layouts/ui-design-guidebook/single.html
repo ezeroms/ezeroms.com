@@ -3,7 +3,7 @@
     {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
     {{ $firstComponent := "" }}
     {{ if gt (len $componentsPages) 0 }}
-        {{ $sortedComponents := sort $componentsPages "Title" "asc" }}
+        {{ $sortedComponents := sort $componentsPages "Params.order" "asc" }}
         {{ $firstComponent = index $sortedComponents 0 }}
     {{ end }}
 
@@ -11,7 +11,7 @@
     {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
     {{ $firstPattern := "" }}
     {{ if gt (len $patternsPages) 0 }}
-        {{ $sortedPatterns := sort $patternsPages "Title" "asc" }}
+        {{ $sortedPatterns := sort $patternsPages "Params.order" "asc" }}
         {{ $firstPattern = index $sortedPatterns 0 }}
     {{ end }}
 
@@ -19,11 +19,12 @@
     {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
     {{ $firstPrinciple := "" }}
     {{ if gt (len $principlesPages) 0 }}
-        {{ $sortedPrinciples := sort $principlesPages "Title" "asc" }}
+        {{ $sortedPrinciples := sort $principlesPages "Params.order" "asc" }}
         {{ $firstPrinciple = index $sortedPrinciples 0 }}
     {{ end }}
 
     {{ $currentCategory := "" }}
+    {{ $isReadmePage := false }}
     {{ if .Params.tags }}
         {{ range .Params.tags }}
             {{ if eq . "components" }}
@@ -32,13 +33,15 @@
                 {{ $currentCategory = "patterns" }}
             {{ else if eq . "principles" }}
                 {{ $currentCategory = "principles" }}
+            {{ else if eq . "readme" }}
+                {{ $isReadmePage = true }}
             {{ end }}
         {{ end }}
     {{ end }}
 
     <div class="column-header">
         <nav class="column-header__nav" id="ui-design-guidebook-category-filters">
-            <a href="/ui-design-guidebook/" class="column-header__tab{{ if eq .RelPermalink "/ui-design-guidebook/" }} active{{ end }}">Readme</a>
+            <a href="/ui-design-guidebook/" class="column-header__tab{{ if or (eq .RelPermalink "/ui-design-guidebook/") $isReadmePage }} active{{ end }}">Readme</a>
             {{ if $firstComponent }}
                 <a href="{{ $firstComponent.RelPermalink }}" class="column-header__tab{{ if eq $currentCategory "components" }} active{{ end }}">Components</a>
             {{ else }}
