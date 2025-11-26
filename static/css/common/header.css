@@ -97,53 +97,5 @@ header {
 
 
 
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
-  .header {
-    display: none;
-  }
-
-  .header-top {
-    display: none;
-  }
-
-  .header__nav {
-    display: none;
-  }
-  
-  .header__button {
-    display: none;
-  }
-
-  .header__logo img {
-    width: 30dvw;
-  }
-
-  .header__nav-sp {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 18px 0 0;
-  }
-
-  .header__nav-sp a {
-    font-size: 14px;
-    color: #050317;
-    margin: 0 24px 0;
-  }
-
-
-}
-
-/* --------------------
-パソコン用のスタイル
--------------------- */
-@media (min-width: 961px) {
-  .header_sp {
-    display: none;
-  }
-}
 
 

@@ -9,3 +9,4 @@ description: "Microsoft Windows 95が発売され、パーソナルコンピュ�
 
 Microsoft Windows 95が発売された。スタートメニューやタスクバーを導入し、パーソナルコンピュータの操作性を大きく向上させた。
 
+

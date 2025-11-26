@@ -106,19 +106,4 @@
 }
 
 
-/* スマホ用のスタイル */
-@media (max-width: 960px) {
-    .article-navigation {
-        gap: 12px;
-    }
-    
-    .article-navigation__link {
-        padding: 12px 16px;
-    }
-    
-    .article-navigation__title {
-        font-size: 0.875rem;
-        -webkit-line-clamp: 3;
-    }
-}
 

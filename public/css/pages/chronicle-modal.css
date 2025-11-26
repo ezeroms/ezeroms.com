@@ -124,24 +124,4 @@
     margin-bottom: 0;
 }
 
-/* スマホ用のスタイル */
-@media (max-width: 960px) {
-    .chronicle-modal__content {
-        width: 95%;
-        max-height: 95vh;
-        border-radius: 16px;
-    }
-    
-    .chronicle-modal__body {
-        padding: 24px;
-    }
-    
-    .chronicle-modal__close {
-        top: 12px;
-        right: 12px;
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
-    }
-}
 

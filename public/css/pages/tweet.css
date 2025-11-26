@@ -300,35 +300,4 @@
 
 /* サイドバーのタグスタイルは共通クラス（sidebar-tag）で管理 */
 
-/* スマホ用のスタイル */
-@media (max-width: 960px) {
-    .tweet-item__bubble {
-        padding: 1.5rem;
-        border-radius: 20px;
-    }
-
-    .tweet-item__text {
-        font-size: 0.875rem;
-    }
-
-    .tweet-item__date {
-        font-size: 0.75rem;
-    }
-
-    .tweet-item__bubble {
-        padding: 1.5rem;
-        padding-bottom: 1.5rem;
-        padding-right: 2rem;
-        border-radius: 20px;
-    }
-
-    .tweet-item__emoji {
-        right: -0.5rem;
-        bottom: -0.375rem;
-        font-size: 24px;
-        width: 2.5rem;
-        height: 2.5rem;
-    }
-
-}
 

@@ -1,6 +1,563 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>設定画面（Settings UI）</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js></script><script>hljs.highlightAll()</script><link rel=stylesheet href=/css/main.css><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon type=image/x-icon href=/images/common/favicon/favicon.ico><link rel=icon type=image/png sizes=16x16 href=/images/common/favicon/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=/images/common/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/images/common/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=192x192 href=/images/common/favicon/favicon-192x192.png><link rel=apple-touch-icon sizes=180x180 href=/images/common/favicon/apple-touch-icon.png><meta property="og:title" content="設定画面（Settings UI）"><meta property="og:description" content="One thing I can tell you is you got to be free!"><meta property="og:type" content="website"><meta property="og:url" content="https://ezeroms.com/ui-design-guidebook/patterns/%E8%A8%AD%E5%AE%9A%E7%94%BB%E9%9D%A2settings-ui/"><meta property="og:image" content="https://ezeroms.com/images/common/og-image.png"><meta property="og:site_name" content="ezeroms.com"><meta property="og:locale" content="ja_JP"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="設定画面（Settings UI）"><meta name=twitter:description content="One thing I can tell you is you got to be free!"><meta name=twitter:image content="https://ezeroms.com/images/common/og-image.png"></head><body class=is-ui-design-guidebook><div class=layout-container><aside class=layout-sidebar aria-label=グローバルナビゲーション><div class=sidebar><div class=sidebar__main><div class=sidebar__logo><a href=/><img src=/images/common/logo.svg alt=ezeroms.com>
-</a><button class=sidebar__minimize-btn id=sidebar-minimize-btn aria-label=サイドバーを最小化 data-tooltip=メニューを非表示にする>
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><nav class=sidebar__nav-group aria-label=グローバルナビゲーション><ul class=sidebar__nav><li><a href=/about/>About</a></li><li><a href=/tweet/>Tweet</a></li><li><a href=/diary/>Diary</a></li><li><a href=/column/>Column</a></li><li><a href=/work/>Work</a></li></ul><div class=sidebar__library><h3 class=sidebar__library-heading>Library</h3><ul class=sidebar__nav><li><a href=/shoulders-of-giants/>The shoulders of Giants</a></li><li><a href=/chronicle/>Chronicle</a></li><li><a class=is-active href=/ui-design-guidebook/>UI Design Guidebook</a></li></ul></div></nav></div></div></aside><div class=layout-body><div class=layout-header><div class=column-header><nav class=column-header__nav id=ui-design-guidebook-category-filters><a href=/ui-design-guidebook/ class=column-header__tab>Readme</a>
-<a href=/ui-design-guidebook/components/modal-window/ class=column-header__tab>Components</a>
-<a href=/ui-design-guidebook/patterns/modal-dialog-popup-difference/ class="column-header__tab active">Patterns</a>
-<a href=/ui-design-guidebook/principles/buttons-vs-links/ class=column-header__tab>Principles</a></nav></div></div><div class="layout-main layout-main--with-header-toc"><aside class=layout-toc aria-label="UI Design Guidebook 目次"><nav class=layout-toc__nav><ul class=layout-toc__list><li><a href=/ui-design-guidebook/patterns/modal-dialog-popup-difference/>Modal / Dialog / Popup の違い</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%94%BB%E9%9D%A2-ui-%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88/>ログイン画面 UI チェックリスト</a></li><li><a href=/ui-design-guidebook/patterns/%E5%85%A5%E5%8A%9B%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E8%A8%AD%E8%A8%88%E3%83%99%E3%82%B9%E3%83%88%E3%83%97%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%82%B9/>入力フォーム設計（ベストプラクティス）</a></li><li><a href=/ui-design-guidebook/patterns/%E9%81%B8%E6%8A%9E%E5%BC%8F-ui%E3%83%A9%E3%82%B8%E3%82%AA-%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9-%E3%82%BB%E3%83%AC%E3%82%AF%E3%83%88%E3%81%AE%E4%BD%BF%E3%81%84%E5%88%86%E3%81%91/>選択式 UI（ラジオ / チェックボックス / セレクトの使い分け）</a></li><li><a href=/ui-design-guidebook/patterns/navigation-patterns%E3%82%BF%E3%83%96%E3%82%B5%E3%82%A4%E3%83%89%E3%83%90%E3%83%BC%E3%83%89%E3%83%AD%E3%83%AF%E3%83%BC/>Navigation Patterns（タブ・サイドバー・ドロワー）</a></li><li><a href=/ui-design-guidebook/patterns/%E6%A4%9C%E7%B4%A2%E7%94%BB%E9%9D%A2search-filter-ui/>検索画面（Search + Filter UI）</a></li><li><a href=/ui-design-guidebook/patterns/%E3%82%A8%E3%83%A9%E3%83%BC%E8%A1%A8%E7%A4%BA%E3%83%90%E3%83%AA%E3%83%87%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3/>エラー表示・バリデーションパターン</a></li><li><a href=/ui-design-guidebook/patterns/%E7%A9%BA%E7%8A%B6%E6%85%8Bempty-state/>空状態（Empty State）</a></li><li><a href=/ui-design-guidebook/patterns/404-%E3%82%A8%E3%83%A9%E3%83%BC%E3%83%9A%E3%83%BC%E3%82%B8%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/>404 / エラーページデザイン</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E7%B7%A8%E9%9B%86/>プロフィール編集</a></li><li><a href=/ui-design-guidebook/patterns/%E8%A8%AD%E5%AE%9A%E7%94%BB%E9%9D%A2settings-ui/ class=active>設定画面（Settings UI）</a></li><li><a href=/ui-design-guidebook/patterns/onboarding-%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3/>Onboarding パターン</a></li><li><a href=/ui-design-guidebook/patterns/%E9%80%9A%E7%9F%A5%E8%A8%AD%E8%A8%88notification-ux/>通知設計（Notification UX）</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%AA%E3%82%B9%E3%83%88-%E8%A9%B3%E7%B4%B0%E3%81%AE%E3%83%AC%E3%82%A4%E3%82%A2%E3%82%A6%E3%83%88master-detail/>リスト + 詳細のレイアウト（Master Detail）</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5%E3%83%9C%E3%83%BC%E3%83%89%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/>ダッシュボードデザイン</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%9A%E3%83%BC%E3%82%B8%E3%83%8D%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E7%84%A1%E9%99%90%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%AB/>ページネーション・無限スクロール</a></li><li><a href=/ui-design-guidebook/patterns/%E3%82%AB%E3%83%BC%E3%83%89%E3%83%AC%E3%82%A4%E3%82%A2%E3%82%A6%E3%83%88%E3%81%AE%E8%A8%AD%E8%A8%88/>カードレイアウトの設計</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E7%AE%A1%E7%90%86%E7%B3%BBui%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC/>ファイル管理系UI（アップロード／プレビュー）</a></li><li><a href=/ui-design-guidebook/patterns/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E3%81%A7%E3%81%AE%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E6%9C%80%E9%81%A9%E5%8C%96/>モバイルでのフォーム最適化</a></li></ul></nav></aside><main class=layout-main__content id=main-content><div id=notification class=notification>Link copied to clipboard!</div><section class=diary-main><div class=diary-main__content><ul class=article-container><article class=article-item><h1>設定画面（Settings UI）</h1><p class=article-item__description>設定画面（Settings UI）に関するUIデザインパターンとベストプラクティス。</p><h1 id=設定画面settings-ui>設定画面（Settings UI）</h1><h2 id=1-目的--どんな体験を支えるか>1. 目的 / どんな体験を支えるか</h2><p>設定画面（Settings UI）は、[目的を記述]するためのUIパターンです。</p><h2 id=2-構造>2. 構造</h2><p>[構造を記述]</p><h2 id=3-デザインの鉄則>3. デザインの鉄則</h2><ul><li>[鉄則1]</li><li>[鉄則2]</li><li>[鉄則3]</li></ul><h2 id=4-よくある失敗と対策>4. よくある失敗と対策</h2><h3 id=失敗例>失敗例</h3><p>[失敗例を記述]</p><h3 id=対策>対策</h3><p>[対策を記述]</p><h2 id=5-事例一般的なui>5. 事例（一般的なUI）</h2><ul><li>[事例1]</li><li>[事例2]</li></ul><h2 id=6-関連するコンポーネント>6. 関連するコンポーネント</h2><ul><li>[関連コンポーネント1]</li><li>[関連コンポーネント2]</li></ul></article></ul></div></section></main></div></div></div><script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-K021MTL6NX")</script><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const e="https://ezeroms.com/",t=e?new URL(e).hostname:window.location.hostname,n=document.querySelectorAll(".article-item a[href]");n.forEach(function(e){const n=e.getAttribute("href");if(!n||e.hasAttribute("target"))return;if(n.startsWith("#")||n.startsWith("/")||n.startsWith("./")||n.startsWith("../")||n.startsWith("http")&&new URL(n,window.location.href).hostname===t)return;(n.startsWith("http://")||n.startsWith("https://")||n.startsWith("//"))&&(e.setAttribute("target","_blank"),e.setAttribute("rel","noopener noreferrer"))})}})()</script><script>(function(){function e(){const t=document.querySelector(".layout-sidebar"),e=document.getElementById("sidebar-minimize-btn");if(!t||!e)return;n(),e.addEventListener("click",function(e){e.preventDefault(),e.stopPropagation(),t.classList.toggle("is-minimized"),n()});function n(){const n=t.classList.contains("is-minimized");n?(e.setAttribute("aria-label","サイドバーを最大化"),e.setAttribute("data-tooltip","メニューを表示する"),e.querySelector("svg").style.transform="rotate(180deg)"):(e.setAttribute("aria-label","サイドバーを最小化"),e.setAttribute("data-tooltip","メニューを非表示にする"),e.querySelector("svg").style.transform="rotate(0deg)")}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e()})()</script><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const e=document.querySelector(".layout-header");if(!e){console.log("Header not found");return}if(e.children.length===0)return;let t=0,n=null,s=!1,o=!1;function i(){return window.pageYOffset||document.documentElement.scrollTop||0}function a(){const o=i();if(Math.abs(o-t)<1)return;const a=o>t,r=o<t;if(n&&(clearTimeout(n),n=null),o<=100){e.classList.remove("hidden"),s=!1,t=o;return}r?(e.classList.remove("hidden"),s=!1):a&&(e.classList.add("hidden"),s=!0),t=o,s&&(n=setTimeout(function(){e.classList.remove("hidden"),s=!1,n=null},3e3))}t=i(),window.addEventListener("scroll",function(){o||(window.requestAnimationFrame(function(){a(),o=!1}),o=!0)},{passive:!0}),a()}})()</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>設定画面（Settings UI）</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="設定画面（Settings UI）">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/ui-design-guidebook/patterns/%E8%A8%AD%E5%AE%9A%E7%94%BB%E9%9D%A2settings-ui/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="設定画面（Settings UI）">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+</head>
+<body class="is-ui-design-guidebook">
+    <div class="layout-container">
+        <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="" href="/about/">About</a>
+        </li>
+        <li>
+          <a class="" href="/tweet/">Tweet</a>
+        </li>
+        <li>
+          <a class="" href="/diary/">Diary</a>
+        </li>
+        <li>
+          <a class="" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="" href="/work/">Work</a>
+        </li>
+        
+      </ul>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          <li>
+            <a class="" href="/chronicle/">Chronicle</a>
+          </li>
+          <li>
+            <a class="is-active" href="/ui-design-guidebook/">UI Design Guidebook</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+        </aside>
+
+        <div class="layout-body">
+            
+            <div class="layout-header">
+                
+    
+    
+    
+    
+        
+        
+    
+
+    
+    
+    
+    
+        
+        
+    
+
+    
+    
+    
+    
+        
+        
+    
+
+    
+    
+    
+        
+            
+                
+            
+        
+    
+
+    <div class="column-header">
+        <nav class="column-header__nav" id="ui-design-guidebook-category-filters">
+            <a href="/ui-design-guidebook/" class="column-header__tab">Readme</a>
+            
+                <a href="/ui-design-guidebook/components/modal-window/" class="column-header__tab">Components</a>
+            
+            
+                <a href="/ui-design-guidebook/patterns/modal-dialog-popup-difference/" class="column-header__tab active">Patterns</a>
+            
+            
+                <a href="/ui-design-guidebook/principles/buttons-vs-links/" class="column-header__tab">Principles</a>
+            
+        </nav>
+    </div>
+
+            </div>
+            
+            <div class="layout-main layout-main--with-header-toc">
+                
+                    <aside class="layout-toc" aria-label="UI Design Guidebook 目次">
+    <nav class="layout-toc__nav">
+        <ul class="layout-toc__list">
+            
+            
+            
+            
+                
+                    
+                
+            
+            
+            
+            
+                
+                
+                    
+                        
+                            
+                        
+                    
+                
+                
+                
+                    
+                    
+                    
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/modal-dialog-popup-difference/" class="">Modal / Dialog / Popup の違い</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E7%94%BB%E9%9D%A2-ui-%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88/" class="">ログイン画面 UI チェックリスト</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E5%85%A5%E5%8A%9B%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E8%A8%AD%E8%A8%88%E3%83%99%E3%82%B9%E3%83%88%E3%83%97%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%82%B9/" class="">入力フォーム設計（ベストプラクティス）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E9%81%B8%E6%8A%9E%E5%BC%8F-ui%E3%83%A9%E3%82%B8%E3%82%AA-%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9-%E3%82%BB%E3%83%AC%E3%82%AF%E3%83%88%E3%81%AE%E4%BD%BF%E3%81%84%E5%88%86%E3%81%91/" class="">選択式 UI（ラジオ / チェックボックス / セレクトの使い分け）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/navigation-patterns%E3%82%BF%E3%83%96%E3%82%B5%E3%82%A4%E3%83%89%E3%83%90%E3%83%BC%E3%83%89%E3%83%AD%E3%83%AF%E3%83%BC/" class="">Navigation Patterns（タブ・サイドバー・ドロワー）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E6%A4%9C%E7%B4%A2%E7%94%BB%E9%9D%A2search-filter-ui/" class="">検索画面（Search &#43; Filter UI）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%82%A8%E3%83%A9%E3%83%BC%E8%A1%A8%E7%A4%BA%E3%83%90%E3%83%AA%E3%83%87%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3/" class="">エラー表示・バリデーションパターン</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E7%A9%BA%E7%8A%B6%E6%85%8Bempty-state/" class="">空状態（Empty State）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/404-%E3%82%A8%E3%83%A9%E3%83%BC%E3%83%9A%E3%83%BC%E3%82%B8%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/" class="">404 / エラーページデザイン</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E7%B7%A8%E9%9B%86/" class="">プロフィール編集</a>
+                        </li>
+                    
+                        
+                        
+                            
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E8%A8%AD%E5%AE%9A%E7%94%BB%E9%9D%A2settings-ui/" class="active">設定画面（Settings UI）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/onboarding-%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3/" class="">Onboarding パターン</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E9%80%9A%E7%9F%A5%E8%A8%AD%E8%A8%88notification-ux/" class="">通知設計（Notification UX）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%AA%E3%82%B9%E3%83%88-%E8%A9%B3%E7%B4%B0%E3%81%AE%E3%83%AC%E3%82%A4%E3%82%A2%E3%82%A6%E3%83%88master-detail/" class="">リスト &#43; 詳細のレイアウト（Master Detail）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5%E3%83%9C%E3%83%BC%E3%83%89%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/" class="">ダッシュボードデザイン</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%9A%E3%83%BC%E3%82%B8%E3%83%8D%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E7%84%A1%E9%99%90%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%AB/" class="">ページネーション・無限スクロール</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%82%AB%E3%83%BC%E3%83%89%E3%83%AC%E3%82%A4%E3%82%A2%E3%82%A6%E3%83%88%E3%81%AE%E8%A8%AD%E8%A8%88/" class="">カードレイアウトの設計</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E7%AE%A1%E7%90%86%E7%B3%BBui%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC/" class="">ファイル管理系UI（アップロード／プレビュー）</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/patterns/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E3%81%A7%E3%81%AE%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E6%9C%80%E9%81%A9%E5%8C%96/" class="">モバイルでのフォーム最適化</a>
+                        </li>
+                    
+                
+            
+        </ul>
+    </nav>
+</aside>
+
+
+                
+                <main class="layout-main__content" id="main-content">
+                    
+    <div id="notification" class="notification">
+    Link copied to clipboard!
+</div>
+
+    <section class="diary-main">
+        <div class="diary-main__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <h1>設定画面（Settings UI）</h1>
+                    
+                        <p class="article-item__description">設定画面（Settings UI）に関するUIデザインパターンとベストプラクティス。</p>
+                    
+                    <h1 id="設定画面settings-ui">設定画面（Settings UI）</h1>
+<h2 id="1-目的--どんな体験を支えるか">1. 目的 / どんな体験を支えるか</h2>
+<p>設定画面（Settings UI）は、[目的を記述]するためのUIパターンです。</p>
+<h2 id="2-構造">2. 構造</h2>
+<p>[構造を記述]</p>
+<h2 id="3-デザインの鉄則">3. デザインの鉄則</h2>
+<ul>
+<li>[鉄則1]</li>
+<li>[鉄則2]</li>
+<li>[鉄則3]</li>
+</ul>
+<h2 id="4-よくある失敗と対策">4. よくある失敗と対策</h2>
+<h3 id="失敗例">失敗例</h3>
+<p>[失敗例を記述]</p>
+<h3 id="対策">対策</h3>
+<p>[対策を記述]</p>
+<h2 id="5-事例一般的なui">5. 事例（一般的なUI）</h2>
+<ul>
+<li>[事例1]</li>
+<li>[事例2]</li>
+</ul>
+<h2 id="6-関連するコンポーネント">6. 関連するコンポーネント</h2>
+<ul>
+<li>[関連コンポーネント1]</li>
+<li>[関連コンポーネント2]</li>
+</ul>
+
+                </article>
+            </ul>
+        </div>
+    </section>
+
+                </main>
+
+                
+                
+                
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = 'http:\/\/localhost:1313\/';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                
+                
+                updateButtonState();
+                
+                
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示する');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.layout-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                
+                lastScrollTop = getScrollTop();
+
+                
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                
+                handleScroll();
+            }
+        })();
+    </script>
+</body>
+</html>

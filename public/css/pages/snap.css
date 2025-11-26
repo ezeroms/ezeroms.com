@@ -235,48 +235,5 @@
     line-height: 1.6;
 }
 
-/* スマホ用のスタイル */
-@media (max-width: 960px) {
-    .snap-gallery {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 16px;
-    }
-
-    .snap-modal {
-        padding: 16px;
-    }
-
-    .snap-modal__close {
-        top: 16px;
-        right: 16px;
-        width: 40px;
-        height: 40px;
-        font-size: 1.5rem;
-    }
-
-    .snap-modal__prev,
-    .snap-modal__next {
-        width: 48px;
-        height: 48px;
-        font-size: 2rem;
-    }
-
-    .snap-modal__prev {
-        left: 8px;
-    }
-
-    .snap-modal__next {
-        right: 8px;
-    }
-
-    .snap-modal__content {
-        max-width: 100%;
-        max-height: 100%;
-    }
-
-    .snap-modal__image {
-        max-height: 60vh;
-    }
-}
 
 

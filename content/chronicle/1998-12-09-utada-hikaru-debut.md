@@ -10,3 +10,4 @@ description: "宇多田ヒカルが「Automatic/time will tell」でデビュー
 
 宇多田ヒカルが「Automatic/time will tell」でデビュー。日本のポップミュージックシーンに大きな影響を与えた。
 
+

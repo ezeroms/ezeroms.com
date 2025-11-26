@@ -14,14 +14,3 @@
 }
 
 
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
-  .article-container {
-    margin: 16px 0 40px;
-    width: calc(100dvw - 32px);
-    padding: 0 16px 40px;
-    gap: 16px;
-  }
-}

@@ -239,40 +239,6 @@
     background: #050317;
 }
 
-/* SP版（767px以下）でのドロワーの位置調整 */
-@media (max-width: 767px) {
-    .drawer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        top: auto;
-        transform: translateY(100%);
-        max-height: 80vh;
-        z-index: 9999;
-    }
-    
-    .drawer.is-open {
-        transform: translateY(0);
-    }
-    
-    .drawer-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: block;
-        z-index: 9998;
-    }
-    
-    .drawer-overlay.is-active {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-}
 
 /* ドロワー内のメニューのスタイル */
 .drawer__nav {
@@ -356,15 +322,6 @@
     padding: 0;
 }
 
-/* SP版でタグ一覧のヘッダーを非表示 */
-@media (max-width: 767px) {
-    .drawer__content .diary-secondary-nav__heading,
-    .drawer__content .tweet-secondary-nav__heading,
-    .drawer__content .work-secondary-nav__heading,
-    .drawer__content .column-secondary-nav__heading {
-        display: none;
-    }
-}
 
 /* 年選択リストのスタイル */
 .year-selector-list {

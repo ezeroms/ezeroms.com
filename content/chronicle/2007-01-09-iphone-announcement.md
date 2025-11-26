@@ -9,3 +9,4 @@ description: "AppleがiPhoneを発表した。"
 
 AppleがiPhoneを発表した。スマートフォンの歴史を変える製品となった。
 
+

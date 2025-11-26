@@ -85,3 +85,4 @@ subcategory: "災害"
 - `date_precision: "month"` → 表示: `YYYY/MM`
 - `date_precision: "day"` または未指定 → 表示: `YYYY/MM/DD`
 
+
