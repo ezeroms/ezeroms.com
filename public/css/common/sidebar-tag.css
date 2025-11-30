@@ -1,17 +1,22 @@
-/* サイドバーのタグスタイル（共通） */
-/* Columnのタグスタイルを基準に統一 */
+/* このファイルは非推奨です。common/tag.css を使用してください。 */
+/* 後方互換性のため、古いクラス名を新しいクラス名にマッピング */
 
 .sidebar-tag,
 a.sidebar-tag {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: #f9f9f7;
-    border: 1px solid #E7E7E9;
-    border-radius: 16px;
-    font-size: 0.75rem;
-    color: #050317;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    /* tag.cssのスタイルを継承（同じスタイルを適用） */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.8rem;
+    min-height: 30px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    transition: all var(--transition-normal) var(--easing-default);
     text-decoration: none;
     cursor: pointer;
     position: static;
@@ -20,26 +25,24 @@ a.sidebar-tag {
 
 .sidebar-tag:hover,
 a.sidebar-tag:hover {
-    background: #E7E7E9;
-    border-color: #6E6D79;
+    background: var(--color-border);
+    border-color: var(--color-border-hover);
 }
 
 .sidebar-tag.active,
 a.sidebar-tag.active {
-    background: #050317;
-    color: #fff;
-    border-color: #050317;
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-primary);
 }
 
 /* セカンダリーナビゲーション内のタグには::before/::afterを表示しない */
-.diary-secondary-nav .tweet-secondary-nav__tags .sidebar-tag::before,
-.diary-secondary-nav .tweet-secondary-nav__tags .sidebar-tag::after,
-.diary-secondary-nav .tweet-secondary-nav__tags a.sidebar-tag::before,
-.diary-secondary-nav .tweet-secondary-nav__tags a.sidebar-tag::after {
+.diary-secondary-nav .secondary-nav__tags .sidebar-tag::before,
+.diary-secondary-nav .secondary-nav__tags .sidebar-tag::after,
+.diary-secondary-nav .secondary-nav__tags a.sidebar-tag::before,
+.diary-secondary-nav .secondary-nav__tags a.sidebar-tag::after {
     display: none !important;
     content: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
 }
-
-

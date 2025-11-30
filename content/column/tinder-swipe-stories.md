@@ -1,14 +1,14 @@
 ---
-title: Tinder Swipe Stories
-date: 2025-02-19T18:57:11.472Z
+title: "Tinder Swipe Stories"
+date: "2025-02-19T18:57:11.472Z"
 slug: tinder-swipe-stories
-month:
-  - 2025-02
-subject:
+column_category:
   - internet-and-technology
-tags:
+column_tag:
   - Tinder
   - SNS
+column_month:
+  - 2025-02
 ---
 Tinderが「Tinder Swipe Stories」という企画をやっている。Tinderでの出会いをテーマにした体験談を集める試みだ。
 

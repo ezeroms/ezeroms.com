@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.147.5"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta name="generator" content="Hugo 0.152.2"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
     <title>ezeroms.com</title>
 
@@ -106,8 +106,8 @@
                 
                 <main class="layout-main__content" id="main-content">
                     
-    <section class="top-main">
-        <div class="top-main__content">
+    <section class="page-section page-section--top">
+        <div class="page-section__content page-section__content--narrow">
             <a href="/" class="top-logo">
                 <img src="/images/common/logo.svg" alt="ezeroms.com" class="top-logo__img">
             </a>
@@ -191,23 +191,7 @@
         </div>
     </section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var imageContainer = document.getElementById("image-container");
-            var imagesData = imageContainer.getAttribute("data-images");
-            try {
-                var images = JSON.parse(imagesData);
-                if (images.length > 0) {
-                    var randomIndex = Math.floor(Math.random() * images.length);
-                    var randomImage = images[randomIndex].Name;
-                    var timestamp = new Date().getTime();
-                    document.getElementById("randomImage").src = "/images/top/" + randomImage + "?v=" + timestamp;
-                }
-            } catch (e) {
-                console.error("Error parsing images data:", e);
-            }
-        });
-    </script>
+    <script src="/js/random-image.js"></script>
 
                 </main>
 

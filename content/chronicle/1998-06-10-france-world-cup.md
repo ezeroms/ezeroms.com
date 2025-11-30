@@ -3,7 +3,7 @@ title: "1998 FIFAワールドカップ開幕"
 date: 1998-06-10
 category: "スポーツ"
 subcategory: "サッカー"
-tags: ["ワールドカップ", "サッカー", "国際"]
+chronicle_tag: ["ワールドカップ", "サッカー", "国際"]
 description: "1998 FIFAワールドカップがフランスで開幕した。"
 ---
 

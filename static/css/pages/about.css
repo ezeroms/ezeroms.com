@@ -3,13 +3,13 @@ body.is-about .layout-header {
     display: none;
 }
 
-.about-main {
+.page-section--about {
     padding: 0 0 80px;
     width: 100%;
     box-sizing: border-box;
 }
 
-.about-main__content {
+.page-section--about .page-section__content {
     max-width: 688px;
     width: 100%;
     min-width: 100%;
@@ -33,7 +33,7 @@ body.is-about .layout-header {
 .about-cover__image {
     width: 100%;
     height: auto;
-    border-radius: 24px;
+    border-radius: var(--radius-default);
     object-fit: cover;
 }
 
@@ -45,9 +45,9 @@ body.is-about .layout-header {
 
 /* Aboutページのh2スタイルを明示的に適用 */
 .about-content .article-item > h2,
-.about-main .article-item > h2,
+.page-section--about .article-item > h2,
 .about-content .article-item h2,
-.about-main .article-item h2 {
+.page-section--about .article-item h2 {
     margin: 1.5rem 0 0 !important;
     border-bottom: 1px solid #E7E7E9 !important;
     width: 100% !important;
@@ -231,8 +231,8 @@ body.is-about .layout-header {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  color: #050317;
-  transition: opacity 0.2s ease;
+  color: var(--color-text-primary);
+  transition: opacity var(--transition-normal) var(--easing-default);
 }
 
 .about__sns-link:hover {
@@ -406,11 +406,11 @@ body.is-about .layout-header {
 .link-card {
   width: auto;
   margin: 0;
-  padding: 32px;
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  background-color: #fff;
-  transition-duration: 0.4s;
+  padding: var(--spacing-3xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  background-color: var(--color-background-white);
+  transition-duration: var(--transition-slow);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -419,8 +419,8 @@ body.is-about .layout-header {
 }
 
   .link-card:hover {
-    border: 1px solid #6E6D79;
-    transition-duration: 0.2s;
+    border: 1px solid var(--color-border-hover);
+    transition-duration: var(--transition-normal);
   }
 
   .link-card__left {

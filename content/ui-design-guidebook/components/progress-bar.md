@@ -1,7 +1,7 @@
 ---
 title: "Progress Bar"
 description: "Progress Barに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "progress-bar"
 order: 31
 date: 2025-01-15T10:00:00Z

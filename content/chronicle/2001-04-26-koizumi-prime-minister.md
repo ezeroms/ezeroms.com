@@ -3,7 +3,7 @@ title: "小泉純一郎内閣発足"
 date: 2001-04-26
 category: "政治"
 subcategory: "内閣"
-tags: ["総理大臣", "小泉純一郎", "構造改革"]
+chronicle_tag: ["総理大臣", "小泉純一郎", "構造改革"]
 user_age: 11
 description: "小泉純一郎が第87代内閣総理大臣に就任"
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Snackbar / Toast"
 description: "Snackbar / Toastに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "snackbar-toast"
 order: 15
 date: 2025-01-15T10:00:00Z

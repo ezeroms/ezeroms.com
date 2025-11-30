@@ -4,7 +4,7 @@ date: 2023-08-22T09:43:54.181Z
 slug: locone
 image: /images/work/locone/02.webp
 start_date: 2023-08-22
-tags:
+work_tag:
   - アプリ
   - UI/UXデザイン
 role: UI/UX Design

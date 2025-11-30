@@ -1,7 +1,7 @@
 ---
 title: "Tag"
 description: "Tagに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "tag"
 order: 18
 date: 2025-01-15T10:00:00Z

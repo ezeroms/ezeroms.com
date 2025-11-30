@@ -31,30 +31,46 @@
 }
 
 /* Work一覧ページのカード内要素間の間隔をmarginで制御 */
-.work-list .column-card > *:first-child {
+.work-list .column-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.work-list .work-card__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    cursor: pointer;
+}
+
+.work-list .work-card__link:hover {
+    color: inherit;
+}
+
+.work-list .work-card__link:hover .column-card__title {
+    opacity: 0.8;
+}
+
+.work-list .column-card .work-card__link > *:first-child {
     margin-top: 0;
 }
 
-.work-list .column-card > *:last-child {
-    margin-bottom: 0;
-}
-
 .work-list .column-card .work-card__image {
-    margin: 0 0 0 0;
-}
-
-.work-list .column-card .work-card__image + .date {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    margin: 0 0 2rem 0;
 }
 
 .work-list .column-card .date {
     margin: 0 0 1rem 0;
 }
 
-.work-list .column-card .column-card__tags {
-    margin-top: 2rem;
-    margin-bottom: 0;
+.work-list .column-card .column-card__title {
+    margin: 0 0 1rem 0;
+}
+
+.work-list .column-card .article-header__tags {
+    margin: 1rem 0 0 0;
 }
 
 .work-article__thumbnail {
@@ -89,23 +105,20 @@
 }
 
 .work-article__meta-label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #050317;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
     min-width: 80px;
     flex-shrink: 0;
     margin-right: 1rem;
 }
 
 .work-article__meta-value {
-    font-size: 0.875rem;
-    color: #050317;
-    line-height: 1.6;
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-relaxed);
 }
 
-.work-article .column-card__tags {
-    margin-top: 2rem;
-}
 
 /* Work詳細ページのarticle-header内のスペース調整 */
 .work-article .article-header > .date {

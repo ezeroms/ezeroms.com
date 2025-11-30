@@ -4,7 +4,7 @@ date: 2019-11-04T10:29:32.128Z
 slug: pixelopolis
 image: /images/work/pixelopolis/06.webp
 start_date: 2019-11-04
-tags:
+work_tag:
   - Webサイト
   - 映像制作
   - UI/UXデザイン

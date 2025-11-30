@@ -3,7 +3,7 @@ title: "香港返還式典"
 date: 1997-06-30
 category: "政治"
 subcategory: "国際"
-tags: ["香港", "中国", "国際", "返還"]
+chronicle_tag: ["香港", "中国", "国際", "返還"]
 description: "香港返還式典が行われ、イギリスから中国への返還が正式に完了した。"
 ---
 

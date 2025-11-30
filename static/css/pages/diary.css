@@ -52,7 +52,7 @@
 }
 
 /* Diaryの補足情報とタグリストの間を開ける */
-.article-item > .date + .column-card__tags {
+.article-item > .date + .article-header__tags {
     margin-top: 1.5rem;
 }
 

@@ -4,7 +4,7 @@ date: 2021-05-11T09:51:15.242Z
 slug: soh
 image: /images/work/soh/08.png
 start_date: 2021-05-11
-tags:
+work_tag:
   - Webサイト
   - フロントエンド
   - UI/UXデザイン

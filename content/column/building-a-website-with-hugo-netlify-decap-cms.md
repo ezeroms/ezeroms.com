@@ -1,15 +1,15 @@
 ---
-title: Hugo + Netlify + DecapCMS を使ったサイト構築
-date: 2024-06-09T13:44:46.264Z
+title: "Hugo + Netlify + DecapCMS を使ったサイト構築"
+date: "2024-06-09T13:44:46.264Z"
 slug: building-a-website-with-hugo-netlify-decap-cms
-month:
-  - 2024-06
-subject:
+column_category:
   - internet-and-technology
-tags:
+column_tag:
   - Hugo
   - Netlify
   - 技術
+column_month:
+  - 2024-06
 ---
 35歳の誕生日を機に、個人サイト（ブログ）をリニューアルすることにした。
 

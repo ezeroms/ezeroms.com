@@ -1,14 +1,14 @@
 ---
 title: Neobrutalism考：「かわいい」論とハローキティ
-date: 2025-04-12T02:49:42.381Z
+date: "2025-04-12T02:49:42.381Z"
 slug: neobrutalism-kawii-hello-kitty
-month:
-  - 2025-04
-subject:
+column_category:
   - design-and-creative
-tags:
+column_tag:
   - デザイン
   - Neobrutalism
+column_month:
+  - 2025-04
 ---
 NN/gにNeobrutalismに関する記事が出ていた。
 

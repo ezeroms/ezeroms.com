@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>山口組分裂</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="山口組分裂">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/chronicle/1997-11-24-yamaguchi-gumi-split/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="山口組分裂">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+</head>
+<body>
+    <div class="layout-container">
+        <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="" href="/about/">About</a>
+        </li>
+        <li>
+          <a class="" href="/tweet/">Tweet</a>
+        </li>
+        <li>
+          <a class="" href="/diary/">Diary</a>
+        </li>
+        <li>
+          <a class="" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="" href="/work/">Work</a>
+        </li>
+        
+      </ul>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          <li>
+            <a class="is-active" href="/chronicle/">Chronicle</a>
+          </li>
+          <li>
+            <a class="" href="/ui-design-guidebook/">UI Design Guidebook</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+        </aside>
+
+        <div class="layout-body">
+            
+            <div class="layout-main layout-main--with-toc layout-main--chronicle">
+                
+                    <aside class="layout-toc" aria-label="Chronicle フィルター">
+    <nav class="layout-toc__nav">
+        <div class="chronicle-filters">
+            
+            <div class="chronicle-filters__section">
+                <h3 class="chronicle-filters__title">生まれ年</h3>
+                <div class="chronicle-birth">
+                    <input type="number" id="toc-birth-year" min="1900" max="2100" value="1989" class="chronicle-birth__year-input">
+                    <input type="number" id="toc-birth-month" min="1" max="12" value="6" class="chronicle-birth__month-input">
+                </div>
+            </div>
+
+            
+            <div class="chronicle-filters__section">
+                <h3 class="chronicle-filters__title">表示期間</h3>
+                <div class="chronicle-year-range">
+                    <input type="number" id="toc-start-year" min="1868" max="2100" value="1989" class="chronicle-year-range__start-input">
+                    <span class="chronicle-year-range__arrow">→</span>
+                    <input type="number" id="toc-end-year" min="1868" max="2100" value="2025" class="chronicle-year-range__end-input">
+                </div>
+                <label class="chronicle-filters__checkbox">
+                    <input type="checkbox" id="toc-monthly-view" class="chronicle-filters__monthly-checkbox">
+                    <span>月単位</span>
+                </label>
+                <label class="chronicle-filters__checkbox">
+                    <input type="checkbox" id="toc-era-display" class="chronicle-filters__era-checkbox">
+                    <span>元号を表示</span>
+                </label>
+            </div>
+
+            
+            
+            
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+            
+            
+            
+                <div class="chronicle-filters__section">
+                    <h3 class="chronicle-filters__title">カテゴリ</h3>
+                    <ul class="chronicle-filters__list">
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="スポーツ"
+                                           data-subcategories="オリンピック,サッカー">
+                                    <span>スポーツ</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="スポーツ"
+                                                           data-subcategory="オリンピック">
+                                                    <span>オリンピック</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="スポーツ"
+                                                           data-subcategory="サッカー">
+                                                    <span>サッカー</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="政治"
+                                           data-subcategories="元号,内閣,国際">
+                                    <span>政治</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="政治"
+                                                           data-subcategory="元号">
+                                                    <span>元号</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="政治"
+                                                           data-subcategory="内閣">
+                                                    <span>内閣</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="政治"
+                                                           data-subcategory="国際">
+                                                    <span>国際</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="文化"
+                                           data-subcategories="映画">
+                                    <span>文化</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="文化"
+                                                           data-subcategory="映画">
+                                                    <span>映画</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="社会"
+                                           data-subcategories="事件,技術,政治,文化,災害">
+                                    <span>社会</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="事件">
+                                                    <span>事件</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="技術">
+                                                    <span>技術</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="政治">
+                                                    <span>政治</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="文化">
+                                                    <span>文化</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="災害">
+                                                    <span>災害</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="経済"
+                                           data-subcategories="税制,金融">
+                                    <span>経済</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="経済"
+                                                           data-subcategory="税制">
+                                                    <span>税制</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="経済"
+                                                           data-subcategory="金融">
+                                                    <span>金融</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="音楽"
+                                           data-subcategories="ポップス">
+                                    <span>音楽</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="音楽"
+                                                           data-subcategory="ポップス">
+                                                    <span>ポップス</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+            
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+            
+            
+            
+            
+                <div class="chronicle-filters__section">
+                    <h3 class="chronicle-filters__title">テーマ史</h3>
+                    <ul class="chronicle-filters__list">
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="2000年">
+                                    <span>2000年</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="iPhone">
+                                    <span>iPhone</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="J-POP">
+                                    <span>J-POP</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="R&amp;B">
+                                    <span>R&amp;B</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="Windows">
+                                    <span>Windows</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="アフガニスタン">
+                                    <span>アフガニスタン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="アベノミクス">
+                                    <span>アベノミクス</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="アメリカ">
+                                    <span>アメリカ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="イラク戦争">
+                                    <span>イラク戦争</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="インターネット">
+                                    <span>インターネット</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ウクライナ">
+                                    <span>ウクライナ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="エンロン">
+                                    <span>エンロン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="オウム真理教">
+                                    <span>オウム真理教</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="オリンピック">
+                                    <span>オリンピック</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="サッカー">
+                                    <span>サッカー</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="スポーツ">
+                                    <span>スポーツ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="スマートフォン">
+                                    <span>スマートフォン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="デビュー">
+                                    <span>デビュー</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="テロ">
+                                    <span>テロ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="パソコン">
+                                    <span>パソコン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ミレニアム">
+                                    <span>ミレニアム</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="リーマン・ショック">
+                                    <span>リーマン・ショック</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ロシア">
+                                    <span>ロシア</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ワールドカップ">
+                                    <span>ワールドカップ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="中国">
+                                    <span>中国</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="事件">
+                                    <span>事件</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="令和">
+                                    <span>令和</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="企業">
+                                    <span>企業</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="元号">
+                                    <span>元号</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="内閣">
+                                    <span>内閣</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="原子力">
+                                    <span>原子力</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="原発事故">
+                                    <span>原発事故</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="台風">
+                                    <span>台風</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="国際">
+                                    <span>国際</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="地震">
+                                    <span>地震</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="安倍晋三">
+                                    <span>安倍晋三</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="小泉純一郎">
+                                    <span>小泉純一郎</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="平成">
+                                    <span>平成</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="復興">
+                                    <span>復興</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="戦争">
+                                    <span>戦争</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="技術">
+                                    <span>技術</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="携帯電話">
+                                    <span>携帯電話</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="政治">
+                                    <span>政治</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="文化">
+                                    <span>文化</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="新型コロナ">
+                                    <span>新型コロナ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="映画">
+                                    <span>映画</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="暴力団">
+                                    <span>暴力団</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="東京">
+                                    <span>東京</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="構造改革">
+                                    <span>構造改革</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="水害">
+                                    <span>水害</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="津波">
+                                    <span>津波</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="消費税">
+                                    <span>消費税</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="災害">
+                                    <span>災害</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="破綻">
+                                    <span>破綻</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="社会問題">
+                                    <span>社会問題</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="福島">
+                                    <span>福島</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="税制">
+                                    <span>税制</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="経済">
+                                    <span>経済</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="緊急事態宣言">
+                                    <span>緊急事態宣言</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="総理大臣">
+                                    <span>総理大臣</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="総選挙">
+                                    <span>総選挙</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="自民党">
+                                    <span>自民党</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="自粛">
+                                    <span>自粛</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="豪雨">
+                                    <span>豪雨</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="返還">
+                                    <span>返還</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="選挙">
+                                    <span>選挙</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="郵政民営化">
+                                    <span>郵政民営化</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="金融">
+                                    <span>金融</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="金融危機">
+                                    <span>金融危機</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="香港">
+                                    <span>香港</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="黒澤明">
+                                    <span>黒澤明</span>
+                                </label>
+                            </li>
+                        
+                    </ul>
+                    <button class="chronicle-filters__clear-tags" id="clear-tags-btn" style="display: none;">
+                        タグの選択を解除
+                    </button>
+                </div>
+            
+        </div>
+    </nav>
+</aside>
+
+                
+                <main class="layout-main__content" id="main-content">
+                    
+    <section class="page-section">
+        <div class="page-section__content">
+            <article class="article-item">
+                <h1>山口組分裂</h1>
+                <p>山口組が分裂し、神戸山口組が結成された。暴力団の組織再編が社会問題となった。</p>
+
+            </article>
+        </div>
+    </section>
+
+                </main>
+
+                
+                
+                
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = 'http:\/\/localhost:1313\/';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                
+                
+                updateButtonState();
+                
+                
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示する');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.layout-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                
+                lastScrollTop = getScrollTop();
+
+                
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                
+                handleScroll();
+            }
+        })();
+    </script>
+</body>
+</html>

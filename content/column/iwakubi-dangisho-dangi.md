@@ -1,15 +1,15 @@
 ---
 title: Podcast「岩首談義所談義」を始めた
-date: 2024-08-17T19:59:21.383Z
+date: "2024-08-17T19:59:21.383Z"
 slug: iwakubi-dangisho-dangi
-month:
-  - 2024-08
-subject:
+column_category:
   - design-and-creative
   - humanities-and-social-sciences
-tags:
+column_tag:
   - ポッドキャスト
   - デザイン
+column_month:
+  - 2024-08
 ---
 　「岩首談義所談義」というPodcastを始めた。新潟県佐渡市の旧岩首村にかつて存在した「岩首談義所」という施設にまつわる思い出や経験を記録し、その価値を伝えることを目指して始めたものだ。先ほど初回のゲストとの収録を終え、いまそれを聞き返しながらこの文章を書いている。
 

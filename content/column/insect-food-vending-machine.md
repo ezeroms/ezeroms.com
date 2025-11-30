@@ -1,14 +1,14 @@
 ---
 title: 神話を解体する自販機と昆虫食文化について
-date: 2024-06-22T19:25:39.447Z
+date: "2024-06-22T19:25:39.447Z"
 slug: insect-food-vending-machine
-month:
-  - 2024-06
-subject:
+column_category:
   - natural-science
-tags:
+column_tag:
   - 昆虫食
   - 文化
+column_month:
+  - 2024-06
 ---
 　JR関内駅北口の喧騒の中に、ひときわ異彩を放つ自動販売機が設置されている。その名も「次世代良質昆虫Food」―――昆虫食を取り扱った自販機だ。
 

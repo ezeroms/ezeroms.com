@@ -1,14 +1,15 @@
 ---
-title: "タイポグラフィテスト記事"
-date: 2025-01-20T10:00:00Z
-subject:
+title: タイポグラフィテスト記事
+date: "2025-01-20T10:00:00Z"
+column_category:
   - design-and-creative
-tags:
+column_tag:
   - デザイン
   - タイポグラフィ
   - テスト
+column_month:
+  - 2025-01
 ---
-
 # 見出しのテスト（h1）
 
 この記事は、フォントサイズや見出し、リスト、本文のスタイルを確認するためのテスト記事です。

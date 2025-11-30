@@ -1,14 +1,14 @@
 ---
 title: MattermostのWebSocket接続エラーを解決した
-date: 2025-05-29T18:15:59.225Z
+date: "2025-05-29T18:15:59.225Z"
 slug: mattermost-websocket-error
-month:
-  - 2025-05
-subject:
+column_category:
   - internet-and-technology
-tags:
+column_tag:
   - Mattermost
   - 技術
+column_month:
+  - 2025-05
 ---
 MattermostにBoards（旧・Focalboard）のプラグインを入れる作業をする過程で発生したエラーに関する備忘録。
 

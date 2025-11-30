@@ -2,11 +2,11 @@
 デバイス共通のスタイル
 -------------------- */
 .article-item blockquote {
-  border-left: 3px solid #E7E7E9;
+  border-left: 3px solid var(--color-border);
   margin: 1rem 0;
   padding-left: 1.25rem;
   padding-right: 0;
-  color: #5D5D5F;
+  color: var(--color-text-secondary);
   font-style: italic;
   display: block;
 }
@@ -30,10 +30,10 @@
   width: 100%;
   margin: 0;
   padding: 32px;
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  background-color: #fff;
-  transition-duration: 0.4s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-default);
+  background-color: var(--color-background-white);
+  transition-duration: var(--transition-slow);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -63,7 +63,7 @@
   width: 100%;
   margin-bottom: 0;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #E7E7E9;
+  border-bottom: 1px solid var(--color-border);
   display: flow-root;
 }
 
@@ -89,14 +89,14 @@
   margin-top: 1rem;
 }
 
-/* タグリストの上は2rem（詳細度を高くして確実に適用） */
-.article-header > .column-card__tags {
-  margin-top: 2rem !important;
+/* 記事ヘッダー内のタグリストの上は2rem */
+.article-header > .article-header__tags {
+  margin-top: 2rem;
 }
 
 /* タイトルの下にタグリスト以外の補足情報がある場合、それとタイトルの間を1rem */
-.article-header > h1 + *:not(.column-card__tags),
-.article-header > h3 + *:not(.column-card__tags) {
+.article-header > h1 + *:not(.article-header__tags),
+.article-header > h3 + *:not(.article-header__tags) {
   margin-top: 1rem;
 }
 
@@ -106,16 +106,16 @@
 }
 
 .hover-effect:hover {
-  border: 1px solid #6E6D79;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border-hover);
+  transition-duration: var(--transition-normal);
 }
 
 .article-item h1 {
   margin: 0 0 0;
   padding: 0;
   max-width: 100%;
-  color: #050317;
-  font-size: 1.5rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-2xl);
   font-style: normal;
   font-weight: 700;
   line-height: 1.6;
@@ -144,24 +144,24 @@
 }
 
 .article-item p.date {
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   margin: 0 0 -0.25rem;
-  color: #7a7a7a;
+  color: var(--color-text-tertiary);
 }
 
 .article-item h2,
 .article-item > h2 {
   margin: 1.5rem 0 0;
-  border-bottom: 1px solid #E7E7E9;
+  border-bottom: 1px solid var(--color-border);
   width: 100%;
   padding: 0 0 0.5rem;
   max-width: 100%;
-  color: #050317;
-  font-size: 1.25rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
   font-style: normal;
-  font-weight: 700;
-  line-height: 1.6;
-  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-tight);
   display: block;
   text-decoration: none;
 }
@@ -179,12 +179,12 @@
   margin: 1.25rem 0 0;
   padding: 0;
   max-width: 100%;
-  color: #050317;
-  font-size: 1.125rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
   font-style: normal;
-  font-weight: 700;
-  line-height: 1.6;
-  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-tight);
   display: block;
   text-decoration: none;
 }
@@ -202,11 +202,11 @@
   margin: 1rem 0 0;
   padding: 0;
   max-width: 100%;
-  color: #050317;
-  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
   font-style: normal;
-  font-weight: 600;
-  line-height: 1.6;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-relaxed);
   display: block;
   text-decoration: none;
 }
@@ -245,11 +245,11 @@
 .article-item p {
   margin: 0 0 1rem;
   padding: 0;
-  color: #050317;
+  color: var(--color-text-primary);
   width: 100%;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--font-weight-normal);
   line-height: 1.8;
   letter-spacing: 0.01em;
 }
@@ -260,6 +260,7 @@
 
 .article-item a {
   text-decoration: underline;
+  text-underline-offset: 0.2em;
   color: inherit;
 }
 
@@ -270,9 +271,9 @@
 
 /* インラインコードのスタイル（Slack風） */
 .article-item code:not(pre code) {
-  background-color: #f4f4f4;
-  color: #C01443;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace;
+  background-color: var(--color-code-background);
+  color: var(--color-code-text);
+  font-family: var(--font-family-mono);
   font-size: 0.875em;
   padding: 0.125em 0.375em;
   border-radius: 3px;
@@ -306,10 +307,10 @@
   margin: 0.5rem 0;
   padding: 0 0 0 0.5rem;
   width: 100%;
-  color: #050317;
-  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--font-weight-normal);
   line-height: 1.8;
   letter-spacing: 0.01em;
 }
@@ -360,13 +361,13 @@
   content: attr(data-alt); /* data-alt属性の内容を表示 */
   display: block;
   margin: 0.75rem 0 0.125rem;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   padding: 0;
-  color: #5D5D5F;
+  color: var(--color-text-secondary);
   width: 100%;
   font-style: normal;
-  font-weight: 400;
-  line-height: 1.6;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
 }
 
 .image-wrapper.no-alt::after {
@@ -416,15 +417,15 @@
 }
 
 .social-action__line a {
-  font-size: 0.875rem;
-  text-decoration: none!important;
-  color: #5D5D5F!important;
-  font-weight: 400!important;
-  transition-duration: 0.2s;
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-normal);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__line .social-action__line-icon {
-  margin: 0!important;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -432,27 +433,27 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_line_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__line:hover a {
   opacity: 1;
-  color: #06C655!important;
-  transition-duration: 0s;
+  color: var(--color-accent-green);
+  transition-duration: var(--transition-fast);
 }
 
 .social-action__line:hover .social-action__line-icon {
-  border: 1px solid #C8EBCF;
+  border: 1px solid var(--color-accent-green-light);
   background-image: url('/images/diary/icon_line_on.svg');
   opacity: 1;
-  transition-duration: 0s!important;
+  transition-duration: var(--transition-fast);
 }
 
 .social-action__x {
-  text-decoration: none!important;
-  margin: 0!important;
+  text-decoration: none;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -460,20 +461,20 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_x_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__x:hover {
   background-image: url('/images/diary/icon_x_on.svg');
-  border: 1px solid #D0D0D1!important;
-  opacity: 1!important;
+  border: 1px solid var(--color-border-light);
+  opacity: 1;
 }
 
 .social-action__hatena {
-  text-decoration: none!important;
-  margin: 0!important;
+  text-decoration: none;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -481,20 +482,20 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_hatena_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__hatena:hover {
   background-image: url('/images/diary/icon_hatena_on.svg');
-  border: 1px solid #D0D0D1!important;
-  opacity: 1!important;
+  border: 1px solid var(--color-border-light);
+  opacity: 1;
 }
 
 .social-action__link {
-  text-decoration: none!important;
-  margin: 0!important;
+  text-decoration: none;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -502,15 +503,15 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_link_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
   cursor: pointer;
 }
 
 .social-action__link:hover {
   background-image: url('/images/diary/icon_link_on.svg');
-  border: 1px solid #D0D0D1!important;
-  opacity: 1!important;
+  border: 1px solid var(--color-border-light);
+  opacity: 1;
 }
 

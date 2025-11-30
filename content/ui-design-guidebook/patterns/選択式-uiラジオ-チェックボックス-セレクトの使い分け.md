@@ -1,7 +1,7 @@
 ---
 title: "選択式 UI（ラジオ / チェックボックス / セレクトの使い分け）"
 description: "選択式 UI（ラジオ / チェックボックス / セレクトの使い分け）に関するUIデザインパターンとベストプラクティス。"
-tags: ["patterns"]
+ui_design_guidebook_tag: ["patterns"]
 slug: "選択式-uiラジオ-チェックボックス-セレクトの使い分け"
 order: 4
 date: 2025-01-15T10:00:00Z

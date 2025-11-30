@@ -1,18 +1,16 @@
 ---
-title: 引っ越します！
-date: 2025-09-15T05:54:49.759Z
+title: 2025-09-15
+date: "2025-09-15T05:54:49.759Z"
 slug: hikkoshi2
-month:
-  - 2025-09
-subject:
-  - diary
-tags:
+diary_tag:
   - 引越し
   - 高円寺
-place: "Koenji, Tokyo"
+diary_place: "Koenji, Tokyo"
 min_temp: 19
 max_temp: 24
-weather: "Sunny"
+weather: Sunny
+diary_month:
+  - 2025-09
 ---
 [かくかくしかじか](https://ezeroms.com/diary/hikkoshi/)で、大好きだった関内の家から引っ越すことになった。時間もお金もかけてリノベーションした家だっただけに、悔しさも無念も言い尽くせないほどある。忸怩たる思いは尽きないが、どうにもできない以上、もう恨み言を並べてもしかたない。ここらで気持ちに区切りをつけようと思う。
 

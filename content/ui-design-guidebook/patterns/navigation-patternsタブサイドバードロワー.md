@@ -1,7 +1,7 @@
 ---
 title: "Navigation Patterns（タブ・サイドバー・ドロワー）"
 description: "Navigation Patterns（タブ・サイドバー・ドロワー）に関するUIデザインパターンとベストプラクティス。"
-tags: ["patterns"]
+ui_design_guidebook_tag: ["patterns"]
 slug: "navigation-patternsタブサイドバードロワー"
 order: 5
 date: 2025-01-15T10:00:00Z

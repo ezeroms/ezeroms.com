@@ -1,13 +1,13 @@
 ---
 date: 2025-01-20T10:00:00Z
+diary_month: 2025-01
 emoji: 📸
-tags:
+tweet_tag:
   - design
   - photography
-place: New York
+diary_place: New York
 ---
 
 写真撮影について考えています。光と影のバランスが重要ですね。
 
 最近は特に、自然光を活かした撮影にこだわっています。人工的なライティングも良いですが、自然な光の方が被写体の本質を捉えられる気がします。
-

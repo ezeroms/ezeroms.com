@@ -1,15 +1,15 @@
 ---
-title: 人とAIの関係性を設計しよう　Embedding / Copilot / Agent の三類型
-date: 2025-05-07T04:32:58.334Z
+title: "人とAIの関係性を設計しよう　Embedding / Copilot / Agent の三類型"
+date: "2025-05-07T04:32:58.334Z"
 slug: 3-ai-model
-month:
-  - 2025-05
-subject:
+column_category:
   - design-and-creative
-tags:
+column_tag:
   - AI
   - デザイン
   - プロダクト開発
+column_month:
+  - 2025-05
 ---
 自分が作るプロダクトの中で、人間とAIはどのような関係性を築くのか？
 

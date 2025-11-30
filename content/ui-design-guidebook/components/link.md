@@ -1,7 +1,7 @@
 ---
 title: "Link"
 description: "ページ間の遷移や外部リソースへのアクセスを提供するナビゲーション要素。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "link"
 order: 2
 date: 2025-01-15T10:00:00Z

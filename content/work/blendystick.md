@@ -5,7 +5,7 @@ slug: blendystick
 image: /images/work/blendystick/09.webp
 start_date: 2018-05-01
 end_date: 2018-07-31
-tags:
+work_tag:
   - Webサイト
   - フロントエンド
   - UI/UXデザイン

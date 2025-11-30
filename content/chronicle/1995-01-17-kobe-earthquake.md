@@ -3,7 +3,7 @@ title: "阪神・淡路大震災"
 date: 1995-01-17
 category: "社会"
 subcategory: "災害"
-tags: ["地震", "災害", "復興"]
+chronicle_tag: ["地震", "災害", "復興"]
 description: "阪神・淡路大震災が発生。死者6,434名、負傷者43,792名の大災害となった。"
 ---
 

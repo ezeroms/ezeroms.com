@@ -5,7 +5,7 @@ slug: coolish
 image: /images/work/coolish/10.webp
 start_date: 2019-07-01
 end_date: 2019-09-05
-tags:
+work_tag:
   - Webサイト
   - フロントエンド
   - UI/UXデザイン

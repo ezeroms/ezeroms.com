@@ -1,7 +1,7 @@
 ---
 title: "Avatar"
 description: "Avatarに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "avatar"
 order: 19
 date: 2025-01-15T10:00:00Z

@@ -3,7 +3,7 @@ title: "東京オリンピック閉幕"
 date: 2021-08-08
 category: "スポーツ"
 subcategory: "オリンピック"
-tags: ["オリンピック", "スポーツ", "東京"]
+chronicle_tag: ["オリンピック", "スポーツ", "東京"]
 description: "東京オリンピックが閉幕した。"
 ---
 

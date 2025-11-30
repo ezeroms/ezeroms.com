@@ -1,7 +1,7 @@
 ---
 title: "Slider"
 description: "Sliderに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "slider"
 order: 12
 date: 2025-01-15T10:00:00Z

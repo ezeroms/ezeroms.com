@@ -1,14 +1,14 @@
 ---
-title: Hugo v0.125以降で _index.md を使ったセクションページが表示されなくなった件
-date: 2025-05-24T05:34:34.333Z
+title: "Hugo v0.125以降で _index.md を使ったセクションページが表示されなくなった件"
+date: "2025-05-24T05:34:34.333Z"
 slug: hugo-section-page-not-rendering
-month:
-  - 2025-05
-subject:
+column_category:
   - internet-and-technology
-tags:
+column_tag:
   - Hugo
   - 技術
+column_month:
+  - 2025-05
 ---
 Hugoでは、`content/about/_index.md`  のようなファイルを配置することで、「about」というセクションのトップページを作ることができる。WordPressでいえばカスタム投稿タイプのアーカイブページ（一覧ページ）に近い仕組みだ。セクション全体の紹介や記事一覧に使われるページで、Hugoの用語では「セクションページ（Section Page）」または「ブランチページ（Branch Page）」と呼ばれている。
 

@@ -1,14 +1,10 @@
-:root {
-    --site-gap: 48px;
-    --sidebar-width: 240px;
-    --secondary-width: 280px;
-}
+/* テーマ変数は theme.css で定義 */
 
 .layout-container {
     display: flex;
     flex-direction: row;
     height: 100vh;
-    background: #f9f9f7;
+    background: var(--color-background);
     color: inherit;
     margin: 0;
     width: 100%;
@@ -21,8 +17,8 @@
     width: var(--sidebar-width);
     flex-shrink: 0;
     border-right: 1px solid rgba(0, 0, 0, 0.08);
-    background: #ffffff;
-    padding: 24px 8px;
+    background: var(--color-background-white);
+    padding: var(--spacing-2xl) var(--spacing-sm);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -68,6 +64,11 @@
     max-width: 100%;
     height: auto;
     display: block;
+    transition: opacity var(--transition-normal) var(--easing-default);
+}
+
+.sidebar__logo a:hover img {
+    opacity: 0.6;
 }
 
 .sidebar__minimize-btn {
@@ -75,17 +76,17 @@
     width: 32px;
     height: 32px;
     padding: 0;
-    background: #fff;
-    border: 1px solid #E7E7E9;
-    border-radius: 6px;
+    background: var(--color-background-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     cursor: pointer;
-    color: rgba(0, 0, 0, 0.7);
-    transition: all 0.2s ease;
+    color: var(--color-secondary-light);
+    transition: all var(--transition-normal) var(--easing-default);
     opacity: 0;
     align-items: center;
     justify-content: center;
     position: absolute;
-    right: 16px;
+    right: var(--spacing-lg);
     top: 50%;
     transform: translateY(-50%);
 }
@@ -96,27 +97,27 @@
 }
 
 .sidebar__minimize-btn:hover {
-    background: rgba(0, 0, 0, 0.03);
-    border-color: #6E6D79;
-    color: #050317;
+    background: var(--color-background-hover);
+    border-color: var(--color-border-hover);
+    color: var(--color-text-primary);
 }
 
 /* ツールチップ */
 .sidebar:hover .sidebar__minimize-btn::after {
     content: attr(data-tooltip);
     position: absolute;
-    left: calc(100% + 8px);
+    left: calc(100% + var(--spacing-sm));
     top: 50%;
     transform: translateY(-50%);
-    padding: 4px 8px;
-    background-color: #050317;
-    color: #fff;
-    font-size: 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-xs);
     white-space: nowrap;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-normal) var(--easing-default);
     z-index: 1000;
 }
 
@@ -127,17 +128,17 @@
 .sidebar:hover .sidebar__minimize-btn::before {
     content: '';
     position: absolute;
-    left: calc(100% + 4px);
+    left: calc(100% + var(--spacing-xs));
     top: 50%;
     transform: translateY(-50%);
     width: 0;
     height: 0;
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
-    border-right: 4px solid #050317;
+    border-right: 4px solid var(--color-primary);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-normal) var(--easing-default);
     z-index: 1000;
 }
 
@@ -179,45 +180,45 @@
 }
 
 .layout-sidebar.is-minimized .sidebar__minimize-btn {
-    display: flex !important;
-    opacity: 1 !important;
+    display: flex;
+    opacity: 1;
     position: relative;
     width: 32px;
     height: 32px;
     padding: 0;
-    background: #fff;
-    border: 1px solid #E7E7E9;
-    border-radius: 6px;
+    background: var(--color-background-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     align-items: center;
     justify-content: center;
-    color: rgba(0, 0, 0, 0.7);
-    transition: all 0.2s ease;
+    color: var(--color-secondary-light);
+    transition: all var(--transition-normal) var(--easing-default);
     margin: 0 auto;
     right: auto;
 }
 
 .layout-sidebar.is-minimized .sidebar__minimize-btn:hover {
-    background: rgba(0, 0, 0, 0.03);
-    border-color: #6E6D79;
-    color: #050317;
+    background: var(--color-background-hover);
+    border-color: var(--color-border-hover);
+    color: var(--color-text-primary);
 }
 
 /* 最小化時のツールチップ位置調整（右に表示） */
 .layout-sidebar.is-minimized .sidebar__minimize-btn::after {
     content: attr(data-tooltip);
     position: absolute;
-    left: calc(100% + 8px);
+    left: calc(100% + var(--spacing-sm));
     top: 50%;
     transform: translateY(-50%);
-    padding: 4px 8px;
-    background-color: #050317;
-    color: #fff;
-    font-size: 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-xs);
     white-space: nowrap;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-normal) var(--easing-default);
     z-index: 1000;
 }
 
@@ -228,17 +229,17 @@
 .layout-sidebar.is-minimized .sidebar__minimize-btn::before {
     content: '';
     position: absolute;
-    left: calc(100% + 4px);
+    left: calc(100% + var(--spacing-xs));
     top: 50%;
     transform: translateY(-50%);
     width: 0;
     height: 0;
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
-    border-right: 4px solid #050317;
+    border-right: 4px solid var(--color-primary);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-normal) var(--easing-default);
     z-index: 1000;
 }
 
@@ -304,31 +305,31 @@
 .layout-toc__list a {
     position: relative;
     text-decoration: none;
-    color: #7a7a7a;
+    color: var(--color-text-tertiary);
     font-size: 0.9rem;
-    line-height: 1.5;
-    font-weight: 500;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    line-height: var(--line-height-normal);
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-normal) var(--easing-default), background-color var(--transition-normal) var(--easing-default);
     display: block;
     cursor: pointer;
-    padding: 8px 12px;
-    margin: 0 -12px;
-    border-radius: 6px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: 0 calc(-1 * var(--spacing-md));
+    border-radius: var(--radius-md);
     width: calc(100%);
     box-sizing: border-box;
 }
 
 .layout-toc__list a:hover,
 .layout-toc__list a:focus-visible {
-    color: #050317;
-    background-color: rgba(0, 0, 0, 0.03);
+    color: var(--color-text-primary);
+    background-color: var(--color-background-hover);
 }
 
 .layout-toc__list a.active,
 .layout-toc__list a.is-active {
-    color: #050317;
-    font-weight: 700;
-    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    background-color: var(--color-background-active);
 }
 
 /* 空のリンクを非表示 */
@@ -365,26 +366,26 @@
 .sidebar__nav a {
     position: relative;
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.65);
-    font-size: 1rem;
+    color: var(--color-secondary);
+    font-size: var(--font-size-base);
     line-height: 1.45;
-    padding: 8px 20px;
-    font-weight: 500;
-    border-radius: 4px;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: var(--spacing-sm) var(--spacing-xl);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-normal) var(--easing-default), background-color var(--transition-normal) var(--easing-default);
     display: block;
     box-sizing: border-box;
 }
 
 .sidebar__nav a:hover,
 .sidebar__nav a:focus-visible {
-    color: #050317;
-    background-color: rgba(0, 0, 0, 0.03);
+    color: var(--color-text-primary);
+    background-color: var(--color-background-hover);
 }
 
 .sidebar__nav a.is-active {
-    color: #050317;
-    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--color-text-primary);
+    background-color: var(--color-background-active);
 }
 
 .sidebar__library {
@@ -394,12 +395,12 @@
 }
 
 .sidebar__library-heading {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.4);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-secondary-lightest);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0 0 12px 20px;
+    letter-spacing: var(--letter-spacing-wide);
+    margin: 0 0 var(--spacing-md) var(--spacing-xl);
     padding: 0;
 }
 
@@ -428,12 +429,12 @@
     position: sticky;
     top: 0;
     z-index: 3;
-    background: #f9f9f7;
+    background: var(--color-background);
     height: 60px;
-    padding: 0 40px;
+    padding: 0 var(--spacing-4xl);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     transform: translateY(0);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s var(--easing-default);
     width: 100%;
     max-width: 100%;
     overflow: hidden;
@@ -455,7 +456,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: #f9f9f7;
+    background: var(--color-background);
     box-sizing: border-box;
 }
 
@@ -479,14 +480,14 @@
 
 /* Chronicleページ専用：画面横いっぱいに広げる */
 .layout-main--chronicle {
-    grid-template-columns: 240px 1fr !important;
+    grid-template-columns: 240px 1fr;
 }
 
 .layout-main--chronicle .layout-main__content {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding: 0 !important;
-    overflow: hidden !important;
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
     position: relative;
     height: 100vh;
     box-sizing: border-box;
@@ -586,28 +587,26 @@
 
 .secondary-nav-placeholder {
     font-size: 0.9rem;
-    color: #7a7a7a;
-    background: rgba(0, 0, 0, 0.03);
-    padding: 16px;
-    border-radius: 8px;
+    color: var(--color-text-tertiary);
+    background: var(--color-background-hover);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-sm);
 }
 
-.diary-main,
-.work-main,
-.about-main,
-.top-main {
+/* ページセクション（メインコンテンツエリア） */
+.page-section {
     padding: 0 0 80px;
     width: 100%;
     box-sizing: border-box;
 }
 
 /* The shoulders of Giantsページでは下のpaddingを削除 */
-.layout-main--with-toc .diary-main {
+.layout-main--with-toc .page-section {
     padding-bottom: 0;
 }
 
-.diary-main__content,
-.work-main__content {
+/* ページセクションのコンテンツ（全幅タイプ） */
+.page-section__content {
     max-width: 100%;
     width: 100%;
     min-width: 100%;
@@ -616,8 +615,8 @@
     overflow: visible;
 }
 
-.about-main__content,
-.top-main__content {
+/* ページセクションのコンテンツ（制限幅タイプ：688px） */
+.page-section__content--narrow {
     max-width: 688px;
     width: 100%;
     min-width: 100%;
@@ -626,7 +625,7 @@
     overflow: visible;
 }
 
-.diary-main .article-container {
+.page-section .article-container {
     margin-top: 0;
 }
 
@@ -647,53 +646,23 @@
 
 .diary-secondary-nav__heading {
     font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--letter-spacing-wider);
     text-transform: uppercase;
-    color: #7a7a7a;
+    color: var(--color-text-tertiary);
     margin: 0;
 }
 
 .diary-secondary-nav a {
-    position: relative;
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--color-secondary-light);
     font-size: 0.9rem;
-    line-height: 1.7;
-    padding-left: 18px;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-/* セカンダリーナビゲーション内の.sidebar-tagには.diary-secondary-nav aのスタイルを適用しない */
-.diary-secondary-nav .tweet-secondary-nav__tags a.sidebar-tag {
-    position: static !important;
-    transform: none !important;
-    padding-left: 0 !important;
-    padding: 0.25rem 0.75rem !important;
-}
-
-.diary-secondary-nav a::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: transparent;
-    transform: translateY(-50%);
-    transition: background 0.2s ease, transform 0.2s ease;
+    line-height: var(--line-height-loose);
+    transition: color var(--transition-normal) var(--easing-default);
 }
 
 .diary-secondary-nav a:hover,
 .diary-secondary-nav a:focus-visible {
-    color: #111;
-    transform: translateX(4px);
-}
-
-.diary-secondary-nav a:hover::before,
-.diary-secondary-nav a:focus-visible::before {
-    background: rgba(0, 0, 0, 0.35);
-    transform: translateY(-50%) scale(1.1);
+    color: var(--color-text-dark);
 }
 
 

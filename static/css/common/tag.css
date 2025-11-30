@@ -1,0 +1,60 @@
+/* タグスタイル（共通） */
+/* 記事内とサイドバーの両方で使用 */
+
+.tag,
+a.tag,
+span.tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.8rem;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    transition: all var(--transition-normal) var(--easing-default);
+    text-decoration: none !important;
+    cursor: pointer;
+    position: static;
+    transform: none;
+}
+
+.tag:hover,
+a.tag:hover,
+span.tag:hover {
+    background: linear-gradient(var(--color-background-hover), var(--color-background-hover)), var(--color-background);
+    border-color: var(--color-border-hover);
+}
+
+.tag.active,
+a.tag.active,
+span.tag.active {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-primary);
+}
+
+/* セカンダリーナビゲーション内のタグには::before/::afterを表示しない */
+.diary-secondary-nav .secondary-nav__tags .tag::before,
+.diary-secondary-nav .secondary-nav__tags .tag::after,
+.diary-secondary-nav .secondary-nav__tags a.tag::before,
+.diary-secondary-nav .secondary-nav__tags a.tag::after {
+    display: none !important;
+    content: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* 記事内のリンクタグのスタイル上書き */
+.article-item a.tag {
+    text-decoration: none !important;
+}
+
+.article-item a.tag:hover {
+    opacity: 1;
+    text-decoration: none !important;
+}
+

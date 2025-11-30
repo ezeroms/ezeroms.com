@@ -1,15 +1,15 @@
 ---
 title: 映画『きみの色』
-date: 2024-09-04T10:47:47.404Z
+date: "2024-09-04T10:47:47.404Z"
 slug: kimi-no-iro
-month:
-  - 2024-09
-subject:
+column_category:
   - movies-and-dramas
   - manga-and-anime
-tags:
+column_tag:
   - 映画
   - アニメ
+column_month:
+  - 2024-09
 ---
 　山田尚子監督、川村元気プロデュースの映画『きみの色』を見てきた。この夏一番楽しみにしていた映画だ。
 

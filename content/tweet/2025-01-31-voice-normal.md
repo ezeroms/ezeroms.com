@@ -1,15 +1,13 @@
 ---
 date: 2025-01-31T10:00:00Z
+diary_month: 2025-01
 emoji: 💬
-tags:
+tweet_tag:
   - サンプル
   - 声
-place: Tokyo
+diary_place: Tokyo
 ---
 
 これは通常の声のサンプルです。
 
 voiceプロパティを指定しない場合、通常のサイズとスタイルで表示されます。普通の会話や日常的なメッセージに適しています。
-
-
-

@@ -1,15 +1,15 @@
 ---
 title: プロダクト開発とユーザーとの摩擦
-date: 2024-06-20T10:14:31.728Z
+date: "2024-06-20T10:14:31.728Z"
 slug: friction-between-product-developer-and-users
-month:
-  - 2024-06
-subject:
+column_category:
   - design-and-creative
   - internet-and-technology
-tags:
+column_tag:
   - プロダクト開発
   - デザイン
+column_month:
+  - 2024-06
 ---
 　5月から6月にかけて、Chooningのアップデートを重ね、新たな機能を続々とリリースした。アーティストのアカウント認証機能、プロフィール共有機能、Spotify視聴履歴に基づいたおすすめ投稿機能などを実装し、さらに中国語（繁体字）版インターフェースもリリースして、この夏は台湾市場への進出も見据えている。
 

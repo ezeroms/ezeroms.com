@@ -1,14 +1,14 @@
 ---
 title: インクトラップ（Inktrap）
-date: 2025-05-22T02:37:54Z
+date: "2025-05-22T02:37:54Z"
 slug: inktrap
-month:
-  - 2025-05
-subject:
+column_category:
   - design-and-creative
-tags:
+column_tag:
   - タイポグラフィ
   - デザイン
+column_month:
+  - 2025-05
 ---
 「インクトラップ（Inktrap）」というタイポグラフィの技術に関するメモ。
 

@@ -3,7 +3,7 @@ title: "消費税率10%への引き上げ"
 date: 2019-10-01
 category: "経済"
 subcategory: "税制"
-tags: ["消費税", "税制", "経済"]
+chronicle_tag: ["消費税", "税制", "経済"]
 description: "消費税率が8%から10%に引き上げられた。"
 ---
 

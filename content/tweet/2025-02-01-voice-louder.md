@@ -1,16 +1,14 @@
 ---
 date: 2025-02-01T10:00:00Z
+diary_month: 2025-02
 emoji: 📢
 voice: louder
-tags:
+tweet_tag:
   - サンプル
   - 声
-place: Tokyo
+diary_place: Tokyo
 ---
 
 これはもっと大声のサンプルです。
 
 もっと大声で話す時は、文字がさらに大きく、より太字で表示されます。非常に重要なメッセージを伝えたい時に使います。
-
-
-

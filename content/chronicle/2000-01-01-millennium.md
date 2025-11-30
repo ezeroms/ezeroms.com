@@ -3,7 +3,7 @@ title: "ミレニアム"
 date: 2000-01-01
 category: "社会"
 subcategory: "文化"
-tags: ["ミレニアム", "2000年", "文化"]
+chronicle_tag: ["ミレニアム", "2000年", "文化"]
 description: "2000年を迎え、ミレニアムブームが起きた。"
 ---
 

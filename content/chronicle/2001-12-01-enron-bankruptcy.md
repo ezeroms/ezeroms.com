@@ -3,7 +3,7 @@ title: "エンロン破綻"
 date: 2001-12-02
 category: "経済"
 subcategory: "金融"
-tags: ["エンロン", "破綻", "金融", "企業"]
+chronicle_tag: ["エンロン", "破綻", "金融", "企業"]
 description: "アメリカのエネルギー大手エンロンが破綻した。"
 ---
 

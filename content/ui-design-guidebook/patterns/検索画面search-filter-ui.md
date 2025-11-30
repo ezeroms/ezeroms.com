@@ -1,7 +1,7 @@
 ---
 title: "検索画面（Search + Filter UI）"
 description: "検索画面（Search + Filter UI）に関するUIデザインパターンとベストプラクティス。"
-tags: ["patterns"]
+ui_design_guidebook_tag: ["patterns"]
 slug: "検索画面search-filter-ui"
 order: 6
 date: 2025-01-15T10:00:00Z

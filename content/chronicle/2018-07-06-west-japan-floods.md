@@ -3,7 +3,7 @@ title: "平成30年7月豪雨"
 date: 2018-07-06
 category: "社会"
 subcategory: "災害"
-tags: ["豪雨", "災害", "水害"]
+chronicle_tag: ["豪雨", "災害", "水害"]
 description: "平成30年7月豪雨が発生し、西日本を中心に甚大な被害が発生した。"
 ---
 

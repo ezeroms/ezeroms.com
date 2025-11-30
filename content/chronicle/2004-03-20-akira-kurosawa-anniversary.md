@@ -3,7 +3,7 @@ title: "黒澤明生誕100周年"
 date: 2010-03-23
 category: "文化"
 subcategory: "映画"
-tags: ["映画", "黒澤明", "文化"]
+chronicle_tag: ["映画", "黒澤明", "文化"]
 description: "黒澤明の生誕100周年を記念したイベントが開催された。"
 ---
 

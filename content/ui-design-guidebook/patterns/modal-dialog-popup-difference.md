@@ -1,7 +1,7 @@
 ---
 title: "Modal / Dialog / Popup の違い"
 description: "モーダル、ダイアログ、ポップアップの違いと使い分けを理解し、適切なUIパターンを選択する。"
-tags: ["patterns"]
+ui_design_guidebook_tag: ["patterns"]
 slug: "modal-dialog-popup-difference"
 order: 1
 date: 2025-01-15T10:00:00Z

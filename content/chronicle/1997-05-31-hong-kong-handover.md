@@ -3,7 +3,7 @@ title: "香港返還"
 date: 1997-05-31
 category: "政治"
 subcategory: "国際"
-tags: ["香港", "中国", "国際", "返還"]
+chronicle_tag: ["香港", "中国", "国際", "返還"]
 description: "香港がイギリスから中国に返還された。"
 ---
 

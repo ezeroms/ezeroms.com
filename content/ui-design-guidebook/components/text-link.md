@@ -1,7 +1,7 @@
 ---
 title: "Text Link"
 description: "本文中やコンテンツ内に配置されるテキストリンク。ナビゲーションリンクとは異なる用途で使用される。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "text-link"
 order: 3
 date: 2025-01-15T10:00:00Z

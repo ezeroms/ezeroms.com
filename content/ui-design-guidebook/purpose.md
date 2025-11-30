@@ -1,7 +1,7 @@
 ---
 title: "目的"
 description: "UI Design Guidebookの目的と役割について"
-tags: ["readme"]
+ui_design_guidebook_tag: ["readme"]
 slug: "purpose"
 order: 1
 date: 2025-01-15T10:00:00Z

@@ -34,15 +34,16 @@ nav ul li a {
 } */
 
 ::-moz-selection {
-  background: #FCEDC3;
+  background: var(--color-selection);
 }
 ::selection {
-  background: #FCEDC3;
+  background: var(--color-selection);
 }
 
 a {
   text-decoration: none;
 }
+
 
 
 

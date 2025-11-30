@@ -1,14 +1,14 @@
 ---
 title: Mattermostをセルフホスティングする
-date: 2025-05-22T04:42:16.822Z
+date: "2025-05-22T04:42:16.822Z"
 slug: mattermost
-month:
-  - 2025-05
-subject:
+column_category:
   - internet-and-technology
-tags:
+column_tag:
   - Mattermost
   - 技術
+column_month:
+  - 2025-05
 ---
 ![](/images/diary/mattermost/47.png)
 

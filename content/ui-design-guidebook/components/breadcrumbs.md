@@ -1,7 +1,7 @@
 ---
 title: "Breadcrumbs"
 description: "Breadcrumbsに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "breadcrumbs"
 order: 22
 date: 2025-01-15T10:00:00Z

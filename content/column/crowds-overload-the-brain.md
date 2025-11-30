@@ -1,14 +1,14 @@
 ---
 title: 人混みは脳にクる
-date: 2024-03-12T12:21:42.966Z
+date: "2024-03-12T12:21:42.966Z"
 slug: crowds-overload-the-brain
-month:
-  - 2024-03
-subject:
+column_category:
   - foreign-cultures
-tags:
+column_tag:
   - 台湾
   - 文化
+column_month:
+  - 2024-03
 ---
 年始早々に台湾に渡り、約二ヶ月ぶりに日本に帰ってきた。
 

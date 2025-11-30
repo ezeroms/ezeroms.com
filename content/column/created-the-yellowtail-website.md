@@ -1,14 +1,14 @@
 ---
 title: テツのWebサイトを作った
-date: 2024-08-14T07:26:44.929Z
+date: "2024-08-14T07:26:44.929Z"
 slug: created-the-yellowtail-website
-month:
-  - 2024-08
-subject:
+column_category:
   - design-and-creative
-tags:
+column_tag:
   - Webサイト
   - デザイン
+column_month:
+  - 2024-08
 ---
 　大学時代のルームメイト・テツが開業したので、お盆付近の三連休を使ってWebサイトを作成した。
 

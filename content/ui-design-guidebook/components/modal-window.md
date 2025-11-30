@@ -1,7 +1,7 @@
 ---
 title: "Modal Window"
 description: "Modal Windowに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 date: 2025-01-15T10:00:00Z
 ---
 

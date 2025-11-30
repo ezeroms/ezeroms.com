@@ -1,7 +1,7 @@
 ---
 title: "一貫性（Consistency）"
 description: "一貫性（Consistency）に関するUIデザイン原則とベストプラクティス。"
-tags: ["principles"]
+ui_design_guidebook_tag: ["principles"]
 slug: "一貫性consistency"
 order: 4
 date: 2025-01-15T10:00:00Z

@@ -1,7 +1,7 @@
 ---
 title: "Button"
 description: "ユーザーのアクションを実行するための基本的なインタラクティブ要素。クリック可能な操作を明確に示す。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "button"
 order: 1
 date: 2025-01-15T10:00:00Z

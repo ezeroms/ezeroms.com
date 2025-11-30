@@ -1,15 +1,15 @@
 ---
-title: Jo Chang「Designing AI for Cultural Diversity」と『鋼の錬金術師』、あるいはデジタルネイチャー
-date: 2025-04-18T16:33:19.392Z
+title: "Jo Chang「Designing AI for Cultural Diversity」と『鋼の錬金術師』、あるいはデジタルネイチャー"
+date: "2025-04-18T16:33:19.392Z"
 slug: designing-ai-for-cultural-diversity
-month:
-  - 2025-04
-subject:
+column_category:
   - design-and-creative
-tags:
+column_tag:
   - AI
   - デザイン
   - 文化
+column_month:
+  - 2025-04
 ---
 「AIをどうデザインするか？」という問いについて、最近読んだJo Changの [「Designing AI for Cultural Diversity」](https://www.uxmatters.com/mt/archives/2025/04/designing-ai-for-cultural-diversity.php) という記事が参考になった。このコラムでは、文化によってAIの受け入れ方や期待のされ方が大きく異なるということが、さまざまな事例とともに紹介されている。
 

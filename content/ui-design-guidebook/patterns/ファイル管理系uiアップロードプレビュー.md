@@ -1,7 +1,7 @@
 ---
 title: "ファイル管理系UI（アップロード／プレビュー）"
 description: "ファイル管理系UI（アップロード／プレビュー）に関するUIデザインパターンとベストプラクティス。"
-tags: ["patterns"]
+ui_design_guidebook_tag: ["patterns"]
 slug: "ファイル管理系uiアップロードプレビュー"
 order: 18
 date: 2025-01-15T10:00:00Z

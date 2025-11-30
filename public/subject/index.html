@@ -99,70 +99,267 @@
             
             <div class="layout-header">
                 
+    
+
+
+    
+
+
+
+
+    
+
+
+
+
+<div class="column-header">
+    <nav class="column-header__nav" id="column-category-filters">
+        <a href="/column/" class="column-header__tab " data-category="all">すべて</a>
+        
+        
+            
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+        
+        
+            
+            
+                
+                
+                <a href="/column_category/books-and-magazines/" class="column-header__tab " data-category="books-and-magazines">本・雑誌</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/design-and-creative/" class="column-header__tab " data-category="design-and-creative">デザイン・クリエイティブ</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/foreign-cultures/" class="column-header__tab " data-category="foreign-cultures">海外文化</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/humanities-and-social-sciences/" class="column-header__tab " data-category="humanities-and-social-sciences">人文・社会科学</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/internet-and-technology/" class="column-header__tab " data-category="internet-and-technology">インターネット・技術</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/manga-and-anime/" class="column-header__tab " data-category="manga-and-anime">漫画・アニメ</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/movies-and-dramas/" class="column-header__tab " data-category="movies-and-dramas">映画・ドラマ</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/natural-science/" class="column-header__tab " data-category="natural-science">自然科学</a>
+            
+        
+            
+            
+        
+    </nav>
+</div>
+
+
+
             </div>
             
             <div class="layout-main layout-main--with-tags">
                 
                 <main class="layout-main__content" id="main-content">
                     
-    <div id="notification" class="notification">
-    Link copied to clipboard!
-</div>
-
-    <section class="diary-main">
-        <div class="diary-main__content">
-            <ul class="article-container" id="article-container">
-
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        
-                         Diary
-                    </p>
-
-                    
-                    
-                    
-                        
-                    
-                    
-                    
-                    
-                    
-                    <h2 class="article-item-heading__label__h2">
-                        
-                    </h2>
-                </div>
-
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container column-list" id="column-articles-list">
                 
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
-            </div>
-
-            
-            
-                <p>No articles found for .</p>
-            
-
+                
+                
+                
             </ul>
         </div>
     </section>
@@ -174,51 +371,8 @@
                     
     <div class="diary-secondary-nav">
     <div class="diary-secondary-nav__section">
-        <p class="diary-secondary-nav__heading">Tags</p>
-        <div class="tweet-secondary-nav__tags">
+        <div class="secondary-nav__tags">
             
-            
-                
-                    
-                        
-                            
-                        
-                    
-                        
-                            
-                        
-                    
-                
-            
-                
-                    
-                        
-                    
-                        
-                            
-                        
-                    
-                
-            
-                
-                    
-                        
-                            
-                        
-                    
-                        
-                            
-                        
-                    
-                        
-                            
-                        
-                    
-                        
-                            
-                        
-                    
-                
             
                 
                     
@@ -252,6 +406,48 @@
                     
                         
                     
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
                         
                             
                         
@@ -266,6 +462,42 @@
                             
                         
                     
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
                         
                     
                 
@@ -278,6 +510,112 @@
                     
                         
                     
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
                         
                             
                         
@@ -286,39 +624,116 @@
             
             
             
-                <span class="sidebar-tag" data-tag="SNS">SNS</span>
             
-                <span class="sidebar-tag" data-tag="コミュニケーション">コミュニケーション</span>
             
-                <span class="sidebar-tag" data-tag="ライブ">ライブ</span>
+                
+                
+                <a href="/column_tag/ai/" class="tag " data-tag="AI">AI</a>
             
-                <span class="sidebar-tag" data-tag="企画">企画</span>
+                
+                
+                <a href="/column_tag/contentful/" class="tag " data-tag="Contentful">Contentful</a>
             
-                <span class="sidebar-tag" data-tag="佐渡">佐渡</span>
+                
+                
+                <a href="/column_tag/hugo/" class="tag " data-tag="Hugo">Hugo</a>
             
-                <span class="sidebar-tag" data-tag="友情">友情</span>
+                
+                
+                <a href="/column_tag/mattermost/" class="tag " data-tag="Mattermost">Mattermost</a>
             
-                <span class="sidebar-tag" data-tag="台湾">台湾</span>
+                
+                
+                <a href="/column_tag/neobrutalism/" class="tag " data-tag="Neobrutalism">Neobrutalism</a>
             
-                <span class="sidebar-tag" data-tag="回転寿司">回転寿司</span>
+                
+                
+                <a href="/column_tag/netlify/" class="tag " data-tag="Netlify">Netlify</a>
             
-                <span class="sidebar-tag" data-tag="引越し">引越し</span>
+                
+                
+                <a href="/column_tag/sns/" class="tag " data-tag="SNS">SNS</a>
             
-                <span class="sidebar-tag" data-tag="文化">文化</span>
+                
+                
+                <a href="/column_tag/tinder/" class="tag " data-tag="Tinder">Tinder</a>
             
-                <span class="sidebar-tag" data-tag="横浜">横浜</span>
+                
+                
+                <a href="/column_tag/web%E3%82%B5%E3%82%A4%E3%83%88/" class="tag " data-tag="Webサイト">Webサイト</a>
             
-                <span class="sidebar-tag" data-tag="農作業">農作業</span>
+                
+                
+                <a href="/column_tag/%E3%82%A2%E3%83%8B%E3%83%A1/" class="tag " data-tag="アニメ">アニメ</a>
             
-                <span class="sidebar-tag" data-tag="音楽">音楽</span>
+                
+                
+                <a href="/column_tag/%E3%82%BF%E3%82%A4%E3%83%9D%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3/" class="tag " data-tag="タイポグラフィ">タイポグラフィ</a>
             
-                <span class="sidebar-tag" data-tag="食べ物">食べ物</span>
+                
+                
+                <a href="/column_tag/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/" class="tag " data-tag="デザイン">デザイン</a>
             
-                <span class="sidebar-tag" data-tag="高円寺">高円寺</span>
+                
+                
+                <a href="/column_tag/%E3%83%86%E3%82%B9%E3%83%88/" class="tag " data-tag="テスト">テスト</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/" class="tag " data-tag="ニュース">ニュース</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%97%E3%83%AD%E3%83%80%E3%82%AF%E3%83%88%E9%96%8B%E7%99%BA/" class="tag " data-tag="プロダクト開発">プロダクト開発</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%9D%E3%83%83%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88/" class="tag " data-tag="ポッドキャスト">ポッドキャスト</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%9E%E3%83%B3%E3%82%AC/" class="tag " data-tag="マンガ">マンガ</a>
+            
+                
+                
+                <a href="/column_tag/%E5%8F%B0%E6%B9%BE/" class="tag " data-tag="台湾">台湾</a>
+            
+                
+                
+                <a href="/column_tag/%E6%8A%80%E8%A1%93/" class="tag " data-tag="技術">技術</a>
+            
+                
+                
+                <a href="/column_tag/%E6%95%A3%E6%AD%A9/" class="tag " data-tag="散歩">散歩</a>
+            
+                
+                
+                <a href="/column_tag/%E6%96%87%E5%8C%96/" class="tag " data-tag="文化">文化</a>
+            
+                
+                
+                <a href="/column_tag/%E6%98%86%E8%99%AB%E9%A3%9F/" class="tag " data-tag="昆虫食">昆虫食</a>
+            
+                
+                
+                <a href="/column_tag/%E6%98%A0%E7%94%BB/" class="tag " data-tag="映画">映画</a>
+            
+                
+                
+                <a href="/column_tag/%E6%9B%B8%E7%B1%8D/" class="tag " data-tag="書籍">書籍</a>
+            
+                
+                
+                <a href="/column_tag/%E6%9C%AC/" class="tag " data-tag="本">本</a>
+            
+                
+                
+                <a href="/column_tag/%E6%BF%B1%E5%8F%A3%E7%AB%9C%E4%BB%8B/" class="tag " data-tag="濱口竜介">濱口竜介</a>
             
         </div>
     </div>
 </div>
+
 
 
                 </aside>

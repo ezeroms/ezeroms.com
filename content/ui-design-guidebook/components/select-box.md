@@ -1,7 +1,7 @@
 ---
 title: "Select Box"
 description: "Select Boxに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "select-box"
 order: 7
 date: 2025-01-15T10:00:00Z

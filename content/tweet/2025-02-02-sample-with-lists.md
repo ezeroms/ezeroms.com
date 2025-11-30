@@ -1,10 +1,11 @@
 ---
 date: 2025-02-02T10:00:00Z
+diary_month: 2025-02
 emoji: 📋
-tags:
+tweet_tag:
   - サンプル
   - リスト
-place: Tokyo
+diary_place: Tokyo
 ---
 
 Tweetでリストやコードブロックを使うサンプルです。
@@ -38,6 +39,3 @@ greet('World');
 ```
 
 これらは通常のTweetと同じように表示されます。
-
-
-

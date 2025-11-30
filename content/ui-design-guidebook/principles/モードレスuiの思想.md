@@ -1,7 +1,7 @@
 ---
 title: "モードレスUIの思想"
 description: "モードレスUIの思想に関するUIデザイン原則とベストプラクティス。"
-tags: ["principles"]
+ui_design_guidebook_tag: ["principles"]
 slug: "モードレスuiの思想"
 order: 11
 date: 2025-01-15T10:00:00Z

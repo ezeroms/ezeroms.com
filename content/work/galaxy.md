@@ -5,7 +5,7 @@ slug: galaxy
 image: /images/work/galaxy/07.webp
 start_date: 2019-03-01
 end_date: 2019-05-14
-tags:
+work_tag:
   - Webサイト
   - フロントエンド
   - UI/UXデザイン

@@ -1,0 +1,96 @@
+/* date-selector-nav共通スタイル */
+
+.date-selector-nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.date-selector-nav__year-selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.date-selector-nav__year-nav {
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    font-weight: 300;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal) var(--easing-default);
+}
+
+.date-selector-nav__year-nav:hover:not(.disabled) {
+    color: var(--color-border-hover);
+}
+
+.date-selector-nav__year-nav.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.date-selector-nav__year-display {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    min-width: 3.75rem;
+    text-align: center;
+}
+
+.date-selector-nav__month-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.date-selector-nav__filter-btn {
+    padding: 0.35rem 0.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-2xl);
+    background: var(--color-background-white);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-normal) var(--easing-default);
+    min-width: 2rem;
+    text-align: center;
+}
+
+.date-selector-nav__filter-btn:hover:not(.disabled) {
+    border-color: var(--color-border-hover);
+    background: var(--color-background);
+}
+
+.date-selector-nav__filter-btn.active {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-primary);
+}
+
+.date-selector-nav__filter-btn.active:hover:not(.disabled) {
+    background: var(--color-primary-hover, rgba(0, 0, 0, 0.1));
+    opacity: 0.9;
+}
+
+.date-selector-nav__filter-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+

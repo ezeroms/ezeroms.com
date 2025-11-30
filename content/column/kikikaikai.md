@@ -1,14 +1,14 @@
 ---
 title: 『奇奇怪怪』の少年ジャンプ的な冒険心、あるいは上品さについて
-date: 2023-08-23T11:04:17.597Z
+date: "2023-08-23T11:04:17.597Z"
 slug: kikikaikai-book-2
-month:
-  - 2023-08
-subject:
+column_category:
   - books-and-magazines
-tags:
+column_tag:
   - 本
   - 書籍
+column_month:
+  - 2023-08
 ---
 昨日は仕事を早めに切り上げて、代官山蔦屋書店に行ってきた。発売を心待ちにしていた『奇奇怪怪』という本を手に入れるためだ。
 

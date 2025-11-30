@@ -3,7 +3,7 @@ title: "iモード開始"
 date: 1999-11-20
 category: "社会"
 subcategory: "技術"
-tags: ["技術", "携帯電話", "インターネット"]
+chronicle_tag: ["技術", "携帯電話", "インターネット"]
 description: "NTTドコモがiモードサービスを開始した。"
 ---
 

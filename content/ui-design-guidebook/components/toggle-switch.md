@@ -1,7 +1,7 @@
 ---
 title: "Toggle Switch"
 description: "Toggle Switchに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "toggle-switch"
 order: 11
 date: 2025-01-15T10:00:00Z

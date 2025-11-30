@@ -1,7 +1,7 @@
 ---
 title: "Checkbox"
 description: "Checkboxに関するUIデザインのガイドラインとベストプラクティス。"
-tags: ["components"]
+ui_design_guidebook_tag: ["components"]
 slug: "checkbox"
 order: 9
 date: 2025-01-15T10:00:00Z

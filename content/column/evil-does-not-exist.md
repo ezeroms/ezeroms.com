@@ -1,14 +1,14 @@
 ---
 title: 「そのとき鹿はどこにいくんだ」「それは…どこか別の場所に」
-date: 2024-05-13T04:01:25.105Z
+date: "2024-05-13T04:01:25.105Z"
 slug: evil-does-not-exist
-month:
-  - 2024-05
-subject:
+column_category:
   - movies-and-dramas
-tags:
+column_tag:
   - 映画
   - 濱口竜介
+column_month:
+  - 2024-05
 ---
 　伊勢佐木町にあるミニシアター・シネマリンで、映画『悪は存在しない』を観てきた。『偶然と想像』や『ドライブ・マイ・カー』で国際的な評価を得た濱口竜介監督の最新作である。
 

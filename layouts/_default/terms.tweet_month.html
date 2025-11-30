@@ -1,0 +1,164 @@
+{{ define "section_header" }}
+    {{ $tweetSection := .Site.GetPage "section" "tweet" }}
+    {{ $allMonths := slice }}
+    {{ if $tweetSection }}
+        {{ range $tweetSection.Pages }}
+            {{ $monthStr := .Date | dateFormat "2006-01" }}
+            {{ if not (in $allMonths $monthStr) }}
+                {{ $allMonths = $allMonths | append $monthStr }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+    {{ $latestYear := "" }}
+    {{ $latestMonthNum := "" }}
+    {{ if $latestMonth }}
+        {{ $latestYear = index (split $latestMonth "-") 0 }}
+        {{ $latestMonthNum = index (split $latestMonth "-") 1 }}
+    {{ end }}
+
+    <div class="date-selector-nav">
+        <div class="date-selector-nav__year-selector">
+            <button class="date-selector-nav__year-nav" id="prev-year">‹</button>
+            <span class="date-selector-nav__year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
+            <button class="date-selector-nav__year-nav" id="next-year">›</button>
+        </div>
+
+        <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
+            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
+            {{ $allYearMonths := slice }}
+            {{ if $tweetSection }}
+                {{ range $tweetSection.Pages }}
+                    {{ $yearMonth := .Date | dateFormat "2006-01" }}
+                    {{ if not (in $allYearMonths $yearMonth) }}
+                        {{ $allYearMonths = $allYearMonths | append $yearMonth }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedYearMonths := sort $allYearMonths }}
+            {{ $years := slice }}
+            {{ range $sortedYearMonths }}
+                {{ $year := index (split . "-") 0 }}
+                {{ if not (in $years $year) }}
+                    {{ $years = $years | append $year }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedYears := sort $years }}
+            {{ $minYear := 0 }}
+            {{ $maxYear := 0 }}
+            {{ if gt (len $sortedYears) 0 }}
+                {{ $minYear = int (index $sortedYears 0) }}
+                {{ $maxYear = int (index $sortedYears (sub (len $sortedYears) 1)) }}
+            {{ end }}
+            {{ range $year := seq $minYear $maxYear }}
+                {{ range $index := seq 1 12 }}
+                    {{ $monthNum := printf "%02d" $index }}
+                    {{ $yearMonth := printf "%d-%s" $year $monthNum }}
+                    {{ $monthName := index $months (sub $index 1) }}
+                    {{ $hasTweets := false }}
+                    {{ range $sortedYearMonths }}
+                        {{ if eq . $yearMonth }}
+                            {{ $hasTweets = true }}
+                        {{ end }}
+                    {{ end }}
+                    {{ $monthPage := index $.Site.Taxonomies.tweet_month ($yearMonth | urlize) }}
+                    {{ if $monthPage }}
+                        <a href="{{ $monthPage.Page.RelPermalink }}" class="date-selector-nav__filter-btn" data-year-month="{{ $yearMonth }}" data-year="{{ $year }}" {{ if not $hasTweets }}style="opacity: 0.4; cursor: not-allowed; pointer-events: none;"{{ end }}{{ if ne (string $year) $latestYear }} style="display: none;{{ if not $hasTweets }} opacity: 0.4; cursor: not-allowed; pointer-events: none;{{ end }}"{{ end }}>{{ $monthName }}</a>
+                    {{ else }}
+                        <span class="date-selector-nav__filter-btn" data-year-month="{{ $yearMonth }}" data-year="{{ $year }}" {{ if not $hasTweets }}style="opacity: 0.4; cursor: not-allowed; pointer-events: none;"{{ end }}{{ if ne (string $year) $latestYear }} style="display: none;{{ if not $hasTweets }} opacity: 0.4; cursor: not-allowed; pointer-events: none;{{ end }}"{{ end }}>{{ $monthName }}</span>
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+{{ end }}
+
+{{ define "main" }}
+    <section class="page-section">
+        <div class="page-section__content">
+            <h1>Months</h1>
+            <ul class="article-container">
+                {{ range .Data.Terms.ByCount }}
+                    <li>
+                        <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const monthFilters = document.getElementById('date-selector-nav__month-filters');
+            
+            let currentYear = parseInt(yearDisplay.textContent);
+
+            function updateMonthButtons(year) {
+                const buttons = monthFilters.querySelectorAll('a');
+                
+                buttons.forEach(btn => {
+                    const btnYear = btn.getAttribute('data-year');
+                    if (btnYear === String(year)) {
+                        btn.style.display = '';
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+            }
+
+            prevYearBtn.addEventListener('click', function() {
+                currentYear--;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                currentYear++;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+            });
+
+            updateMonthButtons(currentYear);
+        });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+    <div class="diary-secondary-nav">
+        <div class="diary-secondary-nav__section">
+            <div class="secondary-nav__tags">
+                {{ $allTags := slice }}
+                {{ $tweetSection := .Site.GetPage "section" "tweet" }}
+                {{ if $tweetSection }}
+                    {{ range $tweetSection.Pages }}
+                        {{ if .Params.tweet_tag }}
+                            {{ range .Params.tweet_tag }}
+                                {{ if not (in $allTags .) }}
+                                    {{ $allTags = $allTags | append . }}
+                                {{ end }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+                {{ $sortedTags := sort $allTags }}
+                {{ range $sortedTags }}
+                    {{ $tagPage := index $.Site.Taxonomies.tweet_tag (. | urlize) }}
+                    {{ if $tagPage }}
+                        <a href="{{ $tagPage.Page.RelPermalink }}" class="tag" data-tag="{{ . }}">{{ . }}</a>
+                    {{ else }}
+                        <span class="tag" data-tag="{{ . }}">{{ . }}</span>
+                    {{ end }}
+                {{ end }}
+            </div>
+        </div>
+    </div>
+{{ end }}
+

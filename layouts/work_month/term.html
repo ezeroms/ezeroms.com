@@ -1,6 +1,8 @@
 {{ define "section_header" }}
+    {{/* Workセクションのページのみをフィルタリング */}}
+    {{ $workPages := where .Pages "Section" "work" }}
     {{ $allMonths := slice }}
-    {{ range .Pages }}
+    {{ range $workPages }}
         {{ $startDate := "" }}
         {{ $endDate := "" }}
         {{ if .Params.start_date }}
@@ -41,44 +43,36 @@
         {{ $latestMonthNum = index (split $latestMonth "-") 1 }}
     {{ end }}
 
-    <div class="date-selector-nav">
-        <div class="date-selector-nav__year-selector">
-            <button class="date-selector-nav__year-nav" id="prev-year">‹</button>
-            <span class="date-selector-nav__year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
-            <button class="date-selector-nav__year-nav" id="next-year">›</button>
-        </div>
-
-        <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
-            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
-            {{ $allYearMonths := slice }}
-            {{ range .Pages }}
-                {{ $startDate := "" }}
-                {{ $endDate := "" }}
-                {{ if .Params.start_date }}
-                    {{ $startDate = .Params.start_date }}
-                {{ end }}
-                {{ if and .Params.end_date (ne .Params.end_date "") }}
-                    {{ $endDate = .Params.end_date }}
-                {{ end }}
-                {{ if $startDate }}
-                    {{ $start := time $startDate }}
-                    {{ $end := $start }}
-                    {{ if and $endDate (ne $endDate "") }}
-                        {{ $end = time $endDate }}
-                    {{ end }}
-                    {{ $current := $start }}
-                    {{ range $i := seq 0 1000 }}
-                        {{ if gt $current $end }}
-                            {{ break }}
-                        {{ end }}
-                        {{ $monthStr := $current | dateFormat "2006-01" }}
-                        {{ if not (in $allYearMonths $monthStr) }}
-                            {{ $allYearMonths = $allYearMonths | append $monthStr }}
-                        {{ end }}
-                        {{ $current = $current.AddDate 0 1 0 }}
-                    {{ end }}
-                {{ end }}
+    {{/* 年の範囲を計算（月ボタン生成のため） */}}
+    {{ $allYearMonths := slice }}
+    {{ range $workPages }}
+        {{ $startDate := "" }}
+        {{ $endDate := "" }}
+        {{ if .Params.start_date }}
+            {{ $startDate = .Params.start_date }}
+        {{ end }}
+        {{ if and .Params.end_date (ne .Params.end_date "") }}
+            {{ $endDate = .Params.end_date }}
+        {{ end }}
+        {{ if $startDate }}
+            {{ $start := time $startDate }}
+            {{ $end := $start }}
+            {{ if and $endDate (ne $endDate "") }}
+                {{ $end = time $endDate }}
             {{ end }}
+            {{ $current := $start }}
+            {{ range $i := seq 0 1000 }}
+                {{ if gt $current $end }}
+                    {{ break }}
+                {{ end }}
+                {{ $monthStr := $current | dateFormat "2006-01" }}
+                {{ if not (in $allYearMonths $monthStr) }}
+                    {{ $allYearMonths = $allYearMonths | append $monthStr }}
+                {{ end }}
+                {{ $current = $current.AddDate 0 1 0 }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
             {{ $sortedYearMonths := sort $allYearMonths }}
             {{ $years := slice }}
             {{ range $sortedYearMonths }}
@@ -87,17 +81,40 @@
                     {{ $years = $years | append $year }}
                 {{ end }}
             {{ end }}
-            {{ $sortedYears := sort $years }}
+            {{/* 年を数値としてソート */}}
+            {{ $yearInts := slice }}
+            {{ range $years }}
+                {{ $yearInt := int . }}
+                {{ if gt $yearInt 0 }}
+                    {{ $yearInts = $yearInts | append $yearInt }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedYearInts := sort $yearInts }}
             {{ $minYear := 0 }}
             {{ $maxYear := 0 }}
-            {{ if gt (len $sortedYears) 0 }}
-                {{ $minYear = int (index $sortedYears 0) }}
-                {{ $maxYear = int (index $sortedYears (sub (len $sortedYears) 1)) }}
+            {{ if gt (len $sortedYearInts) 0 }}
+                {{ $minYear = index $sortedYearInts 0 }}
+                {{ $maxYear = index $sortedYearInts (sub (len $sortedYearInts) 1) }}
             {{ end }}
+    {{ $latestYearInt := 0 }}
+    {{ if $latestYear }}
+        {{ $latestYearInt = int $latestYear }}
+    {{ end }}
+
+    <div class="date-selector-nav">
+        <div class="date-selector-nav__year-selector" data-min-year="{{ $minYear }}" data-max-year="{{ $maxYear }}">
+            <button class="date-selector-nav__year-nav{{ if and (gt $minYear 0) (eq $latestYearInt $minYear) }} disabled{{ end }}" id="prev-year"{{ if and (gt $minYear 0) (eq $latestYearInt $minYear) }} disabled{{ end }}>‹</button>
+            <span class="date-selector-nav__year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
+            <button class="date-selector-nav__year-nav{{ if and (gt $maxYear 0) (eq $latestYearInt $maxYear) }} disabled{{ end }}" id="next-year"{{ if and (gt $maxYear 0) (eq $latestYearInt $maxYear) }} disabled{{ end }}>›</button>
+        </div>
+
+        <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
+            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
             {{ $currentMonth := "" }}
             {{ if and .Data .Data.Term }}
                 {{ $currentMonth = .Data.Term }}
             {{ end }}
+            {{ if and (gt $minYear 0) (gt $maxYear 0) }}
             {{ range $year := seq $minYear $maxYear }}
                 {{ range $index := seq 1 12 }}
                     {{ $monthNum := printf "%02d" $index }}
@@ -113,8 +130,9 @@
                     {{ if eq $yearMonth $currentMonth }}
                         {{ $isActive = true }}
                     {{ end }}
-                    <a href="/work_month/{{ $yearMonth }}/" class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}" data-year-month="{{ $yearMonth }}" data-year="{{ $year }}" {{ if not $hasWorks }}style="opacity: 0.4; cursor: not-allowed; pointer-events: none;"{{ end }}{{ if ne (string $year) $latestYear }} style="display: none;{{ if not $hasWorks }} opacity: 0.4; cursor: not-allowed; pointer-events: none;{{ end }}"{{ end }}>{{ $monthName }}</a>
+                    <a href="/work_month/{{ $yearMonth }}/" class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}{{ if not $hasWorks }} disabled{{ end }}" data-year-month="{{ $yearMonth }}" data-year="{{ $year }}" {{ if not $hasWorks }}style="opacity: 0.4; cursor: not-allowed; pointer-events: none;"{{ end }}{{ if ne (string $year) $latestYear }} style="display: none;{{ if not $hasWorks }} opacity: 0.4; cursor: not-allowed; pointer-events: none;{{ end }}"{{ end }}>{{ $monthName }}</a>
                 {{ end }}
+            {{ end }}
             {{ end }}
         </div>
     </div>
@@ -124,7 +142,8 @@
     <section class="page-section">
         <div class="page-section__content">
             <ul class="article-container column-list work-list" id="work-articles-list">
-                {{ range .Pages }}
+                {{/* Workセクションのページのみを表示 */}}
+                {{ range where .Pages "Section" "work" }}
                     {{ $tags := slice }}
                     {{ if .Params.work_tag }}
                         {{ $tags = .Params.work_tag }}
@@ -194,15 +213,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const yearSelector = document.querySelector('.date-selector-nav__year-selector');
             const yearDisplay = document.getElementById('year-display');
             const prevYearBtn = document.getElementById('prev-year');
             const nextYearBtn = document.getElementById('next-year');
             const monthFilters = document.getElementById('date-selector-nav__month-filters');
             
+            if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
+                return;
+            }
+            
             let currentYear = parseInt(yearDisplay.textContent);
+            const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
+            const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
 
             function updateMonthButtons(year) {
-                const buttons = monthFilters.querySelectorAll('a');
+                // <a>タグと<span>タグの両方を対象にする
+                const buttons = monthFilters.querySelectorAll('a, span');
                 
                 buttons.forEach(btn => {
                     const btnYear = btn.getAttribute('data-year');
@@ -214,20 +241,45 @@
                 });
             }
 
+            function updateYearButtons() {
+                if (currentYear <= minYear) {
+                    prevYearBtn.classList.add('disabled');
+                    prevYearBtn.disabled = true;
+                } else {
+                    prevYearBtn.classList.remove('disabled');
+                    prevYearBtn.disabled = false;
+                }
+                
+                if (currentYear >= maxYear) {
+                    nextYearBtn.classList.add('disabled');
+                    nextYearBtn.disabled = true;
+                } else {
+                    nextYearBtn.classList.remove('disabled');
+                    nextYearBtn.disabled = false;
+                }
+            }
+
             prevYearBtn.addEventListener('click', function() {
-                currentYear--;
-                yearDisplay.textContent = currentYear;
-                updateMonthButtons(currentYear);
+                if (currentYear > minYear) {
+                    currentYear--;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
             });
 
             nextYearBtn.addEventListener('click', function() {
-                currentYear++;
-                yearDisplay.textContent = currentYear;
-                updateMonthButtons(currentYear);
+                if (currentYear < maxYear) {
+                    currentYear++;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
             });
 
-            // 初期状態で月のボタンを更新
+            // 初期状態で月のボタンと年選択ボタンを更新
             updateMonthButtons(currentYear);
+            updateYearButtons();
         });
     </script>
 {{ end }}

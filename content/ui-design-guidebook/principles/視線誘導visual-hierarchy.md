@@ -1,7 +1,7 @@
 ---
 title: "視線誘導（Visual Hierarchy）"
 description: "視線誘導（Visual Hierarchy）に関するUIデザイン原則とベストプラクティス。"
-tags: ["principles"]
+ui_design_guidebook_tag: ["principles"]
 slug: "視線誘導visual-hierarchy"
 order: 5
 date: 2025-01-15T10:00:00Z

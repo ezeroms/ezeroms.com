@@ -5,7 +5,7 @@
     <link>http://localhost:1313/</link>
     <description>One thing I can tell you is you got to be free!</description>
     <language>ja</language>
-    <lastBuildDate>Wed, 26 Nov 2025 13:05:22 JST</lastBuildDate><item>
+    <lastBuildDate>Mon, 01 Dec 2025 01:43:14 JST</lastBuildDate><item>
         <title>初雪の朝</title>
         <link>http://localhost:1313/snap/2025-11-20-snow/</link>
         <description>静かに降り積もる初雪。街が白一色に染まる美しい朝。
@@ -47,7 +47,7 @@ NetlifyCMS = 管理画面で記事を書く
         <pubDate>Thu, 18 Sep 2025 10:15:00 UTC</pubDate>
         <guid>http://localhost:1313/snap/2025-09-18-autumn/</guid>
       </item><item>
-        <title>引っ越します！</title>
+        <title>2025-09-15</title>
         <link>http://localhost:1313/diary/hikkoshi2/</link>
         <description>かくかくしかじかで、大好きだった関内の家から引っ越すことになった。時間もお金もかけてリノベーションした家だっただけに、悔しさも無念も言い尽くせないほどある。忸怩たる思いは尽きないが、どうにもできない以上、もう恨み言を並べてもしかたない。ここらで気持ちに区切りをつけようと思う。
 心配して連絡をくれたり、町や物件をサジェストしてくれたみんな、ありがとう。⁠おかげさまで無事に次の家が決まりました。新天地は高円寺、小杉湯の近くです。
@@ -65,7 +65,7 @@ NetlifyCMS = 管理画面で記事を書く
         <pubDate>Mon, 15 Sep 2025 05:54:49 UTC</pubDate>
         <guid>http://localhost:1313/diary/hikkoshi2/</guid>
       </item><item>
-        <title>引越先を探しています！ 情報求ム</title>
+        <title>2025/08/26</title>
         <link>http://localhost:1313/diary/hikkoshi/</link>
         <description>いま住んでいる横浜・関内の家を出て行かなかればならなくなった！
 引越先を探しているので、何かよさげな物件情報があれば教えてほしい。
@@ -102,12 +102,12 @@ NetlifyCMS = 管理画面で記事を書く
         <guid>http://localhost:1313/snap/2025-06-08-cityscape/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-06-02-soviet-funk/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>ソ連ファンク 共産グルーヴ・ディスクガイド
 https://amzn.asia/d/aH11N6K
 </description>
         <pubDate>Mon, 02 Jun 2025 17:52:00 JST</pubDate>
-        <guid>http://localhost:1313/tweet/2025-06-02-soviet-funk/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title>MattermostのWebSocket接続エラーを解決した</title>
         <link>http://localhost:1313/column/mattermost-websocket-error/</link>
@@ -128,12 +128,12 @@ cat /etc/nginx/sites-available/mattermost server { server_name chat.chooning.app
         <guid>http://localhost:1313/column/mattermost-websocket-error/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-05-29-suchmos-is-back/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description></description>
         <pubDate>Wed, 28 May 2025 16:29:21 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-05-29-suchmos-is-back/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
-        <title>今日のハイライト: 2025/05/26</title>
+        <title>2025/05/26</title>
         <link>http://localhost:1313/diary/2025-05-26/</link>
         <description>KJと、鶴屋町に新しくできたスシローに行ってきた。
 台湾から帰ってきて以来、回転寿司ばかり行っている。カウンターの向こうから次々に流れてくる小皿を思考停止で迎え撃ちたくなる日々が続いているのだ。
@@ -180,7 +180,7 @@ content/ about/ _index.md diary _index.md shoulders-of-giants _index.md work _in
         <pubDate>Sat, 24 May 2025 05:34:34 UTC</pubDate>
         <guid>http://localhost:1313/column/hugo-section-page-not-rendering/</guid>
       </item><item>
-        <title>今日のハイライト: 2025/05/24</title>
+        <title>2025/05/24</title>
         <link>http://localhost:1313/diary/2025-05-24/</link>
         <description>赤レンガ倉庫のテラス席で、Greenroomの音漏れを聞きながら作業していた。海風に乗って届くベース音がちょうどよくて、結構な特等席だ。
 ﻿ このGreenroomに参加するため、京都からふみちゃんがやってきたのだが、昨夜、駅からうちに来るまでの間につまずいて顔面を強打し、なんと前歯が折れてしまった。「欠けた」のではなく、まさにバキリと「折れた」のである。痛すぎる。
@@ -234,7 +234,7 @@ https://www.youtube.com/watch?v=SiTazCUPBGM
         <pubDate>Tue, 20 May 2025 16:30:00 UTC</pubDate>
         <guid>http://localhost:1313/snap/2025-05-20-beach/</guid>
       </item><item>
-        <title>今日のハイライト: 2025/05/19</title>
+        <title>2025/05/19</title>
         <link>http://localhost:1313/diary/2025-05-19/</link>
         <description>佐渡汽船の売店で、なんとなく手に取った笹団子がめちゃくちゃうまかった。
 冷凍されたものを持ち歩いていたら自然解凍されたんだけど、それがよかったのかもしれない。
@@ -242,7 +242,7 @@ https://www.youtube.com/watch?v=SiTazCUPBGM
         <pubDate>Sun, 18 May 2025 17:21:56 UTC</pubDate>
         <guid>http://localhost:1313/diary/2025-05-19/</guid>
       </item><item>
-        <title>今日のハイライト: 2025/05/18</title>
+        <title>2025/05/18</title>
         <link>http://localhost:1313/diary/2025-05-18/</link>
         <description>昨日に引き続き、今日も朝から農作業。
 早起きして張り切った甲斐もあり、昼過ぎには予定の工程を終えることができた。これで大石さんの田んぼは一通り完了、あとは補植を残すのみ。ひとまず助っ人としてのミッションは達成である。
@@ -256,7 +256,7 @@ https://www.youtube.com/watch?v=SiTazCUPBGM
         <pubDate>Sat, 17 May 2025 17:14:44 UTC</pubDate>
         <guid>http://localhost:1313/diary/2025-05-18/</guid>
       </item><item>
-        <title>今日のハイライト: 2025/05/17</title>
+        <title>2025/05/17</title>
         <link>http://localhost:1313/diary/2025-05-17/</link>
         <description>岩首で、大石さんの田植えを手伝ってきた。
 僕は農作業や庭仕事の類が昔からあまり好きじゃない。が、坐骨神経痛とヘルニアを同時にキメた高齢の友人のために、腹を括って鉛のように重たい腰を持ち上げて行ってきた。
@@ -274,7 +274,7 @@ https://www.youtube.com/watch?v=SiTazCUPBGM
         <pubDate>Sat, 17 May 2025 14:56:22 UTC</pubDate>
         <guid>http://localhost:1313/diary/2025-05-17/</guid>
       </item><item>
-        <title>今日のハイライト: 2025/05/10</title>
+        <title>2025/05/10</title>
         <link>http://localhost:1313/diary/2025-05-10/</link>
         <description>台湾といえば、やっぱり肉粽（ちまき）だと思う。
 あの笹の香りともち米のずっしり感が、土地の空気と結びついている感じがする。台北だったら王記府城の肉粽が最高だ。
@@ -377,16 +377,16 @@ Neobrutalismの本質は、「unfinished」な見た目にあるのではない�
         <guid>http://localhost:1313/column/neobrutalism-kawii-hello-kitty/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-04-04-login-jp/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description> </description>
         <pubDate>Fri, 04 Apr 2025 14:55:25 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-04-04-login-jp/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-03-11-send-to-you/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description> </description>
         <pubDate>Tue, 11 Mar 2025 15:46:11 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-03-11-send-to-you/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title>桜並木の午後</title>
         <link>http://localhost:1313/snap/2025-03-10-cherry-blossom/</link>
@@ -411,53 +411,54 @@ Tinderの本質は「人が人を求める」という情欲の一つひとつ�
 ﻿ 無数に存在する誰かの中から、自分が「これだ」と思う相手を選ぶプロセスは、コンビニの陳列棚で商品を手に取る行為とよく似ている。
 炭酸水にするか、スポーツドリンクにするか。一度はカゴに入れたけれど、やっぱり戻すかもしれない。誰かと過ごす時間も、Tinderを開いて右へ左へとスワイプする指の動きも、本質的にはこの（まるで記憶に残らないようなレベルの）迷いと決断の繰り返しだ。出会いとは、常に選択的接触の過程にある。
 ただ、コンビニで買ったものが確実に身体に影響を与えるように、出会いもまた、単なる消費では終わらない。どんな動機であれ、選び取った人との関係は気づかぬうちに人生に何らかの痕跡を残していく。
+それは意識されることのないうちに蓄積し、ある日ふとした瞬間に、自分のどこかに残っていたことに気づくのだろう。
 </description>
         <pubDate>Wed, 19 Feb 2025 18:57:11 UTC</pubDate>
         <guid>http://localhost:1313/column/tinder-swipe-stories/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-02-06-many-tags-without-place/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>タグが多いTweetのサンプルです（place情報なし）。
 この記事にも多くのタグが設定されています。タグが多くなった時に、どのように表示されるか確認できます。
 place情報は含まれていないので、日付のみが表示されます。
 </description>
         <pubDate>Thu, 06 Feb 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-02-06-many-tags-without-place/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-02-05-many-tags-with-place/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>タグが多いTweetのサンプルです（place情報あり）。
 この記事には多くのタグが設定されています。タグが多くなった時に、どのように表示されるか確認できます。
 place情報も含まれているので、日付と場所が一緒に表示されます。
 </description>
         <pubDate>Wed, 05 Feb 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-02-05-many-tags-with-place/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-02-04-voice-loud/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>これは大声のサンプルです（2025年2月版）。
 大声で話す時は、文字が大きく、太字で表示されます。重要なメッセージを伝えたい時に使います。
 もっと大声と比べて、少し控えめな強調になります。
 </description>
         <pubDate>Tue, 04 Feb 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-02-04-voice-loud/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-02-03-voice-louder-sample/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>もっと大声でもう一つのサンプルです。
 もっと大声は、通常の大声よりもさらに大きく、より太字で表示されます。緊急のメッセージや、絶対に伝えたい重要な情報を表現する時に使います。
 このスタイルは、読者の注意を強く引くことができます。
 </description>
         <pubDate>Mon, 03 Feb 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-02-03-voice-louder-sample/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-02-02-sample-with-lists/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>Tweetでリストやコードブロックを使うサンプルです。
 リストの例 最初の項目 二番目の項目 三番目の項目 ネストされた項目1 ネストされた項目2 ナンバーリストの例 最初の項目 二番目の項目 三番目の項目 ネストされた項目1 ネストされた項目2 コードブロックの例 function greet(name) { const message = `Hello, ${name}!`; console.log(message); return message; } greet(&#39;World&#39;); これらは通常のTweetと同じように表示されます。
 </description>
         <pubDate>Sun, 02 Feb 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-02-02-sample-with-lists/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title>雨上がりの路地</title>
         <link>http://localhost:1313/snap/sample-alley/</link>
@@ -467,123 +468,123 @@ place情報も含まれているので、日付と場所が一緒に表示され
         <guid>http://localhost:1313/snap/sample-alley/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-02-01-voice-louder/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>これはもっと大声のサンプルです。
 もっと大声で話す時は、文字がさらに大きく、より太字で表示されます。非常に重要なメッセージを伝えたい時に使います。
 </description>
         <pubDate>Sat, 01 Feb 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-02-01-voice-louder/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-01-31-voice-normal/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>これは通常の声のサンプルです。
 voiceプロパティを指定しない場合、通常のサイズとスタイルで表示されます。普通の会話や日常的なメッセージに適しています。
 </description>
         <pubDate>Fri, 31 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-01-31-voice-normal/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-01-30-voice-whisper/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>これは内緒話のサンプルです。
 内緒話で話す時は、文字が小さく、白色で表示されます。マウスで範囲選択（ハイライト）することで内容が読めるようになります。秘密の話を表現したい時に使います。
 </description>
         <pubDate>Thu, 30 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-01-30-voice-whisper/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-01-29-voice-shaky/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>これは震え声のサンプルです。
 震え声で話す時は、文字が小さく、細字で、不透明度が下がり、ぶるぶると振るえます。不安や恐怖を表現したい時に使います。
 </description>
         <pubDate>Wed, 29 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-01-29-voice-shaky/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-01-28-voice-loud/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>これは大声のサンプルです。
 大声で話す時は、文字が大きく、太字で表示されます。重要なメッセージを伝えたい時に使います。
 </description>
         <pubDate>Tue, 28 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-01-28-voice-loud/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-14/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>アニメ映画について。ストーリーとビジュアルの両立が重要です。
 </description>
         <pubDate>Tue, 28 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-14/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/2025-01-27-anime-movie/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>アニメ映画について。ストーリーとビジュアルの両立が重要です。
 最近観た作品では、ストーリーの深さと美しいアニメーションが完璧に調和していて、とても感動しました。良い作品は、技術と物語の両方が優れていることが分かります。
 </description>
         <pubDate>Mon, 27 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/2025-01-27-anime-movie/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-13/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>音楽ライブについて。生演奏の迫力は素晴らしいですね。
 </description>
         <pubDate>Mon, 27 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-13/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-12/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>モーションデザインについて。アニメーションはユーザー体験を豊かにします。
 </description>
         <pubDate>Sun, 26 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-12/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-11/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>Webアクセシビリティについて。すべてのユーザーが使いやすいサイトを目指しています。
 </description>
         <pubDate>Sat, 25 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-11/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-10/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>イラストレーションの世界。手描きの温かみとデジタルの利便性を両立させたい。
 最近はiPadとProcreateを使って、アナログとデジタルの良いところを組み合わせた制作をしています。手描きの質感を保ちながら、デジタルの修正のしやすさも活かせています。
 </description>
         <pubDate>Fri, 24 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-10/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-9/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>Reactのパフォーマンス最適化について。メモ化と仮想DOMの理解が鍵です。
 useMemoやuseCallbackを適切に使うことで、不要な再レンダリングを防ぐことができます。ただし、過度な最適化は逆効果になることもあるので、バランスが重要です。
 </description>
         <pubDate>Thu, 23 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-9/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-8/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>ブランディングデザインについて。一貫性のあるビジュアルアイデンティティが重要です。
 ロゴ、カラーパレット、タイポグラフィなど、すべての要素が統一されていることで、ブランドの印象が強くなります。細かい部分まで気を配ることが大切ですね。
 </description>
         <pubDate>Wed, 22 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-8/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-7/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>CSSの新しい機能について学んでいます。GridとFlexboxの使い分けが大切です。
 複雑なレイアウトにはGrid、シンプルな横並びにはFlexboxという使い分けが基本ですが、最近は両方を組み合わせることで、より柔軟なレイアウトが作れることに気づきました。
 </description>
         <pubDate>Tue, 21 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-7/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-6/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>写真撮影について考えています。光と影のバランスが重要ですね。
 最近は特に、自然光を活かした撮影にこだわっています。人工的なライティングも良いですが、自然な光の方が被写体の本質を捉えられる気がします。
 </description>
         <pubDate>Mon, 20 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-6/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title>タイポグラフィテスト記事</title>
-        <link>http://localhost:1313/column/typography-test/</link>
+        <link>http://localhost:1313/column/%E3%82%BF%E3%82%A4%E3%83%9D%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3%E3%83%86%E3%82%B9%E3%83%88%E8%A8%98%E4%BA%8B/</link>
         <description>見出しのテスト（h1） この記事は、フォントサイズや見出し、リスト、本文のスタイルを確認するためのテスト記事です。
 見出しのテスト（h2） 見出しのテスト（h3） 見出しのテスト（h4） 本文のスタイルを確認します。これは通常の段落テキストです。フォントサイズは1rem（16px相当）で、行間は1.8に設定されています。読みやすさを重視したタイポグラフィになっています。
 もう一つの段落です。複数の段落がある場合の間隔も確認できます。適切な余白が設定されているか確認してください。
@@ -593,48 +594,48 @@ useMemoやuseCallbackを適切に使うことで、不要な再レンダリン�
 コードスニペットのテスト JavaScriptのコード例 function greet(name) { const message = `Hello, ${name}!`; console.log(message); return message; } greet(&#39;World&#39;); CSSのコード例 .article-item { font-size: 1rem; line-height: 1.8; color: #050317; } .article-item h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.6; } HTMLのコード例 &lt;article class=&#34;article-item&#34;&gt; &lt;h1&gt;タイトル&lt;/h1&gt; &lt;p&gt;本文の内容です。&lt;/p&gt; &lt;ul&gt; &lt;li&gt;リスト項目1&lt;/li&gt; &lt;li&gt;リスト項目2&lt;/li&gt; &lt;/ul&gt; &lt;/article&gt; Pythonのコード例 def calculate_sum(numbers): &#34;&#34;&#34;数値のリストの合計を計算する&#34;&#34;&#34; total = 0 for num in numbers: total += num return total result = calculate_sum([1, 2, 3, 4, 5]) print(f&#34;合計: {result}&#34;) インラインコードのテスト この文章には inline code が含まれています。font-size: 1rem や line-height: 1.8 などのインラインコードのスタイルも確認できます。
 </description>
         <pubDate>Mon, 20 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/column/typography-test/</guid>
+        <guid>http://localhost:1313/column/%E3%82%BF%E3%82%A4%E3%83%9D%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3%E3%83%86%E3%82%B9%E3%83%88%E8%A8%98%E4%BA%8B/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-5/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>JavaScriptの新しい機能について学んでいます。モダンな開発手法がどんどん進化していますね。
 ES2024の新機能を試してみましたが、コードがより簡潔に書けるようになっていて驚きました。特に、非同期処理の書き方が以前よりずっと分かりやすくなっています。
 </description>
         <pubDate>Sun, 19 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-5/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-4/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>UI/UXデザインの重要性について。ユーザーの体験を第一に考えることが大切です。
 ユーザーテストを通じて、実際の使いやすさを検証することが重要です。デザイナーの主観だけでなく、ユーザーの声を聞くことで、より良い製品を作ることができます。
 </description>
         <pubDate>Sat, 18 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-4/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-3/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>Web開発のベストプラクティスについて。コードの可読性と保守性を重視しています。
 チーム開発では特に、他の人が理解しやすいコードを書くことが重要です。コメントを適切に書いたり、命名規則を統一したりすることで、開発効率が大きく向上します。
 </description>
         <pubDate>Fri, 17 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-3/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet-2/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>タイポグラフィについて考えています。文字の選び方で印象が大きく変わりますね。
 フォントの選択、行間、文字間隔など、細かい調整が全体の印象を左右します。読みやすさと美しさのバランスを取るのが難しいところです。
 </description>
         <pubDate>Thu, 16 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet-2/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title></title>
-        <link>http://localhost:1313/tweet/sample-tweet/</link>
+        <link>http://localhost:1313/tweet/</link>
         <description>デザインとWebに関するツイートです。
 良いデザインは、見た目の美しさだけでなく、使いやすさも重要です。ユーザーが直感的に操作できるインターフェースを目指しています。
 最近は特に、アクセシビリティを意識したデザインに注目しています。誰もが使いやすいWebサイトを作ることが、デザイナーとしての使命だと考えています。
 </description>
         <pubDate>Wed, 15 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/tweet/sample-tweet/</guid>
+        <guid>http://localhost:1313/tweet/</guid>
       </item><item>
         <title>「説明しなくても伝わるUI」</title>
         <link>http://localhost:1313/ui-design-guidebook/principles/%E8%AA%AC%E6%98%8E%E3%81%97%E3%81%AA%E3%81%8F%E3%81%A6%E3%82%82%E4%BC%9D%E3%82%8F%E3%82%8Bui/</link>
@@ -1029,11 +1030,11 @@ Modal: ユーザーの注意を強制的に引き、重要な操作や情報を�
         <guid>http://localhost:1313/ui-design-guidebook/principles/%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%A8%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%81%AE%E9%96%A2%E4%BF%82/</guid>
       </item><item>
         <title>サンプルコラム</title>
-        <link>http://localhost:1313/column/sample-column/</link>
+        <link>http://localhost:1313/column/%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E3%82%B3%E3%83%A9%E3%83%A0/</link>
         <description>これはColumnセクションのサンプル記事です。
 </description>
         <pubDate>Wed, 15 Jan 2025 10:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/column/sample-column/</guid>
+        <guid>http://localhost:1313/column/%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E3%82%B3%E3%83%A9%E3%83%A0/</guid>
       </item><item>
         <title>サンプル記事</title>
         <link>http://localhost:1313/ui-design-guidebook/sample-article/</link>
@@ -1441,6 +1442,23 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
 </description>
         <pubDate>Mon, 13 May 2024 04:01:25 UTC</pubDate>
         <guid>http://localhost:1313/column/evil-does-not-exist/</guid>
+      </item><item>
+        <title>2024/05/10</title>
+        <link>http://localhost:1313/diary/2024-05-10/</link>
+        <description>台湾といえば、やっぱり肉粽（ちまき）だと思う。
+あの笹の香りともち米のずっしり感が、土地の空気と結びついている感じがする。台北だったら王記府城の肉粽が最高だ。
+そして今日、初めて気づいたのだが……
+肉粽、コンビニでふつうに売っていた。
+さすが台湾すぎる……！
+﻿ 台湾のコンビニ飯でいうと、僕がめっちゃ好きなのが麻油鶏（マーヨージー）のおにぎりだ。
+麻油鶏とは、台湾のスープ料理である。それがおにぎりの具材になっている。どうだ、混乱するだろう。
+でも食べてみると、ちゃんと米の食感の中から麻油鶏の味がしてくる。いったい何が起きているのか分からない。戸惑いと感動が同時に襲ってくる。
+﻿ 稲田俊輔が、日本料理で「旨味」が重宝されるように、南インド料理では「マズ味」（酸味やエグ味）がうまく使われている、と言っていたが、僕は台湾で暮らして初めて「苦味っておいしいんだな」と感じるようになった。
+そのことを強く実感した料理が二つある。その一つが麻油鶏だ。このおにぎりがおいしいのも、麻油鶏特有の薬膳の苦味が味わえるからだと思う。もう一つは忘れた。思い出したらまた書こう。
+冬に食べる麻油鶏は最高だが（この冬、僕は抑えきれず週三ペースで麻油鶏を食べ、露骨に太った）今日くらいの暑さだとちょっと厳しい。そういうとき、お手軽に麻油鶏の味を楽しむためのものとして、このおにぎりは本当に大発明だと思う。マジで痩せる暇がない。
+</description>
+        <pubDate>Thu, 09 May 2024 17:52:03 UTC</pubDate>
+        <guid>http://localhost:1313/diary/2024-05-10/</guid>
       </item><item>
         <title>必殺仕事記号</title>
         <link>http://localhost:1313/column/the-power-of-the-period/</link>

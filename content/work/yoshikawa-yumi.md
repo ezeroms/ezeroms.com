@@ -4,7 +4,7 @@ date: 2019-05-27T10:23:57.550Z
 slug: yoshikawa-yumi
 image: /images/work/yoshikawa-yumi/18.webp
 start_date: 2019-05-27
-tags:
+work_tag:
   - 紙もの
   - デザイン
 ---

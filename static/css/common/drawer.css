@@ -355,15 +355,15 @@
     border-color: #050317;
 }
 
-.drawer__content .tweet-secondary-nav__tags {
+.drawer__content .secondary-nav__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 0.4rem;
     margin: 0;
     padding: 0;
 }
 
-.drawer__content .sidebar-tag {
+.drawer__content .tag {
     display: inline-block;
     padding: 8px 16px;
     background: rgba(0, 0, 0, 0.05);
@@ -377,12 +377,12 @@
     cursor: pointer;
 }
 
-.drawer__content .sidebar-tag:hover {
+.drawer__content .tag:hover {
     background: rgba(0, 0, 0, 0.1);
     color: #050317;
 }
 
-.drawer__content .sidebar-tag.active {
+.drawer__content .tag.active {
     background: #050317;
     color: #fff;
     font-weight: 600;

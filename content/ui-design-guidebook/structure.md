@@ -1,7 +1,7 @@
 ---
 title: "構成"
 description: "UI Design Guidebookの構成について"
-tags: ["readme"]
+ui_design_guidebook_tag: ["readme"]
 slug: "structure"
 order: 2
 date: 2025-01-15T10:00:00Z
