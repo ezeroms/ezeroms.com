@@ -5,9 +5,18 @@ enableDebug = true
 disableAliases = true
 
 [taxonomies]
-  month = "month"
   subject = "subject"
+  column_category = "column_category"
   topic = "topic"
+  tweet_tag = "tweet_tag"
+  tweet_month = "tweet_month"
+  diary_tag = "diary_tag"
+  diary_month = "diary_month"
+  column_tag = "column_tag"
+  work_tag = "work_tag"
+  work_month = "work_month"
+  chronicle_tag = "chronicle_tag"
+  ui_design_guidebook_tag = "ui_design_guidebook_tag"
 
 [params]
   description = "One thing I can tell you is you got to be free!"
@@ -25,6 +34,9 @@ disableAliases = true
 
 [permalinks]
   diary = "/diary/:slug/"
+  tweet = "/tweet/:slug/"
+  column = "/column/:slug/"
+  work = "/work/:slug/"
 
 [outputFormats]
   [outputFormats.RSS]
@@ -33,10 +45,9 @@ disableAliases = true
     isPlainText = true
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
-  section = ["HTML", "RSS", "JSON"]
-  taxonomy = ["HTML", "RSS", "JSON"]
-  taxonomyTerm = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
 
 [markup]
   [markup.goldmark]

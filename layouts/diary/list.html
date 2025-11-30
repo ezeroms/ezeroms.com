@@ -1,49 +1,5 @@
 {{ define "section_header" }}
-    {{ $allMonths := slice }}
-    {{ range .Pages }}
-        {{ $monthStr := .Date | dateFormat "2006-01" }}
-        {{ if not (in $allMonths $monthStr) }}
-            {{ $allMonths = $allMonths | append $monthStr }}
-        {{ end }}
-    {{ end }}
-    {{ $sortedMonths := sort $allMonths }}
-    {{ $total := len $sortedMonths }}
-    {{ $latestMonth := "" }}
-    {{ if gt $total 0 }}
-        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
-    {{ end }}
-    {{ $latestYear := "" }}
-    {{ $latestMonthNum := "" }}
-    {{ if $latestMonth }}
-        {{ $latestYear = index (split $latestMonth "-") 0 }}
-        {{ $latestMonthNum = index (split $latestMonth "-") 1 }}
-    {{ end }}
-
-    <div class="tweet-header-nav">
-        <div class="tweet-year-selector">
-            <button class="tweet-year-nav" id="prev-year">‹</button>
-            <span class="tweet-year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
-            <button class="tweet-year-nav" id="next-year">›</button>
-        </div>
-
-        <div class="tweet-month-filters" id="tweet-month-filters">
-            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
-            {{ $currentYear := $latestYear }}
-            {{ if not $currentYear }}
-                {{ $currentYear = "2025" }}
-            {{ end }}
-            {{ range $index := seq 1 12 }}
-                {{ $monthNum := printf "%02d" $index }}
-                {{ $yearMonth := printf "%s-%s" $currentYear $monthNum }}
-                {{ $monthName := index $months (sub $index 1) }}
-                {{ $isActive := false }}
-                {{ if eq $yearMonth $latestMonth }}
-                    {{ $isActive = true }}
-                {{ end }}
-                <button class="tweet-filter-btn {{ if $isActive }}active{{ end }}" data-year-month="{{ $yearMonth }}">{{ $monthName }}</button>
-            {{ end }}
-        </div>
-    </div>
+    {{ partial "date-selector-nav-diary.html" . }}
 {{ end }}
 
 {{ define "main" }}
@@ -63,13 +19,13 @@
         {{ $latestMonth = index $sortedMonths (sub $total 1) }}
     {{ end }}
 
-    <section class="diary-main">
-        <div class="diary-main__content">
+    <section class="page-section">
+        <div class="page-section__content">
             <ul class="article-container" id="articles-list">
                        {{ range .Pages }}
                            {{ $yearMonth := .Date | dateFormat "2006-01" }}
                            {{ $displayTitle := .Date | dateFormat "Monday, January 2, 2006" }}
-                           <article class="article-item diary-item" data-year-month="{{ $yearMonth }}" data-tags="{{ if .Params.tags }}{{ delimit .Params.tags " " }}{{ end }}" {{ if ne $yearMonth $latestMonth }}style="display: none;"{{ end }}>
+                           <article class="article-item diary-item">
                                <div class="article-header">
                                    <p class="date">Diary</p>
                                    <h1>
@@ -95,14 +51,25 @@
                                            {{ delimit $parts " · " }}
                                        {{ end }}
                                    </p>
-                                   {{ if .Params.tags }}
-                                       <div class="column-card__tags">
-                                           {{ $sortedTags := sort .Params.tags }}
-                                           {{ range $sortedTags }}
-                                               <a href="?tag={{ . | urlize }}" class="article-tag" data-tag="{{ . }}">{{ . }}</a>
-                                           {{ end }}
-                                       </div>
-                                   {{ end }}
+                            {{ if .Params.diary_tag }}
+                                <div class="article-header__tags">
+                                    {{ $sortedTags := sort .Params.diary_tag }}
+                                    {{ range $sortedTags }}
+                                        {{ $label := . }}
+                                        {{ $taxonomy := "" }}
+                                        {{ range $term, $pages := $.Site.Taxonomies.diary_tag }}
+                                            {{ if eq ($term | urlize) ($label | urlize) }}
+                                                {{ $taxonomy = $pages }}
+                                            {{ end }}
+                                        {{ end }}
+                                        {{ with $taxonomy }}
+                                            <a href="{{ .Page.RelPermalink }}" class="tag" data-tag="{{ $label }}">{{ $label }}</a>
+                                        {{ else }}
+                                            <span class="tag" data-tag="{{ $label }}">{{ $label }}</span>
+                                        {{ end }}
+                                    {{ end }}
+                                </div>
+                            {{ end }}
                                </div>
 
                         {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
@@ -150,252 +117,37 @@
         const yearDisplay = document.getElementById('year-display');
         const prevYearBtn = document.getElementById('prev-year');
         const nextYearBtn = document.getElementById('next-year');
-        const monthFilters = document.getElementById('tweet-month-filters');
-        const diaryItems = document.querySelectorAll('.diary-item');
-
-        // URLパラメータを取得
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlMonth = urlParams.get('month');
-        const urlTag = urlParams.get('tag');
-
-        // 最新の月を取得
-        let latestYearMonth = '';
-        diaryItems.forEach(item => {
-            const yearMonth = item.getAttribute('data-year-month');
-            if (!latestYearMonth || yearMonth > latestYearMonth) {
-                latestYearMonth = yearMonth;
-            }
-        });
-
-        // 初期状態の決定
+        const monthFilters = document.getElementById('date-selector-nav__month-filters');
+        
         let currentYear = parseInt(yearDisplay.textContent);
-        let selectedYearMonth = urlTag ? null : (urlMonth || latestYearMonth);
-        let selectedTag = urlTag || null;
-
-        // URLから年を取得
-        if (urlMonth) {
-            const yearFromMonth = urlMonth.split('-')[0];
-            currentYear = parseInt(yearFromMonth);
-            yearDisplay.textContent = currentYear;
-        }
-
-        function updateURL(month, tag) {
-            const params = new URLSearchParams();
-            if (month) {
-                params.set('month', month);
-            }
-            if (tag) {
-                params.set('tag', tag);
-            }
-            const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-            window.history.pushState({ month: month, tag: tag }, '', newURL);
-        }
 
         function updateMonthButtons(year) {
-            const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-            monthFilters.innerHTML = '';
+            const buttons = monthFilters.querySelectorAll('a');
             
-            for (let i = 1; i <= 12; i++) {
-                const monthNum = String(i).padStart(2, '0');
-                const yearMonth = `${year}-${monthNum}`;
-                const monthName = months[i - 1];
-                const button = document.createElement('button');
-                button.className = 'tweet-filter-btn';
-                button.setAttribute('data-year-month', yearMonth);
-                button.textContent = monthName;
-                
-                // その月に記事があるかチェック
-                let hasArticles = false;
-                diaryItems.forEach(item => {
-                    if (item.getAttribute('data-year-month') === yearMonth) {
-                        hasArticles = true;
-                    }
-                });
-                
-                if (!hasArticles) {
-                    button.style.opacity = '0.4';
-                    button.style.cursor = 'not-allowed';
-                }
-                
-                button.addEventListener('click', function() {
-                    if (hasArticles) {
-                        filterByMonth(yearMonth);
-                    }
-                });
-                monthFilters.appendChild(button);
-            }
-            
-            // 現在選択されている月をアクティブにする
-            if (selectedYearMonth && selectedYearMonth.startsWith(year)) {
-                const activeBtn = monthFilters.querySelector(`[data-year-month="${selectedYearMonth}"]`);
-                if (activeBtn) {
-                    activeBtn.classList.add('active');
-                }
-            }
-        }
-
-        function filterByMonth(yearMonth) {
-            selectedYearMonth = yearMonth;
-            selectedTag = null; // 月を選択したらタグをリセット
-            
-            // アクティブ状態を更新
-            const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
-            allButtons.forEach(btn => {
-                if (btn.getAttribute('data-year-month') === yearMonth) {
-                    btn.classList.add('active');
+            buttons.forEach(btn => {
+                const btnYear = btn.getAttribute('data-year');
+                if (btnYear === String(year)) {
+                    btn.style.display = '';
                 } else {
-                    btn.classList.remove('active');
+                    btn.style.display = 'none';
                 }
             });
-
-            // タグのアクティブ状態をリセット
-            const diaryTags = document.querySelectorAll('.diary-secondary-nav .sidebar-tag');
-            diaryTags.forEach(tagEl => {
-                tagEl.classList.remove('active');
-            });
-
-            // 記事をフィルタリング
-            diaryItems.forEach(item => {
-                const itemYearMonth = item.getAttribute('data-year-month');
-                if (itemYearMonth === yearMonth) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            // URLを更新
-            updateURL(yearMonth, null);
-
-            // ページの先頭に戻る
-            window.scrollTo(0, 0);
-        }
-
-        function filterByTag(tag) {
-            selectedTag = tag;
-            selectedYearMonth = null; // タグを選択したら月をリセット
-            
-            // 月のボタンのアクティブ状態をリセット
-            const allButtons = monthFilters.querySelectorAll('.tweet-filter-btn');
-            allButtons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // タグのアクティブ状態を更新（サイドバー）
-            const diaryTags = document.querySelectorAll('.diary-secondary-nav .sidebar-tag');
-            diaryTags.forEach(tagEl => {
-                if (tagEl.getAttribute('data-tag') === tag) {
-                    tagEl.classList.add('active');
-                } else {
-                    tagEl.classList.remove('active');
-                }
-            });
-
-            // タグのアクティブ状態を更新（記事内）
-            const allDiaryItemTags = document.querySelectorAll('.diary-item .article-tag');
-            allDiaryItemTags.forEach(tagEl => {
-                if (tagEl.getAttribute('data-tag') === tag) {
-                    tagEl.classList.add('active');
-                } else {
-                    tagEl.classList.remove('active');
-                }
-            });
-
-            // 記事をフィルタリング
-            diaryItems.forEach(item => {
-                const tags = item.getAttribute('data-tags');
-                if (tags && tags.includes(tag)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            // URLを更新
-            updateURL(null, tag);
-
-            // ページの先頭に戻る
-            window.scrollTo(0, 0);
         }
 
         prevYearBtn.addEventListener('click', function() {
             currentYear--;
             yearDisplay.textContent = currentYear;
             updateMonthButtons(currentYear);
-            // 選択をリセット
-            selectedYearMonth = '';
-            updateURL(null, selectedTag);
         });
 
         nextYearBtn.addEventListener('click', function() {
             currentYear++;
             yearDisplay.textContent = currentYear;
             updateMonthButtons(currentYear);
-            // 選択をリセット
-            selectedYearMonth = '';
-            updateURL(null, selectedTag);
         });
-
-        // 初期状態の設定
-        if (selectedTag) {
-            filterByTag(selectedTag);
-        } else if (selectedYearMonth) {
-            filterByMonth(selectedYearMonth);
-        }
 
         // 初期状態で月のボタンを更新
         updateMonthButtons(currentYear);
-
-               // タグクリックイベント（セカンダリーナビゲーション）
-               const diaryTags = document.querySelectorAll('.diary-secondary-nav .sidebar-tag');
-               diaryTags.forEach(tag => {
-                   tag.addEventListener('click', function() {
-                       const tagValue = this.getAttribute('data-tag');
-                       filterByTag(tagValue);
-                   });
-               });
-
-               // カード内のタグクリックイベント（親要素へのイベント伝播を防ぐ）
-               document.querySelectorAll('.diary-item .article-tag').forEach(tag => {
-                   tag.addEventListener('click', function(e) {
-                       e.preventDefault();
-                       e.stopPropagation();
-                       const tagValue = this.getAttribute('data-tag');
-                       if (tagValue) {
-                           filterByTag(tagValue);
-                       }
-                   });
-               });
-
-        // ブラウザの戻る/進むボタンに対応
-        window.addEventListener('popstate', function(event) {
-            const params = new URLSearchParams(window.location.search);
-            const month = params.get('month');
-            const tag = params.get('tag');
-            
-            if (tag) {
-                selectedTag = tag;
-                filterByTag(tag);
-            } else if (month) {
-                selectedYearMonth = month;
-                const year = month.split('-')[0];
-                currentYear = parseInt(year);
-                yearDisplay.textContent = currentYear;
-                updateMonthButtons(currentYear);
-                filterByMonth(month);
-            } else {
-                // パラメータがない場合は最新の月を表示
-                selectedTag = null;
-                if (latestYearMonth) {
-                    selectedYearMonth = latestYearMonth;
-                    const year = latestYearMonth.split('-')[0];
-                    currentYear = parseInt(year);
-                    yearDisplay.textContent = currentYear;
-                    updateMonthButtons(currentYear);
-                    filterByMonth(latestYearMonth);
-                }
-            }
-        });
     });
     </script>
 {{ end }}

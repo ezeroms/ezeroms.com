@@ -1,8 +1,8 @@
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
-    <section class="diary-main">
-        <div class="diary-main__content">
+    <section class="page-section">
+        <div class="page-section__content">
             <div class="giants-header" id="giants-header">
                 <div class="giants-header__title-wrapper">
                     <button class="giants-header__link-button" onclick="copyGiantsPageUrl()">
@@ -22,7 +22,7 @@
                     <div class="giants-item__tags">
                         {{ $sortedTopics := sort .Params.topic }}
                         {{ range $sortedTopics }}
-                            <span class="article-tag" data-tag="{{ . }}">{{ . }}</span>
+                            <span class="tag" data-tag="{{ . }}">{{ . }}</span>
                         {{ end }}
                     </div>
                 {{ end }}
@@ -49,7 +49,7 @@
                 }
             });
             // カード内のタグのアクティブ状態を設定
-            const cardTags = document.querySelectorAll('.giants-item .article-tag');
+            const cardTags = document.querySelectorAll('.giants-item .tag');
             cardTags.forEach(tag => {
                 if (tag.getAttribute('data-tag') === selectedTopic) {
                     tag.classList.add('active');
@@ -106,7 +106,7 @@
             });
 
             // カード内のタグのアクティブ状態を更新
-            const cardTags = document.querySelectorAll('.giants-item .article-tag');
+            const cardTags = document.querySelectorAll('.giants-item .tag');
             cardTags.forEach(tag => {
                 if (tag.getAttribute('data-tag') === topic) {
                     tag.classList.add('active');
@@ -146,7 +146,7 @@
 
         // カード内のタグにクリックイベントを追加
         document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('article-tag') && e.target.closest('.giants-item')) {
+                if (e.target.classList.contains('tag') && e.target.closest('.giants-item')) {
                 e.preventDefault();
                 e.stopPropagation();
                 const topic = e.target.getAttribute('data-tag');
@@ -177,7 +177,7 @@
         function showUrlNotification() {
             const notification = document.getElementById('notification');
             if (notification) {
-                notification.textContent = 'Link copied to clipboard!';
+                notification.textContent = 'リンクをコピーしました';
                 notification.className = 'notification show';
                 setTimeout(function() {
                     notification.className = notification.className.replace(' show', '');

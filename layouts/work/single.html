@@ -1,147 +1,12 @@
 {{ define "section_header" }}
-    {{ $currentPage := . }}
-    {{ $allMonths := slice }}
-    {{ range (where .Site.RegularPages "Section" "work") }}
-        {{ $startDate := "" }}
-        {{ $endDate := "" }}
-        {{ if .Params.start_date }}
-            {{ $startDate = .Params.start_date }}
-        {{ end }}
-        {{ if and .Params.end_date (ne .Params.end_date "") }}
-            {{ $endDate = .Params.end_date }}
-        {{ end }}
-        {{ if $startDate }}
-            {{ $start := time $startDate }}
-            {{ $end := $start }}
-            {{ if and $endDate (ne $endDate "") }}
-                {{ $end = time $endDate }}
-            {{ end }}
-            {{ $current := $start }}
-            {{ range $i := seq 0 1000 }}
-                {{ if gt $current $end }}
-                    {{ break }}
-                {{ end }}
-                {{ $monthStr := $current | dateFormat "2006-01" }}
-                {{ if not (in $allMonths $monthStr) }}
-                    {{ $allMonths = $allMonths | append $monthStr }}
-                {{ end }}
-                {{ $current = $current.AddDate 0 1 0 }}
-            {{ end }}
-        {{ end }}
-    {{ end }}
-    {{ $sortedMonths := sort $allMonths }}
-    {{ $currentMonth := "" }}
-        {{ $startDate := "" }}
-        {{ if $currentPage.Params.start_date }}
-            {{ $startDate = $currentPage.Params.start_date }}
-            {{ $currentMonth = (time $startDate) | dateFormat "2006-01" }}
-        {{ end }}
-    {{ $currentYear := "" }}
-    {{ $currentMonthNum := "" }}
-    {{ if $currentMonth }}
-        {{ $currentYear = index (split $currentMonth "-") 0 }}
-        {{ $currentMonthNum = index (split $currentMonth "-") 1 }}
-    {{ end }}
-
-    <div class="tweet-header-nav">
-        <div class="tweet-year-selector">
-            <button class="tweet-year-nav" id="prev-year">‹</button>
-            <span class="tweet-year-display" id="year-display">{{ if $currentYear }}{{ $currentYear }}{{ else }}2025{{ end }}</span>
-            <button class="tweet-year-nav" id="next-year">›</button>
-        </div>
-
-        <div class="tweet-month-filters" id="work-month-filters">
-            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
-            {{ $displayYear := $currentYear }}
-            {{ if not $displayYear }}
-                {{ $displayYear = "2025" }}
-            {{ end }}
-            {{ range $index := seq 1 12 }}
-                {{ $monthNum := printf "%02d" $index }}
-                {{ $yearMonth := printf "%s-%s" $displayYear $monthNum }}
-                {{ $monthName := index $months (sub $index 1) }}
-                {{ $isActive := false }}
-                {{ if eq $yearMonth $currentMonth }}
-                    {{ $isActive = true }}
-                {{ end }}
-                <button class="tweet-filter-btn {{ if $isActive }}active{{ end }}" data-year-month="{{ $yearMonth }}">{{ $monthName }}</button>
-            {{ end }}
-        </div>
-    </div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const yearDisplay = document.getElementById('year-display');
-        const prevYearBtn = document.getElementById('prev-year');
-        const nextYearBtn = document.getElementById('next-year');
-        const monthFilters = document.getElementById('work-month-filters');
-        
-        // 全てのWork記事の年月を取得
-        const allWorkMonths = {{ $sortedMonths | jsonify }};
-        
-        let currentYear = parseInt(yearDisplay.textContent);
-
-        function updateMonthButtons(year) {
-            const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-            monthFilters.innerHTML = '';
-            
-            for (let i = 1; i <= 12; i++) {
-                const monthNum = String(i).padStart(2, '0');
-                const yearMonth = `${year}-${monthNum}`;
-                const monthName = months[i - 1];
-                const button = document.createElement('button');
-                button.className = 'tweet-filter-btn';
-                button.setAttribute('data-year-month', yearMonth);
-                button.textContent = monthName;
-                
-                // その月に作品があるかチェック
-                const hasWorks = allWorkMonths.includes(yearMonth);
-                
-                if (!hasWorks) {
-                    button.style.opacity = '0.4';
-                    button.style.cursor = 'not-allowed';
-                }
-                
-                // 現在の記事の月をアクティブにする
-                const currentMonth = '{{ $currentMonth }}';
-                if (yearMonth === currentMonth) {
-                    button.classList.add('active');
-                }
-                
-                // クリック時に一覧ページに遷移（作品がある場合のみ）
-                button.addEventListener('click', function() {
-                    if (hasWorks) {
-                        window.location.href = '/work/?month=' + yearMonth;
-                    }
-                });
-                
-                monthFilters.appendChild(button);
-            }
-        }
-
-        prevYearBtn.addEventListener('click', function() {
-            currentYear--;
-            yearDisplay.textContent = currentYear;
-            updateMonthButtons(currentYear);
-        });
-
-        nextYearBtn.addEventListener('click', function() {
-            currentYear++;
-            yearDisplay.textContent = currentYear;
-            updateMonthButtons(currentYear);
-        });
-
-        // 初期状態で月のボタンを更新
-        updateMonthButtons(currentYear);
-    });
-    </script>
+    {{ partial "date-selector-nav-work.html" . }}
 {{ end }}
 
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
-    <section class="diary-main">
-        <div class="diary-main__content">
+    <section class="page-section">
+        <div class="page-section__content">
             <ul class="article-container">
                 <article class="article-item work-article">
                     <div class="article-header">
@@ -192,11 +57,11 @@
                                 </div>
                             {{ end }}
                         </div>
-                        {{ if .Params.tags }}
-                            <div class="column-card__tags">
-                                {{ $sortedTags := sort .Params.tags }}
+                        {{ if .Params.work_tag }}
+                            <div class="article-header__tags">
+                                {{ $sortedTags := sort .Params.work_tag }}
                                 {{ range $sortedTags }}
-                                    <a href="/work/?tag={{ . | urlize }}" class="article-tag" data-tag="{{ . }}">{{ . }}</a>
+                                    <a href="/work_tag/{{ . | urlize }}/" class="tag" data-tag="{{ . }}">{{ . }}</a>
                                 {{ end }}
                             </div>
                         {{ end }}
@@ -209,7 +74,7 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         // 記事内のタグクリックイベント
-                        document.querySelectorAll('.work-article .article-tag').forEach(tag => {
+                        document.querySelectorAll('.work-article .tag').forEach(tag => {
                             tag.addEventListener('click', function(e) {
                                 e.preventDefault();
                                 const tagValue = this.getAttribute('data-tag');

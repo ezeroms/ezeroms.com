@@ -25,8 +25,8 @@
 
     {{ $currentCategory := "" }}
     {{ $isReadmePage := false }}
-    {{ if .Params.tags }}
-        {{ range .Params.tags }}
+    {{ if .Params.ui_design_guidebook_tag }}
+        {{ range .Params.ui_design_guidebook_tag }}
             {{ if eq . "components" }}
                 {{ $currentCategory = "components" }}
             {{ else if eq . "patterns" }}
@@ -64,8 +64,8 @@
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
-    <section class="diary-main">
-        <div class="diary-main__content">
+    <section class="page-section">
+        <div class="page-section__content">
             <ul class="article-container">
                 <article class="article-item">
                     <h1>{{ .Title }}</h1>

@@ -4,8 +4,8 @@
             {{ $currentPage := . }}
             {{ $isReadmeIndex := or (eq .RelPermalink "/ui-design-guidebook/") (and (.IsSection) (eq .Section "ui-design-guidebook")) }}
             {{ $isReadmePage := false }}
-            {{ if .Params.tags }}
-                {{ range .Params.tags }}
+            {{ if .Params.ui_design_guidebook_tag }}
+                {{ range .Params.ui_design_guidebook_tag }}
                     {{ if eq . "readme" }}
                         {{ $isReadmePage = true }}
                     {{ end }}
@@ -16,7 +16,7 @@
             {{ if $isReadme }}
                 <!-- Readmeページの場合は「目的」「構成」の目次 -->
                 {{ $readmePages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
-                {{ $readmePages = where $readmePages "Params.tags" "intersect" (slice "readme") }}
+                {{ $readmePages = where $readmePages "Params.ui_design_guidebook_tag" "intersect" (slice "readme") }}
                 {{ $sortedReadme := sort $readmePages "Params.order" "asc" }}
                 {{ range $sortedReadme }}
                     {{ $isActive := false }}
@@ -34,8 +34,8 @@
                 {{ end }}
             {{ else }}
                 {{ $currentCategory := "" }}
-                {{ if .Params.tags }}
-                    {{ range .Params.tags }}
+                {{ if .Params.ui_design_guidebook_tag }}
+                    {{ range .Params.ui_design_guidebook_tag }}
                         {{ if eq . "components" }}
                             {{ $currentCategory = "components" }}
                         {{ else if eq . "patterns" }}
@@ -48,7 +48,7 @@
                 
                 {{ if eq $currentCategory "components" }}
                     {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
-                    {{ $componentsPages = where $componentsPages "Params.tags" "intersect" (slice "components") }}
+                    {{ $componentsPages = where $componentsPages "Params.ui_design_guidebook_tag" "intersect" (slice "components") }}
                     {{ $sortedComponents := sort $componentsPages "Params.order" "asc" }}
                     {{ range $sortedComponents }}
                         {{ $isActive := false }}
@@ -61,7 +61,7 @@
                     {{ end }}
                 {{ else if eq $currentCategory "patterns" }}
                     {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
-                    {{ $patternsPages = where $patternsPages "Params.tags" "intersect" (slice "patterns") }}
+                    {{ $patternsPages = where $patternsPages "Params.ui_design_guidebook_tag" "intersect" (slice "patterns") }}
                     {{ $sortedPatterns := sort $patternsPages "Params.order" "asc" }}
                     {{ range $sortedPatterns }}
                         {{ $isActive := false }}
@@ -74,7 +74,7 @@
                     {{ end }}
                 {{ else if eq $currentCategory "principles" }}
                     {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
-                    {{ $principlesPages = where $principlesPages "Params.tags" "intersect" (slice "principles") }}
+                    {{ $principlesPages = where $principlesPages "Params.ui_design_guidebook_tag" "intersect" (slice "principles") }}
                     {{ $sortedPrinciples := sort $principlesPages "Params.order" "asc" }}
                     {{ range $sortedPrinciples }}
                         {{ $isActive := false }}

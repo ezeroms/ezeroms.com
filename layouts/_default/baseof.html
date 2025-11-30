@@ -14,6 +14,15 @@
 
     <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- JavaScript -->
+    <script>
+        // サイトのベースURLをグローバル変数として設定（外部リンク処理で使用）
+        window.SITE_BASE_URL = '{{ .Site.BaseURL }}';
+    </script>
+    <script src="{{ "js/external-links.js" | relURL }}"></script>
+    <script src="{{ "js/sidebar-minimize.js" | relURL }}"></script>
+    <script src="{{ "js/header-scroll.js" | relURL }}"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ "images/common/favicon/favicon.ico" | relURL }}">
@@ -37,39 +46,99 @@
     <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Site.Params.OgImage }}">
 
 </head>
-<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "media-coverage" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ else if eq .Section "ui-design-guidebook" }} class="is-ui-design-guidebook"{{ end }}>
+{{- $resolvedSection := .Section -}}
+{{- if eq .Kind "term" -}}
+    {{- $pathParts := split (trim .RelPermalink "/") "/" -}}
+    {{- if ge (len $pathParts) 1 -}}
+        {{- $resolvedSection = index $pathParts 0 -}}
+    {{- end -}}
+{{- end -}}
+{{- $taxonomySectionMap := dict
+    "tweet_tag" "tweet"
+    "tweet_month" "tweet"
+    "diary_tag" "diary"
+    "diary_month" "diary"
+    "column_tag" "column"
+    "column_category" "column"
+    "work_tag" "work"
+    "work_month" "work"
+    "chronicle_tag" "chronicle"
+    "ui_design_guidebook_tag" "ui-design-guidebook"
+-}}
+{{- with index $taxonomySectionMap $resolvedSection -}}
+    {{- $resolvedSection = . -}}
+{{- end -}}
+
+{{- $bodyClass := "" -}}
+{{- if .IsHome -}}
+    {{- $bodyClass = "is-home" -}}
+{{- else if eq $resolvedSection "about" -}}
+    {{- $bodyClass = "is-about" -}}
+{{- else if eq $resolvedSection "media-coverage" -}}
+    {{- $bodyClass = "is-about" -}}
+{{- else if eq $resolvedSection "column" -}}
+    {{- $bodyClass = "is-column" -}}
+{{- else if eq $resolvedSection "work" -}}
+    {{- $bodyClass = "is-work" -}}
+{{- else if eq $resolvedSection "ui-design-guidebook" -}}
+    {{- $bodyClass = "is-ui-design-guidebook" -}}
+{{- end -}}
+<body{{ if $bodyClass }} class="{{ $bodyClass }}"{{ end }}>
     <div class="layout-container">
         <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
             {{ partial "sidebar.html" . }}
         </aside>
 
         <div class="layout-body">
-            {{ if and (ne .Section "shoulders-of-giants") (ne .Section "chronicle") }}
+            {{- /* ヘッダーの表示判定 */ -}}
+            {{- $section := $resolvedSection -}}
+            {{- $showHeader := and (ne $section "shoulders-of-giants") (ne $section "chronicle") -}}
+            {{- if $showHeader -}}
             <div class="layout-header">
                 {{ block "section_header" . }}{{ end }}
             </div>
-            {{ end }}
-            <div class="layout-main{{ if .IsHome }} layout-main--centered{{ else if eq .Section "chronicle" }} layout-main--with-toc layout-main--chronicle{{ else if or (eq .Section "shoulders-of-giants") (eq .Section "about") (eq .Section "media-coverage") }} layout-main--with-toc{{ else if eq .Section "ui-design-guidebook" }} layout-main--with-header-toc{{ else }} layout-main--with-tags{{ end }}">
-                {{ if eq .Section "shoulders-of-giants" }}
+            {{- end -}}
+            
+            {{- /* レイアウトクラスの決定 */ -}}
+            {{- $layoutClass := "" -}}
+            {{- if .IsHome -}}
+                {{- $layoutClass = "layout-main--centered" -}}
+            {{- else if eq $resolvedSection "chronicle" -}}
+                {{- $layoutClass = "layout-main--with-toc layout-main--chronicle" -}}
+            {{- else if or (eq $resolvedSection "shoulders-of-giants") (eq $resolvedSection "about") (eq $resolvedSection "media-coverage") -}}
+                {{- $layoutClass = "layout-main--with-toc" -}}
+            {{- else if eq $resolvedSection "ui-design-guidebook" -}}
+                {{- $layoutClass = "layout-main--with-header-toc" -}}
+            {{- else -}}
+                {{- $layoutClass = "layout-main--with-tags" -}}
+            {{- end -}}
+            
+            <div class="layout-main {{ $layoutClass }}">
+                {{- /* TOCの表示判定 */ -}}
+                {{- if eq $resolvedSection "shoulders-of-giants" -}}
                     {{ partial "giants-toc.html" . }}
-                {{ else if eq .Section "ui-design-guidebook" }}
+                {{- else if eq $resolvedSection "ui-design-guidebook" -}}
                     {{ partial "ui-design-guidebook-toc.html" . }}
-                {{ else if or (eq .Section "about") (eq .Section "media-coverage") }}
+                {{- else if or (eq $resolvedSection "about") (eq $resolvedSection "media-coverage") -}}
                     {{ partial "about-toc.html" . }}
-                {{ else if eq .Section "chronicle" }}
+                {{- else if eq $resolvedSection "chronicle" -}}
                     {{ partial "chronicle-toc.html" . }}
-                {{ end }}
+                {{- end -}}
+                
                 <main class="layout-main__content" id="main-content">
                     {{ block "main" . }}{{ end }}
                 </main>
 
-                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "media-coverage") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) }}
+                {{- /* セカンダリーナビゲーションの表示判定 */ -}}
+                {{- $section := $resolvedSection -}}
+                {{- $showSecondaryNav := and (ne $section "ui-design-guidebook") (ne $section "about") (ne $section "media-coverage") (ne $section "shoulders-of-giants") (ne $section "chronicle") (not .IsHome) -}}
+                {{- if $showSecondaryNav -}}
                 <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
                     {{ block "secondary" . }}{{ partial "secondary-nav.html" . }}{{ end }}
                 </aside>
-                {{ else }}
-                {{ block "secondary" . }}{{ end }}
-                {{ end }}
+                {{- else -}}
+                    {{ block "secondary" . }}{{ end }}
+                {{- end -}}
             </div>
         </div>
     </div>
@@ -77,191 +146,5 @@
     <!-- Google Analytics -->
     {{ partial "google_analytics.html" . }}
 
-    <!-- External links handler -->
-    <script>
-        (function() {
-            // DOMContentLoadedを待つ
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', handleExternalLinks);
-            } else {
-                handleExternalLinks();
-            }
-
-            function handleExternalLinks() {
-                const baseURL = '{{ .Site.BaseURL }}';
-                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
-                
-                // 記事内のリンクを取得（.article-item内のリンク）
-                const articleLinks = document.querySelectorAll('.article-item a[href]');
-                
-                articleLinks.forEach(function(link) {
-                    const href = link.getAttribute('href');
-                    
-                    // hrefが空、または既にtarget属性が設定されている場合はスキップ
-                    if (!href || link.hasAttribute('target')) {
-                        return;
-                    }
-                    
-                    // 相対パス、または同じホストの場合は内部リンク
-                    if (href.startsWith('#') || 
-                        href.startsWith('/') || 
-                        href.startsWith('./') ||
-                        href.startsWith('../') ||
-                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
-                        // 内部リンクはそのまま（target属性を追加しない）
-                        return;
-                    }
-                    
-                    // 外部リンクの場合
-                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
-                        link.setAttribute('target', '_blank');
-                        link.setAttribute('rel', 'noopener noreferrer');
-                    }
-                });
-            }
-        })();
-    </script>
-
-    <!-- Sidebar minimize handler -->
-    <script>
-        (function() {
-            function initSidebarMinimize() {
-                const sidebar = document.querySelector('.layout-sidebar');
-                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
-                
-                if (!sidebar || !minimizeBtn) return;
-                
-                // デフォルトは最大化（localStorageは使わない）
-                // 初期状態を更新
-                updateButtonState();
-                
-                // 最小化/最大化ボタンのクリックイベント
-                minimizeBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    sidebar.classList.toggle('is-minimized');
-                    updateButtonState();
-                });
-                
-                function updateButtonState() {
-                    const isMinimized = sidebar.classList.contains('is-minimized');
-                    if (isMinimized) {
-                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
-                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示する');
-                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
-                    } else {
-                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
-                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
-                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
-                    }
-                }
-            }
-            
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
-            } else {
-                initSidebarMinimize();
-            }
-        })();
-    </script>
-
-    <script>
-        (function() {
-            // DOMContentLoadedを待つ
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initHeaderScroll);
-            } else {
-                initHeaderScroll();
-            }
-
-            function initHeaderScroll() {
-                const header = document.querySelector('.layout-header');
-                if (!header) {
-                    console.log('Header not found');
-                    return;
-                }
-
-                // 空のheaderは処理しない
-                if (header.children.length === 0) {
-                    return;
-                }
-
-                let lastScrollTop = 0;
-                let scrollTimeout = null;
-                let isScrollingDown = false;
-                let ticking = false;
-
-                function getScrollTop() {
-                    return window.pageYOffset || document.documentElement.scrollTop || 0;
-                }
-
-                function handleScroll() {
-                    const scrollTop = getScrollTop();
-                    
-                    // スクロール位置が変わっていない場合は処理をスキップ
-                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
-                        return;
-                    }
-
-                    const scrollingDown = scrollTop > lastScrollTop;
-                    const scrollingUp = scrollTop < lastScrollTop;
-
-                    // スクロールタイムアウトをクリア
-                    if (scrollTimeout) {
-                        clearTimeout(scrollTimeout);
-                        scrollTimeout = null;
-                    }
-
-                    // ページトップ付近では常に表示
-                    if (scrollTop <= 100) {
-                        header.classList.remove('hidden');
-                        isScrollingDown = false;
-                        lastScrollTop = scrollTop;
-                        return;
-                    }
-
-                    // 上にスクロールしたら即座に表示
-                    if (scrollingUp) {
-                        header.classList.remove('hidden');
-                        isScrollingDown = false;
-                    }
-                    // 下にスクロールしたら非表示
-                    else if (scrollingDown) {
-                        header.classList.add('hidden');
-                        isScrollingDown = true;
-                    }
-
-                    lastScrollTop = scrollTop;
-
-                    // スクロールが止まったら3秒後に表示（下にスクロールしていた場合のみ）
-                    if (isScrollingDown) {
-                        scrollTimeout = setTimeout(function() {
-                            header.classList.remove('hidden');
-                            isScrollingDown = false;
-                            scrollTimeout = null;
-                        }, 3000);
-                    }
-                }
-
-                // 初期スクロール位置を設定
-                lastScrollTop = getScrollTop();
-
-                // スクロールイベントを監視（throttle付き）
-                window.addEventListener('scroll', function() {
-                    if (!ticking) {
-                        window.requestAnimationFrame(function() {
-                            handleScroll();
-                            ticking = false;
-                        });
-                        ticking = true;
-                    }
-                }, { passive: true });
-
-                // 初期状態を設定
-                handleScroll();
-            }
-        })();
-    </script>
 </body>
 </html>

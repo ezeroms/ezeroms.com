@@ -84,8 +84,8 @@
             <!-- タグ -->
             {{ $allTags := slice }}
             {{ range $chroniclePages }}
-                {{ if .Params.tags }}
-                    {{ range .Params.tags }}
+                {{ if .Params.chronicle_tag }}
+                    {{ range .Params.chronicle_tag }}
                         {{ if not (in $allTags .) }}
                             {{ $allTags = $allTags | append . }}
                         {{ end }}

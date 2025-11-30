@@ -75,7 +75,7 @@
                                                              data-date-precision="{{ if .Params.date_precision }}{{ .Params.date_precision }}{{ else }}day{{ end }}"
                                                              data-category="{{ if .Params.category }}{{ .Params.category }}{{ end }}"
                                                              data-subcategory="{{ if .Params.subcategory }}{{ .Params.subcategory }}{{ end }}"
-                                                             data-tags="{{ if .Params.tags }}{{ delimit .Params.tags " " }}{{ end }}"
+                                                             data-tags="{{ if .Params.chronicle_tag }}{{ delimit .Params.chronicle_tag " " }}{{ end }}"
                                                              data-user-age="{{ if .Params.user_age }}{{ .Params.user_age }}{{ end }}"
                                                              data-title="{{ .Title }}"
                                                              data-description="{{ if .Params.description }}{{ .Params.description }}{{ end }}"
@@ -96,10 +96,10 @@
                                                             {{ if .Content }}
                                                                 <div class="chronicle-event__description">{{ .Content }}</div>
                                                             {{ end }}
-                                                            {{ if .Params.tags }}
+                                                            {{ if .Params.chronicle_tag }}
                                                                 <div class="chronicle-event__tags">
-                                                                    {{ range .Params.tags }}
-                                                                        <span class="article-tag" data-tag="{{ . }}">{{ . }}</span>
+                                                                    {{ range .Params.chronicle_tag }}
+                                                                        <span class="tag" data-tag="{{ . }}">{{ . }}</span>
                                                                     {{ end }}
                                                                 </div>
                                                             {{ end }}
@@ -567,7 +567,7 @@
 
         function updateTagActiveStates() {
             // すべてのカード内のタグを取得
-            const allTagSpans = table.querySelectorAll('.chronicle-event__tags .article-tag[data-tag]');
+            const allTagSpans = table.querySelectorAll('.chronicle-event__tags .tag[data-tag]');
             allTagSpans.forEach(tagSpan => {
                 const tag = tagSpan.getAttribute('data-tag');
                 if (selectedTags.has(tag)) {
@@ -1103,11 +1103,11 @@
                 let tagSpans = [];
                 if (eventData.tagsHTML) {
                     tagsDiv.innerHTML = eventData.tagsHTML;
-                    tagSpans = Array.from(tagsDiv.querySelectorAll('.article-tag[data-tag]'));
+                    tagSpans = Array.from(tagsDiv.querySelectorAll('.tag[data-tag]'));
                 } else {
                     eventData.tags.forEach(tag => {
                         const tagSpan = document.createElement('span');
-                        tagSpan.className = 'article-tag';
+                        tagSpan.className = 'tag';
                         tagSpan.setAttribute('data-tag', tag);
                         tagSpan.textContent = tag;
                         tagsDiv.appendChild(tagSpan);
@@ -1184,7 +1184,7 @@
             event.style.cursor = 'pointer';
             event.addEventListener('click', function(e) {
                 // タグがクリックされた場合はモーダルを開かない
-                if (e.target.closest('.article-tag')) {
+                if (e.target.closest('.tag')) {
                     return;
                 }
                 
@@ -1242,10 +1242,10 @@
             `;
             
             if (eventData.tags && eventData.tags.length > 0) {
-                contentHTML += '<div class="column-card__tags">';
+                contentHTML += '<div class="article-header__tags">';
                 eventData.tags.forEach(tag => {
                     const isActive = selectedTags.has(tag) ? 'active' : '';
-                    contentHTML += `<span class="article-tag ${isActive}" data-tag="${tag}">${tag}</span>`;
+                    contentHTML += `<span class="tag ${isActive}" data-tag="${tag}">${tag}</span>`;
                 });
                 contentHTML += '</div>';
             }
@@ -1267,7 +1267,7 @@
             document.body.style.overflow = 'hidden';
             
             // モーダル内のタグにクリックイベントを追加
-            const modalTags = modalBody.querySelectorAll('.article-tag[data-tag]');
+            const modalTags = modalBody.querySelectorAll('.tag[data-tag]');
             modalTags.forEach(tagSpan => {
                 tagSpan.style.cursor = 'pointer';
                 tagSpan.addEventListener('click', function(e) {
@@ -1604,7 +1604,7 @@
         
         // 初期表示のタグにクリックイベントを追加（既存のタグ要素用）
         function setupTagClickEvents() {
-            const tagSpans = document.querySelectorAll('.chronicle-event__tags .article-tag[data-tag]');
+            const tagSpans = document.querySelectorAll('.chronicle-event__tags .tag[data-tag]');
             tagSpans.forEach(tagSpan => {
                 // 既にイベントリスナーが追加されている場合はスキップ
                 if (tagSpan.hasAttribute('data-click-handled')) {
@@ -1683,7 +1683,7 @@
                 
                 card.addEventListener('click', function(e) {
                     // タグがクリックされた場合はモーダルを開かない
-                    if (e.target.closest('.article-tag')) {
+                    if (e.target.closest('.tag')) {
                         return;
                     }
                     

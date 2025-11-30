@@ -17,7 +17,7 @@
 }
 
 /* Columnページではarticle-containerのmarginとgapを調整 */
-.diary-main__content .article-container.column-list {
+.page-section__content .article-container.column-list {
     margin: 0 0 40px 0;
     gap: 24px;
 }
@@ -34,39 +34,61 @@
     flex-direction: column;
     width: 100%;
     padding: 32px;
-    border: 1px solid #E7E7E9;
-    border-radius: 24px;
-    background-color: #fff;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s ease;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-default);
+    background-color: var(--color-background-white);
+    transition: all var(--transition-normal) var(--easing-default);
     box-sizing: border-box;
 }
 
-
 .column-card:hover {
-    border-color: #6E6D79;
-    transition-duration: 0.2s;
+    border-color: var(--color-border-hover);
+    transition-duration: var(--transition-normal);
+}
+
+.column-list .column-card__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    cursor: pointer;
+}
+
+.column-list .column-card__link:hover {
+    color: inherit;
+}
+
+.column-list .column-card__link:hover .column-card__title {
+    opacity: 0.8;
 }
 
 .column-card__title {
     margin: 0;
-    font-size: 1.125rem;
-    font-weight: 700;
-    line-height: 1.6;
-    color: #050317;
-    letter-spacing: -0.01em;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    letter-spacing: var(--letter-spacing-tight);
 }
 
 /* Column一覧ページのカード内要素間の間隔をmarginで制御 */
+.column-list .column-card > *:first-child {
+    margin-top: 0;
+}
+
+.column-list .column-card__link > *:first-child {
+    margin-top: 0;
+}
+
 .column-list-item .column-card__title {
     margin: 0;
 }
 
 .column-card .date {
     margin: 0 0 -0.25rem;
-    font-size: 0.875rem;
-    color: #7a7a7a;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
 }
 
 /* Column一覧ページのカード内要素間の間隔をmarginで制御 */
@@ -74,48 +96,31 @@
     margin: 0 0 1rem 0;
 }
 
-/* Column一覧ページのタイトルとタグの間に2rem */
-.column-list-item .column-card .column-card__title + .column-card__tags {
-    margin-top: 2rem;
-}
-
 .column-card__description {
-    margin: 8px 0 0;
-    font-size: 0.875rem;
-    color: #5D5D5F;
-    line-height: 1.6;
+    margin: var(--spacing-sm) 0 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
 }
 
-.column-card__tags {
+.article-header__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.375rem;
-    margin-top: 16px;
+    gap: 0.4rem;
+    margin-top: 2rem;
     margin-bottom: 0;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Column一覧ページのカード内要素間の間隔をmarginで制御 */
-.column-list-item .column-card__tags {
-    margin-top: 1rem;
-    margin-bottom: 0;
-}
-
-/* Columnの記事詳細ページのタグ一覧の上のmarginを0にする */
-.article-item .column-card__tags {
-    margin-top: 0;
-}
+/* 記事ヘッダー内のタグリストのスタイルは article-item.css で統一管理 */
 
 /* Column詳細ページのarticle-header内のスペース調整 */
 .article-header > .date {
     margin-bottom: 1rem;
 }
 
-/* Column詳細ページのタイトルとタグの間に2rem */
-.article-header > h1 + .column-card__tags {
-    margin-top: 2rem !important;
-}
+/* 記事ヘッダー内のタグリストのスタイルは article-item.css で統一管理 */
 
 /* 記事内のタグスタイルは共通クラス（article-tag）で管理 */
 
@@ -153,18 +158,18 @@
 
 .breadcrumb__item:not(:last-child)::after {
     content: "›";
-    margin-left: 8px;
-    color: #5D5D5F;
+    margin-left: var(--spacing-sm);
+    color: var(--color-text-secondary);
 }
 
 .breadcrumb__link {
-    color: #5D5D5F;
+    color: var(--color-text-secondary);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color var(--transition-normal) var(--easing-default);
 }
 
 .breadcrumb__link:hover {
-    color: #050317;
+    color: var(--color-text-primary);
     text-decoration: underline;
 }
 
@@ -192,9 +197,14 @@
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
     width: 100%;
     min-width: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.column-header__nav::-webkit-scrollbar {
+    display: none;
 }
 
 .column-header__tab,

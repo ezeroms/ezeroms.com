@@ -1,18 +1,23 @@
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
-    <section class="diary-main">
-        <div class="diary-main__content">
+    <section class="page-section">
+        <div class="page-section__content">
             <ul class="article-container tweet-container">
                 <article class="article-item tweet-item">
                     <div class="tweet-item__bubble">
                         <div class="tweet-item__text{{ if .Params.voice }} tweet-item__text--{{ .Params.voice }}{{ end }}">{{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}</div>
                         <div class="tweet-item__bottom">
-                            {{ if .Params.tags }}
+                            {{ if .Params.tweet_tag }}
                                 <div class="tweet-item__tags">
-                                    {{ $sortedTags := sort .Params.tags }}
+                                    {{ $sortedTags := sort .Params.tweet_tag }}
                                     {{ range $sortedTags }}
-                                        <span class="article-tag" data-tag="{{ . }}">{{ . }}</span>
+                                        {{ $tagPage := index $.Site.Taxonomies.tweet_tag (. | urlize) }}
+                                        {{ if $tagPage }}
+                                            <a href="{{ $tagPage.Page.RelPermalink }}" class="tag" data-tag="{{ . }}">{{ . }}</a>
+                                        {{ else }}
+                                            <span class="tag" data-tag="{{ . }}">{{ . }}</span>
+                                        {{ end }}
                                     {{ end }}
                                 </div>
                             {{ end }}

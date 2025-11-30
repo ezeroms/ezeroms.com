@@ -1,62 +1,22 @@
 {{ define "section_header" }}
-    {{ $categoryNames := dict
-        "music" "音楽"
-        "manga-and-anime" "漫画・アニメ"
-        "movies-and-dramas" "映画・ドラマ"
-        "comedy" "お笑い"
-        "gaming" "ゲーム"
-        "sports" "スポーツ"
-        "books-and-magazines" "本・雑誌"
-        "politics" "政治"
-        "economy-and-business" "経済・ビジネス"
-        "languages" "言葉・言語"
-        "foreign-cultures" "海外文化"
-        "design-and-creative" "デザイン・クリエイティブ"
-        "internet-and-technology" "インターネット・技術"
-        "natural-science" "自然科学"
-        "humanities-and-social-sciences" "人文・社会科学"
-    }}
-    <div class="column-header">
-        <nav class="column-header__nav">
-            {{ $allCategories := slice }}
-            {{ range .Site.RegularPages.ByDate.Reverse }}
-                {{ if eq .Section "column" }}
-                    {{ if .Params.subject }}
-                        {{ range .Params.subject }}
-                            {{ if not (in $allCategories .) }}
-                                {{ $allCategories = $allCategories | append . }}
-                            {{ end }}
-                        {{ end }}
-                    {{ end }}
-                {{ end }}
-            {{ end }}
-            {{ $sortedCategories := sort $allCategories }}
-            <button class="column-header__tab" data-category="all">すべて</button>
-            {{ range $sortedCategories }}
-                {{ $categoryName := index $categoryNames . }}
-                {{ if $categoryName }}
-                    <a class="column-header__tab {{ if in $.Params.subject . }}active{{ end }}" href="/column/?category={{ . }}">{{ $categoryName }}</a>
-                {{ end }}
-            {{ end }}
-        </nav>
-    </div>
+    {{ partial "column-header-nav.html" . }}
 {{ end }}
 
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
-    <section class="diary-main">
-        <div class="diary-main__content">
+    <section class="page-section">
+        <div class="page-section__content">
             <ul class="article-container">
                 <article class="article-item">
                     <div class="article-header">
                         <p class="date">Column · {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
                         <h1>{{ .Title }}</h1>
-                        {{ if .Params.tags }}
-                            <div class="column-card__tags">
-                                {{ $sortedTags := sort .Params.tags }}
+                        {{ if .Params.column_tag }}
+                            <div class="article-header__tags">
+                                {{ $sortedTags := sort .Params.column_tag }}
                                 {{ range $sortedTags }}
-                                    <a href="/column/?tag={{ . | urlize }}" class="article-tag" data-tag="{{ . }}">{{ . }}</a>
+                                    <a href="/column_tag/{{ . | urlize }}/" class="tag" data-tag="{{ . }}">{{ . }}</a>
                                 {{ end }}
                             </div>
                         {{ end }}
@@ -72,7 +32,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 記事内のタグクリックイベント
-            document.querySelectorAll('.article-item .article-tag').forEach(tag => {
+            document.querySelectorAll('.article-item .tag').forEach(tag => {
                 tag.addEventListener('click', function(e) {
                     e.preventDefault();
                     const tagValue = this.getAttribute('data-tag');

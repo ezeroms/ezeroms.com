@@ -3,5 +3,3 @@ title: "Tweet"
 layout: "list"
 ---
 
-
-

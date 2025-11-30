@@ -1,11 +1,10 @@
 <div class="diary-secondary-nav">
     <div class="diary-secondary-nav__section">
-        <p class="diary-secondary-nav__heading">Tags</p>
-        <div class="tweet-secondary-nav__tags">
+        <div class="secondary-nav__tags">
             {{ $allTags := slice }}
             {{ range (where .Site.RegularPages "Section" "column") }}
-                {{ if .Params.tags }}
-                    {{ range .Params.tags }}
+                {{ if .Params.column_tag }}
+                    {{ range .Params.column_tag }}
                         {{ if not (in $allTags .) }}
                             {{ $allTags = $allTags | append . }}
                         {{ end }}
@@ -13,8 +12,16 @@
                 {{ end }}
             {{ end }}
             {{ $sortedTags := sort $allTags }}
+            {{ $currentTag := "" }}
+            {{ if and .Data .Data.Term }}
+                {{ $currentTag = .Data.Term | urlize }}
+            {{ end }}
             {{ range $sortedTags }}
-                <a href="/column/?tag={{ . | urlize }}" class="sidebar-tag" data-tag="{{ . }}" data-tag-urlized="{{ . | urlize }}">{{ . }}</a>
+                {{ $isActive := false }}
+                {{ if and $currentTag (eq (. | urlize) $currentTag) }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <a href="/column_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}">{{ . }}</a>
             {{ end }}
         </div>
     </div>

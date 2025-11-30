@@ -48,25 +48,16 @@
             // 初期状態の決定
             let selectedCategory = urlCategory || 'all';
 
-            function updateURL(category) {
-                const params = new URLSearchParams();
-                if (category && category !== 'all') {
-                    params.set('category', category);
-                }
-                const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-                window.history.pushState({ category: category }, '', newURL);
-            }
-
             function filterByCategory(category) {
                 selectedCategory = category;
 
                 // アクティブ状態を更新
-                const allButtons = categoryFilters.querySelectorAll('.column-header__tab[data-category]');
-                allButtons.forEach(btn => {
-                    if (btn.getAttribute('data-category') === category) {
-                        btn.classList.add('active');
+                const allTabs = categoryFilters.querySelectorAll('.column-header__tab');
+                allTabs.forEach(tab => {
+                    if (tab.getAttribute('data-category') === category) {
+                        tab.classList.add('active');
                     } else {
-                        btn.classList.remove('active');
+                        tab.classList.remove('active');
                     }
                 });
 
@@ -80,13 +71,17 @@
                     }
                 });
 
+                // 空の状態メッセージを更新
+
                 // URLを更新
-                updateURL(category);
+                const newURL = window.location.pathname + (category === 'all' ? '' : '?category=' + category);
+                window.history.pushState({ category: category }, '', newURL);
             }
 
-            // カテゴリボタンのクリックイベント
-            categoryFilters.querySelectorAll('.column-header__tab[data-category]').forEach(btn => {
-                btn.addEventListener('click', function() {
+            // カテゴリタブのクリックイベント
+            const categoryTabs = categoryFilters.querySelectorAll('.column-header__tab');
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
                     const category = this.getAttribute('data-category');
                     filterByCategory(category);
                 });
@@ -108,3 +103,4 @@
 {{ define "secondary" }}
     {{ partial "column_menu.html" . }}
 {{ end }}
+

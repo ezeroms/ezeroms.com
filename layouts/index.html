@@ -1,6 +1,6 @@
 {{ define "main" }}
-    <section class="top-main">
-        <div class="top-main__content">
+    <section class="page-section page-section--top">
+        <div class="page-section__content page-section__content--narrow">
             <a href="/" class="top-logo">
                 <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo__img">
             </a>
@@ -20,23 +20,7 @@
         </div>
     </section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var imageContainer = document.getElementById("image-container");
-            var imagesData = imageContainer.getAttribute("data-images");
-            try {
-                var images = JSON.parse(imagesData);
-                if (images.length > 0) {
-                    var randomIndex = Math.floor(Math.random() * images.length);
-                    var randomImage = images[randomIndex].Name;
-                    var timestamp = new Date().getTime();
-                    document.getElementById("randomImage").src = "/images/top/" + randomImage + "?v=" + timestamp;
-                }
-            } catch (e) {
-                console.error("Error parsing images data:", e);
-            }
-        });
-    </script>
+    <script src="{{ "js/random-image.js" | relURL }}"></script>
 {{ end }}
 
 {{ define "secondary" }}
