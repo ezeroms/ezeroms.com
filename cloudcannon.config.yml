@@ -31,6 +31,13 @@ collections_config:
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
+  tweet:
+    path: content/tweet
+    name: Tweet
+    icon: chat
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
   data:
     path: data
     name: Data
