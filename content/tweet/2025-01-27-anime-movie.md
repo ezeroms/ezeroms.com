@@ -1,12 +1,12 @@
 ---
 date: 2025-01-27T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 🎬
 tweet_tag:
   - animation
   - アニメ
   - 映画
-diary_place: Shibuya
+tweet_place: Shibuya
 ---
 
 アニメ映画について。ストーリーとビジュアルの両立が重要です。

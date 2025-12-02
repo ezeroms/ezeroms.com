@@ -1,11 +1,11 @@
 ---
 date: 2025-01-20T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 📸
 tweet_tag:
   - design
   - photography
-diary_place: New York
+tweet_place: New York
 ---
 
 写真撮影について考えています。光と影のバランスが重要ですね。

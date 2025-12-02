@@ -1,0 +1,77 @@
+{{ define "section_header" }}
+    {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
+    {{ $componentsPages = where $componentsPages "Params.ui_design_guidebook_tag" "intersect" (slice "components") }}
+    {{ $firstComponent := "" }}
+    {{ if gt (len $componentsPages) 0 }}
+        {{ $sortedComponents := sort $componentsPages "Params.order" "asc" }}
+        {{ $firstComponent = index $sortedComponents 0 }}
+    {{ end }}
+
+    {{ $patternsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
+    {{ $patternsPages = where $patternsPages "Params.ui_design_guidebook_tag" "intersect" (slice "patterns") }}
+    {{ $firstPattern := "" }}
+    {{ if gt (len $patternsPages) 0 }}
+        {{ $sortedPatterns := sort $patternsPages "Params.order" "asc" }}
+        {{ $firstPattern = index $sortedPatterns 0 }}
+    {{ end }}
+
+    {{ $principlesPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
+    {{ $principlesPages = where $principlesPages "Params.ui_design_guidebook_tag" "intersect" (slice "principles") }}
+    {{ $firstPrinciple := "" }}
+    {{ if gt (len $principlesPages) 0 }}
+        {{ $sortedPrinciples := sort $principlesPages "Params.order" "asc" }}
+        {{ $firstPrinciple = index $sortedPrinciples 0 }}
+    {{ end }}
+
+    <div class="column-header">
+        <nav class="column-header__nav" id="ui-design-guidebook-category-filters">
+            <a href="/ui-design-guidebook/" class="column-header__tab">Readme</a>
+            <a href="/ui-design-guidebook/components/" class="column-header__tab active">Components</a>
+            {{ if $firstPattern }}
+                <a href="/ui-design-guidebook/patterns/" class="column-header__tab">Patterns</a>
+            {{ else }}
+                <span class="column-header__tab">Patterns</span>
+            {{ end }}
+            {{ if $firstPrinciple }}
+                <a href="/ui-design-guidebook/principles/" class="column-header__tab">Principles</a>
+            {{ else }}
+                <span class="column-header__tab">Principles</span>
+            {{ end }}
+        </nav>
+    </div>
+{{ end }}
+
+{{ define "main" }}
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <h1>{{ .Title }}</h1>
+                    {{ if .Params.description }}
+                        <p class="article-item__description">{{ .Params.description }}</p>
+                    {{ end }}
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    
+                    <h2>コンポーネント一覧</h2>
+                    <ul>
+                        {{ $componentsPages := where .Site.RegularPages "Section" "ui-design-guidebook" }}
+                        {{ $componentsPages = where $componentsPages "Params.ui_design_guidebook_tag" "intersect" (slice "components") }}
+                        {{ $sortedComponents := sort $componentsPages "Params.order" "asc" }}
+                        {{ range $sortedComponents }}
+                            <li>
+                                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                                {{ if .Params.description }}
+                                    <p>{{ .Params.description }}</p>
+                                {{ end }}
+                            </li>
+                        {{ end }}
+                    </ul>
+                </article>
+            </ul>
+        </div>
+    </section>
+{{ end }}
+
+{{ define "secondary" }}
+{{ end }}
+

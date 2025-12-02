@@ -1,141 +1,33 @@
-{{ define "section_header" }}
-    {{ partial "date-selector-nav-tweet.html" . }}
-{{ end }}
-
-{{ define "main" }}
-    {{ partial "notification.html" . }}
-
-    {{ $allMonths := slice }}
-    {{ range .Pages }}
+{{/* Tweet一覧ページを最新記事の月のアーカイブページにリダイレクト */}}
+{{ $tweetSection := .Site.GetPage "section" "tweet" }}
+{{ $allMonths := slice }}
+{{ if $tweetSection }}
+    {{ range $tweetSection.Pages }}
         {{ $monthStr := .Date | dateFormat "2006-01" }}
         {{ if not (in $allMonths $monthStr) }}
             {{ $allMonths = $allMonths | append $monthStr }}
         {{ end }}
     {{ end }}
-    {{ $sortedMonths := sort $allMonths }}
-    {{ $total := len $sortedMonths }}
-    {{ $latestMonth := "" }}
-    {{ if gt $total 0 }}
-        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+{{ end }}
+{{ $sortedMonths := sort $allMonths }}
+{{ $total := len $sortedMonths }}
+{{ $latestMonth := "" }}
+{{ $redirectURL := "/tweet/" }}
+{{ if gt $total 0 }}
+    {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ $monthPage := index .Site.Taxonomies.tweet_month ($latestMonth | urlize) }}
+    {{ if $monthPage }}
+        {{ $redirectURL = $monthPage.Page.RelPermalink }}
     {{ end }}
-
-    <section class="page-section">
-        <div class="page-section__content">
-            <ul class="article-container tweet-container" id="tweet-list">
-                {{ range .Pages }}
-                    {{ $yearMonth := .Date | dateFormat "2006-01" }}
-                    <article class="article-item tweet-item">
-                        <div class="tweet-item__bubble">
-                            <div class="tweet-item__text{{ if .Params.voice }} tweet-item__text--{{ .Params.voice }}{{ end }}">{{ .Content }}</div>
-                            <div class="tweet-item__bottom">
-                                {{ if .Params.tweet_tag }}
-                                    <div class="tweet-item__tags">
-                                        {{ $sortedTags := sort .Params.tweet_tag }}
-                                        {{ range $sortedTags }}
-                                            {{ $label := . }}
-                                            {{ $taxonomy := "" }}
-                                            {{ range $term, $pages := $.Site.Taxonomies.tweet_tag }}
-                                                {{ if eq ($term | urlize) ($label | urlize) }}
-                                                    {{ $taxonomy = $pages }}
-                                                {{ end }}
-                                            {{ end }}
-                                            {{ with $taxonomy }}
-                                                <a href="{{ .Page.RelPermalink }}" class="tag">{{ $label }}</a>
-                                            {{ else }}
-                                                <span class="tag">{{ $label }}</span>
-                                            {{ end }}
-                                        {{ end }}
-                                    </div>
-                                {{ end }}
-                                <div class="tweet-item__footer">
-                                        <p class="date tweet-item__date">
-                                            {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.diary_place }} · <span class="tweet-item__place-link">{{ .Params.diary_place }}</span>{{ end }}
-                                        </p>
-                                </div>
-                            </div>
-                            <div class="tweet-item__emoji" aria-label="{{ if .Params.voice }}{{ .Params.voice }}{{ else }}通常の声{{ end }}">{{ if .Params.emoji }}{{ .Params.emoji }}{{ else }}😊{{ end }}</div>
-                        </div>
-                    </article>
-                {{ end }}
-            </ul>
-        </div>
-    </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const yearSelector = document.querySelector('.date-selector-nav__year-selector');
-            const yearDisplay = document.getElementById('year-display');
-            const prevYearBtn = document.getElementById('prev-year');
-            const nextYearBtn = document.getElementById('next-year');
-            const monthFilters = document.getElementById('date-selector-nav__month-filters');
-            
-            if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
-                return;
-            }
-            
-            let currentYear = parseInt(yearDisplay.textContent);
-            const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
-            const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
-
-            function updateMonthButtons(year) {
-                // <a>タグと<span>タグの両方を対象にする
-                const buttons = monthFilters.querySelectorAll('a, span');
-                
-                buttons.forEach(btn => {
-                    const btnYear = btn.getAttribute('data-year');
-                    if (btnYear === String(year)) {
-                        btn.style.display = '';
-                    } else {
-                        btn.style.display = 'none';
-                    }
-                });
-            }
-
-            function updateYearButtons() {
-                if (currentYear <= minYear) {
-                    prevYearBtn.classList.add('disabled');
-                    prevYearBtn.disabled = true;
-                } else {
-                    prevYearBtn.classList.remove('disabled');
-                    prevYearBtn.disabled = false;
-                }
-                
-                if (currentYear >= maxYear) {
-                    nextYearBtn.classList.add('disabled');
-                    nextYearBtn.disabled = true;
-                } else {
-                    nextYearBtn.classList.remove('disabled');
-                    nextYearBtn.disabled = false;
-                }
-            }
-
-            prevYearBtn.addEventListener('click', function() {
-                if (currentYear > minYear) {
-                    currentYear--;
-                    yearDisplay.textContent = currentYear;
-                    updateMonthButtons(currentYear);
-                    updateYearButtons();
-                }
-            });
-
-            nextYearBtn.addEventListener('click', function() {
-                if (currentYear < maxYear) {
-                    currentYear++;
-                    yearDisplay.textContent = currentYear;
-                    updateMonthButtons(currentYear);
-                    updateYearButtons();
-                }
-            });
-
-            // 初期状態で月のボタンと年選択ボタンを更新
-            updateMonthButtons(currentYear);
-            updateYearButtons();
-        });
-    </script>
 {{ end }}
-
-{{ define "secondary" }}
-    {{ partial "tweet_menu.html" . }}
-{{ end }}
-
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0;url={{ $redirectURL }}">
+    <link rel="canonical" href="{{ $redirectURL }}">
+</head>
+<body>
+    <script>window.location.replace("{{ $redirectURL }}");</script>
+</body>
+</html>

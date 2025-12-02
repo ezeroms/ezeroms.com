@@ -4,6 +4,8 @@ date: 2019-01-13T10:18:16.732Z
 slug: nuclear-regulation-authority
 image: /images/work/nuclear-regulation-authority/15.webp
 start_date: 2019-01-13
+work_category:
+  - graphic
 work_tag:
   - 紙もの
   - デザイン

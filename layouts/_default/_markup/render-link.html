@@ -1,0 +1,11 @@
+{{- if strings.HasPrefix .Destination "spotify:" -}}
+  {{- $parts := split (strings.TrimPrefix "spotify:" .Destination) "/" -}}
+  {{- $type := index $parts 0 | default "track" -}}
+  {{- $id := index $parts 1 -}}
+  <iframe src="https://open.spotify.com/embed/{{ $type }}/{{ $id }}" width="100%" height="152" frameborder="0" allowtransparency="true" allow="encrypted-media" class="spotify"></iframe>
+{{- else if strings.HasPrefix .Destination "youtube:" -}}
+  {{- $id := strings.TrimPrefix "youtube:" .Destination -}}
+  <iframe src="https://www.youtube.com/embed/{{ $id }}" width="100%" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="youtube"></iframe>
+{{- else -}}
+  <a href="{{ .Destination }}"{{ with .Title}} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- end -}}

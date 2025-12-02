@@ -53,9 +53,20 @@
                             </p>
                             {{ if .Params.diary_tag }}
                                 <div class="article-header__tags">
+                                    {{ $currentTag := "" }}
+                                    {{ if hasPrefix $.RelPermalink "/diary_tag/" }}
+                                        {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                        {{ if ge (len $pathParts) 2 }}
+                                            {{ $currentTag = index $pathParts 1 }}
+                                        {{ end }}
+                                    {{ end }}
                                     {{ $sortedTags := sort .Params.diary_tag }}
                                     {{ range $sortedTags }}
                                         {{ $label := . }}
+                                        {{ $isActive := false }}
+                                        {{ if and $currentTag (eq ($label | urlize) $currentTag) }}
+                                            {{ $isActive = true }}
+                                        {{ end }}
                                         {{ $taxonomy := "" }}
                                         {{ range $term, $pages := $.Site.Taxonomies.diary_tag }}
                                             {{ if eq ($term | urlize) ($label | urlize) }}
@@ -63,9 +74,9 @@
                                             {{ end }}
                                         {{ end }}
                                         {{ with $taxonomy }}
-                                            <a href="{{ .Page.RelPermalink }}" class="tag" data-tag="{{ $label }}">{{ $label }}</a>
+                                            <a href="{{ .Page.RelPermalink }}" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</a>
                                         {{ else }}
-                                            <span class="tag" data-tag="{{ $label }}">{{ $label }}</span>
+                                            <span class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</span>
                                         {{ end }}
                                     {{ end }}
                                 </div>
@@ -134,9 +145,23 @@
             buttons.forEach(btn => {
                 const btnYear = btn.getAttribute('data-year');
                 if (btnYear === String(year)) {
-                    btn.style.display = '';
+                    // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                    const currentStyle = btn.getAttribute('style') || '';
+                    if (currentStyle.includes('display: none')) {
+                        const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                        if (newStyle) {
+                            btn.setAttribute('style', newStyle);
+                        } else {
+                            btn.removeAttribute('style');
+                        }
+                    }
                 } else {
-                    btn.style.display = 'none';
+                    // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                    const currentStyle = btn.getAttribute('style') || '';
+                    if (!currentStyle.includes('display: none')) {
+                        const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                        btn.setAttribute('style', newStyle);
+                    }
                 }
             });
         }

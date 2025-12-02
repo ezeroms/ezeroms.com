@@ -13,8 +13,12 @@
             {{ end }}
             {{ $sortedTags := sort $allTags }}
             {{ $currentTag := "" }}
-            {{ if and .Data .Data.Term }}
-                {{ $currentTag = .Data.Term | urlize }}
+            {{/* RelPermalinkから現在のタグを取得 */}}
+            {{ if hasPrefix .RelPermalink "/tweet_tag/" }}
+                {{ $pathParts := split (trim .RelPermalink "/") "/" }}
+                {{ if ge (len $pathParts) 2 }}
+                    {{ $currentTag = index $pathParts 1 }}
+                {{ end }}
             {{ end }}
             {{ range $sortedTags }}
                 {{ $label := . }}

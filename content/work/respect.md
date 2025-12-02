@@ -4,6 +4,8 @@ date: 2017-08-29T10:20:29.341Z
 slug: respect
 image: /images/work/respect/16.webp
 start_date: 2017-08-29
+work_category:
+  - graphic
 work_tag:
   - 紙もの
   - デザイン

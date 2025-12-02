@@ -1,12 +1,12 @@
 ---
 date: 2025-02-01T10:00:00Z
-diary_month: 2025-02
+tweet_month: 2025-02
 emoji: 📢
 voice: louder
 tweet_tag:
   - サンプル
   - 声
-diary_place: Tokyo
+tweet_place: Tokyo
 ---
 
 これはもっと大声のサンプルです。

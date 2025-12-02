@@ -4,6 +4,10 @@ date: 2019-11-04T10:29:32.128Z
 slug: pixelopolis
 image: /images/work/pixelopolis/06.webp
 start_date: 2019-11-04
+work_category:
+  - webapp
+  - graphic
+  - video
 work_tag:
   - Webサイト
   - 映像制作

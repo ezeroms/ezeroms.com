@@ -4,6 +4,8 @@ date: 2022-09-28T10:41:43.938Z
 slug: urameri
 image: /images/work/urameri/04.webp
 start_date: 2022-09-28
+work_category:
+  - website
 work_tag:
   - Webサイト
   - デザイン

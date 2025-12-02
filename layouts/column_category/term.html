@@ -16,20 +16,18 @@
                         {{ $tags = .Params.column_tag }}
                     {{ end }}
                     <li class="column-list-item column-item" data-categories="{{ delimit $categories " " }}" data-tags="{{ delimit $tags " " }}">
-                        <div class="column-card">
-                            <a href="{{ .RelPermalink }}" class="column-card__link">
-                                <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
-                                <h3 class="column-card__title">{{ .Title }}</h3>
-                            </a>
+                        <a href="{{ .RelPermalink }}" class="column-card">
+                            <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                            <h3 class="column-card__title">{{ .Title }}</h3>
                             {{ if .Params.column_tag }}
                                 <div class="article-header__tags">
                                     {{ $sortedTags := sort .Params.column_tag }}
                                     {{ range $sortedTags }}
-                                        <a href="/column_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                                        <a href="/column_tag/{{ . | urlize }}/" class="tag" onclick="event.stopPropagation()">{{ . }}</a>
                                     {{ end }}
                                 </div>
                             {{ end }}
-                        </div>
+                        </a>
                     </li>
                 {{ end }}
             </ul>

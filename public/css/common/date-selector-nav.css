@@ -19,16 +19,18 @@
     background: transparent;
     border: none;
     color: var(--color-text-primary);
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 300;
     cursor: pointer;
     padding: 0;
     width: 2rem;
     height: 2rem;
     display: flex;
-    align-items: center;
     justify-content: center;
     transition: all var(--transition-normal) var(--easing-default);
+    text-decoration: none;
+    line-height: 1;
+    vertical-align: middle;
 }
 
 .date-selector-nav__year-nav:hover:not(.disabled) {
@@ -47,6 +49,14 @@
     color: var(--color-text-primary);
     min-width: 3.75rem;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    line-height: 1;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
 }
 
 .date-selector-nav__month-filters {

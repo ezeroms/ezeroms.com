@@ -1,12 +1,12 @@
 ---
 date: 2025-01-18T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 🎯
 tweet_tag:
   - design
   - ui
   - ux
-diary_place: Kyoto
+tweet_place: Kyoto
 ---
 
 UI/UXデザインの重要性について。ユーザーの体験を第一に考えることが大切です。

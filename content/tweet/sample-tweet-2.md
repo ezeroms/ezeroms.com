@@ -1,12 +1,12 @@
 ---
-date: 2025-01-16T10:00:00Z
-diary_month: 2024-01
+date: 2024-01-16T10:00:00Z
+tweet_month: 2024-01
 emoji: 📝
 voice: shaky
 tweet_tag:
   - design
   - typography
-diary_place: Osaka
+tweet_place: Osaka
 ---
 
 タイポグラフィについて考えています。文字の選び方で印象が大きく変わりますね。

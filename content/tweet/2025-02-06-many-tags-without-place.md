@@ -1,6 +1,6 @@
 ---
 date: 2025-02-06T10:00:00Z
-diary_month: 2025-02
+tweet_month: 2025-02
 emoji: 📌
 tweet_tag:
   - 音楽

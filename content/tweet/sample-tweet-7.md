@@ -1,6 +1,6 @@
 ---
 date: 2025-01-21T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 🎨
 tweet_tag:
   - web

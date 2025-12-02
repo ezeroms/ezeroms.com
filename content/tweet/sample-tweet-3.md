@@ -1,6 +1,6 @@
 ---
-date: 2025-01-17T10:00:00Z
-diary_month: 2024-01
+date: 2024-02-17T10:00:00Z
+tweet_month: 2024-02
 emoji: 💻
 voice: secret
 tweet_tag:

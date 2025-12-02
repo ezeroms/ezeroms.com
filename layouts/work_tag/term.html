@@ -1,115 +1,5 @@
 {{ define "section_header" }}
-    {{ $allMonths := slice }}
-    {{ range .Pages }}
-        {{ $startDate := "" }}
-        {{ $endDate := "" }}
-        {{ if .Params.start_date }}
-            {{ $startDate = .Params.start_date }}
-        {{ end }}
-        {{ if and .Params.end_date (ne .Params.end_date "") }}
-            {{ $endDate = .Params.end_date }}
-        {{ end }}
-        {{ if $startDate }}
-            {{ $start := time $startDate }}
-            {{ $end := $start }}
-            {{ if and $endDate (ne $endDate "") }}
-                {{ $end = time $endDate }}
-            {{ end }}
-            {{ $current := $start }}
-            {{ range $i := seq 0 1000 }}
-                {{ if gt $current $end }}
-                    {{ break }}
-                {{ end }}
-                {{ $monthStr := $current | dateFormat "2006-01" }}
-                {{ if not (in $allMonths $monthStr) }}
-                    {{ $allMonths = $allMonths | append $monthStr }}
-                {{ end }}
-                {{ $current = $current.AddDate 0 1 0 }}
-            {{ end }}
-        {{ end }}
-    {{ end }}
-    {{ $sortedMonths := sort $allMonths }}
-    {{ $total := len $sortedMonths }}
-    {{ $latestMonth := "" }}
-    {{ if gt $total 0 }}
-        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
-    {{ end }}
-    {{ $latestYear := "" }}
-    {{ $latestMonthNum := "" }}
-    {{ if $latestMonth }}
-        {{ $latestYear = index (split $latestMonth "-") 0 }}
-        {{ $latestMonthNum = index (split $latestMonth "-") 1 }}
-    {{ end }}
-
-    <div class="date-selector-nav">
-        <div class="date-selector-nav__year-selector">
-            <button class="date-selector-nav__year-nav" id="prev-year">‹</button>
-            <span class="date-selector-nav__year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
-            <button class="date-selector-nav__year-nav" id="next-year">›</button>
-        </div>
-
-        <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
-            {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
-            {{ $allYearMonths := slice }}
-            {{ range .Pages }}
-                {{ $startDate := "" }}
-                {{ $endDate := "" }}
-                {{ if .Params.start_date }}
-                    {{ $startDate = .Params.start_date }}
-                {{ end }}
-                {{ if and .Params.end_date (ne .Params.end_date "") }}
-                    {{ $endDate = .Params.end_date }}
-                {{ end }}
-                {{ if $startDate }}
-                    {{ $start := time $startDate }}
-                    {{ $end := $start }}
-                    {{ if and $endDate (ne $endDate "") }}
-                        {{ $end = time $endDate }}
-                    {{ end }}
-                    {{ $current := $start }}
-                    {{ range $i := seq 0 1000 }}
-                        {{ if gt $current $end }}
-                            {{ break }}
-                        {{ end }}
-                        {{ $monthStr := $current | dateFormat "2006-01" }}
-                        {{ if not (in $allYearMonths $monthStr) }}
-                            {{ $allYearMonths = $allYearMonths | append $monthStr }}
-                        {{ end }}
-                        {{ $current = $current.AddDate 0 1 0 }}
-                    {{ end }}
-                {{ end }}
-            {{ end }}
-            {{ $sortedYearMonths := sort $allYearMonths }}
-            {{ $years := slice }}
-            {{ range $sortedYearMonths }}
-                {{ $year := index (split . "-") 0 }}
-                {{ if not (in $years $year) }}
-                    {{ $years = $years | append $year }}
-                {{ end }}
-            {{ end }}
-            {{ $sortedYears := sort $years }}
-            {{ $minYear := 0 }}
-            {{ $maxYear := 0 }}
-            {{ if gt (len $sortedYears) 0 }}
-                {{ $minYear = int (index $sortedYears 0) }}
-                {{ $maxYear = int (index $sortedYears (sub (len $sortedYears) 1)) }}
-            {{ end }}
-            {{ range $year := seq $minYear $maxYear }}
-                {{ range $index := seq 1 12 }}
-                    {{ $monthNum := printf "%02d" $index }}
-                    {{ $yearMonth := printf "%d-%s" $year $monthNum }}
-                    {{ $monthName := index $months (sub $index 1) }}
-                    {{ $hasWorks := false }}
-                    {{ range $sortedYearMonths }}
-                        {{ if eq . $yearMonth }}
-                            {{ $hasWorks = true }}
-                        {{ end }}
-                    {{ end }}
-                    <a href="/work_month/{{ $yearMonth }}/" class="date-selector-nav__filter-btn" data-year-month="{{ $yearMonth }}" data-year="{{ $year }}" {{ if not $hasWorks }}style="opacity: 0.4; cursor: not-allowed; pointer-events: none;"{{ end }}{{ if ne (string $year) $latestYear }} style="display: none;{{ if not $hasWorks }} opacity: 0.4; cursor: not-allowed; pointer-events: none;{{ end }}"{{ end }}>{{ $monthName }}</a>
-                {{ end }}
-            {{ end }}
-        </div>
-    </div>
+    {{ partial "work-header-nav.html" . }}
 {{ end }}
 
 {{ define "main" }}
@@ -193,136 +83,45 @@
                         {{ end }}
                     {{ end }}
                     <li class="column-list-item work-list-item" data-tags="{{ delimit $tags " " }}" data-year-months="{{ delimit $yearMonths " " }}">
-                        <div class="column-card work-card">
-                            <a href="{{ .RelPermalink }}" class="work-card__link">
-                                {{ if .Params.image }}
-                                <div class="work-card__image">
-                                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                                </div>
-                                {{ end }}
-                                {{ if $displayDate }}
-                                <p class="date">{{ $displayDate }}</p>
-                                {{ end }}
-                                <h3 class="column-card__title">{{ .Title }}</h3>
-                            </a>
+                        <a href="{{ .RelPermalink }}" class="column-card work-card">
+                            {{ if .Params.image }}
+                            <div class="work-card__image">
+                                <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                            </div>
+                            {{ end }}
+                            {{ if $displayDate }}
+                            <p class="date">{{ $displayDate }}</p>
+                            {{ end }}
+                            <h3 class="column-card__title">{{ .Title }}</h3>
                             {{ if $tags }}
                             <div class="article-header__tags">
+                                {{ $currentTag := "" }}
+                                {{ if hasPrefix $.RelPermalink "/work_tag/" }}
+                                    {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                    {{ if ge (len $pathParts) 2 }}
+                                        {{ $currentTag = index $pathParts 1 }}
+                                    {{ end }}
+                                {{ end }}
                                 {{ $sortedTags := sort $tags }}
                                 {{ range $sortedTags }}
-                                <a href="/work_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                                    {{ $isActive := false }}
+                                    {{ if and $currentTag (eq (. | urlize) $currentTag) }}
+                                        {{ $isActive = true }}
+                                    {{ end }}
+                                    <a href="/work_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}" onclick="event.stopPropagation()">{{ . }}</a>
                                 {{ end }}
                             </div>
                             {{ end }}
-                        </div>
+                        </a>
                     </li>
                 {{ end }}
             </ul>
         </div>
     </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const yearSelector = document.querySelector('.date-selector-nav__year-selector');
-            const yearDisplay = document.getElementById('year-display');
-            const prevYearBtn = document.getElementById('prev-year');
-            const nextYearBtn = document.getElementById('next-year');
-            const monthFilters = document.getElementById('date-selector-nav__month-filters');
-            
-            if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
-                return;
-            }
-            
-            let currentYear = parseInt(yearDisplay.textContent);
-            const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
-            const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
-
-            function updateMonthButtons(year) {
-                // <a>タグと<span>タグの両方を対象にする
-                const buttons = monthFilters.querySelectorAll('a, span');
-                
-                buttons.forEach(btn => {
-                    const btnYear = btn.getAttribute('data-year');
-                    if (btnYear === String(year)) {
-                        btn.style.display = '';
-                    } else {
-                        btn.style.display = 'none';
-                    }
-                });
-            }
-
-            function updateYearButtons() {
-                if (currentYear <= minYear) {
-                    prevYearBtn.classList.add('disabled');
-                    prevYearBtn.disabled = true;
-                } else {
-                    prevYearBtn.classList.remove('disabled');
-                    prevYearBtn.disabled = false;
-                }
-                
-                if (currentYear >= maxYear) {
-                    nextYearBtn.classList.add('disabled');
-                    nextYearBtn.disabled = true;
-                } else {
-                    nextYearBtn.classList.remove('disabled');
-                    nextYearBtn.disabled = false;
-                }
-            }
-
-            prevYearBtn.addEventListener('click', function() {
-                if (currentYear > minYear) {
-                    currentYear--;
-                    yearDisplay.textContent = currentYear;
-                    updateMonthButtons(currentYear);
-                    updateYearButtons();
-                }
-            });
-
-            nextYearBtn.addEventListener('click', function() {
-                if (currentYear < maxYear) {
-                    currentYear++;
-                    yearDisplay.textContent = currentYear;
-                    updateMonthButtons(currentYear);
-                    updateYearButtons();
-                }
-            });
-
-            // 初期状態で月のボタンと年選択ボタンを更新
-            updateMonthButtons(currentYear);
-            updateYearButtons();
-        });
-    </script>
 {{ end }}
 
 {{ define "secondary" }}
-    <div class="diary-secondary-nav">
-        <div class="diary-secondary-nav__section">
-            <div class="secondary-nav__tags">
-                {{ $allTags := slice }}
-                {{ with .Site.GetPage "section" "work" }}
-                    {{ range .Pages }}
-                        {{ if .Params.work_tag }}
-                            {{ range .Params.work_tag }}
-                                {{ if not (in $allTags .) }}
-                                    {{ $allTags = $allTags | append . }}
-                                {{ end }}
-                            {{ end }}
-                        {{ end }}
-                    {{ end }}
-                {{ end }}
-                {{ $sortedTags := sort $allTags }}
-                {{ $currentTag := "" }}
-                {{ if and .Data .Data.Term }}
-                    {{ $currentTag = .Data.Term | urlize }}
-                {{ end }}
-                {{ range $sortedTags }}
-                    {{ $isActive := false }}
-                    {{ if and $currentTag (eq (. | urlize) $currentTag) }}
-                        {{ $isActive = true }}
-                    {{ end }}
-                    <a href="/work_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}">{{ . }}</a>
-                {{ end }}
-            </div>
-        </div>
-    </div>
+    {{ partial "work_menu.html" . }}
 {{ end }}
 

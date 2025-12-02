@@ -1,11 +1,11 @@
 ---
 date: 2025-02-02T10:00:00Z
-diary_month: 2025-02
+tweet_month: 2025-02
 emoji: 📋
 tweet_tag:
   - サンプル
   - リスト
-diary_place: Tokyo
+tweet_place: Tokyo
 ---
 
 Tweetでリストやコードブロックを使うサンプルです。

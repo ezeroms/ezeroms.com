@@ -137,9 +137,23 @@
             buttons.forEach(btn => {
                 const btnYear = btn.getAttribute('data-year');
                 if (btnYear === String(year)) {
-                    btn.style.display = '';
+                    // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                    const currentStyle = btn.getAttribute('style') || '';
+                    if (currentStyle.includes('display: none')) {
+                        const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                        if (newStyle) {
+                            btn.setAttribute('style', newStyle);
+                        } else {
+                            btn.removeAttribute('style');
+                        }
+                    }
                 } else {
-                    btn.style.display = 'none';
+                    // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                    const currentStyle = btn.getAttribute('style') || '';
+                    if (!currentStyle.includes('display: none')) {
+                        const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                        btn.setAttribute('style', newStyle);
+                    }
                 }
             });
         }

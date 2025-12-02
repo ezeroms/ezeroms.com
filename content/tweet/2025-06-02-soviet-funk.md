@@ -1,6 +1,6 @@
 ---
 date: 2025-06-02T17:52:00+09:00
-diary_month: 2025-06
+tweet_month: 2025-06
 tweet_tag:
   - music
   - ソ連ファンク

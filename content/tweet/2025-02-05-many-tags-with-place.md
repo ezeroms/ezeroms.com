@@ -1,6 +1,6 @@
 ---
 date: 2025-02-05T10:00:00Z
-diary_month: 2025-02
+tweet_month: 2025-02
 emoji: 🏷️
 tweet_tag:
   - web
@@ -18,7 +18,7 @@ tweet_tag:
   - typescript
   - html
   - api
-diary_place: Tokyo
+tweet_place: Tokyo
 ---
 
 タグが多いTweetのサンプルです（place情報あり）。

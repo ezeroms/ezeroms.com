@@ -5,6 +5,20 @@
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
+    {{ $allMonths := slice }}
+    {{ range .Pages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
     <section class="page-section">
         <div class="page-section__content">
             <ul class="article-container tweet-container" id="tweet-list">
@@ -16,9 +30,20 @@
                             <div class="tweet-item__bottom">
                                 {{ if .Params.tweet_tag }}
                                     <div class="tweet-item__tags">
+                                        {{ $currentTag := "" }}
+                                        {{ if hasPrefix $.RelPermalink "/tweet_tag/" }}
+                                            {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                            {{ if ge (len $pathParts) 2 }}
+                                                {{ $currentTag = index $pathParts 1 }}
+                                            {{ end }}
+                                        {{ end }}
                                         {{ $sortedTags := sort .Params.tweet_tag }}
                                         {{ range $sortedTags }}
                                             {{ $label := . }}
+                                            {{ $isActive := false }}
+                                            {{ if and $currentTag (eq ($label | urlize) $currentTag) }}
+                                                {{ $isActive = true }}
+                                            {{ end }}
                                             {{ $taxonomy := "" }}
                                             {{ range $term, $pages := $.Site.Taxonomies.tweet_tag }}
                                                 {{ if eq ($term | urlize) ($label | urlize) }}
@@ -26,16 +51,16 @@
                                                 {{ end }}
                                             {{ end }}
                                             {{ with $taxonomy }}
-                                                <a href="{{ .Page.RelPermalink }}" class="tag">{{ $label }}</a>
+                                                <a href="{{ .Page.RelPermalink }}" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</a>
                                             {{ else }}
-                                                <span class="tag">{{ $label }}</span>
+                                                <span class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</span>
                                             {{ end }}
                                         {{ end }}
                                     </div>
                                 {{ end }}
                                 <div class="tweet-item__footer">
                                     <p class="date tweet-item__date">
-                                        {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.diary_place }} · <span class="tweet-item__place-link">{{ .Params.diary_place }}</span>{{ end }}
+                                        {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.tweet_place }} · <span class="tweet-item__place-link">{{ .Params.tweet_place }}</span>{{ end }}
                                     </p>
                                 </div>
                             </div>
@@ -70,9 +95,23 @@
                 buttons.forEach(btn => {
                     const btnYear = btn.getAttribute('data-year');
                     if (btnYear === String(year)) {
-                        btn.style.display = '';
+                        // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                            if (newStyle) {
+                                btn.setAttribute('style', newStyle);
+                            } else {
+                                btn.removeAttribute('style');
+                            }
+                        }
                     } else {
-                        btn.style.display = 'none';
+                        // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (!currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                            btn.setAttribute('style', newStyle);
+                        }
                     }
                 });
             }
@@ -123,4 +162,3 @@
 {{ define "secondary" }}
     {{ partial "tweet_menu.html" . }}
 {{ end }}
-

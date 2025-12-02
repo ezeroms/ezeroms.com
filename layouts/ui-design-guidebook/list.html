@@ -26,21 +26,9 @@
     <div class="column-header">
         <nav class="column-header__nav" id="ui-design-guidebook-category-filters">
             <a href="/ui-design-guidebook/" class="column-header__tab active">Readme</a>
-            {{ if $firstComponent }}
-                <a href="{{ $firstComponent.RelPermalink }}" class="column-header__tab">Components</a>
-            {{ else }}
-                <span class="column-header__tab">Components</span>
-            {{ end }}
-            {{ if $firstPattern }}
-                <a href="{{ $firstPattern.RelPermalink }}" class="column-header__tab">Patterns</a>
-            {{ else }}
-                <span class="column-header__tab">Patterns</span>
-            {{ end }}
-            {{ if $firstPrinciple }}
-                <a href="{{ $firstPrinciple.RelPermalink }}" class="column-header__tab">Principles</a>
-            {{ else }}
-                <span class="column-header__tab">Principles</span>
-            {{ end }}
+            <a href="/ui-design-guidebook/components/" class="column-header__tab">Components</a>
+            <a href="/ui-design-guidebook/patterns/" class="column-header__tab">Patterns</a>
+            <a href="/ui-design-guidebook/principles/" class="column-header__tab">Principles</a>
         </nav>
     </div>
 {{ end }}

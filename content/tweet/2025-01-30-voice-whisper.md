@@ -1,12 +1,12 @@
 ---
 date: 2025-01-30T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 🤫
 voice: secret
 tweet_tag:
   - サンプル
   - 声
-diary_place: Tokyo
+tweet_place: Tokyo
 ---
 
 これは内緒話のサンプルです。

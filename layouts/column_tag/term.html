@@ -16,88 +16,34 @@
                         {{ $tags = .Params.column_tag }}
                     {{ end }}
                     <li class="column-list-item column-item" data-categories="{{ delimit $categories " " }}" data-tags="{{ delimit $tags " " }}">
-                        <div class="column-card">
-                            <a href="{{ .RelPermalink }}" class="column-card__link">
-                                <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
-                                <h3 class="column-card__title">{{ .Title }}</h3>
-                            </a>
+                        <a href="{{ .RelPermalink }}" class="column-card">
+                            <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                            <h3 class="column-card__title">{{ .Title }}</h3>
                             {{ if .Params.column_tag }}
                                 <div class="article-header__tags">
+                                    {{ $currentTag := "" }}
+                                    {{ if hasPrefix $.RelPermalink "/column_tag/" }}
+                                        {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                        {{ if ge (len $pathParts) 2 }}
+                                            {{ $currentTag = index $pathParts 1 }}
+                                        {{ end }}
+                                    {{ end }}
                                     {{ $sortedTags := sort .Params.column_tag }}
                                     {{ range $sortedTags }}
-                                        <a href="/column_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                                        {{ $isActive := false }}
+                                        {{ if and $currentTag (eq (. | urlize) $currentTag) }}
+                                            {{ $isActive = true }}
+                                        {{ end }}
+                                        <a href="/column_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}" onclick="event.stopPropagation()">{{ . }}</a>
                                     {{ end }}
                                 </div>
                             {{ end }}
-                        </div>
+                        </a>
                     </li>
                 {{ end }}
             </ul>
         </div>
     </section>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const categoryFilters = document.getElementById('column-category-filters');
-            const columnItems = document.querySelectorAll('.column-list-item');
-
-            // URLパラメータを取得
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlCategory = urlParams.get('category');
-
-            // 初期状態の決定
-            let selectedCategory = urlCategory || 'all';
-
-            function filterByCategory(category) {
-                selectedCategory = category;
-
-                // アクティブ状態を更新
-                const allTabs = categoryFilters.querySelectorAll('.column-header__tab');
-                allTabs.forEach(tab => {
-                    if (tab.getAttribute('data-category') === category) {
-                        tab.classList.add('active');
-                    } else {
-                        tab.classList.remove('active');
-                    }
-                });
-
-                // 記事をフィルタリング
-                columnItems.forEach(item => {
-                    const itemCategories = item.getAttribute('data-categories').split(' ').filter(c => c);
-                    if (category === 'all' || itemCategories.includes(category)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-
-                // 空の状態メッセージを更新
-
-                // URLを更新
-                const newURL = window.location.pathname + (category === 'all' ? '' : '?category=' + category);
-                window.history.pushState({ category: category }, '', newURL);
-            }
-
-            // カテゴリタブのクリックイベント
-            const categoryTabs = categoryFilters.querySelectorAll('.column-header__tab');
-            categoryTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const category = this.getAttribute('data-category');
-                    filterByCategory(category);
-                });
-            });
-
-            // 初期状態の設定
-            filterByCategory(selectedCategory);
-
-            // ブラウザの戻る/進むボタンに対応
-            window.addEventListener('popstate', function(event) {
-                const params = new URLSearchParams(window.location.search);
-                const category = params.get('category') || 'all';
-                filterByCategory(category);
-            });
-        });
-    </script>
 {{ end }}
 
 {{ define "secondary" }}

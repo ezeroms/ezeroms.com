@@ -1,5 +1,5 @@
 {{ define "section_header" }}
-    {{ partial "date-selector-nav-work.html" . }}
+    {{ partial "work-header-nav.html" . }}
 {{ end }}
 
 {{ define "main" }}
@@ -71,20 +71,6 @@
                 
                 {{ partial "article-navigation.html" . }}
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // 記事内のタグクリックイベント
-                        document.querySelectorAll('.work-article .tag').forEach(tag => {
-                            tag.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                const tagValue = this.getAttribute('data-tag');
-                                if (tagValue) {
-                                    window.location.href = '/work/?tag=' + encodeURIComponent(tagValue);
-                                }
-                            });
-                        });
-                    });
-                </script>
             </ul>
         </div>
     </section>

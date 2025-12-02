@@ -1,11 +1,11 @@
 ---
 date: 2025-01-22T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 🏷️
 tweet_tag:
   - design
   - branding
-diary_place: London
+tweet_place: London
 ---
 
 ブランディングデザインについて。一貫性のあるビジュアルアイデンティティが重要です。

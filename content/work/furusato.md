@@ -4,6 +4,8 @@ date: 2017-11-20T10:33:36.095Z
 slug: furusato
 image: /images/work/furusato/20.webp
 start_date: 2017-11-20
+work_category:
+  - video
 work_tag:
   - 映像制作
   - ディレクション

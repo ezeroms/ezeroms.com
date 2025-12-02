@@ -1,13 +1,13 @@
 ---
 date: 2025-01-15T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 🎨
 voice: loud
 tweet_tag:
   - web
   - デザイン
   - design
-diary_place: Tokyo
+tweet_place: Tokyo
 ---
 
 デザインとWebに関するツイートです。

@@ -39,27 +39,18 @@
     background-color: var(--color-background-white);
     transition: all var(--transition-normal) var(--easing-default);
     box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .column-card:hover {
     border-color: var(--color-border-hover);
     transition-duration: var(--transition-normal);
-}
-
-.column-list .column-card__link {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    width: 100%;
-    cursor: pointer;
-}
-
-.column-list .column-card__link:hover {
     color: inherit;
 }
 
-.column-list .column-card__link:hover .column-card__title {
+.column-card:hover .column-card__title {
     opacity: 0.8;
 }
 
@@ -74,10 +65,6 @@
 
 /* Column一覧ページのカード内要素間の間隔をmarginで制御 */
 .column-list .column-card > *:first-child {
-    margin-top: 0;
-}
-
-.column-list .column-card__link > *:first-child {
     margin-top: 0;
 }
 
@@ -103,7 +90,7 @@
     line-height: var(--line-height-relaxed);
 }
 
-.article-header__tags {
+.column-list .column-card .article-header__tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;

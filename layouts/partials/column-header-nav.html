@@ -16,19 +16,16 @@
     "humanities-and-social-sciences" "人文・社会科学"
 }}
 {{ $isTagPage := false }}
-{{ if and .Data .Data.Singular }}
-    {{ if eq .Data.Singular "column_tag" }}
-        {{ $isTagPage = true }}
-    {{ end }}
+{{ if hasPrefix .RelPermalink "/column_tag/" }}
+    {{ $isTagPage = true }}
 {{ end }}
 {{ $isCategoryPage := false }}
 {{ $currentCategory := "" }}
-{{ if and .Data .Data.Singular }}
-    {{ if eq .Data.Singular "column_category" }}
-        {{ $isCategoryPage = true }}
-        {{ if .Data.Term }}
-            {{ $currentCategory = .Data.Term }}
-        {{ end }}
+{{ if hasPrefix .RelPermalink "/column_category/" }}
+    {{ $isCategoryPage = true }}
+    {{ $pathParts := split (trim .RelPermalink "/") "/" }}
+    {{ if ge (len $pathParts) 2 }}
+        {{ $currentCategory = index $pathParts 1 }}
     {{ end }}
 {{ end }}
 {{ $isListPage := false }}
@@ -38,7 +35,7 @@
 
 <div class="column-header">
     <nav class="column-header__nav" id="column-category-filters">
-        <a href="/column/" class="column-header__tab {{ if $isListPage }}active{{ end }}" data-category="all">すべて</a>
+        <a href="/column/" class="column-header__tab {{ if and $isListPage (not $isTagPage) (not $isCategoryPage) }}active{{ end }}" data-category="all">すべて</a>
         {{ $allCategories := slice }}
         {{ with .Site.GetPage "section" "column" }}
             {{ range .Pages }}
@@ -56,7 +53,7 @@
             {{ $categoryName := index $categoryNames . }}
             {{ if $categoryName }}
                 {{ $isActive := false }}
-                {{ if and $isCategoryPage (eq $currentCategory .) }}
+                {{ if and $isCategoryPage (eq $currentCategory .) (not $isTagPage) }}
                     {{ $isActive = true }}
                 {{ end }}
                 <a href="/column_category/{{ . }}/" class="column-header__tab {{ if $isActive }}active{{ end }}" data-category="{{ . }}">{{ $categoryName }}</a>

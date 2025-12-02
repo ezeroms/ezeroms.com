@@ -4,6 +4,8 @@ date: 2017-10-24T10:26:19.566Z
 slug: heisei-net-shi
 image: /images/work/heisei-net-shi/14.webp
 start_date: 2017-10-24
+work_category:
+  - webapp
 work_tag:
   - UI/UXデザイン
 role: UI/UX Designer

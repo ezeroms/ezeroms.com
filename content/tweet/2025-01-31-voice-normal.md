@@ -1,11 +1,11 @@
 ---
 date: 2025-01-31T10:00:00Z
-diary_month: 2025-01
+tweet_month: 2025-01
 emoji: 💬
 tweet_tag:
   - サンプル
   - 声
-diary_place: Tokyo
+tweet_place: Tokyo
 ---
 
 これは通常の声のサンプルです。

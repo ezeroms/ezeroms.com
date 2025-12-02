@@ -5,6 +5,8 @@ slug: galaxy
 image: /images/work/galaxy/07.webp
 start_date: 2019-03-01
 end_date: 2019-05-14
+work_category:
+  - website
 work_tag:
   - Webサイト
   - フロントエンド
