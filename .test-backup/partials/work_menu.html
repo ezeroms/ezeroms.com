@@ -1,0 +1,34 @@
+<div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <div class="secondary-nav__tags">
+            {{ $allTags := slice }}
+            {{ range (where .Site.RegularPages "Section" "work") }}
+                {{ if .Params.work_tag }}
+                    {{ range .Params.work_tag }}
+                        {{ if not (in $allTags .) }}
+                            {{ $allTags = $allTags | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedTags := sort $allTags }}
+            {{ $currentTag := "" }}
+            {{/* RelPermalinkから現在のタグを取得 */}}
+            {{ if hasPrefix .RelPermalink "/work_tag/" }}
+                {{ $pathParts := split (trim .RelPermalink "/") "/" }}
+                {{ if ge (len $pathParts) 2 }}
+                    {{ $currentTag = index $pathParts 1 }}
+                {{ end }}
+            {{ end }}
+            {{ range $sortedTags }}
+                {{ $label := . }}
+                {{ $isActive := false }}
+                {{ if and $currentTag (eq ($label | urlize) $currentTag) }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <a href="/work_tag/{{ $label | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</a>
+            {{ end }}
+        </div>
+    </div>
+</div>
+

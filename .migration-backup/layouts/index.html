@@ -1,0 +1,27 @@
+{{ define "main" }}
+    <section class="page-section page-section--top">
+        <div class="page-section__content page-section__content--narrow">
+            <a href="/" class="top-logo">
+                <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo__img">
+            </a>
+            <h2 class="top-message">One thing I can tell you is you got to be free!</h2>
+
+            <div class="random-image">
+                <a href="/">
+                {{ $images := readDir "static/images/top" }}
+                {{ $imageNames := slice }}
+                {{ range $images }}
+                    {{ $imageNames = $imageNames | append (dict "Name" .Name) }}
+                {{ end }}
+                <div id="image-container" data-images='{{ $imageNames | jsonify }}'></div>
+                <img id="randomImage" src="" alt="Random Image" class="top-photo">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ "js/random-image.js" | relURL }}"></script>
+{{ end }}
+
+{{ define "secondary" }}
+{{ end }}

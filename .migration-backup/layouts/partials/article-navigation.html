@@ -1,0 +1,44 @@
+<div class="article-navigation">
+    <div class="article-navigation__prev">
+        {{ if .PrevInSection }}
+            <a href="{{ .PrevInSection.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">←</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Prev</span>
+                    <span class="article-navigation__title">
+                        {{ if eq .Section "diary" }}
+                            {{ .PrevInSection.Date | dateFormat "Jan 2" }} · {{ .PrevInSection.Date | dateFormat "2006" }}
+                        {{ else }}
+                            {{ .PrevInSection.Title }}
+                        {{ end }}
+                    </span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    
+    <div class="article-navigation__next">
+        {{ if .NextInSection }}
+            <a href="{{ .NextInSection.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">→</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Next</span>
+                    <span class="article-navigation__title">
+                        {{ if eq .Section "diary" }}
+                            {{ .NextInSection.Date | dateFormat "Jan 2" }} · {{ .NextInSection.Date | dateFormat "2006" }}
+                        {{ else }}
+                            {{ .NextInSection.Title }}
+                        {{ end }}
+                    </span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    
+    <div class="article-navigation__back">
+        <a href="{{ .Section | printf "/%s/" }}" class="article-navigation__link">
+            <span class="article-navigation__label">記事一覧に戻る</span>
+        </a>
+    </div>
+</div>
+

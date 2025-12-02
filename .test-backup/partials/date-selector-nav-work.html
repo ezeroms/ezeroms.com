@@ -1,0 +1,193 @@
+{{/* Work用：月選択ヘッダー（一覧・詳細共通） */}}
+{{/* コンテキストを保存（rangeループ内で上書きされるため） */}}
+{{ $pageContext := . }}
+<div class="date-selector-nav">
+    {{ $workSection := .Site.GetPage "section" "work" }}
+    {{ $allMonths := slice }}
+    {{ if $workSection }}
+        {{ range $workSection.Pages }}
+            {{ $startDate := "" }}
+            {{ $endDate := "" }}
+            {{ if .Params.start_date }}{{ $startDate = .Params.start_date }}{{ end }}
+            {{ if and .Params.end_date (ne .Params.end_date "") }}{{ $endDate = .Params.end_date }}{{ end }}
+            {{ if $startDate }}
+                {{ $start := time $startDate }}
+                {{ $end := $start }}
+                {{ if $endDate }}{{ $end = time $endDate }}{{ end }}
+                {{ $current := $start }}
+                {{ range $i := seq 0 1000 }}
+                    {{ if gt $current $end }}{{ break }}{{ end }}
+                    {{ $monthStr := $current | dateFormat "2006-01" }}
+                    {{ if not (in $allMonths $monthStr) }}
+                        {{ $allMonths = $allMonths | append $monthStr }}
+                    {{ end }}
+                    {{ $current = $current.AddDate 0 1 0 }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
+    {{/* 現在コンテキストの月（詳細ページではその記事の月、一覧では空） */}}
+    {{ $currentMonth := "" }}
+    {{ if $pageContext.IsPage }}
+        {{ $startDate := "" }}
+        {{ if $pageContext.Params.start_date }}
+            {{ $startDate = $pageContext.Params.start_date }}
+            {{ $currentMonth = (time $startDate) | dateFormat "2006-01" }}
+        {{ end }}
+    {{ else if hasPrefix $pageContext.RelPermalink "/work_month/" }}
+        {{/* work_monthタクソノミーページの場合、URLから月を抽出 */}}
+        {{ $pathParts := split (trim $pageContext.RelPermalink "/") "/" }}
+        {{ if ge (len $pathParts) 2 }}
+            {{ $monthPart := index $pathParts 1 }}
+            {{/* "YYYY-MM"形式かどうかを確認 */}}
+            {{ $parts := split $monthPart "-" }}
+            {{ if eq (len $parts) 2 }}
+                {{ $currentMonth = $monthPart }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+    {{/* 年の範囲算出 */}}
+    {{ $years := slice }}
+    {{ range $sortedMonths }}
+        {{ $year := index (split . "-") 0 }}
+        {{ if not (in $years $year) }}
+            {{ $years = $years | append $year }}
+        {{ end }}
+    {{ end }}
+    {{/* 年を数値としてソート */}}
+    {{ $yearInts := slice }}
+    {{ range $years }}
+        {{ $yearInt := int . }}
+        {{ if gt $yearInt 0 }}
+            {{ $yearInts = $yearInts | append $yearInt }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedYearInts := sort $yearInts }}
+    {{ $minYear := 0 }}
+    {{ $maxYear := 0 }}
+    {{ if gt (len $sortedYearInts) 0 }}
+        {{ $minYear = index $sortedYearInts 0 }}
+        {{ $maxYear = index $sortedYearInts (sub (len $sortedYearInts) 1) }}
+    {{ end }}
+
+    {{/* 表示する基準年：詳細はその記事の年、一覧・タグページは最新年 */}}
+    {{ $displayYear := "" }}
+    {{ if $currentMonth }}
+        {{/* $currentMonthが"YYYY-MM"形式の場合のみ年を抽出 */}}
+        {{ $parts := split $currentMonth "-" }}
+        {{ if eq (len $parts) 2 }}
+            {{ $yearPart := index $parts 0 }}
+            {{/* 年が4桁の数字であることを確認 */}}
+            {{ if eq (len $yearPart) 4 }}
+                {{ $displayYear = $yearPart }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{/* $currentMonthから年を取得できない場合（タグページなど）は、最新記事の年を使用 */}}
+    {{ if not $displayYear }}
+        {{ if $latestMonth }}
+            {{ $displayYear = index (split $latestMonth "-") 0 }}
+        {{ else }}
+            {{ $displayYear = "2025" }}
+        {{ end }}
+    {{ end }}
+    {{/* $displayYearは必ず年（4桁の数字）になるはずなので、安全にint変換 */}}
+    {{ $displayYearInt := 0 }}
+    {{ if $displayYear }}
+        {{ $displayYearInt = int $displayYear }}
+    {{ end }}
+
+    <div class="date-selector-nav__year-selector" data-min-year="{{ $minYear }}" data-max-year="{{ $maxYear }}">
+        <button class="date-selector-nav__year-nav{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }}" id="prev-year"{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }}>‹</button>
+        <span class="date-selector-nav__year-display" id="year-display">{{ $displayYear }}</span>
+        <button class="date-selector-nav__year-nav{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }}" id="next-year"{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }}>›</button>
+    </div>
+
+    <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
+        {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
+        {{/* すべての年に対して、すべての月（12ヶ月）を生成 */}}
+        {{ if and (gt $minYear 0) (gt $maxYear 0) }}
+            {{ range $year := seq $minYear $maxYear }}
+                {{ range $index, $label := $months }}
+                    {{ $monthNum := printf "%02d" (add $index 1) }}
+                    {{ $yearMonth := printf "%d-%s" $year $monthNum }}
+                    {{ $hasWorks := in $sortedMonths $yearMonth }}
+
+                    {{ $isActive := false }}
+                    {{/* 一覧ページ、詳細ページ、タグページでは月選択を全て非アクティブにする */}}
+                    {{ $isListPage := false }}
+                    {{ $isSinglePage := false }}
+                    {{ $isTagPage := false }}
+                    {{ if eq $pageContext.RelPermalink "/work/" }}
+                        {{ $isListPage = true }}
+                    {{ end }}
+                    {{ if and $pageContext.IsPage (eq $pageContext.Section "work") }}
+                        {{ $isSinglePage = true }}
+                    {{ end }}
+                    {{ if hasPrefix $pageContext.RelPermalink "/work_tag/" }}
+                        {{ $isTagPage = true }}
+                    {{ end }}
+                    {{/* 月別アーカイブページでのみ、表示年月をアクティブにする */}}
+                    {{ if not $isListPage }}
+                        {{ if not $isSinglePage }}
+                            {{ if not $isTagPage }}
+                                {{ if $currentMonth }}
+                                    {{ if eq $yearMonth $currentMonth }}
+                                        {{ $isActive = true }}
+                                    {{ end }}
+                                {{ end }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+
+                    {{ $monthPage := index $pageContext.Site.Taxonomies.work_month ($yearMonth | urlize) }}
+                    {{/* 初期表示の制御：表示年の場合は表示、それ以外は非表示 */}}
+                    {{ $isInitialYear := eq (string $year) $displayYear }}
+                    {{/* スタイル属性の構築 */}}
+                    {{ $styleAttrs := slice }}
+                    {{ if not $isInitialYear }}
+                        {{ $styleAttrs = $styleAttrs | append "display: none" }}
+                    {{ end }}
+                    {{ if not $hasWorks }}
+                        {{ $styleAttrs = $styleAttrs | append "opacity: 0.4" }}
+                        {{ $styleAttrs = $styleAttrs | append "cursor: not-allowed" }}
+                        {{ $styleAttrs = $styleAttrs | append "pointer-events: none" }}
+                    {{ end }}
+                    {{ $styleAttr := "" }}
+                    {{ if gt (len $styleAttrs) 0 }}
+                        {{ $styleAttr = printf "style=\"%s\"" (delimit $styleAttrs "; ") }}
+                    {{ end }}
+
+                    {{ if $monthPage }}
+                        <a
+                            href="{{ $monthPage.Page.RelPermalink }}"
+                            class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}{{ if not $hasWorks }} disabled{{ end }}"
+                            data-year-month="{{ $yearMonth }}"
+                            data-year="{{ $year }}"
+                            {{ if $styleAttr }}{{ $styleAttr | safeHTML }}{{ end }}
+                        >{{ $label }}</a>
+                    {{ else }}
+                        <span
+                            class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}{{ if not $hasWorks }} disabled{{ end }}"
+                            data-year-month="{{ $yearMonth }}"
+                            data-year="{{ $year }}"
+                            {{ if $styleAttr }}{{ $styleAttr | safeHTML }}{{ end }}
+                        >{{ $label }}</span>
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    </div>
+</div>
+
+
+

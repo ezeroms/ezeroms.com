@@ -1,0 +1,119 @@
+<aside class="layout-toc" aria-label="Chronicle フィルター">
+    <nav class="layout-toc__nav">
+        <div class="chronicle-filters">
+            <!-- Birth設定 -->
+            <div class="chronicle-filters__section">
+                <h3 class="chronicle-filters__title">生まれ年</h3>
+                <div class="chronicle-birth">
+                    <input type="number" id="toc-birth-year" min="1900" max="2100" value="1989" class="chronicle-birth__year-input">
+                    <input type="number" id="toc-birth-month" min="1" max="12" value="6" class="chronicle-birth__month-input">
+                </div>
+            </div>
+
+            <!-- 年代範囲選択 -->
+            <div class="chronicle-filters__section">
+                <h3 class="chronicle-filters__title">表示期間</h3>
+                <div class="chronicle-year-range">
+                    <input type="number" id="toc-start-year" min="1868" max="2100" value="{{ if .Site.Params.chronicle.defaultStartYear }}{{ .Site.Params.chronicle.defaultStartYear }}{{ else }}1989{{ end }}" class="chronicle-year-range__start-input">
+                    <span class="chronicle-year-range__arrow">→</span>
+                    <input type="number" id="toc-end-year" min="1868" max="2100" value="{{ if .Site.Params.chronicle.defaultEndYear }}{{ .Site.Params.chronicle.defaultEndYear }}{{ else }}{{ now.Year }}{{ end }}" class="chronicle-year-range__end-input">
+                </div>
+                <label class="chronicle-filters__checkbox">
+                    <input type="checkbox" id="toc-monthly-view" class="chronicle-filters__monthly-checkbox">
+                    <span>月単位</span>
+                </label>
+                <label class="chronicle-filters__checkbox">
+                    <input type="checkbox" id="toc-era-display" class="chronicle-filters__era-checkbox">
+                    <span>元号を表示</span>
+                </label>
+            </div>
+
+            <!-- カテゴリ・サブカテゴリ -->
+            {{ $chroniclePages := where .Site.RegularPages "Section" "chronicle" }}
+            {{ $categoryMap := dict }}
+            {{ range $chroniclePages }}
+                {{ if and .Params.category .Params.subcategory }}
+                    {{ $category := .Params.category }}
+                    {{ $subcategory := .Params.subcategory }}
+                    {{ $subcategories := index $categoryMap $category }}
+                    {{ if not $subcategories }}
+                        {{ $subcategories = slice }}
+                    {{ end }}
+                    {{ if not (in $subcategories $subcategory) }}
+                        {{ $subcategories = $subcategories | append $subcategory }}
+                    {{ end }}
+                    {{ $categoryMap = merge $categoryMap (dict $category $subcategories) }}
+                {{ end }}
+            {{ end }}
+            
+            {{ if gt (len $categoryMap) 0 }}
+                <div class="chronicle-filters__section">
+                    <h3 class="chronicle-filters__title">カテゴリ</h3>
+                    <ul class="chronicle-filters__list">
+                        {{ range $category, $subcategories := $categoryMap }}
+                            {{ $sortedSubcategories := sort $subcategories }}
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="{{ $category }}"
+                                           data-subcategories="{{ delimit $sortedSubcategories "," }}">
+                                    <span>{{ $category }}</span>
+                                </label>
+                                {{ if gt (len $sortedSubcategories) 0 }}
+                                    <ul class="chronicle-filters__sublist">
+                                        {{ range $sortedSubcategories }}
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="{{ $category }}"
+                                                           data-subcategory="{{ . }}">
+                                                    <span>{{ . }}</span>
+                                                </label>
+                                            </li>
+                                        {{ end }}
+                                    </ul>
+                                {{ end }}
+                            </li>
+                        {{ end }}
+                    </ul>
+                </div>
+            {{ end }}
+
+            <!-- タグ -->
+            {{ $allTags := slice }}
+            {{ range $chroniclePages }}
+                {{ if .Params.chronicle_tag }}
+                    {{ range .Params.chronicle_tag }}
+                        {{ if not (in $allTags .) }}
+                            {{ $allTags = $allTags | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedTags := sort $allTags }}
+            
+            {{ if gt (len $sortedTags) 0 }}
+                <div class="chronicle-filters__section">
+                    <h3 class="chronicle-filters__title">テーマ史</h3>
+                    <ul class="chronicle-filters__list">
+                        {{ range $sortedTags }}
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="{{ . }}">
+                                    <span>{{ . }}</span>
+                                </label>
+                            </li>
+                        {{ end }}
+                    </ul>
+                    <button class="chronicle-filters__clear-tags" id="clear-tags-btn" style="display: none;">
+                        タグの選択を解除
+                    </button>
+                </div>
+            {{ end }}
+        </div>
+    </nav>
+</aside>

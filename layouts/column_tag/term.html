@@ -19,25 +19,25 @@
                         <a href="{{ .RelPermalink }}" class="column-card">
                             <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
                             <h3 class="column-card__title">{{ .Title }}</h3>
-                            {{ if .Params.column_tag }}
-                                <div class="article-header__tags">
-                                    {{ $currentTag := "" }}
-                                    {{ if hasPrefix $.RelPermalink "/column_tag/" }}
-                                        {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
-                                        {{ if ge (len $pathParts) 2 }}
-                                            {{ $currentTag = index $pathParts 1 }}
-                                        {{ end }}
+                            {{- if .Params.column_tag }}
+                            <div class="article-header__tags">
+                                {{ $currentTag := "" }}
+                                {{ if hasPrefix $.RelPermalink "/column_tag/" }}
+                                    {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                    {{ if ge (len $pathParts) 2 }}
+                                        {{ $currentTag = index $pathParts 1 }}
                                     {{ end }}
-                                    {{ $sortedTags := sort .Params.column_tag }}
-                                    {{ range $sortedTags }}
-                                        {{ $isActive := false }}
-                                        {{ if and $currentTag (eq (. | urlize) $currentTag) }}
-                                            {{ $isActive = true }}
-                                        {{ end }}
-                                        <a href="/column_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}" onclick="event.stopPropagation()">{{ . }}</a>
+                                {{ end }}
+                                {{ $sortedTags := sort .Params.column_tag }}
+                                {{ range $sortedTags }}
+                                    {{ $isActive := false }}
+                                    {{ if and $currentTag (eq (. | urlize) $currentTag) }}
+                                        {{ $isActive = true }}
                                     {{ end }}
-                                </div>
-                            {{ end }}
+                                    <a href="/column_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}" onclick="event.stopPropagation()">{{ . }}</a>
+                                {{ end }}
+                            </div>
+                            {{- end }}
                         </a>
                     </li>
                 {{ end }}

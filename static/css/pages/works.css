@@ -37,6 +37,8 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .work-list .column-card:hover {
@@ -53,6 +55,8 @@
 
 .work-list .column-card .work-card__image {
     margin: 0 0 2rem 0;
+    min-width: 0;
+    flex-shrink: 0;
 }
 
 .work-list .column-card .date {
@@ -61,6 +65,9 @@
 
 .work-list .column-card .column-card__title {
     margin: 0 0 1rem 0;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .work-list .column-card .article-header__tags {
@@ -71,6 +78,12 @@
     margin-bottom: 0;
     width: 100%;
     box-sizing: border-box;
+    min-width: 0;
+}
+
+.work-list .column-card .article-header__tags .tag {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .work-article__thumbnail {

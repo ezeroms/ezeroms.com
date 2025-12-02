@@ -1,0 +1,168 @@
+{{ define "section_header" }}
+    {{ partial "work-header-nav.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container column-list work-list" id="work-articles-list">
+                {{/* Workセクションのページのみを表示 */}}
+                {{ range where .Pages "Section" "work" }}
+                    {{ $tags := slice }}
+                    {{ if .Params.work_tag }}
+                        {{ $tags = .Params.work_tag }}
+                    {{ end }}
+                    {{ $startDate := "" }}
+                    {{ $endDate := "" }}
+                    {{ if .Params.start_date }}
+                        {{ $startDate = .Params.start_date }}
+                    {{ end }}
+                    {{ if and .Params.end_date (ne .Params.end_date "") }}
+                        {{ $endDate = .Params.end_date }}
+                    {{ end }}
+                    {{ $yearMonths := slice }}
+                    {{ if $startDate }}
+                        {{ $start := time $startDate }}
+                        {{ $end := $start }}
+                        {{ if and $endDate (ne $endDate "") }}
+                            {{ $end = time $endDate }}
+                        {{ end }}
+                        {{ $current := $start }}
+                        {{ range $i := seq 0 1000 }}
+                            {{ if gt $current $end }}
+                                {{ break }}
+                            {{ end }}
+                            {{ $monthStr := $current | dateFormat "2006-01" }}
+                            {{ $yearMonths = $yearMonths | append $monthStr }}
+                            {{ $current = $current.AddDate 0 1 0 }}
+                        {{ end }}
+                    {{ end }}
+                    {{ $displayDate := "" }}
+                    {{ if $startDate }}
+                        {{ $start := time $startDate }}
+                        {{ if and $endDate (ne $endDate "") }}
+                            {{ $end := time $endDate }}
+                            {{ $displayDate = printf "%s · %s – %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") ($end | dateFormat "Jan") ($end | dateFormat "2006") }}
+                        {{ else }}
+                            {{ $displayDate = printf "%s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
+                        {{ end }}
+                    {{ end }}
+                    <li class="column-list-item work-list-item" data-tags="{{ delimit $tags " " }}" data-year-months="{{ delimit $yearMonths " " }}">
+                        <div class="column-card work-card">
+                            <a href="{{ .RelPermalink }}" class="work-card__link">
+                                {{ if .Params.image }}
+                                <div class="work-card__image">
+                                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                                </div>
+                                {{ end }}
+                                {{ if $displayDate }}
+                                <p class="date">{{ $displayDate }}</p>
+                                {{ end }}
+                                <h3 class="column-card__title">{{ .Title }}</h3>
+                            </a>
+                            {{ if $tags }}
+                            <div class="article-header__tags">
+                                {{ $sortedTags := sort $tags }}
+                                {{ range $sortedTags }}
+                                <a href="/work_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                                {{ end }}
+                            </div>
+                            {{ end }}
+                        </div>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelector = document.querySelector('.date-selector-nav__year-selector');
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const monthFilters = document.getElementById('date-selector-nav__month-filters');
+            
+            if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
+                return;
+            }
+            
+            let currentYear = parseInt(yearDisplay.textContent);
+            const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
+            const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
+
+            function updateMonthButtons(year) {
+                // <a>タグと<span>タグの両方を対象にする
+                const buttons = monthFilters.querySelectorAll('a, span');
+                
+                buttons.forEach(btn => {
+                    const btnYear = btn.getAttribute('data-year');
+                    if (btnYear === String(year)) {
+                        // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                            if (newStyle) {
+                                btn.setAttribute('style', newStyle);
+                            } else {
+                                btn.removeAttribute('style');
+                            }
+                        }
+                    } else {
+                        // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (!currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                            btn.setAttribute('style', newStyle);
+                        }
+                    }
+                });
+            }
+
+            function updateYearButtons() {
+                if (currentYear <= minYear) {
+                    prevYearBtn.classList.add('disabled');
+                    prevYearBtn.disabled = true;
+                } else {
+                    prevYearBtn.classList.remove('disabled');
+                    prevYearBtn.disabled = false;
+                }
+                
+                if (currentYear >= maxYear) {
+                    nextYearBtn.classList.add('disabled');
+                    nextYearBtn.disabled = true;
+                } else {
+                    nextYearBtn.classList.remove('disabled');
+                    nextYearBtn.disabled = false;
+                }
+            }
+
+            prevYearBtn.addEventListener('click', function() {
+                if (currentYear > minYear) {
+                    currentYear--;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                if (currentYear < maxYear) {
+                    currentYear++;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
+            });
+
+            // 初期状態で月のボタンと年選択ボタンを更新
+            updateMonthButtons(currentYear);
+            updateYearButtons();
+        });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "work_menu.html" . }}
+{{ end }}
+

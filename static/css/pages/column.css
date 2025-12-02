@@ -42,6 +42,8 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .column-card:hover {
@@ -61,6 +63,9 @@
     line-height: var(--line-height-relaxed);
     color: var(--color-text-primary);
     letter-spacing: var(--letter-spacing-tight);
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Column一覧ページのカード内要素間の間隔をmarginで制御 */
@@ -70,6 +75,9 @@
 
 .column-list-item .column-card__title {
     margin: 0;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .column-card .date {
@@ -81,6 +89,9 @@
 /* Column一覧ページのカード内要素間の間隔をmarginで制御 */
 .column-list-item .column-card .date {
     margin: 0 0 1rem 0;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .column-card__description {
@@ -98,6 +109,12 @@
     margin-bottom: 0;
     width: 100%;
     box-sizing: border-box;
+    min-width: 0;
+}
+
+.column-list .column-card .article-header__tags .tag {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* 記事ヘッダー内のタグリストのスタイルは article-item.css で統一管理 */

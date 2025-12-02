@@ -61,7 +61,7 @@
                             <p class="date">{{ $displayDate }}</p>
                             {{ end }}
                             <h3 class="column-card__title">{{ .Title }}</h3>
-                            {{ if $tags }}
+                            {{- if $tags }}
                             <div class="article-header__tags">
                                 {{ $currentTag := "" }}
                                 {{ if hasPrefix $.RelPermalink "/work_tag/" }}
@@ -79,7 +79,7 @@
                                     <a href="/work_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}" onclick="event.stopPropagation()">{{ . }}</a>
                                 {{ end }}
                             </div>
-                            {{ end }}
+                            {{- end }}
                         </a>
                     </li>
                 {{ end }}

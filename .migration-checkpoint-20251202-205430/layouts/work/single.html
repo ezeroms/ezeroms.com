@@ -1,0 +1,81 @@
+{{ define "section_header" }}
+    {{ partial "work-header-nav.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item work-article">
+                    <div class="article-header">
+                        {{ $startDate := "" }}
+                        {{ $endDate := "" }}
+                        {{ if .Params.start_date }}
+                            {{ $startDate = .Params.start_date }}
+                        {{ end }}
+                        {{ if and .Params.end_date (ne .Params.end_date "") }}
+                            {{ $endDate = .Params.end_date }}
+                        {{ end }}
+                        {{ $displayDate := "" }}
+                        {{ if $startDate }}
+                            {{ $start := time $startDate }}
+                            {{ if and $endDate (ne $endDate "") }}
+                                {{ $end := time $endDate }}
+                                {{ $displayDate = printf "Work · %s · %s – %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") ($end | dateFormat "Jan") ($end | dateFormat "2006") }}
+                            {{ else }}
+                                {{ $displayDate = printf "Work · %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
+                            {{ end }}
+                        {{ end }}
+                        {{ if $displayDate }}
+                            <p class="date">{{ $displayDate }}</p>
+                        {{ end }}
+                        <h1>{{ .Title }}</h1>
+                        {{ if .Params.image }}
+                            <figure class="work-article__thumbnail">
+                                <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                            </figure>
+                        {{ end }}
+                        <div class="work-article__meta">
+                            {{ if .Params.role }}
+                                <div class="work-article__meta-item">
+                                    <span class="work-article__meta-label">Role</span>
+                                    <span class="work-article__meta-value">{{ .Params.role }}</span>
+                                </div>
+                            {{ end }}
+                            {{ if .Params.client }}
+                                <div class="work-article__meta-item">
+                                    <span class="work-article__meta-label">Client</span>
+                                    <span class="work-article__meta-value">{{ .Params.client }}</span>
+                                </div>
+                            {{ end }}
+                            {{ if .Params.agency }}
+                                <div class="work-article__meta-item">
+                                    <span class="work-article__meta-label">Agency</span>
+                                    <span class="work-article__meta-value">{{ .Params.agency }}</span>
+                                </div>
+                            {{ end }}
+                        </div>
+                        {{ if .Params.work_tag }}
+                            <div class="article-header__tags">
+                                {{ $sortedTags := sort .Params.work_tag }}
+                                {{ range $sortedTags }}
+                                    <a href="/work_tag/{{ . | urlize }}/" class="tag" data-tag="{{ . }}">{{ . }}</a>
+                                {{ end }}
+                            </div>
+                        {{ end }}
+                    </div>
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                </article>
+                
+                {{ partial "article-navigation.html" . }}
+
+            </ul>
+        </div>
+    </section>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "work_menu.html" . }}
+{{ end }}

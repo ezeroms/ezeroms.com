@@ -1,0 +1,28 @@
+{{ define "main" }}
+{{/* Tweet一覧ページを最新記事の月のアーカイブページにリダイレクト */}}
+{{ $tweetSection := .Site.GetPage "section" "tweet" }}
+{{ $allMonths := slice }}
+{{ if $tweetSection }}
+    {{ range $tweetSection.Pages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ $sortedMonths := sort $allMonths }}
+{{ $total := len $sortedMonths }}
+{{ $latestMonth := "" }}
+{{ $redirectURL := "/tweet/" }}
+{{ if gt $total 0 }}
+    {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ $monthPage := index .Site.Taxonomies.tweet_month ($latestMonth | urlize) }}
+    {{ if $monthPage }}
+        {{ $redirectURL = $monthPage.Page.RelPermalink }}
+    {{ end }}
+{{ end }}
+<script>window.location.replace("{{ $redirectURL }}");</script>
+<meta http-equiv="refresh" content="0;url={{ $redirectURL }}">
+<link rel="canonical" href="{{ $redirectURL }}">
+{{ end }}
+

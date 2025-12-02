@@ -1,0 +1,45 @@
+<div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <div class="secondary-nav__tags">
+            {{ $allTags := slice }}
+            {{ range (where .Site.RegularPages "Section" "diary") }}
+                {{ if .Params.diary_tag }}
+                    {{ range .Params.diary_tag }}
+                        {{ if not (in $allTags .) }}
+                            {{ $allTags = $allTags | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedTags := sort $allTags }}
+            {{ $currentTag := "" }}
+            {{/* RelPermalinkから現在のタグを取得 */}}
+            {{ if hasPrefix .RelPermalink "/diary_tag/" }}
+                {{ $pathParts := split (trim .RelPermalink "/") "/" }}
+                {{ if ge (len $pathParts) 2 }}
+                    {{ $currentTag = index $pathParts 1 }}
+                {{ end }}
+            {{ end }}
+            {{ range $sortedTags }}
+                {{ $label := . }}
+                {{ $isActive := false }}
+                {{ if and $currentTag (eq ($label | urlize) $currentTag) }}
+                    {{ $isActive = true }}
+                {{ end }}
+
+                {{ $taxonomy := "" }}
+                {{ range $term, $pages := $.Site.Taxonomies.diary_tag }}
+                    {{ if eq ($term | urlize) ($label | urlize) }}
+                        {{ $taxonomy = $pages }}
+                    {{ end }}
+                {{ end }}
+
+                {{ with $taxonomy }}
+                    <a href="{{ .Page.RelPermalink }}" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</a>
+                {{ else }}
+                    <span class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</span>
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+</div>

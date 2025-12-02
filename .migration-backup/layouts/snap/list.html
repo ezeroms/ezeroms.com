@@ -1,0 +1,303 @@
+{{ define "section_header" }}
+    {{ $allYears := slice }}
+    {{ range .Pages }}
+        {{ $yearStr := .Date | dateFormat "2006" }}
+        {{ if not (in $allYears $yearStr) }}
+            {{ $allYears = $allYears | append $yearStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedYears := sort $allYears }}
+    {{ $total := len $sortedYears }}
+    {{ $latestYear := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestYear = index $sortedYears (sub $total 1) }}
+    {{ end }}
+
+    <div class="snap-header-nav">
+        <div class="snap-year-selector">
+            <button class="snap-year-nav" id="prev-year">‹</button>
+            <span class="snap-year-display" id="year-display">{{ if $latestYear }}{{ $latestYear }}{{ else }}2025{{ end }}</span>
+            <button class="snap-year-nav" id="next-year">›</button>
+        </div>
+    </div>
+{{ end }}
+
+{{ define "main" }}
+    {{ $allYears := slice }}
+    {{ range .Pages }}
+        {{ $yearStr := .Date | dateFormat "2006" }}
+        {{ if not (in $allYears $yearStr) }}
+            {{ $allYears = $allYears | append $yearStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedYears := sort $allYears }}
+    {{ $total := len $sortedYears }}
+    {{ $latestYear := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestYear = index $sortedYears (sub $total 1) }}
+    {{ end }}
+
+    <section class="snap-main">
+        <div class="snap-main__content">
+            <div class="snap-gallery" id="snap-gallery">
+                {{ range .Pages }}
+                    {{ $year := .Date | dateFormat "2006" }}
+                    <div class="snap-item" data-year="{{ $year }}" data-snap-id="{{ .File.UniqueID }}" {{ if ne $year $latestYear }}style="display: none;"{{ end }}>
+                        <div class="snap-item__image-wrapper">
+                            {{ $content := .Content }}
+                            {{ $images := findRE `<img[^>]+>` $content }}
+                            {{ if $images }}
+                                {{ $firstImage := index $images 0 }}
+                                {{ $srcMatch := findRE `src=["']([^"']+)["']` $firstImage }}
+                                {{ if $srcMatch }}
+                                    {{ $imageSrc := index $srcMatch 1 }}
+                                    <img src="{{ $imageSrc }}" alt="{{ .Title }}" class="snap-item__thumbnail" loading="lazy" data-full-image="{{ $imageSrc }}">
+                                {{ else }}
+                                    <div class="snap-item__placeholder">No Image</div>
+                                {{ end }}
+                            {{ else }}
+                                <div class="snap-item__placeholder">No Image</div>
+                            {{ end }}
+                        </div>
+                        <div class="snap-item__info">
+                            <p class="snap-item__date">{{ .Date | dateFormat "Monday, January 2, 2006" }}</p>
+                            {{ if .Params.location }}
+                                <p class="snap-item__location">📍 {{ .Params.location }}</p>
+                            {{ end }}
+                            {{ if .Params.camera }}
+                                <p class="snap-item__camera">📷 {{ .Params.camera }}</p>
+                            {{ end }}
+                        </div>
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+
+    <!-- モーダル -->
+    <div class="snap-modal" id="snap-modal" style="display: none;">
+        <button class="snap-modal__close" id="snap-modal-close" aria-label="閉じる">×</button>
+        <button class="snap-modal__prev" id="snap-modal-prev" aria-label="前の写真">‹</button>
+        <button class="snap-modal__next" id="snap-modal-next" aria-label="次の写真">›</button>
+        <div class="snap-modal__content">
+            <img class="snap-modal__image" id="snap-modal-image" src="" alt="">
+            <div class="snap-modal__info">
+                <p class="snap-modal__date" id="snap-modal-date"></p>
+                <p class="snap-modal__location" id="snap-modal-location"></p>
+                <p class="snap-modal__camera" id="snap-modal-camera"></p>
+                <div class="snap-modal__description" id="snap-modal-description"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const snapItems = document.querySelectorAll('.snap-item');
+            const snapModal = document.getElementById('snap-modal');
+            const snapModalClose = document.getElementById('snap-modal-close');
+            const snapModalImage = document.getElementById('snap-modal-image');
+            const snapModalDate = document.getElementById('snap-modal-date');
+            const snapModalLocation = document.getElementById('snap-modal-location');
+            const snapModalCamera = document.getElementById('snap-modal-camera');
+            const snapModalDescription = document.getElementById('snap-modal-description');
+            const snapModalPrev = document.getElementById('snap-modal-prev');
+            const snapModalNext = document.getElementById('snap-modal-next');
+
+            // URLパラメータを取得
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlYear = urlParams.get('year');
+
+            // 最新の年を取得
+            let latestYear = '';
+            snapItems.forEach(item => {
+                const year = item.getAttribute('data-year');
+                if (!latestYear || year > latestYear) {
+                    latestYear = year;
+                }
+            });
+
+            // 初期状態の決定
+            let currentYear = parseInt(yearDisplay.textContent);
+            let selectedYear = urlYear || latestYear;
+
+            // URLから年を取得
+            if (urlYear) {
+                currentYear = parseInt(urlYear);
+                yearDisplay.textContent = currentYear;
+            }
+
+            // 全Snapデータを収集
+            const snapData = [];
+            snapItems.forEach(item => {
+                const snapId = item.getAttribute('data-snap-id');
+                const year = item.getAttribute('data-year');
+                const thumbnail = item.querySelector('.snap-item__thumbnail');
+                const dateEl = item.querySelector('.snap-item__date');
+                const locationEl = item.querySelector('.snap-item__location');
+                const cameraEl = item.querySelector('.snap-item__camera');
+                
+                if (thumbnail) {
+                    // data-full-image属性があればそれを使用、なければsrcを使用
+                    const fullImageSrc = thumbnail.getAttribute('data-full-image') || thumbnail.src;
+                    snapData.push({
+                        id: snapId,
+                        year: year,
+                        imageSrc: fullImageSrc,
+                        date: dateEl ? dateEl.textContent : '',
+                        location: locationEl ? locationEl.textContent.replace('📍 ', '') : '',
+                        camera: cameraEl ? cameraEl.textContent.replace('📷 ', '') : '',
+                        description: '' // TODO: 説明文を取得
+                    });
+                }
+            });
+
+            let currentSnapIndex = 0;
+
+            function updateURL(year) {
+                const params = new URLSearchParams();
+                if (year) {
+                    params.set('year', year);
+                }
+                const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.history.pushState({ year: year }, '', newURL);
+            }
+
+            function filterByYear(year) {
+                selectedYear = year;
+                
+                // 写真をフィルタリング
+                snapItems.forEach(item => {
+                    const itemYear = item.getAttribute('data-year');
+                    if (itemYear === year) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // URLを更新
+                updateURL(year);
+
+                // ページの先頭に戻る
+                window.scrollTo(0, 0);
+            }
+
+            function openModal(index) {
+                currentSnapIndex = index;
+                const snap = snapData[index];
+                
+                snapModalImage.src = snap.imageSrc;
+                snapModalImage.alt = snap.date;
+                snapModalDate.textContent = snap.date;
+                snapModalLocation.textContent = snap.location ? `📍 ${snap.location}` : '';
+                snapModalCamera.textContent = snap.camera ? `📷 ${snap.camera}` : '';
+                snapModalDescription.textContent = snap.description;
+                
+                snapModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                // 前後ボタンの表示/非表示
+                snapModalPrev.style.display = index > 0 ? 'flex' : 'none';
+                snapModalNext.style.display = index < snapData.length - 1 ? 'flex' : 'none';
+            }
+
+            function closeModal() {
+                snapModal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            function showNext() {
+                if (currentSnapIndex < snapData.length - 1) {
+                    openModal(currentSnapIndex + 1);
+                }
+            }
+
+            function showPrev() {
+                if (currentSnapIndex > 0) {
+                    openModal(currentSnapIndex - 1);
+                }
+            }
+
+            // 年選択イベント
+            prevYearBtn.addEventListener('click', function() {
+                currentYear--;
+                yearDisplay.textContent = currentYear;
+                filterByYear(String(currentYear));
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                currentYear++;
+                yearDisplay.textContent = currentYear;
+                filterByYear(String(currentYear));
+            });
+
+            // 写真クリックイベント
+            snapItems.forEach((item, index) => {
+                const thumbnail = item.querySelector('.snap-item__thumbnail');
+                if (thumbnail) {
+                    thumbnail.addEventListener('click', function() {
+                        const snapId = item.getAttribute('data-snap-id');
+                        const snapIndex = snapData.findIndex(s => s.id === snapId);
+                        if (snapIndex !== -1) {
+                            openModal(snapIndex);
+                        }
+                    });
+                }
+            });
+
+            // モーダル閉じるイベント
+            snapModalClose.addEventListener('click', closeModal);
+            snapModal.addEventListener('click', function(e) {
+                if (e.target === snapModal) {
+                    closeModal();
+                }
+            });
+
+            // 前後ボタン
+            snapModalNext.addEventListener('click', showNext);
+            snapModalPrev.addEventListener('click', showPrev);
+
+            // キーボード操作
+            document.addEventListener('keydown', function(e) {
+                if (snapModal.style.display === 'flex') {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    } else if (e.key === 'ArrowRight') {
+                        showNext();
+                    } else if (e.key === 'ArrowLeft') {
+                        showPrev();
+                    }
+                }
+            });
+
+            // 初期状態の設定
+            if (selectedYear) {
+                filterByYear(selectedYear);
+            }
+
+            // ブラウザの戻る/進むボタンに対応
+            window.addEventListener('popstate', function(event) {
+                const params = new URLSearchParams(window.location.search);
+                const year = params.get('year');
+                
+                if (year) {
+                    selectedYear = year;
+                    currentYear = parseInt(year);
+                    yearDisplay.textContent = currentYear;
+                    filterByYear(year);
+                } else {
+                    selectedYear = latestYear;
+                    currentYear = parseInt(latestYear);
+                    yearDisplay.textContent = currentYear;
+                    filterByYear(latestYear);
+                }
+            });
+        });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+{{ end }}

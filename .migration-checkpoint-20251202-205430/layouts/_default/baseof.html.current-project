@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title }}</title>
+</head>
+<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ end }}>
+    <div class="layout-container">
+        <aside class="layout-sidebar">
+            <div class="sidebar">
+                <div class="sidebar__main">
+                    <div class="sidebar__logo">
+                        <a href="/">Logo</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="layout-body">
+            {{ if and (ne .Section "shoulders-of-giants") (ne .Section "chronicle") }}
+            <div class="layout-header">
+                {{ block "section_header" . }}{{ end }}
+            </div>
+            {{ end }}
+            <div class="layout-main{{ if .IsHome }} layout-main--centered{{ else }} layout-main--with-tags{{ end }}">
+                <main class="layout-main__content" id="main-content">
+                    {{ block "main" . }}{{ end }}
+                </main>
+
+                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "media-coverage") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) }}
+                <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
+                    {{ block "secondary" . }}{{ partial "secondary-nav.html" . }}{{ end }}
+                </aside>
+                {{ else }}
+                {{ block "secondary" . }}{{ end }}
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

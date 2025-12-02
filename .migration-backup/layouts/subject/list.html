@@ -1,0 +1,47 @@
+{{ define "section_header" }}
+    {{ partial "column-header-nav.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container column-list" id="column-articles-list">
+                {{ $currentCategory := "" }}
+                {{ if and .Data .Data.Term }}
+                    {{ $currentCategory = .Data.Term }}
+                {{ end }}
+                {{ $articles := where .Site.RegularPages "Params.column_category" "intersect" (slice $currentCategory) }}
+                {{ range $articles }}
+                    {{ $categories := slice }}
+                    {{ if .Params.column_category }}
+                        {{ $categories = .Params.column_category }}
+                    {{ end }}
+                    {{ $tags := slice }}
+                    {{ if .Params.column_tag }}
+                        {{ $tags = .Params.column_tag }}
+                    {{ end }}
+                    <li class="column-list-item column-item" data-categories="{{ delimit $categories " " }}" data-tags="{{ delimit $tags " " }}">
+                        <div class="column-card">
+                            <a href="{{ .RelPermalink }}" class="column-card__link">
+                                <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                                <h3 class="column-card__title">{{ .Title }}</h3>
+                            </a>
+                            {{ if .Params.column_tag }}
+                                <div class="article-header__tags">
+                                    {{ $sortedTags := sort .Params.column_tag }}
+                                    {{ range $sortedTags }}
+                                        <a href="/column_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                                    {{ end }}
+                                </div>
+                            {{ end }}
+                        </div>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "column_menu.html" . }}
+{{ end }}
