@@ -35,7 +35,7 @@
                                 {{ end }}
                                 <div class="tweet-item__footer">
                                     <p class="date tweet-item__date">
-                                        {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.tweet_place }} · <span class="tweet-item__place-link">{{ .Params.tweet_place }}</span>{{ end }}
+                                        {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.tweet_place }} · <a href="/tweet_place/{{ .Params.tweet_place | urlize }}/" class="tweet-item__place-link">{{ .Params.tweet_place }}</a>{{ end }}
                                     </p>
                                 </div>
                             </div>
