@@ -24,7 +24,7 @@
                 <!-- 通常のコンテンツ -->
                 <div class="about-content">
                     <article class="article-item">
-                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                     </article>
                 </div>
             {{ end }}

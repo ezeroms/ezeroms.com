@@ -71,8 +71,14 @@
 
 .giants-item__citation {
     margin: 1.6rem 0 0 0;
+    padding: 0;
     color: var(--color-text-primary);
+    width: 100%;
+    font-size: var(--font-size-base);
     font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.8;
+    letter-spacing: 0.01em;
 }
 
 .giants-item__tags {

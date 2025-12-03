@@ -13,7 +13,7 @@
                         <p class="media-coverage-detail__lead">{{ .Params.lead }}</p>
                     {{ end }}
                 </div>
-                {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                 {{ if .Params.external_url }}
                     <p><a href="{{ .Params.external_url }}" target="_blank">{{ .Params.external_url }}</a></p>
                 {{ end }}

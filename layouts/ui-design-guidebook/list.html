@@ -39,7 +39,7 @@
             <ul class="article-container">
                 <article class="article-item">
                     <h1>{{ .Title }}</h1>
-                    {{ $content := .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    {{ $content := .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                     {{ $content | safeHTML }}
                 </article>
             </ul>

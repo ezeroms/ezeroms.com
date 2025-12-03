@@ -64,7 +64,7 @@
                             </div>
                         {{ end }}
                     </div>
-                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                 </article>
                 
                 {{ partial "article-navigation.html" . }}

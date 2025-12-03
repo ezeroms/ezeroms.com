@@ -14,7 +14,7 @@
                     {{ $content := .Content }}
                     {{ $parts := split $content "## 🌏 Around the Web" }}
                     {{ if gt (len $parts) 1 }}
-                        {{ index $parts 0 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                        {{ index $parts 0 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                         <h2>🌏 Around the Web</h2>
                         <ul class="about__sns-list">
                             <li>
@@ -79,10 +79,10 @@
                             </li>
                         </ul>
                         {{ if gt (len (index $parts 1)) 0 }}
-                            {{ index $parts 1 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                            {{ index $parts 1 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                         {{ end }}
                     {{ else }}
-                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                     {{ end }}
                 </article>
             </div>
