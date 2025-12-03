@@ -61,11 +61,15 @@
 
 .date-selector-nav__month-filters {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 8px;
     padding: 0;
     justify-content: flex-end;
     flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .date-selector-nav__filter-btn {

@@ -18,6 +18,15 @@
                 <div class="giants-item__content">
                     {{ .Content }}
                 </div>
+                {{ if .Params.citation_override }}
+                    <div class="giants-item__citation">
+                        {{ .Params.citation_override }}
+                    </div>
+                {{ else if and .Params.author .Params.title .Params.publisher .Params.published_year }}
+                    <div class="giants-item__citation">
+                        {{ .Params.author }}『{{ .Params.title }}』（{{ .Params.publisher }}、{{ .Params.published_year }}年）
+                    </div>
+                {{ end }}
                 {{ if .Params.topic }}
                     <div class="giants-item__tags">
                         {{ $sortedTopics := sort .Params.topic }}
@@ -61,6 +70,8 @@
                 headerTitle.textContent = selectedTopic;
             }
             filterByTopic(selectedTopic);
+            // 初期読み込み時にクエリパラメータがある場合は先頭にスクロール
+            scrollToTop();
         } else {
             // タグが選択されていない場合はランダムに並び替え
             shuffleArticles();
@@ -72,6 +83,8 @@
                 e.preventDefault();
                 const topic = this.getAttribute('data-topic');
                 filterByTopic(topic);
+                // タグ選択時に先頭にスクロール
+                scrollToTop();
             });
         });
 
@@ -93,6 +106,9 @@
                 });
                 shuffleArticles();
             }
+            
+            // ページの先頭に戻る
+            scrollToTop();
         });
 
         function filterByTopic(topic) {
@@ -122,12 +138,31 @@
             }
 
             // 記事をフィルタリング
+            const visibleItems = [];
             giantsItems.forEach(item => {
                 const topics = item.getAttribute('data-topics');
                 if (topics && topics.includes(topic)) {
                     item.style.display = '';
+                    visibleItems.push(item);
                 } else {
                     item.style.display = 'none';
+                }
+            });
+
+            // 表示されている記事をランダムに並び替え
+            shuffleArray(visibleItems);
+            const articlesList = document.getElementById('article-container');
+            articlesList.innerHTML = '';
+            
+            // まず表示されている記事を追加
+            visibleItems.forEach(function(article) {
+                articlesList.appendChild(article);
+            });
+            
+            // 次に非表示の記事を追加（順序は維持）
+            giantsItems.forEach(function(item) {
+                if (item.style.display === 'none') {
+                    articlesList.appendChild(item);
                 }
             });
 
@@ -136,11 +171,24 @@
             window.history.pushState({ topic: topic }, '', newURL);
 
             // ページの先頭に戻る
-            const mainContent = document.querySelector('.site-content.is-giants .site-main');
+            scrollToTop();
+        }
+        
+        // ページの先頭にスクロールする関数
+        function scrollToTop() {
+            // 複数の方法で確実にスクロール位置を先頭に戻す
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'instant'
+            });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            
+            // メインコンテンツエリアがある場合もスクロール
+            const mainContent = document.querySelector('.layout-main__content');
             if (mainContent) {
-                mainContent.scrollTo(0, 0);
-            } else {
-                window.scrollTo(0, 0);
+                mainContent.scrollTop = 0;
             }
         }
 
@@ -151,6 +199,8 @@
                 e.stopPropagation();
                 const topic = e.target.getAttribute('data-tag');
                 filterByTopic(topic);
+                // タグ選択時に先頭にスクロール
+                scrollToTop();
             }
         });
 
@@ -198,12 +248,7 @@
             });
 
             // ページの先頭に戻る
-            const mainContent = document.querySelector('.site-content.is-giants .site-main');
-            if (mainContent) {
-                mainContent.scrollTo(0, 0);
-            } else {
-                window.scrollTo(0, 0);
-            }
+            scrollToTop();
         }
 
         // Shuffle array function

@@ -86,26 +86,24 @@
                             {{ $displayDate = printf "%s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
                         {{ end }}
                     {{ end }}
-                    <li class="column-list-item work-list-item">
-                        <a href="{{ .RelPermalink }}" class="column-card work-card">
-                            {{ if .Params.image }}
-                            <div class="work-card__image">
-                                <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                            </div>
+                    <li class="column-list-item work-list-item column-card work-card" data-href="{{ .RelPermalink }}">
+                        {{ if .Params.image }}
+                        <div class="work-card__image">
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                        </div>
+                        {{ end }}
+                        {{ if $displayDate }}
+                        <p class="date">{{ $displayDate }}</p>
+                        {{ end }}
+                        <h3 class="column-card__title">{{ .Title }}</h3>
+                        <div class="article-header__tags">
+                            {{ if $tags }}
+                            {{ $sortedTags := sort $tags }}
+                            {{ range $sortedTags }}
+                            <a href="/work_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
                             {{ end }}
-                            {{ if $displayDate }}
-                            <p class="date">{{ $displayDate }}</p>
                             {{ end }}
-                            <h3 class="column-card__title">{{ .Title }}</h3>
-                            {{- if $tags }}
-                            <div class="article-header__tags">
-                                {{ $sortedTags := sort $tags }}
-                                {{ range $sortedTags }}
-                                <a href="/work_tag/{{ . | urlize }}/" class="tag" onclick="event.stopPropagation()">{{ . }}</a>
-                                {{ end }}
-                            </div>
-                            {{- end }}
-                        </a>
+                        </div>
                     </li>
                 {{ end }}
             </ul>

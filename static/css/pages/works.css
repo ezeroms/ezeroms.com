@@ -18,6 +18,8 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    margin: 0; /* .article-item img の margin を上書き */
+    display: block; /* .article-item img の display を上書き */
 }
 
 .work-card:hover .work-card__image img {
@@ -30,10 +32,23 @@
     margin: 0 0 1rem 0;
 }
 
+/* Work一覧ページのカード全体をクリック可能にする */
+.work-list .column-list-item[data-href] {
+    cursor: pointer;
+}
+
 /* Work一覧ページのカード内要素間の間隔をmarginで制御 */
-.work-list .column-card {
+.work-list .column-card,
+.work-list .column-list-item.column-card {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    padding: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-default);
+    background-color: var(--color-background-white);
+    transition: all var(--transition-normal) var(--easing-default);
+    box-sizing: border-box;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
@@ -41,11 +56,13 @@
     min-width: 0;
 }
 
-.work-list .column-card:hover {
+.work-list .column-card:hover,
+.work-list .column-list-item.column-card:hover {
     color: inherit;
 }
 
-.work-list .column-card:hover .column-card__title {
+.work-list .column-card:hover .column-card__title,
+.work-list .column-list-item.column-card:hover .column-card__title {
     opacity: 0.8;
 }
 
@@ -59,15 +76,20 @@
     flex-shrink: 0;
 }
 
-.work-list .column-card .date {
-    margin: 0 0 1rem 0;
+/* Workカード内の画像に.article-item imgのスタイルが適用されないようにする */
+.work-list .work-card__image img {
+    margin: 0 !important;
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.work-list .column-card .column-card__title {
+.work-list .column-card .date {
     margin: 0 0 1rem 0;
-    min-width: 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
 }
 
 .work-list .column-card .article-header__tags {
@@ -77,39 +99,41 @@
     margin-top: 1rem;
     margin-bottom: 0;
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     min-width: 0;
+    overflow: hidden;
 }
 
 .work-list .column-card .article-header__tags .tag {
     flex-shrink: 0;
     white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-.work-article__thumbnail {
-    margin: 24px 0;
+/* Work詳細ページのサムネイル画像（.article-item img のスタイルを上書き） */
+.work-article .article-header .work-article__thumbnail {
+    margin: 1rem 0 0;
     border-radius: 12px;
     overflow: hidden;
     background: #f3f3f3;
-    border: 1px solid #E7E7E9;
-}
-
-.work-article__thumbnail img {
     width: 100%;
     height: auto;
-    display: block;
+    display: inline;
     object-fit: cover;
+    position: relative;
 }
 
 .work-article__meta {
-    margin-top: 24px;
     display: flex;
     flex-direction: column;
+    margin-top: 2rem;
 }
 
 .work-article__meta-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 0.75rem;
 }
 

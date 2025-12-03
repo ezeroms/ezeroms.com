@@ -50,37 +50,35 @@
                             {{ $displayDate = printf "%s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
                         {{ end }}
                     {{ end }}
-                    <li class="column-list-item work-list-item">
-                        <a href="{{ .RelPermalink }}" class="column-card work-card">
-                            {{ if .Params.image }}
-                            <div class="work-card__image">
-                                <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                            </div>
-                            {{ end }}
-                            {{ if $displayDate }}
-                            <p class="date">{{ $displayDate }}</p>
-                            {{ end }}
-                            <h3 class="column-card__title">{{ .Title }}</h3>
-                            {{- if $tags }}
-                            <div class="article-header__tags">
-                                {{ $currentTag := "" }}
-                                {{ if hasPrefix $.RelPermalink "/work_tag/" }}
-                                    {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
-                                    {{ if ge (len $pathParts) 2 }}
-                                        {{ $currentTag = index $pathParts 1 }}
-                                    {{ end }}
+                    <li class="column-list-item work-list-item column-card work-card" data-href="{{ .RelPermalink }}">
+                        {{ if .Params.image }}
+                        <div class="work-card__image">
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                        </div>
+                        {{ end }}
+                        {{ if $displayDate }}
+                        <p class="date">{{ $displayDate }}</p>
+                        {{ end }}
+                        <h3 class="column-card__title">{{ .Title }}</h3>
+                        <div class="article-header__tags">
+                            {{ if $tags }}
+                            {{ $currentTag := "" }}
+                            {{ if hasPrefix $.RelPermalink "/work_tag/" }}
+                                {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                {{ if ge (len $pathParts) 2 }}
+                                    {{ $currentTag = index $pathParts 1 }}
                                 {{ end }}
-                                {{ $sortedTags := sort $tags }}
-                                {{ range $sortedTags }}
-                                    {{ $isActive := false }}
-                                    {{ if and $currentTag (eq (. | urlize) $currentTag) }}
-                                        {{ $isActive = true }}
-                                    {{ end }}
-                                    <a href="/work_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}" onclick="event.stopPropagation()">{{ . }}</a>
+                            {{ end }}
+                            {{ $sortedTags := sort $tags }}
+                            {{ range $sortedTags }}
+                                {{ $isActive := false }}
+                                {{ if and $currentTag (eq (. | urlize) $currentTag) }}
+                                    {{ $isActive = true }}
                                 {{ end }}
-                            </div>
-                            {{- end }}
-                        </a>
+                                <a href="/work_tag/{{ . | urlize }}/" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ . }}">{{ . }}</a>
+                            {{ end }}
+                            {{ end }}
+                        </div>
                     </li>
                 {{ end }}
             </ul>

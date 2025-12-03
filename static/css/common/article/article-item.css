@@ -92,6 +92,12 @@
 /* 記事ヘッダー内のタグリストの上は2rem */
 .article-header > .article-header__tags {
   margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-start;
 }
 
 /* タイトルの下にタグリスト以外の補足情報がある場合、それとタイトルの間を1rem */

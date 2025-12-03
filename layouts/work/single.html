@@ -33,9 +33,7 @@
                         {{ end }}
                         <h1>{{ .Title }}</h1>
                         {{ if .Params.image }}
-                            <figure class="work-article__thumbnail">
-                                <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                            </figure>
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="work-article__thumbnail">
                         {{ end }}
                         <div class="work-article__meta">
                             {{ if .Params.role }}

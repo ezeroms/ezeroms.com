@@ -69,6 +69,12 @@
     opacity: 1;
 }
 
+.giants-item__citation {
+    margin: 1.6rem 0 0 0;
+    color: var(--color-text-primary);
+    font-style: normal;
+}
+
 .giants-item__tags {
     display: flex;
     flex-wrap: wrap;

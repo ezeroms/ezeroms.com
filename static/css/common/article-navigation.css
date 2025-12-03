@@ -80,7 +80,7 @@
 
 .article-navigation__label {
     font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
+    color: var(--color-text-tertiary);
     font-weight: var(--font-weight-normal);
     white-space: nowrap;
 }
