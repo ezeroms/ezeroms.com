@@ -112,6 +112,7 @@ async function processTweet() {
       const tweetMonth = f.tweetMonth || getMonthFromDate(date);
       const tags = Array.isArray(f.tweetTag) ? f.tweetTag : [];
       const voice = Array.isArray(f.voice) ? f.voice : [];
+      const voiceSingle = voice.length ? voice[0] : '';
       const emoji = typeof f.emoji === 'string' ? f.emoji : '';
       const place = typeof f.tweetPlace === 'string' ? f.tweetPlace : '';
 
@@ -132,7 +133,7 @@ date: ${date}
 tweet_month: ${tweetMonth}
 tweet_tag:${yamlArray(tags)}
 tweet_voice:${yamlArray(voice)}
-${place ? `tweet_place: "${yamlString(place)}"\n` : ''}${emoji ? `tweet_emoji: "${yamlString(emoji)}"\n` : ''}---
+${voiceSingle ? `voice: "${yamlString(voiceSingle)}"\n` : ''}${place ? `tweet_place: "${yamlString(place)}"\n` : ''}${emoji ? `emoji: "${yamlString(emoji)}"\n` : ''}${emoji ? `tweet_emoji: "${yamlString(emoji)}"\n` : ''}---
 `;
 
       const content = frontMatter + '\n' + body + '\n';
