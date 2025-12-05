@@ -11,9 +11,10 @@
     /**
      * ランダム画像を表示
      */
-    function initRandomImage(containerId, imageId) {
+    function initRandomImage(containerId, imageId, skeletonId) {
         const imageContainer = document.getElementById(containerId);
         const randomImageElement = document.getElementById(imageId);
+        const skeletonElement = skeletonId ? document.getElementById(skeletonId) : null;
         
         // 必要な要素が存在しない場合は処理を中断
         if (!imageContainer || !randomImageElement) {
@@ -25,6 +26,10 @@
         
         if (!imagesData) {
             console.warn('[RandomImage] No images data found');
+            // 画像がない場合はプレースホルダーを非表示
+            if (skeletonElement) {
+                skeletonElement.classList.add('hidden');
+            }
             return;
         }
 
@@ -41,13 +46,39 @@
                 const timestamp = new Date().getTime();
                 const imagePath = '/images/top/' + randomImage + '?v=' + timestamp;
                 
-                // 画像のsrc属性を設定
+                // 画像読み込み完了時の処理
+                randomImageElement.addEventListener('load', function() {
+                    // 画像が読み込まれたら、loadedクラスを追加して表示
+                    randomImageElement.classList.add('loaded');
+                    // プレースホルダーを非表示
+                    if (skeletonElement) {
+                        skeletonElement.classList.add('hidden');
+                    }
+                });
+                
+                // 画像読み込みエラー時の処理
+                randomImageElement.addEventListener('error', function() {
+                    // エラー時もプレースホルダーを非表示
+                    if (skeletonElement) {
+                        skeletonElement.classList.add('hidden');
+                    }
+                });
+                
+                // 画像のsrc属性を設定（これで読み込みが開始される）
                 randomImageElement.src = imagePath;
             } else {
                 console.warn('[RandomImage] No images available');
+                // 画像がない場合はプレースホルダーを非表示
+                if (skeletonElement) {
+                    skeletonElement.classList.add('hidden');
+                }
             }
         } catch (e) {
             console.error('[RandomImage] Error parsing images data:', e);
+            // エラー時もプレースホルダーを非表示
+            if (skeletonElement) {
+                skeletonElement.classList.add('hidden');
+            }
         }
     }
     
@@ -56,9 +87,9 @@
      */
     function initAllRandomImages() {
         // PC版
-        initRandomImage('image-container', 'randomImage');
+        initRandomImage('image-container', 'randomImage', 'topPhotoSkeleton');
         // モバイル版
-        initRandomImage('image-container-mobile', 'randomImageMobile');
+        initRandomImage('image-container-mobile', 'randomImageMobile', 'topPhotoSkeletonMobile');
     }
 
     /**

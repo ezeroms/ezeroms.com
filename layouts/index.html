@@ -15,6 +15,7 @@
                     {{ $imageNames = $imageNames | append (dict "Name" .Name) }}
                 {{ end }}
                 <div id="image-container" data-images='{{ $imageNames | jsonify }}'></div>
+                <div class="top-photo-skeleton" id="topPhotoSkeleton"></div>
                 <img id="randomImage" src="" alt="Random Image" class="top-photo">
                 </a>
             </div>
@@ -37,6 +38,7 @@
                     {{ $imageNames = $imageNames | append (dict "Name" .Name) }}
                 {{ end }}
                 <div id="image-container-mobile" data-images='{{ $imageNames | jsonify }}'></div>
+                <div class="top-photo-skeleton top-photo-skeleton--mobile" id="topPhotoSkeletonMobile"></div>
                 <img id="randomImageMobile" src="" alt="Random Image" class="top-photo-mobile">
                 </a>
             </div>
