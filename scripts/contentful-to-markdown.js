@@ -97,7 +97,15 @@ async function processTweet() {
     for (const entry of entries.items) {
       const f = entry.fields || {};
 
-      const date = f.date || new Date().toISOString();
+      // 日付をISO 8601形式（UTC）に変換
+      let date = f.date || new Date().toISOString();
+      if (date && typeof date === 'string') {
+        // Dateオブジェクトに変換してからISO形式に変換（タイムゾーン情報を正しく処理）
+        const dateObj = new Date(date);
+        if (!isNaN(dateObj.getTime())) {
+          date = dateObj.toISOString();
+        }
+      }
       
       // Contentfulのslugフィールドを直接使用（フォールバック: エントリID）
       const slug = f.slug || entry.sys.id;
