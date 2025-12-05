@@ -9,7 +9,7 @@
   status = 200
 
 [build]
-  command = "cd scripts && npm install && cd .. && node scripts/contentful-to-markdown.js && hugo --gc --minify"
+  command = "rm -rf public && cd scripts && npm install && cd .. && node scripts/contentful-to-markdown.js && hugo --gc --minify"
   publish = "public"
 
 [context.production.environment]
