@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
     <meta charset="UTF-8">
     <title>Chronicle</title>
 
@@ -27,19 +27,22 @@
     <meta property="og:title" content="Chronicle">
     <meta property="og:description" content="One thing I can tell you is you got to be free!">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:1313/chronicle/">
-    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:url" content="https://ezeroms.com/chronicle/">
+    <meta property="og:image" content="https://ezeroms.com/images/common/og-image.png">
     <meta property="og:site_name" content="ezeroms.com">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Chronicle">
     <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
-    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta name="twitter:image" content="https://ezeroms.com/images/common/og-image.png">
 
     
 
 </head>
 <body>
+    
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
+    
     <div class="layout-container">
         <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
             <div class="sidebar">
@@ -240,7 +243,7 @@
     <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
       <ul class="sidebar__nav">
         <li>
-          <a class="" href="/about/">About</a>
+          <a class="" href="/about/profile/">About</a>
         </li>
         <li>
           <a class="" href="/tweet_month/2025-06/">Tweet</a>
@@ -279,6 +282,1951 @@
         </aside>
 
         <div class="layout-body">
+            
+            
+                
+<div class="mobile-header" id="mobile-header-chronicle">
+    
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    
+    <h2 class="mobile-header__title">Chronicle</h2>
+    
+    
+    <button class="mobile-header__button" id="mobile-header-chronicle-btn" aria-label="フィルターを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+
+<div class="half-modal__overlay" id="half-modal-chronicle-overlay"></div>
+<div class="half-modal" id="half-modal-chronicle">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">フィルター</h3>
+        <button class="half-modal__close" id="half-modal-chronicle-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        <aside class="layout-toc" aria-label="Chronicle フィルター">
+    <nav class="layout-toc__nav">
+        <div class="chronicle-filters">
+            
+            <div class="chronicle-filters__section">
+                <h3 class="chronicle-filters__title">生まれ年</h3>
+                <div class="chronicle-birth">
+                    <input type="number" id="toc-birth-year" min="1900" max="2100" value="1989" class="chronicle-birth__year-input">
+                    <input type="number" id="toc-birth-month" min="1" max="12" value="6" class="chronicle-birth__month-input">
+                </div>
+            </div>
+
+            
+            <div class="chronicle-filters__section">
+                <h3 class="chronicle-filters__title">表示期間</h3>
+                <div class="chronicle-year-range">
+                    <input type="number" id="toc-start-year" min="1868" max="2100" value="1989" class="chronicle-year-range__start-input">
+                    <span class="chronicle-year-range__arrow">→</span>
+                    <input type="number" id="toc-end-year" min="1868" max="2100" value="2025" class="chronicle-year-range__end-input">
+                </div>
+                <label class="chronicle-filters__checkbox">
+                    <input type="checkbox" id="toc-monthly-view" class="chronicle-filters__monthly-checkbox">
+                    <span>月単位</span>
+                </label>
+                <label class="chronicle-filters__checkbox">
+                    <input type="checkbox" id="toc-era-display" class="chronicle-filters__era-checkbox">
+                    <span>元号を表示</span>
+                </label>
+            </div>
+
+            
+            
+            
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                        
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+                    
+                    
+                    
+                    
+                    
+                    
+                
+            
+                
+            
+            
+            
+                <div class="chronicle-filters__section">
+                    <h3 class="chronicle-filters__title">カテゴリ</h3>
+                    <ul class="chronicle-filters__list">
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="スポーツ"
+                                           data-subcategories="オリンピック,サッカー">
+                                    <span>スポーツ</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="スポーツ"
+                                                           data-subcategory="オリンピック">
+                                                    <span>オリンピック</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="スポーツ"
+                                                           data-subcategory="サッカー">
+                                                    <span>サッカー</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="政治"
+                                           data-subcategories="元号,内閣,国際">
+                                    <span>政治</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="政治"
+                                                           data-subcategory="元号">
+                                                    <span>元号</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="政治"
+                                                           data-subcategory="内閣">
+                                                    <span>内閣</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="政治"
+                                                           data-subcategory="国際">
+                                                    <span>国際</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="文化"
+                                           data-subcategories="映画">
+                                    <span>文化</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="文化"
+                                                           data-subcategory="映画">
+                                                    <span>映画</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="社会"
+                                           data-subcategories="事件,技術,政治,文化,災害">
+                                    <span>社会</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="事件">
+                                                    <span>事件</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="技術">
+                                                    <span>技術</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="政治">
+                                                    <span>政治</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="文化">
+                                                    <span>文化</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="社会"
+                                                           data-subcategory="災害">
+                                                    <span>災害</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="経済"
+                                           data-subcategories="税制,金融">
+                                    <span>経済</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="経済"
+                                                           data-subcategory="税制">
+                                                    <span>税制</span>
+                                                </label>
+                                            </li>
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="経済"
+                                                           data-subcategory="金融">
+                                                    <span>金融</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__category-checkbox" 
+                                           data-category="音楽"
+                                           data-subcategories="ポップス">
+                                    <span>音楽</span>
+                                </label>
+                                
+                                    <ul class="chronicle-filters__sublist">
+                                        
+                                            <li class="chronicle-filters__subitem">
+                                                <label class="chronicle-filters__checkbox">
+                                                    <input type="checkbox" 
+                                                           class="chronicle-filters__subcategory-checkbox" 
+                                                           data-category="音楽"
+                                                           data-subcategory="ポップス">
+                                                    <span>ポップス</span>
+                                                </label>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+            
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+            
+            
+            
+            
+                <div class="chronicle-filters__section">
+                    <h3 class="chronicle-filters__title">テーマ史</h3>
+                    <ul class="chronicle-filters__list">
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="2000年">
+                                    <span>2000年</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="iPhone">
+                                    <span>iPhone</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="J-POP">
+                                    <span>J-POP</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="R&amp;B">
+                                    <span>R&amp;B</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="Windows">
+                                    <span>Windows</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="アフガニスタン">
+                                    <span>アフガニスタン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="アベノミクス">
+                                    <span>アベノミクス</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="アメリカ">
+                                    <span>アメリカ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="イラク戦争">
+                                    <span>イラク戦争</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="インターネット">
+                                    <span>インターネット</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ウクライナ">
+                                    <span>ウクライナ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="エンロン">
+                                    <span>エンロン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="オウム真理教">
+                                    <span>オウム真理教</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="オリンピック">
+                                    <span>オリンピック</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="サッカー">
+                                    <span>サッカー</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="スポーツ">
+                                    <span>スポーツ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="スマートフォン">
+                                    <span>スマートフォン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="デビュー">
+                                    <span>デビュー</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="テロ">
+                                    <span>テロ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="パソコン">
+                                    <span>パソコン</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ミレニアム">
+                                    <span>ミレニアム</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="リーマン・ショック">
+                                    <span>リーマン・ショック</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ロシア">
+                                    <span>ロシア</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="ワールドカップ">
+                                    <span>ワールドカップ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="中国">
+                                    <span>中国</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="事件">
+                                    <span>事件</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="令和">
+                                    <span>令和</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="企業">
+                                    <span>企業</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="元号">
+                                    <span>元号</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="内閣">
+                                    <span>内閣</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="原子力">
+                                    <span>原子力</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="原発事故">
+                                    <span>原発事故</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="台風">
+                                    <span>台風</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="国際">
+                                    <span>国際</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="地震">
+                                    <span>地震</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="安倍晋三">
+                                    <span>安倍晋三</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="小泉純一郎">
+                                    <span>小泉純一郎</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="平成">
+                                    <span>平成</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="復興">
+                                    <span>復興</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="戦争">
+                                    <span>戦争</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="技術">
+                                    <span>技術</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="携帯電話">
+                                    <span>携帯電話</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="政治">
+                                    <span>政治</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="文化">
+                                    <span>文化</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="新型コロナ">
+                                    <span>新型コロナ</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="映画">
+                                    <span>映画</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="暴力団">
+                                    <span>暴力団</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="東京">
+                                    <span>東京</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="構造改革">
+                                    <span>構造改革</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="水害">
+                                    <span>水害</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="津波">
+                                    <span>津波</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="消費税">
+                                    <span>消費税</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="災害">
+                                    <span>災害</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="破綻">
+                                    <span>破綻</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="社会問題">
+                                    <span>社会問題</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="福島">
+                                    <span>福島</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="税制">
+                                    <span>税制</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="経済">
+                                    <span>経済</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="緊急事態宣言">
+                                    <span>緊急事態宣言</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="総理大臣">
+                                    <span>総理大臣</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="総選挙">
+                                    <span>総選挙</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="自民党">
+                                    <span>自民党</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="自粛">
+                                    <span>自粛</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="豪雨">
+                                    <span>豪雨</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="返還">
+                                    <span>返還</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="選挙">
+                                    <span>選挙</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="郵政民営化">
+                                    <span>郵政民営化</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="金融">
+                                    <span>金融</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="金融危機">
+                                    <span>金融危機</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="香港">
+                                    <span>香港</span>
+                                </label>
+                            </li>
+                        
+                            <li class="chronicle-filters__item">
+                                <label class="chronicle-filters__checkbox">
+                                    <input type="checkbox" 
+                                           class="chronicle-filters__tag-checkbox" 
+                                           data-tag="黒澤明">
+                                    <span>黒澤明</span>
+                                </label>
+                            </li>
+                        
+                    </ul>
+                    <button class="chronicle-filters__clear-tags" id="clear-tags-btn" style="display: none;">
+                        タグの選択を解除
+                    </button>
+                </div>
+            
+        </div>
+    </nav>
+</aside>
+
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; 
+    
+    const header = document.getElementById('mobile-header-chronicle');
+    const button = document.getElementById('mobile-header-chronicle-btn');
+    const modal = document.getElementById('half-modal-chronicle');
+    const overlay = document.getElementById('half-modal-chronicle-overlay');
+    const closeBtn = document.getElementById('half-modal-chronicle-close');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn) return;
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+})();
+</script>
+
+
+            
+            
             
             <div class="layout-main layout-main--with-toc layout-main--chronicle">
                 
@@ -3276,7 +5224,7 @@
                                                              data-user-age=""
                                                              data-title="地下鉄サリン事件"
                                                              data-description="オウム真理教による地下鉄サリン事件が発生。13名が死亡、6,000名以上が負傷した。"
-                                                             data-url="http://localhost:1313/chronicle/1995-03-20-sarin-attack/">
+                                                             data-url="https://ezeroms.com/chronicle/1995-03-20-sarin-attack/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -3827,7 +5775,7 @@
                                                              data-user-age=""
                                                              data-title="Windows 95発売"
                                                              data-description="Microsoft Windows 95が発売され、パーソナルコンピュータの歴史を変えた。"
-                                                             data-url="http://localhost:1313/chronicle/1995-07-23-windows95-release/">
+                                                             data-url="https://ezeroms.com/chronicle/1995-07-23-windows95-release/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -4380,7 +6328,7 @@
                                                              data-user-age=""
                                                              data-title="阪神・淡路大震災"
                                                              data-description="阪神・淡路大震災が発生。死者6,434名、負傷者43,792名の大災害となった。"
-                                                             data-url="http://localhost:1313/chronicle/1995-01-17-kobe-earthquake/">
+                                                             data-url="https://ezeroms.com/chronicle/1995-01-17-kobe-earthquake/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -4426,7 +6374,7 @@
                                                              data-user-age=""
                                                              data-title="台風12号による大和川・神崎川氾濫"
                                                              data-description="台風12号により、大和川・神崎川が氾濫し、大阪府を中心に大きな被害が発生した。"
-                                                             data-url="http://localhost:1313/chronicle/1995-09-22-okawa-river-flood/">
+                                                             data-url="https://ezeroms.com/chronicle/1995-09-22-okawa-river-flood/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -4858,7 +6806,7 @@
                                                              data-user-age=""
                                                              data-title="アトランタオリンピック開幕"
                                                              data-description="アトランタオリンピックが開幕。日本は柔道や水泳でメダルを獲得した。"
-                                                             data-url="http://localhost:1313/chronicle/1996-07-20-atlanta-olympics/">
+                                                             data-url="https://ezeroms.com/chronicle/1996-07-20-atlanta-olympics/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -4895,7 +6843,7 @@
                                                              data-user-age=""
                                                              data-title="アトランタオリンピック閉幕"
                                                              data-description="アトランタオリンピックが閉幕。日本は柔道や水泳でメダルを獲得した。"
-                                                             data-url="http://localhost:1313/chronicle/1996-08-01-atlanta-olympics-closing/">
+                                                             data-url="https://ezeroms.com/chronicle/1996-08-01-atlanta-olympics-closing/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -7103,7 +9051,7 @@
                                                              data-user-age=""
                                                              data-title="山口組分裂"
                                                              data-description="山口組が分裂し、神戸山口組が結成された。"
-                                                             data-url="http://localhost:1313/chronicle/1997-11-24-yamaguchi-gumi-split/">
+                                                             data-url="https://ezeroms.com/chronicle/1997-11-24-yamaguchi-gumi-split/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -7529,7 +9477,7 @@
                                                              data-user-age=""
                                                              data-title="香港返還"
                                                              data-description="香港がイギリスから中国に返還された。"
-                                                             data-url="http://localhost:1313/chronicle/1997-05-31-hong-kong-handover/">
+                                                             data-url="https://ezeroms.com/chronicle/1997-05-31-hong-kong-handover/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -7568,7 +9516,7 @@
                                                              data-user-age=""
                                                              data-title="香港返還式典"
                                                              data-description="香港返還式典が行われ、イギリスから中国への返還が正式に完了した。"
-                                                             data-url="http://localhost:1313/chronicle/1997-06-30-hong-kong-handover-ceremony/">
+                                                             data-url="https://ezeroms.com/chronicle/1997-06-30-hong-kong-handover-ceremony/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -8762,7 +10710,7 @@
                                                              data-user-age=""
                                                              data-title="1998 FIFAワールドカップ開幕"
                                                              data-description="1998 FIFAワールドカップがフランスで開幕した。"
-                                                             data-url="http://localhost:1313/chronicle/1998-06-10-france-world-cup/">
+                                                             data-url="https://ezeroms.com/chronicle/1998-06-10-france-world-cup/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -8932,7 +10880,7 @@
                                                              data-user-age="9"
                                                              data-title="宇多田ヒカルデビュー"
                                                              data-description="宇多田ヒカルが「Automatic/time will tell」でデビュー"
-                                                             data-url="http://localhost:1313/chronicle/1998-12-09-utada-hikaru-debut/">
+                                                             data-url="https://ezeroms.com/chronicle/1998-12-09-utada-hikaru-debut/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -11394,7 +13342,7 @@
                                                              data-user-age=""
                                                              data-title="iモード開始"
                                                              data-description="NTTドコモがiモードサービスを開始した。"
-                                                             data-url="http://localhost:1313/chronicle/1999-11-20-smartphone-launch/">
+                                                             data-url="https://ezeroms.com/chronicle/1999-11-20-smartphone-launch/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -13475,7 +15423,7 @@
                                                              data-user-age=""
                                                              data-title="ミレニアム"
                                                              data-description="2000年を迎え、ミレニアムブームが起きた。"
-                                                             data-url="http://localhost:1313/chronicle/2000-01-01-millennium/">
+                                                             data-url="https://ezeroms.com/chronicle/2000-01-01-millennium/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -14540,7 +16488,7 @@
                                                              data-user-age=""
                                                              data-title="アメリカ同時多発テロ"
                                                              data-description="アメリカ同時多発テロが発生した。"
-                                                             data-url="http://localhost:1313/chronicle/2001-09-11-911-attacks/">
+                                                             data-url="https://ezeroms.com/chronicle/2001-09-11-911-attacks/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -14839,7 +16787,7 @@
                                                              data-user-age="11"
                                                              data-title="小泉純一郎内閣発足"
                                                              data-description="小泉純一郎が第87代内閣総理大臣に就任"
-                                                             data-url="http://localhost:1313/chronicle/2001-04-26-koizumi-prime-minister/">
+                                                             data-url="https://ezeroms.com/chronicle/2001-04-26-koizumi-prime-minister/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -15009,7 +16957,7 @@
                                                              data-user-age=""
                                                              data-title="アフガニスタン戦争開始"
                                                              data-description="アメリカがアフガニスタンへの軍事作戦を開始した。"
-                                                             data-url="http://localhost:1313/chronicle/2001-10-07-afghanistan-war/">
+                                                             data-url="https://ezeroms.com/chronicle/2001-10-07-afghanistan-war/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -15943,7 +17891,7 @@
                                                              data-user-age=""
                                                              data-title="エンロン破綻"
                                                              data-description="アメリカのエネルギー大手エンロンが破綻した。"
-                                                             data-url="http://localhost:1313/chronicle/2001-12-01-enron-bankruptcy/">
+                                                             data-url="https://ezeroms.com/chronicle/2001-12-01-enron-bankruptcy/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -16248,7 +18196,7 @@
                                                              data-user-age=""
                                                              data-title="2002 FIFAワールドカップ決勝"
                                                              data-description="2002 FIFAワールドカップが日韓共催で開催され、ブラジルが優勝した。"
-                                                             data-url="http://localhost:1313/chronicle/2002-06-30-world-cup/">
+                                                             data-url="https://ezeroms.com/chronicle/2002-06-30-world-cup/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -18710,7 +20658,7 @@
                                                              data-user-age=""
                                                              data-title="イラク戦争開始"
                                                              data-description="イラク戦争が開始された。"
-                                                             data-url="http://localhost:1313/chronicle/2003-03-20-iraq-war/">
+                                                             data-url="https://ezeroms.com/chronicle/2003-03-20-iraq-war/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -20410,7 +22358,7 @@
                                                              data-user-age=""
                                                              data-title="郵政民営化法案可決"
                                                              data-description="郵政民営化法案が可決された。"
-                                                             data-url="http://localhost:1313/chronicle/2005-09-11-postal-privatization/">
+                                                             data-url="https://ezeroms.com/chronicle/2005-09-11-postal-privatization/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -22237,7 +24185,7 @@
                                                              data-user-age=""
                                                              data-title="第1次安倍内閣発足"
                                                              data-description="安倍晋三が第90代内閣総理大臣に就任した。"
-                                                             data-url="http://localhost:1313/chronicle/2006-09-26-abe-first-term/">
+                                                             data-url="https://ezeroms.com/chronicle/2006-09-26-abe-first-term/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -24318,7 +26266,7 @@
                                                              data-user-age=""
                                                              data-title="iPhone発表"
                                                              data-description="AppleがiPhoneを発表した。"
-                                                             data-url="http://localhost:1313/chronicle/2007-01-09-iphone-announcement/">
+                                                             data-url="https://ezeroms.com/chronicle/2007-01-09-iphone-announcement/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -26907,7 +28855,7 @@
                                                              data-user-age=""
                                                              data-title="リーマン・ショック"
                                                              data-description="リーマン・ショックが発生し、世界的な金融危機が始まった。"
-                                                             data-url="http://localhost:1313/chronicle/2008-09-15-lehman-shock/">
+                                                             data-url="https://ezeroms.com/chronicle/2008-09-15-lehman-shock/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -28353,7 +30301,7 @@
                                                              data-user-age=""
                                                              data-title="黒澤明生誕100周年"
                                                              data-description="黒澤明の生誕100周年を記念したイベントが開催された。"
-                                                             data-url="http://localhost:1313/chronicle/2004-03-20-akira-kurosawa-anniversary/">
+                                                             data-url="https://ezeroms.com/chronicle/2004-03-20-akira-kurosawa-anniversary/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -30309,7 +32257,7 @@
                                                              data-user-age=""
                                                              data-title="東日本大震災"
                                                              data-description="東日本大震災が発生。マグニチュード9.0の巨大地震と大津波により甚大な被害が発生した。"
-                                                             data-url="http://localhost:1313/chronicle/2011-03-11-great-east-japan-earthquake/">
+                                                             data-url="https://ezeroms.com/chronicle/2011-03-11-great-east-japan-earthquake/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -30348,7 +32296,7 @@
                                                              data-user-age=""
                                                              data-title="福島第一原子力発電所事故"
                                                              data-description="福島第一原子力発電所で重大な原子力事故が発生した。"
-                                                             data-url="http://localhost:1313/chronicle/2011-03-15-fukushima-nuclear-accident/">
+                                                             data-url="https://ezeroms.com/chronicle/2011-03-15-fukushima-nuclear-accident/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -31417,7 +33365,7 @@
                                                              data-user-age=""
                                                              data-title="第46回衆議院議員総選挙"
                                                              data-description="第46回衆議院議員総選挙が実施され、自民党が大勝した。"
-                                                             data-url="http://localhost:1313/chronicle/2012-12-16-japan-general-election/">
+                                                             data-url="https://ezeroms.com/chronicle/2012-12-16-japan-general-election/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -31456,7 +33404,7 @@
                                                              data-user-age=""
                                                              data-title="第2次安倍内閣発足"
                                                              data-description="安倍晋三が第96代内閣総理大臣に就任し、第2次安倍内閣が発足した。"
-                                                             data-url="http://localhost:1313/chronicle/2012-12-26-abe-second-term/">
+                                                             data-url="https://ezeroms.com/chronicle/2012-12-26-abe-second-term/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -32650,7 +34598,7 @@
                                                              data-user-age=""
                                                              data-title="リオデジャネイロオリンピック開幕"
                                                              data-description="リオデジャネイロオリンピックが開幕した。"
-                                                             data-url="http://localhost:1313/chronicle/2016-08-05-rio-olympics/">
+                                                             data-url="https://ezeroms.com/chronicle/2016-08-05-rio-olympics/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -32687,7 +34635,7 @@
                                                              data-user-age=""
                                                              data-title="リオデジャネイロオリンピック閉幕"
                                                              data-description="リオデジャネイロオリンピックが閉幕した。"
-                                                             data-url="http://localhost:1313/chronicle/2016-08-21-rio-olympics-closing/">
+                                                             data-url="https://ezeroms.com/chronicle/2016-08-21-rio-olympics-closing/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -35911,7 +37859,7 @@
                                                              data-user-age=""
                                                              data-title="平成30年7月豪雨"
                                                              data-description="平成30年7月豪雨が発生し、西日本を中心に甚大な被害が発生した。"
-                                                             data-url="http://localhost:1313/chronicle/2018-07-06-west-japan-floods/">
+                                                             data-url="https://ezeroms.com/chronicle/2018-07-06-west-japan-floods/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -36849,7 +38797,7 @@
                                                              data-user-age=""
                                                              data-title="平成時代の終わり"
                                                              data-description="平成時代が終わり、令和時代が始まった。"
-                                                             data-url="http://localhost:1313/chronicle/1999-04-01-heisei-era/">
+                                                             data-url="https://ezeroms.com/chronicle/1999-04-01-heisei-era/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -37908,7 +39856,7 @@
                                                              data-user-age=""
                                                              data-title="消費税率10%への引き上げ"
                                                              data-description="消費税率が8%から10%に引き上げられた。"
-                                                             data-url="http://localhost:1313/chronicle/2019-10-01-consumption-tax-increase/">
+                                                             data-url="https://ezeroms.com/chronicle/2019-10-01-consumption-tax-increase/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -39229,7 +41177,7 @@
                                                              data-user-age="30"
                                                              data-title="新型コロナウイルス緊急事態宣言"
                                                              data-description="新型コロナウイルス感染拡大を受け、緊急事態宣言が発令された"
-                                                             data-url="http://localhost:1313/chronicle/2020-04-07-covid-emergency/">
+                                                             data-url="https://ezeroms.com/chronicle/2020-04-07-covid-emergency/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -39266,7 +41214,7 @@
                                                              data-user-age=""
                                                              data-title="緊急事態宣言の全国拡大"
                                                              data-description="緊急事態宣言が全国に拡大された。"
-                                                             data-url="http://localhost:1313/chronicle/2020-04-16-covid-state-of-emergency-extended/">
+                                                             data-url="https://ezeroms.com/chronicle/2020-04-16-covid-state-of-emergency-extended/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -40081,7 +42029,7 @@
                                                              data-user-age=""
                                                              data-title="東京オリンピック開幕"
                                                              data-description="東京オリンピックが開幕した。1年延期され、無観客で開催された。"
-                                                             data-url="http://localhost:1313/chronicle/2021-07-23-tokyo-olympics/">
+                                                             data-url="https://ezeroms.com/chronicle/2021-07-23-tokyo-olympics/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -40118,7 +42066,7 @@
                                                              data-user-age=""
                                                              data-title="東京オリンピック閉幕"
                                                              data-description="東京オリンピックが閉幕した。"
-                                                             data-url="http://localhost:1313/chronicle/2021-08-08-tokyo-olympics-closing/">
+                                                             data-url="https://ezeroms.com/chronicle/2021-08-08-tokyo-olympics-closing/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -42707,7 +44655,7 @@
                                                              data-user-age=""
                                                              data-title="ロシアのウクライナ侵攻開始"
                                                              data-description="ロシアがウクライナへの全面侵攻を開始した。"
-                                                             data-url="http://localhost:1313/chronicle/2022-02-24-ukraine-invasion/">
+                                                             data-url="https://ezeroms.com/chronicle/2022-02-24-ukraine-invasion/">
                                                         <div class="chronicle-event__date">
                                                             
                                                             
@@ -45453,7 +47401,7 @@
             }
 
             function handleExternalLinks() {
-                const baseURL = 'http:\/\/localhost:1313\/';
+                const baseURL = 'https:\/\/ezeroms.com\/';
                 const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
                 
                 
@@ -45527,6 +47475,90 @@
                 document.addEventListener('DOMContentLoaded', initSidebarMinimize);
             } else {
                 initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
             }
         })();
     </script>

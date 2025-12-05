@@ -39,24 +39,46 @@
     {{ block "head" . }}{{ end }}
 
 </head>
-<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "media-coverage" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ else if eq .Section "ui-design-guidebook" }} class="is-ui-design-guidebook"{{ end }}>
+<body{{ if .IsHome }} class="is-home"{{ else if eq .Section "about" }} class="is-about"{{ else if eq .Section "column" }} class="is-column"{{ else if eq .Section "work" }} class="is-work"{{ else if eq .Section "ui-design-guidebook" }} class="is-ui-design-guidebook"{{ end }}>
+    <!-- オーバーレイ -->
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
+    
     <div class="layout-container">
         <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
             {{ partial "sidebar.html" . }}
         </aside>
 
         <div class="layout-body">
+            {{/* モバイル専用ヘッダー（タブレット/スマホのみ表示） */}}
+            {{ if eq .Section "about" }}
+                {{ partial "mobile-header-about.html" . }}
+            {{ else if or (eq .Section "tweet") (hasPrefix .RelPermalink "/tweet_") }}
+                {{ partial "mobile-header-date-selector.html" (dict "context" . "type" "tweet") }}
+            {{ else if or (eq .Section "diary") (hasPrefix .RelPermalink "/diary_") }}
+                {{ partial "mobile-header-date-selector.html" (dict "context" . "type" "diary") }}
+            {{ else if or (eq .Section "column") (hasPrefix .RelPermalink "/column_") }}
+                {{ partial "mobile-header-category.html" (dict "context" . "type" "column") }}
+            {{ else if or (eq .Section "work") (hasPrefix .RelPermalink "/work_") }}
+                {{ partial "mobile-header-category.html" (dict "context" . "type" "work") }}
+            {{ else if eq .Section "shoulders-of-giants" }}
+                {{ partial "mobile-header-giants.html" . }}
+            {{ else if eq .Section "chronicle" }}
+                {{ partial "mobile-header-chronicle.html" . }}
+            {{ else if eq .Section "ui-design-guidebook" }}
+                {{ partial "mobile-header-ui-design-guidebook.html" . }}
+            {{ end }}
+            
             {{ if and (ne .Section "shoulders-of-giants") (ne .Section "chronicle") }}
             <div class="layout-header">
                 {{ block "section_header" . }}{{ end }}
             </div>
             {{ end }}
-            <div class="layout-main{{ if .IsHome }} layout-main--centered{{ else if eq .Section "chronicle" }} layout-main--with-toc layout-main--chronicle{{ else if or (eq .Section "shoulders-of-giants") (eq .Section "about") (eq .Section "media-coverage") }} layout-main--with-toc{{ else if eq .Section "ui-design-guidebook" }} layout-main--with-header-toc{{ else }} layout-main--with-tags{{ end }}">
+            <div class="layout-main{{ if .IsHome }} layout-main--centered{{ else if eq .Section "chronicle" }} layout-main--with-toc layout-main--chronicle{{ else if or (eq .Section "shoulders-of-giants") (eq .Section "about") }} layout-main--with-toc{{ else if eq .Section "ui-design-guidebook" }} layout-main--with-header-toc{{ else }} layout-main--with-tags{{ end }}">
                 {{ if eq .Section "shoulders-of-giants" }}
                     {{ partial "giants-toc.html" . }}
                 {{ else if eq .Section "ui-design-guidebook" }}
                     {{ partial "ui-design-guidebook-toc.html" . }}
-                {{ else if or (eq .Section "about") (eq .Section "media-coverage") }}
+                {{ else if eq .Section "about" }}
                     {{ partial "about-toc.html" . }}
                 {{ else if eq .Section "chronicle" }}
                     {{ partial "chronicle-toc.html" . }}
@@ -65,7 +87,7 @@
                     {{ block "main" . }}{{ end }}
                 </main>
 
-                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "media-coverage") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) }}
+                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) }}
                 <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
                     {{ block "secondary" . }}{{ partial "secondary-nav.html" . }}{{ end }}
                 </aside>
@@ -164,6 +186,90 @@
                 document.addEventListener('DOMContentLoaded', initSidebarMinimize);
             } else {
                 initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    <!-- Sidebar hamburger menu handler (タブレット/スマホ用) -->
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                // ハンバーガーボタンのクリックイベント
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                // オーバーレイのクリックイベント
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                // サイドバー内のリンクをクリックしたら閉じる（タブレット/スマホのみ）
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                // ESCキーで閉じる
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                // ウィンドウリサイズ時にサイドバーを閉じる（デスクトップサイズに戻った場合）
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
             }
         })();
     </script>

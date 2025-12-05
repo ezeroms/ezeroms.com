@@ -13,8 +13,10 @@
 
 .article-item blockquote p {
   margin: 0 0 0.5rem;
-  font-size: 0.9375rem;
-  line-height: 1.7;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--text-line-height);
+  letter-spacing: 0.01em;
 }
 
 .article-item blockquote p:last-child {
@@ -41,6 +43,19 @@
   word-break: break-all;
   box-sizing: border-box;
   flex-shrink: 0;
+}
+
+/* タブレット/スマホ: パディングの調整 */
+@media (max-width: 1079px) {
+  .article-item {
+    padding: var(--spacing-3xl);
+  }
+}
+
+@media (max-width: 767px) {
+  .article-item {
+    padding: var(--article-item-padding-sp-vertical) var(--article-item-padding-sp-horizontal);
+  }
 }
 
 /* .article-itemの直接の子要素の最初の要素のmargin-topを0にする */
@@ -91,7 +106,7 @@
 
 /* 記事ヘッダー内のタグリストの上は2rem */
 .article-header > .article-header__tags {
-  margin-top: 2rem;
+  margin-top: var(--article-header-tags-margin-top);
   display: flex;
   flex-direction: row;
   gap: 0.4rem;
@@ -131,13 +146,12 @@
   transition-duration: 0.4s;
 }
 
-/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
 .article-item h1 + p,
 .article-item h1 + ul,
 .article-item h1 + ol,
 .article-item h1 + blockquote,
 .article-item h1 + hr {
-  margin-top: 1.75rem;
+  margin-top: 1rem;
 }
 
 .article-item h1 a {
@@ -249,15 +263,15 @@
 }
 
 .article-item p {
-  margin: 0 0 1rem;
-  padding: 0;
-  color: var(--color-text-primary);
-  width: 100%;
-  font-size: var(--font-size-base);
-  font-style: normal;
-  font-weight: var(--font-weight-normal);
-  line-height: 1.8;
-  letter-spacing: 0.01em;
+    margin: 0 0 1rem;
+    padding: 0;
+    color: var(--color-text-primary);
+    width: 100%;
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-line-height);
+    letter-spacing: 0.01em;
 }
 
 .article-item p:last-child {
@@ -285,7 +299,10 @@
   border-radius: 3px;
   display: inline;
   line-height: 1.4;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .article-item ul,
@@ -310,15 +327,15 @@
 }
 
 .article-item li {
-  margin: 0.5rem 0;
-  padding: 0 0 0 0.5rem;
-  width: 100%;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-base);
-  font-style: normal;
-  font-weight: var(--font-weight-normal);
-  line-height: 1.8;
-  letter-spacing: 0.01em;
+    margin: 0.5rem 0;
+    padding: 0 0 0 0.5rem;
+    width: 100%;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-line-height);
+    letter-spacing: 0.01em;
 }
 
 .article-item ul ul,
@@ -571,5 +588,22 @@
 /* YouTube埋め込みが読み込まれたらプレースホルダーを非表示 */
 .youtube-placeholder .youtube[src] {
   display: block;
+}
+
+/* スマホ版: social-actionの調整 */
+@media (max-width: 767px) {
+  .social-action {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .article-header > .date:first-child {
+    margin-bottom: 0.6rem !important;
+  }
+  
+  .article-header > h1 {
+    margin-bottom: 0.6rem !important;
+  }
 }
 

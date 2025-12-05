@@ -1,6 +1,5 @@
 ---
-title: "About"
-layout: "list"
+title: "プロフィール"
 ---
 
 # イワモトユウ / ezeroms / gan
@@ -35,3 +34,4 @@ layout: "list"
 - [Threads](https://www.threads.net/@ezeroms)
 - [TikTok](https://www.tiktok.com/@ezeroms)
 - [X (Twitter)](https://x.com/ezeroms)
+

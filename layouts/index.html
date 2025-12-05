@@ -1,5 +1,6 @@
 {{ define "main" }}
-    <section class="page-section page-section--top">
+    <!-- PC版レイアウト -->
+    <section class="page-section page-section--top page-section--top-desktop">
         <div class="page-section__content page-section__content--narrow">
             <a href="/" class="top-logo">
                 <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo__img">
@@ -17,6 +18,89 @@
                 <img id="randomImage" src="" alt="Random Image" class="top-photo">
                 </a>
             </div>
+        </div>
+    </section>
+
+    <!-- SP/タブレット版レイアウト -->
+    <section class="page-section page-section--top page-section--top-mobile">
+        <div class="page-section__content page-section__content--mobile">
+            <a href="/" class="top-logo-mobile">
+                <img src="{{ "images/common/logo.svg" | relURL }}" alt="ezeroms.com" class="top-logo-mobile__img">
+            </a>
+            <h2 class="top-message-mobile">One thing I can tell you is you got to be free!</h2>
+
+            <div class="random-image-mobile">
+                <a href="/">
+                {{ $images := readDir "static/images/top" }}
+                {{ $imageNames := slice }}
+                {{ range $images }}
+                    {{ $imageNames = $imageNames | append (dict "Name" .Name) }}
+                {{ end }}
+                <div id="image-container-mobile" data-images='{{ $imageNames | jsonify }}'></div>
+                <img id="randomImageMobile" src="" alt="Random Image" class="top-photo-mobile">
+                </a>
+            </div>
+
+            <!-- サイトナビゲーション -->
+            {{/* Tweetセクションの最新月を取得 */}}
+            {{ $tweetSection := .Site.GetPage "section" "tweet" }}
+            {{ $tweetMonths := slice }}
+            {{ if $tweetSection }}
+                {{ range $tweetSection.Pages }}
+                    {{ $monthStr := .Date | dateFormat "2006-01" }}
+                    {{ if not (in $tweetMonths $monthStr) }}
+                        {{ $tweetMonths = $tweetMonths | append $monthStr }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedTweetMonths := sort $tweetMonths }}
+            {{ $tweetLatestMonth := "" }}
+            {{ $tweetURL := "/tweet/" }}
+            {{ if gt (len $sortedTweetMonths) 0 }}
+                {{ $tweetLatestMonth = index $sortedTweetMonths (sub (len $sortedTweetMonths) 1) }}
+                {{ $tweetMonthPage := index .Site.Taxonomies.tweet_month ($tweetLatestMonth | urlize) }}
+                {{ if $tweetMonthPage }}
+                    {{ $tweetURL = $tweetMonthPage.Page.RelPermalink }}
+                {{ end }}
+            {{ end }}
+            
+            {{/* Diaryセクションの最新月を取得 */}}
+            {{ $diarySection := .Site.GetPage "section" "diary" }}
+            {{ $diaryMonths := slice }}
+            {{ if $diarySection }}
+                {{ range $diarySection.Pages }}
+                    {{ $monthStr := .Date | dateFormat "2006-01" }}
+                    {{ if not (in $diaryMonths $monthStr) }}
+                        {{ $diaryMonths = $diaryMonths | append $monthStr }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedDiaryMonths := sort $diaryMonths }}
+            {{ $diaryLatestMonth := "" }}
+            {{ $diaryURL := "/diary/" }}
+            {{ if gt (len $sortedDiaryMonths) 0 }}
+                {{ $diaryLatestMonth = index $sortedDiaryMonths (sub (len $sortedDiaryMonths) 1) }}
+                {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($diaryLatestMonth | urlize) }}
+                {{ if $diaryMonthPage }}
+                    {{ $diaryURL = $diaryMonthPage.Page.RelPermalink }}
+                {{ end }}
+            {{ end }}
+            
+            <nav class="top-nav-mobile">
+                <div class="top-nav-mobile__section">
+                    <a href="/about/profile/" class="top-nav-mobile__link">About</a>
+                    <a href="{{ $tweetURL }}" class="top-nav-mobile__link">Tweet</a>
+                    <a href="{{ $diaryURL }}" class="top-nav-mobile__link">Diary</a>
+                    <a href="/column/" class="top-nav-mobile__link">Column</a>
+                    <a href="/work/" class="top-nav-mobile__link">Work</a>
+                </div>
+                <div class="top-nav-mobile__section">
+                    <h3 class="top-nav-mobile__heading">Library</h3>
+                    <a href="/shoulders-of-giants/" class="top-nav-mobile__link">The shoulders of Giants</a>
+                    <a href="/chronicle/" class="top-nav-mobile__link">Chronicle</a>
+                    <a href="/ui-design-guidebook/" class="top-nav-mobile__link">UI Design Guidebook</a>
+                </div>
+            </nav>
         </div>
     </section>
 

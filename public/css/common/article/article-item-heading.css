@@ -86,5 +86,42 @@
   transition-duration: 0s;
 }
 
+/* タブレット/スマホ: パディングと幅の調整 */
+@media (max-width: 1079px) {
+  .article-item-heading {
+    width: calc(100% - 48px);
+    padding: var(--spacing-xl) var(--spacing-2xl);
+    gap: var(--spacing-xl);
+  }
+  
+  .article-item-heading__eye-catch {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .article-item-heading {
+    width: calc(100% - 32px);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    gap: var(--spacing-lg);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .article-item-heading__eye-catch {
+    font-size: 24px;
+  }
+  
+  .article-item-heading__sub-label {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .article-item-heading__button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
 
   

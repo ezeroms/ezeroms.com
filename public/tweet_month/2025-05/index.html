@@ -40,6 +40,9 @@
 
 </head>
 <body>
+    
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
+    
     <div class="layout-container">
         <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
             <div class="sidebar">
@@ -240,7 +243,7 @@
     <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
       <ul class="sidebar__nav">
         <li>
-          <a class="" href="/about/">About</a>
+          <a class="" href="/about/profile/">About</a>
         </li>
         <li>
           <a class="is-active" href="/tweet_month/2025-06/">Tweet</a>
@@ -279,6 +282,867 @@
         </aside>
 
         <div class="layout-body">
+            
+            
+                
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+        
+        
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+            
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+        
+        
+            
+        
+    
+
+
+
+
+    
+
+
+
+
+
+
+
+    
+    
+        
+        
+        
+            
+            
+            
+            
+            
+                
+            
+            
+            
+        
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+        
+    
+
+    
+    
+
+    
+    
+
+    
+    
+        
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+
+
+    
+    
+        
+    
+
+    
+    
+        
+    
+
+
+
+
+
+    
+    
+
+
+<div class="mobile-header" id="mobile-header-tweet">
+    
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    
+    <h2 class="mobile-header__title">
+        2025 May
+    </h2>
+    
+    
+    <button class="mobile-header__button" id="mobile-header-tweet-btn" aria-label="年月を選択" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+
+<div class="half-modal__overlay" id="half-modal-tweet-overlay"></div>
+<div class="half-modal" id="half-modal-tweet">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">年月を選択</h3>
+        <button class="half-modal__close" id="half-modal-tweet-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        
+        <div class="half-modal__year-section">
+            <div class="half-modal__year-selector" data-min-year="2024" data-max-year="2025">
+                <button class="half-modal__year-nav" id="half-modal-tweet-prev-year" data-type="tweet" aria-label="前の年">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <span class="half-modal__year-display" id="half-modal-tweet-year-display">2025</span>
+                <button class="half-modal__year-nav" id="half-modal-tweet-next-year" data-type="tweet" aria-label="次の年">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        
+        <div class="half-modal__grid" id="half-modal-tweet-month-grid">
+            
+            
+                
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2024-01/" class="half-modal__grid-link" data-year-month="2024-01" data-year="2024">Jan</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2024-02/" class="half-modal__grid-link" data-year-month="2024-02" data-year="2024">Feb</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-03" data-year="2024">Mar</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-04" data-year="2024">Apr</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-05" data-year="2024">May</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-06" data-year="2024">Jun</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-07" data-year="2024">Jul</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2024-08/" class="half-modal__grid-link" data-year-month="2024-08" data-year="2024">Aug</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-09" data-year="2024">Sep</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-10" data-year="2024">Oct</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-11" data-year="2024">Nov</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2024-12" data-year="2024">Dec</span>
+                        </div>
+                    
+                
+            
+                
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2025-01/" class="half-modal__grid-link" data-year-month="2025-01" data-year="2025">Jan</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2025-02/" class="half-modal__grid-link" data-year-month="2025-02" data-year="2025">Feb</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2025-03/" class="half-modal__grid-link" data-year-month="2025-03" data-year="2025">Mar</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2025-04/" class="half-modal__grid-link" data-year-month="2025-04" data-year="2025">Apr</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                            
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2025-05/" class="half-modal__grid-link active" data-year-month="2025-05" data-year="2025">May</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <a href="/tweet_month/2025-06/" class="half-modal__grid-link" data-year-month="2025-06" data-year="2025">Jun</a>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2025-07" data-year="2025">Jul</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2025-08" data-year="2025">Aug</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2025-09" data-year="2025">Sep</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2025-10" data-year="2025">Oct</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2025-11" data-year="2025">Nov</span>
+                        </div>
+                    
+                
+                    
+                    
+                    
+                    
+                    
+                        
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link disabled" data-year-month="2025-12" data-year="2025">Dec</span>
+                        </div>
+                    
+                
+            
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; 
+    
+    const type = "tweet";
+    const header = document.getElementById('mobile-header-' + type);
+    const button = document.getElementById('mobile-header-' + type + '-btn');
+    const modal = document.getElementById('half-modal-' + type);
+    const overlay = document.getElementById('half-modal-' + type + '-overlay');
+    const closeBtn = document.getElementById('half-modal-' + type + '-close');
+    const yearDisplay = document.getElementById('half-modal-' + type + '-year-display');
+    const prevYearBtn = document.getElementById('half-modal-' + type + '-prev-year');
+    const nextYearBtn = document.getElementById('half-modal-' + type + '-next-year');
+    const monthGrid = document.getElementById('half-modal-' + type + '-month-grid');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthGrid) return;
+    
+    let currentYear = parseInt(yearDisplay.textContent);
+    const minYear = parseInt(prevYearBtn.closest('.half-modal__year-selector').getAttribute('data-min-year')) || currentYear;
+    const maxYear = parseInt(prevYearBtn.closest('.half-modal__year-selector').getAttribute('data-max-year')) || currentYear;
+    
+    function updateYearButtons() {
+        if (currentYear <= minYear) {
+            prevYearBtn.classList.add('disabled');
+            prevYearBtn.disabled = true;
+        } else {
+            prevYearBtn.classList.remove('disabled');
+            prevYearBtn.disabled = false;
+        }
+        
+        if (currentYear >= maxYear) {
+            nextYearBtn.classList.add('disabled');
+            nextYearBtn.disabled = true;
+        } else {
+            nextYearBtn.classList.remove('disabled');
+            nextYearBtn.disabled = false;
+        }
+    }
+    
+    function updateMonthButtons() {
+        const buttons = monthGrid.querySelectorAll('.half-modal__grid-link');
+        buttons.forEach(btn => {
+            const btnYear = parseInt(btn.getAttribute('data-year'));
+            if (btnYear === currentYear) {
+                btn.style.display = '';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+    }
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        updateYearButtons();
+        updateMonthButtons();
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    prevYearBtn.addEventListener('click', function() {
+        if (currentYear > minYear) {
+            currentYear--;
+            yearDisplay.textContent = currentYear;
+            updateYearButtons();
+            updateMonthButtons();
+        }
+    });
+    
+    nextYearBtn.addEventListener('click', function() {
+        if (currentYear < maxYear) {
+            currentYear++;
+            yearDisplay.textContent = currentYear;
+            updateYearButtons();
+            updateMonthButtons();
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+    
+    
+    updateYearButtons();
+    updateMonthButtons();
+})();
+</script>
+
+
+            
+            
             
             <div class="layout-header">
                 
@@ -502,9 +1366,17 @@
     
 
     <div class="date-selector-nav__year-selector" data-min-year="2024" data-max-year="2025">
-        <button class="date-selector-nav__year-nav" id="prev-year">‹</button>
+        <button class="date-selector-nav__year-nav" id="prev-year" aria-label="前の年">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
         <span class="date-selector-nav__year-display" id="year-display">2025</span>
-        <button class="date-selector-nav__year-nav disabled" id="next-year" disabled>›</button>
+        <button class="date-selector-nav__year-nav disabled" id="next-year" disabled aria-label="次の年">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
+                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
     </div>
 
     <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
@@ -6527,6 +7399,90 @@
                 document.addEventListener('DOMContentLoaded', initSidebarMinimize);
             } else {
                 initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
             }
         })();
     </script>

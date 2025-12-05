@@ -18,7 +18,7 @@ body.is-about .layout-header {
     width: 100%;
     padding: 32px;
     border: 1px solid #E7E7E9;
-    border-radius: 24px;
+    border-radius: var(--radius-xl);
     background-color: #fff;
     text-decoration: none;
     color: inherit;
@@ -54,7 +54,7 @@ body.is-about .layout-header {
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1.8;
+    line-height: var(--text-line-height);
     letter-spacing: 0.01em;
 }
 
@@ -71,7 +71,18 @@ body.is-about .layout-header {
     font-size: 1rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1.8;
+    line-height: var(--text-line-height);
     letter-spacing: 0.01em;
+}
+
+/* スマホ版 */
+@media (max-width: 767px) {
+    .media-coverage-card {
+        padding: var(--card-padding-sp-vertical) var(--card-padding-sp-horizontal);
+    }
+    
+    .media-coverage-card__lead {
+        margin: 1.5rem 0 0 0;
+    }
 }
 

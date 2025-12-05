@@ -11,9 +11,9 @@
     /**
      * ランダム画像を表示
      */
-    function initRandomImage() {
-        const imageContainer = document.getElementById('image-container');
-        const randomImageElement = document.getElementById('randomImage');
+    function initRandomImage(containerId, imageId) {
+        const imageContainer = document.getElementById(containerId);
+        const randomImageElement = document.getElementById(imageId);
         
         // 必要な要素が存在しない場合は処理を中断
         if (!imageContainer || !randomImageElement) {
@@ -50,6 +50,16 @@
             console.error('[RandomImage] Error parsing images data:', e);
         }
     }
+    
+    /**
+     * すべてのランダム画像を初期化
+     */
+    function initAllRandomImages() {
+        // PC版
+        initRandomImage('image-container', 'randomImage');
+        // モバイル版
+        initRandomImage('image-container-mobile', 'randomImageMobile');
+    }
 
     /**
      * 初期化処理
@@ -57,10 +67,10 @@
      */
     function init() {
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initRandomImage);
+            document.addEventListener('DOMContentLoaded', initAllRandomImages);
         } else {
             // 既にDOMが読み込まれている場合は即座に実行
-            initRandomImage();
+            initAllRandomImages();
         }
     }
 

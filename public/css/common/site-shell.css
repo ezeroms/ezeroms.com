@@ -13,6 +13,17 @@
     overflow: hidden;
 }
 
+/* タブレット/スマホ: 画面外へのはみ出しを防ぐ */
+@media (max-width: 1079px) {
+    .layout-container {
+        overflow-x: hidden;
+    }
+    
+    body {
+        overflow-x: hidden;
+    }
+}
+
 .layout-sidebar {
     width: var(--sidebar-width);
     flex-shrink: 0;
@@ -252,6 +263,113 @@
     height: 16px;
 }
 
+/* ========================================
+   レスポンシブデザイン: タブレット/スマホ
+   ======================================== */
+
+/* ハンバーガーメニューボタンはモバイルヘッダー内に統合されたため、ここでは非表示 */
+.sidebar__hamburger-btn {
+    display: none;
+}
+
+/* オーバーレイ */
+.sidebar__overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity var(--transition-normal) var(--easing-default);
+}
+
+.sidebar__overlay.is-active {
+    display: block;
+    opacity: 1;
+}
+
+/* タブレット/スマホ: サイドバーを非表示（デフォルト） */
+@media (max-width: 1079px) {
+    .sidebar__hamburger-btn {
+        display: flex;
+    }
+    
+    .layout-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        max-width: 85vw;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform var(--transition-normal) var(--easing-default);
+        z-index: 1000;
+        box-shadow: none;
+    }
+    
+    .layout-sidebar.is-open {
+        transform: translateX(0);
+    }
+    
+    /* サイドバーが開いている時は、最小化ボタンを非表示 */
+    .layout-sidebar.is-open .sidebar__minimize-btn {
+        display: none;
+    }
+    
+    /* サイドバーのロゴを調整 */
+    .layout-sidebar .sidebar__logo {
+        margin-left: var(--spacing-xl);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    /* サイドバーのパディングを調整 */
+    .layout-sidebar {
+        padding: var(--spacing-2xl) var(--spacing-lg);
+    }
+    
+    /* レイアウトコンテナの調整 */
+    .layout-container {
+        flex-direction: column;
+    }
+    
+    .layout-body {
+        width: 100%;
+    }
+}
+
+/* スマホ: さらに小さなサイズ調整 */
+@media (max-width: 767px) {
+    .sidebar__hamburger-btn {
+        top: var(--spacing-md);
+        left: var(--spacing-md);
+        width: 40px;
+        height: 40px;
+    }
+    
+    .sidebar__hamburger-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .layout-sidebar {
+        width: 260px;
+        max-width: 90vw;
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+    
+    .layout-sidebar .sidebar__logo {
+        margin-left: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .layout-sidebar .sidebar__logo img {
+        width: 120px;
+    }
+}
+
 /* Table of Contents (TOC) スタイル */
 .layout-toc {
     width: 240px;
@@ -444,6 +562,21 @@
     justify-content: center;
 }
 
+/* タブレット/スマホ: 既存のヘッダーを非表示（モバイルヘッダーに置き換え） */
+@media (max-width: 1079px) {
+    .layout-header {
+        display: none !important;
+    }
+}
+
+/* スマホ: さらに小さなサイズ調整 */
+@media (max-width: 767px) {
+    .layout-header {
+        padding: 0 var(--content-padding);
+        height: 52px;
+    }
+}
+
 .layout-header.hidden {
     transform: translateY(-100%);
 }
@@ -466,6 +599,25 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
+}
+
+/* タブレット版: 中央配置型の調整 */
+@media (max-width: 1079px) {
+    .layout-main--centered {
+        padding: 64px 0;
+        width: 480px;
+        margin: 0 auto;
+        height: auto;
+    }
+}
+
+/* スマホ版: 中央配置型の調整 */
+@media (max-width: 767px) {
+    .layout-main--centered {
+        padding: 64px 0;
+        width: 320px;
+        margin: 0 auto;
+    }
 }
 
 /* パターン2: About/The shoulders of Giants（TOC型） */
@@ -585,6 +737,13 @@
     display: none;
 }
 
+/* タブレット/スマホ: タグ一覧を非表示 */
+@media (max-width: 1079px) {
+    .layout-tags {
+        display: none !important;
+    }
+}
+
 .secondary-nav-placeholder {
     font-size: 0.9rem;
     color: var(--color-text-tertiary);
@@ -663,6 +822,109 @@
 .diary-secondary-nav a:hover,
 .diary-secondary-nav a:focus-visible {
     color: var(--color-text-dark);
+}
+
+/* ========================================
+   レスポンシブデザイン: レイアウト調整
+   ======================================== */
+
+/* タブレット/スマホ: レイアウトの調整 */
+@media (max-width: 1079px) {
+    /* パターン1: 中央配置型 */
+    .layout-main--centered {
+        padding: var(--content-padding);
+    }
+    
+    /* パターン2: TOC型 - TOCを非表示、コンテンツを全幅 */
+    .layout-main--with-toc {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: none;
+        height: auto;
+        min-height: calc(100vh - 60px);
+    }
+    
+    .layout-main--with-toc .layout-toc {
+        display: none;
+    }
+    
+    .layout-main--with-toc .layout-main__content {
+        width: 100%;
+        max-width: 100%;
+        padding: var(--content-padding);
+        height: auto;
+    }
+    
+    /* Chronicleページ専用 */
+    .layout-main--chronicle .layout-main__content {
+        height: auto;
+        min-height: calc(100vh - 60px);
+    }
+    
+    /* パターン3: 3カラム型 - セカンダリーナビを非表示、コンテンツを全幅 */
+    .layout-main--with-tags {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: none;
+        height: auto;
+        min-height: calc(100vh - 60px);
+    }
+    
+    .layout-main--with-tags .layout-tags {
+        display: none;
+    }
+    
+    .layout-main--with-tags .layout-main__content {
+        width: 100%;
+        max-width: 100%;
+        padding: var(--content-padding);
+        height: auto;
+    }
+    
+    /* パターン4: ヘッダー+TOC型 - TOCを非表示、コンテンツを全幅 */
+    .layout-main--with-header-toc {
+        display: flex;
+        flex-direction: column;
+        grid-template-columns: none;
+        height: auto;
+        min-height: calc(100vh - 60px);
+    }
+    
+    .layout-main--with-header-toc .layout-toc {
+        display: none;
+    }
+    
+    .layout-main--with-header-toc .layout-main__content {
+        width: 100%;
+        max-width: 100%;
+        padding: var(--content-padding);
+        height: auto;
+    }
+    
+    /* ページセクションのパディング調整 */
+    .page-section {
+        padding-bottom: var(--section-padding-bottom);
+    }
+    
+    /* セカンダリーナビのパディング調整 */
+    .layout-tags {
+        padding: var(--content-padding);
+    }
+}
+
+/* スマホ: さらに小さなサイズ調整 */
+@media (max-width: 767px) {
+    /* パターン1: 中央配置型 */
+    .layout-main--centered {
+        padding: var(--content-padding);
+    }
+    
+    /* パターン2, 3, 4: コンテンツのパディングを16pxに */
+    .layout-main--with-toc .layout-main__content,
+    .layout-main--with-tags .layout-main__content,
+    .layout-main--with-header-toc .layout-main__content {
+        padding: 16px;
+    }
 }
 
 

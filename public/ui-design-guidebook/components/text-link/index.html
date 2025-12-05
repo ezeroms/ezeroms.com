@@ -1,7 +1,1254 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>Text Link</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js></script><script>hljs.highlightAll()</script><link rel=stylesheet href=/css/main.css><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon type=image/x-icon href=/images/common/favicon/favicon.ico><link rel=icon type=image/png sizes=16x16 href=/images/common/favicon/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=/images/common/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/images/common/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=192x192 href=/images/common/favicon/favicon-192x192.png><link rel=apple-touch-icon sizes=180x180 href=/images/common/favicon/apple-touch-icon.png><meta property="og:title" content="Text Link"><meta property="og:description" content="One thing I can tell you is you got to be free!"><meta property="og:type" content="website"><meta property="og:url" content="https://ezeroms.com/ui-design-guidebook/components/text-link/"><meta property="og:image" content="https://ezeroms.com/images/common/og-image.png"><meta property="og:site_name" content="ezeroms.com"><meta property="og:locale" content="ja_JP"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Text Link"><meta name=twitter:description content="One thing I can tell you is you got to be free!"><meta name=twitter:image content="https://ezeroms.com/images/common/og-image.png"></head><body class=is-ui-design-guidebook><div class=layout-container><aside class=layout-sidebar aria-label=グローバルナビゲーション><div class=sidebar><div class=sidebar__main><div class=sidebar__logo><a href=/><img src=/images/common/logo.svg alt=ezeroms.com>
-</a><button class=sidebar__minimize-btn id=sidebar-minimize-btn aria-label=サイドバーを最小化 data-tooltip=メニューを非表示にする>
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><nav class=sidebar__nav-group aria-label=グローバルナビゲーション><ul class=sidebar__nav><li><a href=/about/>About</a></li><li><a href=/tweet_month/2025-06/>Tweet</a></li><li><a href=/diary_month/2025-09/>Diary</a></li><li><a href=/column/>Column</a></li><li><a href=/work/>Work</a></li></ul><div class=sidebar__library><h3 class=sidebar__library-heading>Library</h3><ul class=sidebar__nav><li><a href=/shoulders-of-giants/>The shoulders of Giants</a></li><li><a href=/chronicle/>Chronicle</a></li><li><a class=is-active href=/ui-design-guidebook/>UI Design Guidebook</a></li></ul></div></nav></div></div></aside><div class=layout-body><div class=layout-header><div class=column-header><nav class=column-header__nav id=ui-design-guidebook-category-filters><a href=/ui-design-guidebook/ class=column-header__tab>Readme</a>
-<a href=/ui-design-guidebook/components/ class="column-header__tab active">Components</a>
-<a href=/ui-design-guidebook/patterns/ class=column-header__tab>Patterns</a>
-<a href=/ui-design-guidebook/principles/ class=column-header__tab>Principles</a></nav></div></div><div class="layout-main layout-main--with-header-toc"><aside class=layout-toc aria-label="UI Design Guidebook 目次"><nav class=layout-toc__nav><ul class=layout-toc__list><li><a href=/ui-design-guidebook/components/button/>Button</a></li><li><a href=/ui-design-guidebook/components/link/>Link</a></li><li><a href=/ui-design-guidebook/components/text-link/ class=active>Text Link</a></li><li><a href=/ui-design-guidebook/components/input-field/>Input Field</a></li><li><a href=/ui-design-guidebook/components/textarea/>Textarea</a></li><li><a href=/ui-design-guidebook/components/select-box/>Select Box</a></li><li><a href=/ui-design-guidebook/components/dropdown-menu/>Dropdown Menu</a></li><li><a href=/ui-design-guidebook/components/checkbox/>Checkbox</a></li><li><a href=/ui-design-guidebook/components/toggle-switch/>Toggle Switch</a></li><li><a href=/ui-design-guidebook/components/slider/>Slider</a></li><li><a href=/ui-design-guidebook/components/stepper/>Stepper</a></li><li><a href=/ui-design-guidebook/components/tooltip/>Tooltip</a></li><li><a href=/ui-design-guidebook/components/snackbar-toast/>Snackbar / Toast</a></li><li><a href=/ui-design-guidebook/components/badge/>Badge</a></li><li><a href=/ui-design-guidebook/components/chip/>Chip</a></li><li><a href=/ui-design-guidebook/components/tag/>Tag</a></li><li><a href=/ui-design-guidebook/components/avatar/>Avatar</a></li><li><a href=/ui-design-guidebook/components/tabs/>Tabs</a></li><li><a href=/ui-design-guidebook/components/breadcrumbs/>Breadcrumbs</a></li><li><a href=/ui-design-guidebook/components/accordion/>Accordion</a></li><li><a href=/ui-design-guidebook/components/table/>Table</a></li><li><a href=/ui-design-guidebook/components/card/>Card</a></li><li><a href=/ui-design-guidebook/components/list-item/>List Item</a></li><li><a href=/ui-design-guidebook/components/divider/>Divider</a></li><li><a href=/ui-design-guidebook/components/date-picker/>Date Picker</a></li><li><a href=/ui-design-guidebook/components/file-upload/>File Upload</a></li><li><a href=/ui-design-guidebook/components/modal-window/>Modal Window</a></li><li><a href=/ui-design-guidebook/components/search-input/>Search Input</a></li><li><a href=/ui-design-guidebook/components/radio-button/>Radio Button</a></li><li><a href=/ui-design-guidebook/components/pagination/>Pagination</a></li><li><a href=/ui-design-guidebook/components/time-picker/>Time Picker</a></li><li><a href=/ui-design-guidebook/components/progress-bar/>Progress Bar</a></li><li><a href=/ui-design-guidebook/components/skeleton-loader/>Skeleton Loader</a></li></ul></nav></aside><main class=layout-main__content id=main-content><div id=notification class=notification>リンクをコピーしました</div><section class=page-section><div class=page-section__content><ul class=article-container><article class=article-item><h1>Text Link</h1><p class=article-item__description>本文中やコンテンツ内に配置されるテキストリンク。ナビゲーションリンクとは異なる用途で使用される。</p><h1 id=text-link>Text Link</h1><h2 id=1-何のためのコンポーネントか役割>1. 何のためのコンポーネントか（役割）</h2><p>Text Linkは、本文中やコンテンツ内に自然に配置されるテキストリンクです。主な役割は：</p><ul><li><strong>関連情報への導線</strong>: 記事内の関連ページや参考資料へのリンク</li><li><strong>文脈的なナビゲーション</strong>: コンテンツの流れを保ちながら別の情報へ導く</li><li><strong>引用・参照</strong>: 出典や参考資料へのリンク</li></ul><p>Text Linkは、コンテンツの一部として自然に機能し、ユーザーの探索を支援します。</p><h2 id=2-よく使う場面>2. よく使う場面</h2><ul><li><strong>ブログ記事</strong>: 関連記事や参考資料へのリンク</li><li><strong>ドキュメント</strong>: 関連セクションや外部リソースへのリンク</li><li><strong>ニュース記事</strong>: 関連記事やソースへのリンク</li><li><strong>商品説明</strong>: 関連商品や詳細情報へのリンク</li></ul><h2 id=3-構造と状態>3. 構造と状態</h2><h3 id=基本構造>基本構造</h3><pre tabindex=0><code>[通常のテキスト] [リンクテキスト] [通常のテキスト]
-</code></pre><h3 id=主要な状態>主要な状態</h3><ul><li><strong>Default</strong>: 通常のリンク状態（下線付き、色付き）</li><li><strong>Hover</strong>: マウスオーバー時の状態</li><li><strong>Visited</strong>: 訪問済みリンク</li><li><strong>Focus</strong>: キーボードフォーカス時</li></ul><h2 id=4-デザインのポイント>4. デザインのポイント</h2><h3 id=視覚的識別>視覚的識別</h3><ul><li><strong>下線</strong>: 本文中のリンクには下線を使用（特に重要）</li><li><strong>色</strong>: 背景色と十分なコントラストを確保</li><li><strong>ホバー効果</strong>: マウスオーバー時に色を変える、下線を太くする</li></ul><h3 id=ラベル設計>ラベル設計</h3><ul><li><strong>説明的</strong>: リンク先の内容が分かるテキストを使用</li><li><strong>自然な流れ</strong>: 周囲のテキストと自然に統合される</li></ul><h2 id=5-アクセシビリティ>5. アクセシビリティ</h2><ul><li><strong>キーボード操作</strong>: Tabキーでフォーカス可能</li><li><strong>十分なコントラスト</strong>: WCAG AA基準（4.5:1以上）を満たす</li><li><strong>フォーカス表示</strong>: 明確な視覚的インジケーター</li></ul><h2 id=6-誤用アンチパターン>6. 誤用・アンチパターン</h2><ul><li><strong>「ここをクリック」</strong>: リンクテキスト自体が説明的であるべき</li><li><strong>色だけに依存</strong>: 下線やアイコンも使用</li><li><strong>長すぎるリンク</strong>: 読みやすさを損なう</li></ul><h2 id=7-関連するuiパターン>7. 関連するUIパターン</h2><ul><li><strong>Article</strong>: 記事内のリンク</li><li><strong>Documentation</strong>: ドキュメント内の参照リンク</li></ul></article></ul></div></section></main></div></div></div><script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-K021MTL6NX")</script><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const e="https://ezeroms.com/",t=e?new URL(e).hostname:window.location.hostname,n=document.querySelectorAll(".article-item a[href]");n.forEach(function(e){const n=e.getAttribute("href");if(!n||e.hasAttribute("target"))return;if(n.startsWith("#")||n.startsWith("/")||n.startsWith("./")||n.startsWith("../")||n.startsWith("http")&&new URL(n,window.location.href).hostname===t)return;(n.startsWith("http://")||n.startsWith("https://")||n.startsWith("//"))&&(e.setAttribute("target","_blank"),e.setAttribute("rel","noopener noreferrer"))})}})()</script><script>(function(){function e(){const t=document.querySelector(".layout-sidebar"),e=document.getElementById("sidebar-minimize-btn");if(!t||!e)return;n(),e.addEventListener("click",function(e){e.preventDefault(),e.stopPropagation(),t.classList.toggle("is-minimized"),n()});function n(){const n=t.classList.contains("is-minimized");n?(e.setAttribute("aria-label","サイドバーを最大化"),e.setAttribute("data-tooltip","メニューを表示する"),e.querySelector("svg").style.transform="rotate(180deg)"):(e.setAttribute("aria-label","サイドバーを最小化"),e.setAttribute("data-tooltip","メニューを非表示にする"),e.querySelector("svg").style.transform="rotate(0deg)")}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e()})()</script><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const e=document.querySelector(".layout-header");if(!e){console.log("Header not found");return}if(e.children.length===0)return;let t=0,n=null,s=!1,o=!1;function i(){return window.pageYOffset||document.documentElement.scrollTop||0}function a(){const o=i();if(Math.abs(o-t)<1)return;const a=o>t,r=o<t;if(n&&(clearTimeout(n),n=null),o<=100){e.classList.remove("hidden"),s=!1,t=o;return}r?(e.classList.remove("hidden"),s=!1):a&&(e.classList.add("hidden"),s=!0),t=o,s&&(n=setTimeout(function(){e.classList.remove("hidden"),s=!1,n=null},3e3))}t=i(),window.addEventListener("scroll",function(){o||(window.requestAnimationFrame(function(){a(),o=!1}),o=!0)},{passive:!0}),a()}})()</script><script src=/js/tag-links.js></script><script src=/js/lazy-load.js></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Link</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="Text Link">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ezeroms.com/ui-design-guidebook/components/text-link/">
+    <meta property="og:image" content="https://ezeroms.com/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Text Link">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="https://ezeroms.com/images/common/og-image.png">
+
+    
+
+</head>
+<body class="is-ui-design-guidebook">
+    
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
+    
+    <div class="layout-container">
+        <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    
+    
+    
+    
+    
+    
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+    
+    
+    
+    
+    
+    
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+    
+    
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="" href="/about/profile/">About</a>
+        </li>
+        <li>
+          <a class="" href="/tweet_month/2025-06/">Tweet</a>
+        </li>
+        <li>
+          <a class="" href="/diary_month/2025-09/">Diary</a>
+        </li>
+        <li>
+          <a class="" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="" href="/work/">Work</a>
+        </li>
+        
+      </ul>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          <li>
+            <a class="" href="/chronicle/">Chronicle</a>
+          </li>
+          <li>
+            <a class="is-active" href="/ui-design-guidebook/">UI Design Guidebook</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+        </aside>
+
+        <div class="layout-body">
+            
+            
+                
+<div class="mobile-header" id="mobile-header-ui-design-guidebook">
+    
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    
+    <h2 class="mobile-header__title">
+        
+            Text Link
+        
+    </h2>
+    
+    
+    <button class="mobile-header__button" id="mobile-header-ui-design-guidebook-btn" aria-label="目次を開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+
+<div class="half-modal__overlay" id="half-modal-ui-design-guidebook-overlay"></div>
+<div class="half-modal" id="half-modal-ui-design-guidebook">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">目次</h3>
+        <button class="half-modal__close" id="half-modal-ui-design-guidebook-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        <aside class="layout-toc" aria-label="UI Design Guidebook 目次">
+    <nav class="layout-toc__nav">
+        <ul class="layout-toc__list">
+            
+            
+            
+            
+                
+                    
+                
+            
+            
+            
+            
+                
+                
+                    
+                        
+                            
+                        
+                    
+                
+                
+                
+                    
+                    
+                    
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/button/" class="">Button</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/link/" class="">Link</a>
+                        </li>
+                    
+                        
+                        
+                            
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/text-link/" class="active">Text Link</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/input-field/" class="">Input Field</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/textarea/" class="">Textarea</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/select-box/" class="">Select Box</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/dropdown-menu/" class="">Dropdown Menu</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/checkbox/" class="">Checkbox</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/toggle-switch/" class="">Toggle Switch</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/slider/" class="">Slider</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/stepper/" class="">Stepper</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/tooltip/" class="">Tooltip</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/snackbar-toast/" class="">Snackbar / Toast</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/badge/" class="">Badge</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/chip/" class="">Chip</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/tag/" class="">Tag</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/avatar/" class="">Avatar</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/tabs/" class="">Tabs</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/breadcrumbs/" class="">Breadcrumbs</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/accordion/" class="">Accordion</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/table/" class="">Table</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/card/" class="">Card</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/list-item/" class="">List Item</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/divider/" class="">Divider</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/date-picker/" class="">Date Picker</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/file-upload/" class="">File Upload</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/modal-window/" class="">Modal Window</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/search-input/" class="">Search Input</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/radio-button/" class="">Radio Button</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/pagination/" class="">Pagination</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/time-picker/" class="">Time Picker</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/progress-bar/" class="">Progress Bar</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/skeleton-loader/" class="">Skeleton Loader</a>
+                        </li>
+                    
+                
+            
+        </ul>
+    </nav>
+</aside>
+
+
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; 
+    
+    const header = document.getElementById('mobile-header-ui-design-guidebook');
+    const button = document.getElementById('mobile-header-ui-design-guidebook-btn');
+    const modal = document.getElementById('half-modal-ui-design-guidebook');
+    const overlay = document.getElementById('half-modal-ui-design-guidebook-overlay');
+    const closeBtn = document.getElementById('half-modal-ui-design-guidebook-close');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn) return;
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+})();
+</script>
+
+
+            
+            
+            
+            <div class="layout-header">
+                
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+        
+            
+                
+            
+        
+    
+
+    <div class="column-header">
+        <nav class="column-header__nav" id="ui-design-guidebook-category-filters">
+            <a href="/ui-design-guidebook/" class="column-header__tab">Readme</a>
+            <a href="/ui-design-guidebook/components/" class="column-header__tab active">Components</a>
+            <a href="/ui-design-guidebook/patterns/" class="column-header__tab">Patterns</a>
+            <a href="/ui-design-guidebook/principles/" class="column-header__tab">Principles</a>
+        </nav>
+    </div>
+
+            </div>
+            
+            <div class="layout-main layout-main--with-header-toc">
+                
+                    <aside class="layout-toc" aria-label="UI Design Guidebook 目次">
+    <nav class="layout-toc__nav">
+        <ul class="layout-toc__list">
+            
+            
+            
+            
+                
+                    
+                
+            
+            
+            
+            
+                
+                
+                    
+                        
+                            
+                        
+                    
+                
+                
+                
+                    
+                    
+                    
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/button/" class="">Button</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/link/" class="">Link</a>
+                        </li>
+                    
+                        
+                        
+                            
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/text-link/" class="active">Text Link</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/input-field/" class="">Input Field</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/textarea/" class="">Textarea</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/select-box/" class="">Select Box</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/dropdown-menu/" class="">Dropdown Menu</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/checkbox/" class="">Checkbox</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/toggle-switch/" class="">Toggle Switch</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/slider/" class="">Slider</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/stepper/" class="">Stepper</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/tooltip/" class="">Tooltip</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/snackbar-toast/" class="">Snackbar / Toast</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/badge/" class="">Badge</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/chip/" class="">Chip</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/tag/" class="">Tag</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/avatar/" class="">Avatar</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/tabs/" class="">Tabs</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/breadcrumbs/" class="">Breadcrumbs</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/accordion/" class="">Accordion</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/table/" class="">Table</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/card/" class="">Card</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/list-item/" class="">List Item</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/divider/" class="">Divider</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/date-picker/" class="">Date Picker</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/file-upload/" class="">File Upload</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/modal-window/" class="">Modal Window</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/search-input/" class="">Search Input</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/radio-button/" class="">Radio Button</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/pagination/" class="">Pagination</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/time-picker/" class="">Time Picker</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/progress-bar/" class="">Progress Bar</a>
+                        </li>
+                    
+                        
+                        
+                        <li>
+                            <a href="/ui-design-guidebook/components/skeleton-loader/" class="">Skeleton Loader</a>
+                        </li>
+                    
+                
+            
+        </ul>
+    </nav>
+</aside>
+
+
+                
+                <main class="layout-main__content" id="main-content">
+                    
+    <div id="notification" class="notification">
+    リンクをコピーしました
+</div>
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <h1>Text Link</h1>
+                    
+                        <p class="article-item__description">本文中やコンテンツ内に配置されるテキストリンク。ナビゲーションリンクとは異なる用途で使用される。</p>
+                    
+                    <h1 id="text-link">Text Link</h1>
+<h2 id="1-何のためのコンポーネントか役割">1. 何のためのコンポーネントか（役割）</h2>
+<p>Text Linkは、本文中やコンテンツ内に自然に配置されるテキストリンクです。主な役割は：</p>
+<ul>
+<li><strong>関連情報への導線</strong>: 記事内の関連ページや参考資料へのリンク</li>
+<li><strong>文脈的なナビゲーション</strong>: コンテンツの流れを保ちながら別の情報へ導く</li>
+<li><strong>引用・参照</strong>: 出典や参考資料へのリンク</li>
+</ul>
+<p>Text Linkは、コンテンツの一部として自然に機能し、ユーザーの探索を支援します。</p>
+<h2 id="2-よく使う場面">2. よく使う場面</h2>
+<ul>
+<li><strong>ブログ記事</strong>: 関連記事や参考資料へのリンク</li>
+<li><strong>ドキュメント</strong>: 関連セクションや外部リソースへのリンク</li>
+<li><strong>ニュース記事</strong>: 関連記事やソースへのリンク</li>
+<li><strong>商品説明</strong>: 関連商品や詳細情報へのリンク</li>
+</ul>
+<h2 id="3-構造と状態">3. 構造と状態</h2>
+<h3 id="基本構造">基本構造</h3>
+<pre tabindex="0"><code>[通常のテキスト] [リンクテキスト] [通常のテキスト]
+</code></pre><h3 id="主要な状態">主要な状態</h3>
+<ul>
+<li><strong>Default</strong>: 通常のリンク状態（下線付き、色付き）</li>
+<li><strong>Hover</strong>: マウスオーバー時の状態</li>
+<li><strong>Visited</strong>: 訪問済みリンク</li>
+<li><strong>Focus</strong>: キーボードフォーカス時</li>
+</ul>
+<h2 id="4-デザインのポイント">4. デザインのポイント</h2>
+<h3 id="視覚的識別">視覚的識別</h3>
+<ul>
+<li><strong>下線</strong>: 本文中のリンクには下線を使用（特に重要）</li>
+<li><strong>色</strong>: 背景色と十分なコントラストを確保</li>
+<li><strong>ホバー効果</strong>: マウスオーバー時に色を変える、下線を太くする</li>
+</ul>
+<h3 id="ラベル設計">ラベル設計</h3>
+<ul>
+<li><strong>説明的</strong>: リンク先の内容が分かるテキストを使用</li>
+<li><strong>自然な流れ</strong>: 周囲のテキストと自然に統合される</li>
+</ul>
+<h2 id="5-アクセシビリティ">5. アクセシビリティ</h2>
+<ul>
+<li><strong>キーボード操作</strong>: Tabキーでフォーカス可能</li>
+<li><strong>十分なコントラスト</strong>: WCAG AA基準（4.5:1以上）を満たす</li>
+<li><strong>フォーカス表示</strong>: 明確な視覚的インジケーター</li>
+</ul>
+<h2 id="6-誤用アンチパターン">6. 誤用・アンチパターン</h2>
+<ul>
+<li><strong>「ここをクリック」</strong>: リンクテキスト自体が説明的であるべき</li>
+<li><strong>色だけに依存</strong>: 下線やアイコンも使用</li>
+<li><strong>長すぎるリンク</strong>: 読みやすさを損なう</li>
+</ul>
+<h2 id="7-関連するuiパターン">7. 関連するUIパターン</h2>
+<ul>
+<li><strong>Article</strong>: 記事内のリンク</li>
+<li><strong>Documentation</strong>: ドキュメント内の参照リンク</li>
+</ul>
+
+                </article>
+            </ul>
+        </div>
+    </section>
+
+                </main>
+
+                
+                
+                
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = 'https:\/\/ezeroms.com\/';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                
+                
+                updateButtonState();
+                
+                
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示する');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
+            }
+        })();
+    </script>
+
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.layout-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                
+                lastScrollTop = getScrollTop();
+
+                
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                
+                handleScroll();
+            }
+        })();
+    </script>
+
+    
+    <script src="/js/tag-links.js"></script>
+    
+    
+    <script src="/js/lazy-load.js"></script>
+</body>
+</html>

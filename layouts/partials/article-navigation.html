@@ -36,7 +36,32 @@
     </div>
     
     <div class="article-navigation__back">
-        <a href="{{ .Section | printf "/%s/" }}" class="article-navigation__link">
+        {{ $backURL := .Section | printf "/%s/" }}
+        {{ if eq .Section "diary" }}
+            {{/* Diaryセクションの最新月を取得 */}}
+            {{ $diarySection := .Site.GetPage "section" "diary" }}
+            {{ $diaryMonths := slice }}
+            {{ if $diarySection }}
+                {{ range $diarySection.Pages }}
+                    {{ $monthStr := .Date | dateFormat "2006-01" }}
+                    {{ if not (in $diaryMonths $monthStr) }}
+                        {{ $diaryMonths = $diaryMonths | append $monthStr }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedDiaryMonths := sort $diaryMonths }}
+            {{ if gt (len $sortedDiaryMonths) 0 }}
+                {{ $diaryLatestMonth := index $sortedDiaryMonths (sub (len $sortedDiaryMonths) 1) }}
+                {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($diaryLatestMonth | urlize) }}
+                {{ if $diaryMonthPage }}
+                    {{ $backURL = $diaryMonthPage.Page.RelPermalink }}
+                {{ end }}
+            {{ end }}
+        {{ else if strings.HasPrefix .RelPermalink "/about/media-coverage/" }}
+            {{/* メディア掲載の詳細ページは /about/media-coverage/ に戻る */}}
+            {{ $backURL = "/about/media-coverage/" }}
+        {{ end }}
+        <a href="{{ $backURL }}" class="article-navigation__link">
             <span class="article-navigation__title">記事一覧に戻る</span>
         </a>
     </div>

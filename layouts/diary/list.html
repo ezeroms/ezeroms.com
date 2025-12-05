@@ -1,0 +1,57 @@
+{{/* Diary一覧ページを最新記事の月のアーカイブページにリダイレクト */}}
+{{ $diarySection := .Site.GetPage "section" "diary" }}
+{{ $allMonths := slice }}
+{{ if $diarySection }}
+    {{ range $diarySection.Pages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ $sortedMonths := sort $allMonths }}
+{{ $latestMonth := "" }}
+{{ if gt (len $sortedMonths) 0 }}
+    {{ $latestMonth = index $sortedMonths (sub (len $sortedMonths) 1) }}
+    {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($latestMonth | urlize) }}
+    {{ if $diaryMonthPage }}
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta http-equiv="refresh" content="0; url={{ $diaryMonthPage.Page.RelPermalink }}">
+            <link rel="canonical" href="{{ $diaryMonthPage.Page.RelPermalink }}">
+        </head>
+        <body>
+            <script>
+                window.location.href = "{{ $diaryMonthPage.Page.RelPermalink }}";
+            </script>
+            <p>リダイレクト中... <a href="{{ $diaryMonthPage.Page.RelPermalink }}">こちらをクリック</a></p>
+        </body>
+        </html>
+    {{ else }}
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta http-equiv="refresh" content="0; url=/diary_month/{{ $latestMonth | urlize }}/">
+            <link rel="canonical" href="/diary_month/{{ $latestMonth | urlize }}/">
+        </head>
+        <body>
+            <script>
+                window.location.href = "/diary_month/{{ $latestMonth | urlize }}/";
+            </script>
+            <p>リダイレクト中... <a href="/diary_month/{{ $latestMonth | urlize }}/">こちらをクリック</a></p>
+        </body>
+        </html>
+    {{ end }}
+{{ else }}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Diary</title>
+    </head>
+    <body>
+        <p>記事がありません。</p>
+    </body>
+    </html>
+{{ end }}
+

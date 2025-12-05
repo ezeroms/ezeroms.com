@@ -89,9 +89,17 @@
     {{ end }}
 
     <div class="date-selector-nav__year-selector" data-min-year="{{ $minYear }}" data-max-year="{{ $maxYear }}">
-        <button class="date-selector-nav__year-nav{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }}" id="prev-year"{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }}>‹</button>
+        <button class="date-selector-nav__year-nav{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }}" id="prev-year"{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }} aria-label="前の年">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
         <span class="date-selector-nav__year-display" id="year-display">{{ $displayYear }}</span>
-        <button class="date-selector-nav__year-nav{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }}" id="next-year"{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }}>›</button>
+        <button class="date-selector-nav__year-nav{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }}" id="next-year"{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }} aria-label="次の年">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
+                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
     </div>
 
     <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">

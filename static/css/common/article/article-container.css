@@ -13,4 +13,20 @@
   box-sizing: border-box;
 }
 
+/* タブレット/スマホ: 幅とマージンの調整 */
+@media (max-width: 1079px) {
+  .article-container {
+    width: 100%;
+    margin: var(--spacing-3xl) 0 var(--spacing-2xl);
+    gap: var(--spacing-2xl);
+  }
+}
+
+@media (max-width: 767px) {
+  .article-container {
+    margin: var(--spacing-2xl) 0 var(--spacing-xl);
+    gap: var(--spacing-xl);
+  }
+}
+
 

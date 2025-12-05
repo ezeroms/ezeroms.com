@@ -5,7 +5,7 @@
     <link>http://localhost:1313/</link>
     <description>One thing I can tell you is you got to be free!</description>
     <language>ja</language>
-    <lastBuildDate>Thu, 04 Dec 2025 06:02:19 JST</lastBuildDate><item>
+    <lastBuildDate>Fri, 05 Dec 2025 04:15:08 JST</lastBuildDate><item>
         <title>Render Hooks Test</title>
         <link>http://localhost:1313/test-render-hooks/</link>
         <description>Spotify Test YouTube Test 読み込み中...
@@ -1570,16 +1570,16 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
         <guid>http://localhost:1313/work/urameri/</guid>
       </item><item>
         <title>デザインマネージャーに聞く チームで生産性を高める相互理解のはじめかた</title>
-        <link>http://localhost:1313/media-coverage/bell-ship-2022-04-01/</link>
+        <link>http://localhost:1313/about/media-coverage/bell-ship-2022-04-01/</link>
         <description></description>
         <pubDate>Fri, 01 Apr 2022 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/media-coverage/bell-ship-2022-04-01/</guid>
+        <guid>http://localhost:1313/about/media-coverage/bell-ship-2022-04-01/</guid>
       </item><item>
         <title>おはBiz "佐渡へ佐渡へ"と企業を誘致</title>
-        <link>http://localhost:1313/media-coverage/ohayou-nihon-2022-03-03/</link>
+        <link>http://localhost:1313/about/media-coverage/ohayou-nihon-2022-03-03/</link>
         <description></description>
         <pubDate>Thu, 03 Mar 2022 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/media-coverage/ohayou-nihon-2022-03-03/</guid>
+        <guid>http://localhost:1313/about/media-coverage/ohayou-nihon-2022-03-03/</guid>
       </item><item>
         <title>ロシアのウクライナ侵攻開始</title>
         <link>http://localhost:1313/chronicle/2022-02-24-ukraine-invasion/</link>
@@ -1589,10 +1589,10 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
         <guid>http://localhost:1313/chronicle/2022-02-24-ukraine-invasion/</guid>
       </item><item>
         <title>時代が忘れかけている音楽の価値とは？ 音楽SNS「Chooning」が提案する視聴体験の在り方</title>
-        <link>http://localhost:1313/media-coverage/techable-2021-09-24/</link>
+        <link>http://localhost:1313/about/media-coverage/techable-2021-09-24/</link>
         <description></description>
         <pubDate>Fri, 24 Sep 2021 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/media-coverage/techable-2021-09-24/</guid>
+        <guid>http://localhost:1313/about/media-coverage/techable-2021-09-24/</guid>
       </item><item>
         <title>東京オリンピック閉幕</title>
         <link>http://localhost:1313/chronicle/2021-08-08-tokyo-olympics-closing/</link>
@@ -1615,16 +1615,16 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
         <guid>http://localhost:1313/work/soh/</guid>
       </item><item>
         <title>横浜発のストリーミング時代の音楽アプリ「Chooning」が始動</title>
-        <link>http://localhost:1313/media-coverage/yokohama-keizai-2020-10-11/</link>
+        <link>http://localhost:1313/about/media-coverage/yokohama-keizai-2020-10-11/</link>
         <description></description>
         <pubDate>Sun, 11 Oct 2020 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/media-coverage/yokohama-keizai-2020-10-11/</guid>
+        <guid>http://localhost:1313/about/media-coverage/yokohama-keizai-2020-10-11/</guid>
       </item><item>
         <title>持ち帰り店の情報集約「飲食店は街のインフラ」</title>
-        <link>http://localhost:1313/media-coverage/town-news-2020-04-23/</link>
+        <link>http://localhost:1313/about/media-coverage/town-news-2020-04-23/</link>
         <description></description>
         <pubDate>Thu, 23 Apr 2020 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/media-coverage/town-news-2020-04-23/</guid>
+        <guid>http://localhost:1313/about/media-coverage/town-news-2020-04-23/</guid>
       </item><item>
         <title>緊急事態宣言の全国拡大</title>
         <link>http://localhost:1313/chronicle/2020-04-16-covid-state-of-emergency-extended/</link>
@@ -2263,7 +2263,7 @@ Google Form 連絡先（個人） LINE Messenger WhatsApp Signal チューニン
         <guid>http://localhost:1313/shoulders-of-giants/-130/</guid>
       </item><item>
         <title>このサイトについて</title>
-        <link>http://localhost:1313/about/about-this-site/</link>
+        <link>http://localhost:1313/about/site/</link>
         <description>このサイトについて はじめに いまのウェブは、目的のためにきれいに整備された道のようで、僕のように道草ばかり食って歩いてしまう人間には、どこか身の置きどころがなく感じられます。
 そこで「自分の歩幅で散歩できて、立ち止まりたい場所で気が済むまで眺めていられる、広い庭のような場所を持とう」と思い、このサイトをつくりました。
 かつて、個人的な文章や写真が、ネットの片隅に無造作に置かれていた時代がありました。あの「私的なものが半ば公共に漂っている」不思議な感触に、少年の僕はひどく魅せられていた気がします。
@@ -2285,7 +2285,7 @@ CC BY-NC-ND 4.0（表示・非営利・改変禁止）
 このサイトの更新通知を受け取る 更新を楽しみにしてくれる人がいると、とても励みになります。よければ登録してください！🤩
 Official LINE Account Feedly RSS Feed </description>
         <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/about/about-this-site/</guid>
+        <guid>http://localhost:1313/about/site/</guid>
       </item><item>
         <title>この世の喜びよ</title>
         <link>http://localhost:1313/shoulders-of-giants/-122/</link>
@@ -2479,6 +2479,16 @@ Official LINE Account Feedly RSS Feed </description>
         <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/shoulders-of-giants/-124/</guid>
       </item><item>
+        <title>プロフィール</title>
+        <link>http://localhost:1313/about/profile/</link>
+        <description>イワモトユウ / ezeroms / gan 1989年生まれ、横須賀市出身。Webサービスやスマートフォンアプリのデザイン、開発を行っています。
+これまでに、オンラインサロン・プラットフォーム「Synapse」や、オンライン商談システム「bellFace」などを手がけてきました。最近は、音楽への思いを記録する「Chooning」、人事評価制度を支える「Cateras」などのプロダクトを作っています。
+このサイトでは、僕が日々触れている出来事や、そこで考えたことを記録しています。思いつきのメモから、じっくり調べた記録まで、いろいろなものが混ざっていますが、どこかで誰かの視界が広がるきっかけになれば嬉しいです。
+😍 Favorite things デザイン、インターネット、ポピュラー音楽、楽器の演奏、散歩、麻雀、野菜、花、果物
+🏠 Based in 高円寺：住んでいます。「小杉湯となり」で仕事してます。 横浜：20代から30代にかけて、15年ほど生活していました。僕が経営するチューニング株式会社は、関内の泰生ビルにオフィスがあります。 佐渡島：岩首という村に10年以上通い続けています。年3〜4回ほど島に渡り、田植えやお祭りに参加しています。 台湾：冬の間（1月〜4月）は暖かい地域で越冬しています。台北や新北に滞在していることが多いです。 🌏 Around the Web BeReal Bluesky Chooning Discord Duolingo Facebook Instagram Spotify Threads TikTok X (Twitter) </description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/about/profile/</guid>
+      </item><item>
         <title>マチネの終わりに</title>
         <link>http://localhost:1313/shoulders-of-giants/-22/</link>
         <description>孤独というのは、つまりは、この世界への影響力の欠如の意識だった。自分の存在が、他者に対して、まったく影響を持ち得ないということ。持ち得なかったと知ること。──同時代に対する水平的な影響力だけでなく、次の時代への時間的な、垂直的な影響力。それが、他者の存在のどこを探ってみても、見出せないということ。
@@ -2494,12 +2504,6 @@ Official LINE Account Feedly RSS Feed </description>
 </description>
         <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/shoulders-of-giants/-33/</guid>
-      </item><item>
-        <title>メディア掲載</title>
-        <link>http://localhost:1313/about/media-coverage/</link>
-        <description></description>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
-        <guid>http://localhost:1313/about/media-coverage/</guid>
       </item><item>
         <title>一般意志2.0　ルソー、フロイト、グーグル</title>
         <link>http://localhost:1313/shoulders-of-giants/-68/</link>

@@ -60,7 +60,7 @@
     <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
       <ul class="sidebar__nav">
         <li>
-          <a class="{{ if strings.HasPrefix $current "/about/" }}is-active{{ end }}" href="/about/">About</a>
+          <a class="{{ if strings.HasPrefix $current "/about/" }}is-active{{ end }}" href="/about/profile/">About</a>
         </li>
         <li>
           <a class="{{ if or (strings.HasPrefix $current "/tweet/") (strings.HasPrefix $current "/tweet_month/") (strings.HasPrefix $current "/tweet_tag/") (strings.HasPrefix $current "/tweet_place/") }}is-active{{ end }}" href="{{ $tweetURL }}">Tweet</a>

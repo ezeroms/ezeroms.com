@@ -1,8 +1,8 @@
 {{ define "main" }}
     {{ partial "notification.html" . }}
 
-    <section class="page-section">
-        <div class="page-section__content">
+    <section class="page-section page-section--about">
+        <div class="page-section__content page-section__content--narrow">
             <ul class="article-container column-list">
                 {{ range .Pages }}
                     <li class="column-list-item media-coverage-item">
@@ -18,6 +18,8 @@
                     </li>
                 {{ end }}
             </ul>
+            
+            {{ partial "article-navigation-about.html" . }}
         </div>
     </section>
 {{ end }}

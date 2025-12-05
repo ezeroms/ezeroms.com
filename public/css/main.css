@@ -43,7 +43,12 @@
 @import url('pages/media-coverage.css');
 @import url('pages/snap.css');
 @import url('pages/top.css');
+@import url('pages/top-mobile.css');
 @import url('pages/giants.css');
 @import url('pages/chronicle.css');
 @import url('pages/chronicle-modal.css');
 @import url('pages/ui-design-guidebook.css');
+
+/* モバイル専用コンポーネント（タブレット/スマホのみ表示） */
+@import url('common/mobile-header.css');
+@import url('common/half-modal.css');

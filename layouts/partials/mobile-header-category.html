@@ -1,0 +1,193 @@
+{{/* Column/Work用モバイルヘッダー（カテゴリ選択） */}}
+{{ $context := .context }}
+{{ $type := .type }}
+{{ $pageContext := $context }}
+
+{{/* カテゴリ名のマッピング */}}
+{{ $categoryNames := dict }}
+{{ if eq $type "column" }}
+    {{ $categoryNames = dict
+        "music" "音楽"
+        "manga-and-anime" "漫画・アニメ"
+        "movies-and-dramas" "映画・ドラマ"
+        "comedy" "お笑い"
+        "gaming" "ゲーム"
+        "sports" "スポーツ"
+        "books-and-magazines" "本・雑誌"
+        "politics" "政治"
+        "economy-and-business" "経済・ビジネス"
+        "languages" "言葉・言語"
+        "foreign-cultures" "海外文化"
+        "design-and-creative" "デザイン・クリエイティブ"
+        "internet-and-technology" "インターネット・技術"
+        "natural-science" "自然科学"
+        "humanities-and-social-sciences" "人文・社会科学"
+    }}
+{{ else if eq $type "work" }}
+    {{ $categoryNames = dict
+        "webapp" "Webサービス / Webアプリケーション"
+        "mobileapp" "スマートフォンアプリ"
+        "website" "Webサイト"
+        "graphic" "グラフィック・印刷物"
+        "video" "映像"
+    }}
+{{ end }}
+
+{{/* 現在のカテゴリを取得 */}}
+{{ $currentCategory := "" }}
+{{ $currentCategoryName := "すべて" }}
+{{ $isTagPage := false }}
+{{ if hasPrefix $pageContext.RelPermalink (printf "/%s_tag/" $type) }}
+    {{ $isTagPage = true }}
+{{ end }}
+{{ $isCategoryPage := false }}
+{{ if hasPrefix $pageContext.RelPermalink (printf "/%s_category/" $type) }}
+    {{ $isCategoryPage = true }}
+    {{ $pathParts := split (trim $pageContext.RelPermalink "/") "/" }}
+    {{ if ge (len $pathParts) 2 }}
+        {{ $currentCategory = index $pathParts 1 }}
+        {{ $name := index $categoryNames $currentCategory }}
+        {{ if $name }}
+            {{ $currentCategoryName = $name }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ $isListPage := false }}
+{{ if and (eq $pageContext.Kind "section") (eq $pageContext.RelPermalink (printf "/%s/" $type)) }}
+    {{ $isListPage = true }}
+{{ end }}
+
+{{/* すべてのカテゴリを取得 */}}
+{{ $allCategories := slice }}
+{{ with $pageContext.Site.GetPage "section" $type }}
+    {{ range .Pages }}
+        {{ if eq $type "column" }}
+            {{ if .Params.column_category }}
+                {{ range .Params.column_category }}
+                    {{ if not (in $allCategories .) }}
+                        {{ $allCategories = $allCategories | append . }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ else if eq $type "work" }}
+            {{ if .Params.work_category }}
+                {{ range .Params.work_category }}
+                    {{ if not (in $allCategories .) }}
+                        {{ $allCategories = $allCategories | append . }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{/* Workの場合は指定された順序でソート */}}
+{{ $sortedCategories := slice }}
+{{ if eq $type "work" }}
+    {{ $categoryOrder := slice "webapp" "website" "graphic" "video" "mobileapp" }}
+    {{ range $categoryOrder }}
+        {{ if in $allCategories . }}
+            {{ $sortedCategories = $sortedCategories | append . }}
+        {{ end }}
+    {{ end }}
+    {{ range $allCategories }}
+        {{ if not (in $sortedCategories .) }}
+            {{ $sortedCategories = $sortedCategories | append . }}
+        {{ end }}
+    {{ end }}
+{{ else }}
+    {{ $sortedCategories = sort $allCategories }}
+{{ end }}
+
+<div class="mobile-header" id="mobile-header-{{ $type }}">
+    <!-- ハンバーガーメニューボタン（左側） -->
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    <!-- ページタイトル（中央） -->
+    <h2 class="mobile-header__title">
+        {{ $currentCategoryName }}
+    </h2>
+    
+    <!-- カテゴリ選択ボタン（右側） -->
+    <button class="mobile-header__button" id="mobile-header-{{ $type }}-btn" aria-label="カテゴリを選択" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+{{/* ハーフモーダル */}}
+<div class="half-modal__overlay" id="half-modal-{{ $type }}-overlay"></div>
+<div class="half-modal" id="half-modal-{{ $type }}">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">カテゴリを選択</h3>
+        <button class="half-modal__close" id="half-modal-{{ $type }}-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        <ul class="half-modal__list">
+            <li class="half-modal__item">
+                <a href="/{{ $type }}/" class="half-modal__link{{ if and $isListPage (not $isTagPage) (not $isCategoryPage) }} active{{ end }}">すべて</a>
+            </li>
+            {{ range $sortedCategories }}
+                {{ $categoryName := index $categoryNames . }}
+                {{ if $categoryName }}
+                    {{ $isActive := false }}
+                    {{ if and $isCategoryPage (eq $currentCategory .) (not $isTagPage) }}
+                        {{ $isActive = true }}
+                    {{ end }}
+                    <li class="half-modal__item">
+                        <a href="/{{ $type }}_category/{{ . }}/" class="half-modal__link{{ if $isActive }} active{{ end }}">{{ $categoryName }}</a>
+                    </li>
+                {{ end }}
+            {{ end }}
+        </ul>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; // PCでは実行しない
+    
+    const type = "{{ $type }}";
+    const header = document.getElementById('mobile-header-' + type);
+    const button = document.getElementById('mobile-header-' + type + '-btn');
+    const modal = document.getElementById('half-modal-' + type);
+    const overlay = document.getElementById('half-modal-' + type + '-overlay');
+    const closeBtn = document.getElementById('half-modal-' + type + '-close');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn) return;
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+})();
+</script>
+

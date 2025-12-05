@@ -127,6 +127,20 @@
     --line-height-relaxed: 1.6;
     --line-height-loose: 1.7;
     
+    /* テキストの行間（本文用） */
+    --text-line-height: 1.8;
+    
+    /* 記事ヘッダータグのマージン */
+    --article-header-tags-margin-top: 2rem;
+    
+    /* 記事アイテムのパディング（SP版） */
+    --article-item-padding-sp-vertical: 20px;
+    --article-item-padding-sp-horizontal: 16px;
+    
+    /* カードのパディング（SP版） */
+    --card-padding-sp-vertical: 20px;
+    --card-padding-sp-horizontal: 16px;
+    
     /* レタースペーシング */
     --letter-spacing-tight: -0.01em;
     --letter-spacing-normal: 0;
@@ -145,5 +159,88 @@
     
     /* トランジションイージング */
     --easing-default: ease;
+}
+
+/* ========================================
+   レスポンシブデザイン: タブレット版
+   ======================================== */
+@media (max-width: 1079px) {
+    :root {
+        /* フォントサイズ（ベースは1rem） */
+        --font-size-xs: 0.75rem;        /* 12px */
+        --font-size-sm: 0.875rem;       /* 14px */
+        --font-size-base: 1rem;         /* 16px */
+        --font-size-lg: 1.125rem;       /* 18px */
+        --font-size-xl: 1.25rem;        /* 20px */
+        --font-size-2xl: 1.5rem;        /* 24px */
+        --font-size-3xl: 2rem;          /* 32px */
+        
+        /* スペーシング（約80%） */
+        --spacing-xs: 4px;
+        --spacing-sm: 8px;
+        --spacing-md: 10px;             /* 12px → 10px */
+        --spacing-lg: 13px;             /* 16px → 13px */
+        --spacing-xl: 16px;             /* 20px → 16px */
+        --spacing-2xl: 19px;            /* 24px → 19px */
+        --spacing-3xl: 26px;            /* 32px → 26px */
+        --spacing-4xl: 32px;            /* 40px → 32px */
+        --spacing-5xl: 38px;            /* 48px → 38px */
+        
+        /* コンテンツパディング */
+        --content-padding: 32px;
+        --section-padding-bottom: 64px;
+        
+        /* テキストの行間（タブレット版：より高く） */
+        --text-line-height: 2.0;
+    }
+}
+
+/* ========================================
+   レスポンシブデザイン: スマホ版
+   ======================================== */
+@media (max-width: 767px) {
+    :root {
+        /* フォントサイズ（ベースは1rem） */
+        --font-size-xs: 0.75rem;        /* 12px */
+        --font-size-sm: 0.875rem;       /* 14px */
+        --font-size-base: 1rem;         /* 16px */
+        --font-size-lg: 1.125rem;       /* 18px */
+        --font-size-xl: 1.25rem;        /* 20px */
+        --font-size-2xl: 1.4rem;        /* 22.4px */
+        --font-size-3xl: 2rem;          /* 32px */
+        
+        /* ボーダー半径（SP版：より小さく） */
+        --radius-sm: 3px;               /* 4px → 3px */
+        --radius-md: 6px;               /* 8px → 6px */
+        --radius-lg: 10px;              /* 12px → 10px */
+        --radius-xl: 13px;              /* 16px → 13px */
+        --radius-2xl: 16px;             /* 20px → 16px */
+        --radius-3xl: 19px;             /* 24px → 19px */
+        --radius-full: 9999px;
+        
+        /* 標準ボーダー半径（SP版：16px） */
+        --radius-default: 16px;
+        
+        /* スペーシング（約60%） */
+        --spacing-xs: 4px;
+        --spacing-sm: 6px;              /* 8px → 6px */
+        --spacing-md: 8px;              /* 12px → 8px */
+        --spacing-lg: 10px;             /* 16px → 10px */
+        --spacing-xl: 12px;             /* 20px → 12px */
+        --spacing-2xl: 16px;            /* 24px → 16px */
+        --spacing-3xl: 20px;            /* 32px → 20px */
+        --spacing-4xl: 24px;            /* 40px → 24px */
+        --spacing-5xl: 29px;            /* 48px → 29px */
+        
+        /* コンテンツパディング */
+        --content-padding: 24px;
+        --section-padding-bottom: 48px;
+        
+        /* テキストの行間（スマホ版：より高く） */
+        --text-line-height: 2.0;
+        
+        /* 記事ヘッダータグのマージン（SP版） */
+        --article-header-tags-margin-top: 1.5rem;
+    }
 }
 

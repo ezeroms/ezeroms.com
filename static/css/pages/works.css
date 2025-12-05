@@ -56,6 +56,14 @@
     min-width: 0;
 }
 
+/* スマホ版: paddingを上下20px、左右16pxに */
+@media (max-width: 767px) {
+    .work-list .column-card,
+    .work-list .column-list-item.column-card {
+        padding: var(--card-padding-sp-vertical) var(--card-padding-sp-horizontal);
+    }
+}
+
 .work-list .column-card:hover,
 .work-list .column-list-item.column-card:hover {
     color: inherit;
@@ -168,6 +176,25 @@
     background: #E7E7E9;
     margin-top: 24px;
     margin-bottom: 32px;
+}
+
+/* スマホ版: work-article__meta-itemのスタイル調整 */
+@media (max-width: 767px) {
+    .work-article__meta-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    
+    .work-list .column-card .date {
+        margin: 1.2rem 0 0.6rem 0;
+    }
+    
+    .work-card__image {
+        border-radius: var(--radius-xl);
+    }
 }
 
 

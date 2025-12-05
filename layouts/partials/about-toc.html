@@ -2,13 +2,13 @@
     <nav class="layout-toc__nav">
         <ul class="layout-toc__list">
             <li>
-                <a href="/about/" class="layout-toc__link{{ if eq .RelPermalink "/about/" }} active{{ end }}">プロフィール</a>
+                <a href="/about/profile/" class="layout-toc__link{{ if eq .RelPermalink "/about/profile/" }} active{{ end }}">プロフィール</a>
             </li>
             <li>
-                <a href="/about/about-this-site/" class="layout-toc__link{{ if eq .RelPermalink "/about/about-this-site/" }} active{{ end }}">このサイトについて</a>
+                <a href="/about/site/" class="layout-toc__link{{ if eq .RelPermalink "/about/site/" }} active{{ end }}">このサイトについて</a>
             </li>
             <li>
-                <a href="/about/media-coverage/" class="layout-toc__link{{ if eq .RelPermalink "/about/media-coverage/" }} active{{ end }}">メディア掲載</a>
+                <a href="/about/media-coverage/" class="layout-toc__link{{ if or (eq .RelPermalink "/about/media-coverage/") (strings.HasPrefix .RelPermalink "/about/media-coverage/") }} active{{ end }}">メディア掲載</a>
             </li>
             <li>
                 <a href="/about/contact/" class="layout-toc__link{{ if eq .RelPermalink "/about/contact/" }} active{{ end }}">お問い合わせ</a>

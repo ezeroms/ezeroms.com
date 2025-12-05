@@ -26,6 +26,7 @@
     width: 2rem;
     height: 2rem;
     display: flex;
+    align-items: center;
     justify-content: center;
     transition: all var(--transition-normal) var(--easing-default);
     text-decoration: none;
@@ -106,5 +107,75 @@
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+/* タブレット/スマホ: 日付選択ナビの調整 */
+@media (max-width: 1079px) {
+    .date-selector-nav {
+        gap: var(--spacing-lg);
+    }
+    
+    .date-selector-nav__year-selector {
+        gap: var(--spacing-md);
+    }
+    
+    .date-selector-nav__year-nav {
+        font-size: 1.5rem;
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+    
+    .date-selector-nav__year-display {
+        font-size: var(--font-size-base);
+        min-width: 3rem;
+        height: 1.75rem;
+    }
+    
+    .date-selector-nav__month-filters {
+        gap: var(--spacing-sm);
+    }
+    
+    .date-selector-nav__filter-btn {
+        padding: 0.3rem 0.2rem;
+        min-width: 1.75rem;
+        font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 767px) {
+    .date-selector-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .date-selector-nav__year-selector {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .date-selector-nav__year-nav {
+        font-size: 1.25rem;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+    
+    .date-selector-nav__year-display {
+        font-size: var(--font-size-sm);
+        min-width: 2.5rem;
+        height: 1.5rem;
+    }
+    
+    .date-selector-nav__month-filters {
+        width: 100%;
+        justify-content: flex-start;
+        gap: var(--spacing-xs);
+    }
+    
+    .date-selector-nav__filter-btn {
+        padding: 0.25rem 0.15rem;
+        min-width: 1.5rem;
+        font-size: var(--font-size-xs);
+    }
 }
 

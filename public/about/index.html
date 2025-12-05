@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
     <meta charset="UTF-8">
-    <title>About</title>
+    <title>Abouts</title>
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -24,22 +24,25 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
 
     
-    <meta property="og:title" content="About">
+    <meta property="og:title" content="Abouts">
     <meta property="og:description" content="One thing I can tell you is you got to be free!">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:1313/about/">
-    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:url" content="https://ezeroms.com/about/">
+    <meta property="og:image" content="https://ezeroms.com/images/common/og-image.png">
     <meta property="og:site_name" content="ezeroms.com">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="About">
+    <meta name="twitter:title" content="Abouts">
     <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
-    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta name="twitter:image" content="https://ezeroms.com/images/common/og-image.png">
 
     
 
 </head>
 <body class="is-about">
+    
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
+    
     <div class="layout-container">
         <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
             <div class="sidebar">
@@ -240,7 +243,7 @@
     <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
       <ul class="sidebar__nav">
         <li>
-          <a class="is-active" href="/about/">About</a>
+          <a class="is-active" href="/about/profile/">About</a>
         </li>
         <li>
           <a class="" href="/tweet_month/2025-06/">Tweet</a>
@@ -280,6 +283,102 @@
 
         <div class="layout-body">
             
+            
+                
+<div class="mobile-header" id="mobile-header-about">
+    
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    
+    <h2 class="mobile-header__title">
+        
+            About
+        
+    </h2>
+    
+    
+    <button class="mobile-header__button" id="mobile-header-about-btn" aria-label="目次を開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+
+<div class="half-modal__overlay" id="half-modal-about-overlay"></div>
+<div class="half-modal" id="half-modal-about">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">目次</h3>
+        <button class="half-modal__close" id="half-modal-about-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        <ul class="half-modal__list">
+            <li class="half-modal__item">
+                <a href="/about/profile/" class="half-modal__link">プロフィール</a>
+            </li>
+            <li class="half-modal__item">
+                <a href="/about/site/" class="half-modal__link">このサイトについて</a>
+            </li>
+            <li class="half-modal__item">
+                <a href="/about/media-coverage/" class="half-modal__link">メディア掲載</a>
+            </li>
+            <li class="half-modal__item">
+                <a href="/about/contact/" class="half-modal__link">お問い合わせ</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; 
+    
+    const header = document.getElementById('mobile-header-about');
+    const button = document.getElementById('mobile-header-about-btn');
+    const modal = document.getElementById('half-modal-about');
+    const overlay = document.getElementById('half-modal-about-overlay');
+    const closeBtn = document.getElementById('half-modal-about-close');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn) return;
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+})();
+</script>
+
+
+            
+            
+            
             <div class="layout-header">
                 
             </div>
@@ -290,10 +389,10 @@
     <nav class="layout-toc__nav">
         <ul class="layout-toc__list">
             <li>
-                <a href="/about/" class="layout-toc__link active">プロフィール</a>
+                <a href="/about/profile/" class="layout-toc__link">プロフィール</a>
             </li>
             <li>
-                <a href="/about/about-this-site/" class="layout-toc__link">このサイトについて</a>
+                <a href="/about/site/" class="layout-toc__link">このサイトについて</a>
             </li>
             <li>
                 <a href="/about/media-coverage/" class="layout-toc__link">メディア掲載</a>
@@ -325,37 +424,75 @@
                     
                     
                     
-                        <h1 id="イワモトユウ--ezeroms--gan">イワモトユウ / ezeroms / gan</h1>
-<p>1989年生まれ、横須賀市出身。Webサービスやスマートフォンアプリのデザイン、開発を行っています。</p>
-<p>これまでに、オンラインサロン・プラットフォーム「Synapse」や、オンライン商談システム「<a href="https://bell-face.com/">bellFace</a>」などを手がけてきました。最近は、音楽への思いを記録する「<a href="https://hello.chooning.app/">Chooning</a>」、人事評価制度を支える「<a href="https://www.ashita-team.com/cateras/">Cateras</a>」などのプロダクトを作っています。</p>
-<p>このサイトでは、僕が日々触れている出来事や、そこで考えたことを記録しています。思いつきのメモから、じっくり調べた記録まで、いろいろなものが混ざっていますが、どこかで誰かの視界が広がるきっかけになれば嬉しいです。</p>
-<h2 id="-favorite-things">😍 Favorite things</h2>
-<p>デザイン、インターネット、ポピュラー音楽、楽器の演奏、散歩、麻雀、野菜、花、果物</p>
-<h2 id="-based-in">🏠 Based in</h2>
-<ul>
-<li><strong>高円寺</strong>：住んでいます。「<a href="https://kosugiyu-tonari.com/">小杉湯となり</a>」で仕事してます。</li>
-<li><strong>横浜</strong>：20代から30代にかけて、15年ほど生活していました。僕が経営するチューニング株式会社は、関内の<a href="https://taiyusha.co.jp/base/taisei/">泰生ビル</a>にオフィスがあります。</li>
-<li><strong>佐渡島</strong>：<a href="https://maps.app.goo.gl/kBmej4aTK9oXvmCh9">岩首</a>という村に10年以上通い続けています。年3〜4回ほど島に渡り、田植えやお祭りに参加しています。</li>
-<li><strong>台湾</strong>：冬の間（1月〜4月）は暖かい地域で越冬しています。台北や新北に滞在していることが多いです。</li>
-</ul>
-<h2 id="-around-the-web">🌏 Around the Web</h2>
-<ul>
-<li><a href="https://bere.al/ezeroms">BeReal</a></li>
-<li><a href="https://bsky.app/profile/ezeroms.bsky.social">Bluesky</a></li>
-<li><a href="https://chooning.app/@ezeroms/?hl=ja">Chooning</a></li>
-<li><a href="https://discord.gg/prmzctxtRe">Discord</a></li>
-<li><a href="https://www.duolingo.com/profile/ezeroms">Duolingo</a></li>
-<li><a href="https://www.facebook.com/ezeroms/">Facebook</a></li>
-<li><a href="https://www.instagram.com/ezeroms/">Instagram</a></li>
-<li><a href="https://open.spotify.com/user/ezeroms">Spotify</a></li>
-<li><a href="https://www.threads.net/@ezeroms">Threads</a></li>
-<li><a href="https://www.tiktok.com/@ezeroms">TikTok</a></li>
-<li><a href="https://x.com/ezeroms">X (Twitter)</a></li>
-</ul>
-
+                        
                     
                 </article>
             </div>
+            
+            
+
+
+
+
+
+
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+    
+        
+        
+        
+            
+        
+    
+        
+        
+        
+            
+        
+    
+        
+        
+        
+            
+        
+    
+    
+    
+    
+    
+        
+    
+        
+    
+        
+    
+        
+    
+    
+    
+    
+
+
+<div class="article-navigation">
+    <div class="article-navigation__prev">
+        
+    </div>
+    
+    <div class="article-navigation__next">
+        
+    </div>
+</div>
+
+
         </div>
     </section>
 
@@ -395,7 +532,7 @@
             }
 
             function handleExternalLinks() {
-                const baseURL = 'http:\/\/localhost:1313\/';
+                const baseURL = 'https:\/\/ezeroms.com\/';
                 const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
                 
                 
@@ -469,6 +606,90 @@
                 document.addEventListener('DOMContentLoaded', initSidebarMinimize);
             } else {
                 initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
             }
         })();
     </script>

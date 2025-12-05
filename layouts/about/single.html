@@ -6,7 +6,7 @@
             {{ if eq .Title "メディア掲載" }}
                 <!-- メディア掲載一覧 -->
                 <ul class="article-container column-list">
-                    {{ range where .Site.RegularPages "Section" "media-coverage" }}
+                    {{ range .Pages }}
                         <li class="column-list-item media-coverage-item">
                             <a href="{{ .RelPermalink }}" class="column-card media-coverage-card">
                                 {{ if .Params.date }}
@@ -20,6 +20,90 @@
                         </li>
                     {{ end }}
                 </ul>
+            {{ else if eq .Title "プロフィール" }}
+                <!-- カバー画像 -->
+                <div class="about-cover">
+                    <img src="/images/about/profile.webp" alt="Profile Picture" class="about-cover__image">
+                </div>
+
+                <!-- プロフィールのコンテンツ -->
+                <div class="about-content">
+                    <article class="article-item">
+                        {{ $content := .Content }}
+                        {{ $parts := split $content "## 🌏 Around the Web" }}
+                        {{ if gt (len $parts) 1 }}
+                            {{ index $parts 0 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
+                            <h2>🌏 Around the Web</h2>
+                            <ul class="about__sns-list">
+                                <li>
+                                    <a href="https://bere.al/ezeroms" target="_blank" class="about__sns-link icon_bereal">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">BeReal</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://bsky.app/profile/ezeroms.bsky.social" target="_blank" class="about__sns-link icon_bluesky">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Bluesky</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://chooning.app/@ezeroms/?hl=ja" target="_blank" class="about__sns-link icon_chooning">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Chooning</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://discord.gg/prmzctxtRe" target="_blank" class="about__sns-link icon_discord">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Discord</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.facebook.com/ezeroms/" target="_blank" class="about__sns-link icon_facebook">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Facebook</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.instagram.com/ezeroms/" target="_blank" class="about__sns-link icon_instagram">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Instagram</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://open.spotify.com/user/ezeroms" target="_blank" class="about__sns-link icon_spotify">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Spotify</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.threads.net/@ezeroms" target="_blank" class="about__sns-link icon_threads">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">Threads</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.tiktok.com/@ezeroms" target="_blank" class="about__sns-link icon_tiktok">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">TikTok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://x.com/ezeroms" target="_blank" class="about__sns-link icon_x">
+                                        <span class="about__sns-icon"></span>
+                                        <span class="about__sns-name">X (Twitter)</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            {{ if gt (len (index $parts 1)) 0 }}
+                                {{ index $parts 1 | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
+                            {{ end }}
+                        {{ else }}
+                            {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
+                        {{ end }}
+                    </article>
+                </div>
             {{ else }}
                 <!-- 通常のコンテンツ -->
                 <div class="about-content">
@@ -28,6 +112,8 @@
                     </article>
                 </div>
             {{ end }}
+            
+            {{ partial "article-navigation-about.html" . }}
         </div>
     </section>
 
