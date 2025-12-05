@@ -1,105 +1,200 @@
-/* works.css */
+/* Workページのsection-headerはDiaryと同じスタイルを使用 */
 
-.work {
-    margin: 64px 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    max-width: 1440px;
-    width: calc(100vw - 64px);
-    padding: 0 0 40px;
-}
+/* Work一覧ページのカード内要素間の間隔は、各要素のmarginで制御 */
 
-.work-item {
-    width: calc(33.333% - 16px);
-}
-
-.work-item img {
+.work-card__image {
+    position: relative;
     width: 100%;
-    height: auto;
-    transition: transform 0.2s, background-color 0.2s;
+    aspect-ratio: 16 / 9;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #f3f3f3;
 }
 
-.work-item img:hover {
+.work-card__image img {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: auto;
-    opacity: 0.7;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    margin: 0; /* .article-item img の margin を上書き */
+    display: block; /* .article-item img の display を上書き */
 }
 
-.work-item img:active {
-    transform: scale(0.95);
+.work-card:hover .work-card__image img {
+    transform: scale(1.02);
 }
 
-
-
-
-
-
-
-
-.work-detail-page {
-    padding: 20px;
+.work-card__title {
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 1rem 0;
 }
 
-.works-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
+/* Work一覧ページのカード全体をクリック可能にする */
+.work-list .column-list-item[data-href] {
+    cursor: pointer;
 }
 
-.works-footer a {
-    margin: 0 10px;
-    text-decoration: none;
-    color: #007BFF;
-}
-
-
-
-
-
-.work-hero {
+/* Work一覧ページのカード内要素間の間隔をmarginで制御 */
+.work-list .column-card,
+.work-list .column-list-item.column-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    max-width: 1440px;
     width: 100%;
-    margin: 0;
+    padding: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-default);
+    background-color: var(--color-background-white);
+    transition: all var(--transition-normal) var(--easing-default);
+    box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    overflow: hidden;
+    min-width: 0;
 }
 
-.work-hero img {
+/* スマホ版: paddingを上下20px、左右16pxに */
+@media (max-width: 767px) {
+    .work-list .column-card,
+    .work-list .column-list-item.column-card {
+        padding: var(--card-padding-sp-vertical) var(--card-padding-sp-horizontal);
+    }
+}
+
+.work-list .column-card:hover,
+.work-list .column-list-item.column-card:hover {
+    color: inherit;
+}
+
+.work-list .column-card:hover .column-card__title,
+.work-list .column-list-item.column-card:hover .column-card__title {
+    opacity: 0.8;
+}
+
+.work-list .column-card > *:first-child {
+    margin-top: 0;
+}
+
+.work-list .column-card .work-card__image {
+    margin: 0 0 2rem 0;
+    min-width: 0;
+    flex-shrink: 0;
+}
+
+/* Workカード内の画像に.article-item imgのスタイルが適用されないようにする */
+.work-list .work-card__image img {
+    margin: 0 !important;
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.work-list .column-card .date {
+    margin: 0 0 1rem 0;
+}
+
+.work-list .column-card .article-header__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+    width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.work-list .column-card .article-header__tags .tag {
+    flex-shrink: 0;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Work詳細ページのサムネイル画像（.article-item img のスタイルを上書き） */
+.work-article .article-header .work-article__thumbnail {
+    margin: 1rem 0 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f3f3f3;
+    width: 100%;
     height: auto;
+    display: inline;
+    object-fit: cover;
+    position: relative;
+}
+
+.work-article__meta {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.work-article__meta-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.work-article__meta-item:last-child {
+    margin-bottom: 0;
+}
+
+.work-article__meta-label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    min-width: 80px;
+    flex-shrink: 0;
+    margin-right: 1rem;
+}
+
+.work-article__meta-value {
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-relaxed);
 }
 
 
-
-.work-single {
-    width: 688px;
-    margin: 48px auto 0;
+/* Work詳細ページのarticle-header内のスペース調整 */
+.work-article .article-header > .date {
+    margin-bottom: 1rem;
 }
 
+.work-article__divider {
+    width: 100%;
+    height: 1px;
+    background: #E7E7E9;
+    margin-top: 24px;
+    margin-bottom: 32px;
+}
 
-
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
-    .work {
-        margin: 16px auto 40px;
+/* スマホ版: work-article__meta-itemのスタイル調整 */
+@media (max-width: 767px) {
+    .work-article__meta-item {
         display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
         flex-direction: column;
-        gap: 16px;
-        width: calc(100vw - 32px);
-        padding: 0 0 40px;
+        gap: 0.4rem;
     }
-
-    .work-item {
-        width: 100%;
+    
+    .work-list .column-card .date {
+        margin: 1.2rem 0 0.6rem 0;
     }
-
-    .work-single {
-        width: calc(100dvw - 32px);
-        margin: 48px auto 0;
-        padding: 0;
+    
+    .work-card__image {
+        border-radius: var(--radius-xl);
     }
 }
+
+

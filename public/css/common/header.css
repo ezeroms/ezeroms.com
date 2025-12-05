@@ -5,11 +5,10 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #fff;
+  background-color: var(--color-background-white);
   align-items: center;
-  padding: 0 32px;
+  padding: 0 var(--spacing-3xl);
   position: fixed;
-  background-color: #fff;
   z-index: 10;
   width: calc(100vw - 64px);
   height: 96px;
@@ -22,15 +21,15 @@ header {
 }
 
 .header__nav a {
-  color: #050317;
+  color: var(--color-text-primary);
   text-decoration: none;
-  font-family: "Helvetica Neue";
-  font-size: 16px;
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-base);
   font-style: normal;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   line-height: 100%;
-  letter-spacing: 0.6px;
-  transition-duration: 0.4s;
+  letter-spacing: var(--letter-spacing-widest);
+  transition-duration: var(--transition-slow);
 }
 
 .header__nav a:hover {
@@ -70,80 +69,32 @@ header {
 }
 
 .header__button a {
-  background-color: #050317;
-  padding: 16px 20px;
-  border-radius: 64px;
-  transition-duration: 0.4s;
-  transition: transform 0.2s, background-color 0.2s;
+  background-color: var(--color-primary);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-full);
+  transition-duration: var(--transition-slow);
+  transition: transform var(--transition-normal), background-color var(--transition-normal);
   width: max-content;
   text-decoration: none;
-  color: #fff;
-  font-size: 16px;
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-base);
   font-style: normal;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   line-height: 100%;
-  letter-spacing: 0.6px;
+  letter-spacing: var(--letter-spacing-widest);
 }
 
 .header__button a:hover {
-  background-color: #39393D;
-  transition-duration: 0.1s;
+  background-color: var(--color-primary-hover);
+  transition-duration: var(--transition-fast);
 }
 
 .header__button a:active {
   transform: scale(0.95);
-  background-color: #5D5D5F;
+  background-color: var(--color-primary-active);
 }
 
 
 
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
-  .header {
-    display: none;
-  }
-
-  .header-top {
-    display: none;
-  }
-
-  .header__nav {
-    display: none;
-  }
-  
-  .header__button {
-    display: none;
-  }
-
-  .header__logo img {
-    width: 30dvw;
-  }
-
-  .header__nav-sp {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 18px 0 0;
-  }
-
-  .header__nav-sp a {
-    font-size: 14px;
-    color: #050317;
-    margin: 0 24px 0;
-  }
-
-
-}
-
-/* --------------------
-パソコン用のスタイル
--------------------- */
-@media (min-width: 961px) {
-  .header_sp {
-    display: none;
-  }
-}
 
 

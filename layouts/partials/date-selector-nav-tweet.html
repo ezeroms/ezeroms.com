@@ -1,0 +1,164 @@
+{{/* Tweet用：月選択ヘッダー（一覧・詳細共通） */}}
+{{/* コンテキストを保存（rangeループ内で上書きされるため） */}}
+{{ $pageContext := . }}
+<div class="date-selector-nav">
+    {{/* すべてのTweetページから存在する月を収集 */}}
+    {{ $tweetSection := $pageContext.Site.GetPage "section" "tweet" }}
+    {{ $allMonths := slice }}
+    {{ if $tweetSection }}
+        {{ range $tweetSection.Pages }}
+            {{ $monthStr := .Date | dateFormat "2006-01" }}
+            {{ if not (in $allMonths $monthStr) }}
+                {{ $allMonths = $allMonths | append $monthStr }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
+    {{/* 現在コンテキストの月（詳細ページではその記事の月、一覧では空） */}}
+    {{ $currentMonth := "" }}
+    {{ if $pageContext.IsPage }}
+        {{ $currentMonth = $pageContext.Date | dateFormat "2006-01" }}
+    {{ else if hasPrefix $pageContext.RelPermalink "/tweet_month/" }}
+        {{/* tweet_monthタクソノミーページの場合、URLから月を抽出 */}}
+        {{ $pathParts := split (trim $pageContext.RelPermalink "/") "/" }}
+        {{ if ge (len $pathParts) 2 }}
+            {{ $monthPart := index $pathParts 1 }}
+            {{/* "YYYY-MM"形式かどうかを確認 */}}
+            {{ $parts := split $monthPart "-" }}
+            {{ if eq (len $parts) 2 }}
+                {{ $currentMonth = $monthPart }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+    {{/* 年の範囲算出 */}}
+    {{ $years := slice }}
+    {{ range $sortedMonths }}
+        {{ $year := index (split . "-") 0 }}
+        {{ if not (in $years $year) }}
+            {{ $years = $years | append $year }}
+        {{ end }}
+    {{ end }}
+    {{/* 年を数値としてソート */}}
+    {{ $yearInts := slice }}
+    {{ range $years }}
+        {{ $yearInt := int . }}
+        {{ if gt $yearInt 0 }}
+            {{ $yearInts = $yearInts | append $yearInt }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedYearInts := sort $yearInts }}
+    {{ $minYear := 0 }}
+    {{ $maxYear := 0 }}
+    {{ if gt (len $sortedYearInts) 0 }}
+        {{ $minYear = index $sortedYearInts 0 }}
+        {{ $maxYear = index $sortedYearInts (sub (len $sortedYearInts) 1) }}
+    {{ end }}
+
+    {{/* 表示する基準年：詳細はその記事の年、一覧・タグページは最新年 */}}
+    {{ $displayYear := "" }}
+    {{ if $currentMonth }}
+        {{/* $currentMonthが"YYYY-MM"形式の場合のみ年を抽出 */}}
+        {{ $parts := split $currentMonth "-" }}
+        {{ if eq (len $parts) 2 }}
+            {{ $yearPart := index $parts 0 }}
+            {{/* 年が4桁の数字であることを確認 */}}
+            {{ if eq (len $yearPart) 4 }}
+                {{ $displayYear = $yearPart }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{/* $currentMonthから年を取得できない場合（タグページなど）は、最新記事の年を使用 */}}
+    {{ if not $displayYear }}
+        {{ if $latestMonth }}
+            {{ $displayYear = index (split $latestMonth "-") 0 }}
+        {{ else }}
+            {{ $displayYear = "2025" }}
+        {{ end }}
+    {{ end }}
+    {{/* $displayYearは必ず年（4桁の数字）になるはずなので、安全にint変換 */}}
+    {{ $displayYearInt := 0 }}
+    {{ if $displayYear }}
+        {{ $displayYearInt = int $displayYear }}
+    {{ end }}
+
+    <div class="date-selector-nav__year-selector" data-min-year="{{ $minYear }}" data-max-year="{{ $maxYear }}">
+        <button class="date-selector-nav__year-nav{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }}" id="prev-year"{{ if and (gt $minYear 0) (eq $displayYearInt $minYear) }} disabled{{ end }} aria-label="前の年">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <span class="date-selector-nav__year-display" id="year-display">{{ $displayYear }}</span>
+        <button class="date-selector-nav__year-nav{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }}" id="next-year"{{ if and (gt $maxYear 0) (eq $displayYearInt $maxYear) }} disabled{{ end }} aria-label="次の年">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
+                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
+        {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
+        {{/* すべての年に対して、すべての月（12ヶ月）を生成 */}}
+        {{ if and (gt $minYear 0) (gt $maxYear 0) }}
+            {{ range $year := seq $minYear $maxYear }}
+                {{ range $index, $label := $months }}
+                    {{ $monthNum := printf "%02d" (add $index 1) }}
+                    {{ $yearMonth := printf "%d-%s" $year $monthNum }}
+                    {{ $hasTweets := in $sortedMonths $yearMonth }}
+
+                    {{ $isActive := false }}
+                    {{/* タグページの場合はactiveにしない */}}
+                    {{ $isTagPage := false }}
+                    {{ if hasPrefix $pageContext.RelPermalink "/tweet_tag/" }}
+                        {{ $isTagPage = true }}
+                    {{ end }}
+                    {{ if not $isTagPage }}
+                        {{ if $currentMonth }}
+                            {{ if eq $yearMonth $currentMonth }}
+                                {{ $isActive = true }}
+                            {{ end }}
+                        {{ else if and (not $currentMonth) (eq $yearMonth $latestMonth) }}
+                            {{ $isActive = true }}
+                        {{ end }}
+                    {{ end }}
+
+                    {{ $monthPage := index $pageContext.Site.Taxonomies.tweet_month ($yearMonth | urlize) }}
+                    {{/* 初期表示の制御：表示年の場合は表示、それ以外は非表示 */}}
+                    {{ $isInitialYear := eq $year $displayYearInt }}
+                    {{/* タクソノミーページが見つからない場合でも、記事が存在する場合はURLを生成 */}}
+                    {{ $monthURL := "" }}
+                    {{ if $monthPage }}
+                        {{ $monthURL = $monthPage.Page.RelPermalink }}
+                    {{ else if $hasTweets }}
+                        {{/* タクソノミーページが存在しない場合でも、記事が存在する場合はURLを直接生成 */}}
+                        {{ $monthURL = printf "/tweet_month/%s/" ($yearMonth | urlize) }}
+                    {{ end }}
+
+                    {{ if $monthURL }}
+                        <a
+                            href="{{ $monthURL }}"
+                            class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}{{ if not $hasTweets }} disabled{{ end }}"
+                            data-year-month="{{ $yearMonth }}"
+                            data-year="{{ $year }}"
+                            {{- if not $isInitialYear }} style="display: none"{{ else if not $hasTweets }} style="opacity: 0.4; cursor: not-allowed; pointer-events: none"{{ end }}
+                        >{{ $label }}</a>
+                    {{ else }}
+                        <span
+                            class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}{{ if not $hasTweets }} disabled{{ end }}"
+                            data-year-month="{{ $yearMonth }}"
+                            data-year="{{ $year }}"
+                            {{- if not $isInitialYear }} style="display: none"{{ else if not $hasTweets }} style="opacity: 0.4; cursor: not-allowed; pointer-events: none"{{ end }}
+                        >{{ $label }}</span>
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    </div>
+</div>
+

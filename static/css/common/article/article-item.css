@@ -1,87 +1,243 @@
 /* --------------------
 デバイス共通のスタイル
 -------------------- */
-blockquote {
-  border-left: 4px solid #E7E7E9;
-  margin: 8px 0;
-  padding-left: 20px;
-  gap: 8px;
-  display: flex;
-  flex-direction: column;
+.article-item blockquote {
+  border-left: 3px solid var(--color-border);
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+  padding-right: 0;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  display: block;
+}
+
+.article-item blockquote p {
+  margin: 0 0 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--text-line-height);
+  letter-spacing: 0.01em;
+}
+
+.article-item blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* blockquoteの最後の要素のmargin-bottomを0にする */
+.article-item blockquote:last-child {
+  margin-bottom: 0;
 }
 
 .article-item {
-  width: auto;
-  /* min-width: calc(100% - 64px); */
+  width: 100%;
   margin: 0;
   padding: 32px;
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  background-color: #fff;
-  transition-duration: 0.4s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-default);
+  background-color: var(--color-background-white);
+  transition-duration: var(--transition-slow);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
+  /* gapは削除し、すべての要素にmarginで制御（ネストされた要素にも適用されるため） */
   word-break: break-all;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* タブレット/スマホ: パディングの調整 */
+@media (max-width: 1079px) {
+  .article-item {
+    padding: var(--spacing-3xl);
+  }
+}
+
+@media (max-width: 767px) {
+  .article-item {
+    padding: var(--article-item-padding-sp-vertical) var(--article-item-padding-sp-horizontal);
+  }
+}
+
+/* .article-itemの直接の子要素の最初の要素のmargin-topを0にする */
+.article-item > *:first-child {
+  margin-top: 0;
+}
+
+/* すべての記事ページでマージン相殺を防ぐため、.article-itemの直接の子要素にflow-rootを適用 */
+.article-item > * {
+  display: flow-root;
+}
+
+/* h2はblockとして表示 */
+.article-item > h2 {
+  display: block;
+}
+
+/* 記事のヘッダー部分 */
+.article-header {
+  width: 100%;
+  margin-bottom: 0;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flow-root;
+}
+
+/* 本文がない場合（article-headerが最後の子要素の場合）はborder-bottomを非表示 */
+.article-item > .article-header:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* 記事のヘッダー内の最初の要素のmargin-topを0にする */
+.article-header > *:first-child {
+  margin-top: 0;
+}
+
+/* 記事のヘッダー内の最後の要素のmargin-bottomを0にする */
+.article-header > *:last-child {
+  margin-bottom: 0;
+}
+
+/* タイトルの上の要素とタイトルの間は1rem */
+.article-header > * + h1,
+.article-header > * + h3 {
+  margin-top: 1rem;
+}
+
+/* 記事ヘッダー内のタグリストの上は2rem */
+.article-header > .article-header__tags {
+  margin-top: var(--article-header-tags-margin-top);
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* タイトルの下にタグリスト以外の補足情報がある場合、それとタイトルの間を1rem */
+.article-header > h1 + *:not(.article-header__tags),
+.article-header > h3 + *:not(.article-header__tags) {
+  margin-top: 1rem;
+}
+
+/* 記事のヘッダーの下の本文部分 */
+.article-item > .article-header + * {
+  margin-top: 2rem;
 }
 
 .hover-effect:hover {
-  border: 1px solid #6E6D79;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border-hover);
+  transition-duration: var(--transition-normal);
 }
 
 .article-item h1 {
-  margin: 0;
+  margin: 0 0 0;
   padding: 0;
   max-width: 100%;
-  color: #050317;
-  font-size: 20px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-2xl);
   font-style: normal;
   font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0 0 28px;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  display: block;
   text-decoration: none;
   transition-duration: 0.4s;
 }
 
-.article-item p.date {
-  font-size: 14px;
-  margin: 0 0 -4px;
-  font-style: italic;
-  color: #5D5D5F;
+.article-item h1 + p,
+.article-item h1 + ul,
+.article-item h1 + ol,
+.article-item h1 + blockquote,
+.article-item h1 + hr {
+  margin-top: 1rem;
 }
 
-
-.article-item h2 {
-  margin: 16px 0 0!important;
-  border-bottom: 1px solid #E7E7E9;
-  width: 100%;
-  padding: 0 0 4px;
-  max-width: 100%;
-  color: #050317;
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0;
+.article-item h1 a {
+  color: inherit;
   text-decoration: none;
+}
+
+.article-item h1 a:hover {
+  opacity: 0.8;
+}
+
+.article-item p.date {
+  font-size: var(--font-size-sm);
+  margin: 0 0 -0.25rem;
+  color: var(--color-text-tertiary);
+}
+
+.article-item h2,
+.article-item > h2 {
+  margin: 1.5rem 0 0;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+  padding: 0 0 0.5rem;
+  max-width: 100%;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-tight);
+  display: block;
+  text-decoration: none;
+}
+
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h2 + p,
+.article-item h2 + ul,
+.article-item h2 + ol,
+.article-item h2 + blockquote,
+.article-item h2 + hr {
+  margin-top: 1rem;
 }
 
 .article-item h3 {
-  margin: 16px 0 0!important;
+  margin: 1.25rem 0 0;
   padding: 0;
   max-width: 100%;
-  color: #050317;
-  font-size: 16px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
   font-style: normal;
-  font-weight: 700;
-  line-height: 180%; /* 28.8px */
-  display: inline-block;
-  margin: 0;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-tight);
+  display: block;
   text-decoration: none;
+}
+
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h3 + p,
+.article-item h3 + ul,
+.article-item h3 + ol,
+.article-item h3 + blockquote,
+.article-item h3 + hr {
+  margin-top: 0.875rem;
+}
+
+.article-item h4 {
+  margin: 1rem 0 0;
+  padding: 0;
+  max-width: 100%;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-relaxed);
+  display: block;
+  text-decoration: none;
+}
+
+/* 見出しの直後にp、ul、olなどが来る場合にマージンを追加 */
+.article-item h4 + p,
+.article-item h4 + ul,
+.article-item h4 + ol,
+.article-item h4 + blockquote,
+.article-item h4 + hr {
+  margin-top: 0.75rem;
 }
 
 .article-item h6 {
@@ -93,27 +249,38 @@ blockquote {
 }
 
 .article-item hr {
-  background-color: #E7E7E9;
-  height: 1px;
-  width: 100%;
   border: none;
+  border-top: none;
+  margin: 0.7rem 0;
+  height: 0;
+  width: 100%;
+  background: none;
+}
+
+/* hrの最後の要素のmargin-bottomを0にする */
+.article-item hr:last-child {
+  margin-bottom: 0;
 }
 
 .article-item p {
-  margin: 0;
-  padding: 0;
-  color: #050317;
-  
-  width: 100%;
+    margin: 0 0 1rem;
+    padding: 0;
+    color: var(--color-text-primary);
+    width: 100%;
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-line-height);
+    letter-spacing: 0.01em;
+}
 
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 180%; /* 28.8px */
+.article-item p:last-child {
+  margin-bottom: 0;
 }
 
 .article-item a {
   text-decoration: underline;
+  text-underline-offset: 0.2em;
   color: inherit;
 }
 
@@ -122,32 +289,89 @@ blockquote {
   transition-duration: 0s;
 }
 
+/* インラインコードのスタイル（Slack風） */
+.article-item code:not(pre code) {
+  background-color: var(--color-code-background);
+  color: var(--color-code-text);
+  font-family: var(--font-family-mono);
+  font-size: 0.875em;
+  padding: 0.125em 0.375em;
+  border-radius: 3px;
+  display: inline;
+  line-height: 1.4;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.article-item ul,
+.article-item ol {
+  margin: 0 0 1.5rem 0;
+  padding-left: 1.75rem;
+  list-style-position: outside;
+}
+
+/* リストの最後の要素のmargin-bottomを0にする */
+.article-item ul:last-child,
+.article-item ol:last-child {
+  margin-bottom: 0;
+}
 
 .article-item ul {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 12px 0;
-  padding-inline-start: 1rem;
-  list-style-type: disc!important;
+  list-style-type: disc;
+}
+
+.article-item ol {
+  list-style-type: decimal;
 }
 
 .article-item li {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  color: #050317;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 180%; /* 28.8px */
+    margin: 0.5rem 0;
+    padding: 0 0 0 0.5rem;
+    width: 100%;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-line-height);
+    letter-spacing: 0.01em;
+}
+
+.article-item ul ul,
+.article-item ol ol,
+.article-item ul ol,
+.article-item ol ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.article-item ul ul {
+  list-style-type: circle;
+}
+
+.article-item ul ul ul {
+  list-style-type: square;
 }
 
 .article-item img {
   width: 100%;
   display: block;
-  margin: 0 auto; /* 画像を中央に寄せる場合 */
+  margin: 1.5rem auto; /* 画像を中央に寄せる場合 */
   position: relative; /* 擬似要素を正しく表示するために必要 */
+}
+
+/* 画像の最後の要素のmargin-bottomを0にする */
+.article-item img:last-child {
+  margin-bottom: 0;
+}
+
+/* 見出しの直後に画像が来る場合のマージン調整 */
+.article-item h1 + img,
+.article-item h2 + img,
+.article-item h3 + img,
+.article-item h4 + img {
+  margin-top: 1rem;
 }
 
 .image-wrapper {
@@ -159,14 +383,14 @@ blockquote {
 .image-wrapper::after {
   content: attr(data-alt); /* data-alt属性の内容を表示 */
   display: block;
-  margin: 12px 0 2px 0;
-  font-size: 14px;
+  margin: 0.75rem 0 0.125rem;
+  font-size: var(--font-size-sm);
   padding: 0;
-  color: #5D5D5F;
+  color: var(--color-text-secondary);
   width: 100%;
   font-style: normal;
-  font-weight: 400;
-  line-height: 180%;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
 }
 
 .image-wrapper.no-alt::after {
@@ -216,15 +440,15 @@ blockquote {
 }
 
 .social-action__line a {
-  font-size: 14px;
-  text-decoration: none!important;
-  color: #5D5D5F!important;
-  font-weight: 400!important;
-  transition-duration: 0.2s;
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-normal);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__line .social-action__line-icon {
-  margin: 0!important;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -232,27 +456,27 @@ blockquote {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_line_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__line:hover a {
   opacity: 1;
-  color: #06C655!important;
-  transition-duration: 0s;
+  color: var(--color-accent-green);
+  transition-duration: var(--transition-fast);
 }
 
 .social-action__line:hover .social-action__line-icon {
-  border: 1px solid #C8EBCF;
+  border: 1px solid var(--color-accent-green-light);
   background-image: url('/images/diary/icon_line_on.svg');
   opacity: 1;
-  transition-duration: 0s!important;
+  transition-duration: var(--transition-fast);
 }
 
 .social-action__x {
-  text-decoration: none!important;
-  margin: 0!important;
+  text-decoration: none;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -260,20 +484,20 @@ blockquote {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_x_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__x:hover {
   background-image: url('/images/diary/icon_x_on.svg');
-  border: 1px solid #D0D0D1!important;
-  opacity: 1!important;
+  border: 1px solid var(--color-border-light);
+  opacity: 1;
 }
 
 .social-action__hatena {
-  text-decoration: none!important;
-  margin: 0!important;
+  text-decoration: none;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -281,20 +505,20 @@ blockquote {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_hatena_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
 }
 
 .social-action__hatena:hover {
   background-image: url('/images/diary/icon_hatena_on.svg');
-  border: 1px solid #D0D0D1!important;
-  opacity: 1!important;
+  border: 1px solid var(--color-border-light);
+  opacity: 1;
 }
 
 .social-action__link {
-  text-decoration: none!important;
-  margin: 0!important;
+  text-decoration: none;
+  margin: 0;
   margin-right: 0;
   width: 40px;
   height: 40px;
@@ -302,140 +526,84 @@ blockquote {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('/images/diary/icon_link_off.svg');
-  border: 1px solid #E7E7E9;
-  border-radius: 24px;
-  transition-duration: 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  transition-duration: var(--transition-normal);
   cursor: pointer;
 }
 
 .social-action__link:hover {
   background-image: url('/images/diary/icon_link_on.svg');
-  border: 1px solid #D0D0D1!important;
-  opacity: 1!important;
+  border: 1px solid var(--color-border-light);
+  opacity: 1;
 }
 
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
-  .image-wrapper::after {
-    font-size: 12px;
-    margin: 8px 0 2px 0;
-  }
+/* YouTube埋め込みの遅延読み込み用プレースホルダー */
+.youtube-placeholder {
+  position: relative;
+  width: 100%;
+  min-height: 315px;
+  background-color: var(--color-background-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
 
-  .article-item {
-    width: calc(100dvw - 48px - 32px);
-    padding: 24px;
-    gap: 12px;
-  }
+.youtube-placeholder__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
 
-  .article-item h1 {
-    font-size: 18px;
-    margin: 0 0 18px;
-  }
+.youtube-placeholder__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 
-  .article-item p {
-    font-size: 14px;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  .hover-effect:hover {
-    border: 1px solid #E7E7E9;
-  }
+.youtube-placeholder__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
 
+.youtube-placeholder .youtube {
+  width: 100%;
+  height: 315px;
+  border: none;
+}
 
-  .article-item h2 {
-    font-size: 15px;
-  }
-  
-  .article-item h3 {
-    font-size: 14px;
-  }
+/* YouTube埋め込みが読み込まれたらプレースホルダーを非表示 */
+.youtube-placeholder .youtube[src] {
+  display: block;
+}
 
-  .article-item ul {
-    gap: 8px;
-    margin: 8px 0;
-    padding-inline-start: 1rem;
-  }
-  
-  .article-item li {
-    font-size: 14px;
-  }
-
-
+/* スマホ版: social-actionの調整 */
+@media (max-width: 767px) {
   .social-action {
-    justify-content: start;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
-    flex-direction: column-reverse;
-    /* border-top: 1px solid #E7E7E9; */
-    margin: 40px 0 0;
-    /* padding: 24px 0 0; */
-  }
-
-  .social-action__line {
-    gap: 2px;
-    padding: 0 8px 0 0;
-  }
-
-  .social-action__line a {
-    font-size: 12px;
   }
   
-  .social-action__line .social-action__line-icon {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background-size: 100%;
-    background-image: url('/images/diary/icon_line_on.svg');
-  }
-
-  .social-action__line:hover a {
-    color: #5D5D5F!important;
-  }
-
-  .social-action__line:hover .social-action__line-icon {
-    border: none;
-    opacity: 1;
-    transition-duration: 0s!important;
-  }
-
-  .social-action__right {
-     gap: 24px;
-  }
-
-  .social-action__x {
-    width: 32px;
-    height: 32px;
-  }
-
-  .social-action__x:hover {
-    background-image: url('/images/diary/icon_x_off.svg');
-    border: 1px solid #E7E7E9!important;
-  }
-
-  .social-action__hatena {
-    width: 32px;
-    height: 32px;
-  }
-
-  .social-action__hatena:hover {
-    background-image: url('/images/diary/icon_hatena_off.svg');
-    border: 1px solid #E7E7E9!important;
-  }
-
-  .social-action__link {
-    width: 32px;
-    height: 32px;
+  .article-header > .date:first-child {
+    margin-bottom: 0.6rem !important;
   }
   
-  .social-action__link:hover {
-    background-image: url('/images/diary/icon_link_off.svg');
-    border: 1px solid #E7E7E9!important;
+  .article-header > h1 {
+    margin-bottom: 0.6rem !important;
   }
-
-  .article-item p.date {
-    font-size: 12px;
-    margin: 0 0 -6px;
-  }
-
 }
+

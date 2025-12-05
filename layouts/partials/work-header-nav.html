@@ -1,0 +1,67 @@
+{{ $categoryNames := dict
+    "webapp" "Webサービス / Webアプリケーション"
+    "mobileapp" "スマートフォンアプリ"
+    "website" "Webサイト"
+    "graphic" "グラフィック・印刷物"
+    "video" "映像"
+}}
+{{ $isTagPage := false }}
+{{ if hasPrefix .RelPermalink "/work_tag/" }}
+    {{ $isTagPage = true }}
+{{ end }}
+{{ $isCategoryPage := false }}
+{{ $currentCategory := "" }}
+{{ if hasPrefix .RelPermalink "/work_category/" }}
+    {{ $isCategoryPage = true }}
+    {{ $pathParts := split (trim .RelPermalink "/") "/" }}
+    {{ if ge (len $pathParts) 2 }}
+        {{ $currentCategory = index $pathParts 1 }}
+    {{ end }}
+{{ end }}
+{{ $isListPage := false }}
+{{ if and (eq .Kind "section") (eq .RelPermalink "/work/") }}
+    {{ $isListPage = true }}
+{{ end }}
+
+<div class="column-header">
+    <nav class="column-header__nav" id="work-category-filters">
+        <a href="/work/" class="column-header__tab {{ if and $isListPage (not $isTagPage) (not $isCategoryPage) }}active{{ end }}" data-category="all">すべて</a>
+        {{ $allCategories := slice }}
+        {{ with .Site.GetPage "section" "work" }}
+            {{ range .Pages }}
+                {{ if .Params.work_category }}
+                    {{ range .Params.work_category }}
+                        {{ if not (in $allCategories .) }}
+                            {{ $allCategories = $allCategories | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+        {{/* 指定された順序でカテゴリを並べる */}}
+        {{ $categoryOrder := slice "webapp" "website" "graphic" "video" "mobileapp" }}
+        {{ $sortedCategories := slice }}
+        {{ range $categoryOrder }}
+            {{ if in $allCategories . }}
+                {{ $sortedCategories = $sortedCategories | append . }}
+            {{ end }}
+        {{ end }}
+        {{/* 指定された順序に含まれていないカテゴリを追加 */}}
+        {{ range $allCategories }}
+            {{ if not (in $sortedCategories .) }}
+                {{ $sortedCategories = $sortedCategories | append . }}
+            {{ end }}
+        {{ end }}
+        {{ range $sortedCategories }}
+            {{ $categoryName := index $categoryNames . }}
+            {{ if $categoryName }}
+                {{ $isActive := false }}
+                {{ if and $isCategoryPage (eq $currentCategory .) (not $isTagPage) }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <a href="/work_category/{{ . }}/" class="column-header__tab {{ if $isActive }}active{{ end }}" data-category="{{ . }}">{{ $categoryName }}</a>
+            {{ end }}
+        {{ end }}
+    </nav>
+</div>
+

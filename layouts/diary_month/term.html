@@ -1,0 +1,207 @@
+{{ define "section_header" }}
+    {{ partial "date-selector-nav-diary.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    {{/* Diaryセクションのページのみをフィルタリング */}}
+    {{ $diaryPages := where .Pages "Section" "diary" }}
+    {{ $allMonths := slice }}
+    {{ range $diaryPages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container" id="articles-list">
+                {{/* Diaryセクションのページのみを表示 */}}
+                {{ range where .Pages "Section" "diary" }}
+                    {{ $yearMonth := .Date | dateFormat "2006-01" }}
+                    {{ $displayTitle := .Date | dateFormat "Monday, January 2, 2006" }}
+                    <article class="article-item diary-item">
+                        <div class="article-header">
+                            <p class="date">Diary</p>
+                            <h1>
+                                <a href="{{ .RelPermalink }}">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "2006" }}</a>
+                            </h1>
+                            <p class="date">
+                                {{ $parts := slice }}
+                                {{ $parts = $parts | append (.Date | dateFormat "Mon") }}
+                                {{ if .Params.diary_place }}
+                                    {{ $parts = $parts | append .Params.diary_place }}
+                                {{ end }}
+                                {{ if and .Params.min_temp .Params.max_temp }}
+                                    {{ $parts = $parts | append (printf "%d–%d°C" .Params.min_temp .Params.max_temp) }}
+                                {{ else if .Params.min_temp }}
+                                    {{ $parts = $parts | append (printf "%d°C" .Params.min_temp) }}
+                                {{ else if .Params.max_temp }}
+                                    {{ $parts = $parts | append (printf "%d°C" .Params.max_temp) }}
+                                {{ end }}
+                                {{ if .Params.weather }}
+                                    {{ $parts = $parts | append .Params.weather }}
+                                {{ end }}
+                                {{ if gt (len $parts) 0 }}
+                                    {{ delimit $parts " · " }}
+                                {{ end }}
+                            </p>
+                            {{ if .Params.diary_tag }}
+                                <div class="article-header__tags">
+                                    {{ $sortedTags := sort .Params.diary_tag }}
+                                    {{ range $sortedTags }}
+                                        {{ $label := . }}
+                                        {{ $taxonomy := "" }}
+                                        {{ range $term, $pages := $.Site.Taxonomies.diary_tag }}
+                                            {{ if eq ($term | urlize) ($label | urlize) }}
+                                                {{ $taxonomy = $pages }}
+                                            {{ end }}
+                                        {{ end }}
+                                        {{ with $taxonomy }}
+                                            <a href="{{ .Page.RelPermalink }}" class="tag" data-tag="{{ $label }}">{{ $label }}</a>
+                                        {{ else }}
+                                            <span class="tag" data-tag="{{ $label }}">{{ $label }}</span>
+                                        {{ end }}
+                                    {{ end }}
+                                </div>
+                            {{ end }}
+                        </div>
+
+                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
+
+                        <div class="social-action">
+                            <div class="social-action__left">
+                                <div class="social-action__line">
+                                    <div class="social-action__line-icon"></div>
+                                    <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                        このブログの更新通知をLINEで受け取る
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="social-action__right">
+                                <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" target="_blank" class="social-action__x" data-show-count="false"></a>
+                                <a href="http://b.hatena.ne.jp/entry/{{ .Permalink }}" target="_blank" class="social-action__hatena"></a>
+                                <a class="social-action__link" onclick="copyToClipboard('{{ .Permalink }}')"></a>
+                            </div>
+                        </div>
+                    </article>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <script>
+    function copyToClipboard(url) {
+        navigator.clipboard.writeText(url).then(function() {
+            showNotification();
+        }, function(err) {
+            console.error('リンクの保存に失敗しました: ', err);
+        });
+    }
+
+    function showNotification() {
+        var notification = document.getElementById("notification");
+        notification.className = "notification show";
+        setTimeout(function() {
+            notification.className = notification.className.replace(" show", "");
+        }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearSelector = document.querySelector('.date-selector-nav__year-selector');
+        const yearDisplay = document.getElementById('year-display');
+        const prevYearBtn = document.getElementById('prev-year');
+        const nextYearBtn = document.getElementById('next-year');
+        const monthFilters = document.getElementById('date-selector-nav__month-filters');
+        
+        if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
+            return;
+        }
+        
+        let currentYear = parseInt(yearDisplay.textContent);
+        const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
+        const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
+
+        function updateMonthButtons(year) {
+            // <a>タグと<span>タグの両方を対象にする
+            const buttons = monthFilters.querySelectorAll('a, span');
+            
+            buttons.forEach(btn => {
+                const btnYear = btn.getAttribute('data-year');
+                if (btnYear === String(year)) {
+                    // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                    const currentStyle = btn.getAttribute('style') || '';
+                    if (currentStyle.includes('display: none')) {
+                        const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                        if (newStyle) {
+                            btn.setAttribute('style', newStyle);
+                        } else {
+                            btn.removeAttribute('style');
+                        }
+                    }
+                } else {
+                    // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                    const currentStyle = btn.getAttribute('style') || '';
+                    if (!currentStyle.includes('display: none')) {
+                        const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                        btn.setAttribute('style', newStyle);
+                    }
+                }
+            });
+        }
+
+        function updateYearButtons() {
+            if (currentYear <= minYear) {
+                prevYearBtn.classList.add('disabled');
+                prevYearBtn.disabled = true;
+            } else {
+                prevYearBtn.classList.remove('disabled');
+                prevYearBtn.disabled = false;
+            }
+            
+            if (currentYear >= maxYear) {
+                nextYearBtn.classList.add('disabled');
+                nextYearBtn.disabled = true;
+            } else {
+                nextYearBtn.classList.remove('disabled');
+                nextYearBtn.disabled = false;
+            }
+        }
+
+        prevYearBtn.addEventListener('click', function() {
+            if (currentYear > minYear) {
+                currentYear--;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+                updateYearButtons();
+            }
+        });
+
+        nextYearBtn.addEventListener('click', function() {
+            if (currentYear < maxYear) {
+                currentYear++;
+                yearDisplay.textContent = currentYear;
+                updateMonthButtons(currentYear);
+                updateYearButtons();
+            }
+        });
+
+        // 初期状態で月のボタンと年選択ボタンを更新
+        updateMonthButtons(currentYear);
+        updateYearButtons();
+    });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "diary_menu.html" . }}
+{{ end }}
+

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
     <meta charset="UTF-8">
     <title>義務</title>
 
@@ -27,347 +27,338 @@
     <meta property="og:title" content="義務">
     <meta property="og:description" content="One thing I can tell you is you got to be free!">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:1313/topic/%E7%BE%A9%E5%8B%99/">
-    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:url" content="https://ezeroms.com/topic/%E7%BE%A9%E5%8B%99/">
+    <meta property="og:image" content="https://ezeroms.com/images/common/og-image.png">
     <meta property="og:site_name" content="ezeroms.com">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="義務">
     <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
-    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta name="twitter:image" content="https://ezeroms.com/images/common/og-image.png">
+
+    
 
 </head>
 <body>
     
-<header class="header">
-  <nav class="header__nav">
-      <a href="/about">About</a>
-      <a href="/work">Work</a>
-      <a href="/diary">Diary</a>
-      </ul>
-  </nav>
-
-  <a href="/" class="header__logo">
-      <img src="/images/common/logo.svg" alt="ezeroms.com">
-  </a>
-
-  <div class="header__button">
-    <a href="/shoulders-of-giants">
-      The shoulders of Giants
-    </a>
-  </div>
-</header>
-<header class="sp-header">
-  <img src="/images/common/the-shoulders-of-giants.svg" alt="" class="logo_think" onclick="topFunction()" id="scrollTopButton" title="Go to top">
-  <button id="openModal">
-    <img src="/images/common/icon_list.svg">
-  </button>
-</header>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
-  $(document).ready(function(){
-      
-      $('#scrollTopButton').click(function(){
-          
-          $('html, body').animate({scrollTop : 0},800);
-          return false;
-      });
-  });
-</script>
-
-<div id="overlay"></div>
-<div id="modal">
-  <div class="modal_close-list">
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
     
-    <button class="shuffle" id="reloadPage">
-      <img src="/images/common/icon_shuffle.svg" alt="">
-      Shuffle
-    </button>
-    
-    <button id="closeModal">
-      <img src="/images/common/icon_close.svg" alt="">
-      Close
-    </button>
-  </div>
-
-    <div id="modalContent">
-        
-        <ul>
-          
-          <li><a href="/topic/%E3%82%A2%E3%82%A4%E3%83%87%E3%83%B3%E3%83%86%E3%82%A3%E3%83%86%E3%82%A3" class="a-link">アイデンティティ</a></li>
-          
-          <li><a href="/topic/%E3%82%A2%E3%83%8B%E3%83%A1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="a-link">アニメーション</a></li>
-          
-          <li><a href="/topic/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88" class="a-link">インターネット</a></li>
-          
-          <li><a href="/topic/%E3%82%A8%E3%83%B3%E3%82%BF%E3%83%A1" class="a-link">エンタメ</a></li>
-          
-          <li><a href="/topic/%E3%82%AF%E3%83%AA%E3%82%A8%E3%82%A4%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3" class="a-link">クリエイティビティ</a></li>
-          
-          <li><a href="/topic/%E3%82%B1%E3%82%A2" class="a-link">ケア</a></li>
-          
-          <li><a href="/topic/%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3" class="a-link">コミュニケーション</a></li>
-          
-          <li><a href="/topic/%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%84" class="a-link">コンテンツ</a></li>
-          
-          <li><a href="/topic/%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%80%E3%83%BC" class="a-link">ジェンダー</a></li>
-          
-          <li><a href="/topic/%E3%82%BB%E3%83%83%E3%82%AF%E3%82%B9" class="a-link">セックス</a></li>
-          
-          <li><a href="/topic/%E3%83%86%E3%82%AF%E3%82%B9%E3%83%88%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AF%E3%82%B9%E3%83%88" class="a-link">テクスト／コンテクスト</a></li>
-          
-          <li><a href="/topic/%E3%83%86%E3%82%AF%E3%83%8E%E3%83%AD%E3%82%B8%E3%83%BC" class="a-link">テクノロジー</a></li>
-          
-          <li><a href="/topic/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3" class="a-link">デザイン</a></li>
-          
-          <li><a href="/topic/%E3%83%8A%E3%82%B7%E3%83%A7%E3%83%8A%E3%83%AA%E3%82%BA%E3%83%A0" class="a-link">ナショナリズム</a></li>
-          
-          <li><a href="/topic/%E3%83%97%E3%83%A9%E3%83%83%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0" class="a-link">プラットフォーム</a></li>
-          
-          <li><a href="/topic/%E3%83%9E%E3%82%A4%E3%83%8E%E3%83%AA%E3%83%86%E3%82%A3%E3%83%9E%E3%82%B8%E3%83%A7%E3%83%AA%E3%83%86%E3%82%A3" class="a-link">マイノリティ／マジョリティ</a></li>
-          
-          <li><a href="/topic/%E3%83%A1%E3%83%87%E3%82%A3%E3%82%A2" class="a-link">メディア</a></li>
-          
-          <li><a href="/topic/%E3%83%AA%E3%82%A2%E3%83%AA%E3%83%86%E3%82%A3" class="a-link">リアリティ</a></li>
-          
-          <li><a href="/topic/%E4%B8%8D%E5%AE%89" class="a-link">不安</a></li>
-          
-          <li><a href="/topic/%E4%B8%8D%E7%A2%BA%E5%AE%9F%E6%80%A7" class="a-link">不確実性</a></li>
-          
-          <li><a href="/topic/%E4%B8%AD%E5%8B%95%E6%85%8B" class="a-link">中動態</a></li>
-          
-          <li><a href="/topic/%E4%BA%A4%E9%80%9A" class="a-link">交通</a></li>
-          
-          <li><a href="/topic/%E4%BA%BA%E9%96%93%E9%96%A2%E4%BF%82" class="a-link">人間関係</a></li>
-          
-          <li><a href="/topic/%E4%BB%96%E8%80%85%E6%80%A7" class="a-link">他者性</a></li>
-          
-          <li><a href="/topic/%E4%BE%9D%E5%AD%98%E8%87%AA%E5%BE%8B%E8%87%AA%E7%AB%8B" class="a-link">依存／自律／自立</a></li>
-          
-          <li><a href="/topic/%E5%80%AB%E7%90%86%E9%81%93%E5%BE%B3" class="a-link">倫理／道徳</a></li>
-          
-          <li><a href="/topic/%E5%85%B1%E5%90%8C%E4%BD%93" class="a-link">共同体</a></li>
-          
-          <li><a href="/topic/%E5%85%B1%E6%84%9F" class="a-link">共感</a></li>
-          
-          <li><a href="/topic/%E5%86%99%E7%9C%9F" class="a-link">写真</a></li>
-          
-          <li><a href="/topic/%E5%88%86%E4%BA%BA" class="a-link">分人</a></li>
-          
-          <li><a href="/topic/%E5%88%A9%E4%BB%96" class="a-link">利他</a></li>
-          
-          <li><a href="/topic/%E5%88%B6%E5%BA%A6" class="a-link">制度</a></li>
-          
-          <li><a href="/topic/%E5%89%B5%E4%BD%9C" class="a-link">創作</a></li>
-          
-          <li><a href="/topic/%E5%8A%B4%E5%83%8D%E4%BB%95%E4%BA%8B" class="a-link">労働／仕事</a></li>
-          
-          <li><a href="/topic/%E5%8F%8B%E9%81%94" class="a-link">友達</a></li>
-          
-          <li><a href="/topic/%E5%8F%8D%E7%9F%A5%E6%80%A7" class="a-link">反知性</a></li>
-          
-          <li><a href="/topic/%E5%8F%97%E5%AE%B9" class="a-link">受容</a></li>
-          
-          <li><a href="/topic/%E5%8F%AF%E6%84%9B%E3%81%84" class="a-link">可愛い</a></li>
-          
-          <li><a href="/topic/%E5%8F%AF%E8%83%BD%E6%80%A7" class="a-link">可能性</a></li>
-          
-          <li><a href="/topic/%E5%90%8C%E6%80%A7%E6%84%9B" class="a-link">同性愛</a></li>
-          
-          <li><a href="/topic/%E5%96%AA%E5%A4%B1" class="a-link">喪失</a></li>
-          
-          <li><a href="/topic/%E5%9B%BD%E5%AE%B6" class="a-link">国家</a></li>
-          
-          <li><a href="/topic/%E5%A4%89%E5%8C%96" class="a-link">変化</a></li>
-          
-          <li><a href="/topic/%E5%A4%9A%E6%A7%98%E6%80%A7%E5%90%8C%E8%B3%AA%E6%80%A7" class="a-link">多様性／同質性</a></li>
-          
-          <li><a href="/topic/%E5%A4%A7%E4%BA%BA%E5%AD%90%E3%81%A9%E3%82%82" class="a-link">大人／子ども</a></li>
-          
-          <li><a href="/topic/%E5%A6%8A%E5%A8%A0%E5%87%BA%E7%94%A3%E4%B8%AD%E7%B5%B6" class="a-link">妊娠／出産／中絶</a></li>
-          
-          <li><a href="/topic/%E5%AD%A4%E7%8B%AC" class="a-link">孤独</a></li>
-          
-          <li><a href="/topic/%E5%AD%A6%E3%81%B3" class="a-link">学び</a></li>
-          
-          <li><a href="/topic/%E5%AE%89%E5%BF%83" class="a-link">安心</a></li>
-          
-          <li><a href="/topic/%E5%AE%97%E6%95%99" class="a-link">宗教</a></li>
-          
-          <li><a href="/topic/%E5%AE%B6%E6%97%8F" class="a-link">家族</a></li>
-          
-          <li><a href="/topic/%E5%B7%AE%E5%88%A5" class="a-link">差別</a></li>
-          
-          <li><a href="/topic/%E5%B9%B3%E7%AD%89" class="a-link">平等</a></li>
-          
-          <li><a href="/topic/%E5%BA%83%E5%91%8A" class="a-link">広告</a></li>
-          
-          <li><a href="/topic/%E5%BD%B9%E5%89%B2" class="a-link">役割</a></li>
-          
-          <li><a href="/topic/%E6%80%A7%E6%AC%B2" class="a-link">性欲</a></li>
-          
-          <li><a href="/topic/%E6%81%90%E6%80%96" class="a-link">恐怖</a></li>
-          
-          <li><a href="/topic/%E6%83%85%E5%A0%B1%E7%A4%BE%E4%BC%9A" class="a-link">情報社会</a></li>
-          
-          <li><a href="/topic/%E6%83%B3%E5%83%8F%E5%8A%9B" class="a-link">想像力</a></li>
-          
-          <li><a href="/topic/%E6%84%8F%E8%AD%98%E7%84%A1%E6%84%8F%E8%AD%98" class="a-link">意識／無意識</a></li>
-          
-          <li><a href="/topic/%E6%84%9B" class="a-link">愛</a></li>
-          
-          <li><a href="/topic/%E6%84%9B%E7%9D%80" class="a-link">愛着</a></li>
-          
-          <li><a href="/topic/%E6%84%9F%E8%A6%9A" class="a-link">感覚</a></li>
-          
-          <li><a href="/topic/%E6%86%8E%E6%82%AA" class="a-link">憎悪</a></li>
-          
-          <li><a href="/topic/%E6%88%A6%E4%BA%89%E5%B9%B3%E5%92%8C" class="a-link">戦争／平和</a></li>
-          
-          <li><a href="/topic/%E6%89%80%E6%9C%89" class="a-link">所有</a></li>
-          
-          <li><a href="/topic/%E6%89%B9%E8%A9%95" class="a-link">批評</a></li>
-          
-          <li><a href="/topic/%E6%8E%92%E9%99%A4%E7%96%8E%E5%A4%96" class="a-link">排除／疎外</a></li>
-          
-          <li><a href="/topic/%E6%94%AF%E9%85%8D" class="a-link">支配</a></li>
-          
-          <li><a href="/topic/%E6%95%99%E8%82%B2%E5%AD%90%E8%82%B2%E3%81%A6" class="a-link">教育／子育て</a></li>
-          
-          <li><a href="/topic/%E6%95%AC%E6%84%8F" class="a-link">敬意</a></li>
-          
-          <li><a href="/topic/%E6%96%87%E5%8C%96" class="a-link">文化</a></li>
-          
-          <li><a href="/topic/%E6%97%85" class="a-link">旅</a></li>
-          
-          <li><a href="/topic/%E6%98%A0%E7%94%BB" class="a-link">映画</a></li>
-          
-          <li><a href="/topic/%E6%99%82%E9%96%93" class="a-link">時間</a></li>
-          
-          <li><a href="/topic/%E6%9C%AA%E6%9D%A5" class="a-link">未来</a></li>
-          
-          <li><a href="/topic/%E6%A7%8B%E9%80%A0" class="a-link">構造</a></li>
-          
-          <li><a href="/topic/%E6%A8%A9%E5%8A%9B" class="a-link">権力</a></li>
-          
-          <li><a href="/topic/%E6%B0%91%E4%B8%BB%E4%B8%BB%E7%BE%A9" class="a-link">民主主義</a></li>
-          
-          <li><a href="/topic/%E6%B3%95%E6%B3%95%E5%BE%8B" class="a-link">法／法律</a></li>
-          
-          <li><a href="/topic/%E7%90%86%E6%80%A7%E6%AC%B2%E6%9C%9B" class="a-link">理性／欲望</a></li>
-          
-          <li><a href="/topic/%E7%94%9F%E3%81%8D%E3%81%A5%E3%82%89%E3%81%95" class="a-link">生きづらさ</a></li>
-          
-          <li><a href="/topic/%E7%94%9F%E6%AD%BB" class="a-link">生／死</a></li>
-          
-          <li><a href="/topic/%E7%94%B7%E6%80%A7%E6%80%A7" class="a-link">男性性</a></li>
-          
-          <li><a href="/topic/%E7%95%B0%E6%96%87%E5%8C%96" class="a-link">異文化</a></li>
-          
-          <li><a href="/topic/%E7%96%8E%E5%A4%96%E6%8E%92%E9%99%A4" class="a-link">疎外／排除</a></li>
-          
-          <li><a href="/topic/%E7%99%BA%E5%B1%95%E9%80%B2%E6%AD%A9" class="a-link">発展／進歩</a></li>
-          
-          <li><a href="/topic/%E7%9B%B8%E4%BA%92%E4%BD%9C%E7%94%A8" class="a-link">相互作用</a></li>
-          
-          <li><a href="/topic/%E7%9F%A5%E8%A6%9A" class="a-link">知覚</a></li>
-          
-          <li><a href="/topic/%E7%A4%BE%E4%BC%9A%E5%A5%91%E7%B4%84" class="a-link">社会契約</a></li>
-          
-          <li><a href="/topic/%E7%A7%A9%E5%BA%8F" class="a-link">秩序</a></li>
-          
-          <li><a href="/topic/%E7%B5%84%E7%B9%94" class="a-link">組織</a></li>
-          
-          <li><a href="/topic/%E7%B5%90%E5%A9%9A" class="a-link">結婚</a></li>
-          
-          <li><a href="/topic/%E7%B5%B1%E6%B2%BB" class="a-link">統治</a></li>
-          
-          <li><a href="/topic/%E7%B9%8B%E3%81%8C%E3%82%8A" class="a-link">繋がり</a></li>
-          
-          <li><a href="/topic/%E7%BD%AA%E7%BD%B0" class="a-link">罪／罰</a></li>
-          
-          <li><a href="/topic/%E7%BE%A9%E5%8B%99" class="a-link">義務</a></li>
-          
-          <li><a href="/topic/%E8%87%AA%E5%B7%B1%E4%BB%96%E8%80%85" class="a-link">自己／他者</a></li>
-          
-          <li><a href="/topic/%E8%87%AA%E7%84%B6" class="a-link">自然</a></li>
-          
-          <li><a href="/topic/%E8%87%AA%E7%94%B1" class="a-link">自由</a></li>
-          
-          <li><a href="/topic/%E8%8A%B8%E8%A1%93%E3%82%A2%E3%83%BC%E3%83%88" class="a-link">芸術／アート</a></li>
-          
-          <li><a href="/topic/%E8%99%9A%E6%A7%8B" class="a-link">虚構</a></li>
-          
-          <li><a href="/topic/%E8%A1%A8%E7%8F%BE" class="a-link">表現</a></li>
-          
-          <li><a href="/topic/%E8%A6%8F%E5%88%B6" class="a-link">規制</a></li>
-          
-          <li><a href="/topic/%E8%A6%8F%E7%AF%84" class="a-link">規範</a></li>
-          
-          <li><a href="/topic/%E8%A8%80%E8%91%89" class="a-link">言葉</a></li>
-          
-          <li><a href="/topic/%E8%A8%98%E6%86%B6" class="a-link">記憶</a></li>
-          
-          <li><a href="/topic/%E8%B2%AC%E4%BB%BB" class="a-link">責任</a></li>
-          
-          <li><a href="/topic/%E8%BA%AB%E4%BD%93" class="a-link">身体</a></li>
-          
-          <li><a href="/topic/%E9%81%8A%E3%81%B3" class="a-link">遊び</a></li>
-          
-          <li><a href="/topic/%E9%81%8E%E5%8E%BB" class="a-link">過去</a></li>
-          
-          <li><a href="/topic/%E9%83%BD%E5%B8%82" class="a-link">都市</a></li>
-          
-          <li><a href="/topic/%E9%96%A2%E4%B8%8E" class="a-link">関与</a></li>
-          
-          <li><a href="/topic/%E9%9A%9C%E5%AE%B3%E8%80%85" class="a-link">障害者</a></li>
-          
-          <li><a href="/topic/%E9%9F%B3%E6%A5%BD" class="a-link">音楽</a></li>
-          
-          <li><a href="/topic/%E9%A3%9F%E4%BA%8B" class="a-link">食事</a></li>
-          
-      </ul>
+    <div class="layout-container">
+        <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </div>
-</div>
-
-<script>
-$(document).ready(function(){
-    
-    $('#openModal').click(function(){
-        $('#overlay').fadeIn();
-        $('#modal').slideDown();
-        
-        $('body').addClass('modal-open');
-    });
 
     
-    $('#closeModal, #overlay').click(function(){
-        $('#overlay').fadeOut();
-        $('#modal').slideUp();
-        
-        $('body').removeClass('modal-open');
-    });
-
     
-    $('#reloadPage').click(function() {
+    
+    
+    
+    
         
-        $('#overlay').fadeOut();
-        $('#modal').slideUp(function() {
             
-            window.location.href = "/shoulders-of-giants/";
-        });
-    });
-
-});
-  </script>
-  
-<div id="notification" class="notification">
-    Link copied to clipboard!
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+    
+    
+    
+    
+    
+    
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+    
+    
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="" href="/about/profile/">About</a>
+        </li>
+        <li>
+          <a class="" href="/tweet_month/2025-06/">Tweet</a>
+        </li>
+        <li>
+          <a class="" href="/diary_month/2025-09/">Diary</a>
+        </li>
+        <li>
+          <a class="" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="" href="/work/">Work</a>
+        </li>
+        
+      </ul>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          <li>
+            <a class="" href="/chronicle/">Chronicle</a>
+          </li>
+          <li>
+            <a class="" href="/ui-design-guidebook/">UI Design Guidebook</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 </div>
 
-<main class="main-section">
+
+        </aside>
+
+        <div class="layout-body">
+            
+            
+            
+            
+            <div class="layout-header">
+                
+            </div>
+            
+            <div class="layout-main layout-main--with-tags">
+                
+                <main class="layout-main__content" id="main-content">
+                    
+    <div id="notification" class="notification">
+    リンクをコピーしました
+</div>
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container" id="article-container">
+
+            <div class="article-item-heading">
+                <div class="article-item-heading__label">
+                    <p class="article-item-heading__label__p">
+                        
+                        
+                        The shoulders of Giants
+                    </p>
+                    <h2 class="article-item-heading__label__h2">
+                        義務
+                    </h2>
+                </div>
+
+                
+                <button class="article-item-heading__button" onclick="copyToClipboard()">
+                    <img src="/images/common/icon_link.svg" alt="Get article url">
+                </button>
+                <script>
+                    function copyToClipboard() {
+                        const url = window.location.href;
+                        navigator.clipboard.writeText(url).then(function() {
+                            showNotification();
+                        }, function(err) {
+                            console.error('リンクの保存に失敗しました: ', err);
+                        });
+                    }
+                    function showNotification() {
+                        var notification = document.getElementById("notification");
+                        notification.className = "notification show";
+                        setTimeout(function() {
+                            notification.className = notification.className.replace(" show", "");
+                        }, 3000);
+                    }
+                </script>
+                        
+            </div>
+
+            
+            
+            
+                
+                    <article class="article-item hover-effect">
+                        <p>子どもの頃のほうが大人の今よりも自由だった人がどれくらいいるだろうか。扶養されていたぶん、労働せずに済んだという意味で自由だった人はいるだろうけど、代わりに多くの義務を背負わされていたはずだ。</p>
+<p>私が大人だなぁと思うのは、その種の義務全般から自由であるような人である。たとえば仕事をほっぽり出して失踪しちゃうような人は「大人〜」って感じる。もちろん、学校をほっぽりだして失踪しちゃう子どもにも「大人〜」と思う。</p>
+<p>「大人＝無責任」という単純な話ではない。義務のたぐいがあるということを理解していて、その上で、そんなのはゲームのルールに過ぎない、とわかっている人──心の底からはゲームを信じていない人──が大人だと感じる。遊びに心から没頭するのは子どもっぽい。だから、大人は責任や義務からも醒めていなければならない。</p>
+
+                    </article>
+                
+            
+            </ul>
+        </div>
+    </section>
+
+                </main>
+
+                
+                <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
+                    
     <aside class="main-section-2column__left">
     <ul>
         
@@ -605,74 +596,12 @@ $(document).ready(function(){
         
     </ul>
 </aside>
-    <section class="main-section-2column__right">
-        <ul class="article-container" id="article-container">
 
-            <div class="article-item-heading">
-                <div class="article-item-heading__label">
-                    <p class="article-item-heading__label__p">
-                        
-                        
-                        The shoulders of Giants
-                    </p>
-                    <h2 class="article-item-heading__label__h2">
-                        義務
-                    </h2>
-                </div>
-
+                </aside>
                 
-                <button class="article-item-heading__button" onclick="copyToClipboard()">
-                    <img src="/images/common/icon_link.svg" alt="Get article url">
-                </button>
-                <script>
-                    function copyToClipboard() {
-                        const url = window.location.href;
-                        navigator.clipboard.writeText(url).then(function() {
-                            showNotification();
-                        }, function(err) {
-                            console.error('リンクの保存に失敗しました: ', err);
-                        });
-                    }
-                    function showNotification() {
-                        var notification = document.getElementById("notification");
-                        notification.className = "notification show";
-                        setTimeout(function() {
-                            notification.className = notification.className.replace(" show", "");
-                        }, 3000);
-                    }
-                </script>
-                        
             </div>
-
-            
-            
-            
-                
-                    <article class="article-item hover-effect">
-                        <p>子どもの頃のほうが大人の今よりも自由だった人がどれくらいいるだろうか。扶養されていたぶん、労働せずに済んだという意味で自由だった人はいるだろうけど、代わりに多くの義務を背負わされていたはずだ。</p>
-<p>私が大人だなぁと思うのは、その種の義務全般から自由であるような人である。たとえば仕事をほっぽり出して失踪しちゃうような人は「大人〜」って感じる。もちろん、学校をほっぽりだして失踪しちゃう子どもにも「大人〜」と思う。</p>
-<p>「大人＝無責任」という単純な話ではない。義務のたぐいがあるということを理解していて、その上で、そんなのはゲームのルールに過ぎない、とわかっている人──心の底からはゲームを信じていない人──が大人だと感じる。遊びに心から没頭するのは子どもっぽい。だから、大人は責任や義務からも醒めていなければならない。</p>
-<p>（品田遊、2022『キリンに雷が落ちてどうする 少し考える日々』朝日新聞出版）</p>
-
-                    </article>
-                
-            
-        </ul>
-    </section>
-</main>
-
-<nav class="global-nav">
-  <a href="/" class="global-nav__home"></a>
-  <a href="/about" class="global-nav__about"></a>
-  <a href="/work" class="global-nav__work"></a>
-  <a href="/diary" class="global-nav__diary"></a>
-  <a href="/shoulders-of-giants" class="global-nav__think on"></a>
-</nav>
-
-
-<p class="debug-info">Template : /layouts/topic/list.html</p>
-
-
+        </div>
+    </div>
 
     
     
@@ -689,6 +618,280 @@ $(document).ready(function(){
 
 
     
-    <p class="debug-info">Template : /layouts/_default/baseof.html</p>
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = 'https:\/\/ezeroms.com\/';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                
+                
+                updateButtonState();
+                
+                
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示する');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
+            }
+        })();
+    </script>
+
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.layout-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                
+                lastScrollTop = getScrollTop();
+
+                
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                
+                handleScroll();
+            }
+        })();
+    </script>
+
+    
+    <script src="/js/tag-links.js"></script>
+    
+    
+    <script src="/js/lazy-load.js"></script>
 </body>
 </html>

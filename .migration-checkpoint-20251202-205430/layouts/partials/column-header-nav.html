@@ -1,0 +1,64 @@
+{{ $categoryNames := dict
+    "music" "音楽"
+    "manga-and-anime" "漫画・アニメ"
+    "movies-and-dramas" "映画・ドラマ"
+    "comedy" "お笑い"
+    "gaming" "ゲーム"
+    "sports" "スポーツ"
+    "books-and-magazines" "本・雑誌"
+    "politics" "政治"
+    "economy-and-business" "経済・ビジネス"
+    "languages" "言葉・言語"
+    "foreign-cultures" "海外文化"
+    "design-and-creative" "デザイン・クリエイティブ"
+    "internet-and-technology" "インターネット・技術"
+    "natural-science" "自然科学"
+    "humanities-and-social-sciences" "人文・社会科学"
+}}
+{{ $isTagPage := false }}
+{{ if hasPrefix .RelPermalink "/column_tag/" }}
+    {{ $isTagPage = true }}
+{{ end }}
+{{ $isCategoryPage := false }}
+{{ $currentCategory := "" }}
+{{ if hasPrefix .RelPermalink "/column_category/" }}
+    {{ $isCategoryPage = true }}
+    {{ $pathParts := split (trim .RelPermalink "/") "/" }}
+    {{ if ge (len $pathParts) 2 }}
+        {{ $currentCategory = index $pathParts 1 }}
+    {{ end }}
+{{ end }}
+{{ $isListPage := false }}
+{{ if and (eq .Kind "section") (eq .RelPermalink "/column/") }}
+    {{ $isListPage = true }}
+{{ end }}
+
+<div class="column-header">
+    <nav class="column-header__nav" id="column-category-filters">
+        <a href="/column/" class="column-header__tab {{ if and $isListPage (not $isTagPage) (not $isCategoryPage) }}active{{ end }}" data-category="all">すべて</a>
+        {{ $allCategories := slice }}
+        {{ with .Site.GetPage "section" "column" }}
+            {{ range .Pages }}
+                {{ if .Params.column_category }}
+                    {{ range .Params.column_category }}
+                        {{ if not (in $allCategories .) }}
+                            {{ $allCategories = $allCategories | append . }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+        {{ $sortedCategories := sort $allCategories }}
+        {{ range $sortedCategories }}
+            {{ $categoryName := index $categoryNames . }}
+            {{ if $categoryName }}
+                {{ $isActive := false }}
+                {{ if and $isCategoryPage (eq $currentCategory .) (not $isTagPage) }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <a href="/column_category/{{ . }}/" class="column-header__tab {{ if $isActive }}active{{ end }}" data-category="{{ . }}">{{ $categoryName }}</a>
+            {{ end }}
+        {{ end }}
+    </nav>
+</div>
+

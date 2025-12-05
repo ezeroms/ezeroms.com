@@ -1,0 +1,36 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section page-section--about">
+        <div class="page-section__content page-section__content--narrow">
+            {{ if eq .Title "メディア掲載" }}
+                <!-- メディア掲載一覧 -->
+                <ul class="article-container column-list">
+                    {{ range where .Site.RegularPages "Section" "media-coverage" }}
+                        <li class="column-list-item media-coverage-item">
+                            <a href="{{ .RelPermalink }}" class="column-card media-coverage-card">
+                                {{ if .Params.date }}
+                                    <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                                {{ end }}
+                                <h3 class="column-card__title">{{ .Title }}</h3>
+                                {{ if .Params.lead }}
+                                    <p class="media-coverage-card__lead">{{ .Params.lead }}</p>
+                                {{ end }}
+                            </a>
+                        </li>
+                    {{ end }}
+                </ul>
+            {{ else }}
+                <!-- 通常のコンテンツ -->
+                <div class="about-content">
+                    <article class="article-item">
+                        {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
+                    </article>
+                </div>
+            {{ end }}
+        </div>
+    </section>
+
+    <div class="image-loader"></div>
+{{ end }}
+

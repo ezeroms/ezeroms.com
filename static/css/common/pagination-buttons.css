@@ -34,14 +34,39 @@
   left: 0;
 }
 
-
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
-
-  .pagination-button {
-    font-size: 14px;
+/* タブレット/スマホ: ページネーションボタンの調整 */
+@media (max-width: 1079px) {
+  .pagination-buttons {
+    gap: var(--spacing-2xl);
+    margin: var(--spacing-md) 0;
   }
-
+  
+  .pagination-button {
+    font-size: var(--font-size-sm);
+  }
+  
+  .pagination-button img {
+    width: 14px;
+  }
 }
+
+@media (max-width: 767px) {
+  .pagination-buttons {
+    gap: var(--spacing-xl);
+    margin: var(--spacing-sm) 0;
+  }
+  
+  .pagination-button {
+    font-size: var(--font-size-xs);
+  }
+  
+  .pagination-button img {
+    width: 12px;
+  }
+  
+  .backbutton {
+    position: static;
+  }
+}
+
+

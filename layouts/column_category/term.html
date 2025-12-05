@@ -1,0 +1,39 @@
+{{ define "section_header" }}
+    {{ partial "column-header-nav.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container column-list" id="column-articles-list">
+                {{ range .Pages }}
+                    {{ $categories := slice }}
+                    {{ if .Params.column_category }}
+                        {{ $categories = .Params.column_category }}
+                    {{ end }}
+                    {{ $tags := slice }}
+                    {{ if .Params.column_tag }}
+                        {{ $tags = .Params.column_tag }}
+                    {{ end }}
+                    <li class="column-list-item column-item column-card" data-categories="{{ delimit $categories " " }}" data-tags="{{ delimit $tags " " }}" data-href="{{ .RelPermalink }}">
+                        <p class="date">{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                        <h3 class="column-card__title">{{ .Title }}</h3>
+                        <div class="article-header__tags">
+                            {{ if .Params.column_tag }}
+                            {{ $sortedTags := sort .Params.column_tag }}
+                            {{ range $sortedTags }}
+                            <a href="/column_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                            {{ end }}
+                            {{ end }}
+                        </div>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "column_menu.html" . }}
+{{ end }}
+

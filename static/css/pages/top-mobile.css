@@ -1,0 +1,204 @@
+/* ========================================
+   トップページ SP/タブレット版専用スタイル
+   PCでは完全に非表示
+   ======================================== */
+
+/* PC版レイアウトを非表示（SP/タブレットでは） */
+@media (max-width: 1079px) {
+    .page-section--top-desktop {
+        display: none !important;
+    }
+}
+
+/* SP/タブレット版レイアウト（PCでは非表示） */
+.page-section--top-mobile {
+    display: none;
+}
+
+@media (max-width: 1079px) {
+    .page-section--top-mobile {
+        display: block;
+        width: 100%;
+        padding: 0;
+        min-height: auto;
+    }
+    
+    .page-section--top-mobile .page-section__content--mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: var(--spacing-4xl) 16px var(--spacing-5xl);
+        gap: var(--spacing-4xl);
+        max-width: 100%;
+        width: 100%;
+        min-height: auto;
+        overflow: visible;
+    }
+    
+    /* ロゴ */
+    .top-logo-mobile {
+        display: block;
+        text-decoration: none;
+        order: 0;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .top-logo-mobile__img {
+        width: 180px;
+        height: auto;
+        display: block;
+        transition: opacity 0.3s ease;
+    }
+    
+    .top-logo-mobile:hover .top-logo-mobile__img {
+        opacity: 0.7;
+    }
+    
+    /* メッセージ */
+    .top-message-mobile {
+        color: #050317;
+        text-align: center;
+        font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 1.125rem; /* 18px - PC版より少し小さく */
+        font-style: italic;
+        font-weight: 400;
+        line-height: 1.6;
+        margin: 0;
+        order: 1;
+        max-width: 100%;
+    }
+    
+    /* ランダム画像 */
+    .random-image-mobile {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        order: 2;
+        margin: var(--spacing-xl) 0;
+    }
+    
+    .top-photo-mobile {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    .random-image-mobile a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    /* ナビゲーション */
+    .top-nav-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 56px;
+        width: 100%;
+        max-width: 500px;
+        order: 3;
+        margin-top: var(--spacing-3xl);
+    }
+    
+    .top-nav-mobile__section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+    
+    /* 最初のセクション（About, Tweet, Diary, Column, Work）は2列グリッド */
+    .top-nav-mobile__section:first-child {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-lg) var(--spacing-lg);
+        align-items: start;
+    }
+    
+    .top-nav-mobile__section:first-child .top-nav-mobile__link {
+        justify-self: start;
+    }
+    
+    .top-nav-mobile__heading {
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: var(--letter-spacing-wider);
+        margin: 0 0 var(--spacing-lg) 0;
+        padding: 0;
+    }
+    
+    .top-nav-mobile__link {
+        display: inline-block;
+        padding: var(--spacing-sm) 0;
+        text-decoration: none;
+        color: var(--color-text-primary);
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-normal);
+        border: none;
+        border-bottom: 1px solid transparent;
+        background: transparent;
+        transition: all var(--transition-normal) var(--easing-default);
+        position: relative;
+        width: fit-content;
+    }
+    
+    .top-nav-mobile__link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 1px;
+        background: var(--color-text-primary);
+        transition: width var(--transition-normal) var(--easing-default);
+    }
+    
+    .top-nav-mobile__link:hover {
+        color: var(--color-text-primary);
+        border-bottom-color: transparent;
+    }
+    
+    .top-nav-mobile__link:hover::after {
+        width: 0;
+    }
+}
+
+/* スマホ版の調整 */
+@media (max-width: 767px) {
+    .page-section--top-mobile .page-section__content--mobile {
+        padding: 0;
+        gap: var(--spacing-3xl);
+    }
+    
+    .top-logo-mobile__img {
+        width: 200px;
+    }
+    
+    .top-message-mobile {
+        font-size: 1rem; /* 16px - スマホ版はさらに小さく */
+        max-width: 100%;
+    }
+    
+    .top-nav-mobile {
+        gap: 56px;
+        margin-top: var(--spacing-2xl);
+        max-width: 100%;
+    }
+    
+    .top-nav-mobile__section {
+        gap: var(--spacing-xl);
+    }
+    
+    .top-nav-mobile__link {
+        padding: var(--spacing-sm) 0;
+        font-size: var(--font-size-base);
+    }
+    
+    .top-nav-mobile__heading {
+        margin-bottom: var(--spacing-md);
+    }
+}
+

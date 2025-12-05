@@ -1,11 +1,16 @@
 ---
-title: 引越先を探しています！ 情報求ム
-date: 2025-08-26T02:35:42.498Z
+title: 2025/08/26
+date: "2025-08-26T02:35:42.498Z"
 slug: hikkoshi
-month:
+diary_tag:
+  - 引越し
+  - 横浜
+diary_place: "Yokohama, Kanagawa"
+min_temp: 22
+max_temp: 28
+weather: Sunny
+diary_month:
   - 2025-08
-subject:
-  - diary
 ---
 いま住んでいる横浜・関内の家を出て行かなかればならなくなった！
 

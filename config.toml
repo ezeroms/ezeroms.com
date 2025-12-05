@@ -1,13 +1,36 @@
 baseURL = "https://ezeroms.com/"
 languageCode = "ja"
 title = "ezeroms.com"
+
 enableDebug = true
 disableAliases = true
 
 [taxonomies]
-  month = "month"
   subject = "subject"
+  column_category = "column_category"
   topic = "topic"
+  tweet_tag = "tweet_tag"
+  tweet_month = "tweet_month"
+  tweet_place = "tweet_place"
+  diary_tag = "diary_tag"
+  diary_month = "diary_month"
+  column_tag = "column_tag"
+  work_tag = "work_tag"
+  work_month = "work_month"
+  work_category = "work_category"
+  chronicle_tag = "chronicle_tag"
+  ui_design_guidebook_tag = "ui_design_guidebook_tag"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
+
+[permalinks]
+  tweet = "/tweet/:slug/"
+  diary = "/diary/:slug/"
+  column = "/column/:slug/"
+  work = "/work/:slug/"
 
 [params]
   description = "One thing I can tell you is you got to be free!"
@@ -15,24 +38,19 @@ disableAliases = true
   RSSLink = "index.xml"
   ogImage = "images/common/og-image.png"
   googleAnalytics = "G-K021MTL6NX"
+  
+  [params.chronicle]
+    defaultStartYear = 1989
+    defaultEndYear = 2025
 
 [author]
   name = "ezeroms"
-
-[permalinks]
-  diary = "/diary/:slug/"
 
 [outputFormats]
   [outputFormats.RSS]
     mediatype = "application/rss+xml"
     baseName = "index"
     isPlainText = true
-
-[outputs]
-  home = ["HTML", "RSS", "JSON"]
-  section = ["HTML", "RSS", "JSON"]
-  taxonomy = ["HTML", "RSS", "JSON"]
-  taxonomyTerm = ["HTML", "RSS", "JSON"]
 
 [markup]
   [markup.goldmark]

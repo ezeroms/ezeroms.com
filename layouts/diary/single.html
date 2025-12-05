@@ -1,12 +1,13 @@
-{{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/diary" . }}
-{{ partial "notification.html" . }}
+{{ define "section_header" }}
+    {{ partial "date-selector-nav-diary.html" . }}
+{{ end }}
 
-<main class="main-section">
-    {{ partial "diary_menu.html" . }}
-    <section class="main-section-2column__right">
-        <ul class="article-container" id="articles-list">
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container" id="articles-list">
 
             <!-- <div class="article-item-heading">
                 <div class="article-item-heading__label">
@@ -44,26 +45,51 @@
 
 
             <article class="article-item">
+                <div class="article-header">
+                    <p class="date">Diary</p>
+                    <h1>{{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "2006" }}</h1>
+                    <p class="date">
+                        {{ $parts := slice }}
+                        {{ $parts = $parts | append (.Date | dateFormat "Mon") }}
+                        {{ if .Params.place }}
+                            {{ $parts = $parts | append .Params.place }}
+                        {{ end }}
+                        {{ if and .Params.min_temp .Params.max_temp }}
+                            {{ $parts = $parts | append (printf "%d–%d°C" .Params.min_temp .Params.max_temp) }}
+                        {{ else if .Params.min_temp }}
+                            {{ $parts = $parts | append (printf "%d°C" .Params.min_temp) }}
+                        {{ else if .Params.max_temp }}
+                            {{ $parts = $parts | append (printf "%d°C" .Params.max_temp) }}
+                        {{ end }}
+                        {{ if .Params.weather }}
+                            {{ $parts = $parts | append .Params.weather }}
+                        {{ end }}
+                        {{ if gt (len $parts) 0 }}
+                            {{ delimit $parts " · " }}
+                        {{ end }}
+                    </p>
+                    {{ if .Params.diary_tag }}
+                        <div class="article-header__tags">
+                            {{ $sortedTags := sort .Params.diary_tag }}
+                            {{ range $sortedTags }}
+                                {{ $label := . }}
+                                {{ $taxonomy := "" }}
+                                {{ range $term, $pages := $.Site.Taxonomies.diary_tag }}
+                                    {{ if eq ($term | urlize) ($label | urlize) }}
+                                        {{ $taxonomy = $pages }}
+                                    {{ end }}
+                                {{ end }}
+                                {{ with $taxonomy }}
+                                    <a href="{{ .Page.RelPermalink }}" class="tag" data-tag="{{ $label }}">{{ $label }}</a>
+                                {{ else }}
+                                    <span class="tag" data-tag="{{ $label }}">{{ $label }}</span>
+                                {{ end }}
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
                 
-                <p class="date">{{ .Date | dateFormat "2006-01-02" }}</p>
-                <h1>{{ .Title }}</h1>
-                
-                {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        document.querySelectorAll('.image-wrapper img').forEach(function(img) {
-                            const altText = img.getAttribute('alt');
-                            if (altText) {
-                                img.parentElement.setAttribute('data-alt', altText);
-                            } else {
-                                console.log('alt属性が空のimgタグを検出しました');
-                                img.parentElement.classList.add('no-alt'); // altが空の場合は特定のクラスを追加
-                            }
-                        });
-                    });
-                </script>
-                
+                {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
 
                 <div class="social-action">
                     <div class="social-action__left">
@@ -98,19 +124,13 @@
                     </div>
                 </div>
             </article>
-        
-
-            {{ partial "pagination-buttons.html" . }}    
-
-        </ul>
+                
+            {{ partial "article-navigation.html" . }}
+            </ul>
+        </div>
     </section>
+{{ end }}
 
-    <div class="image-loader"></div>
-</main>
-
-{{ partial "global-nav_diary.html" . }}
-
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/diary/single.html</p>
-
+{{ define "secondary" }}
+    {{ partial "diary_menu.html" . }}
 {{ end }}

@@ -1,0 +1,137 @@
+/* Top page専用スタイル */
+
+/* トップページではheaderを非表示 */
+body.is-home .layout-header {
+    display: none;
+}
+
+/* トップページではサブメニューを非表示 */
+body.is-home .layout-tags {
+    display: none;
+}
+
+/* トップページではlayout-mainを1カラムに */
+body.is-home .layout-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    min-height: calc(100vh - 48px);
+    background: #f9f9f7;
+}
+
+/* タブレット/スマホ: トップページのレイアウト調整 */
+@media (max-width: 1079px) {
+    body.is-home .layout-main {
+        min-height: auto;
+        height: auto;
+        justify-content: flex-start;
+        padding: 0;
+    }
+    
+    body.is-home .layout-main__content {
+        min-height: auto;
+        height: auto;
+        overflow: visible;
+    }
+}
+
+/* スマホ: トップページのレイアウト調整 */
+@media (max-width: 767px) {
+    body.is-home .layout-main {
+        padding: 64px 0;
+    }
+}
+
+/* トップページではlayout-main__contentを全幅に */
+body.is-home .layout-main__content {
+    max-width: 100%;
+    width: 100%;
+}
+
+.page-section--top {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+}
+
+/* タブレット/スマホ: トップページのセクション調整 */
+@media (max-width: 1079px) {
+    .page-section--top {
+        min-height: auto;
+        height: auto;
+    }
+}
+
+.page-section--top .page-section__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 80px 48px;
+    gap: 32px;
+}
+
+.top-logo {
+    display: block;
+    text-decoration: none;
+    order: 0;
+    margin-bottom: 0;
+}
+
+.top-logo__img {
+    width: 300px;
+    height: auto;
+    display: block;
+    transition: opacity 0.2s ease;
+}
+
+.top-logo:hover .top-logo__img {
+    opacity: 0.6;
+}
+
+.top-message {
+    color: #050317;
+    text-align: center;
+    font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+    order: 1;
+}
+
+.random-image {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    order: 2;
+}
+
+.top-photo {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.random-image a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* PC版レイアウト（SP/タブレットでは非表示） */
+@media (max-width: 1079px) {
+    .page-section--top-desktop {
+        display: none !important;
+    }
+}
+
+

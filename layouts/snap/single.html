@@ -1,0 +1,17 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <p class="date">{{ .Date | dateFormat "2006-01-02" }}</p>
+                    <h1>{{ .Title }}</h1>
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
+                </article>
+            </ul>
+        </div>
+    </section>
+{{ end }}
+
+

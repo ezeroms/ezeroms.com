@@ -1,0 +1,64 @@
+{{/* Aboutセクション専用のページネーション */}}
+{{/* 順番: プロフィール → このサイトについて → メディア掲載 → お問い合わせ */}}
+{{ $aboutPages := slice }}
+{{ $prevPage := "" }}
+{{ $nextPage := "" }}
+{{ $aboutSection := .Site.GetPage "section" "about" }}
+{{ if $aboutSection }}
+    {{/* 順番を定義 */}}
+    {{ $pageOrder := slice "profile" "site" "media-coverage" "contact" }}
+    
+    {{/* 各ページを取得して順番通りに並べる */}}
+    {{ range $pageOrder }}
+        {{ $pagePath := . }}
+        {{ $page := $aboutSection.GetPage $pagePath }}
+        {{ if $page }}
+            {{ $aboutPages = $aboutPages | append $page }}
+        {{ end }}
+    {{ end }}
+    
+    {{/* 現在のページのインデックスを取得 */}}
+    {{ $currentIndex := -1 }}
+    {{ range $index, $page := $aboutPages }}
+        {{ if eq $page.RelPermalink $.RelPermalink }}
+            {{ $currentIndex = $index }}
+        {{ end }}
+    {{ end }}
+    
+    {{/* Prev/Nextを取得 */}}
+    {{ if ge $currentIndex 0 }}
+        {{ if gt $currentIndex 0 }}
+            {{ $prevPage = index $aboutPages (sub $currentIndex 1) }}
+        {{ end }}
+        {{ if lt $currentIndex (sub (len $aboutPages) 1) }}
+            {{ $nextPage = index $aboutPages (add $currentIndex 1) }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+<div class="article-navigation">
+    <div class="article-navigation__prev">
+        {{ if $prevPage }}
+            <a href="{{ $prevPage.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">←</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Prev</span>
+                    <span class="article-navigation__title">{{ $prevPage.Title }}</span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    
+    <div class="article-navigation__next">
+        {{ if $nextPage }}
+            <a href="{{ $nextPage.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">→</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Next</span>
+                    <span class="article-navigation__title">{{ $nextPage.Title }}</span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+</div>
+

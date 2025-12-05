@@ -1,100 +1,79 @@
+{{ define "section_header" }}
+    {{ partial "work-header-nav.html" . }}
+{{ end }}
+
 {{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/work" . }}
-{{ partial "notification.html" . }}
+    {{ partial "notification.html" . }}
 
-<main class="main-section">
-    <section class="main-section-1column">
-        <div class="work">
-            
-            <div class="work-hero">
-                <img src="{{ .Params.image }}" alt="{{ .Title }}">
-            </div>
-    
-            <ul class="article-container work-single">
-
-                <div class="article-item-heading">
-                    <div class="article-item-heading__label">
-                        <p class="article-item-heading__label__p">
-                            {{ .Date | dateFormat "2006-01-02" }}
-                        </p>
-                        <h2 class="article-item-heading__label__h2">
-                            {{ .Title }}
-                        </h2>
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item work-article">
+                    <div class="article-header">
+                        {{ $startDate := "" }}
+                        {{ $endDate := "" }}
+                        {{ if .Params.start_date }}
+                            {{ $startDate = .Params.start_date }}
+                        {{ end }}
+                        {{ if and .Params.end_date (ne .Params.end_date "") }}
+                            {{ $endDate = .Params.end_date }}
+                        {{ end }}
+                        {{ $displayDate := "" }}
+                        {{ if $startDate }}
+                            {{ $start := time $startDate }}
+                            {{ if and $endDate (ne $endDate "") }}
+                                {{ $end := time $endDate }}
+                                {{ $displayDate = printf "Work · %s · %s – %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") ($end | dateFormat "Jan") ($end | dateFormat "2006") }}
+                            {{ else }}
+                                {{ $displayDate = printf "Work · %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
+                            {{ end }}
+                        {{ end }}
+                        {{ if $displayDate }}
+                            <p class="date">{{ $displayDate }}</p>
+                        {{ end }}
+                        <h1>{{ .Title }}</h1>
+                        {{ if .Params.image }}
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}" class="work-article__thumbnail">
+                        {{ end }}
+                        <div class="work-article__meta">
+                            {{ if .Params.role }}
+                                <div class="work-article__meta-item">
+                                    <span class="work-article__meta-label">Role</span>
+                                    <span class="work-article__meta-value">{{ .Params.role }}</span>
+                                </div>
+                            {{ end }}
+                            {{ if .Params.client }}
+                                <div class="work-article__meta-item">
+                                    <span class="work-article__meta-label">Client</span>
+                                    <span class="work-article__meta-value">{{ .Params.client }}</span>
+                                </div>
+                            {{ end }}
+                            {{ if .Params.agency }}
+                                <div class="work-article__meta-item">
+                                    <span class="work-article__meta-label">Agency</span>
+                                    <span class="work-article__meta-value">{{ .Params.agency }}</span>
+                                </div>
+                            {{ end }}
+                        </div>
+                        {{ if .Params.work_tag }}
+                            <div class="article-header__tags">
+                                {{ $sortedTags := sort .Params.work_tag }}
+                                {{ range $sortedTags }}
+                                    <a href="/work_tag/{{ . | urlize }}/" class="tag" data-tag="{{ . }}">{{ . }}</a>
+                                {{ end }}
+                            </div>
+                        {{ end }}
                     </div>
-    
-                    <!-- ボタンここから -->
-                    <button class="article-item-heading__button" onclick="copyToClipboard()">
-                        <img src="{{ "images/common/icon_link.svg" | relURL }}" alt="Get article url">
-                    </button>
-                    <script>
-                        function copyToClipboard() {
-                            const url = window.location.href;
-                            navigator.clipboard.writeText(url).then(function() {
-                                showNotification();
-                            }, function(err) {
-                                console.error('リンクの保存に失敗しました: ', err);
-                            });
-                        }
-                        function showNotification() {
-                            var notification = document.getElementById("notification");
-                            notification.className = "notification show";
-                            setTimeout(function() {
-                                notification.className = notification.className.replace(" show", "");
-                            }, 3000);
-                        }
-                    </script>
-                    <!-- ボタンここまで -->        
-                </div>
-    
-                <article class="article-item no-hover-effect">
-                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1></div>" | safeHTML }}
-            
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            document.querySelectorAll('.image-wrapper img').forEach(function(img) {
-                                const altText = img.getAttribute('alt');
-                                if (altText) {
-                                    img.parentElement.setAttribute('data-alt', altText);
-                                } else {
-                                    console.log('alt属性が空のimgタグを検出しました');
-                                    img.parentElement.classList.add('no-alt'); // altが空の場合は特定のクラスを追加
-                                }
-                            });
-                        });
-                    </script>
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
                 </article>
+                
+                {{ partial "article-navigation.html" . }}
 
-                <div class="pagination-buttons">    
-
-                    {{ if .PrevInSection }}
-                        <a href="{{ .PrevInSection.RelPermalink }}" class="pagination-button">
-                            <img src="/images/common/icon_left.svg" alt="">
-                            Prev
-                        </a>
-                    {{ end }}
-
-                    <a href="/work" class="pagination-button">
-                        <img src="/images/common/icon_back.svg" alt="">
-                        Back to gallery
-                    </a>
-
-                    {{ if .NextInSection }}
-                        <a href="{{ .NextInSection.RelPermalink }}" class="pagination-button">
-                            Next
-                            <img src="/images/common/icon_right.svg" alt="">
-                        </a>
-                    {{ end }}
-                  </div>
             </ul>
-
         </div>
-    </section>    
-</main>
+    </section>
+{{ end }}
 
-{{ partial "global-nav_work.html" . }}
-
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/work/single.html</p>
-
+{{ define "secondary" }}
+    {{ partial "work_menu.html" . }}
 {{ end }}

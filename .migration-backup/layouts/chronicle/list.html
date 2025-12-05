@@ -1,0 +1,1904 @@
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="chronicle-main">
+        <div class="chronicle-main__content">
+            <div class="chronicle-table-wrapper" id="chronicle-table-wrapper">
+                <table class="chronicle-table" id="chronicle-table">
+                    <thead>
+                        <tr>
+                            <th class="chronicle-table__year-header">年</th>
+                            {{ $allEvents := where .Site.RegularPages "Section" "chronicle" }}
+                            {{ $subcategoryMap := dict }}
+                            {{ range $allEvents }}
+                                {{ if and .Params.category .Params.subcategory }}
+                                    {{ $category := .Params.category }}
+                                    {{ $subcategory := .Params.subcategory }}
+                                    {{ $key := printf "%s|%s" $category $subcategory }}
+                                    {{ if not (index $subcategoryMap $key) }}
+                                        {{ $subcategoryMap = merge $subcategoryMap (dict $key (dict "category" $category "subcategory" $subcategory)) }}
+                                    {{ end }}
+                                {{ end }}
+                            {{ end }}
+                            
+                            {{ $sortedSubcategories := slice }}
+                            {{ range $key, $data := $subcategoryMap }}
+                                {{ $sortedSubcategories = $sortedSubcategories | append $data }}
+                            {{ end }}
+                            {{ $sortedSubcategories = sort $sortedSubcategories "category" "asc" }}
+                            {{ $sortedSubcategories = sort $sortedSubcategories "subcategory" "asc" }}
+                            
+                            {{ range $sortedSubcategories }}
+                                <th class="chronicle-table__subcategory-header" 
+                                    data-category="{{ .category }}"
+                                    data-subcategory="{{ .subcategory }}">
+                                    {{ .subcategory }}
+                                </th>
+                            {{ end }}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ $allEvents := where .Site.RegularPages "Section" "chronicle" }}
+                        {{ $sortedEvents := sort $allEvents "Date" "asc" }}
+                        
+                        {{ $allYears := slice }}
+                        {{ range $sortedEvents }}
+                            {{ $eventYear := .Date | dateFormat "2006" }}
+                            {{ if and $eventYear (ne $eventYear "0001") (not (in $allYears $eventYear)) }}
+                                {{ $allYears = $allYears | append $eventYear }}
+                            {{ end }}
+                        {{ end }}
+                        {{ $sortedYears := sort $allYears }}
+                        
+                        {{ range $sortedYears }}
+                            {{ $year := . }}
+                            <tr class="chronicle-table__year-row" data-year="{{ $year }}">
+                                <td class="chronicle-table__year-cell">{{ $year }}</td>
+                                {{ range $sortedSubcategories }}
+                                    {{ $category := .category }}
+                                    {{ $subcategory := .subcategory }}
+                                    <td class="chronicle-table__subcategory-cell" 
+                                        data-category="{{ $category }}"
+                                        data-subcategory="{{ $subcategory }}">
+                                        {{ $subcategoryEvents := slice }}
+                                        {{ range $sortedEvents }}
+                                            {{ $eventYear := .Date | dateFormat "2006" }}
+                                            {{ if and (eq $eventYear $year) (eq .Params.category $category) (eq .Params.subcategory $subcategory) }}
+                                                {{ $subcategoryEvents = $subcategoryEvents | append . }}
+                                            {{ end }}
+                                        {{ end }}
+                                        {{ if gt (len $subcategoryEvents) 0 }}
+                                            <div class="chronicle-table__events">
+                                                {{ range $subcategoryEvents }}
+                                                    <article class="chronicle-event" 
+                                                             data-date="{{ .Date | dateFormat "2006-01-02" }}"
+                                                             data-date-precision="{{ if .Params.date_precision }}{{ .Params.date_precision }}{{ else }}day{{ end }}"
+                                                             data-category="{{ if .Params.category }}{{ .Params.category }}{{ end }}"
+                                                             data-subcategory="{{ if .Params.subcategory }}{{ .Params.subcategory }}{{ end }}"
+                                                             data-tags="{{ if .Params.chronicle_tag }}{{ delimit .Params.chronicle_tag " " }}{{ end }}"
+                                                             data-user-age="{{ if .Params.user_age }}{{ .Params.user_age }}{{ end }}"
+                                                             data-title="{{ .Title }}"
+                                                             data-description="{{ if .Params.description }}{{ .Params.description }}{{ end }}"
+                                                             data-url="{{ .Permalink }}">
+                                                        <div class="chronicle-event__date">
+                                                            {{ $precision := default "day" .Params.date_precision }}
+                                                            {{ if eq $precision "year" }}
+                                                                {{ .Date | dateFormat "2006" }}
+                                                            {{ else if eq $precision "month" }}
+                                                                {{ .Date | dateFormat "2006/01" }}
+                                                            {{ else }}
+                                                                {{ .Date | dateFormat "2006/01/02" }}
+                                                            {{ end }}
+                                                        </div>
+                                                        <div class="chronicle-event__content">
+                                                            <h3 class="chronicle-event__title">{{ .Title }}</h3>
+                                                            <span class="chronicle-event__user-age"></span>
+                                                            {{ if .Content }}
+                                                                <div class="chronicle-event__description">{{ .Content }}</div>
+                                                            {{ end }}
+                                                            {{ if .Params.chronicle_tag }}
+                                                                <div class="chronicle-event__tags">
+                                                                    {{ range .Params.chronicle_tag }}
+                                                                        <span class="tag" data-tag="{{ . }}">{{ . }}</span>
+                                                                    {{ end }}
+                                                                </div>
+                                                            {{ end }}
+                                                        </div>
+                                                    </article>
+                                                {{ end }}
+                                            </div>
+                                        {{ end }}
+                                    </td>
+                                {{ end }}
+                            </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- モーダル -->
+    <div class="chronicle-modal" id="chronicle-modal">
+        <div class="chronicle-modal__overlay" id="chronicle-modal-overlay"></div>
+        <div class="chronicle-modal__content">
+            <button class="chronicle-modal__close" id="chronicle-modal-close">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="chronicle-modal__body" id="chronicle-modal-body">
+                <!-- コンテンツがここに動的に挿入されます -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tocBirthYearInput = document.getElementById('toc-birth-year');
+        const tocBirthMonthInput = document.getElementById('toc-birth-month');
+        const tocStartYearInput = document.getElementById('toc-start-year');
+        const tocEndYearInput = document.getElementById('toc-end-year');
+        const monthlyViewCheckbox = document.getElementById('toc-monthly-view');
+        const eraDisplayCheckbox = document.getElementById('toc-era-display');
+        const table = document.getElementById('chronicle-table');
+        const tableBody = table.querySelector('tbody');
+        const tableHeader = table.querySelector('thead tr');
+        const categoryCheckboxes = document.querySelectorAll('.chronicle-filters__category-checkbox');
+        const subcategoryCheckboxes = document.querySelectorAll('.chronicle-filters__subcategory-checkbox');
+        const tagCheckboxes = document.querySelectorAll('.chronicle-filters__tag-checkbox');
+        const clearTagsBtn = document.getElementById('clear-tags-btn');
+
+        // 全てのイベントデータを保持
+        const allEvents = [];
+        const existingRows = tableBody.querySelectorAll('.chronicle-table__year-row');
+        existingRows.forEach(row => {
+            const year = parseInt(row.getAttribute('data-year'));
+            const cells = row.querySelectorAll('.chronicle-table__subcategory-cell');
+            cells.forEach(cell => {
+                const category = cell.getAttribute('data-category');
+                const subcategory = cell.getAttribute('data-subcategory');
+                const events = cell.querySelectorAll('.chronicle-event');
+                events.forEach(event => {
+                    const eventDate = event.getAttribute('data-date');
+                    const eventTags = event.getAttribute('data-tags') ? event.getAttribute('data-tags').split(' ').filter(t => t) : [];
+                    const dateElement = event.querySelector('.chronicle-event__date');
+                    const dateText = dateElement ? dateElement.textContent : '';
+                    const tagsElement = event.querySelector('.chronicle-event__tags');
+                    const tagsHTML = tagsElement ? tagsElement.innerHTML : '';
+                    
+                    allEvents.push({
+                        date: eventDate,
+                        datePrecision: event.getAttribute('data-date-precision') || 'day',
+                        category: category,
+                        subcategory: subcategory,
+                        title: event.getAttribute('data-title') || event.querySelector('.chronicle-event__title').textContent,
+                        description: event.getAttribute('data-description') || (event.querySelector('.chronicle-event__description') ? event.querySelector('.chronicle-event__description').textContent : ''),
+                        content: (() => {
+                            // まず、.chronicle-event__description要素からHTMLを取得
+                            const descriptionEl = event.querySelector('.chronicle-event__description');
+                            if (descriptionEl) {
+                                return descriptionEl.innerHTML;
+                            }
+                            // フォールバック: data-content-html属性から取得（エンコードされている場合）
+                            const contentHtml = event.getAttribute('data-content-html');
+                            if (contentHtml) {
+                                try {
+                                    return decodeURIComponent(contentHtml);
+                                } catch (e) {
+                                    return contentHtml;
+                                }
+                            }
+                            return '';
+                        })(),
+                        url: event.getAttribute('data-url') || '',
+                        dateText: dateText,
+                        tags: eventTags,
+                        tagsHTML: tagsHTML,
+                        html: event.outerHTML
+                    });
+                });
+            });
+        });
+
+        // サブカテゴリのリストを取得
+        const subcategories = [];
+        const subcategoryHeaders = table.querySelectorAll('.chronicle-table__subcategory-header');
+        subcategoryHeaders.forEach(header => {
+            subcategories.push({
+                category: header.getAttribute('data-category'),
+                subcategory: header.getAttribute('data-subcategory')
+            });
+        });
+
+        // 元号を計算する関数（複数の元号を返す可能性がある）
+        function getEras(year, month = null) {
+            // 明治: 1868年1月25日 - 1912年7月29日
+            // 大正: 1912年7月30日 - 1926年12月24日
+            // 昭和: 1926年12月25日 - 1989年1月7日
+            // 平成: 1989年1月8日 - 2019年4月30日
+            // 令和: 2019年5月1日 - 現在
+            
+            if (year < 1868) {
+                return []; // 明治以前は表示しない
+            }
+            
+            const eras = [];
+            
+            // 月が指定されている場合（月単位表示）
+            if (month !== null) {
+                // 明治
+                if (year < 1912 || (year === 1912 && month <= 7)) {
+                    eras.push({ name: '明治', year: year - 1867 });
+                }
+                
+                // 大正
+                if (year === 1912 && month >= 7) {
+                    eras.push({ name: '大正', year: 1 });
+                } else if (year > 1912 && (year < 1926 || (year === 1926 && month <= 12))) {
+                    eras.push({ name: '大正', year: year - 1911 });
+                }
+                
+                // 昭和
+                if (year === 1926 && month >= 12) {
+                    eras.push({ name: '昭和', year: 1 });
+                } else if (year > 1926 && (year < 1989 || (year === 1989 && month <= 1))) {
+                    eras.push({ name: '昭和', year: year - 1925 });
+                }
+                
+                // 平成
+                if (year === 1989 && month >= 1) {
+                    eras.push({ name: '平成', year: 1 });
+                } else if (year > 1989 && (year < 2019 || (year === 2019 && month <= 4))) {
+                    eras.push({ name: '平成', year: year - 1988 });
+                }
+                
+                // 令和
+                if (year === 2019 && month >= 5) {
+                    eras.push({ name: '令和', year: 1 });
+                } else if (year > 2019) {
+                    eras.push({ name: '令和', year: year - 2018 });
+                }
+            } else {
+                // 月が指定されていない場合（年単位表示）- その年に存在する全ての元号を返す
+                // 1912年: 明治45年、大正1年
+                if (year === 1912) {
+                    eras.push({ name: '明治', year: 45 });
+                    eras.push({ name: '大正', year: 1 });
+                }
+                // 1926年: 大正15年、昭和1年
+                else if (year === 1926) {
+                    eras.push({ name: '大正', year: 15 });
+                    eras.push({ name: '昭和', year: 1 });
+                }
+                // 1989年: 昭和64年、平成1年
+                else if (year === 1989) {
+                    eras.push({ name: '昭和', year: 64 });
+                    eras.push({ name: '平成', year: 1 });
+                }
+                // 2019年: 平成31年、令和1年
+                else if (year === 2019) {
+                    eras.push({ name: '平成', year: 31 });
+                    eras.push({ name: '令和', year: 1 });
+                }
+                // その他の年
+                else {
+                    // 明治
+                    if (year < 1912) {
+                        eras.push({ name: '明治', year: year - 1867 });
+                    }
+                    // 大正
+                    else if (year > 1912 && year < 1926) {
+                        eras.push({ name: '大正', year: year - 1911 });
+                    }
+                    // 昭和
+                    else if (year > 1926 && year < 1989) {
+                        eras.push({ name: '昭和', year: year - 1925 });
+                    }
+                    // 平成
+                    else if (year > 1989 && year < 2019) {
+                        eras.push({ name: '平成', year: year - 1988 });
+                    }
+                    // 令和
+                    else if (year > 2019) {
+                        eras.push({ name: '令和', year: year - 2018 });
+                    }
+                }
+            }
+            
+            return eras;
+        }
+
+        // 年齢を計算する関数
+        function calculateAge(eventDate, birthYear, birthMonth) {
+            const event = new Date(eventDate);
+            const birth = new Date(birthYear, birthMonth - 1, 1); // 月は0ベースなので-1
+            
+            if (event < birth) {
+                // 生まれる前の場合
+                let years = birth.getFullYear() - event.getFullYear();
+                let months = birth.getMonth() - event.getMonth();
+                
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                if (years === 0) {
+                    // 1年未満の場合は「Nヶ月前」
+                    return `生まれる${months}ヶ月前`;
+                } else {
+                    // 1年以上の場合は「N年前」（ヶ月は表示しない）
+                    return `生まれる${years}年前`;
+                }
+            } else {
+                // 生まれた後の場合
+                let years = event.getFullYear() - birth.getFullYear();
+                let months = event.getMonth() - birth.getMonth();
+                
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                if (years === 0) {
+                    // 0歳の場合は「生後Nヶ月」
+                    return `生後${months}ヶ月`;
+                } else {
+                    // 1歳以降は「N歳」
+                    return `${years}歳`;
+                }
+            }
+        }
+
+        // 年齢表示を更新する関数
+        function updateAgeDisplay() {
+            const birthYear = parseInt(tocBirthYearInput.value);
+            const birthMonth = parseInt(tocBirthMonthInput.value);
+            
+            if (!birthYear || !birthMonth) return;
+            
+            const events = table.querySelectorAll('.chronicle-event');
+            events.forEach(event => {
+                const eventDate = event.getAttribute('data-date');
+                const ageElement = event.querySelector('.chronicle-event__user-age');
+                
+                if (eventDate && ageElement) {
+                    const ageText = calculateAge(eventDate, birthYear, birthMonth);
+                    ageElement.textContent = ageText;
+                }
+            });
+        }
+
+        // デフォルトの表示期間を設定（Hugoの設定ファイルから取得、またはデフォルト値を使用）
+        const defaultStartYear = {{ if .Site.Params.chronicle.defaultStartYear }}{{ .Site.Params.chronicle.defaultStartYear }}{{ else }}1989{{ end }};
+        const defaultEndYear = {{ if .Site.Params.chronicle.defaultEndYear }}{{ .Site.Params.chronicle.defaultEndYear }}{{ else }}{{ now.Year }}{{ end }};
+
+        // URLパラメータから初期値を読み取る
+        const urlParams = new URLSearchParams(window.location.search);
+        // 初期表示フラグ（URLパラメータがない場合のみtrue）
+        let isInitialLoad = !window.location.search || window.location.search.length === 0;
+        
+        const urlBirthYear = urlParams.get('birthYear');
+        const urlBirthMonth = urlParams.get('birthMonth');
+        const urlStartYear = urlParams.get('start');
+        const urlEndYear = urlParams.get('end');
+        const urlMonthlyView = urlParams.get('monthlyView');
+        const urlEraDisplay = urlParams.get('eraDisplay');
+        if (urlBirthYear) tocBirthYearInput.value = urlBirthYear;
+        if (urlBirthMonth) tocBirthMonthInput.value = urlBirthMonth;
+        
+        // 表示期間の初期値を設定（URLパラメータがない場合はデフォルト値を使用）
+        // 表示期間の下限は1868年（明治1年）とする
+        const minYear = 1868;
+        
+        // HTMLのvalue属性を確認（設定ファイルから読み込まれた値）
+        const htmlStartYear = tocStartYearInput.value ? parseInt(tocStartYearInput.value) : null;
+        const htmlEndYear = tocEndYearInput.value ? parseInt(tocEndYearInput.value) : null;
+        
+        if (urlStartYear) {
+            // URLパラメータがある場合はそれを使用
+            tocStartYearInput.value = urlStartYear;
+        } else if (!htmlStartYear || htmlStartYear < minYear) {
+            // HTMLのvalue属性が無効な場合のみ、デフォルト値を設定
+            tocStartYearInput.value = defaultStartYear;
+        }
+        // それ以外はHTMLのvalue属性（設定ファイルの値）をそのまま使用
+        
+        if (urlEndYear) {
+            // URLパラメータがある場合はそれを使用
+            tocEndYearInput.value = urlEndYear;
+        } else if (!htmlEndYear || htmlEndYear < minYear) {
+            // HTMLのvalue属性が無効な場合のみ、デフォルト値を設定
+            tocEndYearInput.value = defaultEndYear;
+        }
+        // それ以外はHTMLのvalue属性（設定ファイルの値）をそのまま使用
+        
+        // デフォルト値が正しく設定されていることを確認（下限チェック）
+        if (parseInt(tocStartYearInput.value) < minYear) {
+            tocStartYearInput.value = Math.max(defaultStartYear, minYear);
+        }
+        if (parseInt(tocEndYearInput.value) < minYear) {
+            tocEndYearInput.value = Math.max(defaultEndYear, minYear);
+        }
+        
+        // 表示期間の入力値の検証関数
+        function validateYearRange() {
+            const startYear = parseInt(tocStartYearInput.value);
+            const endYear = parseInt(tocEndYearInput.value);
+            const yearRangeSection = tocStartYearInput.closest('.chronicle-filters__section');
+            let errorMessage = yearRangeSection.querySelector('.chronicle-year-range__error');
+            
+            // エラーメッセージ要素が存在しない場合は作成
+            if (!errorMessage) {
+                errorMessage = document.createElement('div');
+                errorMessage.className = 'chronicle-year-range__error';
+                // .chronicle-year-rangeの後に挿入
+                const yearRangeContainer = tocStartYearInput.closest('.chronicle-year-range');
+                yearRangeContainer.parentNode.insertBefore(errorMessage, yearRangeContainer.nextSibling);
+            }
+            
+            // エラーチェック
+            if (startYear && endYear) {
+                if (startYear > endYear) {
+                    errorMessage.textContent = '始点が終点を越えないように設定してください';
+                    errorMessage.style.display = 'block';
+                    tocStartYearInput.classList.add('chronicle-year-range__input--error');
+                    tocEndYearInput.classList.add('chronicle-year-range__input--error');
+                    return false;
+                } else {
+                    errorMessage.style.display = 'none';
+                    tocStartYearInput.classList.remove('chronicle-year-range__input--error');
+                    tocEndYearInput.classList.remove('chronicle-year-range__input--error');
+                    return true;
+                }
+            }
+            
+            // 値が入力されていない場合はエラーを非表示
+            errorMessage.style.display = 'none';
+            tocStartYearInput.classList.remove('chronicle-year-range__input--error');
+            tocEndYearInput.classList.remove('chronicle-year-range__input--error');
+            return true;
+        }
+        
+        // 初期検証
+        validateYearRange();
+        
+        // 記事の最小年による調整は行わない（設定ファイルのデフォルト値を尊重）
+        if (urlMonthlyView === 'true') {
+            monthlyViewCheckbox.checked = true;
+            // ヘッダーの「年」ラベルを「年月」に更新
+            const yearHeader = table.querySelector('.chronicle-table__year-header');
+            if (yearHeader) {
+                yearHeader.textContent = '年月';
+            }
+        }
+        if (urlEraDisplay === 'true') {
+            eraDisplayCheckbox.checked = true;
+        }
+
+        // 表示するサブカテゴリを管理（デフォルトは全て表示）
+        let visibleSubcategories = new Set();
+        const allSubcategoryHeaders = table.querySelectorAll('.chronicle-table__subcategory-header');
+        allSubcategoryHeaders.forEach(header => {
+            const category = header.getAttribute('data-category');
+            const subcategory = header.getAttribute('data-subcategory');
+            const key = `${category}|${subcategory}`;
+            visibleSubcategories.add(key);
+        });
+
+        // 選択されたタグを管理
+        let selectedTags = new Set();
+
+        // URLパラメータから表示サブカテゴリとタグを読み取る
+        const urlSubcategories = urlParams.get('subcategories');
+        if (urlSubcategories) {
+            // URLパラメータがある場合は、それを使用（空の場合は空のSetにする）
+            const subcategoriesArray = urlSubcategories.split(',').filter(s => s);
+            visibleSubcategories = subcategoriesArray.length > 0 ? new Set(subcategoriesArray) : new Set();
+        }
+        // URLパラメータがない場合は、デフォルトで全てのサブカテゴリを表示（既に設定済み）
+        const urlTags = urlParams.get('tags');
+        if (urlTags) {
+            selectedTags = new Set(urlTags.split(','));
+        }
+
+        // チェックボックスの初期状態を設定
+        function updateCheckboxStates() {
+            // サブカテゴリのチェックボックス
+            subcategoryCheckboxes.forEach(checkbox => {
+                const category = checkbox.getAttribute('data-category');
+                const subcategory = checkbox.getAttribute('data-subcategory');
+                const key = `${category}|${subcategory}`;
+                checkbox.checked = visibleSubcategories.has(key);
+            });
+
+            // カテゴリのチェックボックス（全てのサブカテゴリが選択されている場合のみチェック）
+            categoryCheckboxes.forEach(checkbox => {
+                const category = checkbox.getAttribute('data-category');
+                const subcategories = checkbox.getAttribute('data-subcategories').split(',');
+                const allChecked = subcategories.every(sub => {
+                    const key = `${category}|${sub}`;
+                    return visibleSubcategories.has(key);
+                });
+                checkbox.checked = allChecked && subcategories.length > 0;
+            });
+
+            // タグのチェックボックス
+            tagCheckboxes.forEach(checkbox => {
+                const tag = checkbox.getAttribute('data-tag');
+                checkbox.checked = selectedTags.has(tag);
+            });
+
+            // タグが選択されている場合は「タグの選択を解除」ボタンを表示
+            if (selectedTags.size > 0) {
+                clearTagsBtn.style.display = 'block';
+            } else {
+                clearTagsBtn.style.display = 'none';
+            }
+        }
+
+        function updateSubcategoryVisibility() {
+            const headers = table.querySelectorAll('.chronicle-table__subcategory-header');
+            const cells = table.querySelectorAll('.chronicle-table__subcategory-cell');
+            
+            headers.forEach(header => {
+                const category = header.getAttribute('data-category');
+                const subcategory = header.getAttribute('data-subcategory');
+                const key = `${category}|${subcategory}`;
+                if (visibleSubcategories.has(key)) {
+                    header.style.display = '';
+                } else {
+                    header.style.display = 'none';
+                }
+            });
+
+            cells.forEach(cell => {
+                const category = cell.getAttribute('data-category');
+                const subcategory = cell.getAttribute('data-subcategory');
+                const key = `${category}|${subcategory}`;
+                if (visibleSubcategories.has(key)) {
+                    cell.style.display = '';
+                } else {
+                    cell.style.display = 'none';
+                }
+            });
+        }
+
+        function updateTagActiveStates() {
+            // すべてのカード内のタグを取得
+            const allTagSpans = table.querySelectorAll('.chronicle-event__tags .tag[data-tag]');
+            allTagSpans.forEach(tagSpan => {
+                const tag = tagSpan.getAttribute('data-tag');
+                if (selectedTags.has(tag)) {
+                    tagSpan.classList.add('active');
+                } else {
+                    tagSpan.classList.remove('active');
+                }
+            });
+        }
+
+        function filterByTags() {
+            // yearRowsの参照を最新のものに更新
+            yearRows = table.querySelectorAll('.chronicle-table__year-row');
+            
+            if (selectedTags.size === 0) {
+                // タグが選択されていない場合は通常のフィルタリング
+                yearRows.forEach(row => {
+                    row.style.display = '';
+                    const events = row.querySelectorAll('.chronicle-event');
+                    events.forEach(event => {
+                        event.style.display = '';
+                    });
+                });
+                // すべてのカテゴリ・サブカテゴリを表示
+                updateSubcategoryVisibility();
+                // タグのactive状態を更新
+                updateTagActiveStates();
+                return;
+            }
+
+            // タグが選択されている場合はタグでフィルタリング
+            // まず、表示されるイベントがあるカテゴリ・サブカテゴリを特定
+            const visibleSubcategoriesForTags = new Set();
+            
+            yearRows.forEach(row => {
+                const events = row.querySelectorAll('.chronicle-event');
+                
+                events.forEach(event => {
+                    const eventTags = event.getAttribute('data-tags');
+                    let showEvent = false;
+                    
+                    if (eventTags) {
+                        const tags = eventTags.split(' ').filter(t => t);
+                        showEvent = Array.from(selectedTags).some(tag => tags.includes(tag));
+                    }
+                    
+                    if (showEvent) {
+                        const category = event.getAttribute('data-category');
+                        const subcategory = event.getAttribute('data-subcategory');
+                        if (category && subcategory) {
+                            const key = `${category}|${subcategory}`;
+                            visibleSubcategoriesForTags.add(key);
+                        }
+                    }
+                    
+                    event.style.display = showEvent ? '' : 'none';
+                });
+            });
+            
+            // 表示されるイベントがあるカテゴリ・サブカテゴリだけを表示
+            const headers = table.querySelectorAll('.chronicle-table__subcategory-header');
+            const cells = table.querySelectorAll('.chronicle-table__subcategory-cell');
+            
+            headers.forEach(header => {
+                const category = header.getAttribute('data-category');
+                const subcategory = header.getAttribute('data-subcategory');
+                const key = `${category}|${subcategory}`;
+                if (visibleSubcategoriesForTags.has(key)) {
+                    header.style.display = '';
+                } else {
+                    header.style.display = 'none';
+                }
+            });
+
+            cells.forEach(cell => {
+                const category = cell.getAttribute('data-category');
+                const subcategory = cell.getAttribute('data-subcategory');
+                const key = `${category}|${subcategory}`;
+                if (visibleSubcategoriesForTags.has(key)) {
+                    cell.style.display = '';
+                } else {
+                    cell.style.display = 'none';
+                }
+            });
+            
+            // 行の表示/非表示
+            yearRows.forEach(row => {
+                const events = row.querySelectorAll('.chronicle-event[style=""]');
+                row.style.display = events.length > 0 ? '' : 'none';
+            });
+            
+            // タグのactive状態を更新
+            updateTagActiveStates();
+        }
+
+        function filterTable(updateURL = true) {
+            const startYear = parseInt(tocStartYearInput.value);
+            const endYear = parseInt(tocEndYearInput.value);
+            const isMonthlyView = monthlyViewCheckbox.checked;
+
+            // URLを更新（初期表示時は更新しない）
+            if (updateURL && !isInitialLoad) {
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('birthYear', tocBirthYearInput.value);
+                newUrl.searchParams.set('birthMonth', tocBirthMonthInput.value);
+                newUrl.searchParams.set('start', startYear);
+                newUrl.searchParams.set('end', endYear);
+                newUrl.searchParams.set('subcategories', Array.from(visibleSubcategories).join(','));
+                if (isMonthlyView) {
+                    newUrl.searchParams.set('monthlyView', 'true');
+                } else {
+                    newUrl.searchParams.delete('monthlyView');
+                }
+                if (selectedTags.size > 0) {
+                    newUrl.searchParams.set('tags', Array.from(selectedTags).join(','));
+                } else {
+                    newUrl.searchParams.delete('tags');
+                }
+                window.history.pushState({}, '', newUrl);
+            }
+
+            if (isMonthlyView) {
+                // 月単位表示の場合は、テーブルを再構築
+                rebuildTableForMonthlyView();
+            } else {
+                // 年単位表示の場合は、テーブルを再構築
+                rebuildTableForYearView();
+            }
+        }
+
+        function rebuildTableForYearView() {
+            const startYear = parseInt(tocStartYearInput.value);
+            const endYear = parseInt(tocEndYearInput.value);
+            
+            // ヘッダーの「年」ラベルを更新
+            const yearHeader = table.querySelector('.chronicle-table__year-header');
+            if (yearHeader) {
+                yearHeader.textContent = '年';
+            }
+            
+            const showEra = eraDisplayCheckbox.checked;
+            
+            // 既存のtbodyをクリア
+            tableBody.innerHTML = '';
+            
+            // サブカテゴリのヘッダーを取得
+            const subcategoryHeaders = table.querySelectorAll('.chronicle-table__subcategory-header');
+            const subcategories = [];
+            
+            // タグが選択されている場合は、タグに該当する記事があるサブカテゴリだけを表示
+            if (selectedTags.size > 0) {
+                const visibleSubcategoriesForTags = new Set();
+                allEvents.forEach(event => {
+                    if (event.tags && event.tags.length > 0) {
+                        const hasSelectedTag = Array.from(selectedTags).some(tag => event.tags.includes(tag));
+                        if (hasSelectedTag && event.category && event.subcategory) {
+                            const key = `${event.category}|${event.subcategory}`;
+                            visibleSubcategoriesForTags.add(key);
+                        }
+                    }
+                });
+                
+                subcategoryHeaders.forEach(header => {
+                    const category = header.getAttribute('data-category');
+                    const subcategory = header.getAttribute('data-subcategory');
+                    const key = `${category}|${subcategory}`;
+                    if (visibleSubcategoriesForTags.has(key)) {
+                        subcategories.push({ category, subcategory });
+                    }
+                });
+            } else {
+                // タグが選択されていない場合は、visibleSubcategoriesを使用
+                subcategoryHeaders.forEach(header => {
+                    const category = header.getAttribute('data-category');
+                    const subcategory = header.getAttribute('data-subcategory');
+                    const key = `${category}|${subcategory}`;
+                    if (visibleSubcategories.has(key)) {
+                        subcategories.push({ category, subcategory });
+                    }
+                });
+            }
+
+            // 年ごとに行を作成
+            for (let year = startYear; year <= endYear; year++) {
+                const row = document.createElement('tr');
+                row.className = 'chronicle-table__year-row';
+                row.setAttribute('data-year', year);
+                
+                // 年セル
+                const yearCell = document.createElement('td');
+                yearCell.className = 'chronicle-table__year-cell';
+                const yearCellContent = document.createElement('div');
+                yearCellContent.className = 'chronicle-table__year-content';
+                const yearText = document.createElement('div');
+                yearText.textContent = `${year}`;
+                yearCellContent.appendChild(yearText);
+                
+                // 元号表示
+                if (showEra) {
+                    const eras = getEras(year);
+                    if (eras.length > 0) {
+                        const eraText = document.createElement('div');
+                        eraText.className = 'chronicle-table__era-text';
+                        eraText.textContent = eras.map(e => `${e.name}${e.year}`).join(' · ');
+                        yearCellContent.appendChild(eraText);
+                    }
+                }
+                
+                yearCell.appendChild(yearCellContent);
+                row.appendChild(yearCell);
+                
+                // 各サブカテゴリのセル
+                subcategories.forEach(({ category, subcategory }) => {
+                    const cell = document.createElement('td');
+                    cell.className = 'chronicle-table__subcategory-cell';
+                    cell.setAttribute('data-category', category);
+                    cell.setAttribute('data-subcategory', subcategory);
+                    
+                    // 該当年のイベントを取得
+                    let yearEvents = allEvents.filter(event => {
+                        const eventDate = new Date(event.date);
+                        return eventDate.getFullYear() === year &&
+                               event.category === category &&
+                               event.subcategory === subcategory;
+                    });
+                    
+                    // タグでフィルタリング
+                    if (selectedTags.size > 0) {
+                        yearEvents = yearEvents.filter(event => {
+                            if (!event.tags || event.tags.length === 0) return false;
+                            return Array.from(selectedTags).some(tag => event.tags.includes(tag));
+                        });
+                    }
+                    
+                    if (yearEvents.length > 0) {
+                        const eventsDiv = document.createElement('div');
+                        eventsDiv.className = 'chronicle-table__events';
+                        
+                        yearEvents.forEach(eventData => {
+                            const event = createEventElement(eventData);
+                            eventsDiv.appendChild(event);
+                        });
+                        
+                        cell.appendChild(eventsDiv);
+                    }
+                    
+                    row.appendChild(cell);
+                });
+                
+                tableBody.appendChild(row);
+            }
+            
+            // 年行の参照を更新
+            const newYearRows = tableBody.querySelectorAll('.chronicle-table__year-row');
+            yearRows = newYearRows;
+            
+            // 年齢表示を更新
+            updateAgeDisplay();
+            
+            // リサイズ機能を再初期化（テーブルが完全に再構築された後に実行）
+            setTimeout(function() {
+                if (window.initColumnResize) {
+                    window.initColumnResize();
+                }
+                // タグにクリックイベントを追加
+                setupTagClickEvents();
+                // 年齢表示を更新
+                updateAgeDisplay();
+            }, 100);
+        }
+
+        function rebuildTableForMonthlyView() {
+            const startYear = parseInt(tocStartYearInput.value);
+            const endYear = parseInt(tocEndYearInput.value);
+            
+            // ヘッダーの「年」ラベルを「年月」に更新
+            const yearHeader = table.querySelector('.chronicle-table__year-header');
+            if (yearHeader) {
+                yearHeader.textContent = '年月';
+            }
+            
+            const showEra = eraDisplayCheckbox.checked;
+            
+            // 既存のtbodyをクリア
+            tableBody.innerHTML = '';
+            
+            // サブカテゴリのヘッダーを取得
+            const subcategoryHeaders = table.querySelectorAll('.chronicle-table__subcategory-header');
+            let subcategories = [];
+            
+            // タグが選択されている場合は、タグに該当する記事があるサブカテゴリだけを表示
+            if (selectedTags.size > 0) {
+                const visibleSubcategoriesForTags = new Set();
+                allEvents.forEach(event => {
+                    if (event.tags && event.tags.length > 0) {
+                        const hasSelectedTag = Array.from(selectedTags).some(tag => event.tags.includes(tag));
+                        if (hasSelectedTag && event.category && event.subcategory) {
+                            const key = `${event.category}|${event.subcategory}`;
+                            visibleSubcategoriesForTags.add(key);
+                        }
+                    }
+                });
+                
+                subcategoryHeaders.forEach(header => {
+                    const category = header.getAttribute('data-category');
+                    const subcategory = header.getAttribute('data-subcategory');
+                    const key = `${category}|${subcategory}`;
+                    if (visibleSubcategoriesForTags.has(key)) {
+                        subcategories.push({ category, subcategory });
+                    }
+                });
+            } else {
+                // タグが選択されていない場合は、通常のvisibleSubcategoriesを使用
+                subcategoryHeaders.forEach(header => {
+                    const category = header.getAttribute('data-category');
+                    const subcategory = header.getAttribute('data-subcategory');
+                    const key = `${category}|${subcategory}`;
+                    if (visibleSubcategories.has(key)) {
+                        subcategories.push({ category, subcategory });
+                    }
+                });
+            }
+
+            // 年月ごとに行を作成
+            let prevYear = null;
+            let prevMonth = null;
+            for (let year = startYear; year <= endYear; year++) {
+                for (let month = 1; month <= 12; month++) {
+                    const row = document.createElement('tr');
+                    row.className = 'chronicle-table__year-row';
+                    row.setAttribute('data-year', year);
+                    row.setAttribute('data-month', month);
+                    
+                    // 同じ年の中の月と月の間は点線にする（年が変わったとき（12月→1月）は実線）
+                    // 12月の行には点線クラスを追加しない（12月と1月の間を実線にするため）
+                    // それ以外の月（1月〜11月）には点線クラスを追加する
+                    if (month !== 12) {
+                        row.classList.add('chronicle-table__month-row');
+                    }
+                    
+                    prevYear = year;
+                    prevMonth = month;
+                    
+                    // 年月セル
+                    const yearMonthCell = document.createElement('td');
+                    yearMonthCell.className = 'chronicle-table__year-cell';
+                    const yearMonthCellContent = document.createElement('div');
+                    yearMonthCellContent.className = 'chronicle-table__year-content';
+                    const yearMonthText = document.createElement('div');
+                    yearMonthText.textContent = `${year}/${String(month).padStart(2, '0')}`;
+                    yearMonthCellContent.appendChild(yearMonthText);
+                    
+                    // 元号表示
+                    if (showEra) {
+                        const eras = getEras(year, month);
+                        if (eras.length > 0) {
+                            const eraText = document.createElement('div');
+                            eraText.className = 'chronicle-table__era-text';
+                            eraText.textContent = eras.map(e => `${e.name}${e.year}`).join(' · ');
+                            yearMonthCellContent.appendChild(eraText);
+                        }
+                    }
+                    
+                    yearMonthCell.appendChild(yearMonthCellContent);
+                    row.appendChild(yearMonthCell);
+                    
+                    // 各サブカテゴリのセル
+                    subcategories.forEach(({ category, subcategory }) => {
+                        const cell = document.createElement('td');
+                        cell.className = 'chronicle-table__subcategory-cell';
+                        cell.setAttribute('data-category', category);
+                        cell.setAttribute('data-subcategory', subcategory);
+                        
+                        // 該当月のイベントを取得
+                        let monthEvents = allEvents.filter(event => {
+                            const eventDate = new Date(event.date);
+                            const eventYear = eventDate.getFullYear();
+                            const eventMonth = eventDate.getMonth() + 1;
+                            const eventPrecision = event.datePrecision || 'day';
+                            
+                            // 年のみの記事（date_precision: "year"）は、その年の1月に表示
+                            if (eventPrecision === 'year') {
+                                return eventYear === year && 
+                                       month === 1 &&
+                                       event.category === category &&
+                                       event.subcategory === subcategory;
+                            }
+                            
+                            // 年月または年月日の記事は、年と月が一致するものを表示
+                            return eventYear === year && 
+                                   eventMonth === month &&
+                                   event.category === category &&
+                                   event.subcategory === subcategory;
+                        });
+                        
+                        // タグでフィルタリング
+                        if (selectedTags.size > 0) {
+                            monthEvents = monthEvents.filter(event => {
+                                if (!event.tags || event.tags.length === 0) return false;
+                                return Array.from(selectedTags).some(tag => event.tags.includes(tag));
+                            });
+                        }
+                        
+                        if (monthEvents.length > 0) {
+                            const eventsDiv = document.createElement('div');
+                            eventsDiv.className = 'chronicle-table__events';
+                            
+                            monthEvents.forEach(eventData => {
+                                const event = createEventElement(eventData);
+                                eventsDiv.appendChild(event);
+                            });
+                            
+                            cell.appendChild(eventsDiv);
+                        }
+                        
+                        row.appendChild(cell);
+                    });
+                    
+                    // 期間内の行は常に表示
+                    tableBody.appendChild(row);
+                }
+            }
+            
+            // 年行の参照を更新
+            const newYearRows = tableBody.querySelectorAll('.chronicle-table__year-row');
+            yearRows = newYearRows;
+            
+            // 年齢表示を更新
+            updateAgeDisplay();
+            
+            // リサイズ機能を再初期化（テーブルが完全に再構築された後に実行）
+            setTimeout(function() {
+                if (window.initColumnResize) {
+                    window.initColumnResize();
+                }
+                // タグにクリックイベントを追加
+                setupTagClickEvents();
+                // イベントカードにクリックイベントを追加
+                if (window.setupEventCardClickEvents) {
+                    setupEventCardClickEvents();
+                }
+                // 年齢表示を更新
+                updateAgeDisplay();
+            }, 100);
+        }
+
+        function createEventElement(eventData) {
+            const event = document.createElement('article');
+            event.className = 'chronicle-event';
+            event.setAttribute('data-date', eventData.date);
+            if (eventData.category) {
+                event.setAttribute('data-category', eventData.category);
+            }
+            if (eventData.subcategory) {
+                event.setAttribute('data-subcategory', eventData.subcategory);
+            }
+            if (eventData.tags && eventData.tags.length > 0) {
+                event.setAttribute('data-tags', eventData.tags.join(' '));
+            }
+            
+            // 発生日と年齢を同じ行に表示（1989/12/12 · n歳）
+            const dateAgeDiv = document.createElement('div');
+            dateAgeDiv.className = 'chronicle-event__date-age';
+            
+            // 発生日をdate_precisionに基づいてフォーマット
+            if (eventData.date) {
+                const dateObj = new Date(eventData.date);
+                const year = dateObj.getFullYear();
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const day = String(dateObj.getDate()).padStart(2, '0');
+                
+                const precision = eventData.datePrecision || 'day';
+                let dateText;
+                
+                if (precision === 'year') {
+                    dateText = `${year}`;
+                } else if (precision === 'month') {
+                    dateText = `${year}/${month}`;
+                } else {
+                    dateText = `${year}/${month}/${day}`;
+                }
+                
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'chronicle-event__date';
+                dateSpan.textContent = dateText;
+                dateAgeDiv.appendChild(dateSpan);
+                
+                // 区切り文字
+                const separator = document.createElement('span');
+                separator.textContent = ' · ';
+                dateAgeDiv.appendChild(separator);
+            }
+            
+            // 年齢
+            const ageSpan = document.createElement('span');
+            ageSpan.className = 'chronicle-event__user-age';
+            // 年齢を即座に計算して設定
+            const birthYear = parseInt(tocBirthYearInput.value);
+            const birthMonth = parseInt(tocBirthMonthInput.value);
+            if (birthYear && birthMonth && eventData.date) {
+                const ageText = calculateAge(eventData.date, birthYear, birthMonth);
+                ageSpan.textContent = ageText;
+            }
+            dateAgeDiv.appendChild(ageSpan);
+            
+            event.appendChild(dateAgeDiv);
+            
+            // タイトル
+            const title = document.createElement('h3');
+            title.className = 'chronicle-event__title';
+            title.textContent = eventData.title;
+            event.appendChild(title);
+            
+            // 説明
+            if (eventData.description) {
+                const description = document.createElement('div');
+                description.className = 'chronicle-event__description';
+                description.textContent = eventData.description;
+                event.appendChild(description);
+            } else if (eventData.content) {
+                const description = document.createElement('div');
+                description.className = 'chronicle-event__description';
+                description.innerHTML = eventData.content;
+                event.appendChild(description);
+            }
+            
+            // タグ
+            if (eventData.tags && eventData.tags.length > 0) {
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'chronicle-event__tags';
+                
+                // タグ要素を作成（HTMLから読み込むか、新規作成）
+                let tagSpans = [];
+                if (eventData.tagsHTML) {
+                    tagsDiv.innerHTML = eventData.tagsHTML;
+                    tagSpans = Array.from(tagsDiv.querySelectorAll('.tag[data-tag]'));
+                } else {
+                    eventData.tags.forEach(tag => {
+                        const tagSpan = document.createElement('span');
+                        tagSpan.className = 'tag';
+                        tagSpan.setAttribute('data-tag', tag);
+                        tagSpan.textContent = tag;
+                        tagsDiv.appendChild(tagSpan);
+                        tagSpans.push(tagSpan);
+                    });
+                }
+                
+                // すべてのタグにクリックイベントを追加（統一された処理）
+                tagSpans.forEach(tagSpan => {
+                    // 既にイベントリスナーが追加されている場合はスキップ
+                    if (tagSpan.hasAttribute('data-click-handled')) {
+                        return;
+                    }
+                    tagSpan.setAttribute('data-click-handled', 'true');
+                    tagSpan.style.cursor = 'pointer';
+                    
+                    // 選択されているタグに一致する場合はactiveクラスを追加
+                    const tag = tagSpan.getAttribute('data-tag');
+                    if (tag && selectedTags.has(tag)) {
+                        tagSpan.classList.add('active');
+                    }
+                    
+                    tagSpan.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const clickedTag = this.getAttribute('data-tag');
+                        if (!clickedTag) return;
+                        
+                        // タグの選択状態をトグル
+                        if (selectedTags.has(clickedTag)) {
+                            selectedTags.delete(clickedTag);
+                        } else {
+                            selectedTags.add(clickedTag);
+                        }
+                        
+                        // タグに該当する記事のサブカテゴリを収集
+                        const visibleSubcategoriesForTags = new Set();
+                        if (selectedTags.size > 0) {
+                            allEvents.forEach(event => {
+                                if (event.tags && event.tags.length > 0) {
+                                    const hasSelectedTag = Array.from(selectedTags).some(t => event.tags.includes(t));
+                                    if (hasSelectedTag && event.category && event.subcategory) {
+                                        const key = `${event.category}|${event.subcategory}`;
+                                        visibleSubcategoriesForTags.add(key);
+                                    }
+                                }
+                            });
+                            visibleSubcategories = visibleSubcategoriesForTags;
+                        } else {
+                            // タグがすべて解除された場合は、すべてのサブカテゴリを表示
+                            allEvents.forEach(event => {
+                                if (event.category && event.subcategory) {
+                                    const key = `${event.category}|${event.subcategory}`;
+                                    visibleSubcategories.add(key);
+                                }
+                            });
+                        }
+                        
+                        // カテゴリ・サブカテゴリの選択を解除
+                        categoryCheckboxes.forEach(cb => cb.checked = false);
+                        subcategoryCheckboxes.forEach(cb => cb.checked = false);
+                        
+                        // UIを更新
+                        updateCheckboxStates();
+                        updateSubcategoryVisibility();
+                        updateTagActiveStates();
+                        filterTable();
+                    });
+                });
+                
+                event.appendChild(tagsDiv);
+            }
+            
+            // カードクリックイベント（タグクリック時は除く）
+            event.style.cursor = 'pointer';
+            event.addEventListener('click', function(e) {
+                // タグがクリックされた場合はモーダルを開かない
+                if (e.target.closest('.tag')) {
+                    return;
+                }
+                
+                // イベントデータを取得
+                const clickedEvent = allEvents.find(ev => 
+                    ev.date === eventData.date && 
+                    ev.category === eventData.category && 
+                    ev.subcategory === eventData.subcategory &&
+                    ev.title === eventData.title
+                );
+                
+                if (clickedEvent) {
+                    openModal(clickedEvent);
+                }
+            });
+            
+            return event;
+        }
+
+        // モーダルを開く関数
+        function openModal(eventData) {
+            const modal = document.getElementById('chronicle-modal');
+            const modalBody = document.getElementById('chronicle-modal-body');
+            
+            // モーダルのコンテンツを構築
+            const birthYear = parseInt(tocBirthYearInput.value);
+            const birthMonth = parseInt(tocBirthMonthInput.value);
+            let ageText = '';
+            if (birthYear && birthMonth && eventData.date) {
+                ageText = calculateAge(eventData.date, birthYear, birthMonth);
+            }
+            
+            // 日付をフォーマット
+            const dateObj = new Date(eventData.date);
+            const year = dateObj.getFullYear();
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            
+            const precision = eventData.datePrecision || 'day';
+            let dateText;
+            if (precision === 'year') {
+                dateText = `${year}`;
+            } else if (precision === 'month') {
+                dateText = `${year}/${month}`;
+            } else {
+                dateText = `${year}/${month}/${day}`;
+            }
+            
+            // 記事コンテンツを構築
+            let contentHTML = `
+                <article class="article-item">
+                    <div class="article-header">
+                        <p class="date">${dateText} · ${ageText}</p>
+                        <h1>${eventData.title}</h1>
+            `;
+            
+            if (eventData.tags && eventData.tags.length > 0) {
+                contentHTML += '<div class="article-header__tags">';
+                eventData.tags.forEach(tag => {
+                    const isActive = selectedTags.has(tag) ? 'active' : '';
+                    contentHTML += `<span class="tag ${isActive}" data-tag="${tag}">${tag}</span>`;
+                });
+                contentHTML += '</div>';
+            }
+            
+            contentHTML += '</div>';
+            
+            // 本文を追加
+            if (eventData.content) {
+                // コンテンツは既にHTMLとして保存されているので、そのまま使用
+                contentHTML += `<div class="article-content">${eventData.content}</div>`;
+            } else if (eventData.description) {
+                contentHTML += `<div class="article-content"><p>${eventData.description}</p></div>`;
+            }
+            
+            contentHTML += '</article>';
+            
+            modalBody.innerHTML = contentHTML;
+            modal.classList.add('chronicle-modal--open');
+            document.body.style.overflow = 'hidden';
+            
+            // モーダル内のタグにクリックイベントを追加
+            const modalTags = modalBody.querySelectorAll('.tag[data-tag]');
+            modalTags.forEach(tagSpan => {
+                tagSpan.style.cursor = 'pointer';
+                tagSpan.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const clickedTag = this.getAttribute('data-tag');
+                    if (!clickedTag) return;
+                    
+                    // 既にactiveなタグをクリックした場合は選択を解除
+                    if (selectedTags.has(clickedTag)) {
+                        selectedTags.delete(clickedTag);
+                        
+                        // タグがすべて解除された場合は、すべてのサブカテゴリを表示
+                        if (selectedTags.size === 0) {
+                            allEvents.forEach(event => {
+                                if (event.category && event.subcategory) {
+                                    const key = `${event.category}|${event.subcategory}`;
+                                    visibleSubcategories.add(key);
+                                }
+                            });
+                        } else {
+                            // 残りのタグに該当する記事のサブカテゴリを収集
+                            const visibleSubcategoriesForTags = new Set();
+                            allEvents.forEach(event => {
+                                if (event.tags && event.tags.length > 0) {
+                                    const hasSelectedTag = Array.from(selectedTags).some(t => event.tags.includes(t));
+                                    if (hasSelectedTag && event.category && event.subcategory) {
+                                        const key = `${event.category}|${event.subcategory}`;
+                                        visibleSubcategoriesForTags.add(key);
+                                    }
+                                }
+                            });
+                            visibleSubcategories = visibleSubcategoriesForTags;
+                        }
+                    } else {
+                        // タグを選択状態にする
+                        selectedTags.clear();
+                        selectedTags.add(clickedTag);
+                        
+                        // タグに該当する記事のサブカテゴリを収集
+                        const visibleSubcategoriesForTags = new Set();
+                        allEvents.forEach(event => {
+                            if (event.tags && event.tags.length > 0) {
+                                const hasSelectedTag = Array.from(selectedTags).some(t => event.tags.includes(t));
+                                if (hasSelectedTag && event.category && event.subcategory) {
+                                    const key = `${event.category}|${event.subcategory}`;
+                                    visibleSubcategoriesForTags.add(key);
+                                }
+                            }
+                        });
+                        visibleSubcategories = visibleSubcategoriesForTags;
+                    }
+                    
+                    // カテゴリ・サブカテゴリの選択を解除
+                    categoryCheckboxes.forEach(cb => cb.checked = false);
+                    subcategoryCheckboxes.forEach(cb => cb.checked = false);
+                    
+                    // UIを更新
+                    updateCheckboxStates();
+                    updateSubcategoryVisibility();
+                    updateTagActiveStates();
+                    
+                    // モーダルを閉じる
+                    closeModal();
+                    
+                    // テーブルを更新
+                    filterTable();
+                });
+            });
+        }
+
+        // モーダルを閉じる関数
+        function closeModal() {
+            const modal = document.getElementById('chronicle-modal');
+            modal.classList.remove('chronicle-modal--open');
+            document.body.style.overflow = '';
+        }
+
+        // モーダルのイベントリスナー
+        const modalOverlay = document.getElementById('chronicle-modal-overlay');
+        const modalClose = document.getElementById('chronicle-modal-close');
+        
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', closeModal);
+        }
+        if (modalClose) {
+            modalClose.addEventListener('click', closeModal);
+        }
+        
+        // ESCキーでモーダルを閉じる
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('chronicle-modal');
+                if (modal && modal.classList.contains('chronicle-modal--open')) {
+                    closeModal();
+                }
+            }
+        });
+
+        // Birth設定の変更
+        tocBirthYearInput.addEventListener('change', function() {
+            updateAgeDisplay();
+            filterTable();
+        });
+        tocBirthMonthInput.addEventListener('change', function() {
+            updateAgeDisplay();
+            filterTable();
+        });
+
+        // 年代範囲の変更
+        tocStartYearInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value && value < minYear) {
+                this.value = minYear;
+            }
+            validateYearRange();
+            // タグが選択されていない場合、または月単位表示の場合は常にテーブルを更新
+            if (selectedTags.size === 0 || monthlyViewCheckbox.checked) {
+                filterTable();
+            }
+        });
+        tocStartYearInput.addEventListener('change', function() {
+            const value = parseInt(this.value);
+            if (value && value < minYear) {
+                this.value = minYear;
+            }
+            validateYearRange();
+            // タグが選択されていない場合、または月単位表示の場合は常にテーブルを更新
+            if (selectedTags.size === 0 || monthlyViewCheckbox.checked) {
+                filterTable();
+            }
+        });
+        tocEndYearInput.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value && value < minYear) {
+                this.value = minYear;
+            }
+            validateYearRange();
+            // タグが選択されていない場合、または月単位表示の場合は常にテーブルを更新
+            if (selectedTags.size === 0 || monthlyViewCheckbox.checked) {
+                filterTable();
+            }
+        });
+        tocEndYearInput.addEventListener('change', function() {
+            const value = parseInt(this.value);
+            if (value && value < minYear) {
+                this.value = minYear;
+            }
+            validateYearRange();
+            // タグが選択されていない場合、または月単位表示の場合は常にテーブルを更新
+            if (selectedTags.size === 0 || monthlyViewCheckbox.checked) {
+                filterTable();
+            }
+        });
+
+        // カテゴリチェックボックスの変更
+        categoryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const category = this.getAttribute('data-category');
+                const subcategories = this.getAttribute('data-subcategories').split(',');
+                
+                if (this.checked) {
+                    // カテゴリをチェックしたら、そのカテゴリの全サブカテゴリをチェック
+                    subcategories.forEach(sub => {
+                        const key = `${category}|${sub}`;
+                        visibleSubcategories.add(key);
+                    });
+                } else {
+                    // カテゴリのチェックを外したら、そのカテゴリの全サブカテゴリのチェックを外す
+                    subcategories.forEach(sub => {
+                        const key = `${category}|${sub}`;
+                        visibleSubcategories.delete(key);
+                    });
+                }
+                
+                // タグの選択を解除
+                selectedTags.clear();
+                tagCheckboxes.forEach(cb => cb.checked = false);
+                
+                updateCheckboxStates();
+                updateSubcategoryVisibility();
+                filterTable();
+                // フォーカスを外す
+                this.blur();
+            });
+        });
+
+        // サブカテゴリチェックボックスの変更
+        subcategoryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const category = this.getAttribute('data-category');
+                const subcategory = this.getAttribute('data-subcategory');
+                const key = `${category}|${subcategory}`;
+                
+                if (this.checked) {
+                    visibleSubcategories.add(key);
+                } else {
+                    visibleSubcategories.delete(key);
+                }
+                
+                // 親カテゴリのチェック状態を更新
+                const categoryCheckbox = document.querySelector(`.chronicle-filters__category-checkbox[data-category="${category}"]`);
+                if (categoryCheckbox) {
+                    const subcategories = categoryCheckbox.getAttribute('data-subcategories').split(',');
+                    const allChecked = subcategories.every(sub => {
+                        const subKey = `${category}|${sub}`;
+                        return visibleSubcategories.has(subKey);
+                    });
+                    categoryCheckbox.checked = allChecked && subcategories.length > 0;
+                }
+                
+                // タグの選択を解除
+                selectedTags.clear();
+                tagCheckboxes.forEach(cb => cb.checked = false);
+                
+                updateCheckboxStates();
+                updateSubcategoryVisibility();
+                filterTable();
+                // フォーカスを外す
+                this.blur();
+            });
+        });
+
+        // タグチェックボックスの変更
+        tagCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const tag = this.getAttribute('data-tag');
+                
+                if (this.checked) {
+                    selectedTags.add(tag);
+                    // タグを選択したら、カテゴリ・サブカテゴリの選択を解除
+                    visibleSubcategories.clear();
+                    categoryCheckboxes.forEach(cb => cb.checked = false);
+                    subcategoryCheckboxes.forEach(cb => cb.checked = false);
+                } else {
+                    selectedTags.delete(tag);
+                }
+                
+                // タグが選択されている場合は、タグに該当する記事のサブカテゴリをvisibleSubcategoriesに追加
+                if (selectedTags.size > 0) {
+                    const visibleSubcategoriesForTags = new Set();
+                    allEvents.forEach(event => {
+                        if (event.tags && event.tags.length > 0) {
+                            const hasSelectedTag = Array.from(selectedTags).some(tag => event.tags.includes(tag));
+                            if (hasSelectedTag && event.category && event.subcategory) {
+                                const key = `${event.category}|${event.subcategory}`;
+                                visibleSubcategoriesForTags.add(key);
+                            }
+                        }
+                    });
+                    // visibleSubcategoriesを更新
+                    visibleSubcategories = visibleSubcategoriesForTags;
+                }
+                
+                updateCheckboxStates();
+                updateSubcategoryVisibility();
+                filterTable();
+                // フォーカスを外す
+                this.blur();
+            });
+        });
+
+        // タグの選択を解除ボタン
+        clearTagsBtn.addEventListener('click', function() {
+            selectedTags.clear();
+            tagCheckboxes.forEach(cb => cb.checked = false);
+            updateCheckboxStates();
+            filterTable();
+        });
+
+        // 月単位チェックボックスの変更
+        monthlyViewCheckbox.addEventListener('change', function() {
+            filterTable();
+            // フォーカスを外す
+            this.blur();
+        });
+
+        // 元号表示チェックボックスの変更
+        eraDisplayCheckbox.addEventListener('change', function() {
+            filterTable();
+            // フォーカスを外す
+            this.blur();
+        });
+
+        // ブラウザの戻る/進むボタンに対応
+        window.addEventListener('popstate', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlBirthYear = urlParams.get('birthYear');
+            const urlBirthMonth = urlParams.get('birthMonth');
+            const urlStartYear = urlParams.get('start');
+            const urlEndYear = urlParams.get('end');
+            const urlSubcategories = urlParams.get('subcategories');
+            const urlTags = urlParams.get('tags');
+            const urlMonthlyView = urlParams.get('monthlyView');
+            const urlEraDisplay = urlParams.get('eraDisplay');
+            
+            if (urlBirthYear) tocBirthYearInput.value = urlBirthYear;
+            if (urlBirthMonth) tocBirthMonthInput.value = urlBirthMonth;
+            if (urlStartYear) tocStartYearInput.value = urlStartYear;
+            if (urlEndYear) tocEndYearInput.value = urlEndYear;
+            if (urlMonthlyView === 'true') {
+                monthlyViewCheckbox.checked = true;
+            } else {
+                monthlyViewCheckbox.checked = false;
+            }
+            if (urlEraDisplay === 'true') {
+                eraDisplayCheckbox.checked = true;
+            } else {
+                eraDisplayCheckbox.checked = false;
+            }
+            if (urlSubcategories) {
+                visibleSubcategories = new Set(urlSubcategories.split(','));
+            }
+            if (urlTags) {
+                selectedTags = new Set(urlTags.split(','));
+            } else {
+                selectedTags.clear();
+            }
+            
+            updateCheckboxStates();
+            updateSubcategoryVisibility();
+            updateAgeDisplay();
+            filterTable();
+        });
+
+        // 初期状態の設定
+        updateCheckboxStates();
+        updateSubcategoryVisibility();
+        updateAgeDisplay();
+        // 初期表示時は常にfilterTable()を実行（デフォルトで全てのカテゴリが表示される）
+        // 初期表示時はURLを更新しない（updateURL=false）
+        filterTable(false);
+        // 初期表示フラグを解除（次回以降はURLを更新する）
+        isInitialLoad = false;
+        
+        // 初期表示のタグにクリックイベントを追加（既存のタグ要素用）
+        function setupTagClickEvents() {
+            const tagSpans = document.querySelectorAll('.chronicle-event__tags .tag[data-tag]');
+            tagSpans.forEach(tagSpan => {
+                // 既にイベントリスナーが追加されている場合はスキップ
+                if (tagSpan.hasAttribute('data-click-handled')) {
+                    return;
+                }
+                tagSpan.setAttribute('data-click-handled', 'true');
+                tagSpan.style.cursor = 'pointer';
+                
+                // 選択されているタグに一致する場合はactiveクラスを追加
+                const tag = tagSpan.getAttribute('data-tag');
+                if (tag && selectedTags.has(tag)) {
+                    tagSpan.classList.add('active');
+                }
+                
+                tagSpan.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const clickedTag = this.getAttribute('data-tag');
+                    if (!clickedTag) return;
+                    
+                    // タグの選択状態をトグル
+                    if (selectedTags.has(clickedTag)) {
+                        selectedTags.delete(clickedTag);
+                    } else {
+                        selectedTags.add(clickedTag);
+                    }
+                    
+                    // タグに該当する記事のサブカテゴリを収集
+                    const visibleSubcategoriesForTags = new Set();
+                    if (selectedTags.size > 0) {
+                        allEvents.forEach(event => {
+                            if (event.tags && event.tags.length > 0) {
+                                const hasSelectedTag = Array.from(selectedTags).some(t => event.tags.includes(t));
+                                if (hasSelectedTag && event.category && event.subcategory) {
+                                    const key = `${event.category}|${event.subcategory}`;
+                                    visibleSubcategoriesForTags.add(key);
+                                }
+                            }
+                        });
+                        visibleSubcategories = visibleSubcategoriesForTags;
+                    } else {
+                        // タグがすべて解除された場合は、すべてのサブカテゴリを表示
+                        allEvents.forEach(event => {
+                            if (event.category && event.subcategory) {
+                                const key = `${event.category}|${event.subcategory}`;
+                                visibleSubcategories.add(key);
+                            }
+                        });
+                    }
+                    
+                    // カテゴリ・サブカテゴリの選択を解除
+                    categoryCheckboxes.forEach(cb => cb.checked = false);
+                    subcategoryCheckboxes.forEach(cb => cb.checked = false);
+                    
+                    // UIを更新
+                    updateCheckboxStates();
+                    updateSubcategoryVisibility();
+                    updateTagActiveStates();
+                    filterTable();
+                });
+            });
+        }
+        
+        // 初期表示のタグにクリックイベントを追加
+        setupTagClickEvents();
+        
+        // 既存のイベントカードにクリックイベントを追加
+        function setupEventCardClickEvents() {
+            const eventCards = document.querySelectorAll('.chronicle-event');
+            eventCards.forEach(card => {
+                // 既にイベントリスナーが追加されている場合はスキップ
+                if (card.hasAttribute('data-card-click-handled')) {
+                    return;
+                }
+                card.setAttribute('data-card-click-handled', 'true');
+                card.style.cursor = 'pointer';
+                
+                card.addEventListener('click', function(e) {
+                    // タグがクリックされた場合はモーダルを開かない
+                    if (e.target.closest('.tag')) {
+                        return;
+                    }
+                    
+                    // イベントデータを取得
+                    const eventDate = card.getAttribute('data-date');
+                    const category = card.getAttribute('data-category');
+                    const subcategory = card.getAttribute('data-subcategory');
+                    const title = card.getAttribute('data-title') || card.querySelector('.chronicle-event__title')?.textContent;
+                    
+                    const clickedEvent = allEvents.find(ev => 
+                        ev.date === eventDate && 
+                        ev.category === category && 
+                        ev.subcategory === subcategory &&
+                        ev.title === title
+                    );
+                    
+                    if (clickedEvent) {
+                        openModal(clickedEvent);
+                    }
+                });
+            });
+        }
+        
+        // 既存のイベントカードにクリックイベントを追加
+        setupEventCardClickEvents();
+
+        // カラムリサイズ機能
+        (function() {
+            let isResizing = false;
+            let currentColumn = null;
+            let startX = 0;
+            let startWidth = 0;
+            let currentHeader = null;
+            const minWidth = 200;
+            
+            // グローバルなマウス移動ハンドラー
+            function handleMouseMove(e) {
+                if (!isResizing || currentColumn === null || !currentHeader) return;
+                
+                const diff = e.clientX - startX;
+                const newWidth = Math.max(minWidth, startWidth + diff);
+                
+                // ヘッダーの幅を更新
+                currentHeader.style.width = newWidth + 'px';
+                currentHeader.style.minWidth = newWidth + 'px';
+                
+                // 対応するセルの幅も更新
+                const headerRow = table.querySelector('thead tr');
+                const allHeaders = Array.from(headerRow.querySelectorAll('th'));
+                const columnIndex = allHeaders.indexOf(currentHeader);
+                
+                if (columnIndex !== -1) {
+                    const targetCells = table.querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
+                    targetCells.forEach(cell => {
+                        cell.style.width = newWidth + 'px';
+                        cell.style.minWidth = newWidth + 'px';
+                    });
+                }
+            }
+            
+            // グローバルなマウスアップハンドラー
+            function handleMouseUp() {
+                if (isResizing) {
+                    isResizing = false;
+                    const allHandles = table.querySelectorAll('.resize-handle.resizing');
+                    allHandles.forEach(h => h.classList.remove('resizing'));
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                    currentColumn = null;
+                    currentHeader = null;
+                }
+            }
+            
+            // グローバルイベントリスナーを設定（一度だけ）
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            
+            // リサイズ開始
+            function handleMouseDown(e, header, columnIndex) {
+                console.log('handleMouseDown called', columnIndex);
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                isResizing = true;
+                currentColumn = columnIndex;
+                currentHeader = header;
+                startX = e.clientX;
+                
+                // ヘッダーの幅を取得（offsetWidthが0の場合はgetComputedStyleから取得）
+                let headerWidth = header.offsetWidth;
+                if (headerWidth === 0) {
+                    const computedStyle = window.getComputedStyle(header);
+                    headerWidth = parseFloat(computedStyle.width) || 200;
+                }
+                startWidth = headerWidth;
+                console.log('Resize started:', { columnIndex, startX, startWidth, headerWidth });
+                
+                const allHandles = table.querySelectorAll(`.resize-handle[data-column="${columnIndex}"]`);
+                allHandles.forEach(h => h.classList.add('resizing'));
+                
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+            }
+            
+            // リサイズ機能を初期化
+            function initColumnResize() {
+                console.log('initColumnResize called');
+                if (!table || !table.querySelector('thead')) {
+                    console.warn('Table not ready');
+                    return;
+                }
+                
+                // 既存のリサイズハンドルを削除
+                const existingHandles = table.querySelectorAll('.resize-handle');
+                console.log('Removing existing handles:', existingHandles.length);
+                existingHandles.forEach(handle => handle.remove());
+                
+                const headers = table.querySelectorAll('.chronicle-table__subcategory-header');
+                console.log('Found headers:', headers.length);
+                const headerRow = table.querySelector('thead tr');
+                const allHeaders = Array.from(headerRow.querySelectorAll('th'));
+                console.log('All headers:', allHeaders.length);
+
+                // 各ヘッダーにリサイズハンドルを追加
+                headers.forEach((header, index) => {
+                    const columnIndex = allHeaders.indexOf(header);
+                    console.log(`Header ${index}: columnIndex=${columnIndex}`);
+                    if (columnIndex === -1) {
+                        console.warn(`Header ${index} not found in allHeaders`);
+                        return;
+                    }
+                    
+                    // ヘッダーにリサイズハンドルを追加
+                    const handle = document.createElement('div');
+                    handle.className = 'resize-handle';
+                    handle.setAttribute('data-column', columnIndex);
+                    handle.style.position = 'absolute';
+                    handle.style.top = '0';
+                    handle.style.right = '-2px';
+                    handle.style.width = '8px';
+                    handle.style.height = '100%';
+                    handle.style.cursor = 'col-resize';
+                    handle.style.background = 'transparent';
+                    handle.style.zIndex = '20';
+                    handle.style.userSelect = 'none';
+                    handle.style.pointerEvents = 'auto';
+                    
+                    handle.addEventListener('mousedown', function(e) {
+                        console.log('Resize handle mousedown event fired', columnIndex);
+                        handleMouseDown(e, header, columnIndex);
+                    });
+                    
+                    // ヘッダーにposition: relativeを設定（リサイズハンドルの配置のため）
+                    // position: stickyでもposition: relativeとして機能するが、明示的に設定
+                    const headerStyle = window.getComputedStyle(header);
+                    if (headerStyle.position !== 'relative' && headerStyle.position !== 'sticky') {
+                        header.style.position = 'relative';
+                    }
+                    
+                    header.appendChild(handle);
+                    console.log(`Added resize handle to header ${index}`);
+                    
+                    // 対応するセルにもリサイズハンドルを追加
+                    const cells = table.querySelectorAll(`tbody tr td:nth-child(${columnIndex + 1})`);
+                    console.log(`Found ${cells.length} cells for column ${columnIndex}`);
+                    cells.forEach((cell, cellIndex) => {
+                        if (cell.classList.contains('chronicle-table__subcategory-cell')) {
+                            // セルにposition: relativeを設定
+                            const cellStyle = window.getComputedStyle(cell);
+                            if (cellStyle.position === 'static') {
+                                cell.style.position = 'relative';
+                            }
+                            
+                            const cellHandle = document.createElement('div');
+                            cellHandle.className = 'resize-handle';
+                            cellHandle.setAttribute('data-column', columnIndex);
+                            cellHandle.style.position = 'absolute';
+                            cellHandle.style.top = '0';
+                            cellHandle.style.right = '-2px';
+                            cellHandle.style.width = '8px';
+                            cellHandle.style.height = '100%';
+                            cellHandle.style.cursor = 'col-resize';
+                            cellHandle.style.background = 'transparent';
+                            cellHandle.style.zIndex = '20';
+                            cellHandle.style.userSelect = 'none';
+                            cellHandle.style.pointerEvents = 'auto';
+                            
+                            cellHandle.addEventListener('mousedown', function(e) {
+                                console.log('Cell resize handle mousedown event fired', columnIndex);
+                                e.preventDefault();
+                                e.stopPropagation();
+                                e.stopImmediatePropagation();
+                                handleMouseDown(e, header, columnIndex);
+                            }, true); // capture phaseでイベントを捕捉
+                            cell.appendChild(cellHandle);
+                            console.log(`Added resize handle to cell ${cellIndex}`);
+                        }
+                    });
+                });
+                
+                console.log('Column resize initialization complete');
+            }
+            
+            // リサイズ機能を初期化
+            window.initColumnResize = initColumnResize;
+            
+            // 初期化を実行
+            setTimeout(function() {
+                initColumnResize();
+            }, 200);
+        })();
+    });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+{{ end }}

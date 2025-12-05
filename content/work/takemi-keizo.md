@@ -3,6 +3,12 @@ title: 参議院議員・たけみ敬三 リーフレット
 date: 2019-03-27T10:22:13.353Z
 slug: takemi-keizo
 image: /images/work/takemi-keizo/17.webp
+start_date: 2019-03-27
+work_category:
+  - graphic
+work_tag:
+  - 紙もの
+  - デザイン
 ---
 Role : Director, DTP Designer
 

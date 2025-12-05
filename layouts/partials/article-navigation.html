@@ -1,0 +1,69 @@
+<div class="article-navigation">
+    <div class="article-navigation__prev">
+        {{ if .PrevInSection }}
+            <a href="{{ .PrevInSection.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">←</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Prev</span>
+                    <span class="article-navigation__title">
+                        {{ if eq .Section "diary" }}
+                            {{ .PrevInSection.Date | dateFormat "Jan 2" }} · {{ .PrevInSection.Date | dateFormat "2006" }}
+                        {{ else }}
+                            {{ .PrevInSection.Title }}
+                        {{ end }}
+                    </span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    
+    <div class="article-navigation__next">
+        {{ if .NextInSection }}
+            <a href="{{ .NextInSection.RelPermalink }}" class="article-navigation__link">
+                <span class="article-navigation__icon">→</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Next</span>
+                    <span class="article-navigation__title">
+                        {{ if eq .Section "diary" }}
+                            {{ .NextInSection.Date | dateFormat "Jan 2" }} · {{ .NextInSection.Date | dateFormat "2006" }}
+                        {{ else }}
+                            {{ .NextInSection.Title }}
+                        {{ end }}
+                    </span>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    
+    <div class="article-navigation__back">
+        {{ $backURL := .Section | printf "/%s/" }}
+        {{ if eq .Section "diary" }}
+            {{/* Diaryセクションの最新月を取得 */}}
+            {{ $diarySection := .Site.GetPage "section" "diary" }}
+            {{ $diaryMonths := slice }}
+            {{ if $diarySection }}
+                {{ range $diarySection.Pages }}
+                    {{ $monthStr := .Date | dateFormat "2006-01" }}
+                    {{ if not (in $diaryMonths $monthStr) }}
+                        {{ $diaryMonths = $diaryMonths | append $monthStr }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+            {{ $sortedDiaryMonths := sort $diaryMonths }}
+            {{ if gt (len $sortedDiaryMonths) 0 }}
+                {{ $diaryLatestMonth := index $sortedDiaryMonths (sub (len $sortedDiaryMonths) 1) }}
+                {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($diaryLatestMonth | urlize) }}
+                {{ if $diaryMonthPage }}
+                    {{ $backURL = $diaryMonthPage.Page.RelPermalink }}
+                {{ end }}
+            {{ end }}
+        {{ else if strings.HasPrefix .RelPermalink "/about/media-coverage/" }}
+            {{/* メディア掲載の詳細ページは /about/media-coverage/ に戻る */}}
+            {{ $backURL = "/about/media-coverage/" }}
+        {{ end }}
+        <a href="{{ $backURL }}" class="article-navigation__link">
+            <span class="article-navigation__title">記事一覧に戻る</span>
+        </a>
+    </div>
+</div>
+

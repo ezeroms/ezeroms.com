@@ -1,0 +1,139 @@
+{{ define "section_header" }}
+    {{ partial "date-selector-nav-tweet.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container tweet-container" id="tweet-list">
+                {{/* Tweetセクションのページのみを表示 */}}
+                {{ range where .Pages "Section" "tweet" }}
+                    <article class="article-item tweet-item">
+                        <div class="tweet-item__bubble">
+                            <div class="tweet-item__text{{ if .Params.voice }} tweet-item__text--{{ .Params.voice }}{{ end }}">{{ .Content }}</div>
+                            <div class="tweet-item__bottom">
+                                {{ if .Params.tweet_tag }}
+                                    <div class="tweet-item__tags">
+                                        {{ $sortedTags := sort .Params.tweet_tag }}
+                                        {{ range $sortedTags }}
+                                            {{ $label := . }}
+                                            {{ $taxonomy := "" }}
+                                            {{ range $term, $pages := $.Site.Taxonomies.tweet_tag }}
+                                                {{ if eq ($term | urlize) ($label | urlize) }}
+                                                    {{ $taxonomy = $pages }}
+                                                {{ end }}
+                                            {{ end }}
+                                            {{ with $taxonomy }}
+                                                <a href="{{ .Page.RelPermalink }}" class="tag">{{ $label }}</a>
+                                            {{ else }}
+                                                <span class="tag">{{ $label }}</span>
+                                            {{ end }}
+                                        {{ end }}
+                                    </div>
+                                {{ end }}
+                                <div class="tweet-item__footer">
+                                    <p class="date tweet-item__date">
+                                        {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}{{ if .Params.tweet_place }} · <a href="/tweet_place/{{ .Params.tweet_place | urlize }}/" class="tweet-item__place-link">{{ .Params.tweet_place }}</a>{{ end }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tweet-item__emoji" aria-label="{{ if .Params.voice }}{{ .Params.voice }}{{ else }}通常の声{{ end }}">{{ if .Params.emoji }}{{ .Params.emoji }}{{ else }}😊{{ end }}</div>
+                        </div>
+                    </article>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelector = document.querySelector('.date-selector-nav__year-selector');
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const monthFilters = document.getElementById('date-selector-nav__month-filters');
+            
+            if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
+                return;
+            }
+            
+            let currentYear = parseInt(yearDisplay.textContent);
+            const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
+            const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
+
+            function updateMonthButtons(year) {
+                // <a>タグと<span>タグの両方を対象にする
+                const buttons = monthFilters.querySelectorAll('a, span');
+                
+                buttons.forEach(btn => {
+                    const btnYear = btn.getAttribute('data-year');
+                    if (btnYear === String(year)) {
+                        // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                            if (newStyle) {
+                                btn.setAttribute('style', newStyle);
+                            } else {
+                                btn.removeAttribute('style');
+                            }
+                        }
+                    } else {
+                        // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (!currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                            btn.setAttribute('style', newStyle);
+                        }
+                    }
+                });
+            }
+
+            function updateYearButtons() {
+                if (currentYear <= minYear) {
+                    prevYearBtn.classList.add('disabled');
+                    prevYearBtn.disabled = true;
+                } else {
+                    prevYearBtn.classList.remove('disabled');
+                    prevYearBtn.disabled = false;
+                }
+                
+                if (currentYear >= maxYear) {
+                    nextYearBtn.classList.add('disabled');
+                    nextYearBtn.disabled = true;
+                } else {
+                    nextYearBtn.classList.remove('disabled');
+                    nextYearBtn.disabled = false;
+                }
+            }
+
+            prevYearBtn.addEventListener('click', function() {
+                if (currentYear > minYear) {
+                    currentYear--;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                if (currentYear < maxYear) {
+                    currentYear++;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
+            });
+
+            // 初期状態で月のボタンと年選択ボタンを更新
+            updateMonthButtons(currentYear);
+            updateYearButtons();
+        });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "tweet_menu.html" . }}
+{{ end }}

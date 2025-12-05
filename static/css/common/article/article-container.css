@@ -3,23 +3,30 @@
 -------------------- */
 
 .article-container {
-  width: 100%;
+  width: 688px;
+  max-width: 100%;
   padding: 0;
   margin: 64px 0 40px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  box-sizing: border-box;
 }
 
-
-/* --------------------
-スマホ用のスタイル
--------------------- */
-@media (max-width: 960px) {
+/* タブレット/スマホ: 幅とマージンの調整 */
+@media (max-width: 1079px) {
   .article-container {
-    margin: 16px 0 40px;
-    width: calc(100dvw - 32px);
-    padding: 0 16px 40px;
-    gap: 16px;
+    width: 100%;
+    margin: var(--spacing-3xl) 0 var(--spacing-2xl);
+    gap: var(--spacing-2xl);
   }
 }
+
+@media (max-width: 767px) {
+  .article-container {
+    margin: var(--spacing-2xl) 0 var(--spacing-xl);
+    gap: var(--spacing-xl);
+  }
+}
+
+

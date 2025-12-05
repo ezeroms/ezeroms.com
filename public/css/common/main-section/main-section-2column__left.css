@@ -44,15 +44,6 @@
 
 
 
-/* --------------------
-スマホ用のスタイル
--------------------- */
-
-@media (max-width: 960px) {
-  .main-section-2column__left {
-    display: none;
-  }
-}
 
 
 
@@ -61,6 +52,13 @@
 /* --------------------
 パソコン用のスタイル
 -------------------- */
+
+/* タブレット/スマホ版: main-section-2column__leftを非表示 */
+@media (max-width: 1079px) {
+  .main-section-2column__left {
+    display: none;
+  }
+}
 
 @media (min-width: 961px) {
   .main-section-2column__left {

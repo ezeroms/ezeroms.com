@@ -1,0 +1,70 @@
+{{ define "section_header" }}
+    {{ partial "column-header-nav.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <div class="article-header">
+                        <p class="date">Column · {{ .Date | dateFormat "Jan 2" }} · {{ .Date | dateFormat "Mon" }} · {{ .Date | dateFormat "2006" }}</p>
+                        <h1>{{ .Title }}</h1>
+                        {{ if .Params.column_tag }}
+                            <div class="article-header__tags">
+                                {{ $sortedTags := sort .Params.column_tag }}
+                                {{ range $sortedTags }}
+                                    <a href="/column_tag/{{ . | urlize }}/" class="tag" data-tag="{{ . }}">{{ . }}</a>
+                                {{ end }}
+                            </div>
+                        {{ end }}
+                    </div>
+                    {{ .Content | replaceRE "<img ([^>]+)>" "<div class=\"image-wrapper\"><img $1 loading=\"lazy\"></div>" | safeHTML }}
+
+                    <div class="social-action">
+                        <div class="social-action__left">
+                            <div class="social-action__line">
+                                <div class="social-action__line-icon"></div>
+                                <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                    このブログの更新通知をLINEで受け取る
+                                </a>
+                            </div>
+                        </div>
+                        <div class="social-action__right">
+                            <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" target="_blank" class="social-action__x" data-show-count="false"></a>
+                            <a href="http://b.hatena.ne.jp/entry/{{ .Permalink }}" target="_blank" class="social-action__hatena"></a>
+                            <a class="social-action__link" onclick="copyToClipboard('{{ .Permalink }}')"></a>
+                            <script>
+                                function copyToClipboard() {
+                                    const url = window.location.href;
+                                    navigator.clipboard.writeText(url).then(function() {
+                                        showNotification();
+                                    }, function(err) {
+                                        console.error('リンクの保存に失敗しました: ', err);
+                                    });
+                                }
+                                function showNotification() {
+                                    var notification = document.getElementById("notification");
+                                    notification.className = "notification show";
+                                    setTimeout(function() {
+                                        notification.className = notification.className.replace(" show", "");
+                                    }, 3000);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </article>
+                
+                {{ partial "article-navigation.html" . }}
+            </ul>
+        </div>
+    </section>
+
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "column_menu.html" . }}
+{{ end }}
+

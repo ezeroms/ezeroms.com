@@ -1,0 +1,7 @@
+<aside class="main-section-2column__left">
+    <ul>
+        {{ range $name, $taxonomy := .Site.Taxonomies.topic }}
+        <li><a href="{{ "/topic/" | relLangURL }}{{ $name | urlize }}">{{ $name }}</a></li>
+        {{ end }}
+    </ul>
+</aside>

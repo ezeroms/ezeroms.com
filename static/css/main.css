@@ -1,14 +1,15 @@
 /* main.css */
+@import url('common/theme.css');
 @import url('common/common.css');
 @import url('common/debug-info.css');
 
 
 @import url('common/header.css');
-@import url('common/sp-global-menu.css');
-
-@import url('common/sp-header.css');
-@import url('common/sp-half-modal.css');
 @import url('common/pagination-buttons.css');
+@import url('common/article-navigation.css');
+@import url('common/date-selector-nav.css');
+
+@import url('common/site-shell.css');
 
 
 /* main-section */
@@ -24,6 +25,7 @@
 @import url('common/article/article-item.css');
 @import url('common/article/article-item-heading.css');
 @import url('common/article/codeblock.css');
+@import url('common/tag.css');
 
 @import url('pages/index.css');
 
@@ -36,3 +38,17 @@
 
 @import url('pages/diary.css');
 @import url('pages/keyword.css');
+@import url('pages/tweet.css');
+@import url('pages/column.css');
+@import url('pages/media-coverage.css');
+@import url('pages/snap.css');
+@import url('pages/top.css');
+@import url('pages/top-mobile.css');
+@import url('pages/giants.css');
+@import url('pages/chronicle.css');
+@import url('pages/chronicle-modal.css');
+@import url('pages/ui-design-guidebook.css');
+
+/* モバイル専用コンポーネント（タブレット/スマホのみ表示） */
+@import url('common/mobile-header.css');
+@import url('common/half-modal.css');

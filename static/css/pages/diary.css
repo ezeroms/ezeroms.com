@@ -1,0 +1,59 @@
+/* Diary専用スタイル */
+
+.diary-item__title-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.diary-item__title-wrapper a {
+    flex: 1;
+}
+
+.diary-item__emoji {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1;
+    vertical-align: baseline;
+}
+
+.article-item .date .diary-item__emoji {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1;
+    vertical-align: baseline;
+}
+
+/* 記事内のタグスタイルは共通クラス（article-tag）で管理 */
+
+/* Diaryのタイトルと補足情報の間のborderを削除 */
+.article-item > h1 + p.date {
+    position: static !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+.article-item > h1 + p.date::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Diaryのarticle-header内のh1の下のマージンを1remに設定 */
+.article-header > h1 {
+    margin-bottom: 1rem;
+}
+
+/* Diaryのarticle-header内の.date要素（"Diary"）の下に1remのマージン */
+.article-header > .date:first-child {
+    margin-bottom: 1rem;
+}
+
+/* Diaryの補足情報とタグリストの間を開ける */
+.article-item > .date + .article-header__tags {
+    margin-top: 1.5rem;
+}
+
+

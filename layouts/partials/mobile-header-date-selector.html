@@ -1,0 +1,287 @@
+{{/* Tweet/Diary用モバイルヘッダー（年月選択） */}}
+{{ $context := .context }}
+{{ $type := .type }}
+{{ $pageContext := $context }}
+
+{{/* セクション情報を取得 */}}
+{{ $sectionName := $type }}
+{{ $section := $pageContext.Site.GetPage "section" $sectionName }}
+
+{{/* すべてのページから存在する月を収集 */}}
+{{ $allMonths := slice }}
+{{ if $section }}
+    {{ range $section.Pages }}
+        {{ $monthStr := .Date | dateFormat "2006-01" }}
+        {{ if not (in $allMonths $monthStr) }}
+            {{ $allMonths = $allMonths | append $monthStr }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ $sortedMonths := sort $allMonths }}
+{{ $latestMonth := "" }}
+{{ if gt (len $sortedMonths) 0 }}
+    {{ $latestMonth = index $sortedMonths (sub (len $sortedMonths) 1) }}
+{{ end }}
+
+{{/* 現在の月を取得 */}}
+{{ $currentMonth := "" }}
+{{ $currentYear := "" }}
+{{ $currentMonthLabel := "" }}
+{{ if $pageContext.IsPage }}
+    {{ $currentMonth = $pageContext.Date | dateFormat "2006-01" }}
+    {{ $currentYear = $pageContext.Date | dateFormat "2006" }}
+    {{ $currentMonthLabel = $pageContext.Date | dateFormat "Jan" }}
+{{ else if hasPrefix $pageContext.RelPermalink (printf "/%s_month/" $type) }}
+    {{ $pathParts := split (trim $pageContext.RelPermalink "/") "/" }}
+    {{ if ge (len $pathParts) 2 }}
+        {{ $monthPart := index $pathParts 1 }}
+        {{ $parts := split $monthPart "-" }}
+        {{ if eq (len $parts) 2 }}
+            {{ $currentMonth = $monthPart }}
+            {{ $currentYear = index $parts 0 }}
+            {{ $monthStr := index $parts 1 }}
+            {{ $monthNum := 0 }}
+            {{ if hasPrefix $monthStr "0" }}
+                {{ $monthNum = int (strings.TrimPrefix "0" $monthStr) }}
+            {{ else }}
+                {{ $monthNum = int $monthStr }}
+            {{ end }}
+            {{ $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" }}
+            {{ $currentMonthLabel = index $months (sub $monthNum 1) }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{/* タグページかどうか */}}
+{{ $isTagPage := false }}
+{{ if hasPrefix $pageContext.RelPermalink (printf "/%s_tag/" $type) }}
+    {{ $isTagPage = true }}
+{{ end }}
+
+{{/* デフォルト値 */}}
+{{ if not $currentYear }}
+    {{ if $latestMonth }}
+        {{ $currentYear = index (split $latestMonth "-") 0 }}
+        {{ if not $isTagPage }}
+            {{ $currentMonthLabel = "最新" }}
+        {{ end }}
+    {{ else }}
+        {{ $currentYear = "2025" }}
+        {{ $currentMonthLabel = "" }}
+    {{ end }}
+{{ end }}
+
+{{/* 年の範囲算出 */}}
+{{ $years := slice }}
+{{ range $sortedMonths }}
+    {{ $year := index (split . "-") 0 }}
+    {{ if not (in $years $year) }}
+        {{ $years = $years | append $year }}
+    {{ end }}
+{{ end }}
+{{ $yearInts := slice }}
+{{ range $years }}
+    {{ $yearInt := int . }}
+    {{ if gt $yearInt 0 }}
+        {{ $yearInts = $yearInts | append $yearInt }}
+    {{ end }}
+{{ end }}
+{{ $sortedYearInts := sort $yearInts }}
+{{ $minYear := 0 }}
+{{ $maxYear := 0 }}
+{{ if gt (len $sortedYearInts) 0 }}
+    {{ $minYear = index $sortedYearInts 0 }}
+    {{ $maxYear = index $sortedYearInts (sub (len $sortedYearInts) 1) }}
+{{ end }}
+
+<div class="mobile-header" id="mobile-header-{{ $type }}">
+    <!-- ハンバーガーメニューボタン（左側） -->
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    <!-- ページタイトル（中央） -->
+    <h2 class="mobile-header__title">
+        {{ $currentYear }}{{ if $currentMonthLabel }} {{ $currentMonthLabel }}{{ end }}
+    </h2>
+    
+    <!-- 年月選択ボタン（右側） -->
+    <button class="mobile-header__button" id="mobile-header-{{ $type }}-btn" aria-label="年月を選択" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+{{/* ハーフモーダル */}}
+<div class="half-modal__overlay" id="half-modal-{{ $type }}-overlay"></div>
+<div class="half-modal" id="half-modal-{{ $type }}">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">年月を選択</h3>
+        <button class="half-modal__close" id="half-modal-{{ $type }}-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        {{/* 年選択セクション */}}
+        <div class="half-modal__year-section">
+            <div class="half-modal__year-selector" data-min-year="{{ $minYear }}" data-max-year="{{ $maxYear }}">
+                <button class="half-modal__year-nav" id="half-modal-{{ $type }}-prev-year" data-type="{{ $type }}" aria-label="前の年">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <span class="half-modal__year-display" id="half-modal-{{ $type }}-year-display">{{ $currentYear }}</span>
+                <button class="half-modal__year-nav" id="half-modal-{{ $type }}-next-year" data-type="{{ $type }}" aria-label="次の年">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
+                        <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        {{/* 月選択グリッド - すべての年の月を生成 */}}
+        <div class="half-modal__grid" id="half-modal-{{ $type }}-month-grid">
+            {{ $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" }}
+            {{ range $yearInt := $sortedYearInts }}
+                {{ $yearStr := printf "%d" $yearInt }}
+                {{ range $index, $label := $months }}
+                    {{ $monthNum := printf "%02d" (add $index 1) }}
+                    {{ $yearMonth := printf "%s-%s" $yearStr $monthNum }}
+                    {{ $hasContent := in $sortedMonths $yearMonth }}
+                    {{ $isActive := false }}
+                    {{ if $currentMonth }}
+                        {{ if eq $yearMonth $currentMonth }}
+                            {{ $isActive = true }}
+                        {{ end }}
+                    {{ end }}
+                    
+                    {{ $monthURL := "" }}
+                    {{ $taxonomyKey := printf "%s_month" $type }}
+                    {{ $monthPage := index $pageContext.Site.Taxonomies $taxonomyKey ($yearMonth | urlize) }}
+                    {{ if $monthPage }}
+                        {{ $monthURL = $monthPage.Page.RelPermalink }}
+                    {{ else if $hasContent }}
+                        {{ $monthURL = printf "/%s_month/%s/" $type ($yearMonth | urlize) }}
+                    {{ end }}
+                    
+                    {{ if $monthURL }}
+                        <div class="half-modal__grid-item">
+                            <a href="{{ $monthURL }}" class="half-modal__grid-link{{ if $isActive }} active{{ end }}{{ if not $hasContent }} disabled{{ end }}" data-year-month="{{ $yearMonth }}" data-year="{{ $yearStr }}">{{ $label }}</a>
+                        </div>
+                    {{ else }}
+                        <div class="half-modal__grid-item">
+                            <span class="half-modal__grid-link{{ if not $hasContent }} disabled{{ end }}" data-year-month="{{ $yearMonth }}" data-year="{{ $yearStr }}">{{ $label }}</span>
+                        </div>
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; // PCでは実行しない
+    
+    const type = "{{ $type }}";
+    const header = document.getElementById('mobile-header-' + type);
+    const button = document.getElementById('mobile-header-' + type + '-btn');
+    const modal = document.getElementById('half-modal-' + type);
+    const overlay = document.getElementById('half-modal-' + type + '-overlay');
+    const closeBtn = document.getElementById('half-modal-' + type + '-close');
+    const yearDisplay = document.getElementById('half-modal-' + type + '-year-display');
+    const prevYearBtn = document.getElementById('half-modal-' + type + '-prev-year');
+    const nextYearBtn = document.getElementById('half-modal-' + type + '-next-year');
+    const monthGrid = document.getElementById('half-modal-' + type + '-month-grid');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthGrid) return;
+    
+    let currentYear = parseInt(yearDisplay.textContent);
+    const minYear = parseInt(prevYearBtn.closest('.half-modal__year-selector').getAttribute('data-min-year')) || currentYear;
+    const maxYear = parseInt(prevYearBtn.closest('.half-modal__year-selector').getAttribute('data-max-year')) || currentYear;
+    
+    function updateYearButtons() {
+        if (currentYear <= minYear) {
+            prevYearBtn.classList.add('disabled');
+            prevYearBtn.disabled = true;
+        } else {
+            prevYearBtn.classList.remove('disabled');
+            prevYearBtn.disabled = false;
+        }
+        
+        if (currentYear >= maxYear) {
+            nextYearBtn.classList.add('disabled');
+            nextYearBtn.disabled = true;
+        } else {
+            nextYearBtn.classList.remove('disabled');
+            nextYearBtn.disabled = false;
+        }
+    }
+    
+    function updateMonthButtons() {
+        const buttons = monthGrid.querySelectorAll('.half-modal__grid-link');
+        buttons.forEach(btn => {
+            const btnYear = parseInt(btn.getAttribute('data-year'));
+            if (btnYear === currentYear) {
+                btn.style.display = '';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+    }
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        updateYearButtons();
+        updateMonthButtons();
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    prevYearBtn.addEventListener('click', function() {
+        if (currentYear > minYear) {
+            currentYear--;
+            yearDisplay.textContent = currentYear;
+            updateYearButtons();
+            updateMonthButtons();
+        }
+    });
+    
+    nextYearBtn.addEventListener('click', function() {
+        if (currentYear < maxYear) {
+            currentYear++;
+            yearDisplay.textContent = currentYear;
+            updateYearButtons();
+            updateMonthButtons();
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+    
+    // 初期状態
+    updateYearButtons();
+    updateMonthButtons();
+})();
+</script>
+

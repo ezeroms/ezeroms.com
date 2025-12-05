@@ -1,0 +1,134 @@
+{{/* 巨人の肩用モバイルヘッダー（トピック選択） */}}
+{{ $pageContext := . }}
+
+{{/* すべてのトピックを取得 */}}
+{{ $giantsPages := where .Site.RegularPages "Section" "shoulders-of-giants" }}
+{{ $allTopics := slice }}
+{{ range $giantsPages }}
+    {{ if .Params.topic }}
+        {{ range .Params.topic }}
+            {{ if and (ne . "") (not (in $allTopics .)) }}
+                {{ $allTopics = $allTopics | append . }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ $sortedTopics := sort $allTopics }}
+
+{{/* 現在のトピックを取得（URLパラメータから） */}}
+{{ $currentTopic := "" }}
+{{ $currentTopicName := "すべて" }}
+{{ $urlParams := "" }}
+{{ if .Params.topic }}
+    {{ $currentTopic = index .Params.topic 0 }}
+    {{ $currentTopicName = $currentTopic }}
+{{ else }}
+    {{/* URLパラメータから取得 */}}
+    {{ $urlParams = "" }}
+{{ end }}
+
+<div class="mobile-header" id="mobile-header-giants">
+    <!-- ハンバーガーメニューボタン（左側） -->
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    <!-- ページタイトル（中央） -->
+    <h2 class="mobile-header__title">
+        {{ $currentTopicName }}
+    </h2>
+    
+    <!-- トピック選択ボタン（右側） -->
+    <button class="mobile-header__button" id="mobile-header-giants-btn" aria-label="トピックを選択" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+{{/* ハーフモーダル */}}
+<div class="half-modal__overlay" id="half-modal-giants-overlay"></div>
+<div class="half-modal" id="half-modal-giants">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">トピックを選択</h3>
+        <button class="half-modal__close" id="half-modal-giants-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        <ul class="half-modal__list">
+            <li class="half-modal__item">
+                <a href="/shoulders-of-giants/" class="half-modal__link{{ if not $currentTopic }} active{{ end }}" data-topic="">すべて</a>
+            </li>
+            {{ range $sortedTopics }}
+                {{ $isActive := false }}
+                {{ if and $currentTopic (eq $currentTopic .) }}
+                    {{ $isActive = true }}
+                {{ end }}
+                <li class="half-modal__item">
+                    <a href="#" class="half-modal__link{{ if $isActive }} active{{ end }}" data-topic="{{ . }}">{{ . }}</a>
+                </li>
+            {{ end }}
+        </ul>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; // PCでは実行しない
+    
+    const header = document.getElementById('mobile-header-giants');
+    const button = document.getElementById('mobile-header-giants-btn');
+    const modal = document.getElementById('half-modal-giants');
+    const overlay = document.getElementById('half-modal-giants-overlay');
+    const closeBtn = document.getElementById('half-modal-giants-close');
+    const topicLinks = modal.querySelectorAll('.half-modal__link[data-topic]');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn) return;
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    // トピックリンクのクリック処理（URLパラメータを付けてページをリロード）
+    topicLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const topic = this.getAttribute('data-topic');
+            if (topic === '') {
+                // すべてを選択
+                window.location.href = '/shoulders-of-giants/';
+            } else {
+                // トピックをURLパラメータに付けてページをリロード
+                const url = '/shoulders-of-giants/?topic=' + encodeURIComponent(topic);
+                window.location.href = url;
+            }
+        });
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+})();
+</script>
+

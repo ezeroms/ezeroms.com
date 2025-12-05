@@ -1,0 +1,7 @@
+---
+title: "Column"
+layout: "list"
+---
+
+
+

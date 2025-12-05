@@ -16,9 +16,11 @@
     border-radius: 4px;
     font-weight: 500;
     white-space: nowrap;
+    display: none;
 }
 
 .notification.show {
+    display: block;
     visibility: visible;
     opacity: 1;
     animation: slidein 0.2s, slideout 0.5s 2.5s;

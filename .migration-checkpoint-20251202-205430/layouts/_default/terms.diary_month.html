@@ -1,0 +1,18 @@
+{{ define "main" }}
+    <section class="page-section">
+        <div class="page-section__content">
+            <h1>Diary by Month</h1>
+            <ul class="article-container">
+                {{ range .Data.Terms.ByCount }}
+                    <li>
+                        <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "diary_menu.html" . }}
+{{ end }}

@@ -3,6 +3,13 @@ title: 「dakarayo inc.」Webサイト
 date: 2022-10-01T10:38:15.770Z
 slug: dakarayo
 image: /images/work/dakarayo/03.webp
+start_date: 2022-10-01
+work_category:
+  - website
+work_tag:
+  - Webサイト
+  - フロントエンド
+  - UI/UXデザイン
 ---
 博報堂プロダクツやケトルでコピーライターとして活躍する奥祐一朗くんが独立し「dakarayo inc.」を創業しました。
 

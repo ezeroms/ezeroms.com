@@ -1,0 +1,122 @@
+/* The shoulders of Giants 専用スタイル */
+
+.giants-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.giants-header__title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.giants-header__link-button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EFEDE6;
+    border: 1px solid #F0EFEC;
+    border-radius: 100%;
+    cursor: pointer;
+    transition-duration: 0.2s;
+    transition: transform 0.2s, background-color 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.giants-header__link-button:hover {
+    background-color: #F0EFEC;
+    border: 1px solid #6E6D79;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+.giants-header__link-button:active {
+    transform: scale(0.95);
+    background-color: #DEDDDA;
+}
+
+.giants-header__link-button img {
+    width: 16px;
+    height: 16px;
+}
+
+.giants-header__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #050317;
+    margin: 0;
+    line-height: 1.6;
+    letter-spacing: -0.02em;
+}
+
+.giants-header__image {
+    width: 120px;
+    height: 120px;
+    opacity: 1;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.giants-header__image:hover {
+    opacity: 1;
+}
+
+.giants-item__citation {
+    margin: 1.6rem 0 0 0;
+    padding: 0;
+    color: var(--color-text-primary);
+    width: 100%;
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-line-height);
+    letter-spacing: 0.01em;
+}
+
+.giants-item__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 2rem 0 0 0;
+}
+
+/* スマホ版: giants-header__imageのサイズ調整 */
+@media (max-width: 767px) {
+    .giants-header {
+        margin-bottom: 24px;
+    }
+    
+    .giants-header__title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #050317;
+        margin: 0;
+        line-height: 1.4;
+        letter-spacing: -0.02em;
+    }
+    
+    .giants-header__image {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .giants-item__tags {
+        margin: 1.5rem 0 0 0;
+    }
+}
+
+/* タブレット/スマホ版: トピック一覧（TOC）を非表示 */
+@media (max-width: 1079px) {
+    body.is-shoulders-of-giants .layout-toc {
+        display: none;
+    }
+}
+

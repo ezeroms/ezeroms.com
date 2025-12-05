@@ -1,0 +1,9 @@
+<div class="works-footer">
+    {{ if .PrevInSection }}
+        <a href="{{ .PrevInSection.Permalink }}">前へ</a>
+    {{ end }}
+    {{ if .NextInSection }}
+        <a href="{{ .NextInSection.Permalink }}">次へ</a>
+    {{ end }}
+    <a href="/works">一覧に戻る</a>
+</div>

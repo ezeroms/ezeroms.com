@@ -1,24 +1,116 @@
-{{ define "main" }}
-{{ partial "header.html" . }}
-{{ partial "sp-header/work" . }}
+{{ define "section_header" }}
+    {{ partial "work-header-nav.html" . }}
+{{ end }}
 
-<main class="main-section">
-    <section class="main-section-1column">
-        <div class="work">
-            {{ range .Pages }}
-                <div class="work-item">
-                    <a href="{{ .Permalink }}">
-                        <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                    </a>
-                </div>
+{{ define "main" }}
+    {{ $allMonths := slice }}
+    {{ range .Pages }}
+        {{ $startDate := "" }}
+        {{ $endDate := "" }}
+        {{ if .Params.start_date }}
+            {{ $startDate = .Params.start_date }}
+        {{ end }}
+        {{ if and .Params.end_date (ne .Params.end_date "") }}
+            {{ $endDate = .Params.end_date }}
+        {{ end }}
+        {{ if $startDate }}
+            {{ $start := time $startDate }}
+            {{ $end := $start }}
+            {{ if and $endDate (ne $endDate "") }}
+                {{ $end = time $endDate }}
             {{ end }}
+            {{ $current := $start }}
+            {{ range $i := seq 0 1000 }}
+                {{ if gt $current $end }}
+                    {{ break }}
+                {{ end }}
+                {{ $monthStr := $current | dateFormat "2006-01" }}
+                {{ if not (in $allMonths $monthStr) }}
+                    {{ $allMonths = $allMonths | append $monthStr }}
+                {{ end }}
+                {{ $current = $current.AddDate 0 1 0 }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{ $sortedMonths := sort $allMonths }}
+    {{ $total := len $sortedMonths }}
+    {{ $latestMonth := "" }}
+    {{ if gt $total 0 }}
+        {{ $latestMonth = index $sortedMonths (sub $total 1) }}
+    {{ end }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container column-list work-list" id="work-articles-list">
+                {{ range .Pages }}
+                    {{ $categories := slice }}
+                    {{ if .Params.work_category }}
+                        {{ $categories = .Params.work_category }}
+                    {{ end }}
+                    {{ $tags := slice }}
+                    {{ if .Params.work_tag }}
+                        {{ $tags = .Params.work_tag }}
+                    {{ end }}
+                    {{ $startDate := "" }}
+                    {{ $endDate := "" }}
+                    {{ if .Params.start_date }}
+                        {{ $startDate = .Params.start_date }}
+                    {{ end }}
+                    {{ if and .Params.end_date (ne .Params.end_date "") }}
+                        {{ $endDate = .Params.end_date }}
+                    {{ end }}
+                    {{ $yearMonths := slice }}
+                    {{ if $startDate }}
+                        {{ $start := time $startDate }}
+                        {{ $end := $start }}
+                        {{ if and $endDate (ne $endDate "") }}
+                            {{ $end = time $endDate }}
+                        {{ end }}
+                        {{ $current := $start }}
+                        {{ range $i := seq 0 1000 }}
+                            {{ if gt $current $end }}
+                                {{ break }}
+                            {{ end }}
+                            {{ $monthStr := $current | dateFormat "2006-01" }}
+                            {{ $yearMonths = $yearMonths | append $monthStr }}
+                            {{ $current = $current.AddDate 0 1 0 }}
+                        {{ end }}
+                    {{ end }}
+                    {{ $displayDate := "" }}
+                    {{ if $startDate }}
+                        {{ $start := time $startDate }}
+                        {{ if and $endDate (ne $endDate "") }}
+                            {{ $end := time $endDate }}
+                            {{ $displayDate = printf "%s · %s – %s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") ($end | dateFormat "Jan") ($end | dateFormat "2006") }}
+                        {{ else }}
+                            {{ $displayDate = printf "%s · %s" ($start | dateFormat "Jan") ($start | dateFormat "2006") }}
+                        {{ end }}
+                    {{ end }}
+                    <li class="column-list-item work-list-item column-card work-card" data-href="{{ .RelPermalink }}">
+                        {{ if .Params.image }}
+                        <div class="work-card__image">
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                        </div>
+                        {{ end }}
+                        {{ if $displayDate }}
+                        <p class="date">{{ $displayDate }}</p>
+                        {{ end }}
+                        <h3 class="column-card__title">{{ .Title }}</h3>
+                        <div class="article-header__tags">
+                            {{ if $tags }}
+                            {{ $sortedTags := sort $tags }}
+                            {{ range $sortedTags }}
+                            <a href="/work_tag/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                            {{ end }}
+                            {{ end }}
+                        </div>
+                    </li>
+                {{ end }}
+            </ul>
         </div>
     </section>
-</main>
+{{ end }}
 
-{{ partial "global-nav_work.html" . }}
-
-<!-- debug-info -->
-<p class="debug-info">Template : /layouts/work/index.html</p>
-
+{{ define "secondary" }}
+    {{ partial "work_menu.html" . }}
 {{ end }}
