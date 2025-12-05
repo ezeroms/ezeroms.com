@@ -97,10 +97,31 @@ async function processTweet() {
     for (const entry of entries.items) {
       const f = entry.fields || {};
 
-      // Contentfulのモデルではslugが定義されていないので、日付かIDをファイル名に使う
-      const slugBase = f.slug || f.date || entry.sys.id;
-      const slug = String(slugBase).replace(/[:T]/g, '-').replace(/\..+$/, '');
       const date = f.date || new Date().toISOString();
+      
+      // 日付からYYYY-MM-DD形式のslugを生成
+      const dateObj = new Date(date);
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const dateSlug = `${year}-${month}-${day}`;
+      
+      // titleがある場合はそれを使い、なければエントリIDの短いバージョンを使用
+      let slugSuffix = '';
+      if (f.title && typeof f.title === 'string' && f.title.trim()) {
+        // titleからslugを生成（小文字、スペースをハイフンに、特殊文字を削除）
+        slugSuffix = '-' + f.title.toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9-]/g, '')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '')
+          .substring(0, 50); // 最大50文字
+      } else {
+        // エントリIDの最初の8文字を使用
+        slugSuffix = '-' + entry.sys.id.substring(0, 8);
+      }
+      
+      const slug = dateSlug + slugSuffix;
       const tweetMonth = f.tweetMonth || getMonthFromDate(date);
       const tags = Array.isArray(f.tweetTag) ? f.tweetTag : [];
       const voice = Array.isArray(f.voice) ? f.voice : [];

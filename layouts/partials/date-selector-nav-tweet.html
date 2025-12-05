@@ -105,8 +105,9 @@
     <div class="date-selector-nav__month-filters" id="date-selector-nav__month-filters">
         {{ $months := slice "J" "F" "M" "A" "M" "J" "J" "A" "S" "O" "N" "D" }}
         {{/* すべての年に対して、すべての月（12ヶ月）を生成 */}}
-        {{ if and (gt $minYear 0) (gt $maxYear 0) }}
-            {{ range $year := seq $minYear $maxYear }}
+        {{/* seqの範囲制限を追加（最大100年） */}}
+        {{ if and (gt $minYear 0) (gt $maxYear 0) (le (sub $maxYear $minYear) 100) }}
+            {{ range $year := $sortedYearInts }}
                 {{ range $index, $label := $months }}
                     {{ $monthNum := printf "%02d" (add $index 1) }}
                     {{ $yearMonth := printf "%d-%s" $year $monthNum }}
