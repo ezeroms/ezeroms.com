@@ -111,7 +111,7 @@ async function processTweet() {
       const slug = f.slug || entry.sys.id;
       const tweetMonth = f.tweetMonth || getMonthFromDate(date);
       const tags = Array.isArray(f.tweetTag) ? f.tweetTag : [];
-      const voice = Array.isArray(f.voice) ? f.voice : [];
+      const voice = Array.isArray(f.voice_type) ? f.voice_type : [];
       const voiceType = voice.length ? voice[0] : '';
       const emoji = typeof f.emoji === 'string' ? f.emoji : '';
       const place = typeof f.tweetPlace === 'string' ? f.tweetPlace : '';
