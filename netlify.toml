@@ -9,6 +9,7 @@
   status = 200
 
 [build]
+  image = "ubuntu-22.04"
   command = "rm -rf public && cd scripts && npm install && cd .. && node scripts/contentful-to-markdown.js && hugo --gc --minify"
   publish = "public"
 

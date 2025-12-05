@@ -19,11 +19,19 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
 });
 
-async function main() {
+// 日付からYYYY-MM形式の月を取得
+function getMonthFromDate(dateStr) {
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+async function processDiary() {
   const outDir = path.join(__dirname, '..', 'content', 'diary');
   fs.mkdirSync(outDir, { recursive: true });
 
-  console.log('Fetching entries from Contentful...');
+  console.log('Fetching diary entries from Contentful...');
 
   const entries = await client.getEntries({
     content_type: 'diary',
@@ -69,7 +77,76 @@ draft: false
 
     console.log(`Wrote ${filePath}`);
   }
+}
 
+async function processTweet() {
+  const outDir = path.join(__dirname, '..', 'content', 'tweet');
+  fs.mkdirSync(outDir, { recursive: true });
+
+  console.log('Fetching tweet entries from Contentful...');
+
+  try {
+    const entries = await client.getEntries({
+      content_type: 'tweet',
+      limit: 1000,
+      order: '-fields.date',
+    });
+
+    console.log(`Found ${entries.items.length} tweet entries.`);
+
+    for (const entry of entries.items) {
+      const f = entry.fields || {};
+
+      // Contentfulのモデルではslugが定義されていないので、日付かIDをファイル名に使う
+      const slugBase = f.slug || f.date || entry.sys.id;
+      const slug = String(slugBase).replace(/[:T]/g, '-').replace(/\..+$/, '');
+      const date = f.date || new Date().toISOString();
+      const tweetMonth = f.tweetMonth || getMonthFromDate(date);
+      const tags = Array.isArray(f.tweetTag) ? f.tweetTag : [];
+      const voice = Array.isArray(f.voice) ? f.voice : [];
+      const emoji = typeof f.emoji === 'string' ? f.emoji : '';
+      const place = typeof f.tweetPlace === 'string' ? f.tweetPlace : '';
+
+      // ★ Rich Text → HTML → Markdown（bodyはRichText）
+      let body = '';
+      if (f.body && typeof f.body === 'object' && f.body.nodeType) {
+        const html = documentToHtmlString(f.body);
+        body = turndown.turndown(html);
+      } else if (typeof f.body === 'string') {
+        body = f.body;
+      }
+
+      const yamlArray = (arr) => (arr.length ? '\n' + arr.map(v => `  - "${String(v).replace(/"/g, '\\"')}"`).join('\n') : ' []');
+      const yamlString = (value) => String(value).replace(/"/g, '\\"');
+
+      const frontMatter = `---
+date: ${date}
+tweet_month: ${tweetMonth}
+tweet_tag:${yamlArray(tags)}
+tweet_voice:${yamlArray(voice)}
+${place ? `tweet_place: "${yamlString(place)}"\n` : ''}${emoji ? `tweet_emoji: "${yamlString(emoji)}"\n` : ''}---
+`;
+
+      const content = frontMatter + '\n' + body + '\n';
+
+      const filePath = path.join(outDir, `${slug}.md`);
+      fs.writeFileSync(filePath, content, 'utf8');
+
+      console.log(`Wrote ${filePath}`);
+    }
+  } catch (error) {
+    if (error.message && error.message.includes('Content type')) {
+      console.warn('Warning: Tweet content type not found in Contentful. Skipping tweet processing.');
+      console.warn('This might be normal if you haven\'t set up the tweet content type yet.');
+    } else {
+      throw error;
+    }
+  }
+}
+
+async function main() {
+  await processDiary();
+  await processTweet();
   console.log('Done.');
 }
 
