@@ -38,28 +38,22 @@
         {{ end }}
     {{ end }}
     
-    {{/* Diaryセクションの最新月を取得 */}}
-    {{ $diarySection := .Site.GetPage "section" "diary" }}
-    {{ $diaryMonths := slice }}
-    {{ if $diarySection }}
-        {{ range $diarySection.Pages }}
-            {{ $monthStr := .Date | dateFormat "2006-01" }}
-            {{ if not (in $diaryMonths $monthStr) }}
-                {{ $diaryMonths = $diaryMonths | append $monthStr }}
-            {{ end }}
-        {{ end }}
-    {{ end }}
-    {{ $sortedDiaryMonths := sort $diaryMonths }}
-    {{ $diaryLatestMonth := "" }}
+    {{/* Diaryセクションの最新月を取得（実際に存在するタクソノミーページのみ使用） */}}
     {{ $diaryURL := "/diary/" }}
-    {{ if gt (len $sortedDiaryMonths) 0 }}
-        {{ $diaryLatestMonth = index $sortedDiaryMonths (sub (len $sortedDiaryMonths) 1) }}
-        {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($diaryLatestMonth | urlize) }}
-        {{ if $diaryMonthPage }}
-            {{ $diaryURL = $diaryMonthPage.Page.RelPermalink }}
-        {{ else }}
-            {{/* タクソノミーページが存在しない場合でも、直接URLを生成 */}}
-            {{ $diaryURL = printf "/diary_month/%s/" ($diaryLatestMonth | urlize) }}
+    {{ $diaryMonthTaxonomies := .Site.Taxonomies.diary_month }}
+    {{ if $diaryMonthTaxonomies }}
+        {{/* タクソノミーのキー（月）を取得してソート */}}
+        {{ $monthKeys := slice }}
+        {{ range $term, $pages := $diaryMonthTaxonomies }}
+            {{ $monthKeys = $monthKeys | append $term }}
+        {{ end }}
+        {{ $sortedMonthKeys := sort $monthKeys }}
+        {{ if gt (len $sortedMonthKeys) 0 }}
+            {{ $latestMonthKey := index $sortedMonthKeys (sub (len $sortedMonthKeys) 1) }}
+            {{ $diaryMonthPage := index $diaryMonthTaxonomies $latestMonthKey }}
+            {{ if $diaryMonthPage }}
+                {{ $diaryURL = $diaryMonthPage.Page.RelPermalink }}
+            {{ end }}
         {{ end }}
     {{ end }}
     
