@@ -5,7 +5,7 @@
     <link>http://localhost:1313/</link>
     <description>One thing I can tell you is you got to be free!</description>
     <language>ja</language>
-    <lastBuildDate>Fri, 05 Dec 2025 13:11:35 JST</lastBuildDate><item>
+    <lastBuildDate>Fri, 05 Dec 2025 13:45:40 JST</lastBuildDate><item>
         <title>Render Hooks Test</title>
         <link>http://localhost:1313/test-render-hooks/</link>
         <description>Spotify Test YouTube Test 読み込み中...
@@ -1571,13 +1571,15 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
       </item><item>
         <title>デザインマネージャーに聞く チームで生産性を高める相互理解のはじめかた</title>
         <link>http://localhost:1313/about/media-coverage/bell-ship-2022-04-01/</link>
-        <description></description>
+        <description>https://bell-ship.com/
+</description>
         <pubDate>Fri, 01 Apr 2022 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/about/media-coverage/bell-ship-2022-04-01/</guid>
       </item><item>
         <title>おはBiz "佐渡へ佐渡へ"と企業を誘致</title>
         <link>http://localhost:1313/about/media-coverage/ohayou-nihon-2022-03-03/</link>
-        <description></description>
+        <description>https://www.nhk.or.jp/
+</description>
         <pubDate>Thu, 03 Mar 2022 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/about/media-coverage/ohayou-nihon-2022-03-03/</guid>
       </item><item>
@@ -1590,7 +1592,8 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
       </item><item>
         <title>時代が忘れかけている音楽の価値とは？ 音楽SNS「Chooning」が提案する視聴体験の在り方</title>
         <link>http://localhost:1313/about/media-coverage/techable-2021-09-24/</link>
-        <description></description>
+        <description>https://techable.jp/
+</description>
         <pubDate>Fri, 24 Sep 2021 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/about/media-coverage/techable-2021-09-24/</guid>
       </item><item>
@@ -1616,13 +1619,15 @@ Github リポジトリを pull する（僕は複数台のマシンを使って�
       </item><item>
         <title>横浜発のストリーミング時代の音楽アプリ「Chooning」が始動</title>
         <link>http://localhost:1313/about/media-coverage/yokohama-keizai-2020-10-11/</link>
-        <description></description>
+        <description>https://www.hamakei.com/
+</description>
         <pubDate>Sun, 11 Oct 2020 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/about/media-coverage/yokohama-keizai-2020-10-11/</guid>
       </item><item>
         <title>持ち帰り店の情報集約「飲食店は街のインフラ」</title>
         <link>http://localhost:1313/about/media-coverage/town-news-2020-04-23/</link>
-        <description></description>
+        <description>https://www.townnews.co.jp/
+</description>
         <pubDate>Thu, 23 Apr 2020 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/about/media-coverage/town-news-2020-04-23/</guid>
       </item><item>

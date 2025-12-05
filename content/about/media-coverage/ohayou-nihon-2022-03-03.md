@@ -5,3 +5,4 @@ lead: "おはよう日本"
 external_url: "https://www.nhk.or.jp/"
 ---
 
+https://www.nhk.or.jp/
