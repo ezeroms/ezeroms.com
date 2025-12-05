@@ -112,11 +112,6 @@
                 {{ $yearMonth := printf "%d-%s" $year $monthNum }}
                 {{ $hasArticles := in $sortedMonths $yearMonth }}
 
-                {{/* 記事がない月はスキップ */}}
-                {{ if not $hasArticles }}
-                    {{ continue }}
-                {{ end }}
-
                 {{ $isActive := false }}
                 {{/* 詳細ページ、タグページでは月選択を全て非アクティブにする */}}
                 {{ $isSinglePage := false }}
@@ -150,6 +145,13 @@
                         data-year="{{ $year }}"
                         {{- if not $isInitialYear }} style="display: none"{{ end }}
                     >{{ $label }}</a>
+                {{ else }}
+                    <span
+                        class="date-selector-nav__filter-btn disabled {{ if $isActive }}active{{ end }}"
+                        data-year-month="{{ $yearMonth }}"
+                        data-year="{{ $year }}"
+                        {{- if not $isInitialYear }} style="display: none"{{ else }} style="opacity: 0.4; cursor: not-allowed; pointer-events: none"{{ end }}
+                    >{{ $label }}</span>
                 {{ end }}
                 {{ end }}
             {{ end }}
