@@ -32,6 +32,9 @@
         {{ $tweetMonthPage := index .Site.Taxonomies.tweet_month ($tweetLatestMonth | urlize) }}
         {{ if $tweetMonthPage }}
             {{ $tweetURL = $tweetMonthPage.Page.RelPermalink }}
+        {{ else }}
+            {{/* タクソノミーページが存在しない場合でも、直接URLを生成 */}}
+            {{ $tweetURL = printf "/tweet_month/%s/" ($tweetLatestMonth | urlize) }}
         {{ end }}
     {{ end }}
     
@@ -54,6 +57,9 @@
         {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($diaryLatestMonth | urlize) }}
         {{ if $diaryMonthPage }}
             {{ $diaryURL = $diaryMonthPage.Page.RelPermalink }}
+        {{ else }}
+            {{/* タクソノミーページが存在しない場合でも、直接URLを生成 */}}
+            {{ $diaryURL = printf "/diary_month/%s/" ($diaryLatestMonth | urlize) }}
         {{ end }}
     {{ end }}
     
