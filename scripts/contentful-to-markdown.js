@@ -109,12 +109,12 @@ async function processTweet() {
       
       // Contentfulのslugフィールドを直接使用（フォールバック: エントリID）
       const slug = f.slug || entry.sys.id;
-      const tweetMonth = f.tweetMonth || getMonthFromDate(date);
-      const tags = Array.isArray(f.tweetTag) ? f.tweetTag : [];
+      const tweetMonth = f.tweet_month || getMonthFromDate(date);
+      const tags = Array.isArray(f.tweet_tag) ? f.tweet_tag : [];
       const voice = Array.isArray(f.voice_type) ? f.voice_type : [];
       const voiceType = voice.length ? voice[0] : '';
       const emoji = typeof f.emoji === 'string' ? f.emoji : '';
-      const place = typeof f.tweetPlace === 'string' ? f.tweetPlace : '';
+      const place = typeof f.tweet_place === 'string' ? f.tweet_place : '';
 
       // ★ Rich Text → HTML → Markdown（bodyはRichText）
       let body = '';
@@ -132,7 +132,7 @@ async function processTweet() {
 date: ${date}
 tweet_month: ${tweetMonth}
 tweet_tag:${yamlArray(tags)}
-${voiceType ? `voice_type: "${yamlString(voiceType)}"\n` : ''}${place ? `tweet_place: "${yamlString(place)}"\n` : ''}${emoji ? `emoji: "${yamlString(emoji)}"\n` : ''}${emoji ? `tweet_emoji: "${yamlString(emoji)}"\n` : ''}---
+${voiceType ? `voice_type: "${yamlString(voiceType)}"\n` : ''}${place ? `tweet_place: "${yamlString(place)}"\n` : ''}${emoji ? `emoji: "${yamlString(emoji)}"\n` : ''}---
 `;
 
       const content = frontMatter + '\n' + body + '\n';
