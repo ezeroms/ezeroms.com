@@ -1,39 +1,1717 @@
-<!doctype html><html lang=en><head><meta charset=UTF-8><title>Hugo + Netlify の静的ブログに Contentful で管理画面を取り付けた</title><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js></script><script>hljs.highlightAll()</script><link rel=stylesheet href=/css/main.css><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon type=image/x-icon href=/images/common/favicon/favicon.ico><link rel=icon type=image/png sizes=16x16 href=/images/common/favicon/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=/images/common/favicon/favicon-32x32.png><link rel=icon type=image/png sizes=96x96 href=/images/common/favicon/favicon-96x96.png><link rel=icon type=image/png sizes=192x192 href=/images/common/favicon/favicon-192x192.png><link rel=apple-touch-icon sizes=180x180 href=/images/common/favicon/apple-touch-icon.png><meta property="og:title" content="Hugo + Netlify の静的ブログに Contentful で管理画面を取り付けた"><meta property="og:description" content="One thing I can tell you is you got to be free!"><meta property="og:type" content="website"><meta property="og:url" content="https://ezeroms.com/column/6xgc8ozluvuxhgwcf68yb9/"><meta property="og:image" content="https://ezeroms.com/images/common/og-image.png"><meta property="og:site_name" content="ezeroms.com"><meta property="og:locale" content="ja_JP"><meta name=twitter:card content="summary_large_image"><meta name=twitter:title content="Hugo + Netlify の静的ブログに Contentful で管理画面を取り付けた"><meta name=twitter:description content="One thing I can tell you is you got to be free!"><meta name=twitter:image content="https://ezeroms.com/images/common/og-image.png"></head><body class=is-column><div class=sidebar__overlay id=sidebar-overlay></div><div class=layout-container><aside class=layout-sidebar aria-label=グローバルナビゲーション><div class=sidebar><div class=sidebar__main><div class=sidebar__logo><a href=/><img src=/images/common/logo.svg alt=ezeroms.com>
-</a><button class=sidebar__minimize-btn id=sidebar-minimize-btn aria-label=サイドバーを最小化 data-tooltip=メニューを非表示にする>
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><nav class=sidebar__nav-group aria-label=グローバルナビゲーション><ul class=sidebar__nav><li><a href=/about/profile/>About</a></li><li><a href=/tweet_month/2025-06/>Tweet</a></li><li><a href=/diary_month/2025-09/>Diary</a></li><li><a class=is-active href=/column/>Column</a></li><li><a href=/work/>Work</a></li></ul><div class=sidebar__library><h3 class=sidebar__library-heading>Library</h3><ul class=sidebar__nav><li><a href=/shoulders-of-giants/>The shoulders of Giants</a></li></ul></div></nav></div></div></aside><div class=layout-body><div class=mobile-header id=mobile-header-column><button class=mobile-header__hamburger id=sidebar-hamburger-btn aria-label=メニューを開く aria-expanded=false>
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2 class=mobile-header__title>すべて</h2><button class=mobile-header__button id=mobile-header-column-btn aria-label=カテゴリを選択 aria-expanded=false>
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class=half-modal__overlay id=half-modal-column-overlay></div><div class=half-modal id=half-modal-column><div class=half-modal__header><h3 class=half-modal__title>カテゴリを選択</h3><button class=half-modal__close id=half-modal-column-close aria-label=閉じる>
-<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M13.5 4.5l-9 9m0-9 9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class=half-modal__content><ul class=half-modal__list><li class=half-modal__item><a href=/column/ class=half-modal__link>すべて</a></li><li class=half-modal__item><a href=/column_category/books-and-magazines/ class=half-modal__link>本・雑誌</a></li><li class=half-modal__item><a href=/column_category/design-and-creative/ class=half-modal__link>デザイン・クリエイティブ</a></li><li class=half-modal__item><a href=/column_category/foreign-cultures/ class=half-modal__link>海外文化</a></li><li class=half-modal__item><a href=/column_category/internet-and-technology/ class=half-modal__link>インターネット・技術</a></li><li class=half-modal__item><a href=/column_category/manga-and-anime/ class=half-modal__link>漫画・アニメ</a></li><li class=half-modal__item><a href=/column_category/movies-and-dramas/ class=half-modal__link>映画・ドラマ</a></li><li class=half-modal__item><a href=/column_category/natural-science/ class=half-modal__link>自然科学</a></li></ul></div></div><script>(function(){if(window.innerWidth>1079)return;const e="column",a=document.getElementById("mobile-header-"+e),t=document.getElementById("mobile-header-"+e+"-btn"),n=document.getElementById("half-modal-"+e),s=document.getElementById("half-modal-"+e+"-overlay"),i=document.getElementById("half-modal-"+e+"-close");if(!a||!t||!n||!s||!i)return;function r(){n.classList.add("is-open"),s.classList.add("is-active"),t.setAttribute("aria-expanded","true"),document.body.style.overflow="hidden"}function o(){n.classList.remove("is-open"),s.classList.remove("is-active"),t.setAttribute("aria-expanded","false"),document.body.style.overflow=""}t.addEventListener("click",r),i.addEventListener("click",o),s.addEventListener("click",o),document.addEventListener("keydown",function(e){e.key==="Escape"&&n.classList.contains("is-open")&&o()})})()</script><div class=layout-header><div class=column-header><nav class=column-header__nav id=column-category-filters><a href=/column/ class=column-header__tab data-category=all>すべて</a>
-<a href=/column_category/books-and-magazines/ class=column-header__tab data-category=books-and-magazines>本・雑誌</a>
-<a href=/column_category/design-and-creative/ class=column-header__tab data-category=design-and-creative>デザイン・クリエイティブ</a>
-<a href=/column_category/foreign-cultures/ class=column-header__tab data-category=foreign-cultures>海外文化</a>
-<a href=/column_category/internet-and-technology/ class=column-header__tab data-category=internet-and-technology>インターネット・技術</a>
-<a href=/column_category/manga-and-anime/ class=column-header__tab data-category=manga-and-anime>漫画・アニメ</a>
-<a href=/column_category/movies-and-dramas/ class=column-header__tab data-category=movies-and-dramas>映画・ドラマ</a>
-<a href=/column_category/natural-science/ class=column-header__tab data-category=natural-science>自然科学</a></nav></div></div><div class="layout-main layout-main--with-tags"><main class=layout-main__content id=main-content><div id=notification class=notification>リンクをコピーしました</div><section class=page-section><div class=page-section__content><ul class=article-container><article class=article-item><div class=article-header><p class=date>Column · Nov 16 · Sun · 2025</p><h1>Hugo + Netlify の静的ブログに Contentful で管理画面を取り付けた</h1><div class=article-header__tags><a href=/column_tag/contentful/ class=tag data-tag=Contentful>Contentful</a>
-<a href=/column_tag/hugo/ class=tag data-tag=Hugo>Hugo</a>
-<a href=/column_tag/%E6%8A%80%E8%A1%93/ class=tag data-tag=技術>技術</a></div></div><p>僕のブログは、昔ながらの静的サイトという形にこだわって作っている。つまり、サイト閲覧時にサーバー側で動的なページ生成を行わず、そこに置かれていた HTML ファイルがそのままブラウザに届く仕組みだ。</p><p>このことにこだわっているのは、ローディングが阿部寛的に爆速であるとか、セキュリティリスクが抑えられるとか、それっぽい理由も挙げられるが、実のところは僕の嗜好（フェティッシュ）でしかない。静的サイトにはロマンがある。そこには、昔ながらのインターネットの美しさがあり、僕はそれをいつまでも大事にしたいと思っているのだ。</p><p>しかし、さすがに毎回 HTML ファイルを書いているわけではない。初期のウェブ文化も HTML を手書きするところから始まったが、記事が増えるにつれてそれらを効率的に管理する仕組みが求められていった。そうしてこの世に WordPress や Movable Type のような CMS が生まれたわけだが、いずれも、「書く」ことと「公開する」ことの間にある不便さを取り除くための進歩だったといえる。</p><hr><p>では、僕が静的サイトにこだわりながら、この更新のしやすさ問題をどうやって解決しているのか。その答えが Hugo という静的サイトジェネレーターだ。</p><p>Hugo は、Markdown で書いた記事を HTML に変換し、ファイル一式をまとめて静的なサイトとして出力してくれるものだ。ローカルで Markdown（.md）ファイルを書いて GitHub に push すれば、あとは Netlify が自動的にビルドして公開してくれる。md ファイルを構造的に保管しておくことで、コンテンツ管理をおこなっているのである。</p><p>当初は、ローカル環境で Markdown（md）ファイルを書き、それを GitHub に push してサイトを更新していた。ただ、この方法だと外出先から気軽に投稿できない。次第に「ブラウザでサッと更新できる管理画面がほしい」と思うようになり、途中から NetlifyCMS（旧 DecapCMS）を導入して、ブラウザ上に簡易的な CMS を持たせる運用に切り替えた。</p><hr><p>NetlifyCMS の仕組みはシンプルで、裏側では次のように動く。</p><ol><li><p>管理画面で記事を書く</p></li><li><p>NetlifyCMS が md ファイルを自動生成して GitHub に commit</p></li><li><p>Netlify がコミットを検知して再ビルド</p></li><li><p>サイトが更新される</p></li></ol><p>当初はローカル環境で md ファイルを書き、それを GitHub に push してサイトを更新していた。ただ、そのうちブラウザで更新作業をおこないたいと考えるようになり、途中から NetlifyCMS（旧 DecapCMS）を導入して、ブラウザ上に簡易的な管理画面（CMS）を用意する方法に切り替えた。</p><p>NetlifyCMS は GitHub のリポジトリを直接編集する仕組みになっており、裏側では次のように動く。</p><ol><li><p>NetlifyCMS = 管理画面で記事を書く</p></li><li><p>NetlifyCMS が md ファイルを自動生成して GitHub に commit</p></li><li><p>Netlify がそれを検知して再ビルド</p></li><li><p>サイトが更新される</p></li></ol><p>つまり、本質的には以前と同じ「md → GitHub → Netlify」の流れを維持したまま、編集体験だけをブラウザ側に持ってくるという設計だ。</p><p>ところが、ここで思わぬ落とし穴があった。</p><p>NetlifyCMS は、日本語入力をしようとすると編集画面がバグり、まともに文章が書けなかったのだ。</p><p>この事実に気づいたのは、ひととおり実装が終わった後で、僕はしばらく膝から崩れ落ちていた。ただ、「コミュニティでも報告されているし、そのうち直るだろう」と楽観していたのだが、待てど暮らせど一向に直る気配がない。</p><p>その間、僕はずっとテキストエディタで文章を書き、NetlifyCMS にペーストして更新するという、なんともむなしい運用を続けていた。そうして一年半ほどが過ぎ、ようやく「これはもう自分で別の管理画面を用意するしかない」と重い腰を上げることにした。</p><h2 id=作業内容>作業内容</h2><p>選んだのは Contentful。CMS として優れており、API 経由で静的サイトに記事を流し込める。</p><p>ここからは、旧構成の課題と、新構成でどのように問題を解消したかを整理する。</p><h3 id=旧構成>旧構成</h3><ol><li><p>NetlifyCMS で Markdown を作成・編集</p></li><li><p>NetlifyCMS で Publish → GitHub に commit & push</p></li><li><p>Netlify が GitHub を監視しており、push をトリガーに build</p></li><li><p>Netlify のサーバー上で Hugo が走り content/ 以下の Markdown を読み取り、静的サイトを生成</p></li><li><p>Netlify が公開</p></li></ol><h3 id=新構成>新構成</h3><ol><li><p>Contentful の管理画面で記事を作成・編集</p></li><li><p>記事を Publish（Contentful が Webhook を発火）</p></li><li><p>Netlify が Webhook を受け取り、build を開始</p></li><li><p>build 前処理として Node スクリプトが実行され、Contentful から記事を取得して content/ 以下に</p></li><li><p>Markdown を自動生成</p></li><li><p>Netlify のサーバー上で Hugo が走り、Markdown を読み取って静的サイトを生成</p></li><li><p>Netlify が公開</p></li></ol><h3 id=新構成で解消したこと変更の影響><strong>新構成で解消したこと、変更の影響</strong></h3><ul><li><p>日本語の記事作成ができない NetlifyCMS から脱却、Contentful を使って記事管理ができるようになった。</p></li><li><p>Contentful はスマホからも更新ができるため、スマホからの更新ができるようになった。（副産物）</p></li><li><p>GitHub を経由しない更新ルートができたため、本番環境の内容と GitHub で管理しているソースコードが一致しなくなった。</p></li></ul><h2 id=今後の展望>今後の展望</h2><p>前項に書いたように、今回の構成変更によって、「本番サイトに反映されている内容」と「GitHub リポジトリにある内容」が一致しないという状況が生まれてしまった。</p><p>考えようによっては、「アプリケーションは GitHub に置き、記事データは Contentful に置く」という、いわば「アプリとデータベースの分離」として割り切ることもできる。</p><p>ただ、僕としてはこれまで 「すべての記事が GitHub 上で完結している」という状態がとても気に入っていた。</p><p>ローカルに clone すれば記事の全履歴が残っているし、検索も diff も効く。静的サイトでありながら、自分だけのアーカイブを GitHub 上に持っているような感覚があった。その状態が崩れるのは正直ちょっと気に食わない。</p><p>それに、もし誤って GitHub で編集してしまったときに先祖返りが発生する可能性もある。（これは、そんな運用をするなという話ではあるけれど……。）</p><p>この問題をきちんと解決するとしたら、GitHub Actions を使って Contentful → Markdown → GitHub の同期を自動化する、というやり方が考えられる。</p><p>GitHub Actions 上で Node.js を起動し、Contentful API から記事データを取得して content/ 以下に Markdown を生成し、最後に git commit & git push でリポジトリを更新する、という処理だ。</p><p>実行タイミングとしては、まずは手動トリガーや、daily or weekly の定期実行から始めるのが現実的だろう。もちろん、より丁寧にやるなら Contentful の更新を Webhook で検知し、それをきっかけに GitHub Actions を走らせるほうがスマートだ。</p><p>でも、これはこれで、Contentful で Publish → Netlify が反応 → サイト更新、のすぐ後に、今度は GitHub Actions が Contentful を読みに行き、同じ内容を GitHub に push する……という二重更新が発生するので、だいぶキモいかんじもする。</p><p>このあたりはもう少し悩みつつ、近日中に GitHub Actions のプロトタイプを作ってみようと思う。</p><div class=social-action><div class=social-action__left><div class=social-action__line><div class=social-action__line-icon></div><a href=https://lin.ee/eVcRqAC target=_blank>このブログの更新通知をLINEで受け取る</a></div></div><div class=social-action__right><a href="https://twitter.com/intent/tweet?text=Hugo%20%2b%20Netlify%20%e3%81%ae%e9%9d%99%e7%9a%84%e3%83%96%e3%83%ad%e3%82%b0%e3%81%ab%20Contentful%20%e3%81%a7%e7%ae%a1%e7%90%86%e7%94%bb%e9%9d%a2%e3%82%92%e5%8f%96%e3%82%8a%e4%bb%98%e3%81%91%e3%81%9f&url=https%3a%2f%2fezeroms.com%2fcolumn%2f6xgc8ozluvuxhgwcf68yb9%2f" target=_blank class=social-action__x data-show-count=false></a><a href=http://b.hatena.ne.jp/entry/https://ezeroms.com/column/6xgc8ozluvuxhgwcf68yb9/ target=_blank class=social-action__hatena></a><a class=social-action__link onclick='copyToClipboard("https://ezeroms.com/column/6xgc8ozluvuxhgwcf68yb9/")'></a><script>function copyToClipboard(){const e=window.location.href;navigator.clipboard.writeText(e).then(function(){showNotification()},function(e){console.error("リンクの保存に失敗しました: ",e)})}function showNotification(){var e=document.getElementById("notification");e.className="notification show",setTimeout(function(){e.className=e.className.replace(" show","")},3e3)}</script></div></div></article><div class=article-navigation><div class=article-navigation__prev><a href=/column/mattermost-websocket-error/ class=article-navigation__link><span class=article-navigation__icon>←</span><div class=article-navigation__content><span class=article-navigation__label>Prev</span>
-<span class=article-navigation__title>MattermostのWebSocket接続エラーを解決した</span></div></a></div><div class=article-navigation__next></div><div class=article-navigation__back><a href=/column/ class=article-navigation__link><span class=article-navigation__title>記事一覧に戻る</span></a></div></div></ul></div></section></main><aside class=layout-tags aria-label=セカンダリーナビゲーション><div class=diary-secondary-nav><div class=diary-secondary-nav__section><div class=secondary-nav__tags><a href=/column_tag/ai/ class=tag data-tag=AI>AI</a>
-<a href=/column_tag/contentful/ class=tag data-tag=Contentful>Contentful</a>
-<a href=/column_tag/hugo/ class=tag data-tag=Hugo>Hugo</a>
-<a href=/column_tag/mattermost/ class=tag data-tag=Mattermost>Mattermost</a>
-<a href=/column_tag/netlify/ class=tag data-tag=Netlify>Netlify</a>
-<a href=/column_tag/sns/ class=tag data-tag=SNS>SNS</a>
-<a href=/column_tag/tinder/ class=tag data-tag=Tinder>Tinder</a>
-<a href=/column_tag/web%E3%82%B5%E3%82%A4%E3%83%88/ class=tag data-tag=Webサイト>Webサイト</a>
-<a href=/column_tag/%E3%82%A2%E3%83%8B%E3%83%A1/ class=tag data-tag=アニメ>アニメ</a>
-<a href=/column_tag/%E3%82%BF%E3%82%A4%E3%83%9D%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3/ class=tag data-tag=タイポグラフィ>タイポグラフィ</a>
-<a href=/column_tag/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/ class=tag data-tag=デザイン>デザイン</a>
-<a href=/column_tag/%E3%83%86%E3%82%B9%E3%83%88/ class=tag data-tag=テスト>テスト</a>
-<a href=/column_tag/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/ class=tag data-tag=ニュース>ニュース</a>
-<a href=/column_tag/%E3%83%97%E3%83%AD%E3%83%80%E3%82%AF%E3%83%88%E9%96%8B%E7%99%BA/ class=tag data-tag=プロダクト開発>プロダクト開発</a>
-<a href=/column_tag/%E3%83%9E%E3%83%B3%E3%82%AC/ class=tag data-tag=マンガ>マンガ</a>
-<a href=/column_tag/%E5%8F%B0%E6%B9%BE/ class=tag data-tag=台湾>台湾</a>
-<a href=/column_tag/%E6%8A%80%E8%A1%93/ class=tag data-tag=技術>技術</a>
-<a href=/column_tag/%E6%95%A3%E6%AD%A9/ class=tag data-tag=散歩>散歩</a>
-<a href=/column_tag/%E6%96%87%E5%8C%96/ class=tag data-tag=文化>文化</a>
-<a href=/column_tag/%E6%98%86%E8%99%AB%E9%A3%9F/ class=tag data-tag=昆虫食>昆虫食</a>
-<a href=/column_tag/%E6%98%A0%E7%94%BB/ class=tag data-tag=映画>映画</a>
-<a href=/column_tag/%E6%9B%B8%E7%B1%8D/ class=tag data-tag=書籍>書籍</a>
-<a href=/column_tag/%E6%9C%AC/ class=tag data-tag=本>本</a>
-<a href=/column_tag/%E6%BF%B1%E5%8F%A3%E7%AB%9C%E4%BB%8B/ class=tag data-tag=濱口竜介>濱口竜介</a></div></div></div></aside></div></div></div><script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-K021MTL6NX")</script><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const e="https://ezeroms.com/",t=e?new URL(e).hostname:window.location.hostname,n=document.querySelectorAll(".article-item a[href]");n.forEach(function(e){const n=e.getAttribute("href");if(!n||e.hasAttribute("target"))return;if(n.startsWith("#")||n.startsWith("/")||n.startsWith("./")||n.startsWith("../")||n.startsWith("http")&&new URL(n,window.location.href).hostname===t)return;(n.startsWith("http://")||n.startsWith("https://")||n.startsWith("//"))&&(e.setAttribute("target","_blank"),e.setAttribute("rel","noopener noreferrer"))})}})()</script><script>(function(){function e(){const t=document.querySelector(".layout-sidebar"),e=document.getElementById("sidebar-minimize-btn");if(!t||!e)return;n(),e.addEventListener("click",function(e){e.preventDefault(),e.stopPropagation(),t.classList.toggle("is-minimized"),n()});function n(){const n=t.classList.contains("is-minimized");n?(e.setAttribute("aria-label","サイドバーを最大化"),e.setAttribute("data-tooltip","メニューを表示する"),e.querySelector("svg").style.transform="rotate(180deg)"):(e.setAttribute("aria-label","サイドバーを最小化"),e.setAttribute("data-tooltip","メニューを非表示にする"),e.querySelector("svg").style.transform="rotate(0deg)")}}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e()})()</script><script>(function(){function e(){const e=document.querySelector(".layout-sidebar"),t=document.getElementById("sidebar-hamburger-btn"),s=document.getElementById("sidebar-overlay");if(!e||!t||!s)return;function i(){e.classList.add("is-open"),s.classList.add("is-active"),t.setAttribute("aria-label","メニューを閉じる"),t.setAttribute("aria-expanded","true"),document.body.style.overflow="hidden"}function n(){e.classList.remove("is-open"),s.classList.remove("is-active"),t.setAttribute("aria-label","メニューを開く"),t.setAttribute("aria-expanded","false"),document.body.style.overflow=""}function a(){e.classList.contains("is-open")?n():i()}t.addEventListener("click",function(e){e.preventDefault(),e.stopPropagation(),a()}),s.addEventListener("click",function(e){e.preventDefault(),n()});const r=e.querySelectorAll("a");r.forEach(function(e){e.addEventListener("click",function(){window.innerWidth<=1079&&n()})}),document.addEventListener("keydown",function(t){t.key==="Escape"&&e.classList.contains("is-open")&&n()});let o;window.addEventListener("resize",function(){clearTimeout(o),o=setTimeout(function(){window.innerWidth>1079&&n()},100)})}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e()})()</script><script>(function(){document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e();function e(){const e=document.querySelector(".layout-header");if(!e){console.log("Header not found");return}if(e.children.length===0)return;let t=0,n=null,s=!1,o=!1;function i(){return window.pageYOffset||document.documentElement.scrollTop||0}function a(){const o=i();if(Math.abs(o-t)<1)return;const a=o>t,r=o<t;if(n&&(clearTimeout(n),n=null),o<=100){e.classList.remove("hidden"),s=!1,t=o;return}r?(e.classList.remove("hidden"),s=!1):a&&(e.classList.add("hidden"),s=!0),t=o,s&&(n=setTimeout(function(){e.classList.remove("hidden"),s=!1,n=null},3e3))}t=i(),window.addEventListener("scroll",function(){o||(window.requestAnimationFrame(function(){a(),o=!1}),o=!0)},{passive:!0}),a()}})()</script><script src=/js/tag-links.js></script><script src=/js/lazy-load.js></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>Hugo &#43; Netlify の静的ブログに Contentful で管理画面を取り付けた</title>
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <link rel="stylesheet" href="/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="icon" type="image/x-icon" href="/images/common/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/common/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/common/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/common/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/common/favicon/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/common/favicon/apple-touch-icon.png">
+
+    
+    <meta property="og:title" content="Hugo &#43; Netlify の静的ブログに Contentful で管理画面を取り付けた">
+    <meta property="og:description" content="One thing I can tell you is you got to be free!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:1313/column/6xgc8ozluvuxhgwcf68yb9/">
+    <meta property="og:image" content="http://localhost:1313/images/common/og-image.png">
+    <meta property="og:site_name" content="ezeroms.com">
+    <meta property="og:locale" content="ja_JP">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hugo &#43; Netlify の静的ブログに Contentful で管理画面を取り付けた">
+    <meta name="twitter:description" content="One thing I can tell you is you got to be free!">
+    <meta name="twitter:image" content="http://localhost:1313/images/common/og-image.png">
+
+    
+
+</head>
+<body class="is-column">
+    
+    <div class="sidebar__overlay" id="sidebar-overlay"></div>
+    
+    <div class="layout-container">
+        <aside class="layout-sidebar" aria-label="グローバルナビゲーション">
+            <div class="sidebar">
+  <div class="sidebar__main">
+    <div class="sidebar__logo">
+      <a href="/">
+        <img src="/images/common/logo.svg" alt="ezeroms.com">
+      </a>
+      <button class="sidebar__minimize-btn" id="sidebar-minimize-btn" aria-label="サイドバーを最小化" data-tooltip="メニューを非表示にする">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    
+    
+    
+    
+    
+    
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+            
+            
+                
+            
+        
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+    
+    
+    
+    
+    
+    
+        
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+            
+            
+            
+                
+            
+        
+    
+    
+    <nav class="sidebar__nav-group" aria-label="グローバルナビゲーション">
+      <ul class="sidebar__nav">
+        <li>
+          <a class="" href="/about/profile/">About</a>
+        </li>
+        <li>
+          <a class="" href="/tweet_month/2025-12/">Tweet</a>
+        </li>
+        <li>
+          <a class="" href="/diary_month/2025-09/">Diary</a>
+        </li>
+        <li>
+          <a class="is-active" href="/column/">Column</a>
+        </li>
+        <li>
+          <a class="" href="/work/">Work</a>
+        </li>
+        
+      </ul>
+      
+      <div class="sidebar__library">
+        <h3 class="sidebar__library-heading">Library</h3>
+        <ul class="sidebar__nav">
+          <li>
+            <a class="" href="/shoulders-of-giants/">The shoulders of Giants</a>
+          </li>
+          
+          
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+        </aside>
+
+        <div class="layout-body">
+            
+            
+                
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+                    
+                        
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                
+            
+        
+    
+        
+            
+                
+                    
+                        
+                    
+                
+            
+        
+    
+
+
+
+
+
+    
+
+
+<div class="mobile-header" id="mobile-header-column">
+    
+    <button class="mobile-header__hamburger" id="sidebar-hamburger-btn" aria-label="メニューを開く" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+    
+    
+    <h2 class="mobile-header__title">
+        すべて
+    </h2>
+    
+    
+    <button class="mobile-header__button" id="mobile-header-column-btn" aria-label="カテゴリを選択" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</div>
+
+
+<div class="half-modal__overlay" id="half-modal-column-overlay"></div>
+<div class="half-modal" id="half-modal-column">
+    <div class="half-modal__header">
+        <h3 class="half-modal__title">カテゴリを選択</h3>
+        <button class="half-modal__close" id="half-modal-column-close" aria-label="閉じる">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="half-modal__content">
+        <ul class="half-modal__list">
+            <li class="half-modal__item">
+                <a href="/column/" class="half-modal__link">すべて</a>
+            </li>
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/books-and-magazines/" class="half-modal__link">本・雑誌</a>
+                    </li>
+                
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/design-and-creative/" class="half-modal__link">デザイン・クリエイティブ</a>
+                    </li>
+                
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/foreign-cultures/" class="half-modal__link">海外文化</a>
+                    </li>
+                
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/internet-and-technology/" class="half-modal__link">インターネット・技術</a>
+                    </li>
+                
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/manga-and-anime/" class="half-modal__link">漫画・アニメ</a>
+                    </li>
+                
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/movies-and-dramas/" class="half-modal__link">映画・ドラマ</a>
+                    </li>
+                
+            
+                
+                
+                    
+                    
+                    <li class="half-modal__item">
+                        <a href="/column_category/natural-science/" class="half-modal__link">自然科学</a>
+                    </li>
+                
+            
+                
+                
+            
+        </ul>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.innerWidth > 1079) return; 
+    
+    const type = "column";
+    const header = document.getElementById('mobile-header-' + type);
+    const button = document.getElementById('mobile-header-' + type + '-btn');
+    const modal = document.getElementById('half-modal-' + type);
+    const overlay = document.getElementById('half-modal-' + type + '-overlay');
+    const closeBtn = document.getElementById('half-modal-' + type + '-close');
+    
+    if (!header || !button || !modal || !overlay || !closeBtn) return;
+    
+    function openModal() {
+        modal.classList.add('is-open');
+        overlay.classList.add('is-active');
+        button.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('is-open');
+        overlay.classList.remove('is-active');
+        button.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    
+    button.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+        }
+    });
+})();
+</script>
+
+
+            
+            
+            
+            <div class="layout-header">
+                
+    
+
+
+
+
+
+
+
+
+<div class="column-header">
+    <nav class="column-header__nav" id="column-category-filters">
+        <a href="/column/" class="column-header__tab " data-category="all">すべて</a>
+        
+        
+            
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+        
+        
+            
+            
+                
+                
+                <a href="/column_category/books-and-magazines/" class="column-header__tab " data-category="books-and-magazines">本・雑誌</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/design-and-creative/" class="column-header__tab " data-category="design-and-creative">デザイン・クリエイティブ</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/foreign-cultures/" class="column-header__tab " data-category="foreign-cultures">海外文化</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/internet-and-technology/" class="column-header__tab " data-category="internet-and-technology">インターネット・技術</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/manga-and-anime/" class="column-header__tab " data-category="manga-and-anime">漫画・アニメ</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/movies-and-dramas/" class="column-header__tab " data-category="movies-and-dramas">映画・ドラマ</a>
+            
+        
+            
+            
+                
+                
+                <a href="/column_category/natural-science/" class="column-header__tab " data-category="natural-science">自然科学</a>
+            
+        
+            
+            
+        
+    </nav>
+</div>
+
+
+
+            </div>
+            
+            <div class="layout-main layout-main--with-tags">
+                
+                <main class="layout-main__content" id="main-content">
+                    
+    <div id="notification" class="notification">
+    リンクをコピーしました
+</div>
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container">
+                <article class="article-item">
+                    <div class="article-header">
+                        <p class="date">Column · Nov 16 · Sun · 2025</p>
+                        <h1>Hugo &#43; Netlify の静的ブログに Contentful で管理画面を取り付けた</h1>
+                        
+                            <div class="article-header__tags">
+                                
+                                
+                                    <a href="/column_tag/contentful/" class="tag" data-tag="Contentful">Contentful</a>
+                                
+                                    <a href="/column_tag/hugo/" class="tag" data-tag="Hugo">Hugo</a>
+                                
+                                    <a href="/column_tag/%E6%8A%80%E8%A1%93/" class="tag" data-tag="技術">技術</a>
+                                
+                            </div>
+                        
+                    </div>
+                    <p>僕のブログは、昔ながらの静的サイトという形にこだわって作っている。つまり、サイト閲覧時にサーバー側で動的なページ生成を行わず、そこに置かれていた HTML ファイルがそのままブラウザに届く仕組みだ。</p>
+<p>このことにこだわっているのは、ローディングが阿部寛的に爆速であるとか、セキュリティリスクが抑えられるとか、それっぽい理由も挙げられるが、実のところは僕の嗜好（フェティッシュ）でしかない。静的サイトにはロマンがある。そこには、昔ながらのインターネットの美しさがあり、僕はそれをいつまでも大事にしたいと思っているのだ。</p>
+<p>しかし、さすがに毎回 HTML ファイルを書いているわけではない。初期のウェブ文化も HTML を手書きするところから始まったが、記事が増えるにつれてそれらを効率的に管理する仕組みが求められていった。そうしてこの世に WordPress や Movable Type のような CMS が生まれたわけだが、いずれも、「書く」ことと「公開する」ことの間にある不便さを取り除くための進歩だったといえる。</p>
+<hr>
+<p>では、僕が静的サイトにこだわりながら、この更新のしやすさ問題をどうやって解決しているのか。その答えが Hugo という静的サイトジェネレーターだ。</p>
+<p>Hugo は、Markdown で書いた記事を HTML に変換し、ファイル一式をまとめて静的なサイトとして出力してくれるものだ。ローカルで Markdown（.md）ファイルを書いて GitHub に push すれば、あとは Netlify が自動的にビルドして公開してくれる。md ファイルを構造的に保管しておくことで、コンテンツ管理をおこなっているのである。</p>
+<p>当初は、ローカル環境で Markdown（md）ファイルを書き、それを GitHub に push してサイトを更新していた。ただ、この方法だと外出先から気軽に投稿できない。次第に「ブラウザでサッと更新できる管理画面がほしい」と思うようになり、途中から NetlifyCMS（旧 DecapCMS）を導入して、ブラウザ上に簡易的な CMS を持たせる運用に切り替えた。</p>
+<hr>
+<p>NetlifyCMS の仕組みはシンプルで、裏側では次のように動く。</p>
+<ol>
+<li>
+<p>管理画面で記事を書く</p>
+</li>
+<li>
+<p>NetlifyCMS が md ファイルを自動生成して GitHub に commit</p>
+</li>
+<li>
+<p>Netlify がコミットを検知して再ビルド</p>
+</li>
+<li>
+<p>サイトが更新される</p>
+</li>
+</ol>
+<p>当初はローカル環境で md ファイルを書き、それを GitHub に push してサイトを更新していた。ただ、そのうちブラウザで更新作業をおこないたいと考えるようになり、途中から NetlifyCMS（旧 DecapCMS）を導入して、ブラウザ上に簡易的な管理画面（CMS）を用意する方法に切り替えた。</p>
+<p>NetlifyCMS は GitHub のリポジトリを直接編集する仕組みになっており、裏側では次のように動く。</p>
+<ol>
+<li>
+<p>NetlifyCMS = 管理画面で記事を書く</p>
+</li>
+<li>
+<p>NetlifyCMS が md ファイルを自動生成して GitHub に commit</p>
+</li>
+<li>
+<p>Netlify がそれを検知して再ビルド</p>
+</li>
+<li>
+<p>サイトが更新される</p>
+</li>
+</ol>
+<p>つまり、本質的には以前と同じ「md → GitHub → Netlify」の流れを維持したまま、編集体験だけをブラウザ側に持ってくるという設計だ。</p>
+<p>ところが、ここで思わぬ落とし穴があった。</p>
+<p>NetlifyCMS は、日本語入力をしようとすると編集画面がバグり、まともに文章が書けなかったのだ。</p>
+<p>この事実に気づいたのは、ひととおり実装が終わった後で、僕はしばらく膝から崩れ落ちていた。ただ、「コミュニティでも報告されているし、そのうち直るだろう」と楽観していたのだが、待てど暮らせど一向に直る気配がない。</p>
+<p>その間、僕はずっとテキストエディタで文章を書き、NetlifyCMS にペーストして更新するという、なんともむなしい運用を続けていた。そうして一年半ほどが過ぎ、ようやく「これはもう自分で別の管理画面を用意するしかない」と重い腰を上げることにした。</p>
+<h2 id="作業内容">作業内容</h2>
+<p>選んだのは Contentful。CMS として優れており、API 経由で静的サイトに記事を流し込める。</p>
+<p>ここからは、旧構成の課題と、新構成でどのように問題を解消したかを整理する。</p>
+<h3 id="旧構成">旧構成</h3>
+<ol>
+<li>
+<p>NetlifyCMS で Markdown を作成・編集</p>
+</li>
+<li>
+<p>NetlifyCMS で Publish → GitHub に commit &amp; push</p>
+</li>
+<li>
+<p>Netlify が GitHub を監視しており、push をトリガーに build</p>
+</li>
+<li>
+<p>Netlify のサーバー上で Hugo が走り content/ 以下の Markdown を読み取り、静的サイトを生成</p>
+</li>
+<li>
+<p>Netlify が公開</p>
+</li>
+</ol>
+<h3 id="新構成">新構成</h3>
+<ol>
+<li>
+<p>Contentful の管理画面で記事を作成・編集</p>
+</li>
+<li>
+<p>記事を Publish（Contentful が Webhook を発火）</p>
+</li>
+<li>
+<p>Netlify が Webhook を受け取り、build を開始</p>
+</li>
+<li>
+<p>build 前処理として Node スクリプトが実行され、Contentful から記事を取得して content/ 以下に</p>
+</li>
+<li>
+<p>Markdown を自動生成</p>
+</li>
+<li>
+<p>Netlify のサーバー上で Hugo が走り、Markdown を読み取って静的サイトを生成</p>
+</li>
+<li>
+<p>Netlify が公開</p>
+</li>
+</ol>
+<h3 id="新構成で解消したこと変更の影響"><strong>新構成で解消したこと、変更の影響</strong></h3>
+<ul>
+<li>
+<p>日本語の記事作成ができない NetlifyCMS から脱却、Contentful を使って記事管理ができるようになった。</p>
+</li>
+<li>
+<p>Contentful はスマホからも更新ができるため、スマホからの更新ができるようになった。（副産物）</p>
+</li>
+<li>
+<p>GitHub を経由しない更新ルートができたため、本番環境の内容と GitHub で管理しているソースコードが一致しなくなった。</p>
+</li>
+</ul>
+<h2 id="今後の展望">今後の展望</h2>
+<p>前項に書いたように、今回の構成変更によって、「本番サイトに反映されている内容」と「GitHub リポジトリにある内容」が一致しないという状況が生まれてしまった。</p>
+<p>考えようによっては、「アプリケーションは GitHub に置き、記事データは Contentful に置く」という、いわば「アプリとデータベースの分離」として割り切ることもできる。</p>
+<p>ただ、僕としてはこれまで 「すべての記事が GitHub 上で完結している」という状態がとても気に入っていた。</p>
+<p>ローカルに clone すれば記事の全履歴が残っているし、検索も diff も効く。静的サイトでありながら、自分だけのアーカイブを GitHub 上に持っているような感覚があった。その状態が崩れるのは正直ちょっと気に食わない。</p>
+<p>それに、もし誤って GitHub で編集してしまったときに先祖返りが発生する可能性もある。（これは、そんな運用をするなという話ではあるけれど……。）</p>
+<p>この問題をきちんと解決するとしたら、GitHub Actions を使って Contentful → Markdown → GitHub の同期を自動化する、というやり方が考えられる。</p>
+<p>GitHub Actions 上で Node.js を起動し、Contentful API から記事データを取得して content/ 以下に Markdown を生成し、最後に git commit &amp; git push でリポジトリを更新する、という処理だ。</p>
+<p>実行タイミングとしては、まずは手動トリガーや、daily or weekly の定期実行から始めるのが現実的だろう。もちろん、より丁寧にやるなら Contentful の更新を Webhook で検知し、それをきっかけに GitHub Actions を走らせるほうがスマートだ。</p>
+<p>でも、これはこれで、Contentful で Publish → Netlify が反応 → サイト更新、のすぐ後に、今度は GitHub Actions が Contentful を読みに行き、同じ内容を GitHub に push する……という二重更新が発生するので、だいぶキモいかんじもする。</p>
+<p>このあたりはもう少し悩みつつ、近日中に GitHub Actions のプロトタイプを作ってみようと思う。</p>
+
+
+                    <div class="social-action">
+                        <div class="social-action__left">
+                            <div class="social-action__line">
+                                <div class="social-action__line-icon"></div>
+                                <a href="https://lin.ee/eVcRqAC" target="_blank">
+                                    このブログの更新通知をLINEで受け取る
+                                </a>
+                            </div>
+                        </div>
+                        <div class="social-action__right">
+                            <a href="https://twitter.com/intent/tweet?text=Hugo%20%2b%20Netlify%20%e3%81%ae%e9%9d%99%e7%9a%84%e3%83%96%e3%83%ad%e3%82%b0%e3%81%ab%20Contentful%20%e3%81%a7%e7%ae%a1%e7%90%86%e7%94%bb%e9%9d%a2%e3%82%92%e5%8f%96%e3%82%8a%e4%bb%98%e3%81%91%e3%81%9f&url=http%3a%2f%2flocalhost%3a1313%2fcolumn%2f6xgc8ozluvuxhgwcf68yb9%2f" target="_blank" class="social-action__x" data-show-count="false"></a>
+                            <a href="http://b.hatena.ne.jp/entry/http://localhost:1313/column/6xgc8ozluvuxhgwcf68yb9/" target="_blank" class="social-action__hatena"></a>
+                            <a class="social-action__link" onclick="copyToClipboard('http:\/\/localhost:1313\/column\/6xgc8ozluvuxhgwcf68yb9\/')"></a>
+                            <script>
+                                function copyToClipboard() {
+                                    const url = window.location.href;
+                                    navigator.clipboard.writeText(url).then(function() {
+                                        showNotification();
+                                    }, function(err) {
+                                        console.error('リンクの保存に失敗しました: ', err);
+                                    });
+                                }
+                                function showNotification() {
+                                    var notification = document.getElementById("notification");
+                                    notification.className = "notification show";
+                                    setTimeout(function() {
+                                        notification.className = notification.className.replace(" show", "");
+                                    }, 3000);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </article>
+                
+                <div class="article-navigation">
+    <div class="article-navigation__prev">
+        
+            <a href="/column/mattermost-websocket-error/" class="article-navigation__link">
+                <span class="article-navigation__icon">←</span>
+                <div class="article-navigation__content">
+                    <span class="article-navigation__label">Prev</span>
+                    <span class="article-navigation__title">
+                        
+                            MattermostのWebSocket接続エラーを解決した
+                        
+                    </span>
+                </div>
+            </a>
+        
+    </div>
+    
+    <div class="article-navigation__next">
+        
+    </div>
+    
+    <div class="article-navigation__back">
+        
+        
+        <a href="/column/" class="article-navigation__link">
+            <span class="article-navigation__title">記事一覧に戻る</span>
+        </a>
+    </div>
+</div>
+
+
+            </ul>
+        </div>
+    </section>
+
+
+                </main>
+
+                
+                <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
+                    
+    <div class="diary-secondary-nav">
+    <div class="diary-secondary-nav__section">
+        <div class="secondary-nav__tags">
+            
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                    
+                        
+                    
+                
+            
+                
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                
+            
+            
+            
+            
+            
+            
+                
+                
+                <a href="/column_tag/ai/" class="tag " data-tag="AI">AI</a>
+            
+                
+                
+                <a href="/column_tag/contentful/" class="tag " data-tag="Contentful">Contentful</a>
+            
+                
+                
+                <a href="/column_tag/hugo/" class="tag " data-tag="Hugo">Hugo</a>
+            
+                
+                
+                <a href="/column_tag/mattermost/" class="tag " data-tag="Mattermost">Mattermost</a>
+            
+                
+                
+                <a href="/column_tag/netlify/" class="tag " data-tag="Netlify">Netlify</a>
+            
+                
+                
+                <a href="/column_tag/sns/" class="tag " data-tag="SNS">SNS</a>
+            
+                
+                
+                <a href="/column_tag/tinder/" class="tag " data-tag="Tinder">Tinder</a>
+            
+                
+                
+                <a href="/column_tag/web%E3%82%B5%E3%82%A4%E3%83%88/" class="tag " data-tag="Webサイト">Webサイト</a>
+            
+                
+                
+                <a href="/column_tag/%E3%82%A2%E3%83%8B%E3%83%A1/" class="tag " data-tag="アニメ">アニメ</a>
+            
+                
+                
+                <a href="/column_tag/%E3%82%BF%E3%82%A4%E3%83%9D%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3/" class="tag " data-tag="タイポグラフィ">タイポグラフィ</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3/" class="tag " data-tag="デザイン">デザイン</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%86%E3%82%B9%E3%83%88/" class="tag " data-tag="テスト">テスト</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/" class="tag " data-tag="ニュース">ニュース</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%97%E3%83%AD%E3%83%80%E3%82%AF%E3%83%88%E9%96%8B%E7%99%BA/" class="tag " data-tag="プロダクト開発">プロダクト開発</a>
+            
+                
+                
+                <a href="/column_tag/%E3%83%9E%E3%83%B3%E3%82%AC/" class="tag " data-tag="マンガ">マンガ</a>
+            
+                
+                
+                <a href="/column_tag/%E5%8F%B0%E6%B9%BE/" class="tag " data-tag="台湾">台湾</a>
+            
+                
+                
+                <a href="/column_tag/%E6%8A%80%E8%A1%93/" class="tag " data-tag="技術">技術</a>
+            
+                
+                
+                <a href="/column_tag/%E6%95%A3%E6%AD%A9/" class="tag " data-tag="散歩">散歩</a>
+            
+                
+                
+                <a href="/column_tag/%E6%96%87%E5%8C%96/" class="tag " data-tag="文化">文化</a>
+            
+                
+                
+                <a href="/column_tag/%E6%98%86%E8%99%AB%E9%A3%9F/" class="tag " data-tag="昆虫食">昆虫食</a>
+            
+                
+                
+                <a href="/column_tag/%E6%98%A0%E7%94%BB/" class="tag " data-tag="映画">映画</a>
+            
+                
+                
+                <a href="/column_tag/%E6%9B%B8%E7%B1%8D/" class="tag " data-tag="書籍">書籍</a>
+            
+                
+                
+                <a href="/column_tag/%E6%9C%AC/" class="tag " data-tag="本">本</a>
+            
+                
+                
+                <a href="/column_tag/%E6%BF%B1%E5%8F%A3%E7%AB%9C%E4%BB%8B/" class="tag " data-tag="濱口竜介">濱口竜介</a>
+            
+        </div>
+    </div>
+</div>
+
+
+
+                </aside>
+                
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K021MTL6NX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K021MTL6NX');
+</script>
+
+
+
+    
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', handleExternalLinks);
+            } else {
+                handleExternalLinks();
+            }
+
+            function handleExternalLinks() {
+                const baseURL = 'http:\/\/localhost:1313\/';
+                const baseHost = baseURL ? new URL(baseURL).hostname : window.location.hostname;
+                
+                
+                const articleLinks = document.querySelectorAll('.article-item a[href]');
+                
+                articleLinks.forEach(function(link) {
+                    const href = link.getAttribute('href');
+                    
+                    
+                    if (!href || link.hasAttribute('target')) {
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('#') || 
+                        href.startsWith('/') || 
+                        href.startsWith('./') ||
+                        href.startsWith('../') ||
+                        (href.startsWith('http') && new URL(href, window.location.href).hostname === baseHost)) {
+                        
+                        return;
+                    }
+                    
+                    
+                    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarMinimize() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const minimizeBtn = document.getElementById('sidebar-minimize-btn');
+                
+                if (!sidebar || !minimizeBtn) return;
+                
+                
+                
+                updateButtonState();
+                
+                
+                minimizeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    sidebar.classList.toggle('is-minimized');
+                    updateButtonState();
+                });
+                
+                function updateButtonState() {
+                    const isMinimized = sidebar.classList.contains('is-minimized');
+                    if (isMinimized) {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最大化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを表示する');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                    } else {
+                        minimizeBtn.setAttribute('aria-label', 'サイドバーを最小化');
+                        minimizeBtn.setAttribute('data-tooltip', 'メニューを非表示にする');
+                        minimizeBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarMinimize);
+            } else {
+                initSidebarMinimize();
+            }
+        })();
+    </script>
+
+    
+    <script>
+        (function() {
+            function initSidebarHamburger() {
+                const sidebar = document.querySelector('.layout-sidebar');
+                const hamburgerBtn = document.getElementById('sidebar-hamburger-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                if (!sidebar || !hamburgerBtn || !overlay) return;
+                
+                function openSidebar() {
+                    sidebar.classList.add('is-open');
+                    overlay.classList.add('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを閉じる');
+                    hamburgerBtn.setAttribute('aria-expanded', 'true');
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeSidebar() {
+                    sidebar.classList.remove('is-open');
+                    overlay.classList.remove('is-active');
+                    hamburgerBtn.setAttribute('aria-label', 'メニューを開く');
+                    hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    document.body.style.overflow = '';
+                }
+                
+                function toggleSidebar() {
+                    if (sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    } else {
+                        openSidebar();
+                    }
+                }
+                
+                
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+                
+                
+                overlay.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSidebar();
+                });
+                
+                
+                const sidebarLinks = sidebar.querySelectorAll('a');
+                sidebarLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 1079) {
+                            closeSidebar();
+                        }
+                    });
+                });
+                
+                
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+                        closeSidebar();
+                    }
+                });
+                
+                
+                let resizeTimer;
+                window.addEventListener('resize', function() {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function() {
+                        if (window.innerWidth > 1079) {
+                            closeSidebar();
+                        }
+                    }, 100);
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initSidebarHamburger);
+            } else {
+                initSidebarHamburger();
+            }
+        })();
+    </script>
+
+    <script>
+        (function() {
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHeaderScroll);
+            } else {
+                initHeaderScroll();
+            }
+
+            function initHeaderScroll() {
+                const header = document.querySelector('.layout-header');
+                if (!header) {
+                    console.log('Header not found');
+                    return;
+                }
+
+                
+                if (header.children.length === 0) {
+                    return;
+                }
+
+                let lastScrollTop = 0;
+                let scrollTimeout = null;
+                let isScrollingDown = false;
+                let ticking = false;
+
+                function getScrollTop() {
+                    return window.pageYOffset || document.documentElement.scrollTop || 0;
+                }
+
+                function handleScroll() {
+                    const scrollTop = getScrollTop();
+                    
+                    
+                    if (Math.abs(scrollTop - lastScrollTop) < 1) {
+                        return;
+                    }
+
+                    const scrollingDown = scrollTop > lastScrollTop;
+                    const scrollingUp = scrollTop < lastScrollTop;
+
+                    
+                    if (scrollTimeout) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = null;
+                    }
+
+                    
+                    if (scrollTop <= 100) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                        lastScrollTop = scrollTop;
+                        return;
+                    }
+
+                    
+                    if (scrollingUp) {
+                        header.classList.remove('hidden');
+                        isScrollingDown = false;
+                    }
+                    
+                    else if (scrollingDown) {
+                        header.classList.add('hidden');
+                        isScrollingDown = true;
+                    }
+
+                    lastScrollTop = scrollTop;
+
+                    
+                    if (isScrollingDown) {
+                        scrollTimeout = setTimeout(function() {
+                            header.classList.remove('hidden');
+                            isScrollingDown = false;
+                            scrollTimeout = null;
+                        }, 3000);
+                    }
+                }
+
+                
+                lastScrollTop = getScrollTop();
+
+                
+                window.addEventListener('scroll', function() {
+                    if (!ticking) {
+                        window.requestAnimationFrame(function() {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+
+                
+                handleScroll();
+            }
+        })();
+    </script>
+
+    
+    <script src="/js/tag-links.js"></script>
+    
+    
+    <script src="/js/lazy-load.js"></script>
+</body>
+</html>

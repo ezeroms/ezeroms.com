@@ -13,10 +13,12 @@ const TurndownService = require('turndown');
 const turndown = new TurndownService();
 
 // Contentful クライアント
+// Content Preview APIを使用して未公開のエントリも取得可能にする
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
   environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+  accessToken: process.env.CONTENTFUL_PREVIEW_TOKEN || process.env.CONTENTFUL_ACCESS_TOKEN,
+  host: process.env.CONTENTFUL_PREVIEW_TOKEN ? 'preview.contentful.com' : 'cdn.contentful.com',
 });
 
 // 日付からYYYY-MM形式の月を取得
@@ -27,21 +29,53 @@ function getMonthFromDate(dateStr) {
   return `${year}-${month}`;
 }
 
+// すべてのエントリを取得する（ページネーション対応）
+async function getAllEntries(options) {
+  const limit = 100; // Contentful APIの最大値
+  const allItems = [];
+  let skip = 0;
+  let total = null;
+
+  while (true) {
+    const response = await client.getEntries({
+      ...options,
+      limit: limit,
+      skip: skip,
+    });
+
+    // 最初のリクエストで総件数を取得
+    if (total === null) {
+      total = response.total;
+      console.log(`Total entries: ${total}`);
+    }
+
+    allItems.push(...response.items);
+    
+    // すべてのエントリを取得したかチェック
+    if (allItems.length >= total || response.items.length < limit) {
+      break;
+    }
+    
+    skip += limit;
+  }
+
+  return allItems;
+}
+
 async function processDiary() {
   const outDir = path.join(__dirname, '..', 'content', 'diary');
   fs.mkdirSync(outDir, { recursive: true });
 
   console.log('Fetching diary entries from Contentful...');
 
-  const entries = await client.getEntries({
+  const entries = await getAllEntries({
     content_type: 'diary',
-    limit: 1000,
     order: '-fields.date',
   });
 
-  console.log(`Found ${entries.items.length} diary entries.`);
+  console.log(`Found ${entries.length} diary entries.`);
 
-  for (const entry of entries.items) {
+  for (const entry of entries) {
     const f = entry.fields || {};
 
     const title = f.title || 'Untitled';
@@ -86,15 +120,15 @@ async function processTweet() {
   console.log('Fetching tweet entries from Contentful...');
 
   try {
-    const entries = await client.getEntries({
-      content_type: 'tweet',
-      limit: 1000,
-      order: '-fields.date',
-    });
+  const entries = await getAllEntries({
+    content_type: 'tweet',
+    order: '-fields.date',
+    include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
+  });
 
-    console.log(`Found ${entries.items.length} tweet entries.`);
+    console.log(`Found ${entries.length} tweet entries.`);
 
-    for (const entry of entries.items) {
+    for (const entry of entries) {
       const f = entry.fields || {};
 
       // 日付をISO 8601形式（UTC）に変換
@@ -113,7 +147,6 @@ async function processTweet() {
       const tags = Array.isArray(f.tweet_tag) ? f.tweet_tag : [];
       const voice = Array.isArray(f.voice_type) ? f.voice_type : [];
       const voiceType = voice.length ? voice[0] : '';
-      const emoji = typeof f.emoji === 'string' ? f.emoji : '';
       const place = typeof f.tweet_place === 'string' ? f.tweet_place : '';
 
       // ★ Rich Text → HTML → Markdown（bodyはRichText）
@@ -132,7 +165,7 @@ async function processTweet() {
 date: ${date}
 tweet_month: ${tweetMonth}
 tweet_tag:${yamlArray(tags)}
-${voiceType ? `voice_type: "${yamlString(voiceType)}"\n` : ''}${place ? `tweet_place: "${yamlString(place)}"\n` : ''}${emoji ? `emoji: "${yamlString(emoji)}"\n` : ''}---
+${voiceType ? `voice_type: "${yamlString(voiceType)}"\n` : ''}${place ? `tweet_place: "${yamlString(place)}"\n` : ''}---
 `;
 
       const content = frontMatter + '\n' + body + '\n';

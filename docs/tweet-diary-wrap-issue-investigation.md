@@ -178,3 +178,4 @@ mv content/tweet/_index.md.backup content/tweet/_index.md
 - tweet/diaryは完全なHTMLドキュメントを出力する必要があるため、baseof.htmlのラップを回避する必要がある
 - `{{ define "baseof" }}`は理論的にはbaseof.htmlを完全にオーバーライドできるはずだが、実際には動作していない可能性がある
 
+

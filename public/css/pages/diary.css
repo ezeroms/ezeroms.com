@@ -11,22 +11,6 @@
     flex: 1;
 }
 
-.diary-item__emoji {
-    display: inline-block;
-    margin-left: 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1;
-    vertical-align: baseline;
-}
-
-.article-item .date .diary-item__emoji {
-    display: inline-block;
-    margin-left: 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1;
-    vertical-align: baseline;
-}
-
 /* 記事内のタグスタイルは共通クラス（article-tag）で管理 */
 
 /* Diaryのタイトルと補足情報の間のborderを削除 */
