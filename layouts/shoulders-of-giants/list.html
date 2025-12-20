@@ -22,7 +22,12 @@
                     <div class="giants-item__citation">
                         {{ .Params.citation_override }}
                     </div>
+                {{ else if and .Params.author .Params.book_title .Params.publisher .Params.published_year }}
+                    <div class="giants-item__citation">
+                        {{ .Params.author }}『{{ .Params.book_title }}』（{{ .Params.publisher }}、{{ .Params.published_year }}年）
+                    </div>
                 {{ else if and .Params.author .Params.title .Params.publisher .Params.published_year }}
+                    {{/* 後方互換性のため、title もサポート */}}
                     <div class="giants-item__citation">
                         {{ .Params.author }}『{{ .Params.title }}』（{{ .Params.publisher }}、{{ .Params.published_year }}年）
                     </div>

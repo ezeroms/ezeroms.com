@@ -14,8 +14,12 @@
     "@contentful/rich-text": "github:contentful/rich-text",
     "@contentful/rich-text-html-renderer": "^17.1.6",
     "@contentful/rich-text-plain-text-renderer": "^17.1.6",
+    "@contentful/rich-text-types": "^17.2.5",
     "contentful": "^11.8.13",
+    "contentful-management": "^11.66.0",
     "dotenv": "^17.2.3",
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.1",
     "turndown": "^7.2.2"
   }
 }

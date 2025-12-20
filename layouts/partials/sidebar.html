@@ -13,47 +13,28 @@
 
     {{ $current := .RelPermalink }}
     
-    {{/* Tweetセクションの最新月を取得 */}}
-    {{ $tweetSection := .Site.GetPage "section" "tweet" }}
-    {{ $tweetMonths := slice }}
-    {{ if $tweetSection }}
-        {{ range $tweetSection.Pages }}
+    {{/* Diaryセクションの最新月を取得 */}}
+    {{ $diarySection := .Site.GetPage "section" "diary" }}
+    {{ $diaryMonths := slice }}
+    {{ if $diarySection }}
+        {{ range $diarySection.Pages }}
             {{ $monthStr := .Date | dateFormat "2006-01" }}
-            {{ if not (in $tweetMonths $monthStr) }}
-                {{ $tweetMonths = $tweetMonths | append $monthStr }}
+            {{ if not (in $diaryMonths $monthStr) }}
+                {{ $diaryMonths = $diaryMonths | append $monthStr }}
             {{ end }}
         {{ end }}
     {{ end }}
-    {{ $sortedTweetMonths := sort $tweetMonths }}
-    {{ $tweetLatestMonth := "" }}
-    {{ $tweetURL := "/tweet/" }}
-    {{ if gt (len $sortedTweetMonths) 0 }}
-        {{ $tweetLatestMonth = index $sortedTweetMonths (sub (len $sortedTweetMonths) 1) }}
-        {{ $tweetMonthPage := index .Site.Taxonomies.tweet_month ($tweetLatestMonth | urlize) }}
-        {{ if $tweetMonthPage }}
-            {{ $tweetURL = $tweetMonthPage.Page.RelPermalink }}
+    {{ $sortedDiaryMonths := sort $diaryMonths }}
+    {{ $diaryLatestMonth := "" }}
+    {{ $diaryURL := "/diary/" }}
+    {{ if gt (len $sortedDiaryMonths) 0 }}
+        {{ $diaryLatestMonth = index $sortedDiaryMonths (sub (len $sortedDiaryMonths) 1) }}
+        {{ $diaryMonthPage := index .Site.Taxonomies.diary_month ($diaryLatestMonth | urlize) }}
+        {{ if $diaryMonthPage }}
+            {{ $diaryURL = $diaryMonthPage.Page.RelPermalink }}
         {{ else }}
             {{/* タクソノミーページが存在しない場合でも、直接URLを生成 */}}
-            {{ $tweetURL = printf "/tweet_month/%s/" ($tweetLatestMonth | urlize) }}
-        {{ end }}
-    {{ end }}
-    
-    {{/* Diaryセクションの最新月を取得（実際に存在するタクソノミーページのみ使用） */}}
-    {{ $diaryURL := "/diary/" }}
-    {{ $diaryMonthTaxonomies := .Site.Taxonomies.diary_month }}
-    {{ if $diaryMonthTaxonomies }}
-        {{/* タクソノミーのキー（月）を取得してソート */}}
-        {{ $monthKeys := slice }}
-        {{ range $term, $pages := $diaryMonthTaxonomies }}
-            {{ $monthKeys = $monthKeys | append $term }}
-        {{ end }}
-        {{ $sortedMonthKeys := sort $monthKeys }}
-        {{ if gt (len $sortedMonthKeys) 0 }}
-            {{ $latestMonthKey := index $sortedMonthKeys (sub (len $sortedMonthKeys) 1) }}
-            {{ $diaryMonthPage := index $diaryMonthTaxonomies $latestMonthKey }}
-            {{ if $diaryMonthPage }}
-                {{ $diaryURL = $diaryMonthPage.Page.RelPermalink }}
-            {{ end }}
+            {{ $diaryURL = printf "/diary_month/%s/" ($diaryLatestMonth | urlize) }}
         {{ end }}
     {{ end }}
     
@@ -61,9 +42,6 @@
       <ul class="sidebar__nav">
         <li>
           <a class="{{ if strings.HasPrefix $current "/about/" }}is-active{{ end }}" href="/about/profile/">About</a>
-        </li>
-        <li>
-          <a class="{{ if or (strings.HasPrefix $current "/tweet/") (strings.HasPrefix $current "/tweet_month/") (strings.HasPrefix $current "/tweet_tag/") (strings.HasPrefix $current "/tweet_place/") }}is-active{{ end }}" href="{{ $tweetURL }}">Tweet</a>
         </li>
         <li>
           <a class="{{ if or (strings.HasPrefix $current "/diary/") (strings.HasPrefix $current "/diary_month/") (strings.HasPrefix $current "/diary_tag/") }}is-active{{ end }}" href="{{ $diaryURL }}">Diary</a>

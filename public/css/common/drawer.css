@@ -333,7 +333,7 @@
 
 .year-selector-item {
     padding: 16px 20px;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     background: #fff;
     color: #050317;

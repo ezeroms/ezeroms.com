@@ -15,7 +15,7 @@
 
 .tweet-item__bubble {
     background: #fff;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-default);
     padding: 32px;
     padding-bottom: 32px;

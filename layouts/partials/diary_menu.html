@@ -4,9 +4,12 @@
             {{ $allTags := slice }}
             {{ range (where .Site.RegularPages "Section" "diary") }}
                 {{ if .Params.diary_tag }}
-                    {{ range .Params.diary_tag }}
-                        {{ if not (in $allTags .) }}
-                            {{ $allTags = $allTags | append . }}
+                    {{ $tags := .Params.diary_tag }}
+                    {{ if and $tags (gt (len $tags) 0) }}
+                        {{ range $tags }}
+                            {{ if and . (ne . "") (not (in $allTags .)) }}
+                                {{ $allTags = $allTags | append . }}
+                            {{ end }}
                         {{ end }}
                     {{ end }}
                 {{ end }}
