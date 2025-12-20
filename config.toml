@@ -14,6 +14,7 @@ disableAliases = true
   tweet_place = "tweet_place"
   diary_tag = "diary_tag"
   diary_month = "diary_month"
+  diary_place = "diary_place"
   column_tag = "column_tag"
   work_tag = "work_tag"
   work_month = "work_month"
@@ -27,8 +28,6 @@ disableAliases = true
   taxonomy = ["HTML", "RSS"]
 
 [permalinks]
-  tweet = "/tweet/:slug/"
-  diary = "/diary/:slug/"
   column = "/column/:slug/"
   work = "/work/:slug/"
 

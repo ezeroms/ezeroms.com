@@ -136,14 +136,22 @@
                 {{ $monthPage := index $pageContext.Site.Taxonomies.diary_month ($yearMonth | urlize) }}
                 {{/* 初期表示の制御：表示年の場合は表示、それ以外は非表示 */}}
                 {{ $isInitialYear := eq $year $displayYearInt }}
-
+                {{/* タクソノミーページが見つからない場合でも、記事が存在する場合はURLを生成 */}}
+                {{ $monthURL := "" }}
                 {{ if $monthPage }}
+                    {{ $monthURL = $monthPage.Page.RelPermalink }}
+                {{ else if $hasArticles }}
+                    {{/* タクソノミーページが存在しない場合でも、記事が存在する場合はURLを直接生成 */}}
+                    {{ $monthURL = printf "/diary_month/%s/" ($yearMonth | urlize) }}
+                {{ end }}
+
+                {{ if $monthURL }}
                     <a
-                        href="{{ $monthPage.Page.RelPermalink }}"
-                        class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}"
+                        href="{{ $monthURL }}"
+                        class="date-selector-nav__filter-btn {{ if $isActive }}active{{ end }}{{ if not $hasArticles }} disabled{{ end }}"
                         data-year-month="{{ $yearMonth }}"
                         data-year="{{ $year }}"
-                        {{- if not $isInitialYear }} style="display: none"{{ end }}
+                        {{- if not $isInitialYear }} style="display: none"{{ else if not $hasArticles }} style="opacity: 0.4; cursor: not-allowed; pointer-events: none"{{ end }}
                     >{{ $label }}</a>
                 {{ else }}
                     <span

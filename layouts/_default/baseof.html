@@ -52,8 +52,6 @@
             {{/* モバイル専用ヘッダー（タブレット/スマホのみ表示） */}}
             {{ if eq .Section "about" }}
                 {{ partial "mobile-header-about.html" . }}
-            {{ else if or (eq .Section "tweet") (hasPrefix .RelPermalink "/tweet_") }}
-                {{ partial "mobile-header-date-selector.html" (dict "context" . "type" "tweet") }}
             {{ else if or (eq .Section "diary") (hasPrefix .RelPermalink "/diary_") }}
                 {{ partial "mobile-header-date-selector.html" (dict "context" . "type" "diary") }}
             {{ else if or (eq .Section "column") (hasPrefix .RelPermalink "/column_") }}
@@ -87,9 +85,13 @@
                     {{ block "main" . }}{{ end }}
                 </main>
 
-                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) }}
+                {{ if and (ne .Section "ui-design-guidebook") (ne .Section "about") (ne .Section "shoulders-of-giants") (ne .Section "chronicle") (not .IsHome) (or (hasPrefix .RelPermalink "/diary_") (hasPrefix .RelPermalink "/tweet_") (hasPrefix .RelPermalink "/column_") (hasPrefix .RelPermalink "/work_") (eq .Section "column") (eq .Section "work")) }}
                 <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
                     {{ block "secondary" . }}{{ partial "secondary-nav.html" . }}{{ end }}
+                </aside>
+                {{ else if and (not .IsHome) (hasPrefix .RelPermalink "/diary_") }}
+                <aside class="layout-tags" aria-label="セカンダリーナビゲーション">
+                    {{ block "secondary" . }}{{ end }}
                 </aside>
                 {{ else }}
                 {{ block "secondary" . }}{{ end }}

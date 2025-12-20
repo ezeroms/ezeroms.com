@@ -62,7 +62,7 @@
 .chronicle-year-range input[type="number"] {
     width: 80px;
     padding: 8px 12px;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 0.875rem;
     color: #050317;
@@ -104,7 +104,7 @@
     flex: 1 1 0;
     min-height: 0;
     max-height: 100%;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
 }
 
@@ -124,7 +124,7 @@
 
 .chronicle-table thead tr {
     background: #fff;
-    box-shadow: inset 0 -1px 0 #E7E7E9;
+    box-shadow: inset 0 -1px 0 var(--color-border);
 }
 
 .chronicle-table thead th {
@@ -132,7 +132,7 @@
     top: 0;
     background: inherit;
     z-index: 10;
-    box-shadow: inset -1px 0 0 #E7E7E9, inset 0 -1px 0 #E7E7E9;
+    box-shadow: inset -1px 0 0 var(--color-border), inset 0 -1px 0 var(--color-border);
 }
 
 .chronicle-table thead th:first-child {
@@ -153,7 +153,7 @@
     border-right: none;
     border-bottom: none;
     white-space: nowrap;
-    box-shadow: inset -1px 0 0 #E7E7E9;
+    box-shadow: inset -1px 0 0 var(--color-border);
 }
 
 .chronicle-table__category-header,
@@ -172,7 +172,7 @@
     white-space: nowrap;
     min-width: 200px;
     width: auto;
-    box-shadow: inset -1px 0 0 #E7E7E9, inset 0 -1px 0 #E7E7E9, 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset -1px 0 0 var(--color-border), inset 0 -1px 0 var(--color-border), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
 .chronicle-table__subcategory-header {
@@ -225,7 +225,7 @@
 }
 
 .chronicle-table__year-row {
-    border-bottom: 1px solid #E7E7E9;
+    border-bottom: 1px solid var(--color-border);
 }
 
 /* 月単位表示のとき、同じ年の中の月と月の間は点線にする */
@@ -245,7 +245,7 @@
     border-right: none;
     white-space: nowrap;
     vertical-align: top;
-    box-shadow: inset -1px 0 0 #E7E7E9;
+    box-shadow: inset -1px 0 0 var(--color-border);
 }
 
 .chronicle-table__year-content {
@@ -272,7 +272,7 @@
 .chronicle-table__category-cell,
 .chronicle-table__subcategory-cell {
     padding: 16px 24px;
-    border-right: 1px solid #E7E7E9;
+    border-right: 1px solid var(--color-border);
     vertical-align: top;
     min-width: 240px;
     width: auto;
@@ -286,7 +286,7 @@
 
 .chronicle-event {
     padding: 16px;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     background: #fff;
     transition: all 0.2s ease;
@@ -412,7 +412,7 @@
 .chronicle-birth__year-input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 0.875rem;
     color: #050317;
@@ -428,7 +428,7 @@
 .chronicle-birth__month-input {
     width: 80px;
     padding: 8px 12px;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 0.875rem;
     color: #050317;
@@ -453,7 +453,7 @@
 .chronicle-year-range__end-input {
     flex: 1;
     padding: 8px 12px;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 0.875rem;
     color: #050317;
@@ -544,7 +544,7 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    border: 2px solid #E7E7E9;
+    border: 2px solid var(--color-border);
     border-radius: 5px;
     background: #fff;
     position: relative;
@@ -572,7 +572,7 @@
 
 .chronicle-filters__checkbox input[type="checkbox"]:focus {
     outline: none;
-    border-color: #E7E7E9;
+    border-color: var(--color-border);
 }
 
 .chronicle-filters__checkbox span {
@@ -583,7 +583,7 @@
     margin-top: 12px;
     padding: 8px 16px;
     background: #fff;
-    border: 1px solid #E7E7E9;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 0.875rem;
     color: rgba(0, 0, 0, 0.7);

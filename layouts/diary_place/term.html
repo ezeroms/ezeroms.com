@@ -1,0 +1,225 @@
+{{ define "section_header" }}
+    {{ partial "date-selector-nav-diary.html" . }}
+{{ end }}
+
+{{ define "main" }}
+    {{ partial "notification.html" . }}
+
+    <section class="page-section">
+        <div class="page-section__content">
+            <ul class="article-container diary-timeline-container" id="diary-list">
+                {{/* Diaryセクションのページのみを表示 */}}
+                {{ $diaryPages := where .Pages "Section" "diary" }}
+                {{ $totalPages := len $diaryPages }}
+                {{ range $index, $page := $diaryPages }}
+                    <article class="article-item diary-timeline-item" id="{{ $page.File.TranslationBaseName }}">
+                        <div class="diary-timeline-item__wrapper">
+                            <div class="diary-timeline-item__date-marker">
+                                <a href="#{{ $page.File.TranslationBaseName }}" class="diary-timeline-item__date-circle-link" data-slug="{{ $page.File.TranslationBaseName }}" onclick="copyDiaryLink(this, event);">
+                                    <div class="diary-timeline-item__date-circle">
+                                        <span class="diary-timeline-item__date-month">{{ $page.Date | dateFormat "Jan" }}</span>
+                                        <span class="diary-timeline-item__date-day">{{ $page.Date | dateFormat "02" }}</span>
+                                    </div>
+                                </a>
+                                {{ if lt $index (sub $totalPages 1) }}
+                                    <div class="diary-timeline-item__date-line"></div>
+                                {{ end }}
+                            </div>
+                            <div class="diary-timeline-item__content">
+                                <div class="diary-timeline-item__text{{ if .Params.voice_type }} diary-timeline-item__text--{{ .Params.voice_type }}{{ end }}">{{ $page.Content }}</div>
+                                <div class="diary-timeline-item__bottom">
+                                    {{ if $page.Params.diary_tag }}
+                                        <div class="diary-timeline-item__tags">
+                                            {{ $currentTag := "" }}
+                                            {{/* RelPermalinkから現在のタグを取得 */}}
+                                            {{ if hasPrefix $.RelPermalink "/diary_tag/" }}
+                                                {{ $pathParts := split (trim $.RelPermalink "/") "/" }}
+                                                {{ if ge (len $pathParts) 2 }}
+                                                    {{ $currentTag = index $pathParts 1 }}
+                                                {{ end }}
+                                            {{ end }}
+                                            {{ $sortedTags := sort $page.Params.diary_tag }}
+                                            {{ range $sortedTags }}
+                                                {{ $label := . }}
+                                                {{ $isActive := false }}
+                                                {{ if and $currentTag (eq ($label | urlize) $currentTag) }}
+                                                    {{ $isActive = true }}
+                                                {{ end }}
+                                                {{ $taxonomy := "" }}
+                                                {{ range $term, $pages := $.Site.Taxonomies.diary_tag }}
+                                                    {{ if eq ($term | urlize) ($label | urlize) }}
+                                                        {{ $taxonomy = $pages }}
+                                                    {{ end }}
+                                                {{ end }}
+                                                {{ with $taxonomy }}
+                                                    <a href="{{ .Page.RelPermalink }}" class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</a>
+                                                {{ else }}
+                                                    <span class="tag {{ if $isActive }}active{{ end }}" data-tag="{{ $label }}">{{ $label }}</span>
+                                                {{ end }}
+                                            {{ end }}
+                                        </div>
+                                    {{ end }}
+                                    <div class="diary-timeline-item__footer">
+                                        <p class="date diary-timeline-item__date">
+                                            {{ $page.Date | dateFormat "Jan 2" }} · {{ $page.Date | dateFormat "Mon" }} · {{ $page.Date | dateFormat "2006" }}{{ if $page.Params.diary_place }} · {{ $place := $page.Params.diary_place }}{{ $placeTaxonomy := "" }}{{ range $term, $pages := $.Site.Taxonomies.diary_place }}{{ if eq ($term | urlize) ($place | urlize) }}{{ $placeTaxonomy = $pages }}{{ end }}{{ end }}{{ if $placeTaxonomy }}<a href="{{ $placeTaxonomy.Page.RelPermalink }}" class="diary-timeline-item__place-link">{{ $place }}</a>{{ else }}{{ $place }}{{ end }}{{ end }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                {{ end }}
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        function copyDiaryLink(element, event) {
+            if (event) {
+                event.preventDefault(); // デフォルトのアンカーリンク動作を一時的に停止
+            }
+            const slug = element.getAttribute('data-slug');
+            const currentUrl = window.location.origin + window.location.pathname;
+            const urlWithAnchor = currentUrl + '#' + slug;
+            
+            navigator.clipboard.writeText(urlWithAnchor).then(function() {
+                showNotification();
+                // コピー後にアンカーリンクとしてスクロール
+                const targetElement = document.getElementById(slug);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, function(err) {
+                console.error('URLのコピーに失敗しました: ', err);
+            });
+        }
+
+        function showNotification() {
+            var notification = document.getElementById("notification");
+            if (notification) {
+                notification.className = "notification show";
+                setTimeout(function() {
+                    notification.className = notification.className.replace(" show", "");
+                }, 3000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelector = document.querySelector('.date-selector-nav__year-selector');
+            const yearDisplay = document.getElementById('year-display');
+            const prevYearBtn = document.getElementById('prev-year');
+            const nextYearBtn = document.getElementById('next-year');
+            const monthFilters = document.getElementById('date-selector-nav__month-filters');
+            
+            if (!yearSelector || !yearDisplay || !prevYearBtn || !nextYearBtn || !monthFilters) {
+                return;
+            }
+            
+            let currentYear = parseInt(yearDisplay.textContent);
+            const minYear = parseInt(yearSelector.getAttribute('data-min-year')) || currentYear;
+            const maxYear = parseInt(yearSelector.getAttribute('data-max-year')) || currentYear;
+
+            function updateMonthButtons(year) {
+                // <a>タグと<span>タグの両方を対象にする
+                const buttons = monthFilters.querySelectorAll('a, span');
+                
+                buttons.forEach(btn => {
+                    const btnYear = btn.getAttribute('data-year');
+                    if (btnYear === String(year)) {
+                        // 表示年の場合は、display: noneを削除（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle.replace(/display:\s*none;?\s*/gi, '').trim();
+                            if (newStyle) {
+                                btn.setAttribute('style', newStyle);
+                            } else {
+                                btn.removeAttribute('style');
+                            }
+                        }
+                    } else {
+                        // 非表示年の場合は、display: noneを追加（他のstyle属性は保持）
+                        const currentStyle = btn.getAttribute('style') || '';
+                        if (!currentStyle.includes('display: none')) {
+                            const newStyle = currentStyle ? currentStyle + '; display: none' : 'display: none';
+                            btn.setAttribute('style', newStyle);
+                        }
+                    }
+                });
+            }
+
+            function updateYearButtons() {
+                if (currentYear <= minYear) {
+                    prevYearBtn.classList.add('disabled');
+                    prevYearBtn.disabled = true;
+                } else {
+                    prevYearBtn.classList.remove('disabled');
+                    prevYearBtn.disabled = false;
+                }
+                
+                if (currentYear >= maxYear) {
+                    nextYearBtn.classList.add('disabled');
+                    nextYearBtn.disabled = true;
+                } else {
+                    nextYearBtn.classList.remove('disabled');
+                    nextYearBtn.disabled = false;
+                }
+            }
+
+            prevYearBtn.addEventListener('click', function() {
+                if (currentYear > minYear) {
+                    currentYear--;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
+            });
+
+            nextYearBtn.addEventListener('click', function() {
+                if (currentYear < maxYear) {
+                    currentYear++;
+                    yearDisplay.textContent = currentYear;
+                    updateMonthButtons(currentYear);
+                    updateYearButtons();
+                }
+            });
+
+            // 初期状態で月のボタンと年選択ボタンを更新
+            updateMonthButtons(currentYear);
+            updateYearButtons();
+
+            // アンカーリンクの処理（クエリパラメータまたはハッシュから）
+            function scrollToAnchor() {
+                let targetId = null;
+                
+                // まずクエリパラメータをチェック
+                const urlParams = new URLSearchParams(window.location.search);
+                const slug = urlParams.get('slug');
+                if (slug) {
+                    targetId = slug;
+                    // クエリパラメータをアンカーリンクに変換
+                    const newUrl = window.location.pathname + '#' + slug;
+                    window.history.replaceState({}, '', newUrl);
+                } else if (window.location.hash) {
+                    // ハッシュが直接指定されている場合
+                    targetId = window.location.hash.substring(1); // #を除去
+                }
+                
+                if (targetId) {
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        setTimeout(function() {
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+                }
+            }
+            
+            scrollToAnchor();
+        });
+    </script>
+{{ end }}
+
+{{ define "secondary" }}
+    {{ partial "diary_menu.html" . }}
+{{ end }}
+
