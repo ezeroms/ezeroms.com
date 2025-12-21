@@ -44,28 +44,6 @@
             </div>
 
             <!-- サイトナビゲーション -->
-            {{/* Tweetセクションの最新月を取得 */}}
-            {{ $tweetSection := .Site.GetPage "section" "tweet" }}
-            {{ $tweetMonths := slice }}
-            {{ if $tweetSection }}
-                {{ range $tweetSection.Pages }}
-                    {{ $monthStr := .Date | dateFormat "2006-01" }}
-                    {{ if not (in $tweetMonths $monthStr) }}
-                        {{ $tweetMonths = $tweetMonths | append $monthStr }}
-                    {{ end }}
-                {{ end }}
-            {{ end }}
-            {{ $sortedTweetMonths := sort $tweetMonths }}
-            {{ $tweetLatestMonth := "" }}
-            {{ $tweetURL := "/tweet/" }}
-            {{ if gt (len $sortedTweetMonths) 0 }}
-                {{ $tweetLatestMonth = index $sortedTweetMonths (sub (len $sortedTweetMonths) 1) }}
-                {{ $tweetMonthPage := index .Site.Taxonomies.tweet_month ($tweetLatestMonth | urlize) }}
-                {{ if $tweetMonthPage }}
-                    {{ $tweetURL = $tweetMonthPage.Page.RelPermalink }}
-                {{ end }}
-            {{ end }}
-            
             {{/* Diaryセクションの最新月を取得 */}}
             {{ $diarySection := .Site.GetPage "section" "diary" }}
             {{ $diaryMonths := slice }}
@@ -91,7 +69,6 @@
             <nav class="top-nav-mobile">
                 <div class="top-nav-mobile__section">
                     <a href="/about/profile/" class="top-nav-mobile__link">About</a>
-                    <a href="{{ $tweetURL }}" class="top-nav-mobile__link">Tweet</a>
                     <a href="{{ $diaryURL }}" class="top-nav-mobile__link">Diary</a>
                     <a href="/column/" class="top-nav-mobile__link">Column</a>
                     <a href="/work/" class="top-nav-mobile__link">Work</a>
