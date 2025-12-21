@@ -77,11 +77,63 @@
     display: block;
     text-decoration: none;
     color: inherit;
-    transition: opacity 0.2s ease;
+    position: relative;
 }
 
-.diary-timeline-item__date-circle-link:hover {
-    opacity: 0.8;
+/* ツールチップ（PCのみ） */
+@media (min-width: 768px) {
+    .diary-timeline-item__date-circle-link {
+        isolation: isolate;
+    }
+
+    .diary-timeline-item__date-circle-link:hover {
+        opacity: 1 !important;
+    }
+
+    .diary-timeline-item__date-circle-link::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + var(--spacing-sm));
+        left: 50%;
+        transform: translateX(-50%);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        background-color: var(--color-primary);
+        color: var(--color-text-inverse);
+        font-size: var(--font-size-xs);
+        white-space: nowrap;
+        border-radius: var(--radius-sm);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-normal) var(--easing-default);
+        z-index: 1000;
+        isolation: isolate;
+    }
+
+    .diary-timeline-item__date-circle-link:hover::after {
+        opacity: 1 !important;
+    }
+
+    .diary-timeline-item__date-circle-link::before {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + var(--spacing-xs));
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid var(--color-primary);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-normal) var(--easing-default);
+        z-index: 1000;
+        isolation: isolate;
+    }
+
+    .diary-timeline-item__date-circle-link:hover::before {
+        opacity: 1 !important;
+    }
 }
 
 .diary-timeline-item__date-circle {
@@ -99,6 +151,11 @@
     z-index: 2;
     flex-shrink: 0;
     cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.diary-timeline-item__date-circle-link:hover .diary-timeline-item__date-circle {
+    opacity: 0.8;
 }
 
 .diary-timeline-item__date-month {
@@ -298,7 +355,23 @@
 }
 
 @media (max-width: 767px) {
+    .article-container.diary-timeline-container {
+        gap: 24px;
+    }
+    
+    .diary-timeline-item__wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
     .diary-timeline-item__date-marker {
+        width: 100%;
+        padding-top: 0;
+        margin-bottom: 0;
+        align-items: flex-start;
+    }
+    
+    .diary-timeline-item__date-line {
         display: none;
     }
     

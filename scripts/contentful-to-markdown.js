@@ -62,17 +62,50 @@ async function getAllEntries(options) {
   return allItems;
 }
 
-async function processDiary() {
+async function processColumn() {
   const outDir = path.join(__dirname, '..', 'content', 'column');
   fs.mkdirSync(outDir, { recursive: true });
 
   console.log('Fetching column entries from Contentful...');
 
-  const entries = await getAllEntries({
-    content_type: 'diary', // Contentful側のコンテンツタイプIDは 'diary' だが、実際はColumn
-    order: '-fields.date',
-    include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
-  });
+  // 後方互換性のため、新しいIDを優先、なければ古いIDを試す
+  let entries;
+  try {
+    entries = await getAllEntries({
+      content_type: '21x9qoYgM1TRew9Oagxt8s', // 現在のColumnコンテンツタイプ（システムID）
+      order: '-fields.date',
+      include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
+    });
+  } catch (error) {
+    // エラーメッセージまたはエラー詳細にContent type関連のエラーが含まれる場合
+    const isContentTypeError = error.message && (
+      error.message.includes('Content type') || 
+      error.message.includes('unknownContentType') ||
+      error.message.includes('DOESNOTEXIST')
+    ) || (error.response && error.response.data && error.response.data.details && 
+          error.response.data.details.errors && 
+          error.response.data.details.errors.some(e => e.name === 'unknownContentType'));
+    
+    if (isContentTypeError) {
+      console.log('   Content type "21x9qoYgM1TRew9Oagxt8s" not found, trying "column"...');
+      try {
+        entries = await getAllEntries({
+          content_type: 'column', // 旧ID（後方互換性）
+          order: '-fields.date',
+          include: 0,
+        });
+      } catch (error2) {
+        console.log('   Content type "column" not found, trying old ID "diary"...');
+        entries = await getAllEntries({
+          content_type: 'diary', // 旧ID（後方互換性）
+          order: '-fields.date',
+          include: 0,
+        });
+      }
+    } else {
+      throw error;
+    }
+  }
 
   console.log(`Found ${entries.length} column entries.`);
 
@@ -80,7 +113,21 @@ async function processDiary() {
     const f = entry.fields || {};
 
     const title = f.title || 'Untitled';
-    const slug = f.slug || entry.sys.id;
+    // Contentfulのslugフィールドを直接使用（ロケール対応、フォールバック: エントリID）
+    let slug = '';
+    if (f.slug) {
+      if (typeof f.slug === 'string') {
+        slug = f.slug;
+      } else if (f.slug['ja-JP']) {
+        slug = f.slug['ja-JP'];
+      } else if (f.slug['en-US']) {
+        slug = f.slug['en-US'];
+      } else {
+        slug = Object.values(f.slug)[0] || entry.sys.id;
+      }
+    } else {
+      slug = entry.sys.id;
+    }
     
     // 日付をISO 8601形式（UTC）に変換
     let date = f.date || new Date().toISOString();
@@ -127,20 +174,67 @@ ${columnMonth ? `column_month:\n  - "${String(columnMonth).replace(/"/g, '\\"')}
   }
 }
 
-async function processTweet() {
+async function processDiary() {
   const outDir = path.join(__dirname, '..', 'content', 'diary');
   fs.mkdirSync(outDir, { recursive: true });
 
-  console.log('Fetching tweet entries from Contentful...');
+  console.log('Fetching diary entries from Contentful...');
 
   try {
-  const entries = await getAllEntries({
-    content_type: 'tweet',
-    order: '-fields.date',
-    include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
-  });
+    // 後方互換性のため、新しいIDを優先、なければ古いIDを試す
+    let entries;
+    try {
+      // まず現在のDiaryコンテンツタイプIDを試す
+      entries = await getAllEntries({
+        content_type: '2Kymz8f5lsk5BSap6oSM9L', // 現在のDiaryコンテンツタイプ（システムID: 2Kymz8f5lsk5BSap6oSM9L）
+        order: '-fields.date',
+        include: 0,
+      });
+    } catch (error) {
+      // 'diary_new'が見つからない場合は、'tweet'を試す（移行前のDiaryコンテンツ）
+      const isContentTypeError = error.message && (
+        error.message.includes('Content type') || 
+        error.message.includes('unknownContentType') ||
+        error.message.includes('DOESNOTEXIST')
+      ) || (error.response && error.response.data && error.response.data.details && 
+            error.response.data.details.errors && 
+            error.response.data.details.errors.some(e => e.name === 'unknownContentType'));
+      
+      if (isContentTypeError) {
+        console.log('   Content type "2Kymz8f5lsk5BSap6oSM9L" not found, trying "tweet"...');
+        try {
+          entries = await getAllEntries({
+            content_type: 'tweet', // 移行前のDiaryコンテンツタイプ（後方互換性）
+            order: '-fields.date',
+            include: 0,
+          });
+        } catch (error2) {
+          // 'tweet'も見つからない場合は、'diary'を試す
+          const isContentTypeError2 = error2.message && (
+            error2.message.includes('Content type') || 
+            error2.message.includes('unknownContentType') ||
+            error2.message.includes('DOESNOTEXIST')
+          ) || (error2.response && error2.response.data && error2.response.data.details && 
+                error2.response.data.details.errors && 
+                error2.response.data.details.errors.some(e => e.name === 'unknownContentType'));
+          
+          if (isContentTypeError2) {
+            console.log('   Content type "tweet" not found, trying "diary"...');
+            entries = await getAllEntries({
+              content_type: 'diary', // 旧ID（後方互換性）
+              order: '-fields.date',
+              include: 0,
+            });
+          } else {
+            throw error2;
+          }
+        }
+      } else {
+        throw error;
+      }
+    }
 
-    console.log(`Found ${entries.length} tweet entries.`);
+    console.log(`Found ${entries.length} diary entries.`);
 
     for (const entry of entries) {
       const f = entry.fields || {};
@@ -188,6 +282,7 @@ async function processTweet() {
       const yamlString = (value) => String(value).replace(/"/g, '\\"');
 
       const frontMatter = `---
+slug: "${yamlString(slug)}"
 date: ${date}
 diary_month:
   - ${diaryMonth}
@@ -204,8 +299,8 @@ ${voiceType ? `voice_type: "${yamlString(voiceType)}"\n` : ''}${place ? `diary_p
     }
   } catch (error) {
     if (error.message && error.message.includes('Content type')) {
-      console.warn('Warning: Tweet content type not found in Contentful. Skipping tweet processing.');
-      console.warn('This might be normal if you haven\'t set up the tweet content type yet.');
+      console.warn('Warning: Diary content type not found in Contentful. Skipping diary processing.');
+      console.warn('This might be normal if you haven\'t set up the diary content type yet.');
     } else {
       throw error;
     }
@@ -219,11 +314,44 @@ async function processShouldersOfGiants() {
   console.log('Fetching shoulders-of-giants entries from Contentful...');
 
   try {
-    const entries = await getAllEntries({
-      content_type: 'shouldersOfGiants',
-      order: '-sys.createdAt',
-      include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
-    });
+    // 後方互換性のため、新しいIDを優先、なければ古いIDを試す
+    let entries;
+    try {
+      entries = await getAllEntries({
+        content_type: '3iZ9V9Emr1bFMBMKGYsCCB', // 現在のShoulders of Giantsコンテンツタイプ（システムID）
+        order: '-sys.createdAt',
+        include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
+      });
+    } catch (error) {
+      // エラーメッセージまたはエラー詳細にContent type関連のエラーが含まれる場合
+      const isContentTypeError = error.message && (
+        error.message.includes('Content type') || 
+        error.message.includes('unknownContentType') ||
+        error.message.includes('DOESNOTEXIST')
+      ) || (error.response && error.response.data && error.response.data.details && 
+            error.response.data.details.errors && 
+            error.response.data.details.errors.some(e => e.name === 'unknownContentType'));
+      
+      if (isContentTypeError) {
+        console.log('   Content type "3iZ9V9Emr1bFMBMKGYsCCB" not found, trying "shoulders_of_giants"...');
+        try {
+          entries = await getAllEntries({
+            content_type: 'shoulders_of_giants', // 旧ID（後方互換性）
+            order: '-sys.createdAt',
+            include: 0,
+          });
+        } catch (error2) {
+          console.log('   Content type "shoulders_of_giants" not found, trying old ID "shouldersOfGiants"...');
+          entries = await getAllEntries({
+            content_type: 'shouldersOfGiants', // 旧ID（後方互換性）
+            order: '-sys.createdAt',
+            include: 0,
+          });
+        }
+      } else {
+        throw error;
+      }
+    }
 
     console.log(`Found ${entries.length} shoulders-of-giants entries.`);
 
@@ -256,6 +384,7 @@ async function processShouldersOfGiants() {
       const yamlString = (value) => String(value).replace(/"/g, '\\"');
 
       const frontMatter = `---
+slug: "${yamlString(slug)}"
 ${topics.length > 0 ? `topic:${yamlArray(topics)}\n` : ''}${bookTitle ? `book_title: "${yamlString(bookTitle)}"\n` : ''}${author ? `author: "${yamlString(author)}"\n` : ''}${publisher ? `publisher: "${yamlString(publisher)}"\n` : ''}${publishedYear ? `published_year: ${publishedYear}\n` : ''}${citationOverride ? `citation_override: "${yamlString(citationOverride)}"\n` : ''}---
 `;
 
@@ -277,8 +406,8 @@ ${topics.length > 0 ? `topic:${yamlArray(topics)}\n` : ''}${bookTitle ? `book_ti
 }
 
 async function main() {
+  await processColumn();
   await processDiary();
-  await processTweet();
   await processShouldersOfGiants();
   console.log('Done.');
 }

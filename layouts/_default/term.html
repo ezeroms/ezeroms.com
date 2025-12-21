@@ -20,7 +20,7 @@
                         <article class="article-item diary-timeline-item" id="{{ $page.File.TranslationBaseName }}">
                             <div class="diary-timeline-item__wrapper">
                                 <div class="diary-timeline-item__date-marker">
-                                    <a href="#{{ $page.File.TranslationBaseName }}" class="diary-timeline-item__date-circle-link" data-slug="{{ $page.File.TranslationBaseName }}" onclick="copyDiaryLink(this, event);">
+                                    <a href="#{{ $page.File.TranslationBaseName }}" class="diary-timeline-item__date-circle-link" data-slug="{{ $page.File.TranslationBaseName }}" data-tooltip="リンクをコピー" onclick="copyDiaryLink(this, event);">
                                         <div class="diary-timeline-item__date-circle">
                                             <span class="diary-timeline-item__date-month">{{ $page.Date | dateFormat "Jan" }}</span>
                                             <span class="diary-timeline-item__date-day">{{ $page.Date | dateFormat "02" }}</span>
@@ -80,7 +80,7 @@
         <script>
             function copyDiaryLink(element, event) {
                 if (event) {
-                    event.preventDefault(); // デフォルトのアンカーリンク動作を一時的に停止
+                    event.preventDefault(); // デフォルトのアンカーリンク動作を停止
                 }
                 const slug = element.getAttribute('data-slug');
                 const currentUrl = window.location.origin + window.location.pathname;
@@ -88,11 +88,6 @@
                 
                 navigator.clipboard.writeText(urlWithAnchor).then(function() {
                     showNotification();
-                    // コピー後にアンカーリンクとしてスクロール
-                    const targetElement = document.getElementById(slug);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
                 }, function(err) {
                     console.error('URLのコピーに失敗しました: ', err);
                 });
