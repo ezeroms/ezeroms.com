@@ -1,4 +1,5 @@
 ---
+slug: "3bdwwkjwthnmq8mf"
 date: 2025-09-23T12:13:00.000Z
 diary_month:
   - 2025-09

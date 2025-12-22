@@ -1,4 +1,5 @@
 ---
+slug: "t4jxutn8k7grfdxe"
 date: 2025-11-16T18:00:00.000Z
 diary_month:
   - 2025-11

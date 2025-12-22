@@ -1,4 +1,5 @@
 ---
+slug: "wvzclnwrbmq7af99"
 date: 2025-12-07T00:02:00.000Z
 diary_month:
   - 2025-12

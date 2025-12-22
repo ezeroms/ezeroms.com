@@ -1,4 +1,5 @@
 ---
+slug: "f4yxrrdfp3egranp"
 date: 2025-12-05T01:22:00.000Z
 diary_month:
   - 2025-12

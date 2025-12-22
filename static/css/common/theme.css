@@ -128,7 +128,7 @@
     --line-height-loose: 1.7;
     
     /* テキストの行間（本文用） */
-    --text-line-height: 2.0;
+    --text-line-height: 1.9;
     
     /* 記事ヘッダータグのマージン */
     --article-header-tags-margin-top: 2rem;
@@ -191,7 +191,7 @@
         --section-padding-bottom: 64px;
         
         /* テキストの行間（タブレット版：より高く） */
-        --text-line-height: 2.0;
+        --text-line-height: 1.9;
     }
 }
 

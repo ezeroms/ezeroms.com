@@ -1,0 +1,22 @@
+---
+slug: "ac3y1ybw7ybvjpcz"
+date: 2025-05-18T17:21:56.283Z
+diary_month:
+  - 2025-05
+diary_tag:
+  - "佐渡"
+  - "食べ物"
+diary_place: "Sado Island, Niigata"
+---
+
+!\[\](/images/diary/2025-05-19/cm4cyhfzubnrrkfa.jpg)
+
+佐渡汽船の売店で、なんとなく手に取った笹団子がめちゃくちゃうまかった。
+
+冷凍されたものを持ち歩いていたら自然解凍されたんだけど、それがよかったのかもしれない。
+
+######
+
+!\[Perchの中庭でエナドリをキメる海野\](/images/diary/2025-05-19/pgtvtq7i0u3jw0bu.jpg)
+
+!\[佐和田を歩いていたら突然現れたどこでもドア\](/images/diary/2025-05-19/ycxsxmfg8tjhbbff.jpg)

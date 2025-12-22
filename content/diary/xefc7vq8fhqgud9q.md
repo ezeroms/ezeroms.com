@@ -1,4 +1,5 @@
 ---
+slug: "xefc7vq8fhqgud9q"
 date: 2025-12-08T05:42:00.000Z
 diary_month:
   - 2025-12
@@ -7,7 +8,7 @@ diary_tag:
   - "デザイン"
 ---
 
-### CSS Masonry のあゆみと現状
+CSS Masonry のあゆみと現状
 
 [https://blog.sakupi01.com/dev/articles/the-state-of-css-masonry](https://blog.sakupi01.com/dev/articles/the-state-of-css-masonry)
 

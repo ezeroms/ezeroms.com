@@ -1,4 +1,5 @@
 ---
+slug: "u3zbdzybxhb7rnm9"
 date: 2025-12-18T08:54:00.000Z
 diary_month:
   - 2025-12

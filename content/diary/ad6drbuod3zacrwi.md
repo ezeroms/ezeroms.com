@@ -1,4 +1,5 @@
 ---
+slug: "ad6drbuod3zacrwi"
 date: 2025-11-09T10:36:00.000Z
 diary_month:
   - 2025-11

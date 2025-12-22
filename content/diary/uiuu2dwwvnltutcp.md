@@ -1,4 +1,5 @@
 ---
+slug: "uiuu2dwwvnltutcp"
 date: 2025-11-27T03:54:00.000Z
 diary_month:
   - 2025-11

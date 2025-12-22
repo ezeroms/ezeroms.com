@@ -1,4 +1,5 @@
 ---
+slug: "qk6t4ozrbpuyeuda"
 date: 2025-11-17T03:43:00.000Z
 diary_month:
   - 2025-11

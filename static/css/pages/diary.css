@@ -203,7 +203,7 @@
     line-height: var(--text-line-height);
     margin: 0 0 2rem 0;
     word-break: break-word;
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
 }
 
 .diary-timeline-item__text > *:first-child {

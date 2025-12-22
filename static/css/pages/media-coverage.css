@@ -55,7 +55,7 @@ body.is-about .layout-header {
     font-style: normal;
     font-weight: 400;
     line-height: var(--text-line-height);
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
 }
 
 .media-coverage-card__lead:last-child {
@@ -72,7 +72,7 @@ body.is-about .layout-header {
     font-style: normal;
     font-weight: 400;
     line-height: var(--text-line-height);
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
 }
 
 /* スマホ版 */
