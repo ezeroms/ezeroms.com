@@ -6,6 +6,7 @@ diary_month:
 diary_tag:
   - "語学学習"
   - "Duolingo"
+voice_type: "loud"
 ---
 
 Duolingo のダイアモンドリーグトーナメントを3週連続で勝ち切った！

@@ -1,4 +1,5 @@
 ---
+slug: "xdtx63djf3z53x2w"
 book_title: "社会学的想像力"
 author: "С・ライト・ミルズ"
 publisher: "ちくま学芸文庫"

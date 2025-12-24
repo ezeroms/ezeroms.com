@@ -12,6 +12,62 @@ const { documentToHtmlString } = require('@contentful/rich-text-html-renderer');
 const TurndownService = require('turndown');
 const turndown = new TurndownService();
 
+// YouTube URLからビデオIDを抽出（完全なIDを取得）
+function extractYouTubeVideoId(url) {
+  if (!url) return null;
+  
+  // https://www.youtube.com/watch?v=VIDEO_ID&feature=share のような場合
+  // URLパラメータ（&、#、?、スペース、タブ、改行）までをビデオIDとして取得
+  // パターン1: watch?v=VIDEO_ID 形式
+  // より寛容な正規表現: v=の後の文字列を取得（&、#、?、スペース、タブ、改行、URL終端まで）
+  let match = url.match(/[?&]v=([a-zA-Z0-9_-]{11,})/); // まず11文字以上のIDを試す
+  if (match) {
+    // URLパラメータで終わる可能性があるので、&、#、?、スペースなどまで
+    let videoId = match[1];
+    // 次の&、#、?、スペース、タブ、改行までを取得
+    const endIndex = videoId.search(/[&#\s\t\n\r]/);
+    if (endIndex > 0) {
+      videoId = videoId.substring(0, endIndex);
+    }
+    return videoId;
+  }
+  
+  // 短いIDも試す（8文字以上）
+  match = url.match(/[?&]v=([a-zA-Z0-9_-]{8,})/);
+  if (match) {
+    let videoId = match[1];
+    const endIndex = videoId.search(/[&#\s\t\n\r]/);
+    if (endIndex > 0) {
+      videoId = videoId.substring(0, endIndex);
+    }
+    return videoId;
+  }
+  
+  // パターン2: youtu.be/VIDEO_ID 形式
+  match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    let videoId = match[1];
+    const endIndex = videoId.search(/[?&#\s\t\n\r]/);
+    if (endIndex > 0) {
+      videoId = videoId.substring(0, endIndex);
+    }
+    return videoId;
+  }
+  
+  // パターン3: /embed/VIDEO_ID 形式
+  match = url.match(/\/embed\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    let videoId = match[1];
+    const endIndex = videoId.search(/[?&#\s\t\n\r]/);
+    if (endIndex > 0) {
+      videoId = videoId.substring(0, endIndex);
+    }
+    return videoId;
+  }
+  
+  return null;
+}
+
 // Contentful クライアント
 // Content Preview APIを使用して未公開のエントリも取得可能にする
 const client = createClient({
@@ -206,10 +262,51 @@ async function processColumn() {
 
     // ★ Rich Text → HTML → Markdown
     if (f.body && typeof f.body === 'object' && f.body.nodeType) {
-      const html = documentToHtmlString(f.body);
-      body = turndown.turndown(html);
-      // YouTube URLをyoutube:VIDEO_ID形式に変換
-      body = convertYouTubeUrlsToMarkdown(body);
+      let html = documentToHtmlString(f.body);
+      
+      // HTML内のYouTubeリンクを検出して、hrefをyoutube:VIDEO_ID形式に変換
+      // より寛容な正規表現で、href属性の値を完全に取得
+      html = html.replace(
+        /<a\s+([^>]*?)href\s*=\s*["']([^"']+)["']([^>]*?)>(.*?)<\/a>/gi,
+        (match, before, url, after, text) => {
+          const videoId = extractYouTubeVideoId(url);
+          if (videoId) {
+            // YouTube URLの場合は、hrefをyoutube:VIDEO_ID形式に変換
+            return `<a href="youtube:${videoId}" class="youtube-link" data-youtube-id="${videoId}">${text}</a>`;
+          }
+          return match; // YouTube URLでない場合はそのまま
+        }
+      );
+      
+        // HTML内のプレーンテキストのYouTube URLも検出して<a>タグに変換
+        // <p>https://youtu.be/zDdiWV_740M</p> のような形式
+        html = html.replace(
+          /(https?:\/\/[^\s<>"']*youtu[^\s<>"']*)/gi,
+          (match) => {
+            const videoId = extractYouTubeVideoId(match);
+            if (videoId) {
+              // <a>タグに変換（Turndownが認識できるように）
+              return `<a href="youtube:${videoId}"></a>`;
+            }
+            return match;
+          }
+        );
+        
+        body = turndown.turndown(html);
+        
+        // Turndownで変換されたMarkdownリンクをYouTube形式に変換
+        // エスケープされた形式も含めて処理
+        body = body.replace(
+          /\\?\[\s*\\?\]\s*\(\s*youtube:\s*([a-zA-Z0-9_-]+)\s*\)/g,
+          '[](youtube:$1)'
+        );
+        body = body.replace(
+          /\[([^\]]*)\]\(youtube:([a-zA-Z0-9_-]+)\)/g,
+          '[$1](youtube:$2)'
+        );
+        
+        // YouTube URLをyoutube:VIDEO_ID形式に変換（念のため再度処理）
+        body = convertYouTubeUrlsToMarkdown(body);
     } else if (typeof f.body === 'string') {
       body = f.body;
       // YouTube URLをyoutube:VIDEO_ID形式に変換
@@ -333,9 +430,30 @@ async function processDiary() {
       // ★ Rich Text → HTML → Markdown（bodyはRichText）
       let body = '';
       if (f.body && typeof f.body === 'object' && f.body.nodeType) {
-        const html = documentToHtmlString(f.body);
+        let html = documentToHtmlString(f.body);
+        
+        // HTML内のYouTubeリンクを検出して、hrefをyoutube:VIDEO_ID形式に変換
+        // より寛容な正規表現で、href属性の値を完全に取得
+        html = html.replace(
+          /<a\s+([^>]*?)href\s*=\s*["']([^"']+)["']([^>]*?)>(.*?)<\/a>/gi,
+          (match, before, url, after, text) => {
+            const videoId = extractYouTubeVideoId(url);
+            if (videoId) {
+              return `<a href="youtube:${videoId}" class="youtube-link" data-youtube-id="${videoId}">${text}</a>`;
+            }
+            return match;
+          }
+        );
+        
         body = turndown.turndown(html);
-        // YouTube URLをyoutube:VIDEO_ID形式に変換
+        
+        // Turndownで変換されたMarkdownリンクをYouTube形式に変換
+        body = body.replace(
+          /\[([^\]]*)\]\(youtube:([a-zA-Z0-9_-]+)\)/g,
+          '[$1](youtube:$2)'
+        );
+        
+        // YouTube URLをyoutube:VIDEO_ID形式に変換（念のため再度処理）
         body = convertYouTubeUrlsToMarkdown(body);
       } else if (typeof f.body === 'string') {
         body = f.body;
@@ -439,9 +557,30 @@ async function processShouldersOfGiants() {
       // ★ Rich Text → HTML → Markdown（bodyはRichText）
       let body = '';
       if (f.body && typeof f.body === 'object' && f.body.nodeType) {
-        const html = documentToHtmlString(f.body);
+        let html = documentToHtmlString(f.body);
+        
+        // HTML内のYouTubeリンクを検出して、hrefをyoutube:VIDEO_ID形式に変換
+        // より寛容な正規表現で、href属性の値を完全に取得
+        html = html.replace(
+          /<a\s+([^>]*?)href\s*=\s*["']([^"']+)["']([^>]*?)>(.*?)<\/a>/gi,
+          (match, before, url, after, text) => {
+            const videoId = extractYouTubeVideoId(url);
+            if (videoId) {
+              return `<a href="youtube:${videoId}" class="youtube-link" data-youtube-id="${videoId}">${text}</a>`;
+            }
+            return match;
+          }
+        );
+        
         body = turndown.turndown(html);
-        // YouTube URLをyoutube:VIDEO_ID形式に変換
+        
+        // Turndownで変換されたMarkdownリンクをYouTube形式に変換
+        body = body.replace(
+          /\[([^\]]*)\]\(youtube:([a-zA-Z0-9_-]+)\)/g,
+          '[$1](youtube:$2)'
+        );
+        
+        // YouTube URLをyoutube:VIDEO_ID形式に変換（念のため再度処理）
         body = convertYouTubeUrlsToMarkdown(body);
       } else if (typeof f.body === 'string') {
         body = f.body;

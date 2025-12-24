@@ -1,4 +1,5 @@
 ---
+slug: "wd2baax8t5n294wn"
 book_title: "改訂新版 共同幻想論"
 author: "吉本隆明"
 publisher: "角川ソフィア文庫"

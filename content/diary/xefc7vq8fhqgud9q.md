@@ -8,12 +8,10 @@ diary_tag:
   - "デザイン"
 ---
 
-CSS Masonry のあゆみと現状
+[CSS Masonryについて（sakupi01 blog）](https://blog.sakupi01.com/dev/articles/the-state-of-css-masonry)
 
-[https://blog.sakupi01.com/dev/articles/the-state-of-css-masonry](https://blog.sakupi01.com/dev/articles/the-state-of-css-masonry)
-
-* * *
-
-*   Masonry レイアウトとは、例えば Pinterest のように、画像や要素の高さがバラバラでも「隙間なく詰める」縦横のグリッド配置の方式。行・列を均等なマスに分けるのではなく、片方の軸だけをきちんとグリッド化し、もう一方の軸を「積み上げ（stack）」で詰めるようなイメージ。
+*   CSS Masonryは、Pinterest型の段組みレイアウトを、JavaScriptによる配置計算ではなく、CSSのレイアウトモデルとしてネイティブに扱おうとする仕様提案で、DOM順やアクセシビリティを保ったまま、高さの異なる要素を列方向に詰めて配置することを意図している。
     
-*   これまでは JS ライブラリや手書きの CSS／スクリプトで無理やり実現されてきたが、ネイティブ CSS でその概念を標準化しようという試みが進んでいる。
+*   記事では、CSS Gridは行を揃える二次元レイアウトであるがゆえにカードUIでは余白が生じやすく、Multi-columnは視覚順と読み順が乖離し、JS Masonryは再計算コストやDOM操作による保守性の問題を抱えてきた、という整理がされている。
+    
+*   その上でCSS Masonryは、「自然な視覚配置」と「構造的な正しさ」を両立できる可能性を持つ一方、配置の予測可能性や制御性が下がるというトレードオフも含んでおり、意味的な行・列を持たないカード一覧などに用途を限定して考えるべきものとして位置づけられている。

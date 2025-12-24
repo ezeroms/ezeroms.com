@@ -7,11 +7,6 @@ diary_tag:
   - "お笑い"
 ---
 
-「真空ジェシカVSイルカ」はイルカの圧勝
---------------------
+厳しい〜〜〜
 
-[https://natalie.mu/owarai/news/641423](https://natalie.mu/owarai/news/641423)
-
-* * *
-
-*   厳しい
+[「真空ジェシカVSイルカ」はイルカの圧勝](https://natalie.mu/owarai/news/641423)
