@@ -29,6 +29,63 @@ function getMonthFromDate(dateStr) {
   return `${year}-${month}`;
 }
 
+// YouTube URLをyoutube:VIDEO_ID形式に変換
+function convertYouTubeUrlsToMarkdown(markdown) {
+  if (!markdown) return markdown;
+  
+  // まず、既存のMarkdownリンク形式のYouTube URLを変換
+  // パターン1: [text](https://www.youtube.com/watch?v=VIDEO_ID)
+  markdown = markdown.replace(
+    /\[([^\]]*)\]\(https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?:[^\)]*)\)/g,
+    '[$1](youtube:$2)'
+  );
+  
+  // パターン2: [text](https://youtu.be/VIDEO_ID)
+  markdown = markdown.replace(
+    /\[([^\]]*)\]\(https?:\/\/(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]+)(?:[^\)]*)\)/g,
+    '[$1](youtube:$2)'
+  );
+  
+  // パターン3: [text](https://www.youtube.com/embed/VIDEO_ID)
+  markdown = markdown.replace(
+    /\[([^\]]*)\]\(https?:\/\/(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]+)(?:[^\)]*)\)/g,
+    '[$1](youtube:$2)'
+  );
+  
+  // リンクテキストが空の場合: [](https://...)
+  markdown = markdown.replace(
+    /\[\]\(https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)(?:[^\)]*)\)/g,
+    '[](youtube:$1)'
+  );
+  
+  // プレーンテキストのYouTube URLを検出して変換
+  // パターン1: 行全体がYouTube URLの場合（前後に空白または行の開始/終了）
+  markdown = markdown.replace(
+    /(^|\s)https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?:\S*)?(\s|$)/gm,
+    '$1[](youtube:$2)$3'
+  );
+  
+  // パターン2: 行全体がyoutu.be URLの場合
+  markdown = markdown.replace(
+    /(^|\s)https?:\/\/(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]+)(?:\S*)?(\s|$)/gm,
+    '$1[](youtube:$2)$3'
+  );
+  
+  // パターン3: 段落内のYouTube URL（前後に空白がある）
+  markdown = markdown.replace(
+    /(\s)https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)(?:\S*)?(\s)/g,
+    '$1[](youtube:$2)$3'
+  );
+  
+  // パターン4: 段落内のyoutu.be URL
+  markdown = markdown.replace(
+    /(\s)https?:\/\/(?:www\.)?youtu\.be\/([a-zA-Z0-9_-]+)(?:\S*)?(\s)/g,
+    '$1[](youtube:$2)$3'
+  );
+  
+  return markdown;
+}
+
 // すべてのエントリを取得する（ページネーション対応）
 async function getAllEntries(options) {
   const limit = 100; // Contentful APIの最大値
@@ -151,8 +208,12 @@ async function processColumn() {
     if (f.body && typeof f.body === 'object' && f.body.nodeType) {
       const html = documentToHtmlString(f.body);
       body = turndown.turndown(html);
+      // YouTube URLをyoutube:VIDEO_ID形式に変換
+      body = convertYouTubeUrlsToMarkdown(body);
     } else if (typeof f.body === 'string') {
       body = f.body;
+      // YouTube URLをyoutube:VIDEO_ID形式に変換
+      body = convertYouTubeUrlsToMarkdown(body);
     }
 
     const safeTitle = String(title).replace(/"/g, '\\"');
@@ -274,8 +335,12 @@ async function processDiary() {
       if (f.body && typeof f.body === 'object' && f.body.nodeType) {
         const html = documentToHtmlString(f.body);
         body = turndown.turndown(html);
+        // YouTube URLをyoutube:VIDEO_ID形式に変換
+        body = convertYouTubeUrlsToMarkdown(body);
       } else if (typeof f.body === 'string') {
         body = f.body;
+        // YouTube URLをyoutube:VIDEO_ID形式に変換
+        body = convertYouTubeUrlsToMarkdown(body);
       }
 
       const yamlArray = (arr) => (arr.length ? '\n' + arr.map(v => `  - "${String(v).replace(/"/g, '\\"')}"`).join('\n') : '\n  []');
@@ -376,8 +441,12 @@ async function processShouldersOfGiants() {
       if (f.body && typeof f.body === 'object' && f.body.nodeType) {
         const html = documentToHtmlString(f.body);
         body = turndown.turndown(html);
+        // YouTube URLをyoutube:VIDEO_ID形式に変換
+        body = convertYouTubeUrlsToMarkdown(body);
       } else if (typeof f.body === 'string') {
         body = f.body;
+        // YouTube URLをyoutube:VIDEO_ID形式に変換
+        body = convertYouTubeUrlsToMarkdown(body);
       }
 
       const yamlArray = (arr) => (arr.length ? '\n' + arr.map(v => `  - "${String(v).replace(/"/g, '\\"')}"`).join('\n') : '');
