@@ -61,4 +61,4 @@ Tinderの本質は「人が人を求める」という情欲の一つひとつ�
 
 それは意識されることのないうちに蓄積し、ある日ふとした瞬間に、自分のどこかに残っていたことに気づくのだろう。
 
-<https://www.youtube.com/watch?v=Wczdy7emRds>
+<[](youtube:Wczdy7emRds)

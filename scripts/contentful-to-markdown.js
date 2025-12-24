@@ -222,6 +222,30 @@ async function processColumn() {
 
   console.log(`Found ${entries.length} column entries.`);
 
+  // Contentfulから取得したslugのセットを作成（削除対象の判定用）
+  const contentfulSlugs = new Set();
+  
+  // まず全てのslugを収集
+  for (const entry of entries) {
+    const f = entry.fields || {};
+    let slug = '';
+    if (f.slug) {
+      if (typeof f.slug === 'string') {
+        slug = f.slug;
+      } else if (f.slug['ja-JP']) {
+        slug = f.slug['ja-JP'];
+      } else if (f.slug['en-US']) {
+        slug = f.slug['en-US'];
+      } else {
+        slug = Object.values(f.slug)[0] || entry.sys.id;
+      }
+    } else {
+      slug = entry.sys.id;
+    }
+    contentfulSlugs.add(slug);
+  }
+  
+  // エントリを処理してファイルを生成
   for (const entry of entries) {
     const f = entry.fields || {};
 
@@ -330,6 +354,26 @@ ${columnMonth ? `column_month:\n  - "${String(columnMonth).replace(/"/g, '\\"')}
 
     console.log(`Wrote ${filePath}`);
   }
+  
+  // Contentfulに存在しないファイルを削除
+  console.log('\nChecking for files to delete...');
+  const existingFiles = fs.readdirSync(outDir);
+  let deletedCount = 0;
+  for (const file of existingFiles) {
+    if (file === '_index.md') continue; // _index.mdは削除しない
+    if (!file.endsWith('.md')) continue;
+    
+    const fileSlug = file.replace(/\.md$/, '');
+    if (!contentfulSlugs.has(fileSlug)) {
+      const filePath = path.join(outDir, file);
+      fs.unlinkSync(filePath);
+      console.log(`Deleted ${filePath} (not found in Contentful)`);
+      deletedCount++;
+    }
+  }
+  if (deletedCount > 0) {
+    console.log(`Deleted ${deletedCount} file(s) that were not found in Contentful.`);
+  }
 }
 
 async function processDiary() {
@@ -394,6 +438,17 @@ async function processDiary() {
 
     console.log(`Found ${entries.length} diary entries.`);
 
+    // Contentfulから取得したslugのセットを作成（削除対象の判定用）
+    const contentfulSlugs = new Set();
+    
+    // まず全てのslugを収集
+    for (const entry of entries) {
+      const f = entry.fields || {};
+      const slug = f.slug || entry.sys.id;
+      contentfulSlugs.add(slug);
+    }
+    
+    // エントリを処理してファイルを生成
     for (const entry of entries) {
       const f = entry.fields || {};
 
@@ -445,9 +500,28 @@ async function processDiary() {
           }
         );
         
+        // HTML内のプレーンテキストのYouTube URLも検出して<a>タグに変換
+        // <p>https://youtu.be/zDdiWV_740M</p> のような形式
+        html = html.replace(
+          /(https?:\/\/[^\s<>"']*youtu[^\s<>"']*)/gi,
+          (match) => {
+            const videoId = extractYouTubeVideoId(match);
+            if (videoId) {
+              // <a>タグに変換（Turndownが認識できるように）
+              return `<a href="youtube:${videoId}"></a>`;
+            }
+            return match;
+          }
+        );
+        
         body = turndown.turndown(html);
         
         // Turndownで変換されたMarkdownリンクをYouTube形式に変換
+        // エスケープされた形式も含めて処理
+        body = body.replace(
+          /\\?\[\s*\\?\]\s*\(\s*youtube:\s*([a-zA-Z0-9_-]+)\s*\)/g,
+          '[](youtube:$1)'
+        );
         body = body.replace(
           /\[([^\]]*)\]\(youtube:([a-zA-Z0-9_-]+)\)/g,
           '[$1](youtube:$2)'
@@ -479,6 +553,26 @@ ${voiceType ? `voice_type: "${yamlString(voiceType)}"\n` : ''}${place ? `diary_p
       fs.writeFileSync(filePath, content, 'utf8');
 
       console.log(`Wrote ${filePath}`);
+    }
+    
+    // Contentfulに存在しないファイルを削除
+    console.log('\nChecking for files to delete...');
+    const existingFiles = fs.readdirSync(outDir);
+    let deletedCount = 0;
+    for (const file of existingFiles) {
+      if (file === '_index.md') continue; // _index.mdは削除しない
+      if (!file.endsWith('.md')) continue;
+      
+      const fileSlug = file.replace(/\.md$/, '');
+      if (!contentfulSlugs.has(fileSlug)) {
+        const filePath = path.join(outDir, file);
+        fs.unlinkSync(filePath);
+        console.log(`Deleted ${filePath} (not found in Contentful)`);
+        deletedCount++;
+      }
+    }
+    if (deletedCount > 0) {
+      console.log(`Deleted ${deletedCount} file(s) that were not found in Contentful.`);
     }
   } catch (error) {
     if (error.message && error.message.includes('Content type')) {
@@ -538,6 +632,17 @@ async function processShouldersOfGiants() {
 
     console.log(`Found ${entries.length} shoulders-of-giants entries.`);
 
+    // Contentfulから取得したslugのセットを作成（削除対象の判定用）
+    const contentfulSlugs = new Set();
+    
+    // まず全てのslugを収集
+    for (const entry of entries) {
+      const f = entry.fields || {};
+      const slug = f.slug || entry.sys.id;
+      contentfulSlugs.add(slug);
+    }
+    
+    // エントリを処理してファイルを生成
     for (const entry of entries) {
       const f = entry.fields || {};
 
@@ -572,9 +677,28 @@ async function processShouldersOfGiants() {
           }
         );
         
+        // HTML内のプレーンテキストのYouTube URLも検出して<a>タグに変換
+        // <p>https://youtu.be/zDdiWV_740M</p> のような形式
+        html = html.replace(
+          /(https?:\/\/[^\s<>"']*youtu[^\s<>"']*)/gi,
+          (match) => {
+            const videoId = extractYouTubeVideoId(match);
+            if (videoId) {
+              // <a>タグに変換（Turndownが認識できるように）
+              return `<a href="youtube:${videoId}"></a>`;
+            }
+            return match;
+          }
+        );
+        
         body = turndown.turndown(html);
         
         // Turndownで変換されたMarkdownリンクをYouTube形式に変換
+        // エスケープされた形式も含めて処理
+        body = body.replace(
+          /\\?\[\s*\\?\]\s*\(\s*youtube:\s*([a-zA-Z0-9_-]+)\s*\)/g,
+          '[](youtube:$1)'
+        );
         body = body.replace(
           /\[([^\]]*)\]\(youtube:([a-zA-Z0-9_-]+)\)/g,
           '[$1](youtube:$2)'
@@ -602,6 +726,26 @@ ${topics.length > 0 ? `topic:${yamlArray(topics)}\n` : ''}${bookTitle ? `book_ti
       fs.writeFileSync(filePath, content, 'utf8');
 
       console.log(`Wrote ${filePath}`);
+    }
+    
+    // Contentfulに存在しないファイルを削除
+    console.log('\nChecking for files to delete...');
+    const existingFiles = fs.readdirSync(outDir);
+    let deletedCount = 0;
+    for (const file of existingFiles) {
+      if (file === '_index.md') continue; // _index.mdは削除しない
+      if (!file.endsWith('.md')) continue;
+      
+      const fileSlug = file.replace(/\.md$/, '');
+      if (!contentfulSlugs.has(fileSlug)) {
+        const filePath = path.join(outDir, file);
+        fs.unlinkSync(filePath);
+        console.log(`Deleted ${filePath} (not found in Contentful)`);
+        deletedCount++;
+      }
+    }
+    if (deletedCount > 0) {
+      console.log(`Deleted ${deletedCount} file(s) that were not found in Contentful.`);
     }
   } catch (error) {
     if (error.message && error.message.includes('Content type')) {
