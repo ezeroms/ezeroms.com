@@ -7,10 +7,14 @@ diary_tag:
   - "映画"
 ---
 
-映画『ルックバック』
+[映画『ルックバック』](https://k2pic.com/film/lb)
 
-[https://k2pic.com/film/lb](https://k2pic.com/film/lb)
+[](youtube:djXq8NxlXf8)
 
 * * *
 
-ルックバック実写化……！ 監督・脚本・是枝裕和、音楽・坂東祐大……つ、強すぎる。
+ルックバック実写化……！
+
+監督・脚本・是枝裕和、音楽・坂東祐大……！！！
+
+つ、強すぎる。

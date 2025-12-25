@@ -45,10 +45,13 @@ function findDuplicates() {
 
     fileInfo.push({ slug, path: filePath, body, size: stats.size });
 
-    if (!bodyToFiles.has(body)) {
-      bodyToFiles.set(body, []);
+    // bodyを正規化（空白を統一）
+    const normalizedBody = body.replace(/\s+/g, ' ').trim();
+    
+    if (!bodyToFiles.has(normalizedBody)) {
+      bodyToFiles.set(normalizedBody, []);
     }
-    bodyToFiles.get(body).push({ slug, path: filePath, size: stats.size });
+    bodyToFiles.get(normalizedBody).push({ slug, path: filePath, size: stats.size, originalBody: body });
   }
 
   // 重複を検出
@@ -68,8 +71,9 @@ function findDuplicates() {
 
   for (let i = 0; i < duplicates.length; i++) {
     const { body, files } = duplicates[i];
+    const preview = body.substring(0, 150).replace(/\n/g, ' ');
     console.log(`Duplicate Group ${i + 1}:`);
-    console.log(`  Content preview: ${body.substring(0, 100).replace(/\n/g, ' ')}...`);
+    console.log(`  Content preview: ${preview}...`);
     console.log(`  Files (${files.length}):`);
     
     // ファイルサイズでソート（小さい順）

@@ -11,4 +11,4 @@ diary_tag:
 
 ### [リモートワーカーのためのコワーキングアプリ「Teracy」](https://teracy.io/ja/)
 
-[](youtube:irkcUZj2g5s)[](youtube:irkcUZj2g5s)
+[](youtube:irkcUZj2g5s)

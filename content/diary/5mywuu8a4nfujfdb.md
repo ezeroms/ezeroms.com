@@ -7,6 +7,7 @@ diary_tag:
   - "キャッシュレス"
   - "PayPay"
   - "制度設計"
+  - "決済システム"
 ---
 
 [なぜPayPayは家計簿アプリと連携されないのか──日本の決済データを巡る構造的な課題（ITmedia NEWS）](https://www.itmedia.co.jp/news/articles/2510/31/news087.html)
