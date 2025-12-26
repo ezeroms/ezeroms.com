@@ -7,6 +7,7 @@ const { createClient } = require('contentful');
 
 // ★ 公式: Rich Text → HTML
 const { documentToHtmlString } = require('@contentful/rich-text-html-renderer');
+const { BLOCKS } = require('@contentful/rich-text-types');
 
 // ★ HTML → Markdown
 const TurndownService = require('turndown');
@@ -187,7 +188,7 @@ async function processColumn() {
     entries = await getAllEntries({
       content_type: '21x9qoYgM1TRew9Oagxt8s', // 現在のColumnコンテンツタイプ（システムID）
       order: '-fields.date',
-      include: 0, // リンクされたエントリを含めない（パフォーマンス向上）
+      include: 10, // 埋め込まれたアセット（画像）を含める
     });
   } catch (error) {
     // エラーメッセージまたはエラー詳細にContent type関連のエラーが含まれる場合
@@ -286,7 +287,27 @@ async function processColumn() {
 
     // ★ Rich Text → HTML → Markdown
     if (f.body && typeof f.body === 'object' && f.body.nodeType) {
-      let html = documentToHtmlString(f.body);
+      // 画像を処理するカスタムレンダラー
+      const options = {
+        renderNode: {
+          [BLOCKS.EMBEDDED_ASSET]: (node) => {
+            const asset = node.data.target;
+            if (asset && asset.fields && asset.fields.file) {
+              const file = asset.fields.file;
+              let url = file.url;
+              if (url.startsWith('//')) {
+                url = 'https:' + url;
+              }
+              const title = asset.fields.title || '';
+              const description = asset.fields.description || '';
+              const alt = title || description || '';
+              return `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />`;
+            }
+            return '';
+          },
+        },
+      };
+      let html = documentToHtmlString(f.body, options);
       
       // HTML内のYouTubeリンクを検出して、hrefをyoutube:VIDEO_ID形式に変換
       // より寛容な正規表現で、href属性の値を完全に取得
@@ -485,7 +506,27 @@ async function processDiary() {
       // ★ Rich Text → HTML → Markdown（bodyはRichText）
       let body = '';
       if (f.body && typeof f.body === 'object' && f.body.nodeType) {
-        let html = documentToHtmlString(f.body);
+        // 画像を処理するカスタムレンダラー
+        const options = {
+          renderNode: {
+            [BLOCKS.EMBEDDED_ASSET]: (node) => {
+              const asset = node.data.target;
+              if (asset && asset.fields && asset.fields.file) {
+                const file = asset.fields.file;
+                let url = file.url;
+                if (url.startsWith('//')) {
+                  url = 'https:' + url;
+                }
+                const title = asset.fields.title || '';
+                const description = asset.fields.description || '';
+                const alt = title || description || '';
+                return `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />`;
+              }
+              return '';
+            },
+          },
+        };
+        let html = documentToHtmlString(f.body, options);
         
         // HTML内のYouTubeリンクを検出して、hrefをyoutube:VIDEO_ID形式に変換
         // より寛容な正規表現で、href属性の値を完全に取得
@@ -662,7 +703,27 @@ async function processShouldersOfGiants() {
       // ★ Rich Text → HTML → Markdown（bodyはRichText）
       let body = '';
       if (f.body && typeof f.body === 'object' && f.body.nodeType) {
-        let html = documentToHtmlString(f.body);
+        // 画像を処理するカスタムレンダラー
+        const options = {
+          renderNode: {
+            [BLOCKS.EMBEDDED_ASSET]: (node) => {
+              const asset = node.data.target;
+              if (asset && asset.fields && asset.fields.file) {
+                const file = asset.fields.file;
+                let url = file.url;
+                if (url.startsWith('//')) {
+                  url = 'https:' + url;
+                }
+                const title = asset.fields.title || '';
+                const description = asset.fields.description || '';
+                const alt = title || description || '';
+                return `<img src="${url}" alt="${alt.replace(/"/g, '&quot;')}" />`;
+              }
+              return '';
+            },
+          },
+        };
+        let html = documentToHtmlString(f.body, options);
         
         // HTML内のYouTubeリンクを検出して、hrefをyoutube:VIDEO_ID形式に変換
         // より寛容な正規表現で、href属性の値を完全に取得
