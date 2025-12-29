@@ -41,7 +41,11 @@ column_tag:
 *   転居（やうつり）「急げ」（赤い公園）
     
 
-つまり、曲名でありながら、おみくじの各項目の「お言葉」としても読めてしまうものを集める、という大喜利的な企画です。スマホを振るとおみくじが出てきて、各項目ごとに一曲ずつ、曲名がおみくじの内容のようにランダム表示される仕組みを考えています。できれば、そのまま楽曲を再生できるようにもしたいと思っています。
+つまり、曲名でありながら、おみくじの各項目の「お言葉」としても読めてしまうものを集める、という大喜利的な企画です。スマホを振るとおみくじが出てきて、各項目ごとに一曲ずつ、曲名がおみくじの内容のようにランダム表示される。できれば、そのまま楽曲を再生できる仕組みにしたいと考えています。見た目も、本物のおみくじに寄せつつ、でもWebの表現で可愛らしいものにしようと思っています。
+
+![61](https://images.ctfassets.net/dis3d5w8snuc/3T0mHcLhuemWJYlthTVYFD/dc703fb10022d5b496422ab2807b978d/61.png)
+
+（デザインを相談しているときのイメージボード）
 
 お願いしたいこと
 --------
@@ -55,6 +59,8 @@ column_tag:
 [https://docs.google.com/spreadsheets/d/15SfsoBNiv4mUM20dq8d4rBAAu5miZ0dE-sKWl976f4s](https://docs.google.com/spreadsheets/d/15SfsoBNiv4mUM20dq8d4rBAAu5miZ0dE-sKWl976f4s)
 
 ![60](https://images.ctfassets.net/dis3d5w8snuc/3XXwjo8HLMFyxlgBxZoEGD/7a65822346811a15e6b9d82f99aba563/60.png)
+
+（入力シートはこんな感じ）
 
 ### 入力にあたって
 
