@@ -1,0 +1,6 @@
+/* Next.js 用の最小リセット。本番スタイルは /css/main.css（現行サイト）を使用 */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}

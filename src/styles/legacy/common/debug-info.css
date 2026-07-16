@@ -1,0 +1,9 @@
+.debug-info {
+  display: none;
+  /* display: flex; */
+  width: 100%;
+  z-index: 100;
+  background-color: #050317;
+  color: #fff;
+  margin: 0;
+}

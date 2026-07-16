@@ -1,0 +1,66 @@
+/* このファイルは非推奨です。common/tag.css を使用してください。 */
+/* 後方互換性のため、古いクラス名を新しいクラス名にマッピング */
+
+.article-tag,
+a.article-tag,
+span.article-tag,
+.article-item .article-tag,
+.article-item a.article-tag,
+.article-item span.article-tag,
+.diary-item .article-tag,
+.diary-item a.article-tag,
+.diary-item span.article-tag {
+    /* tag.cssのスタイルを継承（同じスタイルを適用） */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.8rem;
+    min-height: 30px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    transition: all var(--transition-normal) var(--easing-default);
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.article-item a.article-tag {
+    text-decoration: none !important;
+}
+
+.article-item a.article-tag:hover {
+    opacity: 1;
+    text-decoration: none !important;
+}
+
+.article-tag:hover,
+a.article-tag:hover,
+span.article-tag:hover,
+.article-item .article-tag:hover,
+.article-item a.article-tag:hover,
+.article-item span.article-tag:hover,
+.diary-item .article-tag:hover,
+.diary-item a.article-tag:hover,
+.diary-item span.article-tag:hover {
+    background: var(--color-border);
+    border-color: var(--color-border-hover);
+}
+
+.article-tag.active,
+a.article-tag.active,
+span.article-tag.active,
+.article-item .article-tag.active,
+.article-item a.article-tag.active,
+.article-item span.article-tag.active,
+.article-item span.article-tag.active,
+.diary-item .article-tag.active,
+.diary-item a.article-tag.active,
+.diary-item span.article-tag.active {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-primary);
+}

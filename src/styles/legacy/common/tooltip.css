@@ -1,0 +1,36 @@
+/* --------------------
+デバイス共通のスタイル
+-------------------- */
+.tooltip {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    right: 50%;
+    width: max-content;
+    display: flex;
+    padding: 2px var(--spacing-sm);
+    transform: translate(-50%, -50%) scale(0);
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-xs);
+    border-radius: 2px;
+    opacity: 0;
+}
+
+.about__profile__sns li:hover .tooltip {
+    transform: translate(-50%, -50%) scale(1);
+    transition-duration: var(--transition-fast);
+    bottom: 50%;
+    opacity: 1;
+}
+
+
+
+
+
+
+/* --------------------
+パソコン用のスタイル
+-------------------- */
+@media (min-width: 961px) {
+}

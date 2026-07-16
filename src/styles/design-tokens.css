@@ -1,0 +1,32 @@
+/**
+ * ezeroms shared design tokens (Admin + Public).
+ * Values aligned with legacy theme (#050317 / #f9f9f7).
+ * HSL channels without `hsl()` for Tailwind alpha support.
+ */
+:root {
+  --background: 60 14% 97%; /* #f9f9f7 */
+  --foreground: 240 40% 5%; /* #050317 */
+  --card: 0 0% 100%;
+  --card-foreground: 240 40% 5%;
+  --primary: 240 40% 5%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 60 8% 94%;
+  --secondary-foreground: 240 40% 5%;
+  --muted: 60 8% 94%;
+  --muted-foreground: 240 4% 38%; /* ~#5d5d5f */
+  --accent: 60 8% 94%;
+  --accent-foreground: 240 40% 5%;
+  --destructive: 0 72% 40%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 6% 90%; /* #E7E7E9 */
+  --input: 240 6% 90%;
+  --ring: 240 40% 5%;
+  --radius: 0.5rem;
+
+  /* Brand aliases (non-HSL) for rare direct use */
+  --ez-primary: #050317;
+  --ez-primary-hover: #39393d;
+  --ez-bg: #f9f9f7;
+  --ez-border: #e7e7e9;
+  --ez-text-secondary: #5d5d5f;
+}

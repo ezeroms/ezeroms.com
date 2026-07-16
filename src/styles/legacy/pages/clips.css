@@ -1,0 +1,91 @@
+/* Clips — bookmark / short-memo list */
+
+.clips-page__intro {
+  margin: 0 0 var(--spacing-2xl, 2rem);
+  max-width: 36em;
+  color: var(--color-text-secondary, #5d5d5f);
+  font-size: var(--font-size-base, 1rem);
+  line-height: 1.6;
+}
+
+.clips-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.clips-card {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--color-border, #e7e7e9);
+}
+
+.clips-card:first-child {
+  padding-top: 0;
+}
+
+.clips-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary, #5d5d5f);
+}
+
+.clips-card__date {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.clips-card__source {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.clips-card__source:hover {
+  opacity: 0.7;
+}
+
+.clips-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+
+.clips-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.clips-card__title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.clips-card__memo {
+  margin: 0;
+  max-width: 40em;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--color-text-primary, #050317);
+  white-space: pre-wrap;
+}
+
+.clips-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+}
+
+.clips-empty {
+  margin: 2rem 0;
+  color: var(--color-text-secondary, #5d5d5f);
+}

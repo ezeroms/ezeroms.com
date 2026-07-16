@@ -1,5 +1,46 @@
-.DS_Store
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-node_modules
-.envstatic/images/diary/2025-05-17/PXL_20250517_153841132.mp4
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+.hugo_build.lock
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env files (secrets)
 .env
+.env*.local
+.env.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Tina / legacy
+.tina
+
+# Nested install leftovers
+scripts/node_modules/

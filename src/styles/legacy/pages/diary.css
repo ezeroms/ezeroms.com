@@ -1,0 +1,434 @@
+/* Diary専用スタイル */
+
+.diary-item__title-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.diary-item__title-wrapper a {
+    flex: 1;
+}
+
+/* 記事内のタグスタイルは共通クラス（article-tag）で管理 */
+
+/* Diaryのタイトルと補足情報の間のborderを削除 */
+.article-item > h1 + p.date {
+    position: static !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+.article-item > h1 + p.date::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* Diaryのarticle-header内のh1の下のマージンを1remに設定 */
+.article-header > h1 {
+    margin-bottom: 1rem;
+}
+
+/* Diaryのarticle-header内の.date要素（"Diary"）の下に1remのマージン */
+.article-header > .date:first-child {
+    margin-bottom: 1rem;
+}
+
+/* Diaryの補足情報とタグリストの間を開ける */
+.article-item > .date + .article-header__tags {
+    margin-top: 1.5rem;
+}
+
+/* Diary Timeline Style */
+.diary-timeline-container {
+    position: relative;
+}
+
+.diary-timeline-item {
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+    width: 100%;
+    margin: 0;
+}
+
+.diary-timeline-item__wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 8px;
+    position: relative;
+    width: 100%;
+}
+
+.diary-timeline-item__date-marker {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    padding-top: 8px;
+}
+
+.diary-timeline-item__date-circle-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+/* ツールチップ（PCのみ） */
+@media (min-width: 768px) {
+    .diary-timeline-item__date-circle-link {
+        isolation: isolate;
+    }
+
+    .diary-timeline-item__date-circle-link:hover {
+        opacity: 1 !important;
+    }
+
+    .diary-timeline-item__date-circle-link::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + var(--spacing-sm));
+        left: 50%;
+        transform: translateX(-50%);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        background-color: var(--color-primary);
+        color: var(--color-text-inverse);
+        font-size: var(--font-size-xs);
+        white-space: nowrap;
+        border-radius: var(--radius-sm);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-normal) var(--easing-default);
+        z-index: 1000;
+        isolation: isolate;
+    }
+
+    .diary-timeline-item__date-circle-link:hover::after {
+        opacity: 1 !important;
+    }
+
+    .diary-timeline-item__date-circle-link::before {
+        content: '';
+        position: absolute;
+        bottom: calc(100% + var(--spacing-xs));
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid var(--color-primary);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--transition-normal) var(--easing-default);
+        z-index: 1000;
+        isolation: isolate;
+    }
+
+    .diary-timeline-item__date-circle-link:hover::before {
+        opacity: 1 !important;
+    }
+}
+
+.diary-timeline-item__date-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #050317;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.diary-timeline-item__date-circle-link:hover .diary-timeline-item__date-circle {
+    opacity: 0.8;
+}
+
+.diary-timeline-item__date-month {
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.diary-timeline-item__date-day {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.diary-timeline-item__date-line {
+    width: 2px;
+    background-color: var(--color-border);
+    margin-top: 8px;
+    position: absolute;
+    top: 72px;
+    bottom: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.diary-timeline-item__content {
+    flex: 1;
+    min-width: 0;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-default);
+    padding: 32px;
+    padding-bottom: 32px;
+    box-sizing: border-box;
+}
+
+.diary-timeline-item__content > *:first-child {
+    margin-top: 0;
+}
+
+.diary-timeline-item__text {
+    color: #050317;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: var(--text-line-height);
+    margin: 0 0 2rem 0;
+    word-break: break-word;
+    letter-spacing: 0;
+}
+
+.diary-timeline-item__text > *:first-child {
+    margin-top: 0;
+}
+
+.diary-timeline-item__text p {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    opacity: inherit;
+}
+
+.diary-timeline-item__text p:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+/* 文字サイズのバリエーション */
+.diary-timeline-item__text--loud {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+}
+
+.diary-timeline-item__text--louder {
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+}
+
+.diary-timeline-item__text--louder p {
+    line-height: 1.4 !important;
+}
+
+.diary-timeline-item__text--shaky {
+    font-size: 0.875rem !important;
+    font-weight: 300 !important;
+    font-style: normal !important;
+    opacity: 0.8 !important;
+    animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translate(-1px, -1px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translate(1px, 1px);
+    }
+}
+
+.diary-timeline-item__text--secret {
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    opacity: 1 !important;
+    color: #fff !important;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+.diary-timeline-item__text--secret p {
+    color: #fff !important;
+}
+
+.diary-timeline-item__text--secret * {
+    color: #fff !important;
+}
+
+.diary-timeline-item__bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.diary-timeline-item__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    width: auto;
+}
+
+.diary-timeline-item__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 0;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.diary-timeline-item__date {
+    font-size: 0.875rem;
+    margin: 0;
+    font-style: italic;
+    color: #5D5D5F;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* Placeリンクはアンダーラインなし、周りと同じ色で、ホバー時に少し明るく */
+.diary-timeline-item__date a.diary-timeline-item__place-link {
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    transition: color var(--transition-normal) var(--easing-default);
+}
+
+.diary-timeline-item__date a.diary-timeline-item__place-link:hover {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+}
+
+/* Permalink focus (方式A: タイムライン内ハイライト) */
+.diary-timeline-container--focused .diary-timeline-item.is-dimmed {
+    opacity: 0.4;
+    transition: opacity 0.35s ease;
+}
+
+.diary-timeline-container--focused .diary-timeline-item.is-focused {
+    opacity: 1;
+}
+
+.diary-timeline-item.is-focused .diary-timeline-item__content {
+    outline: 1px solid var(--color-border-hover);
+    box-shadow: 0 0 0 4px rgba(5, 3, 23, 0.04);
+}
+
+.diary-timeline-item__permalink {
+    color: inherit;
+    text-decoration: none;
+}
+
+.diary-timeline-item__permalink:hover {
+    color: var(--color-text-secondary);
+}
+
+.notes-feed-more {
+    max-width: 688px;
+    margin: 0 auto 48px;
+    padding: 0 0 24px;
+    text-align: center;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm, 0.875rem);
+    line-height: 1.6;
+}
+
+.notes-feed-more a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 1079px) {
+    .diary-timeline-item__date-marker {
+        width: 64px;
+    }
+    
+    .diary-timeline-item__date-circle {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .diary-timeline-item__date-month {
+        font-size: 0.6875rem;
+        font-weight: 700;
+    }
+    
+    .diary-timeline-item__date-day {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+    
+    .diary-timeline-item__content {
+        padding: 24px;
+        padding-bottom: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    .article-container.diary-timeline-container {
+        gap: 24px;
+    }
+    
+    .diary-timeline-item__wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .diary-timeline-item__date-marker {
+        width: 100%;
+        padding-top: 0;
+        margin-bottom: 0;
+        align-items: flex-start;
+    }
+    
+    .diary-timeline-item__date-line {
+        display: none;
+    }
+    
+    .diary-timeline-item__content {
+        padding: 16px;
+        padding-bottom: 16px;
+    }
+    
+    .diary-timeline-item__text {
+        margin-bottom: 1.5rem;
+    }
+    
+    .diary-timeline-item__text--loud {
+        font-size: 1.125rem !important;
+    }
+    
+    .diary-timeline-item__text--louder {
+        font-size: 2rem !important;
+    }
+}
