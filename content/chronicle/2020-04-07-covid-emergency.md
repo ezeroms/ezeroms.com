@@ -1,6 +1,7 @@
 ---
 title: "新型コロナウイルス緊急事態宣言"
 date: 2020-04-07
+end_date: 2020-05-25
 category: "社会"
 subcategory: "政治"
 chronicle_tag: ["新型コロナ", "緊急事態宣言", "自粛"]

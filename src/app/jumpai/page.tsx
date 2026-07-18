@@ -6,7 +6,9 @@ import {
 
 export const revalidate = 60;
 
-export const metadata: Metadata = photoGalleryMetadata("jumpai");
+export async function generateMetadata(): Promise<Metadata> {
+  return photoGalleryMetadata("jumpai");
+}
 
 export default async function JumpaiIndexPage({
   searchParams,

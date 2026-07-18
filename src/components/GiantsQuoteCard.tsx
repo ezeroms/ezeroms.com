@@ -12,7 +12,7 @@ import { cn } from "@/lib/cn";
 import { contentCard } from "@/lib/site/card-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
 import { tagChipClass } from "@/lib/site/tag-styles";
-import { DiaryShareButton } from "@/components/DiaryShareButton";
+import { ShareButton } from "@/components/ShareButton";
 
 type Props = {
   item: ShouldersOfGiants;
@@ -114,7 +114,7 @@ export function GiantsQuoteCard({
             );
           })}
         </div>
-        <DiaryShareButton
+        <ShareButton
           path={permalink}
           className="-mb-1.5 -mr-1.5 shrink-0"
         />

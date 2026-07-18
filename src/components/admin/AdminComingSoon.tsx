@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,7 @@ import type { AdminNavItem } from "@/lib/admin/nav";
 
 export function AdminComingSoon({ item }: { item: AdminNavItem }) {
   return (
-    <>
+    <AdminContent>
       <AdminPageHeader title={item.label} description={item.description} />
       <Card>
         <CardHeader>
@@ -31,6 +32,6 @@ export function AdminComingSoon({ item }: { item: AdminNavItem }) {
           </Button>
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

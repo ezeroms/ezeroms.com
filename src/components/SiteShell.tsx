@@ -9,6 +9,7 @@ import {
   resolveBreadcrumbs,
   type BreadcrumbItem,
 } from "@/lib/site/breadcrumbs";
+import { listPublicPhotoGalleries } from "@/lib/content/queries";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -39,6 +40,8 @@ type Props = {
    * 省略時は breadcrumbFilter があるとき自動で true。
    */
   filterActive?: boolean;
+  /** パンくず末尾横の ? 説明（Photo 一覧など）。詳細・絞り込み時は渡さない */
+  breadcrumbInfo?: string | null;
   /** パンくず全体を明示指定（pathname 推定を上書き） */
   breadcrumbs?: BreadcrumbItem[];
   /** パンくず＋検索ヘッダーを出さない */
@@ -61,13 +64,20 @@ export async function SiteShell({
   breadcrumbFilter,
   breadcrumbSectionHref,
   filterActive,
+  breadcrumbInfo,
   breadcrumbs,
   hidePageHeader = false,
   hideHeaderSearch = false,
 }: Props) {
   const h = await headers();
   const pathname = h.get("x-pathname") ?? "/";
-  const diaryLatestHref = "/diary/";
+  const notesLatestHref = "/diary/";
+  const publicPhotos = await listPublicPhotoGalleries().catch(() => []);
+  const photoNav = publicPhotos.map((g) => ({
+    id: g.id,
+    href: g.basePath,
+    label: g.label,
+  }));
 
   const showAside = Boolean(showTagsAside && secondary);
   const resolvedMain =
@@ -111,7 +121,11 @@ export async function SiteShell({
           )}
           aria-label="グローバルナビゲーション"
         >
-          <Sidebar pathname={pathname} diaryLatestHref={diaryLatestHref} />
+          <Sidebar
+            pathname={pathname}
+            notesLatestHref={notesLatestHref}
+            photoNav={photoNav}
+          />
         </aside>
 
         <div className="layout-body relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background">
@@ -146,6 +160,7 @@ export async function SiteShell({
                       <BreadcrumbHeader
                         items={resolvedCrumbs}
                         showSearch={!hideHeaderSearch}
+                        infoDescription={breadcrumbInfo}
                         className="min-w-0 flex-1"
                       />
                     ) : null}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/content/diary-meta";
+import { absoluteUrl } from "@/lib/content/absolute-url";
 
 /** Site-wide OGP / card thumbnail size (1.91:1). */
 export const OG_IMAGE_WIDTH = 1200;

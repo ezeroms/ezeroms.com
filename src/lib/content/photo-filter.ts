@@ -1,6 +1,6 @@
 /**
  * 写真ギャラリーの絞り込みクエリ（年）。
- * Smile / Jampai の公開 UI ではタグ絞り込みは使わない。
+ * Smile / Jampai / Kuikake の公開 UI ではタグ絞り込みは使わない。
  */
 
 import {

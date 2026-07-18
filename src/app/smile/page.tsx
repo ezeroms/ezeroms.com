@@ -6,7 +6,9 @@ import {
 
 export const revalidate = 60;
 
-export const metadata: Metadata = photoGalleryMetadata("smile");
+export async function generateMetadata(): Promise<Metadata> {
+  return photoGalleryMetadata("smile");
+}
 
 export default async function SmileIndexPage({
   searchParams,

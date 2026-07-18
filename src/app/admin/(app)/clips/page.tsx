@@ -1,12 +1,10 @@
 import Link from "next/link";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { clipSourceHost } from "@/lib/content/clip-meta";
 import { getSessionUser } from "@/lib/supabase/auth";
@@ -36,7 +34,7 @@ export default async function AdminClipsListPage() {
   }
 
   return (
-    <>
+    <AdminContent width="wide">
       <AdminPageHeader
         title="Clips"
         description="Web記事のクリップ・短いメモ付きブックマーク"
@@ -47,10 +45,6 @@ export default async function AdminClipsListPage() {
         }
       />
       <Card>
-        <CardHeader>
-          <CardTitle>最近の Clips</CardTitle>
-          <CardDescription>最新 80 件</CardDescription>
-        </CardHeader>
         <CardContent>
           <ul className="m-0 flex list-none flex-col gap-0 p-0">
             {items.map((item) => (
@@ -99,6 +93,6 @@ export default async function AdminClipsListPage() {
           </ul>
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

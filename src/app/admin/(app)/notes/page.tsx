@@ -1,13 +1,13 @@
-import Link from "next/link";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  AdminNotesListTable,
+  type AdminNotesTableItem,
+} from "@/components/admin/AdminNotesListTable";
+import { NotesCreateButton } from "@/components/admin/NotesCreateButton";
+import { Card, CardContent } from "@/components/ui/card";
+import { htmlToEditableMarkdown } from "@/lib/admin/content";
+import { excerptFromHtml } from "@/lib/admin/list-format";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -16,90 +16,79 @@ export const dynamic = "force-dynamic";
 export default async function AdminNotesListPage() {
   await getSessionUser();
 
-  let items: {
-    slug: string;
-    date: string;
-    status: string;
-    diary_tag: string[] | null;
-    body_html: string;
-  }[] = [];
+  let items: AdminNotesTableItem[] = [];
+  let loadError: string | null = null;
 
   if (hasSupabaseConfig()) {
-    const { data } = await getSupabaseAdmin()
+    // Prefer body_md / og_image when present; fall back if columns not migrated yet.
+    let { data, error } = await getSupabaseAdmin()
       .from("diary")
-      .select("slug, date, status, diary_tag, body_html")
+      .select(
+        "slug, date, status, diary_tag, diary_place, body_html, body_md, og_image",
+      )
+      .eq("is_deleted", false)
       .order("date", { ascending: false })
-      .limit(40);
-    items = (data ?? []) as typeof items;
+      .limit(200);
+
+    if (error) {
+      const fallback = await getSupabaseAdmin()
+        .from("diary")
+        .select("slug, date, status, diary_tag, diary_place, body_html")
+        .eq("is_deleted", false)
+        .order("date", { ascending: false })
+        .limit(200);
+      data = fallback.data;
+      error = fallback.error;
+    }
+
+    if (error) {
+      loadError = error.message;
+      console.error("[admin/notes]", error.message);
+    } else {
+      items = ((data ?? []) as Record<string, unknown>[]).map((row) => {
+        const slug = String(row.slug ?? "");
+        const date = String(row.date ?? "");
+        const status = String(row.status ?? "published");
+        const tags = (row.diary_tag as string[] | null) ?? [];
+        const place = (row.diary_place as string | null) ?? null;
+        const bodyHtml = (row.body_html as string | null) ?? "";
+        const bodyMd =
+          String(row.body_md ?? "").trim() || htmlToEditableMarkdown(bodyHtml);
+
+        return {
+          slug,
+          date,
+          status,
+          place,
+          tags,
+          excerpt: excerptFromHtml(bodyHtml),
+          editor: {
+            slug,
+            body_md: bodyMd,
+            date,
+            tags: tags.join(", "),
+            place: place ?? "",
+            status: status === "draft" ? "draft" : "published",
+            og_image: (row.og_image as string | null) ?? "",
+          },
+        };
+      });
+    }
   }
 
   return (
-    <>
-      <AdminPageHeader
-        title="Notes"
-        description="日記・メモのタイムライン"
-        actions={
-          <Button asChild>
-            <Link href="/admin/notes/new/">＋ 新規投稿</Link>
-          </Button>
-        }
-      />
-      <Card>
-        <CardHeader>
-          <CardTitle>最近の Notes</CardTitle>
-          <CardDescription>最新 40 件 · 行をクリックして編集</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="m-0 flex list-none flex-col gap-0 p-0">
-            {items.map((item) => {
-              const excerpt = item.body_html
-                .replace(/<[^>]+>/g, " ")
-                .replace(/\s+/g, " ")
-                .trim()
-                .slice(0, 80);
-              return (
-                <li
-                  key={item.slug}
-                  className="flex items-center justify-between gap-3 border-b border-border py-3 text-sm last:border-b-0"
-                >
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      href={`/admin/notes/${item.slug}/edit/`}
-                      className="font-medium underline-offset-2 hover:underline"
-                    >
-                      {new Date(item.date).toLocaleString("ja-JP")}
-                    </Link>
-                    {excerpt ? (
-                      <p className="truncate text-xs text-muted-foreground">
-                        {excerpt}
-                      </p>
-                    ) : null}
-                    <p className="truncate text-xs text-muted-foreground">
-                      {item.status}
-                      {(item.diary_tag ?? []).length
-                        ? ` · ${(item.diary_tag ?? []).join(", ")}`
-                        : ""}
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 gap-1">
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={`/admin/notes/${item.slug}/edit/`}>編集</Link>
-                    </Button>
-                    <Button asChild variant="ghost" size="sm">
-                      <Link href={`/diary/${item.slug}/`}>表示</Link>
-                    </Button>
-                  </div>
-                </li>
-              );
-            })}
-            {!items.length ? (
-              <li className="py-6 text-sm text-muted-foreground">
-                まだ投稿がありません
-              </li>
-            ) : null}
-          </ul>
+    <AdminContent width="wide">
+      <AdminPageHeader title="Notes" actions={<NotesCreateButton />} />
+      {loadError ? (
+        <p className="mb-3 text-sm text-destructive">
+          一覧の取得に失敗しました: {loadError}
+        </p>
+      ) : null}
+      <Card className="overflow-hidden">
+        <CardContent className="overflow-x-auto p-0">
+          <AdminNotesListTable items={items} empty={!items.length} />
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

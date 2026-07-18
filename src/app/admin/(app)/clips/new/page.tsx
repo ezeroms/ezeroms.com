@@ -1,3 +1,4 @@
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ClipsEditorForm } from "@/components/admin/ClipsEditorForm";
 import {
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export default function AdminClipsNewPage() {
   return (
-    <>
+    <AdminContent>
       <AdminPageHeader
         title="クリップを追加"
         description="タイトル・出典URL・短いメモだけで残せます。"
@@ -28,6 +29,6 @@ export default function AdminClipsNewPage() {
           <ClipsEditorForm />
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

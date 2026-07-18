@@ -2,15 +2,9 @@ import { notFound } from "next/navigation";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import { formatPhotoCaption } from "@/lib/content/photo-caption";
-import {
-  getPhotoGallery,
-  type PhotoGalleryId,
-} from "@/lib/content/photo-galleries";
+import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import { formatPhotoDate } from "@/lib/content/photo-filter";
-import { getPhotoBySlug } from "@/lib/content/queries";
-import { sanitizeBody } from "@/lib/html";
-import { cn } from "@/lib/cn";
-import { proseBodyClass } from "@/lib/site/prose-styles";
+import { getPhotoBySlug, requirePublicPhotoGallery } from "@/lib/content/queries";
 
 type Props = {
   galleryId: PhotoGalleryId;
@@ -19,14 +13,11 @@ type Props = {
 
 /**
  * 直接 URL 用の写真詳細。
- * タイトルはデータ上保持するが公開 UI には出さない。
- * パンくず末尾には日付・場所のキャプションを使う。
- *
- * TODO(仕様確認): 一覧ギャラリーは角丸なしだが、ここでは従来どおり
- * rounded-xl のまま。見た目を揃える場合は別タスクで仕様決定が必要。
+ * タイトル・メモ（body_html）は公開 UI には出さない。
+ * パンくず末尾には日付・場所を使う。
  */
 export async function PhotoDetailPage({ galleryId, slug }: Props) {
-  const gallery = getPhotoGallery(galleryId);
+  const gallery = await requirePublicPhotoGallery(galleryId);
   const photo = await getPhotoBySlug(galleryId, slug);
   if (!photo) notFound();
 
@@ -69,16 +60,6 @@ export async function PhotoDetailPage({ galleryId, slug }: Props) {
             </div>
           ) : null}
         </dl>
-
-        {photo.body_html?.trim() ? (
-          <div
-            className={cn(
-              "mt-6 max-w-none text-base leading-relaxed text-foreground",
-              proseBodyClass,
-            )}
-            dangerouslySetInnerHTML={{ __html: sanitizeBody(photo.body_html) }}
-          />
-        ) : null}
       </article>
     </SiteShell>
   );

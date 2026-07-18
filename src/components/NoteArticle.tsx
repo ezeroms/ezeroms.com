@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { Diary } from "@/types/content";
 import {
-  diaryPermalink,
-  formatDiaryDate,
-} from "@/lib/content/diary-meta";
+  notesPermalink,
+  formatNotesDate,
+} from "@/lib/content/notes-meta";
 import { tagChipClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
-import { DiaryShareButton } from "@/components/DiaryShareButton";
+import { ShareButton } from "@/components/ShareButton";
 import { contentCard } from "@/lib/site/card-styles";
 
 type Props = {
@@ -16,15 +16,15 @@ type Props = {
 };
 
 /**
- * Notes（diary）の個別詳細。
- * カード内レイアウトは一覧（DiaryTimeline）に揃える。
+ * Notes（公開 URL / DB は diary）の個別詳細。
+ * カード内レイアウトは一覧（NotesTimeline）に揃える。
  */
 export function NoteArticle({ item, bodyHtml }: Props) {
   const tags = [...(item.diary_tag ?? [])].sort((a, b) =>
     a.localeCompare(b, "ja"),
   );
-  const dateLabel = formatDiaryDate(item.date);
-  const permalink = diaryPermalink(item.slug);
+  const dateLabel = formatNotesDate(item.date);
+  const permalink = notesPermalink(item.slug);
 
   return (
     <div className="w-full font-sans text-foreground">
@@ -72,7 +72,7 @@ export function NoteArticle({ item, bodyHtml }: Props) {
               ) : null}
             </div>
           </div>
-          <DiaryShareButton
+          <ShareButton
             path={permalink}
             className="-mr-1.5 -mt-1.5"
           />

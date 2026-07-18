@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
-import { absoluteUrl } from "@/lib/content/diary-meta";
+import { absoluteUrl } from "@/lib/content/absolute-url";
 import {
   OG_IMAGE_ASPECT_CLASS,
   ogImageMetadata,

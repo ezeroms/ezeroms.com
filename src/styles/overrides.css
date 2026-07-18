@@ -25,7 +25,7 @@
 
 /* Share button tooltip — above icon center, short delay, pop up from below */
 @media (min-width: 768px) {
-  .diary-share-btn::after {
+  .share-btn::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: calc(100% + 6px);
@@ -49,8 +49,8 @@
     transition-delay: 0s;
   }
 
-  .diary-share-btn:hover::after,
-  .diary-share-btn:focus-visible::after {
+  .share-btn:hover::after,
+  .share-btn:focus-visible::after {
     opacity: 1;
     transform: translateX(-50%) translateY(0) scale(1);
     transition-delay: 0.35s;

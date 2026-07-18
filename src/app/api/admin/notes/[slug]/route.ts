@@ -35,6 +35,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
       "id, slug, date, diary_tag, diary_place, og_image, status, body_html, body_md, published_at, updated_at",
     )
     .eq("slug", slug)
+    .eq("is_deleted", false)
     .maybeSingle();
 
   if (error) {
@@ -102,6 +103,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       .from("diary")
       .select("slug, diary_month")
       .eq("slug", slug)
+      .eq("is_deleted", false)
       .maybeSingle();
 
     if (findError) {
@@ -151,4 +153,33 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       { status: 500 },
     );
   }
+}
+
+export async function DELETE(_request: NextRequest, { params }: RouteParams) {
+  const auth = await requireAdmin();
+  if (auth.error) return auth.error;
+
+  const { slug } = await params;
+  const { data, error } = await getSupabaseAdmin()
+    .from("diary")
+    .update({ is_deleted: true })
+    .eq("slug", slug)
+    .eq("is_deleted", false)
+    .select("slug, diary_month")
+    .maybeSingle();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  if (!data) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  revalidatePath("/diary");
+  revalidatePath(`/diary/${slug}`);
+  for (const m of (data.diary_month as string[] | null) ?? []) {
+    revalidatePath(`/diary_month/${m}`);
+  }
+
+  return NextResponse.json({ ok: true, slug });
 }

@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateContentSlug } from "@/lib/admin/content";
 import { isPhotoGalleryId } from "@/lib/content/photo-galleries";
+import { createCleanPhotoAssets } from "@/lib/media/photo-clean";
+import { allocateUniquePhotoFileId } from "@/lib/media/photo-filename";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ gallery: string }> };
 
+/**
+ * 写真アップロード:
+ * 1. 向きを焼き込み、メタデータを削除した JPEG + サムネを作る
+ * 2. 英数字 16 桁のユニーク名で Storage へ保存
+ */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   const user = await getSessionUser();
   if (!user) {
@@ -27,30 +33,60 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "file is required" }, { status: 400 });
     }
 
-    const original = file.name || "upload.webp";
-    const ext = original.includes(".")
-      ? original.slice(original.lastIndexOf("."))
-      : ".webp";
-    const base =
-      original.replace(/\.[^.]+$/, "").replace(/[^\w-]+/g, "-") ||
-      generateContentSlug(8);
-    const objectPath = `photos/${gallery}/${base}-${Date.now()}${ext}`;
+    const sourceBuffer = Buffer.from(await file.arrayBuffer());
+    const assets = await createCleanPhotoAssets(sourceBuffer);
 
-    const buffer = Buffer.from(await file.arrayBuffer());
     const sb = getSupabaseAdmin();
-    const { error: upErr } = await sb.storage.from("media").upload(objectPath, buffer, {
-      contentType: file.type || "image/webp",
-      upsert: false,
-    });
-    if (upErr) {
-      return NextResponse.json({ error: upErr.message }, { status: 500 });
+
+    // list と upload の間の極稀な衝突に備え、最大 2 回試す
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const fileId = await allocateUniquePhotoFileId(sb, gallery);
+      const originalPath = `photos/${gallery}/${fileId}${assets.original.extension}`;
+      const thumbPath = `photos/${gallery}/${fileId}-thumb.webp`;
+
+      const { error: originalError } = await sb.storage
+        .from("media")
+        .upload(originalPath, assets.original.buffer, {
+          contentType: assets.original.contentType,
+          upsert: false,
+        });
+
+      if (originalError) {
+        // 名前衝突とみなして付け直し
+        continue;
+      }
+
+      const { error: thumbError } = await sb.storage
+        .from("media")
+        .upload(thumbPath, assets.thumb.buffer, {
+          contentType: assets.thumb.contentType,
+          upsert: false,
+        });
+
+      if (thumbError) {
+        await sb.storage.from("media").remove([originalPath]);
+        return NextResponse.json({ error: thumbError.message }, { status: 500 });
+      }
+
+      const originalPublic = sb.storage.from("media").getPublicUrl(originalPath);
+      const thumbPublic = sb.storage.from("media").getPublicUrl(thumbPath);
+
+      return NextResponse.json({
+        image_url: originalPublic.data.publicUrl,
+        image_thumb_url: thumbPublic.data.publicUrl,
+        path: originalPath,
+        thumb_path: thumbPath,
+        file_id: fileId,
+      });
     }
 
-    const { data: pub } = sb.storage.from("media").getPublicUrl(objectPath);
-    return NextResponse.json({ image_url: pub.publicUrl, path: objectPath });
-  } catch (e) {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Upload failed" },
+      { error: "ユニークなファイル名で保存できませんでした" },
+      { status: 500 },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Upload failed" },
       { status: 500 },
     );
   }

@@ -5,6 +5,7 @@ import {
   Bookmark,
   Briefcase,
   FileText,
+  Pizza,
   House,
   Landmark,
   Mail,
@@ -17,10 +18,19 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
+import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
+
+export type SidebarPhotoNavItem = {
+  id: PhotoGalleryId;
+  href: string;
+  label: string;
+};
 
 type Props = {
   pathname: string;
-  diaryLatestHref?: string;
+  notesLatestHref?: string;
+  /** 公開中の Photos ナビ（非公開は含めない） */
+  photoNav?: SidebarPhotoNavItem[];
 };
 
 type NavItem = {
@@ -36,7 +46,17 @@ type NavSection = {
   items: NavItem[];
 };
 
-export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
+const PHOTO_ICONS: Record<PhotoGalleryId, LucideIcon> = {
+  smile: Smile,
+  jumpai: Bird,
+  kuikake: Pizza,
+};
+
+export function Sidebar({
+  pathname,
+  notesLatestHref = "/diary/",
+  photoNav,
+}: Props) {
   const isDiary =
     pathname.startsWith("/diary") ||
     pathname.startsWith("/diary_month") ||
@@ -66,11 +86,22 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
   const isContact =
     pathname === "/about/contact" ||
     pathname.startsWith("/about/contact/");
-  const isSmile = pathname.startsWith("/smile");
-  const isJumpai = pathname.startsWith("/jumpai");
   const isClips = pathname.startsWith("/clips");
   const isGiants = pathname.startsWith("/shoulders-of-giants");
   const isChronicle = pathname.startsWith("/chronicle");
+
+  const resolvedPhotoNav: SidebarPhotoNavItem[] = photoNav ?? [
+    { id: "smile", href: "/smile/", label: "Smile" },
+    { id: "jumpai", href: "/jumpai/", label: "Jampai" },
+    { id: "kuikake", href: "/kuikake/", label: "Kuikake" },
+  ];
+
+  const photoItems: NavItem[] = resolvedPhotoNav.map((item) => ({
+    href: item.href,
+    label: item.label,
+    icon: PHOTO_ICONS[item.id],
+    active: pathname.startsWith(`/${item.id}`),
+  }));
 
   const sections: NavSection[] = [
     {
@@ -78,7 +109,7 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
       label: "Writing",
       items: [
         {
-          href: diaryLatestHref,
+          href: notesLatestHref,
           label: "Notes",
           icon: NotebookPen,
           active: isDiary,
@@ -91,24 +122,15 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
         },
       ],
     },
-    {
-      id: "photos",
-      label: "Photos",
-      items: [
-        {
-          href: "/smile/",
-          label: "Smile",
-          icon: Smile,
-          active: isSmile,
-        },
-        {
-          href: "/jumpai/",
-          label: "Jampai",
-          icon: Bird,
-          active: isJumpai,
-        },
-      ],
-    },
+    ...(photoItems.length
+      ? [
+          {
+            id: "photos",
+            label: "Photos",
+            items: photoItems,
+          } satisfies NavSection,
+        ]
+      : []),
     {
       id: "works",
       label: "Works",

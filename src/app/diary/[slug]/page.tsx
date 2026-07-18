@@ -3,14 +3,14 @@ import { notFound } from "next/navigation";
 import { MobileHeader } from "@/components/MobileHeader";
 import { NoteArticle } from "@/components/NoteArticle";
 import { SiteShell } from "@/components/SiteShell";
+import { absoluteUrl } from "@/lib/content/absolute-url";
+import { firstImageSrc } from "@/lib/content/html-plain";
 import {
-  absoluteUrl,
-  diaryExcerpt,
-  diaryPermalink,
-  diaryTitle,
-  firstImageSrc,
-  formatDiaryDate,
-} from "@/lib/content/diary-meta";
+  notesExcerpt,
+  notesPermalink,
+  notesTitle,
+  formatNotesDate,
+} from "@/lib/content/notes-meta";
 import {
   ogImageMetadata,
   resolveOgImageUrl,
@@ -18,7 +18,7 @@ import {
 } from "@/lib/content/og-image";
 import { getDiaryBySlug, listDiary, listRelatedDiary } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
-import { DiaryTimeline } from "@/components/DiaryTimeline";
+import { NotesTimeline } from "@/components/NotesTimeline";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
 
 export const revalidate = 60;
@@ -39,10 +39,10 @@ export async function generateMetadata({
   const item = await getDiaryBySlug(slug);
   if (!item) return { title: "Notes" };
 
-  const title = diaryTitle(item);
-  const description = diaryExcerpt(item.body_html, 160) || undefined;
+  const title = notesTitle(item);
+  const description = notesExcerpt(item.body_html, 160) || undefined;
   const ogImage = resolveOgImageUrl(item.og_image, firstImageSrc(item.body_html));
-  const url = absoluteUrl(diaryPermalink(slug), siteUrl());
+  const url = absoluteUrl(notesPermalink(slug), siteUrl());
   const images = ogImageMetadata(ogImage);
 
   return {
@@ -76,7 +76,7 @@ export default async function DiaryEntryPage({
   if (!item) notFound();
 
   const bodyHtml = sanitizeBody(item.body_html);
-  const breadcrumbLabel = formatDiaryDate(item.date) || "Note";
+  const breadcrumbLabel = formatNotesDate(item.date) || "Note";
   const related = await listRelatedDiary(item).catch(() => []);
 
   return (
@@ -90,7 +90,7 @@ export default async function DiaryEntryPage({
       <NoteArticle item={item} bodyHtml={bodyHtml} />
       {related.length > 0 ? (
         <RelatedPostsSection>
-          <DiaryTimeline
+          <NotesTimeline
             items={related.map((entry) => ({
               ...entry,
               body_html: sanitizeBody(entry.body_html),

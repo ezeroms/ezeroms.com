@@ -55,6 +55,12 @@ export function readPhotoMarkdown(
     const date = toIsoDateString(data.date);
     const body_html = markdownToHtml(content);
     const image_url = resolveImageUrl(content, data.image ?? data.image_url);
+    const image_thumb_url =
+      typeof data.image_thumb === "string" && data.image_thumb.trim()
+        ? data.image_thumb.trim()
+        : typeof data.image_thumb_url === "string" && data.image_thumb_url.trim()
+          ? data.image_thumb_url.trim()
+          : null;
     return {
       id: `fs-${gallery}-${slug}`,
       slug,
@@ -63,6 +69,7 @@ export function readPhotoMarkdown(
       location: data.location ? String(data.location) : null,
       camera: data.camera ? String(data.camera) : null,
       image_url,
+      image_thumb_url,
       photo_tag: asStringArray(data.photo_tag ?? data.tags),
       body_html,
       status: "published",

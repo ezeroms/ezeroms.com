@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { BreadcrumbItem } from "@/lib/site/breadcrumbs";
+import { BreadcrumbInfoButton } from "@/components/BreadcrumbInfoButton";
 import { HeaderSearch } from "@/components/HeaderSearch";
 import { cn } from "@/lib/cn";
 
@@ -8,6 +9,11 @@ type Props = {
   /** 右端の検索を出す（デフォルト true） */
   showSearch?: boolean;
   className?: string;
+  /**
+   * 末尾クランブ（ギャラリー名）横の ? で出す説明。
+   * 詳細ページや絞り込み階層があるときは渡さない。
+   */
+  infoDescription?: string | null;
 };
 
 /**
@@ -18,8 +24,12 @@ export function BreadcrumbHeader({
   items,
   showSearch = true,
   className,
+  infoDescription,
 }: Props) {
   if (!items.length) return null;
+
+  const infoText = infoDescription?.trim() || "";
+  const lastIndex = items.length - 1;
 
   return (
     <div
@@ -31,7 +41,7 @@ export function BreadcrumbHeader({
       <nav aria-label="パンくず" className="min-w-0 flex-1 overflow-hidden">
         <ol className="m-0 flex list-none flex-nowrap items-center gap-x-1.5 overflow-hidden p-0 font-sans text-sm font-medium tracking-wide text-muted-foreground">
           {items.map((item, index) => {
-            const isLast = index === items.length - 1;
+            const isLast = index === lastIndex;
             return (
               <li
                 key={`${item.label}-${index}`}
@@ -56,13 +66,20 @@ export function BreadcrumbHeader({
                 ) : (
                   <span
                     className={cn(
-                      "truncate",
+                      "inline-flex min-w-0 max-w-full items-center gap-1",
                       isLast && "text-foreground/80",
                     )}
                     aria-current={isLast ? "page" : undefined}
-                    title={item.label}
                   >
-                    {item.label}
+                    <span className="truncate" title={item.label}>
+                      {item.label}
+                    </span>
+                    {isLast && infoText ? (
+                      <BreadcrumbInfoButton
+                        description={infoText}
+                        galleryLabel={item.label}
+                      />
+                    ) : null}
                   </span>
                 )}
               </li>

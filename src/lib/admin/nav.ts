@@ -12,8 +12,11 @@ export type AdminNavItem = {
     | "bookmark"
     | "file-text"
     | "briefcase"
+    | "palette"
+    | "music-2"
     | "smile"
     | "aperture"
+    | "pizza"
     | "image"
     | "book-open"
     | "landmark"
@@ -56,15 +59,8 @@ export const adminNavSections: AdminNavSection[] = [
         href: "/admin/column/",
         label: "Column",
         description: "長めのエッセイ・記事",
-        status: "soon",
+        status: "ready",
         icon: "file-text",
-      },
-      {
-        href: "/admin/work/",
-        label: "Works",
-        description: "Creative / Experience / Chooning",
-        status: "soon",
-        icon: "briefcase",
       },
     ],
   },
@@ -87,11 +83,45 @@ export const adminNavSections: AdminNavSection[] = [
         icon: "aperture",
       },
       {
+        href: "/admin/kuikake/",
+        label: "Kuikake",
+        description: "写真ギャラリー Kuikake",
+        status: "ready",
+        icon: "pizza",
+      },
+      {
         href: "/admin/top-images/",
         label: "Top images",
         description: "トップのランダム画像",
         status: "soon",
         icon: "image",
+      },
+    ],
+  },
+  {
+    id: "works",
+    label: "Works",
+    items: [
+      {
+        href: "/admin/creative/",
+        label: "Creative",
+        description: "つくったもの・制作実績",
+        status: "ready",
+        icon: "palette",
+      },
+      {
+        href: "/admin/experience/",
+        label: "Experience",
+        description: "職歴・関与の年表",
+        status: "ready",
+        icon: "briefcase",
+      },
+      {
+        href: "/admin/chooning/",
+        label: "Chooning",
+        description: "プロダクト Chooning（後回し）",
+        status: "soon",
+        icon: "music-2",
       },
     ],
   },

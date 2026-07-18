@@ -1,5 +1,5 @@
 import { SiteShell } from "@/components/SiteShell";
-import { DiaryTimeline } from "@/components/DiaryTimeline";
+import { NotesTimeline } from "@/components/NotesTimeline";
 import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
 import { emptyNotesFilter } from "@/lib/content/notes-filter";
@@ -48,7 +48,7 @@ export default async function DiaryTagPage({
       breadcrumbCurrent={`#${decoded}`}
       filterActive
     >
-      <DiaryTimeline items={sanitized} currentTag={decoded} />
+      <NotesTimeline items={sanitized} currentTag={decoded} />
     </SiteShell>
   );
 }

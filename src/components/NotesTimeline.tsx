@@ -4,27 +4,31 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Diary } from "@/types/content";
 import {
-  diaryPermalink,
-  formatDiaryDate,
-} from "@/lib/content/diary-meta";
+  notesPermalink,
+  formatNotesDate,
+} from "@/lib/content/notes-meta";
 import { cn } from "@/lib/cn";
 import { tagChipClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
-import { DiaryShareButton } from "@/components/DiaryShareButton";
+import { ShareButton } from "@/components/ShareButton";
 import { contentCard } from "@/lib/site/card-styles";
 
 type Props = {
   items: Diary[];
   currentTag?: string;
-  /** When set, scroll to this entry and highlight it (permalink / deep link). */
+  /** 指定時、その投稿へスクロールしてハイライト（パーマリンク / ディープリンク） */
   focusSlug?: string;
-  /** Skip empty-state copy (e.g. related block). */
+  /** 関連投稿など、空のときの文言を出さない場合 */
   hideEmpty?: boolean;
-  /** Avoid duplicate #notification when the page already has one. */
+  /** ページ側に #notification があるとき二重に出さない */
   showNotification?: boolean;
 };
 
-export function DiaryTimeline({
+/**
+ * Notes 一覧・関連投稿のタイムライン。
+ * DB / URL は diary のままなので、DOM id も互換のため diary-list を維持する。
+ */
+export function NotesTimeline({
   items,
   currentTag,
   focusSlug,
@@ -37,11 +41,12 @@ export function DiaryTimeline({
     setActiveFocus(focusSlug);
   }, [focusSlug]);
 
+  // ハッシュ付き URL（#slug）で来たときもフォーカス対象にする
   useEffect(() => {
     if (focusSlug) return;
     const hash = window.location.hash.replace(/^#/, "");
     if (!hash) return;
-    if (!items.some((i) => i.slug === hash)) return;
+    if (!items.some((item) => item.slug === hash)) return;
     setActiveFocus(hash);
   }, [focusSlug, items]);
 
@@ -49,10 +54,10 @@ export function DiaryTimeline({
     if (!activeFocus) return;
     const el = document.getElementById(activeFocus);
     if (!el) return;
-    const t = window.setTimeout(() => {
+    const timer = window.setTimeout(() => {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 80);
-    return () => window.clearTimeout(t);
+    return () => window.clearTimeout(timer);
   }, [activeFocus]);
 
   const hasFocus = Boolean(activeFocus);
@@ -80,8 +85,8 @@ export function DiaryTimeline({
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
           {items.map((item) => {
             const isFocused = activeFocus === item.slug;
-            const permalink = diaryPermalink(item.slug);
-            const dateLabel = formatDiaryDate(item.date);
+            const permalink = notesPermalink(item.slug);
+            const dateLabel = formatNotesDate(item.date);
             return (
               <article
                 key={item.id}
@@ -134,8 +139,8 @@ export function DiaryTimeline({
                       ) : null}
                     </div>
                   </div>
-                  <DiaryShareButton
-                    path={diaryPermalink(item.slug)}
+                  <ShareButton
+                    path={notesPermalink(item.slug)}
                     className="-mr-1.5 -mt-1.5"
                   />
                 </div>

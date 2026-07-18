@@ -9,12 +9,15 @@ import {
   Bookmark,
   Briefcase,
   ChevronUp,
+  Pizza,
   FileText,
   Image as ImageIcon,
   Landmark,
   LayoutDashboard,
+  Music2,
   Newspaper,
   NotebookPen,
+  Palette,
   Smile,
   User,
   type LucideIcon,
@@ -29,8 +32,11 @@ const icons: Record<AdminNavItem["icon"], LucideIcon> = {
   bookmark: Bookmark,
   "file-text": FileText,
   briefcase: Briefcase,
+  palette: Palette,
+  "music-2": Music2,
   smile: Smile,
   aperture: Aperture,
+  pizza: Pizza,
   image: ImageIcon,
   "book-open": BookOpen,
   landmark: Landmark,
@@ -124,7 +130,7 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-border bg-card">
+    <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-[rgba(0,0,0,0.08)] bg-card">
       <div className="border-b border-border px-4 pb-4 pt-6">
         <Link
           href="/admin/"
@@ -137,7 +143,6 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
             className="block h-auto w-[132px] max-w-full"
           />
         </Link>
-        <p className="mt-1.5 text-xs text-muted-foreground">Admin</p>
       </div>
       <nav className="flex-1 overflow-y-auto px-2.5 py-4">
         {adminNavSections.map((section) => (

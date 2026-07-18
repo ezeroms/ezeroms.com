@@ -9,7 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
-import { firstImageSrc } from "../src/lib/content/diary-meta";
+import { firstImageSrc } from "../src/lib/content/html-plain";
 
 dotenv.config({ path: ".env.local" });
 

@@ -4,7 +4,7 @@ import { ColumnArticle } from "@/components/ColumnArticle";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import { columnExcerpt, columnThumbSrc } from "@/lib/content/column-meta";
-import { absoluteUrl } from "@/lib/content/diary-meta";
+import { absoluteUrl } from "@/lib/content/absolute-url";
 import {
   ogImageMetadata,
   resolveOgImageUrl,

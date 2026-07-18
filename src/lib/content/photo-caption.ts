@@ -21,3 +21,24 @@ export function photoAccessibilityLabel(photo: Photo): string {
 export function photosWithImageUrl(photos: Photo[]): Photo[] {
   return photos.filter((photo) => Boolean(photo.image_url?.trim()));
 }
+
+/**
+ * グリッド・管理一覧用の表示 URL。
+ * サムネがあればそれを使い、なければオリジナルにフォールバックする。
+ */
+export function photoGridSrc(
+  photo: Pick<Photo, "image_url" | "image_thumb_url">,
+): string | null {
+  const thumb = photo.image_thumb_url?.trim();
+  if (thumb) return thumb;
+  const original = photo.image_url?.trim();
+  return original || null;
+}
+
+/** ライトボックス・詳細ページ用（常にオリジナル） */
+export function photoOriginalSrc(
+  photo: Pick<Photo, "image_url">,
+): string | null {
+  const original = photo.image_url?.trim();
+  return original || null;
+}

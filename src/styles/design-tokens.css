@@ -19,6 +19,7 @@
   --destructive: 0 72% 40%;
   --destructive-foreground: 0 0% 100%;
   --border: 240 6% 90%; /* #E7E7E9 */
+  --border-hover: 245 5% 45%; /* #6E6D79 — legacy --color-border-hover */
   --input: 240 6% 90%;
   --ring: 240 40% 5%;
   --radius: 0.5rem;
@@ -33,6 +34,7 @@
   --ez-primary-hover: #39393d;
   --ez-bg: #f9f9f7;
   --ez-border: #e7e7e9;
+  --ez-border-hover: #6e6d79;
   --ez-text-secondary: #5d5d5f;
   --ez-brand: #06c655;
   --ez-brand-muted: #c8ebcf;

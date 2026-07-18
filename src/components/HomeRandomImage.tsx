@@ -8,11 +8,24 @@ type TopImagePayload = {
   alt: string;
 };
 
-type Props = {
-  diaryHref: string;
+export type HomePhotoNavItem = {
+  href: string;
+  label: string;
 };
 
-export function HomeRandomImage({ diaryHref }: Props) {
+type Props = {
+  notesHref: string;
+  photoNav?: HomePhotoNavItem[];
+};
+
+export function HomeRandomImage({
+  notesHref,
+  photoNav = [
+    { href: "/smile/", label: "Smile" },
+    { href: "/jumpai/", label: "Jampai" },
+    { href: "/kuikake/", label: "Kuikake" },
+  ],
+}: Props) {
   const [image, setImage] = useState<TopImagePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -115,22 +128,27 @@ export function HomeRandomImage({ diaryHref }: Props) {
           <nav className="top-nav-mobile">
             <div className="top-nav-mobile__section">
               <h3 className="top-nav-mobile__heading">Writing</h3>
-              <Link href={diaryHref} className="top-nav-mobile__link">
+              <Link href={notesHref} className="top-nav-mobile__link">
                 Notes
               </Link>
               <Link href="/column/" className="top-nav-mobile__link">
                 Column
               </Link>
             </div>
-            <div className="top-nav-mobile__section">
-              <h3 className="top-nav-mobile__heading">Photos</h3>
-              <Link href="/smile/" className="top-nav-mobile__link">
-                Smile
-              </Link>
-              <Link href="/jumpai/" className="top-nav-mobile__link">
-                Jampai
-              </Link>
-            </div>
+            {photoNav.length > 0 ? (
+              <div className="top-nav-mobile__section">
+                <h3 className="top-nav-mobile__heading">Photos</h3>
+                {photoNav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="top-nav-mobile__link"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
             <div className="top-nav-mobile__section">
               <h3 className="top-nav-mobile__heading">Works</h3>
               <Link href="/works/creative/" className="top-nav-mobile__link">

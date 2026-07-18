@@ -21,6 +21,7 @@ export async function listExperience(): Promise<Experience[]> {
         .from("experience")
         .select("*")
         .eq("status", PUBLISHED)
+        .eq("is_deleted", false)
         .order("start_date", { ascending: false });
       if (error) {
         if (isMissingRelationError(error)) return listExperienceMarkdown();
@@ -54,6 +55,7 @@ export async function getExperienceBySlug(
         .select("*")
         .eq("slug", slug)
         .eq("status", PUBLISHED)
+        .eq("is_deleted", false)
         .maybeSingle();
       if (error) {
         if (!isMissingRelationError(error)) {

@@ -27,6 +27,7 @@ export async function listDiary(opts?: {
     .from("diary")
     .select("*", { count: "exact" })
     .eq("status", PUBLISHED)
+    .eq("is_deleted", false)
     .order("date", { ascending: false });
 
   if (opts?.month) q = q.contains("diary_month", [opts.month]);
@@ -75,6 +76,7 @@ export async function getDiaryBySlug(slug: string): Promise<Diary | null> {
     .select("*")
     .eq("slug", slug)
     .eq("status", PUBLISHED)
+    .eq("is_deleted", false)
     .maybeSingle();
   if (error) throw error;
   return data as Diary | null;
@@ -122,7 +124,8 @@ export async function listDiaryTaxonomy(): Promise<{
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
     .select("diary_tag, diary_place")
-    .eq("status", PUBLISHED);
+    .eq("status", PUBLISHED)
+    .eq("is_deleted", false);
   if (error) throw error;
   const tags = new Set<string>();
   const places = new Set<string>();

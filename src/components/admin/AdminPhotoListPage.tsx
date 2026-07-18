@@ -1,19 +1,59 @@
-import Link from "next/link";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  getPhotoGallery,
-  type PhotoGalleryId,
-} from "@/lib/content/photo-galleries";
+  AdminPhotoListTable,
+  type AdminPhotoTableItem,
+} from "@/components/admin/AdminPhotoListTable";
+import { PhotoCreateButton } from "@/components/admin/PhotoCreateButton";
+import { PhotoGallerySettingsModal } from "@/components/admin/PhotoGallerySettingsModal";
+import { Alert } from "@/components/ui/alert";
+import { Card, CardContent } from "@/components/ui/card";
+import { htmlToEditableMarkdown } from "@/lib/admin/content";
+import { filenameFromImageUrl } from "@/lib/media/photo-name";
+import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
+import { resolvePhotoDbTable } from "@/lib/content/photo-db";
+import { loadPhotoGallery } from "@/lib/content/queries/photo-gallery-meta";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+
+function mapRows(data: Record<string, unknown>[] | null): AdminPhotoTableItem[] {
+  return (data ?? [])
+    .filter((row) => row.is_deleted !== true)
+    .map((row) => {
+    const slug = String(row.slug ?? "");
+    const date = String(row.date ?? "");
+    const status = String(row.status ?? "published");
+    const image_url = (row.image_url as string | null) ?? null;
+    const image_thumb_url = (row.image_thumb_url as string | null) ?? null;
+    const location = (row.location as string | null) ?? null;
+    const camera = (row.camera as string | null) ?? null;
+    const filename = image_url ? filenameFromImageUrl(image_url) : slug;
+
+    return {
+      slug,
+      filename,
+      date,
+      status,
+      image_url,
+      image_thumb_url,
+      location,
+      camera,
+      editor: {
+        slug,
+        filename,
+        date,
+        location: location ?? "",
+        camera: camera ?? "",
+        image_url: image_url ?? "",
+        image_thumb_url: image_thumb_url ?? "",
+        caption: htmlToEditableMarkdown(
+          (row.body_html as string | null) ?? "",
+        ),
+        status: status === "draft" ? "draft" : "published",
+      },
+    };
+  });
+}
 
 export async function AdminPhotoListPage({
   galleryId,
@@ -21,96 +61,86 @@ export async function AdminPhotoListPage({
   galleryId: PhotoGalleryId;
 }) {
   await getSessionUser();
-  const gallery = getPhotoGallery(galleryId);
+  const gallery = await loadPhotoGallery(galleryId);
 
-  let items: {
-    slug: string;
-    title: string;
-    date: string;
-    status: string;
-    image_url: string | null;
-    location: string | null;
-  }[] = [];
+  let items: AdminPhotoTableItem[] = [];
+  let usingLegacySnap = false;
+  let loadError: string | null = null;
 
   if (hasSupabaseConfig()) {
-    const { data } = await getSupabaseAdmin()
-      .from(galleryId)
-      .select("slug, title, date, status, image_url, location")
+    const resolved = await resolvePhotoDbTable(galleryId);
+    usingLegacySnap = resolved.usingLegacySnap;
+
+    const { data, error } = await getSupabaseAdmin()
+      .from(resolved.table)
+      .select("*")
+      .eq("is_deleted", false)
       .order("date", { ascending: false })
-      .limit(80);
-    items = (data ?? []) as typeof items;
+      .limit(200);
+
+    if (error) {
+      loadError = error.message;
+    } else {
+      items = mapRows((data ?? []) as Record<string, unknown>[]);
+    }
+  } else {
+    loadError = "Supabase が設定されていません（.env.local を確認してください）";
   }
 
   return (
-    <>
+    <AdminContent width="wide">
       <AdminPageHeader
         title={gallery.label}
-        description={gallery.description}
         actions={
-          <Button asChild>
-            <Link href={`${gallery.adminPath}new/`}>＋ 写真を追加</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <PhotoGallerySettingsModal
+              galleryId={galleryId}
+              initialLabel={gallery.label}
+              initialDescription={gallery.description}
+              initialStatus={gallery.status}
+            />
+            <PhotoCreateButton galleryId={galleryId} />
+          </div>
         }
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>最近の {gallery.label}</CardTitle>
-          <CardDescription>最新 80 件</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="m-0 flex list-none flex-col gap-0 p-0">
-            {items.map((item) => (
-              <li
-                key={item.slug}
-                className="flex items-center justify-between gap-3 border-b border-border py-3 text-sm last:border-b-0"
-              >
-                <div className="flex min-w-0 flex-1 items-center gap-3">
-                  {item.image_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={item.image_url}
-                      alt=""
-                      className="h-12 w-12 shrink-0 rounded-md object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-muted text-xs text-muted-foreground">
-                      —
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      href={`${gallery.adminPath}${item.slug}/edit/`}
-                      className="font-medium underline-offset-2 hover:underline"
-                    >
-                      {item.title}
-                    </Link>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {new Date(item.date).toLocaleDateString("ja-JP")}
-                      {item.location ? ` · ${item.location}` : ""} ·{" "}
-                      {item.status}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex shrink-0 gap-1">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`${gallery.adminPath}${item.slug}/edit/`}>編集</Link>
-                  </Button>
-                  <Button asChild variant="ghost" size="sm">
-                    <Link href={`${gallery.basePath}${item.slug}/`} target="_blank">
-                      見る
-                    </Link>
-                  </Button>
-                </div>
-              </li>
-            ))}
-            {!items.length ? (
-              <li className="py-6 text-sm text-muted-foreground">
-                まだ写真がありません
-              </li>
-            ) : null}
-          </ul>
+
+      {usingLegacySnap ? (
+        <Alert className="mb-4">
+          旧テーブル <code>snap</code> のデータを表示しています。正式な{" "}
+          <code>smile</code> / <code>jumpai</code> / <code>kuikake</code>{" "}
+          テーブルを作るには、Supabase SQL Editor で{" "}
+          <code>supabase/migrations/20260719030000_photo_galleries_safe.sql</code>{" "}
+          を実行し、続けて{" "}
+          <code>npx tsx scripts/admin/setup-photo-galleries.ts</code>{" "}
+          を実行してください。
+        </Alert>
+      ) : null}
+
+      {loadError ? (
+        <Alert variant="destructive" className="mb-4">
+          読み込みエラー: {loadError}
+          {galleryId !== "smile" ? (
+            <>
+              {" "}
+              — テーブル <code>{gallery.table}</code> が未作成の可能性があります。
+              SQL マイグレーション{" "}
+              <code>20260719030000_photo_galleries_safe.sql</code>{" "}
+              を適用してください。
+            </>
+          ) : null}
+        </Alert>
+      ) : null}
+
+      <Card className="overflow-hidden">
+        <CardContent className="overflow-x-auto p-0">
+          <AdminPhotoListTable
+            galleryId={galleryId}
+            basePath={gallery.basePath}
+            items={items}
+            empty={!items.length && !loadError}
+          />
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

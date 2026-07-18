@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { diaryPermalink } from "@/lib/content/diary-meta";
+import { notesPermalink } from "@/lib/content/notes-meta";
 import { giantsPermalink } from "@/lib/content/giants-meta";
 import {
   listDiary,
@@ -64,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     for (const item of items) {
       entries.push({
-        url: `${SITE_URL}${diaryPermalink(item.slug)}`,
+        url: `${SITE_URL}${notesPermalink(item.slug)}`,
         lastModified: item.updated_at ? new Date(item.updated_at) : undefined,
         changeFrequency: "monthly",
         priority: 0.7,

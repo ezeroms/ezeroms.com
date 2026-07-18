@@ -8,7 +8,7 @@ import {
   type SearchParamsRecord,
 } from "@/lib/content/filter-search-params";
 import type { Diary } from "@/types/content";
-import { diaryMonthKey } from "@/lib/content/diary-meta";
+import { notesMonthKey } from "@/lib/content/notes-meta";
 
 export const WEEKDAY_LABELS = [
   "Sun",
@@ -78,7 +78,7 @@ export function formatMonthLabel(ym: string): string {
 
 export function diaryMatchesMonths(item: Diary, months: string[]): boolean {
   if (!months.length) return true;
-  const key = diaryMonthKey(item);
+  const key = notesMonthKey(item);
   if (months.includes(key)) return true;
   return (item.diary_month ?? []).some((raw) => {
     const slash = raw.match(/^(\d{4})\/(\d{1,2})/);

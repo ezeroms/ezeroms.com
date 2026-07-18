@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import {
   ClipsEditorForm,
@@ -53,7 +54,7 @@ export default async function AdminClipsEditPage({ params }: PageProps) {
   };
 
   return (
-    <>
+    <AdminContent>
       <AdminPageHeader
         title="Clips を編集"
         description={initial.title}
@@ -78,6 +79,6 @@ export default async function AdminClipsEditPage({ params }: PageProps) {
           <ClipsEditorForm initial={initial} />
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

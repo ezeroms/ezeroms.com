@@ -58,6 +58,15 @@ export function resolveBreadcrumbs(
     }
     return [{ label: "Photos" }, { label: "Jampai" }];
   }
+  if (path.startsWith("/kuikake/")) {
+    if (isDetailUnder("/kuikake/", path)) {
+      return withCurrent(
+        [{ label: "Photos" }, { label: "Kuikake", href: "/kuikake/" }],
+        "Photo",
+      );
+    }
+    return [{ label: "Photos" }, { label: "Kuikake" }];
+  }
 
   // Writing — Notes
   if (

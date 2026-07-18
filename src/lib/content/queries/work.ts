@@ -26,6 +26,7 @@ export async function listWork(opts?: {
       .from("work")
       .select("*", { count: "exact" })
       .eq("status", PUBLISHED)
+      .eq("is_deleted", false)
       .order("date", { ascending: false });
     if (opts?.category) q = q.contains("work_category", [opts.category]);
     if (opts?.categories?.length === 1) {
@@ -117,6 +118,7 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
     .select("*")
     .eq("slug", slug)
     .eq("status", PUBLISHED)
+    .eq("is_deleted", false)
     .maybeSingle();
   if (error) throw error;
   if (!data) return null;

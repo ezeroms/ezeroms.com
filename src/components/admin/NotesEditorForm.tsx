@@ -1,11 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -15,6 +13,14 @@ function localDatetimeValue(d = new Date()) {
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+
+export const NOTES_EDITOR_FORM_ID = "notes-editor-form";
+
+const IGNORE_PASSWORD_MANAGERS = {
+  "data-1p-ignore": true,
+  "data-lpignore": "true",
+  autoComplete: "off",
+} as const;
 
 export type NotesEditorInitial = {
   slug: string;
@@ -28,29 +34,62 @@ export type NotesEditorInitial = {
 
 export function NotesEditorForm({
   initial,
+  formId = NOTES_EDITOR_FORM_ID,
+  hideSubmit = false,
+  onSaved,
+  onLoadingChange,
+  onDirtyChange,
 }: {
   initial?: NotesEditorInitial;
+  formId?: string;
+  hideSubmit?: boolean;
+  onSaved?: () => void;
+  onLoadingChange?: (loading: boolean) => void;
+  onDirtyChange?: (dirty: boolean) => void;
 }) {
   const router = useRouter();
   const isEdit = Boolean(initial?.slug);
-  const [bodyMd, setBodyMd] = useState(initial?.body_md ?? "");
-  const [date, setDate] = useState(
-    initial?.date ? localDatetimeValue(new Date(initial.date)) : localDatetimeValue(),
-  );
-  const [tags, setTags] = useState(initial?.tags ?? "");
-  const [place, setPlace] = useState(initial?.place ?? "");
-  const [ogImage, setOgImage] = useState(initial?.og_image ?? "");
-  const [status, setStatus] = useState<"published" | "draft">(
-    initial?.status ?? "published",
-  );
+
+  const [baseline] = useState(() => ({
+    bodyMd: initial?.body_md ?? "",
+    date: initial?.date
+      ? localDatetimeValue(new Date(initial.date))
+      : localDatetimeValue(),
+    tags: initial?.tags ?? "",
+    place: initial?.place ?? "",
+    ogImage: initial?.og_image ?? "",
+    status: (initial?.status ?? "published") as "published" | "draft",
+  }));
+
+  const [bodyMd, setBodyMd] = useState(baseline.bodyMd);
+  const [date, setDate] = useState(baseline.date);
+  const [tags, setTags] = useState(baseline.tags);
+  const [place, setPlace] = useState(baseline.place);
+  const [ogImage, setOgImage] = useState(baseline.ogImage);
+  const [status, setStatus] = useState<"published" | "draft">(baseline.status);
   const [error, setError] = useState<string | null>(null);
-  const [ok, setOk] = useState<{ slug: string } | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const dirty =
+    bodyMd !== baseline.bodyMd ||
+    date !== baseline.date ||
+    tags !== baseline.tags ||
+    place !== baseline.place ||
+    ogImage !== baseline.ogImage ||
+    status !== baseline.status;
+
+  useEffect(() => {
+    onLoadingChange?.(loading);
+  }, [loading, onLoadingChange]);
+
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!dirty || loading) return;
     setError(null);
-    setOk(null);
     setLoading(true);
     try {
       const payload = {
@@ -77,16 +116,8 @@ export function NotesEditorForm({
         setError(data.error || "保存に失敗しました");
         return;
       }
-      if (data.item?.slug) {
-        setOk({ slug: data.item.slug });
-        if (!isEdit) {
-          setBodyMd("");
-          setTags("");
-          setPlace("");
-          setOgImage("");
-        }
-        router.refresh();
-      }
+      router.refresh();
+      onSaved?.();
     } catch {
       setError("通信エラーが発生しました");
     } finally {
@@ -95,13 +126,18 @@ export function NotesEditorForm({
   }
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-      {isEdit ? (
-        <p className="text-xs text-muted-foreground">
-          slug: <code className="rounded bg-muted px-1 py-0.5">{initial!.slug}</code>
-        </p>
-      ) : null}
-      <div className="flex flex-col gap-1.5">
+    <form
+      id={formId}
+      className="flex flex-col gap-4"
+      onSubmit={onSubmit}
+      autoComplete="off"
+      data-1p-ignore
+      data-lpignore="true"
+      data-form-type="other"
+    >
+      {error ? <Alert variant="destructive">{error}</Alert> : null}
+
+      <div className="space-y-2">
         <Label htmlFor="note-body">本文（Markdown）</Label>
         <Textarea
           id="note-body"
@@ -109,84 +145,80 @@ export function NotesEditorForm({
           onChange={(e) => setBodyMd(e.target.value)}
           placeholder="今日あったこと、考えたこと…"
           required
+          rows={8}
+          {...IGNORE_PASSWORD_MANAGERS}
         />
       </div>
+
       <OgImageField
         value={ogImage}
         onChange={setOgImage}
         uploadKind="diary"
         disabled={loading}
       />
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="note-date">日時</Label>
-        <Input
-          id="note-date"
-          type="datetime-local"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="note-date">日時</Label>
+          <Input
+            id="note-date"
+            type="datetime-local"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            {...IGNORE_PASSWORD_MANAGERS}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="note-status">ステータス</Label>
+          <Select
+            id="note-status"
+            value={status}
+            onChange={(e) =>
+              setStatus(e.target.value === "draft" ? "draft" : "published")
+            }
+            {...IGNORE_PASSWORD_MANAGERS}
+          >
+            <option value="published">公開</option>
+            <option value="draft">非公開</option>
+          </Select>
+        </div>
       </div>
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="note-tags">タグ（カンマ区切り）</Label>
-        <Input
-          id="note-tags"
-          type="text"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          placeholder="散歩, 音楽"
-        />
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="note-tags">タグ（カンマ区切り）</Label>
+          <Input
+            id="note-tags"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            placeholder="散歩, 音楽"
+            {...IGNORE_PASSWORD_MANAGERS}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="note-place">場所</Label>
+          <Input
+            id="note-place"
+            value={place}
+            onChange={(e) => setPlace(e.target.value)}
+            placeholder="高円寺"
+            {...IGNORE_PASSWORD_MANAGERS}
+          />
+        </div>
       </div>
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="note-place">場所</Label>
-        <Input
-          id="note-place"
-          type="text"
-          value={place}
-          onChange={(e) => setPlace(e.target.value)}
-          placeholder="高円寺"
-        />
-      </div>
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="note-status">公開状態</Label>
-        <Select
-          id="note-status"
-          value={status}
-          onChange={(e) =>
-            setStatus(e.target.value === "draft" ? "draft" : "published")
-          }
-        >
-          <option value="published">公開</option>
-          <option value="draft">下書き</option>
-        </Select>
-      </div>
-      {error ? <Alert variant="destructive">{error}</Alert> : null}
-      {ok ? (
-        <Alert variant="success">
-          保存しました。{" "}
-          <Link href={`/diary/${ok.slug}/`} className="underline">
-            投稿を見る
-          </Link>
-          {isEdit ? null : (
-            <>
-              {" · "}
-              <Link href={`/admin/notes/${ok.slug}/edit/`} className="underline">
-                続けて編集
-              </Link>
-            </>
-          )}
-        </Alert>
+
+      {!hideSubmit ? (
+        <div className="pt-1">
+          <button
+            type="submit"
+            disabled={loading || !dirty}
+            className="inline-flex h-10 cursor-pointer items-center justify-center rounded-md border border-solid border-border bg-card px-4 text-sm font-medium text-foreground shadow-none hover:border-border-hover disabled:cursor-default disabled:opacity-50 disabled:pointer-events-none"
+          >
+            {loading ? "保存中…" : isEdit ? "更新" : "追加"}
+          </button>
+        </div>
       ) : null}
-      <div className="flex flex-wrap gap-2 pt-1">
-        <Button type="submit" disabled={loading}>
-          {loading ? "保存中…" : isEdit ? "更新する" : "投稿する"}
-        </Button>
-        {isEdit ? (
-          <Button asChild type="button" variant="outline">
-            <Link href="/admin/notes/">一覧へ戻る</Link>
-          </Button>
-        ) : null}
-      </div>
     </form>
   );
 }

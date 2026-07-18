@@ -233,7 +233,10 @@ async function migrateGiants() {
       citation_override: data.citation_override
         ? String(data.citation_override)
         : null,
-      source_url: data.source_url ? String(data.source_url) : null,
+      // Only send when present — column may not exist until migration is applied.
+      ...(data.source_url
+        ? { source_url: String(data.source_url) }
+        : {}),
       body_html: mdToHtml(content),
       status: "published",
       published_at: new Date().toISOString(),
@@ -285,7 +288,7 @@ async function migrateExperience() {
   await upsert("experience", rows);
 }
 
-async function migratePhotoGallery(table: "smile" | "jumpai") {
+async function migratePhotoGallery(table: "smile" | "jumpai" | "kuikake") {
   const rows = [];
   for (const file of listMdFiles(path.join(CONTENT, table))) {
     const { data, content } = readEntry(file);
@@ -320,6 +323,10 @@ async function migrateSmile() {
 
 async function migrateJumpai() {
   await migratePhotoGallery("jumpai");
+}
+
+async function migrateKuikake() {
+  await migratePhotoGallery("kuikake");
 }
 
 async function migrateChronicle() {
@@ -400,6 +407,7 @@ async function main() {
   await run("experience", migrateExperience);
   await run("smile", migrateSmile);
   await run("jumpai", migrateJumpai);
+  await run("kuikake", migrateKuikake);
   await run("chronicle", migrateChronicle);
   await run("uidg", migrateUidg);
   console.log("\nDone.");

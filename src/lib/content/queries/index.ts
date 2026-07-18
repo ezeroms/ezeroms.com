@@ -8,6 +8,7 @@ export * from "./work";
 export * from "./experience";
 export * from "./giants";
 export * from "./photos";
+export * from "./photo-gallery-meta";
 export * from "./clips";
 export * from "./chronicle";
 export * from "./about";

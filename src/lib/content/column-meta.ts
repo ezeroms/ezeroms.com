@@ -1,12 +1,9 @@
-import {
-  diaryExcerpt,
-  firstImageSrc,
-  htmlToPlainText,
-} from "@/lib/content/diary-meta";
+import { notesExcerpt } from "@/lib/content/notes-meta";
+import { firstImageSrc, htmlToPlainText } from "@/lib/content/html-plain";
 import { COLUMN_THUMBS } from "@/lib/content/column-thumbs.generated";
 
 export function columnExcerpt(html: string, max = 120): string {
-  return diaryExcerpt(html, max);
+  return notesExcerpt(html, max);
 }
 
 export function columnThumbSrc(

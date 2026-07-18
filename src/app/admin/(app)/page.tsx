@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,7 @@ export default async function AdminDashboardPage() {
   const sections = adminNavSections.filter((s) => s.id !== "overview");
 
   return (
-    <>
+    <AdminContent width="wide">
       <AdminPageHeader
         title="ダッシュボード"
         description={
@@ -81,6 +82,6 @@ export default async function AdminDashboardPage() {
           </section>
         ))}
       </div>
-    </>
+    </AdminContent>
   );
 }

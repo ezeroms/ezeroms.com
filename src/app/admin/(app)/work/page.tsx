@@ -1,8 +1,6 @@
-import { AdminComingSoon } from "@/components/admin/AdminComingSoon";
-import { flattenAdminNav } from "@/lib/admin/nav";
+import { redirect } from "next/navigation";
 
-const item = flattenAdminNav().find((i) => i.href === "/admin/work/")!;
-
-export default function AdminWorkPage() {
-  return <AdminComingSoon item={item} />;
+/** Legacy path — Creative lives under /admin/creative/ */
+export default function AdminWorkRedirectPage() {
+  redirect("/admin/creative/");
 }

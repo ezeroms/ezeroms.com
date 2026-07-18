@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
-import { DiaryTimeline } from "@/components/DiaryTimeline";
+import { NotesTimeline } from "@/components/NotesTimeline";
 import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
-import { diaryMonthKey } from "@/lib/content/diary-meta";
+import { notesMonthKey } from "@/lib/content/notes-meta";
 import {
   notesFilterActive,
   parseNotesFilter,
@@ -58,7 +58,7 @@ export default async function DiaryIndexPage({
   }));
 
   const oldestInFeed = items[items.length - 1];
-  const continueMonth = oldestInFeed ? diaryMonthKey(oldestInFeed) : "";
+  const continueMonth = oldestInFeed ? notesMonthKey(oldestInFeed) : "";
   const hasMore = !filtering && total > items.length;
 
   return (
@@ -78,7 +78,7 @@ export default async function DiaryIndexPage({
       breadcrumbFilter={filtering ? summarizeNotesFilter(filter) : null}
       breadcrumbSectionHref="/diary/"
     >
-      <DiaryTimeline items={sanitized} />
+      <NotesTimeline items={sanitized} />
       {hasMore && continueMonth ? (
         <p className="notes-feed-more mx-auto max-w-3xl pb-8">
           最新 {items.length} 件を表示しています。それ以前は{" "}

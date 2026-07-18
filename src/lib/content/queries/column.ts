@@ -26,6 +26,7 @@ export async function listColumn(opts?: {
       .from("column")
       .select("*", { count: "exact" })
       .eq("status", PUBLISHED)
+      .eq("is_deleted", false)
       .order("date", { ascending: false });
     if (opts?.category) q = q.contains("column_category", [opts.category]);
     if (opts?.categories?.length === 1) {
@@ -102,6 +103,7 @@ export async function getColumnBySlug(slug: string): Promise<Column | null> {
     .select("*")
     .eq("slug", slug)
     .eq("status", PUBLISHED)
+    .eq("is_deleted", false)
     .maybeSingle();
   if (error) throw error;
   return data as Column | null;

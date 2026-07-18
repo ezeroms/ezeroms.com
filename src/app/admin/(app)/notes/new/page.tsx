@@ -1,3 +1,4 @@
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { NotesEditorForm } from "@/components/admin/NotesEditorForm";
 import {
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export default function AdminNotesNewPage() {
   return (
-    <>
+    <AdminContent>
       <AdminPageHeader
         title="Notes を書く"
         description="タイムラインに載る短いメモを投稿します。"
@@ -26,6 +27,6 @@ export default function AdminNotesNewPage() {
           <NotesEditorForm />
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

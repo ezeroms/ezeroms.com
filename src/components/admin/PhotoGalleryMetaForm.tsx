@@ -1,0 +1,148 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import type {
+  PhotoGalleryId,
+  PhotoGalleryStatus,
+} from "@/lib/content/photo-galleries";
+
+export const PHOTO_GALLERY_META_FORM_ID = "photo-gallery-meta-form";
+
+const IGNORE_PASSWORD_MANAGERS = {
+  "data-1p-ignore": true,
+  "data-lpignore": "true",
+  autoComplete: "off",
+} as const;
+
+type Props = {
+  galleryId: PhotoGalleryId;
+  initialLabel: string;
+  initialDescription: string;
+  initialStatus?: PhotoGalleryStatus;
+  /** 保存成功時（モーダルを閉じるなど） */
+  onSaved?: () => void;
+  /** 送信中フラグの変化（フッターボタン用） */
+  onLoadingChange?: (loading: boolean) => void;
+  /** フォーム内の送信ボタンを出さない（フッターに置く場合） */
+  hideSubmit?: boolean;
+  formId?: string;
+};
+
+/** ギャラリーの表示名・説明文・公開状態を編集する。 */
+export function PhotoGalleryMetaForm({
+  galleryId,
+  initialLabel,
+  initialDescription,
+  initialStatus = "published",
+  onSaved,
+  onLoadingChange,
+  hideSubmit = false,
+  formId = PHOTO_GALLERY_META_FORM_ID,
+}: Props) {
+  const router = useRouter();
+  const [label, setLabel] = useState(initialLabel);
+  const [description, setDescription] = useState(initialDescription);
+  const [status, setStatus] = useState<PhotoGalleryStatus>(initialStatus);
+  const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  function setLoadingState(next: boolean) {
+    setLoading(next);
+    onLoadingChange?.(next);
+  }
+
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    setError(null);
+    setSaved(false);
+    setLoadingState(true);
+    try {
+      const res = await fetch(`/api/admin/photos/${galleryId}/meta/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ label, description, status }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setError(data.error || "保存に失敗しました");
+        return;
+      }
+      setSaved(true);
+      router.refresh();
+      onSaved?.();
+    } catch {
+      setError("保存中に通信エラーが発生しました");
+    } finally {
+      setLoadingState(false);
+    }
+  }
+
+  return (
+    <form
+      id={formId}
+      className="flex flex-col gap-4"
+      onSubmit={onSubmit}
+      autoComplete="off"
+      data-1p-ignore
+      data-lpignore="true"
+      data-form-type="other"
+    >
+      {error ? <Alert variant="destructive">{error}</Alert> : null}
+      {saved ? <Alert variant="success">ページ設定を保存しました</Alert> : null}
+
+      <div className="space-y-2">
+        <Label htmlFor="gallery-label">表示名</Label>
+        <Input
+          id="gallery-label"
+          value={label}
+          onChange={(e) => setLabel(e.target.value)}
+          required
+          {...IGNORE_PASSWORD_MANAGERS}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="gallery-description">説明文</Label>
+        <Textarea
+          id="gallery-description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={3}
+          placeholder="公開ページの ? アイコンで表示される説明"
+          {...IGNORE_PASSWORD_MANAGERS}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="gallery-status">ステータス</Label>
+        <Select
+          id="gallery-status"
+          value={status}
+          onChange={(e) =>
+            setStatus(e.target.value === "private" ? "private" : "published")
+          }
+          {...IGNORE_PASSWORD_MANAGERS}
+        >
+          <option value="published">公開</option>
+          <option value="private">非公開</option>
+        </Select>
+      </div>
+
+      {!hideSubmit ? (
+        <div>
+          <Button type="submit" disabled={loading}>
+            {loading ? "保存中…" : "設定を保存"}
+          </Button>
+        </div>
+      ) : null}
+    </form>
+  );
+}

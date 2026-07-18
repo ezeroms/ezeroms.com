@@ -21,6 +21,7 @@ export async function GET() {
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
     .select("id, slug, date, diary_tag, diary_place, status, published_at, updated_at")
+    .eq("is_deleted", false)
     .order("date", { ascending: false })
     .limit(40);
 
@@ -85,6 +86,7 @@ export async function POST(request: NextRequest) {
       status,
       published_at: status === "published" ? dateIso : null,
       updated_at: now,
+      is_deleted: false,
     };
 
     const { data, error } = await getSupabaseAdmin()

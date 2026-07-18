@@ -3,15 +3,16 @@ import { MobileHeader } from "@/components/MobileHeader";
 import { PhotoFilterPanel } from "@/components/PhotoFilterPanel";
 import { PhotoGallery } from "@/components/photos/PhotoGallery";
 import { SiteShell } from "@/components/SiteShell";
-import {
-  getPhotoGallery,
-  type PhotoGalleryId,
-} from "@/lib/content/photo-galleries";
+import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import {
   parsePhotoFilter,
   photoFilterActive,
 } from "@/lib/content/photo-filter";
-import { listPhotos, listPhotoTaxonomy } from "@/lib/content/queries";
+import {
+  listPhotos,
+  listPhotoTaxonomy,
+  requirePublicPhotoGallery,
+} from "@/lib/content/queries";
 import { summarizePhotoFilter } from "@/lib/site/breadcrumb-filters";
 
 type Props = {
@@ -19,8 +20,10 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export function photoGalleryMetadata(galleryId: PhotoGalleryId): Metadata {
-  const gallery = getPhotoGallery(galleryId);
+export async function photoGalleryMetadata(
+  galleryId: PhotoGalleryId,
+): Promise<Metadata> {
+  const gallery = await requirePublicPhotoGallery(galleryId);
   return {
     title: gallery.label,
     description: gallery.description,
@@ -31,7 +34,7 @@ export async function PhotoGalleryIndexPage({
   galleryId,
   searchParams,
 }: Props) {
-  const gallery = getPhotoGallery(galleryId);
+  const gallery = await requirePublicPhotoGallery(galleryId);
   const resolvedSearchParams = await searchParams;
   const filter = parsePhotoFilter(resolvedSearchParams);
   const isFiltering = photoFilterActive(filter);
@@ -47,6 +50,9 @@ export async function PhotoGalleryIndexPage({
     ).catch(() => ({ items: [], total: 0 })),
   ]);
 
+  // 詳細や絞り込み階層があるときは ? を出さない（一覧の Photos / Smile のみ）
+  const breadcrumbInfo = isFiltering ? null : gallery.description;
+
   return (
     <SiteShell
       bodyClassName={`is-${galleryId}`}
@@ -61,6 +67,7 @@ export async function PhotoGalleryIndexPage({
       showTagsAside
       breadcrumbFilter={isFiltering ? summarizePhotoFilter(filter) : null}
       breadcrumbSectionHref={gallery.basePath}
+      breadcrumbInfo={breadcrumbInfo}
     >
       <PhotoGallery items={listed.items} />
     </SiteShell>

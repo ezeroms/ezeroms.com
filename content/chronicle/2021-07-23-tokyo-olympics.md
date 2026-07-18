@@ -1,6 +1,7 @@
 ---
 title: "東京オリンピック開幕"
 date: 2021-07-23
+end_date: 2021-08-08
 category: "スポーツ"
 subcategory: "オリンピック"
 chronicle_tag: ["オリンピック", "スポーツ", "東京"]

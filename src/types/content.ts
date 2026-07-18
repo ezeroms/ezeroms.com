@@ -155,7 +155,7 @@ export type ShouldersOfGiants = {
   updated_at: string;
 };
 
-/** Curated photograph in Smile or Jampai gallery. */
+/** Curated photograph in Smile / Jampai / Kuikake gallery. */
 export type Photo = {
   id: string;
   slug: string;
@@ -163,10 +163,15 @@ export type Photo = {
   date: string;
   location: string | null;
   camera: string | null;
+  /** オリジナル画像（ライトボックス・詳細用） */
   image_url: string | null;
+  /** 一覧用の軽量サムネ。未設定時は image_url にフォールバック */
+  image_thumb_url: string | null;
   photo_tag: string[];
   body_html: string;
   status: ContentStatus;
+  /** 論理削除フラグ。true のとき一覧・公開から除外 */
+  is_deleted?: boolean;
   published_at: string | null;
   created_at: string;
   updated_at: string;

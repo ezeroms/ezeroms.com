@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import {
   NotesEditorForm,
@@ -35,6 +36,7 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
       "slug, date, diary_tag, diary_place, og_image, status, body_html, body_md",
     )
     .eq("slug", slug)
+    .eq("is_deleted", false)
     .maybeSingle();
 
   if (error || !data) {
@@ -58,7 +60,7 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
   };
 
   return (
-    <>
+    <AdminContent>
       <AdminPageHeader
         title="Notes を編集"
         description={new Date(initial.date).toLocaleString("ja-JP")}
@@ -77,6 +79,6 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
           <NotesEditorForm initial={initial} />
         </CardContent>
       </Card>
-    </>
+    </AdminContent>
   );
 }

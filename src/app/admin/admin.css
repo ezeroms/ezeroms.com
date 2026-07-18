@@ -43,3 +43,113 @@ body:has(.admin-root) {
 .admin-root a:hover {
   opacity: 1;
 }
+
+/* レガシー CSS 対策。見た目の本体は Button（Tailwind）側で統一 */
+.admin-root button,
+.admin-root a[class*="inline-flex"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.admin-root button[class*="border-border"],
+.admin-root a[class*="border-border"] {
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+  box-shadow: none;
+}
+
+.admin-root button[class*="border-border"]:hover,
+.admin-root a[class*="border-border"]:hover,
+.admin-root button[class*="border-border"]:focus-visible,
+.admin-root a[class*="border-border"]:focus-visible {
+  border-color: hsl(var(--border-hover)); /* フォーム focus と同じ */
+  background-color: hsl(var(--card));
+}
+
+/* 削除など destructive: Tailwind red 系を維持（hover で線を濃く） */
+.admin-root button[class*="border-red-"],
+.admin-root a[class*="border-red-"] {
+  background-color: hsl(var(--card));
+  box-shadow: none;
+}
+
+.admin-root button[class*="text-red-600"],
+.admin-root a[class*="text-red-600"] {
+  color: var(--color-red-600, #dc2626);
+}
+
+.admin-root button[class*="border-red-300"],
+.admin-root a[class*="border-red-300"],
+.admin-root button[class*="border-red-200"],
+.admin-root a[class*="border-red-200"] {
+  border-color: var(--color-red-200, #fecaca);
+}
+
+.admin-root button[class*="border-red-"]:hover,
+.admin-root a[class*="border-red-"]:hover,
+.admin-root button[class*="border-red-"]:focus-visible,
+.admin-root a[class*="border-red-"]:focus-visible {
+  border-color: var(--color-red-500, #ef4444);
+  background-color: hsl(var(--card));
+}
+
+.admin-root button[class*="border-border"]:disabled,
+.admin-root a[class*="border-border"][aria-disabled="true"],
+.admin-root button[class*="border-border"]:disabled:hover,
+.admin-root button[class*="border-border"]:disabled:focus-visible {
+  border-color: hsl(var(--border));
+  cursor: default;
+  pointer-events: none;
+}
+
+.admin-root button[class*="border-red-"]:disabled,
+.admin-root button[class*="border-red-"]:disabled:hover,
+.admin-root button[class*="border-red-"]:disabled:focus-visible {
+  border-color: var(--color-red-200, #fecaca);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ネイティブ file input なども含め、フォーム枠は線のみ（シャドウなし） */
+.admin-root input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.admin-root textarea,
+.admin-root select {
+  box-shadow: none !important;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card)); /* 白 */
+}
+
+.admin-root input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+.admin-root textarea:focus,
+.admin-root select:focus {
+  outline: none;
+  border-color: hsl(var(--border-hover)); /* コラムカード hover と同じ #6E6D79 */
+  box-shadow: none !important;
+}
+
+/* 管理テーブル線（chronicle マトリクスに準拠）
+ * ヘッダー下 = ややはっきりした実線
+ * 行間 = 月と月の区切りと同じ薄い実線（#f1f3f4）
+ */
+.admin-root table {
+  border-collapse: collapse;
+}
+
+.admin-root table th,
+.admin-root table td {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.admin-root table thead th {
+  border-bottom: 1px solid #e8eaed !important;
+}
+
+.admin-root table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid #f1f3f4 !important;
+}

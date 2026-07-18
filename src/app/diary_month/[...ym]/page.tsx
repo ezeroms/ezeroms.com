@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
-import { DiaryTimeline } from "@/components/DiaryTimeline";
+import { NotesTimeline } from "@/components/NotesTimeline";
 import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
 import { emptyNotesFilter, formatMonthLabel } from "@/lib/content/notes-filter";
@@ -58,7 +58,7 @@ export default async function DiaryMonthPage({
       breadcrumbCurrent={formatMonthLabel(month) || month}
       filterActive
     >
-      <DiaryTimeline items={sanitized} />
+      <NotesTimeline items={sanitized} />
     </SiteShell>
   );
 }

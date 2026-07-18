@@ -30,8 +30,12 @@ title: "プロフィール"
 - [Duolingo](https://www.duolingo.com/profile/ezeroms)
 - [Facebook](https://www.facebook.com/ezeroms/)
 - [Instagram](https://www.instagram.com/ezeroms/)
+- [LINE](https://line.me/ti/p/Aj7KkTC6Fo)
+- [Messenger](https://m.me/ezeroms)
+- [Signal](https://signal.me/#eu/b86kR2YSALTBmAF7MhH5DPm3ipGWm75xKfK6BbCQ-MyJ92vspUhKeYvBm3yXzw1C)
 - [Spotify](https://open.spotify.com/user/ezeroms)
 - [Threads](https://www.threads.net/@ezeroms)
 - [TikTok](https://www.tiktok.com/@ezeroms)
+- [WhatsApp](https://wa.me/qr/36R6ZQFFCIUBP1)
 - [X (Twitter)](https://x.com/ezeroms)
 

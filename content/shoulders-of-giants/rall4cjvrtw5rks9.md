@@ -6,7 +6,6 @@ topic:
   - "権力"
   - "社会契約"
   - "自然"
-  - ""
 book_title: "暇と退屈の倫理学"
 author: "國分功一郎"
 publisher: "新潮社"

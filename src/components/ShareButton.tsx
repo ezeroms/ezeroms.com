@@ -27,7 +27,8 @@ type Props = {
   className?: string;
 };
 
-export function DiaryShareButton({ path, className }: Props) {
+/** Notes / Giants など、投稿カード共通のシェアボタン。 */
+export function ShareButton({ path, className }: Props) {
   async function shareOrCopyLink() {
     const url = `${window.location.origin}${path}`;
 
@@ -52,7 +53,7 @@ export function DiaryShareButton({ path, className }: Props) {
     <button
       type="button"
       className={cn(
-        "diary-share-btn relative inline-flex shrink-0 items-center justify-center rounded-full border-0 bg-transparent",
+        "share-btn relative inline-flex shrink-0 items-center justify-center rounded-full border-0 bg-transparent",
         "h-9 w-9 cursor-pointer text-foreground transition-[opacity,background-color]",
         "opacity-30 group-hover:opacity-100",
         "hover:bg-accent",

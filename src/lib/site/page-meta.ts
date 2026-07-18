@@ -84,6 +84,12 @@ const JUMPAI: SitePageMeta = {
     "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
 };
 
+const KUIKAKE: SitePageMeta = {
+  title: "Kuikake",
+  description:
+    "作品として見せたい写真のギャラリー。Kuikake に収めた一枚です。",
+};
+
 const SEARCH: SitePageMeta = {
   title: "Search",
   description: "サイト内検索。",
@@ -137,6 +143,9 @@ export function resolveSitePageMeta(pathname: string): SitePageMeta | null {
 
   if (/^\/jumpai\/[^/]+\/$/.test(path)) return null;
   if (path.startsWith("/jumpai/")) return JUMPAI;
+
+  if (/^\/kuikake\/[^/]+\/$/.test(path)) return null;
+  if (path.startsWith("/kuikake/")) return KUIKAKE;
 
   if (path.startsWith("/search/")) return SEARCH;
 

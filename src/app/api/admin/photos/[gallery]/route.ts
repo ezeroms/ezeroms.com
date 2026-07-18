@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { generateContentSlug, markdownToHtml } from "@/lib/admin/content";
 import {
   getPhotoGallery,
   isPhotoGalleryId,
 } from "@/lib/content/photo-galleries";
+import {
+  isLegacySnapTable,
+  resolvePhotoDbTable,
+} from "@/lib/content/photo-db";
+import { markdownToHtml } from "@/lib/admin/content";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -33,11 +37,11 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   const auth = await requireAdmin(galleryId);
   if (auth.error) return auth.error;
 
+  const { table } = await resolvePhotoDbTable(auth.galleryId);
   const { data, error } = await getSupabaseAdmin()
-    .from(auth.galleryId)
-    .select(
-      "id, slug, title, date, location, camera, image_url, status, published_at, updated_at",
-    )
+    .from(table)
+    .select("*")
+    .eq("is_deleted", false)
     .order("date", { ascending: false })
     .limit(80);
 
@@ -52,28 +56,26 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   const auth = await requireAdmin(galleryId);
   if (auth.error) return auth.error;
   const galleryMeta = getPhotoGallery(auth.galleryId);
+  const { table } = await resolvePhotoDbTable(auth.galleryId);
 
   try {
     const body = (await request.json()) as {
-      title?: string;
+      slug?: string;
+      filename?: string;
       date?: string;
       location?: string;
       camera?: string;
       image_url?: string;
+      image_thumb_url?: string;
       caption?: string;
       status?: "draft" | "published" | "archived";
-      slug?: string;
     };
-
-    const title = (body.title ?? "").trim();
-    if (!title) {
-      return NextResponse.json({ error: "タイトルを入力してください" }, { status: 400 });
-    }
 
     const imageUrl = (body.image_url ?? "").trim();
     if (!imageUrl) {
       return NextResponse.json({ error: "画像をアップロードしてください" }, { status: 400 });
     }
+    const imageThumbUrl = (body.image_thumb_url ?? "").trim() || null;
 
     const dateInput = body.date?.trim() || new Date().toISOString();
     const dateIso = new Date(dateInput).toISOString();
@@ -82,28 +84,42 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const status = body.status === "draft" ? "draft" : "published";
-    const slug =
-      (body.slug?.trim() && /^[a-z0-9-]+$/i.test(body.slug.trim())
-        ? body.slug.trim()
-        : null) || generateContentSlug();
+    const slugRaw = (body.slug ?? "").trim();
+    if (!slugRaw) {
+      return NextResponse.json({ error: "スラッグを入力してください" }, { status: 400 });
+    }
+    if (!/^[a-z0-9_-]+$/i.test(slugRaw)) {
+      return NextResponse.json(
+        { error: "スラッグは半角英数字・ハイフン・アンダースコアのみです" },
+        { status: 400 },
+      );
+    }
+    const slug = slugRaw;
+    // title カラムは NOT NULL のため slug を格納（公開 UI では未使用）
+    const title = slug;
     const caption = (body.caption ?? "").trim();
     const now = new Date().toISOString();
 
-    const row = {
+    // 旧 snap には photo_tag / image_thumb_url が無い
+    const row: Record<string, unknown> = {
       slug,
       title,
       date: dateIso,
       location: (body.location ?? "").trim() || null,
       camera: (body.camera ?? "").trim() || null,
       image_url: imageUrl,
-      photo_tag: [] as string[],
       body_html: caption ? markdownToHtml(caption) : "",
       status,
       published_at: status === "published" ? now : null,
+      is_deleted: false,
     };
+    if (!isLegacySnapTable(table)) {
+      row.image_thumb_url = imageThumbUrl;
+      row.photo_tag = [] as string[];
+    }
 
     const { data, error } = await getSupabaseAdmin()
-      .from(auth.galleryId)
+      .from(table)
       .insert(row)
       .select("*")
       .single();
