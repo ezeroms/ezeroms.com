@@ -1,178 +1,146 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { Filter, PanelRightClose, X } from "lucide-react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { Filter, X } from "lucide-react";
 import { cn } from "@/lib/cn";
-
-const STORAGE_KEY = "ezeroms.filter-rail.expanded";
-const WIDE_MQ = "(min-width: 1080px)";
 
 type Props = {
   children: React.ReactNode;
+  /** 絞り込みが効いているとき、閉じた FAB をアクティブ色にする */
+  active?: boolean;
 };
 
 /**
- * Right filter rail that can collapse to a bottom-right FAB.
- * Narrow viewports start collapsed; wide start expanded (unless user minimized).
+ * Filter control that stays one surface: FAB morphs into a tall floating card.
+ * Does not reserve layout space in the content column.
  */
-export function FilterRail({ children }: Props) {
+export function FilterRail({ children, active = false }: Props) {
+  const [open, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
-  const [isWide, setIsWide] = useState(true);
-  const [userExpanded, setUserExpanded] = useState(true);
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const panelId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const mq = window.matchMedia(WIDE_MQ);
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    setIsWide(mq.matches);
-    if (stored === "0") setUserExpanded(false);
-    if (stored === "1") setUserExpanded(true);
     setHydrated(true);
-
-    function onChange(e: MediaQueryListEvent) {
-      setIsWide(e.matches);
-      if (!e.matches) setSheetOpen(false);
-    }
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const railExpanded = hydrated && isWide && userExpanded;
-  const showFab = hydrated && (!isWide || !userExpanded);
-
-  const minimize = useCallback(() => {
-    setUserExpanded(false);
-    setSheetOpen(false);
-    window.localStorage.setItem(STORAGE_KEY, "0");
-  }, []);
-
-  const expandWide = useCallback(() => {
-    setUserExpanded(true);
-    setSheetOpen(false);
-    window.localStorage.setItem(STORAGE_KEY, "1");
-  }, []);
-
-  const openSheet = useCallback(() => {
-    if (isWide) {
-      expandWide();
-      return;
-    }
-    setSheetOpen(true);
-  }, [isWide, expandWide]);
-
-  const closeSheet = useCallback(() => setSheetOpen(false), []);
+  const close = useCallback(() => setOpen(false), []);
+  const openPanel = useCallback(() => setOpen(true), []);
 
   useEffect(() => {
-    if (!sheetOpen) return;
+    if (!open) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") closeSheet();
+      if (e.key === "Escape") close();
+    }
+    function onPointerDown(e: MouseEvent | TouchEvent) {
+      const target = e.target as Node | null;
+      if (!target) return;
+      if (rootRef.current?.contains(target)) return;
+      close();
     }
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("touchstart", onPointerDown);
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("touchstart", onPointerDown);
     };
-  }, [sheetOpen, closeSheet]);
+  }, [open, close]);
+
+  if (!hydrated) return null;
 
   return (
-    <>
-      {/* Wide expanded rail */}
-      {railExpanded ? (
-        <aside
-          className={cn(
-            "layout-tags",
-            "flex min-h-0 w-52 shrink-0 flex-col self-stretch",
-            "!border-0 !bg-transparent !p-0",
-          )}
-          aria-label="絞り込み"
-        >
-          <div
-            className={cn(
-              "flex h-full min-h-0 w-full flex-col overflow-hidden",
-              "rounded-xl border border-border bg-card p-3 shadow-sm",
-            )}
-          >
-            <div className="mb-2 flex shrink-0 items-center justify-end">
-              <button
-                type="button"
-                className={cn(
-                  "inline-flex h-8 w-8 items-center justify-center rounded-md border-0",
-                  "bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground",
-                )}
-                onClick={minimize}
-                aria-label="絞り込みを最小化"
-                title="最小化"
-              >
-                <PanelRightClose className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
-          </div>
-        </aside>
-      ) : null}
-
-      {/* Placeholder so layout gap stays consistent while hydrating on wide */}
-      {!hydrated ? (
-        <aside
-          className="hidden min-h-0 w-52 shrink-0 min-[1080px]:block"
-          aria-hidden
-        />
-      ) : null}
-
-      {/* FAB */}
-      {showFab ? (
+    <div
+      ref={rootRef}
+      id={panelId}
+      className={cn(
+        "fixed bottom-6 right-6 z-40 flex flex-col overflow-hidden",
+        "border shadow-lg",
+        "origin-bottom-right transition-[width,height,border-radius,box-shadow,background-color,border-color,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        open
+          ? "h-[min(72vh,30rem)] w-[min(calc(100vw-1.5rem),18.5rem)] rounded-2xl border-border bg-card text-foreground shadow-xl"
+          : active
+            ? "h-12 w-12 rounded-full border-primary bg-primary text-primary-foreground shadow-md"
+            : "h-12 w-12 rounded-full border-border bg-card text-foreground",
+      )}
+      role={open ? "dialog" : undefined}
+      aria-label={open ? "絞り込み" : undefined}
+      aria-modal={open || undefined}
+    >
+      {!open ? (
         <button
           type="button"
           className={cn(
-            "fixed bottom-6 right-6 z-40",
-            "inline-flex h-12 w-12 items-center justify-center rounded-full",
-            "border border-border bg-card text-foreground shadow-lg",
-            "hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            "relative flex h-full w-full items-center justify-center border-0 bg-transparent",
+            active
+              ? "text-primary-foreground hover:bg-primary/90"
+              : "text-foreground hover:bg-accent",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           )}
-          onClick={openSheet}
-          aria-label="絞り込みを開く"
+          onClick={openPanel}
+          aria-label={active ? "絞り込みを開く（条件適用中）" : "絞り込みを開く"}
+          aria-expanded={false}
+          aria-controls={panelId}
         >
           <Filter className="h-5 w-5" />
+          {active ? (
+            <span
+              className="absolute right-2 top-2 h-2 w-2 rounded-full bg-primary-foreground ring-2 ring-primary"
+              aria-hidden
+            />
+          ) : null}
         </button>
-      ) : null}
-
-      {/* Narrow overlay sheet */}
-      {sheetOpen ? (
-        <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal>
-          <button
-            type="button"
-            className="absolute inset-0 border-0 bg-black/40"
-            aria-label="閉じる"
-            onClick={closeSheet}
-          />
-          <div
-            className={cn(
-              "relative flex h-full w-full max-w-sm flex-col",
-              "border-l border-border bg-card p-4 shadow-xl",
-            )}
-          >
-            <div className="mb-3 flex shrink-0 items-center justify-between gap-2">
-              <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                絞り込み
-              </p>
-              <button
-                type="button"
+      ) : (
+        <>
+          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-border px-3 py-2.5">
+            <div className="flex min-w-0 items-center gap-2">
+              <span
                 className={cn(
-                  "inline-flex h-8 w-8 items-center justify-center rounded-md border-0",
-                  "bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground",
+                  "inline-flex h-8 w-8 items-center justify-center rounded-full",
+                  active
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-foreground",
                 )}
-                onClick={closeSheet}
-                aria-label="閉じる"
               >
-                <X className="h-4 w-4" />
-              </button>
+                <Filter className="h-4 w-4" />
+              </span>
+              <p className="m-0 text-sm font-semibold tracking-tight">
+                絞り込み
+                {active ? (
+                  <span className="ml-1.5 text-xs font-medium text-primary">
+                    適用中
+                  </span>
+                ) : null}
+              </p>
             </div>
-            <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
+            <button
+              type="button"
+              className={cn(
+                "inline-flex h-8 w-8 items-center justify-center rounded-full border-0",
+                "bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              )}
+              onClick={close}
+              aria-label="絞り込みを閉じる"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
-        </div>
-      ) : null}
-    </>
+
+          <div className="min-h-0 flex-1 overflow-hidden px-3 pb-3 pt-2">
+            <div
+              className={cn(
+                "h-full min-h-0 overflow-hidden [&_>div]:h-full",
+                /* Panel chrome already has a title — hide the nested one */
+                "[&_[data-filter-panel-title]]:hidden",
+              )}
+            >
+              {children}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }

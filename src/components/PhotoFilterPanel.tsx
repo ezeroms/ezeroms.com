@@ -2,15 +2,23 @@
 
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { FilterAccordionRow } from "@/components/filter/FilterAccordionRow";
+import {
+  FilterPanelFooter,
+  FilterPanelHeading,
+} from "@/components/filter/FilterPanelChrome";
+import {
+  summarizeFilterSelection,
+  toggleListValue,
+} from "@/components/filter/filterPanelUtils";
 import {
   emptyPhotoFilter,
   photoFilterActive,
   serializePhotoFilter,
   type PhotoFilterState,
 } from "@/lib/content/photo-filter";
-import { cn } from "@/lib/cn";
 
-type Section = "year" | null;
+type OpenSection = "year" | null;
 
 type Props = {
   years: string[];
@@ -18,21 +26,9 @@ type Props = {
   basePath: string;
 };
 
-function toggleInList<T>(list: T[], value: T): T[] {
-  return list.includes(value)
-    ? list.filter((v) => v !== value)
-    : [...list, value];
-}
-
-function summary(values: string[]): string {
-  if (!values.length) return "指定なし";
-  if (values.length <= 2) return values.join("、");
-  return `${values.slice(0, 2).join("、")} 他${values.length - 2}`;
-}
-
 export function PhotoFilterPanel({ years, initial, basePath }: Props) {
   const router = useRouter();
-  const [open, setOpen] = useState<Section>(null);
+  const [openSection, setOpenSection] = useState<OpenSection>(null);
   const [draft, setDraft] = useState<PhotoFilterState>({
     ...initial,
     tags: [],
@@ -43,144 +39,79 @@ export function PhotoFilterPanel({ years, initial, basePath }: Props) {
     [years],
   );
 
-  const dirty =
+  const isDirty =
     JSON.stringify(draft) !== JSON.stringify(initial) ||
     photoFilterActive(draft);
-  const canClear = photoFilterActive(draft) || photoFilterActive(initial);
+  const showClear =
+    photoFilterActive(draft) || photoFilterActive(initial);
 
-  function toggleSection(key: Section) {
-    setOpen((prev) => (prev === key ? null : key));
+  function toggleSection(section: OpenSection) {
+    setOpenSection((current) => (current === section ? null : section));
   }
 
-  function apply() {
+  function applyFilter() {
     router.push(
       `${basePath}${serializePhotoFilter({ ...draft, tags: [] })}`,
     );
-    setOpen(null);
+    setOpenSection(null);
   }
 
-  function clearAll() {
+  function clearFilter() {
     setDraft(emptyPhotoFilter());
     router.push(basePath);
-    setOpen(null);
+    setOpenSection(null);
   }
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
-      <div className="shrink-0 pb-3">
-        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          絞り込み
-        </p>
-      </div>
+      <FilterPanelHeading />
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="overflow-hidden rounded-md border border-border">
-          <FilterRow
+          <FilterAccordionRow
             label="年"
-            summary={summary(draft.years.map((y) => `${y}年`))}
-            open={open === "year"}
+            summary={summarizeFilterSelection(
+              draft.years.map((year) => `${year}年`),
+            )}
+            open={openSection === "year"}
             onToggle={() => toggleSection("year")}
           >
             <div className="flex flex-col gap-1.5">
-              {yearsNewestFirst.map((y) => (
+              {yearsNewestFirst.map((year) => (
                 <label
-                  key={y}
-                  className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                  key={year}
+                  className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                 >
                   <input
                     type="checkbox"
                     className="mt-0.5 shrink-0"
-                    checked={draft.years.includes(y)}
+                    checked={draft.years.includes(year)}
                     onChange={() =>
-                      setDraft((d) => ({
-                        ...d,
-                        years: toggleInList(d.years, y),
+                      setDraft((current) => ({
+                        ...current,
+                        years: toggleListValue(current.years, year),
                       }))
                     }
                   />
-                  <span>{y}年</span>
+                  <span>{year}年</span>
                 </label>
               ))}
               {!yearsNewestFirst.length ? (
-                <p className="m-0 text-[13px] text-muted-foreground">
+                <p className="m-0 text-sm text-muted-foreground">
                   年データがありません
                 </p>
               ) : null}
             </div>
-          </FilterRow>
+          </FilterAccordionRow>
         </div>
       </div>
 
-      <div className="mt-auto shrink-0 space-y-2 border-t border-border pt-3">
-        <button
-          type="button"
-          className={cn(
-            "w-full rounded-md border-0 px-4 py-2.5 text-sm font-semibold",
-            "bg-primary text-primary-foreground",
-            "hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40",
-          )}
-          onClick={apply}
-          disabled={!dirty && !photoFilterActive(initial)}
-        >
-          絞り込み
-        </button>
-        {canClear ? (
-          <button
-            type="button"
-            className={cn(
-              "w-full rounded-md border border-border bg-transparent px-4 py-2.5 text-[13px]",
-              "text-muted-foreground hover:bg-accent hover:text-foreground",
-            )}
-            onClick={clearAll}
-          >
-            クリア
-          </button>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function FilterRow({
-  label,
-  summary: summaryText,
-  open,
-  onToggle,
-  bordered,
-  children,
-}: {
-  label: string;
-  summary: string;
-  open: boolean;
-  onToggle: () => void;
-  bordered?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className={cn(bordered && "border-t border-border")}>
-      <button
-        type="button"
-        className={cn(
-          "grid w-full grid-cols-[auto_1fr_auto] items-center gap-2",
-          "border-0 bg-transparent px-3 py-2.5 text-left",
-          "cursor-pointer text-foreground hover:bg-accent",
-        )}
-        onClick={onToggle}
-        aria-expanded={open}
-      >
-        <span className="whitespace-nowrap text-sm font-semibold">{label}</span>
-        <span className="truncate text-[13px] text-muted-foreground">
-          {summaryText}
-        </span>
-        <span className="text-xs text-muted-foreground" aria-hidden>
-          {open ? "▾" : "▸"}
-        </span>
-      </button>
-      {open ? (
-        <div className="max-h-52 overflow-y-auto border-t border-border px-3 py-2.5">
-          {children}
-        </div>
-      ) : null}
+      <FilterPanelFooter
+        onApply={applyFilter}
+        onClear={clearFilter}
+        applyDisabled={!isDirty && !photoFilterActive(initial)}
+        showClear={showClear}
+      />
     </div>
   );
 }

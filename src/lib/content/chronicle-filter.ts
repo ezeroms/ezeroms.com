@@ -1,3 +1,14 @@
+import {
+  decodePipeSeparatedList,
+  encodePipeSeparatedList,
+  firstSearchParamValue,
+  parseYearList,
+  toQueryString,
+  type SearchParamsRecord,
+} from "@/lib/content/filter-search-params";
+import type { ChronicleDatePrecision } from "@/types/content";
+
+export type { ChronicleDatePrecision };
 /** Interest lenses for Chronicle exploration. */
 export type ChronicleInterestId = "society" | "tech" | "personal";
 
@@ -46,94 +57,138 @@ export function emptyChronicleFilter(): ChronicleFilterState {
   return { interests: [], years: [], tags: [] };
 }
 
-export function chronicleFilterActive(f: ChronicleFilterState): boolean {
+export function chronicleFilterActive(filter: ChronicleFilterState): boolean {
   return (
-    f.interests.length > 0 || f.years.length > 0 || f.tags.length > 0
+    filter.interests.length > 0 ||
+    filter.years.length > 0 ||
+    filter.tags.length > 0
   );
 }
 
-function one(
-  sp: Record<string, string | string[] | undefined>,
-  key: string,
-): string {
-  const v = sp[key];
-  if (Array.isArray(v)) return v[0] ?? "";
-  return v ?? "";
-}
-
-function decodeList(raw: string): string[] {
-  return raw
-    .split("|")
-    .map((s) => {
-      try {
-        return decodeURIComponent(s.trim());
-      } catch {
-        return s.trim();
-      }
-    })
-    .filter(Boolean);
-}
-
-function isInterestId(v: string): v is ChronicleInterestId {
-  return v === "society" || v === "tech" || v === "personal";
+function isInterestId(value: string): value is ChronicleInterestId {
+  return value === "society" || value === "tech" || value === "personal";
 }
 
 /** Parse `/chronicle/?i=&y=&t=` */
 export function parseChronicleFilter(
-  sp: Record<string, string | string[] | undefined>,
+  searchParams: SearchParamsRecord,
 ): ChronicleFilterState {
-  const interests = one(sp, "i")
+  const interests = firstSearchParamValue(searchParams, "i")
     .split(",")
-    .map((s) => s.trim())
+    .map((part) => part.trim())
     .filter(isInterestId);
-  const years = one(sp, "y")
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => /^\d{4}$/.test(s));
+
   return {
     interests,
-    years,
-    tags: decodeList(one(sp, "t")),
+    years: parseYearList(firstSearchParamValue(searchParams, "y")),
+    tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
   };
 }
 
-export function serializeChronicleFilter(f: ChronicleFilterState): string {
-  const q = new URLSearchParams();
-  if (f.interests.length) q.set("i", f.interests.join(","));
-  if (f.years.length) q.set("y", f.years.join(","));
-  if (f.tags.length) {
-    q.set("t", f.tags.map((t) => encodeURIComponent(t)).join("|"));
+export function serializeChronicleFilter(
+  filter: ChronicleFilterState,
+): string {
+  const query = new URLSearchParams();
+  if (filter.interests.length) {
+    query.set("i", filter.interests.join(","));
   }
-  const s = q.toString();
-  return s ? `?${s}` : "";
+  if (filter.years.length) query.set("y", filter.years.join(","));
+  if (filter.tags.length) {
+    query.set("t", encodePipeSeparatedList(filter.tags));
+  }
+  return toQueryString(query);
 }
 
 export function chronicleYear(date: string): string {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) {
-    const m = /^(\d{4})/.exec(date);
-    return m?.[1] ?? "";
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) {
+    const match = /^(\d{4})/.exec(date);
+    return match?.[1] ?? "";
   }
-  return String(d.getFullYear());
+  return String(parsed.getFullYear());
 }
 
-export function formatChronicleDate(date: string): string {
-  // Prefer date-only strings as-is when already YYYY-MM-DD
+/** `01`–`12`. Invalid dates return "". */
+export function chronicleMonth(date: string): string {
   if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    const [y, m, d] = date.split("-");
-    return `${y}/${m}/${d}`;
+    return date.slice(5, 7);
   }
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleDateString("ja-JP", {
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) {
+    const match = /^\d{4}-(\d{2})/.exec(date);
+    return match?.[1] ?? "";
+  }
+  return String(parsed.getMonth() + 1).padStart(2, "0");
+}
+
+function normalizeDateParts(date: string): {
+  year: string;
+  month: string;
+  day: string;
+} | null {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    const [year, month, day] = date.split("-");
+    return { year, month, day };
+  }
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return {
+    year: String(parsed.getFullYear()),
+    month: String(parsed.getMonth() + 1).padStart(2, "0"),
+    day: String(parsed.getDate()).padStart(2, "0"),
+  };
+}
+
+export function formatChronicleDate(
+  date: string,
+  precision: ChronicleDatePrecision = "day",
+): string {
+  const parts = normalizeDateParts(date);
+  if (!parts) return date;
+  if (precision === "year") return parts.year;
+  const iso =
+    precision === "month"
+      ? `${parts.year}-${parts.month}-01`
+      : `${parts.year}-${parts.month}-${parts.day}`;
+  const parsed = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return date;
+  if (precision === "month") {
+    return parsed.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+    });
+  }
+  return parsed.toLocaleDateString("en-US", {
     year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+    month: "short",
+    day: "numeric",
   });
 }
 
+/** Single day or period label for matrix / modal / detail. */
+export function formatChronicleWhen(item: {
+  date: string;
+  date_precision?: ChronicleDatePrecision | null;
+  end_date?: string | null;
+}): string {
+  const precision = item.date_precision ?? "day";
+  const start = formatChronicleDate(item.date, precision);
+  if (!item.end_date) return start;
+  const endPrecision =
+    precision === "day" ? "day" : precision === "month" ? "month" : "year";
+  const end = formatChronicleDate(item.end_date, endPrecision);
+  if (end === start) return start;
+  return `${start} – ${end}`;
+}
+
+export function chronicleIsPeriod(item: {
+  end_date?: string | null;
+}): boolean {
+  return Boolean(item.end_date);
+}
+
 export function interestLabel(id: ChronicleInterestId): string {
-  return CHRONICLE_INTERESTS.find((i) => i.id === id)?.label ?? id;
+  return CHRONICLE_INTERESTS.find((item) => item.id === id)?.label ?? id;
 }
 
 /** Match an event against one interest lens. */
@@ -151,9 +206,9 @@ export function chronicleMatchesInterest(
   }
   if (interest === "tech") {
     if (item.subcategory === "技術") return true;
-    return tags.some((t) => TECH_TAGS.has(t));
+    return tags.some((tag) => TECH_TAGS.has(tag));
   }
-  // personal: theme-driven — events that carry tags (関心のフックがあるもの)
+  // personal: タグがある出来事（関心のフックがあるもの）
   return tags.length > 0;
 }
 
@@ -166,5 +221,7 @@ export function chronicleMatchesAnyInterest(
   interests: ChronicleInterestId[],
 ): boolean {
   if (!interests.length) return true;
-  return interests.some((i) => chronicleMatchesInterest(item, i));
+  return interests.some((interest) =>
+    chronicleMatchesInterest(item, interest),
+  );
 }

@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import { preprocessMarkdownMedia } from "@/lib/html";
 
 /** Generate a short URL-safe slug (diary-style). */
 export function generateContentSlug(length = 16): string {
@@ -24,7 +25,7 @@ export function parseTagList(raw: string): string[] {
 }
 
 export function markdownToHtml(md: string): string {
-  return marked.parse(md, { async: false }) as string;
+  return marked.parse(preprocessMarkdownMedia(md), { async: false }) as string;
 }
 
 /** Fallback when body_md is empty (legacy migrated HTML). */

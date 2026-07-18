@@ -10,7 +10,7 @@ function formatDate(date: string | null): string {
   if (!date) return "";
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleDateString("ja-JP", {
+  return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -27,7 +27,7 @@ export function MediaCoverageList({ items }: Props) {
   }
 
   return (
-    <div className="columns-1 gap-4 sm:columns-2">
+    <div className="columns-1 gap-6 sm:columns-2">
       {items.map((item) => {
         const dateLabel = formatDate(item.date);
         const external = Boolean(item.external_url?.trim());
@@ -36,8 +36,8 @@ export function MediaCoverageList({ items }: Props) {
           : `/about/media-coverage/${item.slug}/`;
 
         const body = (
-          <div className="flex flex-col gap-2 p-3.5">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+          <div className="flex flex-col gap-3 p-6">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
               {dateLabel ? <time dateTime={item.date ?? undefined}>{dateLabel}</time> : null}
               {dateLabel && item.lead ? <span aria-hidden>·</span> : null}
               {item.lead ? <span>{item.lead}</span> : null}
@@ -46,7 +46,7 @@ export function MediaCoverageList({ items }: Props) {
               {item.title}
             </h2>
             {external ? (
-              <p className="m-0 text-[12px] text-muted-foreground">
+              <p className="m-0 text-sm text-muted-foreground">
                 外部記事を見る →
               </p>
             ) : null}
@@ -57,8 +57,7 @@ export function MediaCoverageList({ items }: Props) {
           <article
             key={item.id}
             className={cn(
-              "mb-4 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card",
-              "shadow-sm transition-shadow hover:shadow-md",
+              "mb-6 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card shadow-sm",
             )}
           >
             {external ? (

@@ -5,6 +5,8 @@ export type About = {
   slug: string;
   title: string;
   body_html: string;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -19,6 +21,8 @@ export type MediaCoverage = {
   lead: string | null;
   external_url: string | null;
   body_html: string;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -35,6 +39,8 @@ export type Diary = {
   body_html: string;
   /** Markdown source for admin editing (may be empty for legacy rows). */
   body_md?: string;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -50,6 +56,8 @@ export type Column = {
   column_category: string[];
   column_tag: string[];
   body_html: string;
+  /** OGP image URL (recommended 1200×630). Also used as list thumb when set. */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -64,6 +72,8 @@ export type Work = {
   title: string;
   date: string;
   image_url: string | null;
+  /** OGP image URL (recommended 1200×630); falls back to image_url when empty. */
+  og_image: string;
   start_date: string | null;
   end_date: string | null;
   work_category: string[];
@@ -81,10 +91,15 @@ export type Work = {
   updated_at: string;
 };
 
-/** Project note inside an Experience period (Creative link deferred). */
+/** Project / engagement inside an Experience period. */
 export type ExperienceProject = {
   title: string;
   description?: string;
+  start_date?: string;
+  end_date?: string | null;
+  role?: string;
+  team_scale?: string;
+  tasks?: string[];
 };
 
 /**
@@ -100,10 +115,20 @@ export type Experience = {
   role: string | null;
   start_date: string;
   end_date: string | null;
+  /** 事業内容など */
+  business: string | null;
+  /** 従業員数の表示用文字列 */
+  employee_count: string | null;
+  /** 資本金の表示用文字列 */
+  capital: string | null;
+  /** 補足（売却・社名変更など） */
+  note: string | null;
   summary: string;
   body_html: string;
   projects: ExperienceProject[];
   sort_order: number;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -119,14 +144,18 @@ export type ShouldersOfGiants = {
   publisher: string | null;
   published_year: string | null;
   citation_override: string | null;
+  /** External source URL for the citation (optional). */
+  source_url: string | null;
   body_html: string;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
   updated_at: string;
 };
 
-/** Curated photograph in Smile or Jumpai gallery. */
+/** Curated photograph in Smile or Jampai gallery. */
 export type Photo = {
   id: string;
   slug: string;
@@ -143,16 +172,24 @@ export type Photo = {
   updated_at: string;
 };
 
+export type ChronicleDatePrecision = "year" | "month" | "day";
+
 export type Chronicle = {
   id: string;
   slug: string;
   title: string;
   date: string;
+  /** Display precision for `date` (year / month / day). */
+  date_precision: ChronicleDatePrecision;
+  /** When set, the event spans `date` … `end_date`. */
+  end_date: string | null;
   category: string | null;
   subcategory: string | null;
   chronicle_tag: string[];
   description: string | null;
   body_html: string;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -168,6 +205,8 @@ export type UiDesignGuidebook = {
   tags: string[];
   sort_order: number;
   body_html: string;
+  /** OGP image URL (recommended 1200×630). */
+  og_image: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;

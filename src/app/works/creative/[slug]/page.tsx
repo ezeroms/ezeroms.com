@@ -1,15 +1,62 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
-import { getWorkBySlug } from "@/lib/content/queries";
+import { absoluteUrl } from "@/lib/content/diary-meta";
+import {
+  OG_IMAGE_ASPECT_CLASS,
+  ogImageMetadata,
+  resolveOgImageUrl,
+  siteUrl,
+} from "@/lib/content/og-image";
+import { getWorkBySlug, listWork } from "@/lib/content/queries";
 import {
   formatWorkPeriod,
   serializeWorkFilter,
 } from "@/lib/content/work-filter";
 import { sanitizeBody } from "@/lib/html";
+import { cn } from "@/lib/cn";
+import { proseBodyClass } from "@/lib/site/prose-styles";
 
 export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const { items } = await listWork().catch(() => ({
+    items: [] as Awaited<ReturnType<typeof listWork>>["items"],
+  }));
+  return items.map((item) => ({ slug: item.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const item = await getWorkBySlug(slug);
+  if (!item) return { title: "Creative" };
+
+  const title = item.title;
+  const url = absoluteUrl(`/works/creative/${slug}/`, siteUrl());
+  const ogImage = resolveOgImageUrl(item.og_image, item.image_url);
+  const images = ogImageMetadata(ogImage);
+
+  return {
+    title,
+    alternates: { canonical: url },
+    openGraph: {
+      ...images.openGraph,
+      title,
+      url,
+      type: "article",
+    },
+    twitter: {
+      ...images.twitter,
+      title,
+    },
+  };
+}
 
 export default async function CreativeDetailPage({
   params,
@@ -26,25 +73,21 @@ export default async function CreativeDetailPage({
     <SiteShell
       bodyClassName="is-works-creative"
       mobileHeader={<MobileHeader title="Creative" />}
-      hidePageHeader
+      breadcrumbCurrent={item.title}
     >
       <article className="mx-auto max-w-3xl font-sans text-foreground">
-        <p className="m-0 mb-4 text-sm text-muted-foreground">
-          <Link
-            href="/works/creative/"
-            className="underline-offset-2 hover:text-foreground hover:underline"
+        {(item.image_url || item.og_image) ? (
+          <div
+            className={cn(
+              "mb-6 overflow-hidden rounded-xl bg-muted",
+              OG_IMAGE_ASPECT_CLASS,
+            )}
           >
-            ← Creative
-          </Link>
-        </p>
-
-        {item.image_url ? (
-          <div className="mb-6 overflow-hidden rounded-xl bg-muted">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={item.image_url}
+              src={(item.image_url || item.og_image)!}
               alt=""
-              className="m-0 block h-auto w-full object-cover"
+              className="m-0 block h-full w-full object-cover"
             />
           </div>
         ) : null}
@@ -79,7 +122,7 @@ export default async function CreativeDetailPage({
         </dl>
 
         {(item.work_tag ?? []).length ? (
-          <div className="mt-4 flex flex-wrap gap-1.5">
+          <div className="mt-4 flex flex-wrap gap-2">
             {(item.work_tag ?? []).map((t) => (
               <Link
                 key={t}
@@ -90,7 +133,7 @@ export default async function CreativeDetailPage({
                   clients: [],
                   kinds: [],
                 })}`}
-                className="rounded-md bg-muted px-2 py-0.5 text-[12px] text-muted-foreground no-underline hover:text-foreground"
+                className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground no-underline hover:text-foreground"
               >
                 {t}
               </Link>
@@ -100,7 +143,10 @@ export default async function CreativeDetailPage({
 
         {item.body_html?.trim() ? (
           <div
-            className="prose prose-sm mt-6 max-w-none"
+            className={cn(
+              "mt-6 max-w-none text-base leading-relaxed text-foreground",
+              proseBodyClass,
+            )}
             dangerouslySetInnerHTML={{ __html: sanitizeBody(item.body_html) }}
           />
         ) : null}

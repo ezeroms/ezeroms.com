@@ -1,12 +1,16 @@
+/** Photos 配下のギャラリー ID（Smile / Jampai）。 */
 export type PhotoGalleryId = "smile" | "jumpai";
 
 export type PhotoGalleryMeta = {
   id: PhotoGalleryId;
-  /** Supabase table name */
+  /** Supabase テーブル名（gallery id と同じ） */
   table: PhotoGalleryId;
+  /** UI 表示名 */
   label: string;
   description: string;
+  /** 公開一覧のパス（末尾スラッシュ付き） */
   basePath: string;
+  /** 管理画面のパス（末尾スラッシュ付き） */
   adminPath: string;
 };
 
@@ -23,9 +27,9 @@ export const PHOTO_GALLERIES: Record<PhotoGalleryId, PhotoGalleryMeta> = {
   jumpai: {
     id: "jumpai",
     table: "jumpai",
-    label: "Jumpai",
+    label: "Jampai",
     description:
-      "作品として見せたい写真のギャラリー。Jumpai に収めた一枚です。",
+      "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
     basePath: "/jumpai/",
     adminPath: "/admin/jumpai/",
   },

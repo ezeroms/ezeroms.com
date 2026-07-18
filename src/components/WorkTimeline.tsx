@@ -60,35 +60,35 @@ export function WorkTimeline({ items }: Props) {
               </p>
             ) : null}
 
-            <div className="rounded-xl border border-border bg-card p-3.5 shadow-sm transition-shadow hover:shadow-md">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
               <Link
                 href={`/works/creative/${item.slug}/`}
                 className="block text-inherit no-underline"
               >
                 {period ? (
-                  <p className="m-0 mb-1 text-[11px] text-muted-foreground">
+                  <p className="m-0 mb-2 text-sm text-muted-foreground">
                     {period}
                   </p>
                 ) : null}
-                <h3 className="m-0 text-[15px] font-semibold leading-snug text-foreground">
+                <h3 className="m-0 text-base font-semibold leading-snug text-foreground">
                   {item.title}
                 </h3>
                 {meta ? (
-                  <p className="m-0 mt-1.5 text-[13px] leading-snug text-muted-foreground">
+                  <p className="m-0 mt-2 text-sm leading-snug text-muted-foreground">
                     {meta}
                   </p>
                 ) : null}
                 {catLabel || (item.work_tag ?? []).length ? (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {catLabel ? (
-                      <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                      <span className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                         {catLabel}
                       </span>
                     ) : null}
                     {[...(item.work_tag ?? [])].sort().slice(0, 4).map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
+                        className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground"
                       >
                         {tag}
                       </span>

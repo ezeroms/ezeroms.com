@@ -42,19 +42,46 @@ export function diaryTitle(item: Pick<Diary, "date" | "body_html">): string {
   const d = new Date(item.date);
   const dateLabel = Number.isNaN(d.getTime())
     ? "Notes"
-    : d.toLocaleDateString("ja-JP", {
+    : d.toLocaleDateString("en-US", {
         year: "numeric",
-        month: "long",
+        month: "short",
         day: "numeric",
       });
   const excerpt = diaryExcerpt(item.body_html, 48);
   return excerpt ? `${dateLabel} — ${excerpt}` : dateLabel;
 }
 
-/** First <img src> in body, if any */
+/** パンくず・詳細見出し用の日付ラベル */
+export function formatDiaryDate(iso: string): string {
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/** 詳細ページ用の日時（分まで） */
+export function formatDiaryDateTime(iso: string): string {
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+/** First image in body: `<img src>` or Markdown `![](...)`. */
 export function firstImageSrc(html: string): string | null {
-  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  return m?.[1] ?? null;
+  const img = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (img?.[1]) return img[1].trim();
+  const md = html.match(/!\[[^\]]*]\(\s*<?([^)\s>]+)>?\s*(?:["'][^"']*["'])?\s*\)/);
+  if (md?.[1]) return md[1].trim();
+  return null;
 }
 
 export function absoluteUrl(pathOrUrl: string, siteUrl: string): string {

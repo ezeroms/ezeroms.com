@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  Aperture,
+  Bird,
   BookOpen,
   Bookmark,
   Briefcase,
@@ -51,11 +51,21 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
   const isExperience = pathname.startsWith("/works/experience");
   const isChooning = pathname.startsWith("/works/chooning");
   const isMe =
-    pathname.startsWith("/about/me") || pathname.startsWith("/about/profile");
+    pathname === "/about/me" ||
+    pathname.startsWith("/about/me/") ||
+    pathname === "/about/profile" ||
+    pathname.startsWith("/about/profile/");
   const isHere =
-    pathname.startsWith("/about/here") || pathname.startsWith("/about/site");
-  const isMediaCoverage = pathname.startsWith("/about/media-coverage");
-  const isContact = pathname.startsWith("/about/contact");
+    pathname === "/about/here" ||
+    pathname.startsWith("/about/here/") ||
+    pathname === "/about/site" ||
+    pathname.startsWith("/about/site/");
+  const isMediaCoverage =
+    pathname === "/about/media-coverage" ||
+    pathname.startsWith("/about/media-coverage/");
+  const isContact =
+    pathname === "/about/contact" ||
+    pathname.startsWith("/about/contact/");
   const isSmile = pathname.startsWith("/smile");
   const isJumpai = pathname.startsWith("/jumpai");
   const isClips = pathname.startsWith("/clips");
@@ -93,8 +103,8 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
         },
         {
           href: "/jumpai/",
-          label: "Jumpai",
-          icon: Aperture,
+          label: "Jampai",
+          icon: Bird,
           active: isJumpai,
         },
       ],
@@ -145,6 +155,12 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
           icon: Landmark,
           active: isChronicle,
         },
+        {
+          href: "/about/media-coverage/",
+          label: "Media coverage",
+          icon: Newspaper,
+          active: isMediaCoverage,
+        },
       ],
     },
     {
@@ -162,12 +178,6 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
           label: "Here",
           icon: House,
           active: isHere,
-        },
-        {
-          href: "/about/media-coverage/",
-          label: "Media coverage",
-          icon: Newspaper,
-          active: isMediaCoverage,
         },
         {
           href: "/about/contact/",
@@ -205,12 +215,12 @@ export function Sidebar({ pathname, diaryLatestHref = "/diary/" }: Props) {
       </div>
 
       <nav
-        className="w-full flex-1 overflow-y-auto px-2 py-3"
+        className="w-full flex-1 overflow-y-auto px-2.5 py-4"
         aria-label="グローバルナビゲーション"
       >
         {sections.map((section) => (
-          <div key={section.id} className="mb-4 w-full">
-            <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <div key={section.id} className="mb-5 w-full last:mb-0">
+            <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {section.label}
             </p>
             <ul className="m-0 flex w-full list-none flex-col gap-0.5 p-0">

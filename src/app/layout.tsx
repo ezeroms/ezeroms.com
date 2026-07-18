@@ -4,6 +4,7 @@ import "@/styles/design-tokens.css";
 import "@/styles/app.css";
 import "@/styles/globals.css";
 import "@/styles/legacy/main.css";
+import "@/styles/overrides.css";
 
 export const metadata: Metadata = {
   title: {

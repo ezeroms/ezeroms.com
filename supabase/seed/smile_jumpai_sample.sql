@@ -1,4 +1,4 @@
--- Sample Smile / Jumpai rows
+-- Sample Smile / Jampai rows
 -- 1) Run supabase/migrations/20260717100000_smile_jumpai.sql first
 -- 2) Then this file, or: npm run migrate:smile && npm run migrate:jumpai
 

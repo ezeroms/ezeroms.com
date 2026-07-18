@@ -1,7 +1,24 @@
+import {
+  decodePipeSeparatedList,
+  encodePipeSeparatedList,
+  firstSearchParamValue,
+  parseWeekdayList,
+  parseYearMonthList,
+  toQueryString,
+  type SearchParamsRecord,
+} from "@/lib/content/filter-search-params";
 import type { Diary } from "@/types/content";
 import { diaryMonthKey } from "@/lib/content/diary-meta";
 
-export const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"] as const;
+export const WEEKDAY_LABELS = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat",
+] as const;
 
 export type NotesFilterState = {
   months: string[];
@@ -14,75 +31,49 @@ export function emptyNotesFilter(): NotesFilterState {
   return { months: [], weekdays: [], tags: [], places: [] };
 }
 
-export function notesFilterActive(f: NotesFilterState): boolean {
+export function notesFilterActive(filter: NotesFilterState): boolean {
   return (
-    f.months.length > 0 ||
-    f.weekdays.length > 0 ||
-    f.tags.length > 0 ||
-    f.places.length > 0
+    filter.months.length > 0 ||
+    filter.weekdays.length > 0 ||
+    filter.tags.length > 0 ||
+    filter.places.length > 0
   );
 }
 
 /** Parse `/diary/?m=&w=&t=&p=` */
 export function parseNotesFilter(
-  sp: Record<string, string | string[] | undefined>,
+  searchParams: SearchParamsRecord,
 ): NotesFilterState {
-  const one = (key: string) => {
-    const v = sp[key];
-    if (Array.isArray(v)) return v[0] ?? "";
-    return v ?? "";
+  return {
+    months: parseYearMonthList(firstSearchParamValue(searchParams, "m")),
+    weekdays: parseWeekdayList(firstSearchParamValue(searchParams, "w")),
+    tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
+    places: decodePipeSeparatedList(firstSearchParamValue(searchParams, "p")),
   };
-  const months = one("m")
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => /^\d{4}-\d{2}$/.test(s));
-  const weekdays = one("w")
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => /^\d+$/.test(s))
-    .map((s) => Number(s))
-    .filter((n) => Number.isInteger(n) && n >= 0 && n <= 6);
-  const tags = one("t")
-    .split("|")
-    .map((s) => {
-      try {
-        return decodeURIComponent(s.trim());
-      } catch {
-        return s.trim();
-      }
-    })
-    .filter(Boolean);
-  const places = one("p")
-    .split("|")
-    .map((s) => {
-      try {
-        return decodeURIComponent(s.trim());
-      } catch {
-        return s.trim();
-      }
-    })
-    .filter(Boolean);
-  return { months, weekdays, tags, places };
 }
 
-export function serializeNotesFilter(f: NotesFilterState): string {
-  const q = new URLSearchParams();
-  if (f.months.length) q.set("m", f.months.join(","));
-  if (f.weekdays.length) q.set("w", f.weekdays.join(","));
-  if (f.tags.length) {
-    q.set("t", f.tags.map((t) => encodeURIComponent(t)).join("|"));
+export function serializeNotesFilter(filter: NotesFilterState): string {
+  const query = new URLSearchParams();
+  if (filter.months.length) query.set("m", filter.months.join(","));
+  if (filter.weekdays.length) query.set("w", filter.weekdays.join(","));
+  if (filter.tags.length) {
+    query.set("t", encodePipeSeparatedList(filter.tags));
   }
-  if (f.places.length) {
-    q.set("p", f.places.map((p) => encodeURIComponent(p)).join("|"));
+  if (filter.places.length) {
+    query.set("p", encodePipeSeparatedList(filter.places));
   }
-  const s = q.toString();
-  return s ? `?${s}` : "";
+  return toQueryString(query);
 }
 
 export function formatMonthLabel(ym: string): string {
-  const [y, m] = ym.split("-");
-  if (!y || !m) return ym;
-  return `${y}年${Number(m)}月`;
+  const [year, month] = ym.split("-");
+  if (!year || !month) return ym;
+  const parsed = new Date(`${year}-${month}-01T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return ym;
+  return parsed.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+  });
 }
 
 export function diaryMatchesMonths(item: Diary, months: string[]): boolean {

@@ -23,10 +23,17 @@
   --ring: 240 40% 5%;
   --radius: 0.5rem;
 
+  /* Key accent (legacy --color-accent-green #06C655) */
+  --brand: 145 94% 40%; /* #06C655 */
+  --brand-foreground: 145 94% 28%; /* darker green for text on tinted bg */
+  --brand-muted: 132 47% 85%; /* #C8EBCF */
+
   /* Brand aliases (non-HSL) for rare direct use */
   --ez-primary: #050317;
   --ez-primary-hover: #39393d;
   --ez-bg: #f9f9f7;
   --ez-border: #e7e7e9;
   --ez-text-secondary: #5d5d5f;
+  --ez-brand: #06c655;
+  --ez-brand-muted: #c8ebcf;
 }

@@ -9,6 +9,7 @@ import {
   notesFilterActive,
   parseNotesFilter,
 } from "@/lib/content/notes-filter";
+import { summarizeNotesFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listDiary,
   listDiaryMonths,
@@ -31,8 +32,8 @@ export default async function DiaryIndexPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const sp = await searchParams;
-  const filter = parseNotesFilter(sp);
+  const resolvedSearchParams = await searchParams;
+  const filter = parseNotesFilter(resolvedSearchParams);
   const filtering = notesFilterActive(filter);
 
   const [months, taxonomy, listed] = await Promise.all([
@@ -73,10 +74,13 @@ export default async function DiaryIndexPage({
         />
       }
       showTagsAside
+      mainClassName="layout-main--single"
+      breadcrumbFilter={filtering ? summarizeNotesFilter(filter) : null}
+      breadcrumbSectionHref="/diary/"
     >
       <DiaryTimeline items={sanitized} />
       {hasMore && continueMonth ? (
-        <p className="notes-feed-more pb-8">
+        <p className="notes-feed-more mx-auto max-w-3xl pb-8">
           最新 {items.length} 件を表示しています。それ以前は{" "}
           <Link href={`/diary_month/${continueMonth}/`}>月別アーカイブ</Link>
           や右の絞り込みからどうぞ。

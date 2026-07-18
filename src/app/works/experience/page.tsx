@@ -22,9 +22,7 @@ export default async function ExperiencePage() {
       mainClassName="layout-main--single"
       showTagsAside={false}
     >
-      <div className="mx-auto w-full max-w-5xl">
-        <ExperienceChart items={items} />
-      </div>
+      <ExperienceChart items={items} />
     </SiteShell>
   );
 }

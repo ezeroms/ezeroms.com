@@ -11,97 +11,124 @@ type SearchResult = {
   work: { slug: string; title: string }[];
 };
 
-export function SearchClient() {
-  const [q, setQ] = useState("");
+type Props = {
+  initialQuery?: string;
+};
+
+export function SearchClient({ initialQuery = "" }: Props) {
+  const [query, setQuery] = useState(initialQuery);
   const [data, setData] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (!q.trim()) {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  useEffect(() => {
+    if (!query.trim()) {
       setData(null);
       return;
     }
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       abortRef.current?.abort();
-      const ac = new AbortController();
-      abortRef.current = ac;
+      const controller = new AbortController();
+      abortRef.current = controller;
       setLoading(true);
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, {
-          signal: ac.signal,
-          cache: "no-store",
-        });
-        setData((await res.json()) as SearchResult);
-      } catch (e) {
-        if ((e as Error).name !== "AbortError") console.error(e);
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}`,
+          {
+            signal: controller.signal,
+            cache: "no-store",
+          },
+        );
+        setData((await response.json()) as SearchResult);
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") console.error(error);
       } finally {
         setLoading(false);
       }
     }, 250);
     return () => {
-      clearTimeout(t);
+      clearTimeout(timer);
       abortRef.current?.abort();
     };
-  }, [q]);
+  }, [query]);
 
   return (
-    <div>
-      <h1>Search</h1>
-      <input
-        type="search"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search…"
-        style={{ width: "100%", maxWidth: 480, padding: "0.5rem" }}
-      />
-      {loading ? <p>Searching…</p> : null}
+    <div className="mx-auto max-w-2xl font-sans text-foreground">
+      <label className="block">
+        <span className="sr-only">検索キーワード</span>
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="キーワードを入力…"
+          autoFocus
+          className="h-10 w-full border-0 border-b border-border bg-transparent px-0 text-base text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-foreground"
+        />
+      </label>
+
+      {loading ? (
+        <p className="mt-6 text-sm text-muted-foreground">検索中…</p>
+      ) : null}
+
       {data ? (
-        <div>
-          <section>
-            <h2>Notes</h2>
-            <ul>
-              {data.diary.map((d) => (
-                <li key={d.slug}>
-                  <Link href={`/diary/${d.slug}/`}>{d.date}</Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section>
-            <h2>Column</h2>
-            <ul>
-              {data.column.map((d) => (
-                <li key={d.slug}>
-                  <Link href={`/column/${d.slug}/`}>{d.title}</Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section>
-            <h2>Chronicle</h2>
-            <ul>
-              {data.chronicle.map((d) => (
-                <li key={d.slug}>
-                  <Link href={`/chronicle/${d.slug}/`}>
-                    {d.date} {d.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section>
-            <h2>Work</h2>
-            <ul>
-              {data.work.map((d) => (
-                <li key={d.slug}>
-                  <Link href={`/work/${d.slug}/`}>{d.title}</Link>
-                </li>
-              ))}
-            </ul>
-          </section>
+        <div className="mt-8 space-y-8">
+          <SearchSection title="Notes">
+            {data.diary.map((item) => (
+              <li key={item.slug}>
+                <Link href={`/diary/${item.slug}/`}>{item.date}</Link>
+              </li>
+            ))}
+          </SearchSection>
+          <SearchSection title="Column">
+            {data.column.map((item) => (
+              <li key={item.slug}>
+                <Link href={`/column/${item.slug}/`}>{item.title}</Link>
+              </li>
+            ))}
+          </SearchSection>
+          <SearchSection title="Chronicle">
+            {data.chronicle.map((item) => (
+              <li key={item.slug}>
+                <Link href={`/chronicle/${item.slug}/`}>
+                  {item.date} {item.title}
+                </Link>
+              </li>
+            ))}
+          </SearchSection>
+          <SearchSection title="Work">
+            {data.work.map((item) => (
+              <li key={item.slug}>
+                <Link href={`/works/creative/${item.slug}/`}>
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+          </SearchSection>
         </div>
       ) : null}
     </div>
+  );
+}
+
+function SearchSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {title}
+      </h2>
+      <ul className="mt-2 list-none space-y-1.5 p-0 text-sm [&_a]:text-foreground [&_a]:underline-offset-2 hover:[&_a]:underline">
+        {children}
+      </ul>
+    </section>
   );
 }

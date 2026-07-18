@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { MobileHeader } from "@/components/MobileHeader";
 import { PhotoFilterPanel } from "@/components/PhotoFilterPanel";
-import { PhotoMasonry } from "@/components/PhotoMasonry";
+import { PhotoGallery } from "@/components/photos/PhotoGallery";
 import { SiteShell } from "@/components/SiteShell";
 import {
   getPhotoGallery,
@@ -12,6 +12,7 @@ import {
   photoFilterActive,
 } from "@/lib/content/photo-filter";
 import { listPhotos, listPhotoTaxonomy } from "@/lib/content/queries";
+import { summarizePhotoFilter } from "@/lib/site/breadcrumb-filters";
 
 type Props = {
   galleryId: PhotoGalleryId;
@@ -19,10 +20,10 @@ type Props = {
 };
 
 export function photoGalleryMetadata(galleryId: PhotoGalleryId): Metadata {
-  const g = getPhotoGallery(galleryId);
+  const gallery = getPhotoGallery(galleryId);
   return {
-    title: g.label,
-    description: g.description,
+    title: gallery.label,
+    description: gallery.description,
   };
 }
 
@@ -30,10 +31,10 @@ export async function PhotoGalleryIndexPage({
   galleryId,
   searchParams,
 }: Props) {
-  const g = getPhotoGallery(galleryId);
-  const sp = await searchParams;
-  const filter = parsePhotoFilter(sp);
-  const filtering = photoFilterActive(filter);
+  const gallery = getPhotoGallery(galleryId);
+  const resolvedSearchParams = await searchParams;
+  const filter = parsePhotoFilter(resolvedSearchParams);
+  const isFiltering = photoFilterActive(filter);
 
   const [taxonomy, listed] = await Promise.all([
     listPhotoTaxonomy(galleryId).catch(() => ({
@@ -42,26 +43,26 @@ export async function PhotoGalleryIndexPage({
     })),
     listPhotos(
       galleryId,
-      filtering ? { years: filter.years } : undefined,
+      isFiltering ? { years: filter.years } : undefined,
     ).catch(() => ({ items: [], total: 0 })),
   ]);
 
   return (
     <SiteShell
       bodyClassName={`is-${galleryId}`}
-      mobileHeader={<MobileHeader title={g.label} />}
+      mobileHeader={<MobileHeader title={gallery.label} />}
       secondary={
         <PhotoFilterPanel
           years={taxonomy.years}
           initial={filter}
-          basePath={g.basePath}
+          basePath={gallery.basePath}
         />
       }
       showTagsAside
+      breadcrumbFilter={isFiltering ? summarizePhotoFilter(filter) : null}
+      breadcrumbSectionHref={gallery.basePath}
     >
-      <div className="w-full py-0 font-sans text-foreground">
-        <PhotoMasonry items={listed.items} basePath={g.basePath} />
-      </div>
+      <PhotoGallery items={listed.items} />
     </SiteShell>
   );
 }

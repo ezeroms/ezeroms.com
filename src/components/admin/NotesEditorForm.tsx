@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +23,7 @@ export type NotesEditorInitial = {
   tags: string;
   place: string;
   status: "published" | "draft";
+  og_image: string;
 };
 
 export function NotesEditorForm({
@@ -37,6 +39,7 @@ export function NotesEditorForm({
   );
   const [tags, setTags] = useState(initial?.tags ?? "");
   const [place, setPlace] = useState(initial?.place ?? "");
+  const [ogImage, setOgImage] = useState(initial?.og_image ?? "");
   const [status, setStatus] = useState<"published" | "draft">(
     initial?.status ?? "published",
   );
@@ -55,6 +58,7 @@ export function NotesEditorForm({
         date: new Date(date).toISOString(),
         tags,
         place,
+        og_image: ogImage,
         status,
       };
       const res = await fetch(
@@ -79,6 +83,7 @@ export function NotesEditorForm({
           setBodyMd("");
           setTags("");
           setPlace("");
+          setOgImage("");
         }
         router.refresh();
       }
@@ -106,6 +111,12 @@ export function NotesEditorForm({
           required
         />
       </div>
+      <OgImageField
+        value={ogImage}
+        onChange={setOgImage}
+        uploadKind="diary"
+        disabled={loading}
+      />
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="note-date">日時</Label>
         <Input

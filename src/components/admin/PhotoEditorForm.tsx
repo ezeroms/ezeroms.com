@@ -35,7 +35,7 @@ export function PhotoEditorForm({
   galleryId: PhotoGalleryId;
   initial?: PhotoEditorInitial;
 }) {
-  const g = getPhotoGallery(galleryId);
+  const gallery = getPhotoGallery(galleryId);
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const isEdit = Boolean(initial?.slug);
@@ -125,7 +125,7 @@ export function PhotoEditorForm({
       }
       setOk({ slug });
       if (!isEdit) {
-        router.push(`${g.adminPath}${slug}/edit/`);
+        router.push(`${gallery.adminPath}${slug}/edit/`);
         router.refresh();
       } else {
         router.refresh();
@@ -144,7 +144,7 @@ export function PhotoEditorForm({
         <Alert>
           保存しました。{" "}
           <Link
-            href={`${g.basePath}${ok.slug}/`}
+            href={`${gallery.basePath}${ok.slug}/`}
             className="underline"
             target="_blank"
           >
@@ -260,7 +260,7 @@ export function PhotoEditorForm({
           {loading ? "保存中…" : isEdit ? "更新する" : "追加する"}
         </Button>
         <Button asChild type="button" variant="outline">
-          <Link href={g.adminPath}>一覧へ戻る</Link>
+          <Link href={gallery.adminPath}>一覧へ戻る</Link>
         </Button>
       </div>
     </form>

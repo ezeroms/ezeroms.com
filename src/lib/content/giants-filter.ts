@@ -1,3 +1,10 @@
+import {
+  decodePipeSeparatedList,
+  encodePipeSeparatedList,
+  firstSearchParamValue,
+  type SearchParamsRecord,
+} from "@/lib/content/filter-search-params";
+
 export type GiantsFilterState = {
   topics: string[];
 };
@@ -6,52 +13,36 @@ export function emptyGiantsFilter(): GiantsFilterState {
   return { topics: [] };
 }
 
-export function giantsFilterActive(f: GiantsFilterState): boolean {
-  return f.topics.length > 0;
-}
-
-function decodePipeList(raw: string): string[] {
-  return raw
-    .split("|")
-    .map((s) => {
-      try {
-        return decodeURIComponent(s.trim());
-      } catch {
-        return s.trim();
-      }
-    })
-    .filter(Boolean);
+export function giantsFilterActive(filter: GiantsFilterState): boolean {
+  return filter.topics.length > 0;
 }
 
 /**
  * Parse `/shoulders-of-giants/?t=topic1|topic2`
- * Also accepts legacy `?topic=` (single).
+ * 旧形式の `?topic=`（単一）も受け付ける。
  */
 export function parseGiantsFilter(
-  sp: Record<string, string | string[] | undefined>,
+  searchParams: SearchParamsRecord,
 ): GiantsFilterState {
-  const one = (key: string) => {
-    const v = sp[key];
-    if (Array.isArray(v)) return v[0] ?? "";
-    return v ?? "";
-  };
-  const fromT = decodePipeList(one("t"));
-  if (fromT.length) return { topics: fromT };
+  const fromTopicsParam = decodePipeSeparatedList(
+    firstSearchParamValue(searchParams, "t"),
+  );
+  if (fromTopicsParam.length) return { topics: fromTopicsParam };
 
-  const legacy = one("topic").trim();
-  if (legacy) {
+  const legacyTopic = firstSearchParamValue(searchParams, "topic").trim();
+  if (legacyTopic) {
     try {
-      return { topics: [decodeURIComponent(legacy)] };
+      return { topics: [decodeURIComponent(legacyTopic)] };
     } catch {
-      return { topics: [legacy] };
+      return { topics: [legacyTopic] };
     }
   }
   return emptyGiantsFilter();
 }
 
-export function serializeGiantsFilter(f: GiantsFilterState): string {
-  if (!f.topics.length) return "";
-  const q = new URLSearchParams();
-  q.set("t", f.topics.map((t) => encodeURIComponent(t)).join("|"));
-  return `?${q.toString()}`;
+export function serializeGiantsFilter(filter: GiantsFilterState): string {
+  if (!filter.topics.length) return "";
+  const query = new URLSearchParams();
+  query.set("t", encodePipeSeparatedList(filter.topics));
+  return `?${query.toString()}`;
 }

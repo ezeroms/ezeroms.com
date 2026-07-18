@@ -18,10 +18,12 @@ export function formatExperienceDuration(
 
   const years = Math.floor(months / 12);
   const rem = months % 12;
-  if (years > 0 && rem > 0) return `${years}年${rem}ヶ月`;
-  if (years > 0) return `${years}年`;
-  if (rem > 0) return `${rem}ヶ月`;
-  return "1ヶ月未満";
+  if (years > 0 && rem > 0) {
+    return `${years} yr${years === 1 ? "" : "s"} ${rem} mo`;
+  }
+  if (years > 0) return `${years} yr${years === 1 ? "" : "s"}`;
+  if (rem > 0) return `${rem} mo`;
+  return "< 1 mo";
 }
 
 export function formatExperiencePeriod(
@@ -30,14 +32,14 @@ export function formatExperiencePeriod(
 ): string {
   const start = new Date(startDate);
   if (Number.isNaN(start.getTime())) return "";
-  const startLabel = start.toLocaleDateString("ja-JP", {
+  const startLabel = start.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
   });
-  if (!endDate) return `${startLabel} – 現在`;
+  if (!endDate) return `${startLabel} – Present`;
   const end = new Date(endDate);
   if (Number.isNaN(end.getTime())) return startLabel;
-  const endLabel = end.toLocaleDateString("ja-JP", {
+  const endLabel = end.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
   });
@@ -52,9 +54,31 @@ export function parseExperienceProjects(raw: unknown): ExperienceProject[] {
       const o = p as Record<string, unknown>;
       const title = String(o.title ?? "").trim();
       if (!title) return null;
+      const description = o.description
+        ? String(o.description).trim()
+        : undefined;
+      const start_date = o.start_date
+        ? String(o.start_date).slice(0, 10)
+        : undefined;
+      let end_date: string | null | undefined;
+      if (o.end_date === null || o.end_date === "") end_date = null;
+      else if (o.end_date != null)
+        end_date = String(o.end_date).slice(0, 10);
+      const role = o.role ? String(o.role).trim() : undefined;
+      const team_scale = o.team_scale
+        ? String(o.team_scale).trim()
+        : undefined;
+      const tasks = Array.isArray(o.tasks)
+        ? o.tasks.map((t) => String(t).trim()).filter(Boolean)
+        : undefined;
       return {
         title,
-        description: o.description ? String(o.description) : undefined,
+        description: description || undefined,
+        start_date,
+        end_date,
+        role: role || undefined,
+        team_scale: team_scale || undefined,
+        tasks: tasks?.length ? tasks : undefined,
       };
     })
     .filter(Boolean) as ExperienceProject[];
@@ -72,10 +96,15 @@ export function normalizeExperienceRow(
     role: (row.role as string | null) ?? null,
     start_date: String(row.start_date).slice(0, 10),
     end_date: row.end_date ? String(row.end_date).slice(0, 10) : null,
+    business: row.business ? String(row.business) : null,
+    employee_count: row.employee_count ? String(row.employee_count) : null,
+    capital: row.capital ? String(row.capital) : null,
+    note: row.note ? String(row.note) : null,
     summary: String(row.summary ?? ""),
     body_html: String(row.body_html ?? ""),
     projects: parseExperienceProjects(row.projects),
     sort_order: Number(row.sort_order ?? 0) || 0,
+    og_image: String(row.og_image ?? ""),
     status: (row.status as Experience["status"]) ?? "published",
     published_at: (row.published_at as string | null) ?? null,
     created_at: String(row.created_at ?? ""),

@@ -3,7 +3,7 @@ import { SiteShell } from "@/components/SiteShell";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
-import { emptyNotesFilter } from "@/lib/content/notes-filter";
+import { emptyNotesFilter, formatMonthLabel } from "@/lib/content/notes-filter";
 import {
   listDiary,
   listDiaryMonths,
@@ -54,6 +54,9 @@ export default async function DiaryMonthPage({
         />
       }
       showTagsAside
+      mainClassName="layout-main--single"
+      breadcrumbCurrent={formatMonthLabel(month) || month}
+      filterActive
     >
       <DiaryTimeline items={sanitized} />
     </SiteShell>

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { AboutArticle } from "@/components/AboutArticle";
 import { AboutShell } from "@/components/AboutToc";
 import { getAboutBySlug, listAbout } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
@@ -15,6 +16,11 @@ const CONTENT_BY_PUBLIC: Record<string, string> = {
 };
 
 const PUBLIC_SLUGS = ["me", "here", "contact"] as const;
+
+/** カード見出しと重複する先頭の h1 を本文から外す（Column 詳細と同じ構成） */
+function stripLeadingH1(html: string): string {
+  return html.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
+}
 
 export async function generateStaticParams() {
   const pages = await listAbout().catch(() => []);
@@ -47,27 +53,24 @@ export default async function AboutPage({
 
   const page = await getAboutBySlug(contentSlug);
   const pathname = `/about/${slug}/`;
-  const showCover = slug === "me";
+  const isMe = slug === "me";
+
+  // Me は本文先頭の名前見出しを活かす。Here / Contact は front matter の title をカード見出しに使う
+  const cardTitle = isMe ? undefined : page?.title;
+  const bodyHtml = page
+    ? sanitizeBody(
+        cardTitle ? stripLeadingH1(page.body_html) : page.body_html,
+      )
+    : "";
 
   return (
     <AboutShell pathname={pathname}>
       {page ? (
-        <article>
-          {showCover ? (
-            <div className="mb-6 overflow-hidden rounded-xl bg-muted">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/about/profile.webp"
-                alt=""
-                className="m-0 block h-auto w-full object-cover"
-              />
-            </div>
-          ) : null}
-          <div
-            className="prose prose-sm max-w-none text-foreground prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-foreground prose-a:underline-offset-2"
-            dangerouslySetInnerHTML={{ __html: sanitizeBody(page.body_html) }}
-          />
-        </article>
+        <AboutArticle
+          bodyHtml={bodyHtml}
+          title={cardTitle}
+          coverSrc={isMe ? "/images/about/profile.webp" : null}
+        />
       ) : (
         <p className="m-0 text-sm text-muted-foreground">
           コンテンツが見つかりませんでした。

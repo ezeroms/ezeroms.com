@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Chronicle } from "@/types/content";
 import {
   chronicleYear,
-  formatChronicleDate,
+  formatChronicleWhen,
   serializeChronicleFilter,
 } from "@/lib/content/chronicle-filter";
 import { cn } from "@/lib/cn";
@@ -57,12 +57,12 @@ export function ChronicleTimeline({ items }: Props) {
               </p>
             ) : null}
 
-            <article className="rounded-xl border border-border bg-card p-3.5 shadow-sm transition-shadow hover:shadow-md">
-              <p className="m-0 mb-1 text-[11px] text-muted-foreground">
-                {formatChronicleDate(item.date)}
+            <article className="rounded-xl border border-border bg-card p-6 shadow-sm">
+              <p className="m-0 mb-2 text-sm text-muted-foreground">
+                {formatChronicleWhen(item)}
                 {meta ? ` · ${meta}` : ""}
               </p>
-              <h3 className="m-0 text-[15px] font-semibold leading-snug text-foreground">
+              <h3 className="m-0 text-base font-semibold leading-snug text-foreground">
                 <Link
                   href={`/chronicle/${item.slug}/`}
                   className="text-inherit no-underline hover:underline hover:underline-offset-2"
@@ -71,12 +71,12 @@ export function ChronicleTimeline({ items }: Props) {
                 </Link>
               </h3>
               {item.description ? (
-                <p className="m-0 mt-1.5 text-[13px] leading-snug text-muted-foreground">
+                <p className="m-0 mt-2 text-sm leading-snug text-muted-foreground">
                   {item.description}
                 </p>
               ) : null}
               {(item.chronicle_tag ?? []).length ? (
-                <div className="mt-2 flex flex-wrap gap-1.5">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {[...(item.chronicle_tag ?? [])].sort().map((tag) => (
                     <Link
                       key={tag}
@@ -85,7 +85,7 @@ export function ChronicleTimeline({ items }: Props) {
                         years: [],
                         tags: [tag],
                       })}`}
-                      className="rounded-md bg-muted px-2 py-0.5 text-[11px] text-muted-foreground no-underline hover:bg-accent hover:text-foreground"
+                      className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground no-underline hover:bg-accent hover:text-foreground"
                     >
                       {tag}
                     </Link>

@@ -233,6 +233,7 @@ async function migrateGiants() {
       citation_override: data.citation_override
         ? String(data.citation_override)
         : null,
+      source_url: data.source_url ? String(data.source_url) : null,
       body_html: mdToHtml(content),
       status: "published",
       published_at: new Date().toISOString(),
@@ -241,20 +242,9 @@ async function migrateGiants() {
   await upsert("shoulders_of_giants", rows);
 }
 
-function parseProjects(raw: unknown): { title: string; description?: string }[] {
+function parseProjects(raw: unknown): unknown[] {
   if (!Array.isArray(raw)) return [];
-  return raw
-    .map((p) => {
-      if (!p || typeof p !== "object") return null;
-      const o = p as Record<string, unknown>;
-      const title = String(o.title ?? "").trim();
-      if (!title) return null;
-      const description = o.description
-        ? String(o.description).trim()
-        : undefined;
-      return description ? { title, description } : { title };
-    })
-    .filter(Boolean) as { title: string; description?: string }[];
+  return raw.filter((p) => p && typeof p === "object" && "title" in p);
 }
 
 async function migrateExperience() {
@@ -278,6 +268,12 @@ async function migrateExperience() {
       role: data.role ? String(data.role) : null,
       start_date: start,
       end_date: end,
+      business: data.business ? String(data.business) : null,
+      employee_count: data.employee_count
+        ? String(data.employee_count)
+        : null,
+      capital: data.capital ? String(data.capital) : null,
+      note: data.note ? String(data.note) : null,
       summary: data.summary ? String(data.summary) : "",
       body_html: mdToHtml(content),
       projects: parseProjects(data.projects),
@@ -332,10 +328,15 @@ async function migrateChronicle() {
     const { data, content } = readEntry(file);
     const slug = slugFromFile(file, data);
     const date = toDateOnly(data.date) ?? "2000-01-01";
+    const precisionRaw = String(data.date_precision ?? "day").toLowerCase();
+    const date_precision =
+      precisionRaw === "year" || precisionRaw === "month" ? precisionRaw : "day";
     rows.push({
       slug,
       title: String(data.title ?? slug),
       date,
+      date_precision,
+      end_date: toDateOnly(data.end_date),
       category: data.category ? String(data.category) : null,
       subcategory: data.subcategory ? String(data.subcategory) : null,
       chronicle_tag: asStringArray(data.chronicle_tag),

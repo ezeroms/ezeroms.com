@@ -53,7 +53,7 @@ export default async function AdminDashboardPage() {
                       <CardTitle className="text-base">{item.label}</CardTitle>
                       <span
                         className={cn(
-                          "rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                          "rounded px-1.5 py-0.5 text-xs font-semibold uppercase tracking-wide",
                           item.status === "ready"
                             ? "bg-emerald-50 text-emerald-800"
                             : "bg-muted text-muted-foreground",

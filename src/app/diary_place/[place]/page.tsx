@@ -44,6 +44,9 @@ export default async function DiaryPlacePage({
         />
       }
       showTagsAside
+      mainClassName="layout-main--single"
+      breadcrumbCurrent={decoded}
+      filterActive
     >
       <DiaryTimeline items={sanitized} />
     </SiteShell>

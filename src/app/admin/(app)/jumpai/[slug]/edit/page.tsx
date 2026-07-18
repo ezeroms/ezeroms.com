@@ -22,7 +22,7 @@ export default async function AdminJumpaiEditPage({
 }) {
   await getSessionUser();
   const { slug } = await params;
-  const g = getPhotoGallery("jumpai");
+  const gallery = getPhotoGallery("jumpai");
 
   if (!hasSupabaseConfig()) notFound();
 
@@ -42,7 +42,7 @@ export default async function AdminJumpaiEditPage({
       />
       <Card>
         <CardHeader>
-          <CardTitle>{g.label}</CardTitle>
+          <CardTitle>{gallery.label}</CardTitle>
           <CardDescription>/{slug}/</CardDescription>
         </CardHeader>
         <CardContent>

@@ -1,4 +1,12 @@
 import { WORK_CATEGORY_NAMES } from "@/components/WorkHeaderNav";
+import {
+  decodePipeSeparatedList,
+  encodePipeSeparatedList,
+  firstSearchParamValue,
+  parseYearList,
+  toQueryString,
+  type SearchParamsRecord,
+} from "@/lib/content/filter-search-params";
 import type { WorkKind } from "@/types/content";
 
 export type WorkFilterState = {
@@ -19,78 +27,58 @@ export function emptyWorkFilter(): WorkFilterState {
   return { years: [], categories: [], tags: [], clients: [], kinds: [] };
 }
 
-export function workFilterActive(f: WorkFilterState): boolean {
+export function workFilterActive(filter: WorkFilterState): boolean {
   return (
-    f.years.length > 0 ||
-    f.categories.length > 0 ||
-    f.tags.length > 0 ||
-    f.clients.length > 0 ||
-    f.kinds.length > 0
+    filter.years.length > 0 ||
+    filter.categories.length > 0 ||
+    filter.tags.length > 0 ||
+    filter.clients.length > 0 ||
+    filter.kinds.length > 0
   );
 }
 
-function one(
-  sp: Record<string, string | string[] | undefined>,
-  key: string,
-): string {
-  const v = sp[key];
-  if (Array.isArray(v)) return v[0] ?? "";
-  return v ?? "";
-}
-
-function decodeList(raw: string): string[] {
-  return raw
-    .split("|")
-    .map((s) => {
-      try {
-        return decodeURIComponent(s.trim());
-      } catch {
-        return s.trim();
-      }
-    })
-    .filter(Boolean);
-}
-
-function isWorkKind(v: string): v is WorkKind {
-  return v === "product" || v === "commission" || v === "involvement";
+function isWorkKind(value: string): value is WorkKind {
+  return (
+    value === "product" ||
+    value === "commission" ||
+    value === "involvement"
+  );
 }
 
 /** Parse `?y=&c=&t=&cl=&k=` */
 export function parseWorkFilter(
-  sp: Record<string, string | string[] | undefined>,
+  searchParams: SearchParamsRecord,
 ): WorkFilterState {
-  const years = one(sp, "y")
+  const kinds = firstSearchParamValue(searchParams, "k")
     .split(",")
-    .map((s) => s.trim())
-    .filter((s) => /^\d{4}$/.test(s));
-  const kinds = one(sp, "k")
-    .split(",")
-    .map((s) => s.trim())
+    .map((part) => part.trim())
     .filter(isWorkKind);
+
   return {
-    years,
-    categories: decodeList(one(sp, "c")),
-    tags: decodeList(one(sp, "t")),
-    clients: decodeList(one(sp, "cl")),
+    years: parseYearList(firstSearchParamValue(searchParams, "y")),
+    categories: decodePipeSeparatedList(
+      firstSearchParamValue(searchParams, "c"),
+    ),
+    tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
+    clients: decodePipeSeparatedList(firstSearchParamValue(searchParams, "cl")),
     kinds,
   };
 }
 
-export function serializeWorkFilter(f: WorkFilterState): string {
-  const q = new URLSearchParams();
-  if (f.years.length) q.set("y", f.years.join(","));
-  if (f.categories.length) {
-    q.set("c", f.categories.map((c) => encodeURIComponent(c)).join("|"));
+export function serializeWorkFilter(filter: WorkFilterState): string {
+  const query = new URLSearchParams();
+  if (filter.years.length) query.set("y", filter.years.join(","));
+  if (filter.categories.length) {
+    query.set("c", encodePipeSeparatedList(filter.categories));
   }
-  if (f.tags.length) {
-    q.set("t", f.tags.map((t) => encodeURIComponent(t)).join("|"));
+  if (filter.tags.length) {
+    query.set("t", encodePipeSeparatedList(filter.tags));
   }
-  if (f.clients.length) {
-    q.set("cl", f.clients.map((c) => encodeURIComponent(c)).join("|"));
+  if (filter.clients.length) {
+    query.set("cl", encodePipeSeparatedList(filter.clients));
   }
-  if (f.kinds.length) q.set("k", f.kinds.join(","));
-  const s = q.toString();
-  return s ? `?${s}` : "";
+  if (filter.kinds.length) query.set("k", filter.kinds.join(","));
+  return toQueryString(query);
 }
 
 export function workCategoryLabel(cat: string): string {
@@ -103,8 +91,8 @@ export function workPrimaryDate(item: {
   date: string;
 }): Date {
   if (item.start_date) {
-    const d = new Date(item.start_date);
-    if (!Number.isNaN(d.getTime())) return d;
+    const parsed = new Date(item.start_date);
+    if (!Number.isNaN(parsed.getTime())) return parsed;
   }
   return new Date(item.date);
 }
@@ -113,9 +101,9 @@ export function workYear(item: {
   start_date: string | null;
   date: string;
 }): string {
-  const d = workPrimaryDate(item);
-  if (Number.isNaN(d.getTime())) return "";
-  return String(d.getFullYear());
+  const parsed = workPrimaryDate(item);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return String(parsed.getFullYear());
 }
 
 export function formatWorkPeriod(
@@ -125,14 +113,14 @@ export function formatWorkPeriod(
   if (!startDate) return "";
   const start = new Date(startDate);
   if (Number.isNaN(start.getTime())) return "";
-  const startLabel = start.toLocaleDateString("ja-JP", {
+  const startLabel = start.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
   });
   if (!endDate) return `${startLabel} –`;
   const end = new Date(endDate);
   if (Number.isNaN(end.getTime())) return startLabel;
-  const endLabel = end.toLocaleDateString("ja-JP", {
+  const endLabel = end.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
   });
@@ -158,5 +146,6 @@ export function normalizeWorkRow<T extends Record<string, unknown>>(
     product_key: (row.product_key as string | null | undefined) ?? null,
     work_category: (row.work_category as string[] | null | undefined) ?? [],
     work_tag: (row.work_tag as string[] | null | undefined) ?? [],
+    og_image: String(row.og_image ?? ""),
   };
 }

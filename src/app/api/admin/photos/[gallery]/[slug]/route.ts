@@ -29,8 +29,8 @@ async function requireAdmin(galleryParam: string) {
 }
 
 export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const { gallery, slug } = await params;
-  const auth = await requireAdmin(gallery);
+  const { gallery: galleryId, slug } = await params;
+  const auth = await requireAdmin(galleryId);
   if (auth.error) return auth.error;
 
   const { data, error } = await getSupabaseAdmin()
@@ -50,10 +50,10 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 }
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  const { gallery, slug } = await params;
-  const auth = await requireAdmin(gallery);
+  const { gallery: galleryId, slug } = await params;
+  const auth = await requireAdmin(galleryId);
   if (auth.error) return auth.error;
-  const g = getPhotoGallery(auth.galleryId);
+  const galleryMeta = getPhotoGallery(auth.galleryId);
 
   try {
     const body = (await request.json()) as {
@@ -123,8 +123,8 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    revalidatePath(g.basePath);
-    revalidatePath(`${g.basePath}${slug}/`);
+    revalidatePath(galleryMeta.basePath);
+    revalidatePath(`${galleryMeta.basePath}${slug}/`);
     return NextResponse.json({ item: data });
   } catch (e) {
     return NextResponse.json(
@@ -135,10 +135,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const { gallery, slug } = await params;
-  const auth = await requireAdmin(gallery);
+  const { gallery: galleryId, slug } = await params;
+  const auth = await requireAdmin(galleryId);
   if (auth.error) return auth.error;
-  const g = getPhotoGallery(auth.galleryId);
+  const galleryMeta = getPhotoGallery(auth.galleryId);
 
   const { error } = await getSupabaseAdmin()
     .from(auth.galleryId)
@@ -149,6 +149,6 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  revalidatePath(g.basePath);
+  revalidatePath(galleryMeta.basePath);
   return NextResponse.json({ ok: true, slug });
 }

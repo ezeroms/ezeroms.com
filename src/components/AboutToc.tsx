@@ -1,6 +1,5 @@
 import { SiteShell } from "@/components/SiteShell";
 import { MobileHeader } from "@/components/MobileHeader";
-import { cn } from "@/lib/cn";
 
 const PAGE_TITLES: Record<string, string> = {
   "/about/me/": "Me",
@@ -13,11 +12,10 @@ const PAGE_TITLES: Record<string, string> = {
 export function AboutShell({
   pathname,
   children,
-  wide = false,
 }: {
   pathname: string;
   children: React.ReactNode;
-  /** Full content width (card grids). Default is reading column. */
+  /** Full content width (card grids). Kept for callers; card itself constrains width. */
   wide?: boolean;
 }) {
   const title =
@@ -31,15 +29,10 @@ export function AboutShell({
       bodyClassName="is-about"
       mobileHeader={<MobileHeader title={title} />}
       showTagsAside={false}
+      showLayoutHeader={false}
+      mainClassName="layout-main--single"
     >
-      <div
-        className={cn(
-          "font-sans text-foreground",
-          wide ? "w-full" : "mx-auto max-w-3xl",
-        )}
-      >
-        {children}
-      </div>
+      <div className="w-full font-sans text-foreground">{children}</div>
     </SiteShell>
   );
 }

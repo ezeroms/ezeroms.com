@@ -1,27 +1,22 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { GiantsFilterPanel } from "@/components/GiantsFilterPanel";
-import { GiantsTimeline } from "@/components/GiantsTimeline";
+import { GiantsArticle } from "@/components/GiantsArticle";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
-import { emptyGiantsFilter } from "@/lib/content/giants-filter";
 import {
   formatGiantsCitation,
   giantsExcerpt,
   giantsPermalink,
 } from "@/lib/content/giants-meta";
 import {
-  getGiantsBySlug,
-  listGiants,
-  listGiantsTopics,
-} from "@/lib/content/queries";
+  ogImageMetadata,
+  resolveOgImageUrl,
+  siteUrl,
+} from "@/lib/content/og-image";
+import { getGiantsBySlug, listGiants } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 
 export const revalidate = 60;
-
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://ezeroms.com";
 
 export async function generateStaticParams() {
   const { items } = await listGiants().catch(() => ({
@@ -42,17 +37,25 @@ export async function generateMetadata({
   const citation = formatGiantsCitation(item);
   const title = citation || item.book_title || "The shoulders of Giants";
   const description = giantsExcerpt(item.body_html, 160) || undefined;
-  const url = `${SITE_URL}${giantsPermalink(slug)}`;
+  const url = `${siteUrl()}${giantsPermalink(slug)}`;
+  const ogImage = resolveOgImageUrl(item.og_image);
+  const images = ogImageMetadata(ogImage);
 
   return {
     title,
     description,
     alternates: { canonical: url },
     openGraph: {
+      ...images.openGraph,
       title,
       description,
       url,
       type: "article",
+    },
+    twitter: {
+      ...images.twitter,
+      title,
+      description,
     },
   };
 }
@@ -66,41 +69,20 @@ export default async function GiantsEntryPage({
   const item = await getGiantsBySlug(slug);
   if (!item) notFound();
 
-  const topics = item.topic ?? [];
-  const [allTopics, related] = await Promise.all([
-    listGiantsTopics().catch(() => [] as string[]),
-    topics.length
-      ? listGiants({ topics, limit: 40 }).catch(() => ({
-          items: [item],
-          total: 1,
-        }))
-      : listGiants({ limit: 40 }).catch(() => ({ items: [item], total: 1 })),
-  ]);
-
-  const bySlug = new Map(related.items.map((i) => [i.slug, i]));
-  if (!bySlug.has(item.slug)) bySlug.set(item.slug, item);
-  const ordered = [...bySlug.values()].sort((a, b) =>
-    b.created_at.localeCompare(a.created_at),
-  );
-
-  const sanitized = ordered.map((row) => ({
-    ...row,
-    body_html: sanitizeBody(row.body_html),
-  }));
+  const citation = formatGiantsCitation(item);
+  const bodyHtml = sanitizeBody(item.body_html);
 
   return (
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
       mobileHeader={
-        <MobileHeader title={formatGiantsCitation(item) || "Giants"} />
+        <MobileHeader title={citation || "The shoulders of Giants"} />
       }
-      secondary={
-        <GiantsFilterPanel topics={allTopics} initial={emptyGiantsFilter()} />
-      }
-      showTagsAside
-      hidePageHeader
+      showTagsAside={false}
+      breadcrumbCurrent={citation || item.book_title || slug}
+      mainClassName="layout-main--single"
     >
-      <GiantsTimeline items={sanitized} focusSlug={slug} />
+      <GiantsArticle item={item} bodyHtml={bodyHtml} />
     </SiteShell>
   );
 }

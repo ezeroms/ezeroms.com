@@ -5,48 +5,56 @@ import { marked } from "marked";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import type { Photo } from "@/types/content";
 
-function contentRoot(gallery: PhotoGalleryId): string {
+function galleryContentDirectory(gallery: PhotoGalleryId): string {
   return path.join(process.cwd(), "content", gallery);
 }
 
-function mdToHtml(md: string): string {
-  return marked.parse(md, { async: false }) as string;
+function markdownToHtml(markdown: string): string {
+  return marked.parse(markdown, { async: false }) as string;
 }
 
-function asStringArray(v: unknown): string[] {
-  if (!v) return [];
-  if (Array.isArray(v)) return v.map(String).filter(Boolean);
-  return [String(v)].filter(Boolean);
+function asStringArray(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.map(String).filter(Boolean);
+  return [String(value)].filter(Boolean);
 }
 
-function toIso(v: unknown): string {
-  if (v instanceof Date && !Number.isNaN(v.getTime())) return v.toISOString();
-  if (v != null && v !== "") {
-    const d = new Date(String(v));
-    if (!Number.isNaN(d.getTime())) return d.toISOString();
+function toIsoDateString(value: unknown): string {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
+  }
+  if (value != null && value !== "") {
+    const parsed = new Date(String(value));
+    if (!Number.isNaN(parsed.getTime())) return parsed.toISOString();
   }
   return new Date().toISOString();
 }
 
-function firstImageSrc(htmlOrMd: string, front?: unknown): string | null {
-  if (typeof front === "string" && front.trim()) return front.trim();
-  const m = htmlOrMd.match(/src=["']([^"']+)["']/);
-  return m?.[1] ?? null;
+/** front matter の image を優先し、なければ本文中の最初の src を使う。 */
+function resolveImageUrl(
+  bodyMarkdown: string,
+  frontMatterImage: unknown,
+): string | null {
+  if (typeof frontMatterImage === "string" && frontMatterImage.trim()) {
+    return frontMatterImage.trim();
+  }
+  const match = bodyMarkdown.match(/src=["']([^"']+)["']/);
+  return match?.[1] ?? null;
 }
 
 export function readPhotoMarkdown(
   gallery: PhotoGalleryId,
   slug: string,
 ): Photo | null {
-  const file = path.join(contentRoot(gallery), `${slug}.md`);
-  if (!fs.existsSync(file)) return null;
+  const filePath = path.join(galleryContentDirectory(gallery), `${slug}.md`);
+  if (!fs.existsSync(filePath)) return null;
   try {
-    const raw = fs.readFileSync(file, "utf8");
+    const raw = fs.readFileSync(filePath, "utf8");
     const { data, content } = matter(raw);
     const now = new Date().toISOString();
-    const date = toIso(data.date);
-    const body_html = mdToHtml(content);
-    const image_url = firstImageSrc(content, data.image ?? data.image_url);
+    const date = toIsoDateString(data.date);
+    const body_html = markdownToHtml(content);
+    const image_url = resolveImageUrl(content, data.image ?? data.image_url);
     return {
       id: `fs-${gallery}-${slug}`,
       slug,
@@ -62,19 +70,21 @@ export function readPhotoMarkdown(
       created_at: now,
       updated_at: now,
     };
-  } catch (e) {
-    console.error(`[readPhotoMarkdown:${gallery}:${slug}]`, e);
+  } catch (error) {
+    console.error(`[readPhotoMarkdown:${gallery}:${slug}]`, error);
     return null;
   }
 }
 
 export function listPhotoMarkdown(gallery: PhotoGalleryId): Photo[] {
-  const root = contentRoot(gallery);
-  if (!fs.existsSync(root)) return [];
+  const directory = galleryContentDirectory(gallery);
+  if (!fs.existsSync(directory)) return [];
   return fs
-    .readdirSync(root)
-    .filter((f) => f.endsWith(".md") && !f.startsWith("_"))
-    .map((f) => readPhotoMarkdown(gallery, f.replace(/\.md$/, "")))
+    .readdirSync(directory)
+    .filter((fileName) => fileName.endsWith(".md") && !fileName.startsWith("_"))
+    .map((fileName) =>
+      readPhotoMarkdown(gallery, fileName.replace(/\.md$/, "")),
+    )
     .filter(Boolean)
     .sort((a, b) => b!.date.localeCompare(a!.date)) as Photo[];
 }

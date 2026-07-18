@@ -7,6 +7,7 @@ import {
   columnFilterActive,
   parseColumnFilter,
 } from "@/lib/content/column-filter";
+import { summarizeColumnFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listColumn,
   listColumnMonths,
@@ -26,8 +27,8 @@ export default async function ColumnIndexPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const sp = await searchParams;
-  const filter = parseColumnFilter(sp);
+  const resolvedSearchParams = await searchParams;
+  const filter = parseColumnFilter(resolvedSearchParams);
   const filtering = columnFilterActive(filter);
 
   const [months, taxonomy, listed] = await Promise.all([
@@ -59,6 +60,9 @@ export default async function ColumnIndexPage({
         />
       }
       showTagsAside
+      mainClassName="layout-main--single"
+      breadcrumbFilter={filtering ? summarizeColumnFilter(filter) : null}
+      breadcrumbSectionHref="/column/"
     >
       <ColumnList
         items={listed.items}

@@ -2,9 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
-import { serializeChronicleFilter, formatChronicleDate } from "@/lib/content/chronicle-filter";
+import { serializeChronicleFilter, formatChronicleWhen } from "@/lib/content/chronicle-filter";
 import { getChronicleBySlug } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
+import { cn } from "@/lib/cn";
+import { proseBodyClass } from "@/lib/site/prose-styles";
 
 export const revalidate = 60;
 
@@ -35,7 +37,7 @@ export default async function ChronicleEntryPage({
         </p>
 
         <p className="m-0 mb-2 text-sm text-muted-foreground">
-          <time dateTime={item.date}>{formatChronicleDate(item.date)}</time>
+          <time dateTime={item.date}>{formatChronicleWhen(item)}</time>
           {meta ? ` · ${meta}` : ""}
         </p>
 
@@ -50,7 +52,7 @@ export default async function ChronicleEntryPage({
         ) : null}
 
         {(item.chronicle_tag ?? []).length ? (
-          <div className="mt-4 flex flex-wrap gap-1.5">
+          <div className="mt-4 flex flex-wrap gap-2">
             {(item.chronicle_tag ?? []).map((t) => (
               <Link
                 key={t}
@@ -59,7 +61,7 @@ export default async function ChronicleEntryPage({
                   years: [],
                   tags: [t],
                 })}`}
-                className="rounded-md bg-muted px-2 py-0.5 text-[12px] text-muted-foreground no-underline hover:text-foreground"
+                className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground no-underline hover:text-foreground"
               >
                 {t}
               </Link>
@@ -69,7 +71,10 @@ export default async function ChronicleEntryPage({
 
         {item.body_html?.trim() ? (
           <div
-            className="prose prose-sm mt-6 max-w-none"
+            className={cn(
+              "mt-6 max-w-none text-base leading-relaxed text-foreground",
+              proseBodyClass,
+            )}
             dangerouslySetInnerHTML={{ __html: sanitizeBody(item.body_html) }}
           />
         ) : null}

@@ -139,10 +139,10 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
         </Link>
         <p className="mt-1.5 text-xs text-muted-foreground">Admin</p>
       </div>
-      <nav className="flex-1 overflow-y-auto px-2 py-3">
+      <nav className="flex-1 overflow-y-auto px-2.5 py-4">
         {adminNavSections.map((section) => (
-          <div key={section.id} className="mb-4">
-            <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <div key={section.id} className="mb-5 last:mb-0">
+            <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {section.label}
             </p>
             <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
@@ -160,7 +160,7 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
                       {item.status === "soon" ? (
                         <span
                           className={cn(
-                            "rounded px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide",
+                            "rounded px-1 py-0.5 text-xs font-semibold uppercase tracking-wide",
                             active
                               ? "bg-muted-foreground/15 text-muted-foreground"
                               : "bg-muted text-muted-foreground",

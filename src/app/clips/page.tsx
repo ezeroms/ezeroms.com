@@ -7,6 +7,7 @@ import {
   notesFilterActive,
   parseNotesFilter,
 } from "@/lib/content/notes-filter";
+import { summarizeNotesFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listClip,
   listClipMonths,
@@ -25,8 +26,8 @@ export default async function ClipsIndexPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const sp = await searchParams;
-  const filter = parseNotesFilter(sp);
+  const resolvedSearchParams = await searchParams;
+  const filter = parseNotesFilter(resolvedSearchParams);
   // Clips have no place facet
   const clipFilter = { ...filter, places: [] as string[] };
   const filtering = notesFilterActive(clipFilter);
@@ -60,6 +61,8 @@ export default async function ClipsIndexPage({
         />
       }
       showTagsAside
+      breadcrumbFilter={filtering ? summarizeNotesFilter(clipFilter) : null}
+      breadcrumbSectionHref="/clips/"
     >
       <div className="w-full py-0 font-sans text-foreground">
         <ClipsMasonry items={listed.items} activeTags={clipFilter.tags} />

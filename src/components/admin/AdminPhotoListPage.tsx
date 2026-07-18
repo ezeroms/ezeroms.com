@@ -21,7 +21,7 @@ export async function AdminPhotoListPage({
   galleryId: PhotoGalleryId;
 }) {
   await getSessionUser();
-  const g = getPhotoGallery(galleryId);
+  const gallery = getPhotoGallery(galleryId);
 
   let items: {
     slug: string;
@@ -44,17 +44,17 @@ export async function AdminPhotoListPage({
   return (
     <>
       <AdminPageHeader
-        title={g.label}
-        description={g.description}
+        title={gallery.label}
+        description={gallery.description}
         actions={
           <Button asChild>
-            <Link href={`${g.adminPath}new/`}>＋ 写真を追加</Link>
+            <Link href={`${gallery.adminPath}new/`}>＋ 写真を追加</Link>
           </Button>
         }
       />
       <Card>
         <CardHeader>
-          <CardTitle>最近の {g.label}</CardTitle>
+          <CardTitle>最近の {gallery.label}</CardTitle>
           <CardDescription>最新 80 件</CardDescription>
         </CardHeader>
         <CardContent>
@@ -73,13 +73,13 @@ export async function AdminPhotoListPage({
                       className="h-12 w-12 shrink-0 rounded-md object-cover"
                     />
                   ) : (
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-muted text-[10px] text-muted-foreground">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-muted text-xs text-muted-foreground">
                       —
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
                     <Link
-                      href={`${g.adminPath}${item.slug}/edit/`}
+                      href={`${gallery.adminPath}${item.slug}/edit/`}
                       className="font-medium underline-offset-2 hover:underline"
                     >
                       {item.title}
@@ -93,10 +93,10 @@ export async function AdminPhotoListPage({
                 </div>
                 <div className="flex shrink-0 gap-1">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`${g.adminPath}${item.slug}/edit/`}>編集</Link>
+                    <Link href={`${gallery.adminPath}${item.slug}/edit/`}>編集</Link>
                   </Button>
                   <Button asChild variant="ghost" size="sm">
-                    <Link href={`${g.basePath}${item.slug}/`} target="_blank">
+                    <Link href={`${gallery.basePath}${item.slug}/`} target="_blank">
                       見る
                     </Link>
                   </Button>

@@ -7,6 +7,7 @@ import {
   parseWorkFilter,
   workFilterActive,
 } from "@/lib/content/work-filter";
+import { summarizeWorkFilter } from "@/lib/site/breadcrumb-filters";
 import { listWork, listWorkTaxonomy } from "@/lib/content/queries";
 
 export const revalidate = 60;
@@ -21,8 +22,8 @@ export default async function CreativePage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const sp = await searchParams;
-  const filter = parseWorkFilter(sp);
+  const resolvedSearchParams = await searchParams;
+  const filter = parseWorkFilter(resolvedSearchParams);
   const filtering = workFilterActive(filter);
 
   const [taxonomy, listed] = await Promise.all([
@@ -62,6 +63,8 @@ export default async function CreativePage({
         />
       }
       showTagsAside
+      breadcrumbFilter={filtering ? summarizeWorkFilter(filter) : null}
+      breadcrumbSectionHref="/works/creative/"
     >
       <WorkList items={listed.items} />
     </SiteShell>

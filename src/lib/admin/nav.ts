@@ -81,8 +81,8 @@ export const adminNavSections: AdminNavSection[] = [
       },
       {
         href: "/admin/jumpai/",
-        label: "Jumpai",
-        description: "写真ギャラリー Jumpai",
+        label: "Jampai",
+        description: "写真ギャラリー Jampai",
         status: "ready",
         icon: "aperture",
       },

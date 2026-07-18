@@ -18,8 +18,8 @@ export function AdminComingSoon({ item }: { item: AdminNavItem }) {
         <CardHeader>
           <CardTitle>準備中</CardTitle>
           <CardDescription>
-            このセクションの編集 UI はこれから実装します。データモデルと公開 API
-            は既にあります。
+            このセクションの編集 UI はこれから実装します。データモデル（OGP 画像
+            1200×630 含む）と公開 API は既にあります。
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">

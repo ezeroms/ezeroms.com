@@ -22,7 +22,7 @@ export default async function AdminSmileEditPage({
 }) {
   await getSessionUser();
   const { slug } = await params;
-  const g = getPhotoGallery("smile");
+  const gallery = getPhotoGallery("smile");
 
   if (!hasSupabaseConfig()) notFound();
 
@@ -42,7 +42,7 @@ export default async function AdminSmileEditPage({
       />
       <Card>
         <CardHeader>
-          <CardTitle>{g.label}</CardTitle>
+          <CardTitle>{gallery.label}</CardTitle>
           <CardDescription>/{slug}/</CardDescription>
         </CardHeader>
         <CardContent>

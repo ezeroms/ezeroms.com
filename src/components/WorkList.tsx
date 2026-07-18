@@ -19,7 +19,7 @@ export function WorkList({ items }: Props) {
   }
 
   return (
-    <div className="columns-1 gap-4 sm:columns-2" id="work-articles-list">
+    <div className="columns-1 gap-6 sm:columns-2" id="work-articles-list">
       {items.map((item) => {
         const href = `/works/creative/${item.slug}/`;
         const period = formatWorkPeriod(item.start_date, item.end_date);
@@ -32,26 +32,25 @@ export function WorkList({ items }: Props) {
           <article
             key={item.id}
             className={cn(
-              "mb-4 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card",
-              "shadow-sm transition-shadow hover:shadow-md",
+              "mb-6 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card shadow-sm",
             )}
           >
             <Link href={href} className="block text-inherit no-underline">
-              {item.image_url ? (
-                <div className="overflow-hidden bg-muted">
+              {item.image_url || item.og_image ? (
+                <div className="aspect-[1200/630] overflow-hidden bg-muted">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={item.image_url}
+                    src={(item.image_url || item.og_image)!}
                     alt=""
-                    className="m-0 block h-auto max-h-56 w-full object-cover"
+                    className="m-0 block h-full w-full object-cover"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
               ) : null}
 
-              <div className="flex flex-col gap-2 p-3.5">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+              <div className="flex flex-col gap-3 p-6">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
                   {period ? <span>{period}</span> : null}
                   {period && categoryLabel ? <span aria-hidden>·</span> : null}
                   {categoryLabel ? <span>{categoryLabel}</span> : null}
@@ -62,17 +61,17 @@ export function WorkList({ items }: Props) {
                 </h2>
 
                 {(item.role || item.client) && (
-                  <p className="m-0 text-[13px] leading-snug text-muted-foreground">
+                  <p className="m-0 text-sm leading-snug text-muted-foreground">
                     {[item.role, item.client].filter(Boolean).join(" / ")}
                   </p>
                 )}
 
                 {(item.work_tag ?? []).length ? (
-                  <div className="mt-0.5 flex flex-wrap gap-1.5">
+                  <div className="mt-1 flex flex-wrap gap-2">
                     {[...(item.work_tag ?? [])].sort().map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                        className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
                       >
                         {tag}
                       </span>

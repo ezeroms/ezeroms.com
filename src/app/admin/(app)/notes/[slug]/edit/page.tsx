@@ -31,7 +31,9 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
 
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
-    .select("slug, date, diary_tag, diary_place, status, body_html, body_md")
+    .select(
+      "slug, date, diary_tag, diary_place, og_image, status, body_html, body_md",
+    )
     .eq("slug", slug)
     .maybeSingle();
 
@@ -51,6 +53,7 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
     date: data.date as string,
     tags: ((data.diary_tag as string[] | null) ?? []).join(", "),
     place: (data.diary_place as string | null) ?? "",
+    og_image: (data.og_image as string | null) ?? "",
     status,
   };
 

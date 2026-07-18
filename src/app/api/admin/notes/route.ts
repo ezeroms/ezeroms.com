@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
       date?: string;
       tags?: string;
       place?: string;
+      og_image?: string;
       status?: "draft" | "published" | "archived";
       slug?: string;
     };
@@ -68,6 +69,7 @@ export async function POST(request: NextRequest) {
     const month = monthKeyFromDate(dateIso);
     const tags = parseTagList(body.tags ?? "");
     const place = body.place?.trim() || null;
+    const ogImage = (body.og_image ?? "").trim();
     const bodyHtml = markdownToHtml(bodyMd);
     const now = new Date().toISOString();
 
@@ -77,6 +79,7 @@ export async function POST(request: NextRequest) {
       diary_month: [month],
       diary_tag: tags,
       diary_place: place,
+      og_image: ogImage,
       body_md: bodyMd,
       body_html: bodyHtml,
       status,

@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ClipYoutubeEmbed } from "@/components/ClipYoutubeEmbed";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { parseYoutubeVideoId } from "@/lib/content/clip-meta";
 
 function localDatetimeValue(d = new Date()) {
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -52,6 +54,11 @@ export function ClipsEditorForm({
   const [ok, setOk] = useState<{ slug: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [ogLoading, setOgLoading] = useState(false);
+
+  const youtubeId = useMemo(
+    () => parseYoutubeVideoId(sourceUrl),
+    [sourceUrl],
+  );
 
   async function fetchOgp() {
     setError(null);
@@ -103,7 +110,7 @@ export function ClipsEditorForm({
         status,
         og_image: ogImage,
         og_description: ogDescription,
-        refresh_og: isEdit && !ogImage,
+        refresh_og: isEdit && !ogImage && !youtubeId,
       };
       const res = await fetch(
         isEdit ? `/api/admin/clips/${initial!.slug}/` : "/api/admin/clips/",
@@ -151,7 +158,7 @@ export function ClipsEditorForm({
             type="url"
             value={sourceUrl}
             onChange={(e) => setSourceUrl(e.target.value)}
-            placeholder="https://…"
+            placeholder="https://…（記事 or YouTube）"
             required
             className="flex-1"
           />
@@ -165,11 +172,17 @@ export function ClipsEditorForm({
           </Button>
         </div>
         <p className="m-0 text-xs text-muted-foreground">
-          URL を入れて OGP を取得すると、画像プレビューとタイトル候補が入ります。
+          {youtubeId
+            ? "YouTube URL を検出したので、公開カードでは埋め込み動画を表示します。タイトル候補は OGP 取得でも入れられます。"
+            : "記事 URL なら OGP を取得すると画像プレビューとタイトル候補が入ります。YouTube URL なら埋め込み表示になります。"}
         </p>
       </div>
 
-      {ogImage ? (
+      {youtubeId ? (
+        <div className="overflow-hidden rounded-lg border border-border">
+          <ClipYoutubeEmbed videoId={youtubeId} title={title || "YouTube"} />
+        </div>
+      ) : ogImage ? (
         <div className="overflow-hidden rounded-lg border border-border bg-muted">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -187,7 +200,7 @@ export function ClipsEditorForm({
           id="clip-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="記事タイトル"
+          placeholder={youtubeId ? "動画タイトル" : "記事タイトル"}
           required
         />
       </div>

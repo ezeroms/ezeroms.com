@@ -1,5 +1,14 @@
 "use client";
 
+import { FilterAccordionRow } from "@/components/filter/FilterAccordionRow";
+import {
+  FilterPanelFooter,
+  FilterPanelHeading,
+} from "@/components/filter/FilterPanelChrome";
+import {
+  summarizeFilterSelection,
+  toggleListValue,
+} from "@/components/filter/filterPanelUtils";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
@@ -10,7 +19,6 @@ import {
   serializeNotesFilter,
   type NotesFilterState,
 } from "@/lib/content/notes-filter";
-import { cn } from "@/lib/cn";
 
 type Section = "period" | "weekday" | "tag" | "place" | null;
 
@@ -24,18 +32,6 @@ type Props = {
   /** Hide place filter (e.g. Clips). Default true when places provided. */
   showPlaces?: boolean;
 };
-
-function toggleInList<T>(list: T[], value: T): T[] {
-  return list.includes(value)
-    ? list.filter((v) => v !== value)
-    : [...list, value];
-}
-
-function summary(values: string[]): string {
-  if (!values.length) return "指定なし";
-  if (values.length <= 2) return values.join("、");
-  return `${values.slice(0, 2).join("、")} 他${values.length - 2}`;
-}
 
 export function NotesFilterPanel({
   months,
@@ -79,17 +75,13 @@ export function NotesFilterPanel({
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
-      <div className="shrink-0 pb-3">
-        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          絞り込み
-        </p>
-      </div>
+      <FilterPanelHeading />
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="overflow-hidden rounded-md border border-border">
-          <FilterRow
+          <FilterAccordionRow
             label="時期"
-            summary={summary(draft.months.map(formatMonthLabel))}
+            summary={summarizeFilterSelection(draft.months.map(formatMonthLabel))}
             open={open === "period"}
             onToggle={() => toggleSection("period")}
           >
@@ -97,7 +89,7 @@ export function NotesFilterPanel({
               {monthsNewestFirst.map((ym) => (
                 <label
                   key={ym}
-                  className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                  className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                 >
                   <input
                     type="checkbox"
@@ -106,7 +98,7 @@ export function NotesFilterPanel({
                     onChange={() =>
                       setDraft((d) => ({
                         ...d,
-                        months: toggleInList(d.months, ym),
+                        months: toggleListValue(d.months, ym),
                       }))
                     }
                   />
@@ -114,27 +106,27 @@ export function NotesFilterPanel({
                 </label>
               ))}
               {!monthsNewestFirst.length ? (
-                <p className="m-0 text-[13px] text-muted-foreground">
+                <p className="m-0 text-sm text-muted-foreground">
                   月データがありません
                 </p>
               ) : null}
             </div>
-          </FilterRow>
+          </FilterAccordionRow>
 
-          <FilterRow
+          <FilterAccordionRow
             label="曜日"
-            summary={summary(
-              draft.weekdays.map((w) => `${WEEKDAY_LABELS[w]}曜`),
+            summary={summarizeFilterSelection(
+              draft.weekdays.map((w) => WEEKDAY_LABELS[w]),
             )}
             open={open === "weekday"}
             onToggle={() => toggleSection("weekday")}
-            bordered
+            showTopBorder
           >
             <div className="grid grid-cols-4 gap-1.5">
               {WEEKDAY_LABELS.map((label, i) => (
                 <label
                   key={label}
-                  className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                  className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                 >
                   <input
                     type="checkbox"
@@ -143,7 +135,7 @@ export function NotesFilterPanel({
                     onChange={() =>
                       setDraft((d) => ({
                         ...d,
-                        weekdays: toggleInList(d.weekdays, i),
+                        weekdays: toggleListValue(d.weekdays, i),
                       }))
                     }
                   />
@@ -151,20 +143,20 @@ export function NotesFilterPanel({
                 </label>
               ))}
             </div>
-          </FilterRow>
+          </FilterAccordionRow>
 
-          <FilterRow
+          <FilterAccordionRow
             label="タグ"
-            summary={summary(draft.tags)}
+            summary={summarizeFilterSelection(draft.tags)}
             open={open === "tag"}
             onToggle={() => toggleSection("tag")}
-            bordered
+            showTopBorder
           >
             <div className="flex flex-col gap-1.5">
               {tags.map((tag) => (
                 <label
                   key={tag}
-                  className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                  className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                 >
                   <input
                     type="checkbox"
@@ -173,7 +165,7 @@ export function NotesFilterPanel({
                     onChange={() =>
                       setDraft((d) => ({
                         ...d,
-                        tags: toggleInList(d.tags, tag),
+                        tags: toggleListValue(d.tags, tag),
                       }))
                     }
                   />
@@ -181,26 +173,26 @@ export function NotesFilterPanel({
                 </label>
               ))}
               {!tags.length ? (
-                <p className="m-0 text-[13px] text-muted-foreground">
+                <p className="m-0 text-sm text-muted-foreground">
                   タグがありません
                 </p>
               ) : null}
             </div>
-          </FilterRow>
+          </FilterAccordionRow>
 
           {showPlaces ? (
-            <FilterRow
+            <FilterAccordionRow
               label="場所"
-              summary={summary(draft.places)}
+              summary={summarizeFilterSelection(draft.places)}
               open={open === "place"}
               onToggle={() => toggleSection("place")}
-              bordered
+              showTopBorder
             >
               <div className="flex flex-col gap-1.5">
                 {places.map((place) => (
                   <label
                     key={place}
-                    className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                    className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                   >
                     <input
                       type="checkbox"
@@ -209,7 +201,7 @@ export function NotesFilterPanel({
                       onChange={() =>
                         setDraft((d) => ({
                           ...d,
-                          places: toggleInList(d.places, place),
+                          places: toggleListValue(d.places, place),
                         }))
                       }
                     />
@@ -217,86 +209,23 @@ export function NotesFilterPanel({
                   </label>
                 ))}
                 {!places.length ? (
-                  <p className="m-0 text-[13px] text-muted-foreground">
+                  <p className="m-0 text-sm text-muted-foreground">
                     場所がありません
                   </p>
                 ) : null}
               </div>
-            </FilterRow>
+            </FilterAccordionRow>
           ) : null}
         </div>
       </div>
 
-      <div className="mt-auto shrink-0 space-y-2 border-t border-border pt-3">
-        <button
-          type="button"
-          className={cn(
-            "w-full rounded-md border-0 px-4 py-2.5 text-sm font-semibold",
-            "bg-primary text-primary-foreground",
-            "hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40",
-          )}
-          onClick={apply}
-          disabled={!dirty && !notesFilterActive(initial)}
-        >
-          絞り込み
-        </button>
-        {canClear ? (
-          <button
-            type="button"
-            className={cn(
-              "w-full rounded-md border border-border bg-transparent px-4 py-2.5 text-[13px]",
-              "text-muted-foreground hover:bg-accent hover:text-foreground",
-            )}
-            onClick={clearAll}
-          >
-            クリア
-          </button>
-        ) : null}
-      </div>
+      <FilterPanelFooter
+        onApply={apply}
+        onClear={clearAll}
+        applyDisabled={!dirty && !notesFilterActive(initial)}
+        showClear={canClear}
+      />
     </div>
   );
 }
 
-function FilterRow({
-  label,
-  summary: summaryText,
-  open,
-  onToggle,
-  bordered,
-  children,
-}: {
-  label: string;
-  summary: string;
-  open: boolean;
-  onToggle: () => void;
-  bordered?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className={cn(bordered && "border-t border-border")}>
-      <button
-        type="button"
-        className={cn(
-          "grid w-full grid-cols-[auto_1fr_auto] items-center gap-2",
-          "border-0 bg-transparent px-3 py-2.5 text-left",
-          "cursor-pointer text-foreground hover:bg-accent",
-        )}
-        onClick={onToggle}
-        aria-expanded={open}
-      >
-        <span className="whitespace-nowrap text-sm font-semibold">{label}</span>
-        <span className="truncate text-[13px] text-muted-foreground">
-          {summaryText}
-        </span>
-        <span className="text-xs text-muted-foreground" aria-hidden>
-          {open ? "▾" : "▸"}
-        </span>
-      </button>
-      {open ? (
-        <div className="max-h-52 overflow-y-auto border-t border-border px-3 py-2.5">
-          {children}
-        </div>
-      ) : null}
-    </div>
-  );
-}

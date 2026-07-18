@@ -1,5 +1,21 @@
+/**
+ * 写真ギャラリーの絞り込みクエリ（年）。
+ * Smile / Jampai の公開 UI ではタグ絞り込みは使わない。
+ */
+
+import {
+  firstSearchParamValue,
+  parseYearList,
+  toQueryString,
+  type SearchParamsRecord,
+} from "@/lib/content/filter-search-params";
+
 export type PhotoFilterState = {
   years: string[];
+  /**
+   * 互換のため残している。公開 UI では常に空配列。
+   * （データ上の photo_tag や admin 側とは別系統）
+   */
   tags: string[];
 };
 
@@ -7,50 +23,38 @@ export function emptyPhotoFilter(): PhotoFilterState {
   return { years: [], tags: [] };
 }
 
-export function photoFilterActive(f: PhotoFilterState): boolean {
-  return f.years.length > 0;
+export function photoFilterActive(filter: PhotoFilterState): boolean {
+  return filter.years.length > 0;
 }
 
-function one(
-  sp: Record<string, string | string[] | undefined>,
-  key: string,
-): string {
-  const v = sp[key];
-  if (Array.isArray(v)) return v[0] ?? "";
-  return v ?? "";
-}
-
-/** Parse `/?y=` (tags removed for Smile / Jumpai). */
+/** URL の `?y=2024,2025` をフィルタ状態に変換する。 */
 export function parsePhotoFilter(
-  sp: Record<string, string | string[] | undefined>,
+  searchParams: SearchParamsRecord,
 ): PhotoFilterState {
-  const years = one(sp, "y")
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => /^\d{4}$/.test(s));
   return {
-    years,
+    years: parseYearList(firstSearchParamValue(searchParams, "y")),
     tags: [],
   };
 }
 
-export function serializePhotoFilter(f: PhotoFilterState): string {
-  const q = new URLSearchParams();
-  if (f.years.length) q.set("y", f.years.join(","));
-  const s = q.toString();
-  return s ? `?${s}` : "";
+export function serializePhotoFilter(filter: PhotoFilterState): string {
+  const query = new URLSearchParams();
+  if (filter.years.length) {
+    query.set("y", filter.years.join(","));
+  }
+  return toQueryString(query);
 }
 
 export function photoYear(date: string): string {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return "";
-  return String(d.getFullYear());
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return String(parsed.getFullYear());
 }
 
 export function formatPhotoDate(date: string): string {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("ja-JP", {
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",

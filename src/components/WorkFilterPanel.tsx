@@ -1,5 +1,14 @@
 "use client";
 
+import { FilterAccordionRow } from "@/components/filter/FilterAccordionRow";
+import {
+  FilterPanelFooter,
+  FilterPanelHeading,
+} from "@/components/filter/FilterPanelChrome";
+import {
+  summarizeFilterSelection,
+  toggleListValue,
+} from "@/components/filter/filterPanelUtils";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
@@ -12,7 +21,6 @@ import {
 } from "@/lib/content/work-filter";
 import { sortWorkCategories } from "@/components/WorkHeaderNav";
 import type { WorkKind } from "@/types/content";
-import { cn } from "@/lib/cn";
 
 type Section = "kind" | "year" | "category" | "tag" | "client" | null;
 
@@ -27,18 +35,6 @@ type Props = {
   showCategories?: boolean;
   showTags?: boolean;
 };
-
-function toggleInList<T>(list: T[], value: T): T[] {
-  return list.includes(value)
-    ? list.filter((v) => v !== value)
-    : [...list, value];
-}
-
-function summary(values: string[]): string {
-  if (!values.length) return "指定なし";
-  if (values.length <= 2) return values.join("、");
-  return `${values.slice(0, 2).join("、")} 他${values.length - 2}`;
-}
 
 const ALL_KINDS = Object.keys(WORK_KIND_LABELS) as WorkKind[];
 
@@ -98,18 +94,14 @@ export function WorkFilterPanel({
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
-      <div className="shrink-0 pb-3">
-        <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          絞り込み
-        </p>
-      </div>
+      <FilterPanelHeading />
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="overflow-hidden rounded-md border border-border">
           {showKinds ? (
-            <FilterRow
+            <FilterAccordionRow
               label="種類"
-              summary={summary(draft.kinds.map((k) => WORK_KIND_LABELS[k]))}
+              summary={summarizeFilterSelection(draft.kinds.map((k) => WORK_KIND_LABELS[k]))}
               open={open === "kind"}
               onToggle={() => toggleSection("kind")}
             >
@@ -117,7 +109,7 @@ export function WorkFilterPanel({
                 {ALL_KINDS.map((kind) => (
                   <label
                     key={kind}
-                    className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                    className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                   >
                     <input
                       type="checkbox"
@@ -126,7 +118,7 @@ export function WorkFilterPanel({
                       onChange={() =>
                         setDraft((d) => ({
                           ...d,
-                          kinds: toggleInList(d.kinds, kind),
+                          kinds: toggleListValue(d.kinds, kind),
                         }))
                       }
                     />
@@ -134,21 +126,21 @@ export function WorkFilterPanel({
                   </label>
                 ))}
               </div>
-            </FilterRow>
+            </FilterAccordionRow>
           ) : null}
 
-          <FilterRow
+          <FilterAccordionRow
             label="年"
-            summary={summary(draft.years.map((y) => `${y}年`))}
+            summary={summarizeFilterSelection(draft.years.map((y) => `${y}年`))}
             open={open === "year"}
             onToggle={() => toggleSection("year")}
-            bordered={showKinds}
+            showTopBorder={showKinds}
           >
             <div className="flex flex-col gap-1.5">
               {yearsNewestFirst.map((y) => (
                 <label
                   key={y}
-                  className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                  className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                 >
                   <input
                     type="checkbox"
@@ -157,7 +149,7 @@ export function WorkFilterPanel({
                     onChange={() =>
                       setDraft((d) => ({
                         ...d,
-                        years: toggleInList(d.years, y),
+                        years: toggleListValue(d.years, y),
                       }))
                     }
                   />
@@ -165,26 +157,26 @@ export function WorkFilterPanel({
                 </label>
               ))}
               {!yearsNewestFirst.length ? (
-                <p className="m-0 text-[13px] text-muted-foreground">
+                <p className="m-0 text-sm text-muted-foreground">
                   年データがありません
                 </p>
               ) : null}
             </div>
-          </FilterRow>
+          </FilterAccordionRow>
 
           {showCategories ? (
-            <FilterRow
+            <FilterAccordionRow
               label="カテゴリ"
-              summary={summary(draft.categories.map(workCategoryLabel))}
+              summary={summarizeFilterSelection(draft.categories.map(workCategoryLabel))}
               open={open === "category"}
               onToggle={() => toggleSection("category")}
-              bordered
+              showTopBorder
             >
               <div className="flex flex-col gap-1.5">
                 {categoriesSorted.map((cat) => (
                   <label
                     key={cat}
-                    className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                    className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                   >
                     <input
                       type="checkbox"
@@ -193,7 +185,7 @@ export function WorkFilterPanel({
                       onChange={() =>
                         setDraft((d) => ({
                           ...d,
-                          categories: toggleInList(d.categories, cat),
+                          categories: toggleListValue(d.categories, cat),
                         }))
                       }
                     />
@@ -201,27 +193,27 @@ export function WorkFilterPanel({
                   </label>
                 ))}
                 {!categoriesSorted.length ? (
-                  <p className="m-0 text-[13px] text-muted-foreground">
+                  <p className="m-0 text-sm text-muted-foreground">
                     カテゴリがありません
                   </p>
                 ) : null}
               </div>
-            </FilterRow>
+            </FilterAccordionRow>
           ) : null}
 
           {showTags ? (
-            <FilterRow
+            <FilterAccordionRow
               label="タグ"
-              summary={summary(draft.tags)}
+              summary={summarizeFilterSelection(draft.tags)}
               open={open === "tag"}
               onToggle={() => toggleSection("tag")}
-              bordered
+              showTopBorder
             >
               <div className="flex flex-col gap-1.5">
                 {tags.map((tag) => (
                   <label
                     key={tag}
-                    className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                    className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                   >
                     <input
                       type="checkbox"
@@ -230,7 +222,7 @@ export function WorkFilterPanel({
                       onChange={() =>
                         setDraft((d) => ({
                           ...d,
-                          tags: toggleInList(d.tags, tag),
+                          tags: toggleListValue(d.tags, tag),
                         }))
                       }
                     />
@@ -238,26 +230,26 @@ export function WorkFilterPanel({
                   </label>
                 ))}
                 {!tags.length ? (
-                  <p className="m-0 text-[13px] text-muted-foreground">
+                  <p className="m-0 text-sm text-muted-foreground">
                     タグがありません
                   </p>
                 ) : null}
               </div>
-            </FilterRow>
+            </FilterAccordionRow>
           ) : null}
 
-          <FilterRow
+          <FilterAccordionRow
             label="クライアント"
-            summary={summary(draft.clients)}
+            summary={summarizeFilterSelection(draft.clients)}
             open={open === "client"}
             onToggle={() => toggleSection("client")}
-            bordered
+            showTopBorder
           >
             <div className="flex flex-col gap-1.5">
               {clientsSorted.map((client) => (
                 <label
                   key={client}
-                  className="flex cursor-pointer items-start gap-2 text-[13px] leading-snug text-foreground"
+                  className="flex cursor-pointer items-start gap-2 text-sm leading-snug text-foreground"
                 >
                   <input
                     type="checkbox"
@@ -266,7 +258,7 @@ export function WorkFilterPanel({
                     onChange={() =>
                       setDraft((d) => ({
                         ...d,
-                        clients: toggleInList(d.clients, client),
+                        clients: toggleListValue(d.clients, client),
                       }))
                     }
                   />
@@ -274,85 +266,22 @@ export function WorkFilterPanel({
                 </label>
               ))}
               {!clientsSorted.length ? (
-                <p className="m-0 text-[13px] text-muted-foreground">
+                <p className="m-0 text-sm text-muted-foreground">
                   クライアントがありません
                 </p>
               ) : null}
             </div>
-          </FilterRow>
+          </FilterAccordionRow>
         </div>
       </div>
 
-      <div className="mt-auto shrink-0 space-y-2 border-t border-border pt-3">
-        <button
-          type="button"
-          className={cn(
-            "w-full rounded-md border-0 px-4 py-2.5 text-sm font-semibold",
-            "bg-primary text-primary-foreground",
-            "hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40",
-          )}
-          onClick={apply}
-          disabled={!dirty && !workFilterActive(initial)}
-        >
-          絞り込み
-        </button>
-        {canClear ? (
-          <button
-            type="button"
-            className={cn(
-              "w-full rounded-md border border-border bg-transparent px-4 py-2.5 text-[13px]",
-              "text-muted-foreground hover:bg-accent hover:text-foreground",
-            )}
-            onClick={clearAll}
-          >
-            クリア
-          </button>
-        ) : null}
-      </div>
+      <FilterPanelFooter
+        onApply={apply}
+        onClear={clearAll}
+        applyDisabled={!dirty && !workFilterActive(initial)}
+        showClear={canClear}
+      />
     </div>
   );
 }
 
-function FilterRow({
-  label,
-  summary: summaryText,
-  open,
-  onToggle,
-  bordered,
-  children,
-}: {
-  label: string;
-  summary: string;
-  open: boolean;
-  onToggle: () => void;
-  bordered?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className={cn(bordered && "border-t border-border")}>
-      <button
-        type="button"
-        className={cn(
-          "grid w-full grid-cols-[auto_1fr_auto] items-center gap-2",
-          "border-0 bg-transparent px-3 py-2.5 text-left",
-          "cursor-pointer text-foreground hover:bg-accent",
-        )}
-        onClick={onToggle}
-        aria-expanded={open}
-      >
-        <span className="whitespace-nowrap text-sm font-semibold">{label}</span>
-        <span className="truncate text-[13px] text-muted-foreground">
-          {summaryText}
-        </span>
-        <span className="text-xs text-muted-foreground" aria-hidden>
-          {open ? "▾" : "▸"}
-        </span>
-      </button>
-      {open ? (
-        <div className="max-h-52 overflow-y-auto border-t border-border px-3 py-2.5">
-          {children}
-        </div>
-      ) : null}
-    </div>
-  );
-}

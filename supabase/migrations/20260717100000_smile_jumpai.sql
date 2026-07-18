@@ -1,4 +1,4 @@
--- Smile / Jumpai photo galleries (replace Snap)
+-- Smile / Jampai photo galleries (replace Snap)
 -- Apply in Supabase SQL Editor or: supabase db push
 
 drop table if exists public.snap cascade;
@@ -57,4 +57,4 @@ create trigger jumpai_set_updated_at
 
 alter table public.jumpai enable row level security;
 
-comment on table public.jumpai is 'Jumpai photo gallery — curated photographs';
+comment on table public.jumpai is 'Jampai photo gallery — curated photographs';

@@ -79,9 +79,9 @@ const SMILE: SitePageMeta = {
 };
 
 const JUMPAI: SitePageMeta = {
-  title: "Jumpai",
+  title: "Jampai",
   description:
-    "作品として見せたい写真のギャラリー。Jumpai に収めた一枚です。",
+    "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
 };
 
 const SEARCH: SitePageMeta = {

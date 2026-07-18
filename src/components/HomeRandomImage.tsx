@@ -128,7 +128,7 @@ export function HomeRandomImage({ diaryHref }: Props) {
                 Smile
               </Link>
               <Link href="/jumpai/" className="top-nav-mobile__link">
-                Jumpai
+                Jampai
               </Link>
             </div>
             <div className="top-nav-mobile__section">
@@ -157,6 +157,12 @@ export function HomeRandomImage({ diaryHref }: Props) {
               <Link href="/chronicle/" className="top-nav-mobile__link">
                 Chronicle
               </Link>
+              <Link
+                href="/about/media-coverage/"
+                className="top-nav-mobile__link"
+              >
+                Media coverage
+              </Link>
             </div>
             <div className="top-nav-mobile__section">
               <h3 className="top-nav-mobile__heading">About</h3>
@@ -165,12 +171,6 @@ export function HomeRandomImage({ diaryHref }: Props) {
               </Link>
               <Link href="/about/here/" className="top-nav-mobile__link">
                 Here
-              </Link>
-              <Link
-                href="/about/media-coverage/"
-                className="top-nav-mobile__link"
-              >
-                Media coverage
               </Link>
               <Link href="/about/contact/" className="top-nav-mobile__link">
                 Contact

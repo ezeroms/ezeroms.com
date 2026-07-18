@@ -294,9 +294,11 @@
 .about-content a,
 .about-content a:link,
 .about-content a:visited {
-  text-decoration: underline;
+  text-decoration: underline !important;
   text-underline-offset: 0.2em;
-  color: var(--color-text-primary);
+  text-decoration-color: currentColor;
+  color: hsl(var(--muted-foreground)) !important;
+  transition: color 0.15s ease;
 }
 
 .article-item a:hover,
@@ -304,8 +306,9 @@
 .article-container li a:hover,
 .article-container td a:hover,
 .about-content a:hover {
-  opacity: 0.7;
-  transition-duration: 0s;
+  color: hsl(var(--foreground)) !important;
+  text-decoration-color: currentColor;
+  opacity: 1;
 }
 
 /* インラインコードのスタイル（Slack風） */
@@ -327,8 +330,9 @@
 .article-item ul,
 .article-item ol {
   margin: 0 0 1.5rem 0;
-  padding-left: 1.75rem;
-  list-style-position: outside;
+  padding-left: 0;
+  margin-left: 0;
+  list-style: none;
 }
 
 /* リストの最後の要素のmargin-bottomを0にする */
@@ -337,24 +341,52 @@
   margin-bottom: 0;
 }
 
-.article-item ul {
-  list-style-type: disc;
+.article-item ul > li,
+.article-item ol > li {
+  position: relative;
+  margin: 0.5rem 0;
+  padding: 0 0 0 1.25em;
+  width: auto;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-style: normal;
+  font-weight: var(--font-weight-normal);
+  line-height: var(--text-line-height);
+  letter-spacing: 0;
+}
+
+.article-item ul > li::before,
+.article-item ol > li::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.1em;
+  text-align: center;
+  line-height: inherit;
+  transform: translateY(-0.05em);
+}
+
+.article-item ul > li::before {
+  content: "•";
 }
 
 .article-item ol {
-  list-style-type: decimal;
+  counter-reset: article-ol;
 }
 
-.article-item li {
-    margin: 0.5rem 0;
-    padding: 0 0 0 0.5rem;
-    width: 100%;
-    color: var(--color-text-primary);
-    font-size: var(--font-size-base);
-    font-style: normal;
-    font-weight: var(--font-weight-normal);
-    line-height: var(--text-line-height);
-    letter-spacing: 0;
+.article-item ol > li {
+  counter-increment: article-ol;
+}
+
+.article-item ol > li::before {
+  content: counter(article-ol) ".";
+  font-variant-numeric: tabular-nums;
+}
+
+/* markdown などが li 内に p を入れても、丸と本文が横並びになるようにする */
+.article-item li > p {
+  display: inline;
+  margin: 0;
 }
 
 .article-item ul ul,
@@ -362,15 +394,10 @@
 .article-item ul ol,
 .article-item ol ul {
   margin: 0.5rem 0;
-  padding-left: 1.5rem;
 }
 
-.article-item ul ul {
-  list-style-type: circle;
-}
-
-.article-item ul ul ul {
-  list-style-type: square;
+.article-item ul ul > li::before {
+  content: "◦";
 }
 
 .article-item img {
