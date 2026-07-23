@@ -22,11 +22,20 @@ export type AdminWorkTableItem = {
 type Props = {
   items: AdminWorkTableItem[];
   empty: boolean;
+  /** 公開ページのベースパス（末尾スラッシュ推奨） */
+  publicBasePath?: string;
 };
 
-export function AdminWorkListTable({ items, empty }: Props) {
+export function AdminWorkListTable({
+  items,
+  empty,
+  publicBasePath = "/works/creative/",
+}: Props) {
   const [editing, setEditing] = useState<WorkEditorInitial | null>(null);
   const close = useCallback(() => setEditing(null), []);
+  const detailBase = publicBasePath.endsWith("/")
+    ? publicBasePath
+    : `${publicBasePath}/`;
 
   return (
     <>
@@ -76,7 +85,7 @@ export function AdminWorkListTable({ items, empty }: Props) {
               </td>
               <td className="px-4 py-2.5 align-middle">
                 <div className="flex justify-end">
-                  <OpenContentButton href={`/works/creative/${item.slug}/`} />
+                  <OpenContentButton href={`${detailBase}${item.slug}/`} />
                 </div>
               </td>
             </AdminClickableRow>
@@ -95,7 +104,12 @@ export function AdminWorkListTable({ items, empty }: Props) {
       </table>
 
       {editing ? (
-        <WorkEditModal initial={editing} open onClose={close} />
+        <WorkEditModal
+          initial={editing}
+          open
+          onClose={close}
+          productKey={editing.product_key}
+        />
       ) : null}
     </>
   );

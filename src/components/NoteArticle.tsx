@@ -6,6 +6,7 @@ import {
 } from "@/lib/content/notes-meta";
 import { tagChipClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
+import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
 import { contentCard } from "@/lib/site/card-styles";
 
@@ -78,10 +79,7 @@ export function NoteArticle({ item, bodyHtml }: Props) {
           />
         </div>
 
-        <div
-          className={notesBodyClass}
-          dangerouslySetInnerHTML={{ __html: bodyHtml }}
-        />
+        <ArticleProse className={notesBodyClass} html={bodyHtml} />
 
         {tags.length ? (
           <div className="mt-4 flex flex-wrap gap-2">

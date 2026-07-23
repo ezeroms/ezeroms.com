@@ -15,18 +15,19 @@ cp .env.example .env.local
    - Project URL → `NEXT_PUBLIC_SUPABASE_URL`
    - `anon` `public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`（管理画面ログイン用）
    - `service_role` secret → `SUPABASE_SERVICE_ROLE_KEY`（**公開しない**）
-3. **SQL Editor** で次を順に実行
+3. **Account → Access Tokens** で Personal Access Token を発行 → `SUPABASE_ACCESS_TOKEN`（`npm run db:apply` 用。Vercel には不要）
+4. **SQL Editor** で次を順に実行
    - [`supabase/migrations/20260716120000_init_content_schema.sql`](supabase/migrations/20260716120000_init_content_schema.sql)
    - [`supabase/migrations/20260716120001_fix_triggers_rls.sql`](supabase/migrations/20260716120001_fix_triggers_rls.sql)（必要なら）
    - [`supabase/migrations/20260716120100_storage_media.sql`](supabase/migrations/20260716120100_storage_media.sql)
    - [`supabase/migrations/20260717010000_top_image.sql`](supabase/migrations/20260717010000_top_image.sql)
    - [`supabase/migrations/20260717020000_diary_body_md.sql`](supabase/migrations/20260717020000_diary_body_md.sql)（Notes 編集用）
    - [`supabase/migrations/20260717030000_clip.sql`](supabase/migrations/20260717030000_clip.sql)（Clips）
-4. トップ画像を Storage + DB へ投入
+5. トップ画像を Storage + DB へ投入
    ```bash
    npm run migrate:top-images
    ```
-5. **管理ユーザー作成**（Supabase Auth）
+6. **管理ユーザー作成**（Supabase Auth）
    ```bash
    npm run admin:create-user -- you@example.com 'your-password'
    ```

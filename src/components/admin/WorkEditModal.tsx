@@ -13,9 +13,15 @@ type Props = {
   initial?: WorkEditorInitial | null;
   open: boolean;
   onClose: () => void;
+  productKey?: string | null;
 };
 
-export function WorkEditModal({ initial = null, open, onClose }: Props) {
+export function WorkEditModal({
+  initial = null,
+  open,
+  onClose,
+  productKey = null,
+}: Props) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -81,8 +87,9 @@ export function WorkEditModal({ initial = null, open, onClose }: Props) {
       maxHeightClassName="max-h-[min(90vh,52rem)]"
     >
       <WorkEditorForm
-        key={initial?.slug ?? "new"}
+        key={initial?.slug ?? `new-${productKey ?? "work"}`}
         initial={initial ?? undefined}
+        productKey={productKey ?? initial?.product_key}
         hideSubmit
         onLoadingChange={setSaving}
         onDirtyChange={setDirty}

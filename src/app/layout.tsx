@@ -27,21 +27,10 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
-        />
         <link rel="icon" href="/images/common/favicon/favicon.ico" />
       </head>
       <body>
         {children}
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
-          strategy="afterInteractive"
-        />
-        <Script id="hljs-init" strategy="afterInteractive">
-          {`window.hljs && window.hljs.highlightAll();`}
-        </Script>
         {process.env.NEXT_PUBLIC_GA_ID ? (
           <>
             <Script

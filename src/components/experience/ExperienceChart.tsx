@@ -286,7 +286,7 @@ export function ExperienceChart({ items }: Props) {
   const gridHeight = yearMonths.length * ROW_H;
 
   return (
-    <div className="-mx-6 -my-5 flex h-[calc(100dvh-2.75rem)] flex-col lg:flex-row">
+    <div className="flex h-[calc(100dvh-2.75rem)] flex-col lg:flex-row">
       <div
         className="min-h-0 w-full shrink-0 overflow-auto overscroll-contain bg-white lg:w-[45%] lg:max-w-[34rem] xl:max-w-[38rem]"
         style={{ borderRight: `1px solid ${LINE_COL}` }}

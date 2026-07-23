@@ -57,6 +57,7 @@ export async function PhotoGalleryIndexPage({
     <SiteShell
       bodyClassName={`is-${galleryId}`}
       mobileHeader={<MobileHeader title={gallery.label} />}
+      contentClassName="p-6"
       secondary={
         <PhotoFilterPanel
           years={taxonomy.years}

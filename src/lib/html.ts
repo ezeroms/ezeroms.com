@@ -3,6 +3,7 @@ import {
   parseYoutubeVideoId,
   youtubeEmbedSrc,
 } from "@/lib/content/clip-meta";
+import { repairLiteralMarkdownInHtml } from "@/lib/content/legacy-markdown";
 
 /** Responsive 16:9 YouTube block for body HTML. */
 export function youtubeEmbedBlock(videoId: string): string {
@@ -75,8 +76,59 @@ export function preprocessMarkdownMedia(md: string): string {
   );
 }
 
+function decodeBasicHtmlEntities(s: string): string {
+  return s
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+function escapeHtmlText(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
+ * 移行データで ```…``` が `<p>` 内に残っている場合を `<pre><code>` に直す。
+ * （Markdown フェンスがエスケープされたまま HTML 化されたレガシー行向け）
+ */
+export function repairLegacyCodeFencesInHtml(html: string): string {
+  if (!html.includes("```")) return html;
+
+  const repaired = html.replace(
+    /```(\w*)\s*([\s\S]*?)```/g,
+    (_match, lang: string, body: string) => {
+      const text = decodeBasicHtmlEntities(
+        body
+          .replace(/<\/p>\s*<p>/gi, "\n")
+          .replace(/<br\s*\/?>/gi, "\n")
+          .replace(/<\/?p>/gi, "\n")
+          .replace(/<a\b[^>]*>([\s\S]*?)<\/a>/gi, "$1")
+          .replace(/<[^>]+>/g, "")
+          .replace(/\n{3,}/g, "\n\n")
+          .trim(),
+      );
+      const langClass = lang ? ` class="language-${lang}"` : "";
+      return `<pre><code${langClass}>${escapeHtmlText(text)}</code></pre>`;
+    },
+  );
+
+  // `<p><pre>…</pre></p>` を解く
+  return repaired.replace(/<p>\s*(<pre>[\s\S]*?<\/pre>)\s*<\/p>/gi, "$1");
+}
+
 export function sanitizeBody(html: string): string {
-  return sanitizeHtml(embedYoutubeInHtml(html), {
+  return sanitizeHtml(
+    embedYoutubeInHtml(
+      repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+    ),
+    {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
       "img",
       "h1",
@@ -109,5 +161,6 @@ export function sanitizeBody(html: string): string {
       "youtube-nocookie.com",
       "open.spotify.com",
     ],
-  });
+  },
+  );
 }

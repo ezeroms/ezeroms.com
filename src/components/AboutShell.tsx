@@ -8,14 +8,19 @@ const PAGE_TITLES: Record<string, string> = {
   "/about/contact/": "Contact",
 };
 
-/** About page chrome — same shell / column layout as other sections. */
+/**
+ * About 配下ページ共通のシェル（パンくず・サイドバー付き SiteShell）。
+ */
 export function AboutShell({
   pathname,
   children,
 }: {
   pathname: string;
   children: React.ReactNode;
-  /** Full content width (card grids). Kept for callers; card itself constrains width. */
+  /**
+   * 以前はカードグリッド用の幅指定だった。
+   * 現状 SiteShell 側で幅を制御するため未使用（呼び出し互換のため残す）。
+   */
   wide?: boolean;
 }) {
   const title =

@@ -1,80 +1,65 @@
-import Link from "next/link";
 import type { MediaCoverage } from "@/types/content";
-import { cn } from "@/lib/cn";
+import {
+  ContentThumbCard,
+  contentThumbCardListClassName,
+} from "@/components/ContentThumbCard";
+import {
+  columnExcerpt,
+  firstImageSrc,
+  formatColumnDate,
+} from "@/lib/content/column-meta";
 
 type Props = {
   items: MediaCoverage[];
 };
 
-function formatDate(date: string | null): string {
-  if (!date) return "";
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+function mediaCoverageThumbSrc(item: MediaCoverage): string | null {
+  const ogImage = (item.og_image ?? "").trim();
+  if (ogImage) return ogImage;
+  return firstImageSrc(item.body_html ?? "");
 }
 
+/**
+ * Media coverage 一覧。
+ * Column と同じ ContentThumbCard レイアウトを使う。
+ */
 export function MediaCoverageList({ items }: Props) {
   if (!items.length) {
     return (
-      <p className="py-6 text-sm text-muted-foreground">
+      <p className="py-10 text-sm text-muted-foreground">
         まだ掲載がありません。
       </p>
     );
   }
 
   return (
-    <div className="columns-1 gap-6 sm:columns-2">
+    <div
+      className={contentThumbCardListClassName()}
+      id="media-coverage-list"
+    >
       {items.map((item) => {
-        const dateLabel = formatDate(item.date);
-        const external = Boolean(item.external_url?.trim());
-        const href = external
+        const isExternal = Boolean(item.external_url?.trim());
+        const href = isExternal
           ? item.external_url!
           : `/about/media-coverage/${item.slug}/`;
-
-        const body = (
-          <div className="flex flex-col gap-3 p-6">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
-              {dateLabel ? <time dateTime={item.date ?? undefined}>{dateLabel}</time> : null}
-              {dateLabel && item.lead ? <span aria-hidden>·</span> : null}
-              {item.lead ? <span>{item.lead}</span> : null}
-            </div>
-            <h2 className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground">
-              {item.title}
-            </h2>
-            {external ? (
-              <p className="m-0 text-sm text-muted-foreground">
-                外部記事を見る →
-              </p>
-            ) : null}
-          </div>
-        );
+        const excerpt = columnExcerpt(item.body_html ?? "", 120);
+        const lead = (item.lead ?? "").trim();
+        const dateLabel = item.date ? formatColumnDate(item.date) : "";
 
         return (
-          <article
+          <ContentThumbCard
             key={item.id}
-            className={cn(
-              "mb-6 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card shadow-sm",
-            )}
-          >
-            {external ? (
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-inherit no-underline"
-              >
-                {body}
-              </a>
-            ) : (
-              <Link href={href} className="block text-inherit no-underline">
-                {body}
-              </Link>
-            )}
-          </article>
+            href={href}
+            title={item.title}
+            thumbSrc={mediaCoverageThumbSrc(item)}
+            dateTime={item.date}
+            dateLabel={dateLabel}
+            metaSecondary={lead ? <span>{lead}</span> : null}
+            excerpt={
+              excerpt || (isExternal ? "外部記事を見る →" : undefined)
+            }
+            external={isExternal}
+          />
         );
       })}
     </div>

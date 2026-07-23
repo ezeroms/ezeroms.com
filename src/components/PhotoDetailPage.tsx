@@ -29,6 +29,7 @@ export async function PhotoDetailPage({ galleryId, slug }: Props) {
       bodyClassName={`is-${galleryId}`}
       mobileHeader={<MobileHeader title={gallery.label} />}
       breadcrumbCurrent={caption || undefined}
+      contentClassName="p-6"
     >
       <article className="mx-auto max-w-3xl font-sans text-foreground">
         {photo.image_url ? (

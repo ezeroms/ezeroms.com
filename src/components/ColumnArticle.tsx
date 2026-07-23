@@ -1,3 +1,4 @@
+import { ArticleProse } from "@/components/ArticleProse";
 import Link from "next/link";
 import type { Column } from "@/types/content";
 import { COLUMN_CATEGORY_NAMES } from "@/components/ColumnHeaderNav";
@@ -105,20 +106,18 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
 
         <div className="my-6 h-px w-full bg-border" aria-hidden />
 
-        <div
+        <ArticleProse
+          html={html}
           className={cn(
             notesBodyClass,
             // Column 向けの見出し・引用・コード（Notes 共通の上に足す）
             "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
             "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight",
             "[&_blockquote]:my-4 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground",
-            "[&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-muted [&_pre]:p-3 [&_pre]:text-sm",
-            "[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm",
-            "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
+            "[&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:font-mono [&_:not(pre)>code]:text-[0.9em]",
             "[&_figure]:my-6",
             "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground",
           )}
-          dangerouslySetInnerHTML={{ __html: html }}
         />
       </article>
     </div>

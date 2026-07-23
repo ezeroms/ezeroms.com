@@ -4,6 +4,8 @@ export type OpenGraphData = {
   image: string;
   title: string;
   description: string;
+  /** og:site_name など（なければ空） */
+  siteName: string;
 };
 
 function metaContent(html: string, keys: string[]): string {
@@ -32,7 +34,13 @@ function decodeHtmlEntities(s: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
+    .replace(/&gt;/g, ">")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) =>
+      String.fromCodePoint(Number.parseInt(hex, 16)),
+    )
+    .replace(/&#(\d+);/g, (_, dec: string) =>
+      String.fromCodePoint(Number.parseInt(dec, 10)),
+    );
 }
 
 function absoluteUrl(base: string, maybeRelative: string): string {
@@ -44,12 +52,68 @@ function absoluteUrl(base: string, maybeRelative: string): string {
   }
 }
 
+/** TextDecoder が受け付けるラベルへ正規化（ITmedia 等の Shift_JIS 向け）。 */
+function normalizeCharset(raw: string): string {
+  const c = raw.trim().toLowerCase().replace(/_/g, "-");
+  if (
+    c === "shift-jis" ||
+    c === "sjis" ||
+    c === "x-sjis" ||
+    c === "windows-31j" ||
+    c === "cp932" ||
+    c === "ms932"
+  ) {
+    return "shift_jis";
+  }
+  if (c === "euc-jp" || c === "eucjp" || c === "x-euc-jp") return "euc-jp";
+  if (c === "iso-2022-jp") return "iso-2022-jp";
+  if (c === "utf8" || c === "utf-8") return "utf-8";
+  return c || "utf-8";
+}
+
+/**
+ * Content-Type ヘッダと HTML 先頭の meta charset から文字コードを推定する。
+ * `res.text()` は常に UTF-8 扱いなので、日本語サイトでは ArrayBuffer 経由でデコードする。
+ */
+function detectCharset(contentType: string, bytes: Uint8Array): string {
+  const fromHeader = contentType.match(/charset\s*=\s*["']?([^\s;"']+)/i);
+  if (fromHeader?.[1]) return normalizeCharset(fromHeader[1]);
+
+  const head = new TextDecoder("latin1").decode(bytes.slice(0, 8192));
+  const fromMeta =
+    head.match(/<meta[^>]+charset\s*=\s*["']?\s*([a-zA-Z0-9_-]+)/i) ||
+    head.match(
+      /<meta[^>]+http-equiv\s*=\s*["']?content-type["'][^>]+content\s*=\s*["'][^"']*charset\s*=\s*([a-zA-Z0-9_-]+)/i,
+    ) ||
+    head.match(
+      /<meta[^>]+content\s*=\s*["'][^"']*charset\s*=\s*([a-zA-Z0-9_-]+)["'][^>]+http-equiv\s*=\s*["']?content-type/i,
+    );
+  if (fromMeta?.[1]) return normalizeCharset(fromMeta[1]);
+
+  return "utf-8";
+}
+
+function decodeHtmlBytes(bytes: Uint8Array, contentType: string): string {
+  const charset = detectCharset(contentType, bytes);
+  try {
+    return new TextDecoder(charset).decode(bytes);
+  } catch {
+    // 未知ラベルなどは UTF-8 にフォールバック
+    return new TextDecoder("utf-8").decode(bytes);
+  }
+}
+
 /**
  * Best-effort scrape of og/twitter meta. Failures return empty strings
  * (clip save should still succeed without OGP).
  */
 export async function fetchOpenGraph(url: string): Promise<OpenGraphData> {
-  const empty: OpenGraphData = { image: "", title: "", description: "" };
+  const empty: OpenGraphData = {
+    image: "",
+    title: "",
+    description: "",
+    siteName: "",
+  };
   try {
     // eslint-disable-next-line no-new
     new URL(url);
@@ -76,7 +140,8 @@ export async function fetchOpenGraph(url: string): Promise<OpenGraphData> {
       return empty;
     }
 
-    const html = (await res.text()).slice(0, 400_000);
+    const bytes = new Uint8Array(await res.arrayBuffer()).slice(0, 400_000);
+    const html = decodeHtmlBytes(bytes, contentType);
     const image = absoluteUrl(
       url,
       metaContent(html, [
@@ -92,8 +157,12 @@ export async function fetchOpenGraph(url: string): Promise<OpenGraphData> {
       "twitter:description",
       "description",
     ]);
+    const siteName = metaContent(html, [
+      "og:site_name",
+      "application-name",
+    ]);
 
-    return { image, title, description };
+    return { image, title, description, siteName };
   } catch {
     return empty;
   }

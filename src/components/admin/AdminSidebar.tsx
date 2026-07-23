@@ -20,6 +20,7 @@ import {
   Palette,
   Smile,
   User,
+  Home,
   type LucideIcon,
 } from "lucide-react";
 import { adminNavSections, type AdminNavItem } from "@/lib/admin/nav";
@@ -41,6 +42,7 @@ const icons: Record<AdminNavItem["icon"], LucideIcon> = {
   "book-open": BookOpen,
   landmark: Landmark,
   user: User,
+  home: Home,
   newspaper: Newspaper,
 };
 
@@ -89,12 +91,12 @@ function AdminUserMenu({ email }: { email: string | null }) {
   const label = email ?? "未ログイン";
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="admin-user-menu relative">
       {open ? (
-        <div className="absolute bottom-full left-0 right-0 z-20 mb-1 overflow-hidden rounded-md border border-border bg-card shadow-md">
+        <div className="absolute bottom-full left-0 right-0 z-20 mb-1 overflow-hidden rounded-md border border-border bg-white shadow-none">
           <button
             type="button"
-            className="w-full px-3 py-2 text-left text-sm hover:bg-accent disabled:opacity-50"
+            className="w-full border-0 bg-white px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-accent disabled:opacity-50"
             onClick={logout}
             disabled={loading}
           >
@@ -104,12 +106,13 @@ function AdminUserMenu({ email }: { email: string | null }) {
       ) : null}
       <button
         type="button"
-        className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left transition-colors hover:bg-accent"
+        className="flex w-full items-center gap-2 rounded-md border border-solid border-border bg-white px-2 py-2 text-left shadow-none ring-0 transition-colors hover:border-border-hover hover:bg-white focus-visible:outline-none focus-visible:border-border-hover"
+        style={{ boxShadow: "none" }}
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
       >
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-muted-foreground">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-transparent text-xs font-semibold text-muted-foreground">
           {(email?.[0] ?? "?").toUpperCase()}
         </span>
         <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
@@ -182,7 +185,7 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
           </div>
         ))}
       </nav>
-      <div className="border-t border-border px-2 py-2">
+      <div className="border-t border-[rgba(0,0,0,0.08)] bg-card px-2.5 py-2.5">
         <AdminUserMenu email={userEmail} />
       </div>
     </aside>

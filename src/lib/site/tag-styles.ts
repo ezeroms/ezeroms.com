@@ -10,7 +10,7 @@ export function tagChipClass(active: boolean) {
     "shrink-0 rounded-md border border-solid px-2 py-0.5 text-xs font-medium no-underline transition-colors",
     active
       ? "!border !border-solid !border-foreground bg-muted !text-foreground"
-      : "border-transparent bg-muted !text-muted-foreground hover:bg-secondary hover:!text-foreground",
+      : "border-transparent bg-muted !text-muted-foreground hover:!border-[hsl(var(--foreground)/0.22)] hover:bg-secondary hover:!text-foreground",
   );
 }
 

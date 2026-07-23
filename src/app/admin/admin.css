@@ -49,7 +49,7 @@ body:has(.admin-root) {
 .admin-root a[class*="inline-flex"] {
   appearance: none;
   -webkit-appearance: none;
-  box-shadow: none;
+  box-shadow: none !important;
   cursor: pointer;
 }
 
@@ -58,7 +58,7 @@ body:has(.admin-root) {
   background-color: hsl(var(--card));
   color: hsl(var(--foreground));
   border-color: hsl(var(--border));
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .admin-root button[class*="border-border"]:hover,
@@ -130,6 +130,31 @@ body:has(.admin-root) {
   box-shadow: none !important;
 }
 
+/* TipTap など contenteditable 枠も input/textarea と同じ線・フォーカス */
+.admin-root .admin-rich-text {
+  box-shadow: none !important;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  border-radius: 0.375rem; /* rounded-md */
+}
+
+.admin-root .admin-rich-text:focus-within {
+  outline: none;
+  border-color: hsl(var(--border-hover));
+  box-shadow: none !important;
+}
+
+.admin-root .admin-rich-text .tiptap,
+.admin-root .admin-rich-text .ProseMirror {
+  outline: none;
+}
+
+.admin-root .admin-rich-text .tiptap:focus,
+.admin-root .admin-rich-text .ProseMirror:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* 管理テーブル線（chronicle マトリクスに準拠）
  * ヘッダー下 = ややはっきりした実線
  * 行間 = 月と月の区切りと同じ薄い実線（#f1f3f4）
@@ -152,4 +177,11 @@ body:has(.admin-root) {
 
 .admin-root table tbody tr:not(:last-child) td {
   border-bottom: 1px solid #f1f3f4 !important;
+}
+
+/* サイドバー下部のユーザーメニューは線のみ（シャドウ禁止） */
+.admin-root .admin-user-menu,
+.admin-root .admin-user-menu button {
+  box-shadow: none !important;
+  filter: none !important;
 }

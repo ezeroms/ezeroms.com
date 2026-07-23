@@ -12,21 +12,28 @@ import { summarizeChronicleFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listChronicle,
   listChronicleTaxonomy,
+  requirePublicLibrarySection,
 } from "@/lib/content/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Chronicle",
-  description:
-    "関心ごとの年表。テーマを横軸・時系列を縦軸に、出来事を横断して辿ります。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicLibrarySection("chronicle").catch(
+    () => null,
+  );
+  return {
+    title: section?.label ?? "Chronicle",
+    description:
+      "関心ごとの年表。テーマを横軸・時系列を縦軸に、出来事を横断して辿ります。",
+  };
+}
 
 export default async function ChroniclePage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const section = await requirePublicLibrarySection("chronicle");
   const resolvedSearchParams = await searchParams;
   const filter = parseChronicleFilter(resolvedSearchParams);
   const filtering = chronicleFilterActive(filter);
@@ -57,7 +64,8 @@ export default async function ChroniclePage({
   return (
     <SiteShell
       bodyClassName="is-chronicle"
-      mobileHeader={<MobileHeader title="Chronicle" />}
+      mobileHeader={<MobileHeader title={section.label} />}
+      contentClassName="p-0"
       secondary={
         <ChronicleFilterPanel
           years={taxonomy.years}
@@ -70,7 +78,7 @@ export default async function ChroniclePage({
       breadcrumbFilter={filtering ? summarizeChronicleFilter(filter) : null}
       breadcrumbSectionHref="/chronicle/"
     >
-      <div className="-mx-6 -my-5 h-[calc(100dvh-2.75rem)]">
+      <div className="h-[calc(100dvh-2.75rem)]">
         <ChronicleMatrix items={listed.items} themes={themes} />
       </div>
     </SiteShell>

@@ -1,14 +1,30 @@
 import { SiteShell } from "@/components/SiteShell";
 import { HomeRandomImage } from "@/components/HomeRandomImage";
-import { listPublicPhotoGalleries } from "@/lib/content/queries";
+import {
+  listPublicLibrarySections,
+  listPublicPhotoGalleries,
+  listPublicWorksSections,
+} from "@/lib/content/queries";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const publicPhotos = await listPublicPhotoGalleries().catch(() => []);
+  const [publicPhotos, publicWorks, publicLibrary] = await Promise.all([
+    listPublicPhotoGalleries().catch(() => []),
+    listPublicWorksSections().catch(() => []),
+    listPublicLibrarySections().catch(() => []),
+  ]);
   const photoNav = publicPhotos.map((g) => ({
     href: g.basePath,
     label: g.label,
+  }));
+  const worksNav = publicWorks.map((s) => ({
+    href: s.basePath,
+    label: s.label,
+  }));
+  const libraryNav = publicLibrary.map((s) => ({
+    href: s.basePath,
+    label: s.label,
   }));
 
   return (
@@ -18,7 +34,12 @@ export default async function HomePage() {
       showTagsAside={false}
       showLayoutHeader={false}
     >
-      <HomeRandomImage notesHref="/diary/" photoNav={photoNav} />
+      <HomeRandomImage
+        notesHref="/diary/"
+        photoNav={photoNav}
+        worksNav={worksNav}
+        libraryNav={libraryNav}
+      />
     </SiteShell>
   );
 }

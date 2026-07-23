@@ -5,8 +5,10 @@ import {
   type AdminWorkTableItem,
 } from "@/components/admin/AdminWorkListTable";
 import { WorkCreateButton } from "@/components/admin/WorkCreateButton";
+import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
+import { loadWorksSection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 import { normalizeWorkRow } from "@/lib/content/work-filter";
@@ -23,6 +25,7 @@ function isCreativeWork(row: Record<string, unknown>): boolean {
 
 export default async function AdminCreativeListPage() {
   await getSessionUser();
+  const section = await loadWorksSection("creative");
 
   let items: AdminWorkTableItem[] = [];
   let loadError: string | null = null;
@@ -100,7 +103,19 @@ export default async function AdminCreativeListPage() {
 
   return (
     <AdminContent width="wide">
-      <AdminPageHeader title="Creative" actions={<WorkCreateButton />} />
+      <AdminPageHeader
+        title={section.label}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <WorksSectionSettingsModal
+              metaApiPath="/api/admin/works/creative/meta/"
+              initialLabel={section.label}
+              initialStatus={section.status}
+            />
+            <WorkCreateButton />
+          </div>
+        }
+      />
       {loadError ? (
         <p className="mb-3 text-sm text-destructive">
           一覧の取得に失敗しました: {loadError}

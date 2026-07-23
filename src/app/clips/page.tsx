@@ -12,20 +12,26 @@ import {
   listClip,
   listClipMonths,
   listClipTags,
+  requirePublicLibrarySection,
 } from "@/lib/content/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Clips",
-  description: "Webのニュースや記事のクリップ。出典と短いメモだけを残す場所です。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicLibrarySection("clips").catch(() => null);
+  return {
+    title: section?.label ?? "Clips",
+    description:
+      "Webのニュースや記事のクリップ。出典と短いメモだけを残す場所です。",
+  };
+}
 
 export default async function ClipsIndexPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const section = await requirePublicLibrarySection("clips");
   const resolvedSearchParams = await searchParams;
   const filter = parseNotesFilter(resolvedSearchParams);
   // Clips have no place facet
@@ -49,7 +55,7 @@ export default async function ClipsIndexPage({
   return (
     <SiteShell
       bodyClassName="is-clips"
-      mobileHeader={<MobileHeader title="Clips" />}
+      mobileHeader={<MobileHeader title={section.label} />}
       secondary={
         <NotesFilterPanel
           months={months}

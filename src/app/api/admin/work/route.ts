@@ -15,10 +15,13 @@ function parseOptionalDate(raw: string | undefined | null): string | null {
   return v;
 }
 
-function revalidateWorkPaths(slug: string) {
+function revalidateWorkPaths(slug: string, productKey?: string | null) {
   revalidatePath("/works/creative");
   revalidatePath(`/works/creative/${slug}/`);
   revalidatePath(`/work/${slug}/`);
+  if (productKey === "chooning") {
+    revalidatePath("/works/chooning");
+  }
 }
 
 export async function GET() {
@@ -70,6 +73,7 @@ export async function POST(request: NextRequest) {
       og_image?: string;
       status?: "draft" | "published" | "archived";
       slug?: string;
+      product_key?: string | null;
     };
 
     const title = (body.title ?? "").trim();
@@ -93,6 +97,10 @@ export async function POST(request: NextRequest) {
     }
 
     const status = body.status === "draft" ? "draft" : "published";
+    const productKey =
+      typeof body.product_key === "string" && body.product_key.trim()
+        ? body.product_key.trim()
+        : null;
     const slug =
       (body.slug?.trim() && /^[a-z0-9-]+$/i.test(body.slug.trim())
         ? body.slug.trim()
@@ -118,7 +126,7 @@ export async function POST(request: NextRequest) {
       work_category: categories,
       work_tag: tags,
       work_kind: "commission" as const,
-      product_key: null,
+      product_key: productKey,
       role,
       client,
       agency,
@@ -140,7 +148,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    revalidateWorkPaths(slug);
+    revalidateWorkPaths(slug, productKey);
 
     return NextResponse.json({ ok: true, item: data });
   } catch (e) {

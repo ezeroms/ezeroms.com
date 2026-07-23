@@ -23,6 +23,7 @@ export function readAboutMarkdown(slug: string): About | null {
       slug,
       title: String(data.title ?? slug),
       body_html: mdToHtml(content),
+      body_md: content,
       og_image: "",
       status: "published",
       published_at: now,

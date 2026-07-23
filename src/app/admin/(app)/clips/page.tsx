@@ -1,12 +1,13 @@
-import Link from "next/link";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
-import { clipSourceHost } from "@/lib/content/clip-meta";
+  AdminClipsListTable,
+  type AdminClipsTableItem,
+} from "@/components/admin/AdminClipsListTable";
+import { ClipsCreateButton } from "@/components/admin/ClipsCreateButton";
+import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { Card, CardContent } from "@/components/ui/card";
+import { loadLibrarySection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -14,83 +15,82 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminClipsListPage() {
   await getSessionUser();
+  const section = await loadLibrarySection("clips");
 
-  let items: {
-    slug: string;
-    title: string;
-    source_url: string;
-    date: string;
-    status: string;
-    memo: string;
-  }[] = [];
+  let items: AdminClipsTableItem[] = [];
+  let loadError: string | null = null;
 
   if (hasSupabaseConfig()) {
-    const { data } = await getSupabaseAdmin()
+    const { data, error } = await getSupabaseAdmin()
       .from("clip")
-      .select("slug, title, source_url, date, status, memo")
+      .select(
+        "slug, title, source_url, source_name, date, status, memo, clip_tag, og_image, og_description",
+      )
       .order("date", { ascending: false })
-      .limit(80);
-    items = (data ?? []) as typeof items;
+      .limit(200);
+
+    if (error) {
+      loadError = error.message;
+      console.error("[admin/clips]", error.message);
+    } else {
+      items = ((data ?? []) as Record<string, unknown>[]).map((row) => {
+        const slug = String(row.slug ?? "");
+        const title = String(row.title ?? "");
+        const sourceUrl = String(row.source_url ?? "");
+        const sourceName = String(row.source_name ?? "");
+        const date = String(row.date ?? "");
+        const status = String(row.status ?? "draft");
+        const memo = String(row.memo ?? "");
+        const tags = ((row.clip_tag as string[] | null) ?? []).join(", ");
+        return {
+          slug,
+          title,
+          source_url: sourceUrl,
+          source_name: sourceName,
+          date,
+          status,
+          memo,
+          editor: {
+            slug,
+            title,
+            source_url: sourceUrl,
+            source_name: sourceName,
+            date,
+            memo,
+            tags,
+            status: status === "draft" ? "draft" : "published",
+            og_image: String(row.og_image ?? ""),
+            og_description: String(row.og_description ?? ""),
+          },
+        };
+      });
+    }
   }
 
   return (
     <AdminContent width="wide">
       <AdminPageHeader
-        title="Clips"
+        title={section.label}
         description="Web記事のクリップ・短いメモ付きブックマーク"
         actions={
-          <Button asChild>
-            <Link href="/admin/clips/new/">＋ 新規クリップ</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <WorksSectionSettingsModal
+              metaApiPath="/api/admin/library/clips/meta/"
+              initialLabel={section.label}
+              initialStatus={section.status}
+            />
+            <ClipsCreateButton />
+          </div>
         }
       />
+      {loadError ? (
+        <p className="mb-4 text-sm text-destructive" role="alert">
+          読み込みエラー: {loadError}
+        </p>
+      ) : null}
       <Card>
-        <CardContent>
-          <ul className="m-0 flex list-none flex-col gap-0 p-0">
-            {items.map((item) => (
-              <li
-                key={item.slug}
-                className="flex items-center justify-between gap-3 border-b border-border py-3 text-sm last:border-b-0"
-              >
-                <div className="min-w-0 flex-1">
-                  <Link
-                    href={`/admin/clips/${item.slug}/edit/`}
-                    className="font-medium underline-offset-2 hover:underline"
-                  >
-                    {item.title}
-                  </Link>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {new Date(item.date).toLocaleDateString("ja-JP")} ·{" "}
-                    {clipSourceHost(item.source_url)} · {item.status}
-                  </p>
-                  {item.memo ? (
-                    <p className="truncate text-xs text-muted-foreground">
-                      {item.memo}
-                    </p>
-                  ) : null}
-                </div>
-                <div className="flex shrink-0 gap-1">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/admin/clips/${item.slug}/edit/`}>編集</Link>
-                  </Button>
-                  <Button asChild variant="ghost" size="sm">
-                    <a
-                      href={item.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      出典
-                    </a>
-                  </Button>
-                </div>
-              </li>
-            ))}
-            {!items.length ? (
-              <li className="py-6 text-sm text-muted-foreground">
-                まだクリップがありません
-              </li>
-            ) : null}
-          </ul>
+        <CardContent className="overflow-x-auto p-0">
+          <AdminClipsListTable items={items} empty={!items.length} />
         </CardContent>
       </Card>
     </AdminContent>

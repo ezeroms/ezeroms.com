@@ -9,7 +9,7 @@ import {
   resolveBreadcrumbs,
   type BreadcrumbItem,
 } from "@/lib/site/breadcrumbs";
-import { listPublicPhotoGalleries } from "@/lib/content/queries";
+import { listPublicPhotoGalleries, listPublicWorksSections, listPublicLibrarySections } from "@/lib/content/queries";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -48,6 +48,12 @@ type Props = {
   hidePageHeader?: boolean;
   /** ヘッダー右の検索を隠す */
   hideHeaderSearch?: boolean;
+  /**
+   * メインコンテンツ外周の余白。
+   * 省略時は上下左右とも `p-6`（ヘッダー下にも余白）。
+   * Chronicle など端まで敷きたいページは `p-0` を渡す。
+   */
+  contentClassName?: string;
 };
 
 export async function SiteShell({
@@ -68,6 +74,7 @@ export async function SiteShell({
   breadcrumbs,
   hidePageHeader = false,
   hideHeaderSearch = false,
+  contentClassName,
 }: Props) {
   const h = await headers();
   const pathname = h.get("x-pathname") ?? "/";
@@ -77,6 +84,18 @@ export async function SiteShell({
     id: g.id,
     href: g.basePath,
     label: g.label,
+  }));
+  const publicWorks = await listPublicWorksSections().catch(() => []);
+  const worksNav = publicWorks.map((s) => ({
+    id: s.id,
+    href: s.basePath,
+    label: s.label,
+  }));
+  const publicLibrary = await listPublicLibrarySections().catch(() => []);
+  const libraryNav = publicLibrary.map((s) => ({
+    id: s.id,
+    href: s.basePath,
+    label: s.label,
   }));
 
   const showAside = Boolean(showTagsAside && secondary);
@@ -125,6 +144,8 @@ export async function SiteShell({
             pathname={pathname}
             notesLatestHref={notesLatestHref}
             photoNav={photoNav}
+            worksNav={worksNav}
+            libraryNav={libraryNav}
           />
         </aside>
 
@@ -177,7 +198,11 @@ export async function SiteShell({
                   </header>
                 ) : null}
 
-                <div className="w-full px-6 py-8">{children}</div>
+                <div
+                  className={cn("w-full", contentClassName ?? "p-6")}
+                >
+                  {children}
+                </div>
               </main>
             </div>
 

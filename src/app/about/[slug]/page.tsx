@@ -1,39 +1,42 @@
 import { redirect } from "next/navigation";
 import { AboutArticle } from "@/components/AboutArticle";
-import { AboutShell } from "@/components/AboutToc";
-import { getAboutBySlug, listAbout } from "@/lib/content/queries";
+import { AboutMeProfile } from "@/components/AboutMeProfile";
+import { AboutShell } from "@/components/AboutShell";
+import {
+  ABOUT_PUBLIC_SLUGS,
+  aboutContentSlugFromPublic,
+  aboutPublicSlugFromContent,
+  isAboutPublicSlug,
+  redirectPathForLegacyAboutSlug,
+} from "@/lib/content/about-routes";
+import {
+  getAboutBySlug,
+  getMeProfile,
+  listAbout,
+} from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 
 export const revalidate = 60;
 
-/** Public URL slug → content slug in DB / Hugo */
-const CONTENT_BY_PUBLIC: Record<string, string> = {
-  me: "profile",
-  here: "site",
-  contact: "contact",
-  profile: "profile",
-  site: "site",
-};
-
-const PUBLIC_SLUGS = ["me", "here", "contact"] as const;
-
-/** カード見出しと重複する先頭の h1 を本文から外す（Column 詳細と同じ構成） */
+/**
+ * カード見出しと重複する先頭の h1 を本文から外す。
+ * Column 詳細と同様、タイトルはカード側で出すため。
+ */
 function stripLeadingH1(html: string): string {
   return html.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
 }
 
 export async function generateStaticParams() {
   const pages = await listAbout().catch(() => []);
-  const fromDb = pages
-    .map((p) => {
-      if (p.slug === "profile") return { slug: "me" };
-      if (p.slug === "site") return { slug: "here" };
-      if (p.slug === "contact") return { slug: "contact" };
-      return null;
+  const fromDatabase = pages
+    .map((page) => {
+      const publicSlug = aboutPublicSlugFromContent(page.slug);
+      return publicSlug ? { slug: publicSlug } : null;
     })
     .filter(Boolean) as { slug: string }[];
-  if (fromDb.length) return fromDb;
-  return PUBLIC_SLUGS.map((slug) => ({ slug }));
+
+  if (fromDatabase.length) return fromDatabase;
+  return ABOUT_PUBLIC_SLUGS.map((slug) => ({ slug }));
 }
 
 export default async function AboutPage({
@@ -41,27 +44,57 @@ export default async function AboutPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
+  const { slug: requestedSlug } = await params;
 
-  if (slug === "profile") redirect("/about/me/");
-  if (slug === "site") redirect("/about/here/");
+  // 旧 Hugo パス（/about/site/ など）は正式な公開 URL へ寄せる
+  const legacyRedirect = redirectPathForLegacyAboutSlug(requestedSlug);
+  if (legacyRedirect) {
+    redirect(legacyRedirect);
+  }
 
-  const contentSlug = CONTENT_BY_PUBLIC[slug];
+  if (!isAboutPublicSlug(requestedSlug)) {
+    redirect("/about/me/");
+  }
+
+  const pathname = `/about/${requestedSlug}/`;
+  const isMePage = requestedSlug === "me";
+
+  // Me は構造化プロフィール（about_profile など）を優先
+  if (isMePage) {
+    const meProfile = await getMeProfile();
+    if (meProfile) {
+      return (
+        <AboutShell pathname={pathname}>
+          <AboutMeProfile
+            data={{
+              ...meProfile,
+              profile: {
+                ...meProfile.profile,
+                bio_html: sanitizeBody(meProfile.profile.bio_html),
+              },
+              based_in: meProfile.based_in.map((row) => ({
+                ...row,
+                body_html: sanitizeBody(row.body_html),
+              })),
+            }}
+          />
+        </AboutShell>
+      );
+    }
+  }
+
+  const contentSlug = aboutContentSlugFromPublic(requestedSlug);
   if (!contentSlug) {
     redirect("/about/me/");
   }
 
   const page = await getAboutBySlug(contentSlug);
-  const pathname = `/about/${slug}/`;
-  const isMe = slug === "me";
 
-  // Me は本文先頭の名前見出しを活かす。Here / Contact は front matter の title をカード見出しに使う
-  const cardTitle = isMe ? undefined : page?.title;
-  const bodyHtml = page
-    ? sanitizeBody(
-        cardTitle ? stripLeadingH1(page.body_html) : page.body_html,
-      )
-    : "";
+  // Me は本文内の名前見出しを使う。Here / Contact は front matter / DB の title をカード見出しに使う
+  const cardTitle = isMePage ? undefined : page?.title;
+  const rawBodyHtml = page?.body_html ?? "";
+  const bodyForCard = cardTitle ? stripLeadingH1(rawBodyHtml) : rawBodyHtml;
+  const bodyHtml = page ? sanitizeBody(bodyForCard) : "";
 
   return (
     <AboutShell pathname={pathname}>
@@ -69,9 +102,9 @@ export default async function AboutPage({
         <AboutArticle
           bodyHtml={bodyHtml}
           title={cardTitle}
-          coverSrc={isMe ? "/images/about/profile.webp" : null}
+          coverSrc={isMePage ? "/images/about/profile.webp" : null}
         />
-      ) : (
+          ) : (
         <p className="m-0 text-sm text-muted-foreground">
           コンテンツが見つかりませんでした。
         </p>

@@ -19,9 +19,23 @@ import {
 } from "lucide-react";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
+import type { WorksSectionId } from "@/lib/content/works-sections";
+import type { LibrarySectionId } from "@/lib/content/library-sections";
 
 export type SidebarPhotoNavItem = {
   id: PhotoGalleryId;
+  href: string;
+  label: string;
+};
+
+export type SidebarWorksNavItem = {
+  id: WorksSectionId;
+  href: string;
+  label: string;
+};
+
+export type SidebarLibraryNavItem = {
+  id: LibrarySectionId;
   href: string;
   label: string;
 };
@@ -31,6 +45,10 @@ type Props = {
   notesLatestHref?: string;
   /** 公開中の Photos ナビ（非公開は含めない） */
   photoNav?: SidebarPhotoNavItem[];
+  /** 公開中の Works ナビ（非公開は含めない） */
+  worksNav?: SidebarWorksNavItem[];
+  /** 公開中の Library ナビ（非公開は含めない） */
+  libraryNav?: SidebarLibraryNavItem[];
 };
 
 type NavItem = {
@@ -52,10 +70,49 @@ const PHOTO_ICONS: Record<PhotoGalleryId, LucideIcon> = {
   kuikake: Pizza,
 };
 
+const WORKS_ICONS: Record<WorksSectionId, LucideIcon> = {
+  creative: Palette,
+  experience: Briefcase,
+  chooning: Music2,
+};
+
+const WORKS_ACTIVE: Record<
+  WorksSectionId,
+  (pathname: string) => boolean
+> = {
+  creative: (pathname) =>
+    pathname.startsWith("/works/creative") ||
+    pathname.startsWith("/work/") ||
+    pathname.startsWith("/work_"),
+  experience: (pathname) => pathname.startsWith("/works/experience"),
+  chooning: (pathname) => pathname.startsWith("/works/chooning"),
+};
+
+const LIBRARY_ICONS: Record<LibrarySectionId, LucideIcon> = {
+  clips: Bookmark,
+  giants: BookOpen,
+  chronicle: Landmark,
+  "media-coverage": Newspaper,
+};
+
+const LIBRARY_ACTIVE: Record<
+  LibrarySectionId,
+  (pathname: string) => boolean
+> = {
+  clips: (pathname) => pathname.startsWith("/clips"),
+  giants: (pathname) => pathname.startsWith("/shoulders-of-giants"),
+  chronicle: (pathname) => pathname.startsWith("/chronicle"),
+  "media-coverage": (pathname) =>
+    pathname === "/about/media-coverage" ||
+    pathname.startsWith("/about/media-coverage/"),
+};
+
 export function Sidebar({
   pathname,
   notesLatestHref = "/diary/",
   photoNav,
+  worksNav,
+  libraryNav,
 }: Props) {
   const isDiary =
     pathname.startsWith("/diary") ||
@@ -64,12 +121,6 @@ export function Sidebar({
     pathname.startsWith("/diary_place");
   const isColumn =
     pathname.startsWith("/column") || pathname.startsWith("/column_");
-  const isCreative =
-    pathname.startsWith("/works/creative") ||
-    pathname.startsWith("/work/") ||
-    pathname.startsWith("/work_");
-  const isExperience = pathname.startsWith("/works/experience");
-  const isChooning = pathname.startsWith("/works/chooning");
   const isMe =
     pathname === "/about/me" ||
     pathname.startsWith("/about/me/") ||
@@ -80,15 +131,9 @@ export function Sidebar({
     pathname.startsWith("/about/here/") ||
     pathname === "/about/site" ||
     pathname.startsWith("/about/site/");
-  const isMediaCoverage =
-    pathname === "/about/media-coverage" ||
-    pathname.startsWith("/about/media-coverage/");
   const isContact =
     pathname === "/about/contact" ||
     pathname.startsWith("/about/contact/");
-  const isClips = pathname.startsWith("/clips");
-  const isGiants = pathname.startsWith("/shoulders-of-giants");
-  const isChronicle = pathname.startsWith("/chronicle");
 
   const resolvedPhotoNav: SidebarPhotoNavItem[] = photoNav ?? [
     { id: "smile", href: "/smile/", label: "Smile" },
@@ -96,11 +141,46 @@ export function Sidebar({
     { id: "kuikake", href: "/kuikake/", label: "Kuikake" },
   ];
 
+  const resolvedWorksNav: SidebarWorksNavItem[] = worksNav ?? [
+    { id: "creative", href: "/works/creative/", label: "Creative" },
+    { id: "experience", href: "/works/experience/", label: "Experience" },
+    { id: "chooning", href: "/works/chooning/", label: "Chooning" },
+  ];
+
+  const resolvedLibraryNav: SidebarLibraryNavItem[] = libraryNav ?? [
+    { id: "clips", href: "/clips/", label: "Clips" },
+    {
+      id: "giants",
+      href: "/shoulders-of-giants/",
+      label: "The shoulders of Giants",
+    },
+    { id: "chronicle", href: "/chronicle/", label: "Chronicle" },
+    {
+      id: "media-coverage",
+      href: "/about/media-coverage/",
+      label: "Media coverage",
+    },
+  ];
+
   const photoItems: NavItem[] = resolvedPhotoNav.map((item) => ({
     href: item.href,
     label: item.label,
     icon: PHOTO_ICONS[item.id],
-    active: pathname.startsWith(`/${item.id}`),
+    active: pathname.startsWith(item.href.replace(/\/$/, "")),
+  }));
+
+  const worksItems: NavItem[] = resolvedWorksNav.map((item) => ({
+    href: item.href,
+    label: item.label,
+    icon: WORKS_ICONS[item.id],
+    active: WORKS_ACTIVE[item.id](pathname),
+  }));
+
+  const libraryItems: NavItem[] = resolvedLibraryNav.map((item) => ({
+    href: item.href,
+    label: item.label,
+    icon: LIBRARY_ICONS[item.id],
+    active: LIBRARY_ACTIVE[item.id](pathname),
   }));
 
   const sections: NavSection[] = [
@@ -131,60 +211,24 @@ export function Sidebar({
           } satisfies NavSection,
         ]
       : []),
-    {
-      id: "works",
-      label: "Works",
-      items: [
-        {
-          href: "/works/creative/",
-          label: "Creative",
-          icon: Palette,
-          active: isCreative,
-        },
-        {
-          href: "/works/experience/",
-          label: "Experience",
-          icon: Briefcase,
-          active: isExperience,
-        },
-        {
-          href: "/works/chooning/",
-          label: "Chooning",
-          icon: Music2,
-          active: isChooning,
-        },
-      ],
-    },
-    {
-      id: "library",
-      label: "Library",
-      items: [
-        {
-          href: "/clips/",
-          label: "Clips",
-          icon: Bookmark,
-          active: isClips,
-        },
-        {
-          href: "/shoulders-of-giants/",
-          label: "The shoulders of Giants",
-          icon: BookOpen,
-          active: isGiants,
-        },
-        {
-          href: "/chronicle/",
-          label: "Chronicle",
-          icon: Landmark,
-          active: isChronicle,
-        },
-        {
-          href: "/about/media-coverage/",
-          label: "Media coverage",
-          icon: Newspaper,
-          active: isMediaCoverage,
-        },
-      ],
-    },
+    ...(worksItems.length
+      ? [
+          {
+            id: "works",
+            label: "Works",
+            items: worksItems,
+          } satisfies NavSection,
+        ]
+      : []),
+    ...(libraryItems.length
+      ? [
+          {
+            id: "library",
+            label: "Library",
+            items: libraryItems,
+          } satisfies NavSection,
+        ]
+      : []),
     {
       id: "about",
       label: "About",

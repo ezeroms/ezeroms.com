@@ -21,6 +21,7 @@ export type AdminNavItem = {
     | "book-open"
     | "landmark"
     | "user"
+    | "home"
     | "newspaper";
 };
 
@@ -93,7 +94,7 @@ export const adminNavSections: AdminNavSection[] = [
         href: "/admin/top-images/",
         label: "Top images",
         description: "トップのランダム画像",
-        status: "soon",
+        status: "ready",
         icon: "image",
       },
     ],
@@ -119,8 +120,8 @@ export const adminNavSections: AdminNavSection[] = [
       {
         href: "/admin/chooning/",
         label: "Chooning",
-        description: "プロダクト Chooning（後回し）",
-        status: "soon",
+        description: "プロダクト Chooning",
+        status: "ready",
         icon: "music-2",
       },
     ],
@@ -138,37 +139,44 @@ export const adminNavSections: AdminNavSection[] = [
       },
       {
         href: "/admin/giants/",
-        label: "Giants",
-        description: "Shoulders of Giants",
-        status: "soon",
+        label: "The shoulders of Giants",
+        description: "引用・巨人の肩の上",
+        status: "ready",
         icon: "book-open",
       },
       {
         href: "/admin/chronicle/",
         label: "Chronicle",
         description: "年表・出来事",
-        status: "soon",
+        status: "ready",
         icon: "landmark",
-      },
-    ],
-  },
-  {
-    id: "site",
-    label: "Site",
-    items: [
-      {
-        href: "/admin/about/",
-        label: "About",
-        description: "プロフィール",
-        status: "soon",
-        icon: "user",
       },
       {
         href: "/admin/media-coverage/",
         label: "Media coverage",
         description: "掲載・取材",
-        status: "soon",
+        status: "ready",
         icon: "newspaper",
+      },
+    ],
+  },
+  {
+    id: "about",
+    label: "About",
+    items: [
+      {
+        href: "/admin/me/",
+        label: "Me",
+        description: "プロフィール",
+        status: "ready",
+        icon: "user",
+      },
+      {
+        href: "/admin/here/",
+        label: "Here",
+        description: "このサイトについて",
+        status: "ready",
+        icon: "home",
       },
     ],
   },

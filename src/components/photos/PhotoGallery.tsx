@@ -114,7 +114,7 @@ export function PhotoGallery({ items }: Props) {
                   role="listitem"
                   className={cn(
                     "block w-full border-0 bg-transparent p-0",
-                    "cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   )}
                   onClick={() => setActivePhotoId(photo.id)}
                   aria-label={`${photoAccessibilityLabel(photo)} を拡大表示`}

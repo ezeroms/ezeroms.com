@@ -9,6 +9,8 @@ export * from "./experience";
 export * from "./giants";
 export * from "./photos";
 export * from "./photo-gallery-meta";
+export * from "./works-section-meta";
+export * from "./library-section-meta";
 export * from "./clips";
 export * from "./chronicle";
 export * from "./about";

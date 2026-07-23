@@ -2,12 +2,13 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
 import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { generateContentSlug } from "@/lib/admin/content";
 
 function localDatetimeValue(d = new Date()) {
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -51,6 +52,10 @@ export function ColumnEditorForm({
   const router = useRouter();
   const isEdit = Boolean(initial?.slug);
 
+  const [mediaFolder] = useState(
+    () => initial?.slug || `draft-${generateContentSlug(12)}`,
+  );
+
   const [baseline] = useState(() => ({
     title: initial?.title ?? "",
     bodyMd: initial?.body_md ?? "",
@@ -90,9 +95,33 @@ export function ColumnEditorForm({
     onDirtyChange?.(dirty);
   }, [dirty, onDirtyChange]);
 
+  async function uploadBodyImage(file: File): Promise<string | null> {
+    const form = new FormData();
+    form.set("file", file);
+    form.set("folder", mediaFolder);
+    const res = await fetch("/api/admin/notes/media/upload/", {
+      method: "POST",
+      body: form,
+    });
+    const data = (await res.json()) as {
+      error?: string;
+      image_url?: string;
+    };
+    if (!res.ok || !data.image_url) {
+      setError(data.error || "画像のアップロードに失敗しました");
+      return null;
+    }
+    setError(null);
+    return data.image_url;
+  }
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!dirty || loading) return;
+    if (!bodyMd.trim()) {
+      setError("本文を入力してください");
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
@@ -155,16 +184,19 @@ export function ColumnEditorForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="column-body">本文（Markdown）</Label>
-        <Textarea
+        <Label htmlFor="column-body">本文</Label>
+        <AdminRichTextEditor
           id="column-body"
           value={bodyMd}
-          onChange={(e) => setBodyMd(e.target.value)}
+          onChange={setBodyMd}
+          disabled={loading}
           placeholder="本文を書く…"
-          required
-          rows={10}
-          {...IGNORE_PASSWORD_MANAGERS}
+          minHeightClassName="min-h-[280px]"
+          onUploadImage={uploadBodyImage}
         />
+        <p className="m-0 text-xs text-muted-foreground">
+          ツールバーの画像ボタン、または画像のドラッグ＆ドロップ／ペーストで本文に挿入できます。
+        </p>
       </div>
 
       <OgImageField

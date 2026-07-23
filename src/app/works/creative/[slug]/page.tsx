@@ -10,7 +10,7 @@ import {
   resolveOgImageUrl,
   siteUrl,
 } from "@/lib/content/og-image";
-import { getWorkBySlug, listWork } from "@/lib/content/queries";
+import { getWorkBySlug, listWork, requirePublicWorksSection } from "@/lib/content/queries";
 import {
   formatWorkPeriod,
   serializeWorkFilter,
@@ -33,9 +33,12 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  const section = await requirePublicWorksSection("creative").catch(() => null);
+  if (!section) return { title: "Creative" };
+
   const { slug } = await params;
   const item = await getWorkBySlug(slug);
-  if (!item) return { title: "Creative" };
+  if (!item) return { title: section.label };
 
   const title = item.title;
   const url = absoluteUrl(`/works/creative/${slug}/`, siteUrl());
@@ -63,6 +66,7 @@ export default async function CreativeDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await requirePublicWorksSection("creative");
   const { slug } = await params;
   const item = await getWorkBySlug(slug);
   if (!item) notFound();

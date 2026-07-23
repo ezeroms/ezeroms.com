@@ -5,7 +5,7 @@
     <link>http://localhost:1313/</link>
     <description>One thing I can tell you is you got to be free!</description>
     <language>ja</language>
-    <lastBuildDate>Sat, 27 Dec 2025 00:31:35 JST</lastBuildDate><item>
+    <lastBuildDate>Tue, 30 Dec 2025 00:21:58 JST</lastBuildDate><item>
         <title>【音楽好きのみなさんへ】お正月企画「御耳籤」にご協力ください！</title>
         <link>http://localhost:1313/column/ufxb9si64twriek7/</link>
         <description>友人と一緒に、お正月に公開するちょっとした制作物を準備しており、ミュージックラバーなみなさんの知恵をお借りしたく存じます！！
@@ -20,11 +20,13 @@
 学問（がくもん）「覚悟を決めろ！」（サバシスター）
 恋愛（れんあい）「ただならぬ関係」（東京事変）
 転居（やうつり）「急げ」（赤い公園）
-つまり、曲名でありながら、おみくじの各項目の「お言葉」としても読めてしまうものを集める、という大喜利的な企画です。スマホを振るとおみくじが出てきて、各項目ごとに一曲ずつ、曲名がおみくじの内容のようにランダム表示される仕組みを考えています。できれば、そのまま楽曲を再生できるようにもしたいと思っています。
+つまり、曲名でありながら、おみくじの各項目の「お言葉」としても読めてしまうものを集める、という大喜利的な企画です。スマホを振るとおみくじが出てきて、各項目ごとに一曲ずつ、曲名がおみくじの内容のようにランダム表示される。できれば、そのまま楽曲を再生できる仕組みにしたいと考えています。見た目も、本物のおみくじに寄せつつ、でもWebの表現で可愛らしいものにしようと思っています。
+（デザインを相談しているときのイメージボード）
 お願いしたいこと 曲のアイデアをください！
 いま一人でリストを増やしているのですが、さすがにネタ切れしてきて苦しんでいます。「これ、お言葉っぽい！」と思う曲名があったら、ぜひ投げ込んでください。
 曲のリストはGoogleスプレッドシートで管理しているので、自由にアクセスして編集してOKです！
 https://docs.google.com/spreadsheets/d/15SfsoBNiv4mUM20dq8d4rBAAu5miZ0dE-sKWl976f4s
+（入力シートはこんな感じ）
 入力にあたって シートごとに 「御神託」「願望」「待人」「失物」「旅行」「商売」「学問」「恋愛」「転居」 とカテゴリが分かれています。
 思いついたカテゴリだけ、1曲だけでも大丈夫 ですので、軽い気持ちで追加してもらえると助かります。
 最終的な選定はこちらで行うため、被りは気にせず入力してOKです。とにかくネタ数勝負なので、雑に放り込んでもらって大丈夫です！
@@ -2867,6 +2869,15 @@ dateフィールドの形式: dateフィールドは常にYYYY-MM-DD形式で指
         <guid>http://localhost:1313/shoulders-of-giants/5mngglvt7puquim8/</guid>
       </item><item>
         <title></title>
+        <link>http://localhost:1313/shoulders-of-giants/5ngkfftd9wbixya4/</link>
+        <description>思えばあとのふたりにもあたらしい恋人ができたり、転職を考えていたりと、まるであのときの私たちは、ばらばらになることをしめしあわせたようであって、あたらしいところへいこうとか、いかなければとか、このままこうしていてもどうにもならないしとか、そういうことを思っていたような、思うしかなかったような気がしてならない。
+しかし解散について、三人で向かい合って話し合った記憶がどうもなく。つまりすべてのやりとりはそれぞれのアイフォーンの中で行われ、定められ、決まったのじゃなかったか。
+私たちはおおきな喧嘩をしたり、言い合ったり、殴り合ったりしたことは、勿論、なかったけれど、次へ行くと決めた人間というものは、そうやって、自然に、当たり前に、さらりと顔を合わせなくなるものであるのだと、私はそのとき知ったのだった。
+</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/shoulders-of-giants/5ngkfftd9wbixya4/</guid>
+      </item><item>
+        <title></title>
         <link>http://localhost:1313/shoulders-of-giants/5opt2efn97spq4vf/</link>
         <description>そして繰り返すが、「仮想現実から拡張現実へ」というキャッチフレーズは情報産業のトレンドの変化を表現するもの以上の意味を帯びている。それは僕たちの虚構観そのものの変化でもあるのだ。20世紀的な劇映画は、ディズニーのプリンセスストーリーたちや『スター・ウォーズ』、そしてMCUが代表するように半ばグローバルなコミュニケーションツールとなり、そして『ポケモンGO』が代表する21世紀的なアプリゲームは通勤や買い物といった生活そのものを娯楽化する。「ここではない、どこか」に、外部に越境することではなく「ここ」に、内部に深く潜るための回路を、いま、僕たちは情報技術に、そして虚構そのものに求めつつあるのだ。
 </description>
@@ -3210,6 +3221,20 @@ ANTは人びとの集まりが「社会」を構成するのではなく、非�
         <guid>http://localhost:1313/shoulders-of-giants/fnxgzpmkmdc3cp6d/</guid>
       </item><item>
         <title></title>
+        <link>http://localhost:1313/shoulders-of-giants/g92gi76gac3hhn5w/</link>
+        <description>私はティッシュを二枚とり、すばやくとんとんしながら、保育園のときにもこういうことがあったなあと思い出して、人間って変わらないなあと主語を大きくしながら恥ずかしさを誤魔化すための感慨にふけり、でも、他人と一緒に住むって、失敗を笑ってもらえるということでもあるのだなあと、うれし恥ずかし感じ入り、そういう、私たちの、はじめての夜だった。
+</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/shoulders-of-giants/g92gi76gac3hhn5w/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/shoulders-of-giants/gmegrzhwuruszhmg/</link>
+        <description>消えたいと思ったけれど、死ぬのは面倒くさくてたまらないから、できることなら森のにおいのする緑色のバブになって、家の浴槽で、泡となり、緑色のお湯となり、最後は円を描きながらするすると何処かへ流れたいと思った。それはもう願うように、祈るように、思っていた。しかし、そううまくはいかないもので、私はじりじり生きていた。しつこくたしかに生きていた。
+</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/shoulders-of-giants/gmegrzhwuruszhmg/</guid>
+      </item><item>
+        <title></title>
         <link>http://localhost:1313/shoulders-of-giants/hbgjerjuwjnijh2j/</link>
         <description>物語的時間は、過去と現在をつなぐことで、一貫性を作り出す。例えば、いま自分が成功しているのは、過去の自分の努力の賜物だ、と考える。無害なときも少なくない。けれど、本章で論じたように、過去の亡霊に取り憑かれて動けなくなることもある。過去の自分のしたこと、できなかったことが、今の自分の苦境を作っている、と思い込むとどうだろうか。現在は変えられるかもしれないのに、変更可能性を見逃してしまう。物語的時間にはリスクもあるのだ。
 非物語的な精神医学アプローチについて研究しているサリー・ラサムとマーク・ピンダーは、人生を物語とすることを批判する。自己が自らの人生を語る過程で、当事者としてだけではなく、あたかも他者が自分を評価するかのような二人称的な視点を内在化する。これは一見すると自己理解の深化をもたらすかのように見えるが、同時に自己の感覚や記憶が外部の期待や社会的規範に染められるリスクがある。つまり、自己が自分自身の物語を構築する際、その物語は必然的に自己の意図や価値観だけでなく、他者からの評価というフィルターを通して再解釈されるため、真の自己がかすんでしまう可能性があるのだ。
@@ -3452,6 +3477,15 @@ ANTは人びとの集まりが「社会」を構成するのではなく、非�
 </description>
         <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/shoulders-of-giants/p7n7p25hyhgi61jg/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/shoulders-of-giants/pfyzh38wmayk5gfn/</link>
+        <description>どんな狂気も、他人事ではない。おなじアパートに住む、おなじような生活水準の人間のやったことなのだから、なおさらである。
+なにをそんなに狂うことがあるのかとは思うけれども、それは自分が狂っていないから、そんなに悠長なことを思えるのだ。
+狂気は、とうに私たちのなかで眠っているのだから、いつ自分が他人の洗濯ものをばら撒くようになるかわからない。きっかけひとつで、すべてがひっくり返ってしまうことを、私たちはよく知っているはずだ。
+</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/shoulders-of-giants/pfyzh38wmayk5gfn/</guid>
       </item><item>
         <title></title>
         <link>http://localhost:1313/shoulders-of-giants/q9izlc90xwmc1v1i/</link>
@@ -3726,6 +3760,16 @@ ANTは人びとの集まりが「社会」を構成するのではなく、非�
 </description>
         <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
         <guid>http://localhost:1313/shoulders-of-giants/wd2baax8t5n294wn/</guid>
+      </item><item>
+        <title></title>
+        <link>http://localhost:1313/shoulders-of-giants/wed79zxh3yxrreuf/</link>
+        <description>スーパーマーケットをふらふらしていると、ペヤングの超大盛りが目についた。
+私はそれを三つ買って帰り、黒のマジックペンで『すべてがどうでもよくなったときのためのペヤング』と書いてみる。りんごちゃんの、めろんちゃんの、小原の、とひとつひとつに名前も書き入れ、台所に並べる。
+すべてがどうでもよくなったとき、私はふたりのそばにいないかもしれないし、そもそも私ではなんの役にもたたないかもしれない。
+ならば食い意地の張っている、きっと落ち込んだときにもたくさん食べるタイプの君たちに、ペヤングの超大盛りをひとつあげます。
+</description>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 UTC</pubDate>
+        <guid>http://localhost:1313/shoulders-of-giants/wed79zxh3yxrreuf/</guid>
       </item><item>
         <title></title>
         <link>http://localhost:1313/shoulders-of-giants/wl6op5lk9nuxvz7f/</link>

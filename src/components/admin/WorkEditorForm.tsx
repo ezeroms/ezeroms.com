@@ -42,12 +42,15 @@ export type WorkEditorInitial = {
   agency: string;
   og_image: string;
   status: "published" | "draft";
+  /** Chooning などプロダクト紐付け */
+  product_key?: string | null;
 };
 
 export function WorkEditorForm({
   initial,
   formId = WORK_EDITOR_FORM_ID,
   hideSubmit = false,
+  productKey,
   onSaved,
   onLoadingChange,
   onDirtyChange,
@@ -55,6 +58,8 @@ export function WorkEditorForm({
   initial?: WorkEditorInitial;
   formId?: string;
   hideSubmit?: boolean;
+  /** 新規作成時に付与する product_key（例: chooning） */
+  productKey?: string | null;
   onSaved?: () => void;
   onLoadingChange?: (loading: boolean) => void;
   onDirtyChange?: (dirty: boolean) => void;
@@ -125,6 +130,8 @@ export function WorkEditorForm({
     setError(null);
     setLoading(true);
     try {
+      const resolvedProductKey =
+        productKey ?? initial?.product_key ?? null;
       const payload = {
         title,
         body_md: bodyMd,
@@ -139,6 +146,7 @@ export function WorkEditorForm({
         agency,
         og_image: ogImage,
         status,
+        product_key: resolvedProductKey,
       };
       const res = await fetch(
         isEdit ? `/api/admin/work/${initial!.slug}/` : "/api/admin/work/",

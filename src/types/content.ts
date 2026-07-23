@@ -5,12 +5,61 @@ export type About = {
   slug: string;
   title: string;
   body_html: string;
-  /** OGP image URL (recommended 1200×630). */
-  og_image: string;
+  /** Markdown source for admin editing (may be empty for legacy rows). */
+  body_md?: string;
+  og_image?: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
   updated_at: string;
+};
+
+/** Structured Me profile (admin: /admin/about/). */
+export type AboutProfile = {
+  id: string;
+  name: string;
+  sub_name: string;
+  bio_md: string;
+  bio_html: string;
+  cover_image: string;
+  status: ContentStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AboutFavorite = {
+  id: string;
+  label: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AboutBasedIn = {
+  id: string;
+  location: string;
+  body_md: string;
+  body_html: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AboutWebLink = {
+  id: string;
+  label: string;
+  url: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MeProfilePayload = {
+  profile: AboutProfile;
+  favorites: AboutFavorite[];
+  based_in: AboutBasedIn[];
+  web_links: AboutWebLink[];
 };
 
 export type MediaCoverage = {
@@ -223,11 +272,14 @@ export type TopImage = {
   slug: string;
   image_url: string;
   alt: string | null;
+  location: string | null;
+  captured_year: number | null;
   sort_order: number;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  is_deleted?: boolean;
 };
 
 /** Web clip / memo bookmark (short; long writing belongs in Column). */
@@ -236,6 +288,8 @@ export type Clip = {
   slug: string;
   title: string;
   source_url: string;
+  /** 掲載メディア表示名（og:site_name など） */
+  source_name: string;
   date: string;
   memo: string;
   clip_tag: string[];

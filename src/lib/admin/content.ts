@@ -1,5 +1,12 @@
 import { marked } from "marked";
 import { preprocessMarkdownMedia } from "@/lib/html";
+import {
+  looksLikeLiteralMarkdownInHtml,
+  normalizeLegacyMarkdown,
+  repairLiteralMarkdownInHtml,
+  unescapeOverEscapedMarkdown,
+} from "@/lib/content/legacy-markdown";
+import { editorHtmlToMarkdown } from "@/lib/admin/rich-text";
 
 /** Generate a short URL-safe slug (diary-style). */
 export function generateContentSlug(length = 16): string {
@@ -25,13 +32,41 @@ export function parseTagList(raw: string): string[] {
 }
 
 export function markdownToHtml(md: string): string {
-  return marked.parse(preprocessMarkdownMedia(md), { async: false }) as string;
+  const prepared = normalizeLegacyMarkdown(unescapeOverEscapedMarkdown(md));
+  return marked.parse(preprocessMarkdownMedia(prepared), {
+    async: false,
+  }) as string;
 }
 
-/** Fallback when body_md is empty (legacy migrated HTML). */
+/** Markdown → HTML without wrapping block `<p>` (for list item bodies). */
+export function inlineMarkdownToHtml(md: string): string {
+  const html = markdownToHtml(md).trim();
+  return html
+    .replace(/^<p>/i, "")
+    .replace(/<\/p>$/i, "")
+    .replace(/<\/p>\s*<p>/gi, "<br /><br />");
+}
+
+/**
+ * Fallback when body_md is empty (legacy migrated HTML).
+ * 生 Markdown が HTML に残っている場合は修復してから Turndown し、
+ * 画像・見出しなどが RTE で正しく見えるようにする。
+ */
 export function htmlToEditableMarkdown(html: string): string {
   if (!html.trim()) return "";
-  return html
+
+  const source = looksLikeLiteralMarkdownInHtml(html)
+    ? repairLiteralMarkdownInHtml(html)
+    : html;
+
+  try {
+    const md = editorHtmlToMarkdown(source);
+    if (md.trim()) return md;
+  } catch {
+    // fall through to regex strip
+  }
+
+  return source
     .replace(/\r\n?/g, "\n")
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<\/p>/gi, "\n\n")
@@ -44,6 +79,10 @@ export function htmlToEditableMarkdown(html: string): string {
     .replace(/<h3[^>]*>/gi, "### ")
     .replace(/<\/li>/gi, "\n")
     .replace(/<li[^>]*>/gi, "- ")
+    .replace(
+      /<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*(?:\s+alt=["']([^"']*)["'])?[^>]*\/?>/gi,
+      (_m, src: string, alt?: string) => `![${alt ?? ""}](${src})`,
+    )
     .replace(/<a[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a>/gi, "[$2]($1)")
     .replace(/<strong[^>]*>(.*?)<\/strong>/gi, "**$1**")
     .replace(/<b[^>]*>(.*?)<\/b>/gi, "**$1**")

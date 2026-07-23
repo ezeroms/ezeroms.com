@@ -28,7 +28,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   const { data, error } = await getSupabaseAdmin()
     .from("clip")
     .select(
-      "id, slug, title, source_url, date, memo, clip_tag, og_image, og_description, status, published_at, updated_at",
+      "id, slug, title, source_url, source_name, date, memo, clip_tag, og_image, og_description, status, published_at, updated_at",
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -58,6 +58,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const body = (await request.json()) as {
       title?: string;
       source_url?: string;
+      source_name?: string;
       date?: string;
       memo?: string;
       tags?: string;
@@ -100,7 +101,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     const { data: existing, error: findError } = await getSupabaseAdmin()
       .from("clip")
-      .select("slug, source_url, og_image, og_description")
+      .select("slug, source_url, source_name, og_image, og_description")
       .eq("slug", slug)
       .maybeSingle();
 
@@ -113,16 +114,21 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     let ogImage = (body.og_image ?? existing.og_image ?? "").trim();
     let ogDescription = (body.og_description ?? existing.og_description ?? "").trim();
+    let sourceName = (body.source_name ?? existing.source_name ?? "").trim();
     const urlChanged = existing.source_url !== sourceUrl;
     if (body.refresh_og || urlChanged || !ogImage) {
       const og = await fetchOpenGraph(sourceUrl);
       if (og.image) ogImage = og.image;
       if (og.description) ogDescription = og.description;
+      if (og.siteName && (urlChanged || !sourceName)) {
+        sourceName = og.siteName;
+      }
     }
 
     const row = {
       title,
       source_url: sourceUrl,
+      source_name: sourceName,
       date: dateIso,
       memo,
       clip_tag: tags,

@@ -6,6 +6,17 @@ export function clipSourceHost(url: string): string {
   }
 }
 
+/** カード／一覧の出典表示（保存名 → YouTube → ホスト名） */
+export function clipSourceLabel(
+  sourceUrl: string,
+  sourceName?: string | null,
+): string {
+  const name = (sourceName ?? "").trim();
+  if (name) return name;
+  if (parseYoutubeVideoId(sourceUrl)) return "YouTube";
+  return clipSourceHost(sourceUrl) || "—";
+}
+
 export function formatClipDate(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";

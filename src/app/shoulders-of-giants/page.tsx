@@ -7,16 +7,23 @@ import {
   parseGiantsFilter,
 } from "@/lib/content/giants-filter";
 import { summarizeGiantsFilter } from "@/lib/site/breadcrumb-filters";
-import { listGiants, listGiantsTopics } from "@/lib/content/queries";
+import {
+  listGiants,
+  listGiantsTopics,
+  requirePublicLibrarySection,
+} from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 import type { ShouldersOfGiants } from "@/types/content";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "The shoulders of Giants",
-  description: "影響を受けた人・作品・考え方のメモ。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicLibrarySection("giants").catch(() => null);
+  return {
+    title: section?.label ?? "The shoulders of Giants",
+    description: "影響を受けた人・作品・考え方のメモ。",
+  };
+}
 
 function shuffleItems<T>(items: T[]): T[] {
   const next = [...items];
@@ -32,6 +39,7 @@ export default async function GiantsPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const section = await requirePublicLibrarySection("giants");
   const resolvedSearchParams = await searchParams;
   const filter = parseGiantsFilter(resolvedSearchParams);
   const filtering = giantsFilterActive(filter);
@@ -55,7 +63,7 @@ export default async function GiantsPage({
   return (
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
-      mobileHeader={<MobileHeader title="The shoulders of Giants" />}
+      mobileHeader={<MobileHeader title={section.label} />}
       showTagsAside={false}
       breadcrumbFilter={selectedTopic ? summarizeGiantsFilter({
         topics: [selectedTopic],

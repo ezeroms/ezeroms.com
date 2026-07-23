@@ -53,14 +53,8 @@ export function AdminNotesListTable({ items, empty }: Props) {
               <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
                 {formatAdminListDate(item.date)}
               </td>
-              <td className="max-w-[360px] px-4 py-2.5 align-middle">
-                <span className="font-medium text-foreground">
-                  {item.excerpt || "（本文なし）"}
-                </span>
-                <p className="m-0 truncate text-xs text-muted-foreground">
-                  {item.slug}
-                  {item.tags.length ? ` · ${item.tags.join(", ")}` : ""}
-                </p>
+              <td className="max-w-[360px] truncate px-4 py-2.5 align-middle font-medium text-foreground">
+                {item.excerpt || "（本文なし）"}
               </td>
               <td className="max-w-[140px] truncate px-4 py-2.5 align-middle text-muted-foreground">
                 {item.place?.trim() || "—"}

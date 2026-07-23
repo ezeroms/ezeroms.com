@@ -8,20 +8,29 @@ import {
   workFilterActive,
 } from "@/lib/content/work-filter";
 import { summarizeWorkFilter } from "@/lib/site/breadcrumb-filters";
-import { listWork, listWorkTaxonomy } from "@/lib/content/queries";
+import {
+  listWork,
+  listWorkTaxonomy,
+  requirePublicWorksSection,
+} from "@/lib/content/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Creative",
-  description: "つくったもの・サイトのギャラリー。制作実績を並べて眺める場所です。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicWorksSection("creative").catch(() => null);
+  return {
+    title: section?.label ?? "Creative",
+    description:
+      "つくったもの・サイトのギャラリー。制作実績を並べて眺める場所です。",
+  };
+}
 
 export default async function CreativePage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const section = await requirePublicWorksSection("creative");
   const resolvedSearchParams = await searchParams;
   const filter = parseWorkFilter(resolvedSearchParams);
   const filtering = workFilterActive(filter);
@@ -50,7 +59,7 @@ export default async function CreativePage({
   return (
     <SiteShell
       bodyClassName="is-works-creative"
-      mobileHeader={<MobileHeader title="Creative" />}
+      mobileHeader={<MobileHeader title={section.label} />}
       secondary={
         <WorkFilterPanel
           years={taxonomy.years}

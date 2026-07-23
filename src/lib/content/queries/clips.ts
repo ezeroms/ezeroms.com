@@ -39,6 +39,7 @@ export async function listClip(opts?: {
     if (error) throw error;
     let items = ((data ?? []) as Clip[]).map((row) => ({
       ...row,
+      source_name: row.source_name ?? "",
       og_image: row.og_image ?? "",
       og_description: row.og_description ?? "",
       memo: row.memo ?? "",

@@ -3,7 +3,10 @@ import { notFound } from "next/navigation";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import { serializeChronicleFilter, formatChronicleWhen } from "@/lib/content/chronicle-filter";
-import { getChronicleBySlug } from "@/lib/content/queries";
+import {
+  getChronicleBySlug,
+  requirePublicLibrarySection,
+} from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 import { cn } from "@/lib/cn";
 import { proseBodyClass } from "@/lib/site/prose-styles";
@@ -15,10 +18,10 @@ export default async function ChronicleEntryPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await requirePublicLibrarySection("chronicle");
   const { slug } = await params;
   const item = await getChronicleBySlug(slug);
   if (!item) notFound();
-
   const meta = [item.category, item.subcategory].filter(Boolean).join(" · ");
 
   return (

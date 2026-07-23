@@ -82,6 +82,18 @@
         margin: var(--spacing-xl) 0;
         min-height: 200px;
     }
+
+    .random-image-mobile__link {
+        position: relative;
+        display: block;
+        line-height: 0;
+    }
+
+    .top-photo-caption--mobile {
+        right: 12px;
+        bottom: 10px;
+        font-size: 12px;
+    }
     
     .top-photo-mobile {
         width: 100%;

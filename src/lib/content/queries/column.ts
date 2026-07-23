@@ -125,3 +125,24 @@ export async function listRelatedColumn(
     limit,
   });
 }
+
+/**
+ * 公開 Column を日付新しい順で見たときの隣接記事。
+ * - previous: より古い（一覧では後ろ）
+ * - next: より新しい（一覧では前）
+ */
+export async function getAdjacentColumn(slug: string): Promise<{
+  previous: Column | null;
+  next: Column | null;
+}> {
+  const { items } = await listColumn();
+  const index = items.findIndex((c) => c.slug === slug);
+  if (index < 0) return { previous: null, next: null };
+
+  return {
+    // date desc: index+1 = older
+    previous: index < items.length - 1 ? items[index + 1]! : null,
+    // date desc: index-1 = newer
+    next: index > 0 ? items[index - 1]! : null,
+  };
+}

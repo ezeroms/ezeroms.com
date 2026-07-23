@@ -1,82 +1,89 @@
 ---
-title: "タイポグラフィテスト記事"
+title: タイポグラフィテスト記事
 date: 2025-01-20T10:00:00.000Z
-slug: "5i4debb716eggmyr"
+slug: 5i4debb716eggmyr
 column_month:
-  - "2025-01"
+  - 2025-01
 column_category:
-  - "design-and-creative"
+  - design-and-creative
 column_tag:
-  - "デザイン"
-  - "タイポグラフィ"
-  - "テスト"
+  - デザイン
+  - タイポグラフィ
+  - テスト
 ---
-
-\# 見出しのテスト（h1）
+# 見出しのテスト（h1）
 
 この記事は、フォントサイズや見出し、リスト、本文のスタイルを確認するためのテスト記事です。
 
-\## 見出しのテスト（h2）
+## 見出しのテスト（h2）
 
-\### 見出しのテスト（h3）
+### 見出しのテスト（h3）
 
-\#### 見出しのテスト（h4）
+#### 見出しのテスト（h4）
 
 本文のスタイルを確認します。これは通常の段落テキストです。フォントサイズは1rem（16px相当）で、行間は1.8に設定されています。読みやすさを重視したタイポグラフィになっています。
 
 もう一つの段落です。複数の段落がある場合の間隔も確認できます。適切な余白が設定されているか確認してください。
 
-\## リストのテスト
+## リストのテスト
 
-\### 順序なしリスト（ul）
+### 順序なしリスト（ul）
 
-\- 最初の項目 - 二番目の項目 - 三番目の項目 - ネストされた項目1 - ネストされた項目2 - さらにネストされた項目 - 四番目の項目
+- 最初の項目 - 二番目の項目 - 三番目の項目 - ネストされた項目1 - ネストされた項目2 - さらにネストされた項目 - 四番目の項目
 
-\### 順序付きリスト（ol）
+### 順序付きリスト（ol）
 
-1\. 最初の項目 2. 二番目の項目 3. 三番目の項目 1. ネストされた項目1 2. ネストされた項目2 4. 四番目の項目
+1. 最初の項目 2. 二番目の項目 3. 三番目の項目 1. ネストされた項目1 2. ネストされた項目2 4. 四番目の項目
 
-\## 引用のテスト
+## 引用のテスト
 
-\> これは引用ブロックです。重要な情報や引用文を表示する際に使用します。左側にボーダーが表示され、適切な余白が設定されています。
+> これは引用ブロックです。重要な情報や引用文を表示する際に使用します。左側にボーダーが表示され、適切な余白が設定されています。
 
-\## リンクのテスト
+## リンクのテスト
 
-\[これはリンクです\](https://example.com)。リンクのスタイルも確認できます。
+[これはリンクです](https://example.com)。リンクのスタイルも確認できます。
 
-\## 画像のテスト
+## 画像のテスト
 
 画像のキャプション表示も確認できます。
 
-\## コードスニペットのテスト
+## コードスニペットのテスト
 
-\### JavaScriptのコード例
+### JavaScriptのコード例
 
-\`\`\`javascript function greet(name) { const message = \`Hello, ${name}!\`; console.log(message); return message; }
+```
+javascript function greet(name) { const message = `Hello, ${name}!`; console.log(message); return message; }
 
-greet('World'); \`\`\`
+greet('World');
+```
 
-\### CSSのコード例
+### CSSのコード例
 
-\`\`\`css .article-item { font-size: 1rem; line-height: 1.8; color: #050317; }
+```
+css .article-item { font-size: 1rem; line-height: 1.8; color: #050317; }
 
-.article-item h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.6; } \`\`\`
+.article-item h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.6; }
+```
 
-\### HTMLのコード例
+### HTMLのコード例
 
-\`\`\`html <article class="article-item"> <h1>タイトル</h1> <p>本文の内容です。</p> <ul> <li>リスト項目1</li> <li>リスト項目2</li> </ul> </article> \`\`\`
+```
+html <article class="article-item"> <h1>タイトル</h1> <p>本文の内容です。</p> <ul> <li>リスト項目1</li> <li>リスト項目2</li> </ul> </article>
+```
 
-\### Pythonのコード例
+### Pythonのコード例
 
-\`\`\`python def calculate\_sum(numbers): """数値のリストの合計を計算する""" total = 0 for num in numbers: total += num return total
+```
+python def calculate_sum(numbers): """数値のリストの合計を計算する""" total = 0 for num in numbers: total += num return total
 
-result = calculate\_sum(\[1, 2, 3, 4, 5\]) print(f"合計: {result}") \`\`\`
+result = calculate_sum([1, 2, 3, 4, 5]) print(f"合計: {result}")
+```
 
-\### インラインコードのテスト
+### インラインコードのテスト
 
-この文章には \`inline code\` が含まれています。\`font-size: 1rem\` や \`line-height: 1.8\` などのインラインコードのスタイルも確認できます。
+この文章には `inline code` が含まれています。`font-size: 1rem` や `line-height: 1.8` などのインラインコードのスタイルも確認できます。
 
-\## 長文のテスト
+## 長文のテスト
 
 長い文章での表示も確認します。複数の段落にわたる長い文章がどのように表示されるか、行間や文字間隔が適切かどうかを確認してください。タイポグラフィは読みやすさを最優先に設計されています。
 

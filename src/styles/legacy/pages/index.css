@@ -52,6 +52,29 @@
   position: relative;
 }
 
+.random-image__link {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.top-photo-caption {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  z-index: 30;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
 /* スケルトンスクリーン（プレースホルダー） */
 .top-photo-skeleton {
   position: absolute;

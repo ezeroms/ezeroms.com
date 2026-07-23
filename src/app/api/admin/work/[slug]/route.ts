@@ -21,6 +21,7 @@ function revalidateWorkPaths(slug: string) {
   revalidatePath("/works/creative");
   revalidatePath(`/works/creative/${slug}/`);
   revalidatePath(`/work/${slug}/`);
+  revalidatePath("/works/chooning");
 }
 
 async function requireAdmin() {

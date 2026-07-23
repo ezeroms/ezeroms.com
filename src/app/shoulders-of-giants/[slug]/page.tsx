@@ -13,7 +13,11 @@ import {
   resolveOgImageUrl,
   siteUrl,
 } from "@/lib/content/og-image";
-import { getGiantsBySlug, listGiants } from "@/lib/content/queries";
+import {
+  getGiantsBySlug,
+  listGiants,
+  requirePublicLibrarySection,
+} from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 
 export const revalidate = 60;
@@ -30,10 +34,12 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  const section = await requirePublicLibrarySection("giants").catch(() => null);
+  if (!section) return { title: "The shoulders of Giants" };
+
   const { slug } = await params;
   const item = await getGiantsBySlug(slug);
-  if (!item) return { title: "The shoulders of Giants" };
-
+  if (!item) return { title: section.label };
   const citation = formatGiantsCitation(item);
   const title = citation || item.book_title || "The shoulders of Giants";
   const description = giantsExcerpt(item.body_html, 160) || undefined;
@@ -65,10 +71,10 @@ export default async function GiantsEntryPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  await requirePublicLibrarySection("giants");
   const { slug } = await params;
   const item = await getGiantsBySlug(slug);
   if (!item) notFound();
-
   const citation = formatGiantsCitation(item);
   const bodyHtml = sanitizeBody(item.body_html);
 

@@ -66,6 +66,7 @@ export default async function ColumnIndexPage({
     >
       <ColumnList
         items={listed.items}
+        listId="column-articles-list"
         currentCategory={
           filter.categories.length === 1 ? filter.categories[0] : undefined
         }

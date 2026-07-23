@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   // Next.js 開発インジケータ（左下の N / Route パネル）を非表示
   devIndicators: false,
   trailingSlash: true,
+  // HEIC 変換（libheif-js）を Webpack にバンドルさせない
+  serverExternalPackages: ["heic-convert", "heic-decode", "libheif-js"],
   images: {
     remotePatterns: [
       {

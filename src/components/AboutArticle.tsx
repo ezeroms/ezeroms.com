@@ -1,5 +1,7 @@
+import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
-import { proseBodyClass } from "@/lib/site/prose-styles";
+import { notesBodyClass } from "@/lib/site/prose-styles";
+import { contentCard } from "@/lib/site/card-styles";
 
 type Props = {
   /** Already sanitized body HTML */
@@ -11,12 +13,16 @@ type Props = {
 
 /**
  * About（Me / Here / Contact）本文。
- * Column 詳細と同じ読み物カードの枠・タイポグラフィに揃える。
+ * Column 詳細と同じ読み物カード・区切り（hr は余白のみ）に揃える。
  */
 export function AboutArticle({ bodyHtml, title, coverSrc }: Props) {
   return (
     <div className="w-full font-sans text-foreground">
-      <article className="mx-auto min-w-0 w-full max-w-3xl overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      <article
+        className={contentCard({
+          className: "mx-auto min-w-0 w-full max-w-3xl overflow-hidden",
+        })}
+      >
         {coverSrc ? (
           <div className="bg-muted">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -38,25 +44,19 @@ export function AboutArticle({ bodyHtml, title, coverSrc }: Props) {
             </>
           ) : null}
 
-          <div
+          <ArticleProse
+            html={bodyHtml}
             className={cn(
-              "about-article__body min-w-0 text-base leading-relaxed text-foreground",
-              proseBodyClass,
-              "[&_p]:m-0 [&_p+p]:mt-4",
+              notesBodyClass,
               "[&_h1]:mb-4 [&_h1]:mt-0 [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:leading-snug [&_h1]:tracking-tight sm:[&_h1]:text-3xl",
-              "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:border-b [&_h2]:border-border [&_h2]:pb-2 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
+              "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
               "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight",
               "[&_blockquote]:my-4 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground",
-              "[&_hr]:my-6 [&_hr]:border-border",
-              "[&_img]:my-6 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg",
-              "[&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-muted [&_pre]:p-3 [&_pre]:text-sm",
-              "[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-sm",
-              "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
+              "[&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:text-sm",
               "[&_figure]:my-6",
               "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground",
               "[&_strong]:font-semibold",
             )}
-            dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
         </div>
       </article>

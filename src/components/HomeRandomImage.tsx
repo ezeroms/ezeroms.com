@@ -6,9 +6,34 @@ import { useEffect, useState } from "react";
 type TopImagePayload = {
   image_url: string;
   alt: string;
+  location: string | null;
+  captured_year: number | null;
 };
 
+function formatTopCaption(
+  location: string | null | undefined,
+  year: number | null | undefined,
+): string | null {
+  const loc = (location ?? "").trim();
+  const y =
+    typeof year === "number" && Number.isFinite(year) ? String(year) : "";
+  if (loc && y) return `${loc}, ${y}`;
+  if (loc) return loc;
+  if (y) return y;
+  return null;
+}
+
 export type HomePhotoNavItem = {
+  href: string;
+  label: string;
+};
+
+export type HomeWorksNavItem = {
+  href: string;
+  label: string;
+};
+
+export type HomeLibraryNavItem = {
   href: string;
   label: string;
 };
@@ -16,6 +41,8 @@ export type HomePhotoNavItem = {
 type Props = {
   notesHref: string;
   photoNav?: HomePhotoNavItem[];
+  worksNav?: HomeWorksNavItem[];
+  libraryNav?: HomeLibraryNavItem[];
 };
 
 export function HomeRandomImage({
@@ -24,6 +51,17 @@ export function HomeRandomImage({
     { href: "/smile/", label: "Smile" },
     { href: "/jumpai/", label: "Jampai" },
     { href: "/kuikake/", label: "Kuikake" },
+  ],
+  worksNav = [
+    { href: "/works/creative/", label: "Creative" },
+    { href: "/works/experience/", label: "Experience" },
+    { href: "/works/chooning/", label: "Chooning" },
+  ],
+  libraryNav = [
+    { href: "/clips/", label: "Clips" },
+    { href: "/shoulders-of-giants/", label: "The shoulders of Giants" },
+    { href: "/chronicle/", label: "Chronicle" },
+    { href: "/about/media-coverage/", label: "Media coverage" },
   ],
 }: Props) {
   const [image, setImage] = useState<TopImagePayload | null>(null);
@@ -41,6 +79,11 @@ export function HomeRandomImage({
           setImage({
             image_url: `${data.image_url}${data.image_url.includes("?") ? "&" : "?"}t=${Date.now()}`,
             alt: data.alt || "Random Image",
+            location: data.location ?? null,
+            captured_year:
+              typeof data.captured_year === "number"
+                ? data.captured_year
+                : null,
           });
         }
       } catch {
@@ -56,6 +99,9 @@ export function HomeRandomImage({
   const photoMobileClass = loaded
     ? "top-photo-mobile loaded"
     : "top-photo-mobile";
+  const caption = image
+    ? formatTopCaption(image.location, image.captured_year)
+    : null;
 
   return (
     <>
@@ -73,7 +119,7 @@ export function HomeRandomImage({
             One thing I can tell you is you got to be free!
           </h2>
           <div className="random-image">
-            <Link href="/">
+            <Link href="/" className="random-image__link">
               {!image || !loaded ? (
                 <div className="top-photo-skeleton" id="topPhotoSkeleton" />
               ) : null}
@@ -85,6 +131,11 @@ export function HomeRandomImage({
                   className={photoClass}
                   onLoad={() => setLoaded(true)}
                 />
+              ) : null}
+              {caption && loaded ? (
+                <span className="top-photo-caption" aria-hidden="true">
+                  {caption}
+                </span>
               ) : null}
             </Link>
           </div>
@@ -105,7 +156,7 @@ export function HomeRandomImage({
             One thing I can tell you is you got to be free!
           </h2>
           <div className="random-image-mobile">
-            <Link href="/">
+            <Link href="/" className="random-image-mobile__link">
               {!image || !loaded ? (
                 <div
                   className="top-photo-skeleton top-photo-skeleton--mobile"
@@ -121,10 +172,17 @@ export function HomeRandomImage({
                   onLoad={() => setLoaded(true)}
                 />
               ) : null}
+              {caption && loaded ? (
+                <span
+                  className="top-photo-caption top-photo-caption--mobile"
+                  aria-hidden="true"
+                >
+                  {caption}
+                </span>
+              ) : null}
             </Link>
           </div>
 
-          {/* SP/タブレット専用ナビ（PCでは親 section が display:none） */}
           <nav className="top-nav-mobile">
             <div className="top-nav-mobile__section">
               <h3 className="top-nav-mobile__heading">Writing</h3>
@@ -149,39 +207,34 @@ export function HomeRandomImage({
                 ))}
               </div>
             ) : null}
-            <div className="top-nav-mobile__section">
-              <h3 className="top-nav-mobile__heading">Works</h3>
-              <Link href="/works/creative/" className="top-nav-mobile__link">
-                Creative
-              </Link>
-              <Link href="/works/experience/" className="top-nav-mobile__link">
-                Experience
-              </Link>
-              <Link href="/works/chooning/" className="top-nav-mobile__link">
-                Chooning
-              </Link>
-            </div>
-            <div className="top-nav-mobile__section">
-              <h3 className="top-nav-mobile__heading">Library</h3>
-              <Link href="/clips/" className="top-nav-mobile__link">
-                Clips
-              </Link>
-              <Link
-                href="/shoulders-of-giants/"
-                className="top-nav-mobile__link"
-              >
-                The shoulders of Giants
-              </Link>
-              <Link href="/chronicle/" className="top-nav-mobile__link">
-                Chronicle
-              </Link>
-              <Link
-                href="/about/media-coverage/"
-                className="top-nav-mobile__link"
-              >
-                Media coverage
-              </Link>
-            </div>
+            {worksNav.length > 0 ? (
+              <div className="top-nav-mobile__section">
+                <h3 className="top-nav-mobile__heading">Works</h3>
+                {worksNav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="top-nav-mobile__link"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
+            {libraryNav.length > 0 ? (
+              <div className="top-nav-mobile__section">
+                <h3 className="top-nav-mobile__heading">Library</h3>
+                {libraryNav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="top-nav-mobile__link"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
             <div className="top-nav-mobile__section">
               <h3 className="top-nav-mobile__heading">About</h3>
               <Link href="/about/me/" className="top-nav-mobile__link">

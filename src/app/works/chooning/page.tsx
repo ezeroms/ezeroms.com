@@ -3,17 +3,21 @@ import Link from "next/link";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import { WorkList } from "@/components/WorkList";
-import { listWork } from "@/lib/content/queries";
+import { listWork, requirePublicWorksSection } from "@/lib/content/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Chooning",
-  description:
-    "音楽への思いを記録するプロダクト Chooning。特筆して残したい作品です。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicWorksSection("chooning").catch(() => null);
+  return {
+    title: section?.label ?? "Chooning",
+    description:
+      "音楽への思いを記録するプロダクト Chooning。特筆して残したい作品です。",
+  };
+}
 
 export default async function ChooningPage() {
+  const section = await requirePublicWorksSection("chooning");
   const { items } = await listWork({ productKey: "chooning" }).catch(() => ({
     items: [],
     total: 0,
@@ -22,14 +26,11 @@ export default async function ChooningPage() {
   return (
     <SiteShell
       bodyClassName="is-works-chooning"
-      mobileHeader={<MobileHeader title="Chooning" />}
+      mobileHeader={<MobileHeader title={section.label} />}
       showTagsAside={false}
     >
       <div className="mx-auto max-w-3xl font-sans text-foreground">
-        <p className="m-0 text-sm leading-relaxed text-muted-foreground">
-          音楽への思いを記録するプロダクト。Works のなかでも特に力を入れている取り組みです。
-        </p>
-        <p className="mt-3 text-sm text-muted-foreground">
+        <p className="m-0 text-sm text-muted-foreground">
           <a
             href="https://hello.chooning.app/"
             target="_blank"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ArticleNavigation } from "@/components/ArticleNavigation";
 import { ColumnArticle } from "@/components/ColumnArticle";
 import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
@@ -10,7 +11,12 @@ import {
   resolveOgImageUrl,
   siteUrl,
 } from "@/lib/content/og-image";
-import { getColumnBySlug, listColumn, listRelatedColumn } from "@/lib/content/queries";
+import {
+  getAdjacentColumn,
+  getColumnBySlug,
+  listColumn,
+  listRelatedColumn,
+} from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 import { ColumnList } from "@/components/ColumnList";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
@@ -73,7 +79,10 @@ export default async function ColumnPage({
   if (!item) notFound();
 
   const bodyHtml = sanitizeBody(item.body_html);
-  const related = await listRelatedColumn(item).catch(() => []);
+  const [related, adjacent] = await Promise.all([
+    listRelatedColumn(item).catch(() => []),
+    getAdjacentColumn(slug).catch(() => ({ previous: null, next: null })),
+  ]);
 
   return (
     <SiteShell
@@ -85,6 +94,24 @@ export default async function ColumnPage({
       mainClassName="layout-main--single"
     >
       <ColumnArticle item={item} bodyHtml={bodyHtml} />
+      <ArticleNavigation
+        previous={
+          adjacent.previous
+            ? {
+                href: `/column/${adjacent.previous.slug}/`,
+                title: adjacent.previous.title,
+              }
+            : null
+        }
+        next={
+          adjacent.next
+            ? {
+                href: `/column/${adjacent.next.slug}/`,
+                title: adjacent.next.title,
+              }
+            : null
+        }
+      />
       {related.length > 0 ? (
         <RelatedPostsSection>
           <ColumnList items={related} hideEmpty />

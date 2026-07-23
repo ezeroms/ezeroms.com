@@ -20,7 +20,7 @@ export async function GET() {
   const { data, error } = await getSupabaseAdmin()
     .from("clip")
     .select(
-      "id, slug, title, source_url, date, memo, clip_tag, og_image, status, published_at, updated_at",
+      "id, slug, title, source_url, source_name, date, memo, clip_tag, og_image, status, published_at, updated_at",
     )
     .order("date", { ascending: false })
     .limit(80);
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
       slug?: string;
       og_image?: string;
       og_description?: string;
+      source_name?: string;
     };
 
     const title = (body.title ?? "").trim();
@@ -85,16 +86,19 @@ export async function POST(request: NextRequest) {
 
     let ogImage = (body.og_image ?? "").trim();
     let ogDescription = (body.og_description ?? "").trim();
-    if (!ogImage) {
+    let sourceName = (body.source_name ?? "").trim();
+    if (!ogImage || !sourceName) {
       const og = await fetchOpenGraph(sourceUrl);
-      ogImage = og.image;
+      if (!ogImage) ogImage = og.image;
       if (!ogDescription) ogDescription = og.description;
+      if (!sourceName) sourceName = og.siteName;
     }
 
     const row = {
       slug,
       title,
       source_url: sourceUrl,
+      source_name: sourceName,
       date: dateIso,
       memo,
       clip_tag: tags,

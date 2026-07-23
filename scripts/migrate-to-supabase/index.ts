@@ -11,8 +11,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import matter from "gray-matter";
-import { marked } from "marked";
 import dotenv from "dotenv";
+import { legacyMarkdownToHtml } from "../../src/lib/content/legacy-markdown";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config({ path: ".env" });
@@ -43,7 +43,7 @@ function mdToHtml(md: string): string {
     (_m, type, id) =>
       `<iframe src="https://open.spotify.com/embed/${type}/${id}" height="152" allow="encrypted-media"></iframe>`,
   );
-  return marked.parse(src, { async: false }) as string;
+  return legacyMarkdownToHtml(src);
 }
 
 function listMdFiles(dir: string): string[] {

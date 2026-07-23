@@ -1,34 +1,5 @@
-import { AdminContent } from "@/components/admin/AdminContent";
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { ClipsEditorForm } from "@/components/admin/ClipsEditorForm";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-export const dynamic = "force-dynamic";
+import { redirect } from "next/navigation";
 
 export default function AdminClipsNewPage() {
-  return (
-    <AdminContent>
-      <AdminPageHeader
-        title="クリップを追加"
-        description="タイトル・出典URL・短いメモだけで残せます。"
-      />
-      <Card>
-        <CardHeader>
-          <CardTitle>新規 Clips</CardTitle>
-          <CardDescription>
-            長い意見は Column へ。ここはブックマーク用です。
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ClipsEditorForm />
-        </CardContent>
-      </Card>
-    </AdminContent>
-  );
+  redirect("/admin/clips/");
 }

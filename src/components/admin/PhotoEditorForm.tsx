@@ -292,7 +292,7 @@ export function PhotoEditorForm({
           ref={fileRef}
           id="photo-image"
           type="file"
-          accept="image/*"
+          accept="image/*,.heic,.heif,image/heic,image/heif"
           className="sr-only"
           disabled={uploading || loading}
           onChange={(e) => {

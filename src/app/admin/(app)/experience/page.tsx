@@ -5,8 +5,10 @@ import {
   type AdminExperienceTableItem,
 } from "@/components/admin/AdminExperienceListTable";
 import { ExperienceCreateButton } from "@/components/admin/ExperienceCreateButton";
+import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
+import { loadWorksSection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -14,6 +16,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminExperienceListPage() {
   await getSessionUser();
+  const section = await loadWorksSection("experience");
 
   let items: AdminExperienceTableItem[] = [];
 
@@ -71,8 +74,17 @@ export default async function AdminExperienceListPage() {
   return (
     <AdminContent width="wide">
       <AdminPageHeader
-        title="Experience"
-        actions={<ExperienceCreateButton />}
+        title={section.label}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <WorksSectionSettingsModal
+              metaApiPath="/api/admin/works/experience/meta/"
+              initialLabel={section.label}
+              initialStatus={section.status}
+            />
+            <ExperienceCreateButton />
+          </div>
+        }
       />
       <Card className="overflow-hidden">
         <CardContent className="overflow-x-auto p-0">
