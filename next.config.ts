@@ -34,6 +34,23 @@ const nextConfig: NextConfig = {
         destination: "https://ringofes.info/?from=chooning",
         permanent: false,
       },
+      // 旧 Hugo About 一覧 → Me
+      {
+        source: "/about",
+        destination: "/about/me/",
+        permanent: true,
+      },
+      // 旧 About スラッグ
+      {
+        source: "/about/profile",
+        destination: "/about/me/",
+        permanent: true,
+      },
+      {
+        source: "/about/site",
+        destination: "/about/here/",
+        permanent: true,
+      },
       {
         source: "/kuikake",
         destination: "/tabekake/",
