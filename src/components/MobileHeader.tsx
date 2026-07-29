@@ -1,30 +1,32 @@
 "use client";
 
+import { MobileMenuButton } from "@/components/MobileMenuButton";
+import { cn } from "@/lib/cn";
+
 type Props = {
   title?: string;
+  className?: string;
 };
 
-/** Minimal mobile top bar with hamburger (opens sidebar via SiteScripts) */
-export function MobileHeader({ title }: Props) {
+/**
+ * Fallback chrome when SiteShell has no sticky breadcrumb header.
+ * Hidden on desktop (≥1080px). Logo belongs in page content, not here.
+ */
+export function MobileHeader({ title, className }: Props) {
   return (
-    <header className="mobile-header">
-      <button
-        type="button"
-        id="sidebar-hamburger-btn"
-        className="mobile-header__hamburger"
-        aria-label="メニューを開く"
-        aria-expanded="false"
-      >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path
-            d="M3 5h14M3 10h14M3 15h14"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-      </button>
-      {title ? <span className="mobile-header__title">{title}</span> : null}
+    <header
+      className={cn(
+        "flex h-14 w-full shrink-0 items-center gap-3 border-b border-border bg-background px-4",
+        "min-[1080px]:hidden",
+        className,
+      )}
+    >
+      <MobileMenuButton />
+      {title ? (
+        <span className="min-w-0 flex-1 truncate text-sm font-medium tracking-wide text-foreground">
+          {title}
+        </span>
+      ) : null}
     </header>
   );
 }

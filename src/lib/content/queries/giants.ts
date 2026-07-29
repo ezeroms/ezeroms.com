@@ -4,7 +4,23 @@ import {
   hasSupabaseConfig,
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
+import { rankBySharedTags } from "@/lib/content/related";
 import type { ShouldersOfGiants } from "@/types/content";
+
+function normalizeGiantsRow(row: ShouldersOfGiants): ShouldersOfGiants {
+  return {
+    ...row,
+    topic: row.topic ?? [],
+    book_title: row.book_title ?? null,
+    author: row.author ?? null,
+    publisher: row.publisher ?? null,
+    published_year: row.published_year ?? null,
+    citation_override: row.citation_override ?? null,
+    source_url: row.source_url ?? null,
+    body_html: row.body_html ?? "",
+    og_image: row.og_image ?? "",
+  };
+}
 
 export async function listGiants(opts?: {
   topic?: string;
@@ -28,18 +44,7 @@ export async function listGiants(opts?: {
 
     const { data, error, count } = await q;
     if (error) throw error;
-    const items = ((data ?? []) as ShouldersOfGiants[]).map((row) => ({
-      ...row,
-      topic: row.topic ?? [],
-      book_title: row.book_title ?? null,
-      author: row.author ?? null,
-      publisher: row.publisher ?? null,
-      published_year: row.published_year ?? null,
-      citation_override: row.citation_override ?? null,
-      source_url: row.source_url ?? null,
-      body_html: row.body_html ?? "",
-      og_image: row.og_image ?? "",
-    }));
+    const items = ((data ?? []) as ShouldersOfGiants[]).map(normalizeGiantsRow);
     return { items, total: count ?? items.length };
   } catch (e) {
     console.error("[listGiants]", e);
@@ -81,21 +86,30 @@ export async function getGiantsBySlug(
       .maybeSingle();
     if (error) throw error;
     if (!data) return null;
-    const row = data as ShouldersOfGiants;
-    return {
-      ...row,
-      topic: row.topic ?? [],
-      book_title: row.book_title ?? null,
-      author: row.author ?? null,
-      publisher: row.publisher ?? null,
-      published_year: row.published_year ?? null,
-      citation_override: row.citation_override ?? null,
-      source_url: row.source_url ?? null,
-      body_html: row.body_html ?? "",
-      og_image: row.og_image ?? "",
-    };
+    return normalizeGiantsRow(data as ShouldersOfGiants);
   } catch (e) {
     console.error("[getGiantsBySlug]", e);
     return null;
   }
+}
+
+/** Same type (Giants) posts that share ≥1 topic, ranked by overlap then date. */
+export async function listRelatedGiants(
+  item: Pick<ShouldersOfGiants, "slug" | "topic">,
+  limit = 6,
+): Promise<ShouldersOfGiants[]> {
+  const topics = item.topic ?? [];
+  if (!topics.length) return [];
+  const { items } = await listGiants({ topics });
+  const ranked = rankBySharedTags({
+    currentSlug: item.slug,
+    currentTags: topics,
+    candidates: items.map((entry) => ({
+      ...entry,
+      date: entry.published_at ?? entry.created_at,
+    })),
+    getTags: (entry) => entry.topic,
+    limit,
+  });
+  return ranked.map(({ date: _date, ...rest }) => rest as ShouldersOfGiants);
 }

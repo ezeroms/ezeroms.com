@@ -14,7 +14,7 @@ export type About = {
   updated_at: string;
 };
 
-/** Structured Me profile (admin: /admin/about/). */
+/** Structured Me profile (admin: /admin/me/). */
 export type AboutProfile = {
   id: string;
   name: string;
@@ -22,6 +22,8 @@ export type AboutProfile = {
   bio_md: string;
   bio_html: string;
   cover_image: string;
+  /** /about/me/ の OGP（空ならサイト既定） */
+  og_image?: string;
   status: ContentStatus;
   published_at: string | null;
   created_at: string;
@@ -193,7 +195,7 @@ export type ShouldersOfGiants = {
   publisher: string | null;
   published_year: string | null;
   citation_override: string | null;
-  /** External source URL for the citation (optional). */
+  /** Optional URL for the citation / book purchase page (external). */
   source_url: string | null;
   body_html: string;
   /** OGP image URL (recommended 1200×630). */
@@ -204,7 +206,7 @@ export type ShouldersOfGiants = {
   updated_at: string;
 };
 
-/** Curated photograph in Smile / Jampai / Kuikake gallery. */
+/** Curated photograph in Smile / Jampai / Tabekake gallery. */
 export type Photo = {
   id: string;
   slug: string;

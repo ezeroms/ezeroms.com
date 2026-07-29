@@ -92,7 +92,7 @@ export function NotesTimeline({
                 key={item.id}
                 id={item.slug}
                 className={cn(
-                  contentCard({ className: "group overflow-visible p-6" }),
+                  contentCard({ className: "overflow-visible p-6" }),
                   hasFocus && !isFocused && "opacity-40",
                   isFocused && "ring-1 ring-[hsl(var(--foreground)/0.35)]",
                 )}
@@ -139,10 +139,6 @@ export function NotesTimeline({
                       ) : null}
                     </div>
                   </div>
-                  <ShareButton
-                    path={notesPermalink(item.slug)}
-                    className="-mr-1.5 -mt-1.5"
-                  />
                 </div>
 
                 <div
@@ -150,23 +146,22 @@ export function NotesTimeline({
                   dangerouslySetInnerHTML={{ __html: item.body_html }}
                 />
 
-                {(item.diary_tag?.length ?? 0) > 0 ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {[...(item.diary_tag ?? [])].sort().map((tag) => {
-                      const active = currentTag === tag;
-                      return (
-                        <Link
-                          key={tag}
-                          href={`/diary_tag/${encodeURIComponent(tag)}/`}
-                          className={tagChipClass(active)}
-                          data-tag={tag}
-                        >
-                          {tag}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                ) : null}
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {[...(item.diary_tag ?? [])].sort().map((tag) => {
+                    const active = currentTag === tag;
+                    return (
+                      <Link
+                        key={tag}
+                        href={`/diary_tag/${encodeURIComponent(tag)}/`}
+                        className={tagChipClass(active)}
+                        data-tag={tag}
+                      >
+                        {tag}
+                      </Link>
+                    );
+                  })}
+                  <ShareButton path={permalink} />
+                </div>
               </article>
             );
           })}

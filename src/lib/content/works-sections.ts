@@ -10,6 +10,8 @@ export type WorksSectionMeta = {
   label: string;
   /** published = 公開 / private = 非公開（ナビ非表示・404） */
   status: WorksSectionStatus;
+  /** 一覧・記事フォールバック用 OGP（空なら未設定） */
+  og_image: string;
   /** 公開一覧のパス（末尾スラッシュ付き） */
   basePath: string;
   /** 管理画面のパス（末尾スラッシュ付き） */
@@ -21,6 +23,7 @@ export const WORKS_SECTIONS: Record<WorksSectionId, WorksSectionMeta> = {
     id: "creative",
     label: "Creative",
     status: "published",
+    og_image: "",
     basePath: "/works/creative/",
     adminPath: "/admin/creative/",
   },
@@ -28,6 +31,7 @@ export const WORKS_SECTIONS: Record<WorksSectionId, WorksSectionMeta> = {
     id: "experience",
     label: "Experience",
     status: "published",
+    og_image: "",
     basePath: "/works/experience/",
     adminPath: "/admin/experience/",
   },
@@ -35,6 +39,7 @@ export const WORKS_SECTIONS: Record<WorksSectionId, WorksSectionMeta> = {
     id: "chooning",
     label: "Chooning",
     status: "published",
+    og_image: "",
     basePath: "/works/chooning/",
     adminPath: "/admin/chooning/",
   },

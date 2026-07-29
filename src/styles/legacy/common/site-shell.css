@@ -601,22 +601,24 @@
     padding: 40px;
 }
 
-/* タブレット版: 中央配置型の調整 */
+/* タブレット版: 中央配置型の調整（幅固定は廃止 — React shell + overrides に委譲） */
 @media (max-width: 1079px) {
     .layout-main--centered {
-        padding: 64px 0;
-        width: 480px;
-        margin: 0 auto;
-        height: auto;
+        padding: 0;
+        width: 100%;
+        margin: 0;
+        height: 100%;
+        align-items: stretch;
+        justify-content: flex-start;
     }
 }
 
 /* スマホ版: 中央配置型の調整 */
 @media (max-width: 767px) {
     .layout-main--centered {
-        padding: 64px 0;
-        width: 320px;
-        margin: 0 auto;
+        padding: 0;
+        width: 100%;
+        margin: 0;
     }
 }
 
@@ -695,12 +697,15 @@
     box-sizing: border-box;
 }
 
-/* パターン1: 中央配置 */
+/* パターン1: 中央配置 — height:auto + justify center clips overflow; prefer stretch + scroll */
 .layout-main--centered .layout-main__content {
-    width: auto;
-    height: auto;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    min-height: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow-y: auto;
 }
 
 /* パターン2, 4: TOCあり */

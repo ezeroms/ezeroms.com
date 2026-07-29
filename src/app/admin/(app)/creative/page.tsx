@@ -49,7 +49,7 @@ export default async function AdminCreativeListPage() {
         .eq("is_deleted", false)
         .order("date", { ascending: false })
         .limit(300);
-      data = fallback.data;
+      data = fallback.data as typeof data;
       error = fallback.error;
     }
 
@@ -111,6 +111,7 @@ export default async function AdminCreativeListPage() {
               metaApiPath="/api/admin/works/creative/meta/"
               initialLabel={section.label}
               initialStatus={section.status}
+              initialOgImage={section.og_image}
             />
             <WorkCreateButton />
           </div>

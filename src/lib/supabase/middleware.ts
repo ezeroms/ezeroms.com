@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAdminEmail } from "@/lib/supabase/admin-email";
 
 export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -48,8 +49,10 @@ export async function updateSession(request: NextRequest) {
   });
 
   const {
-    data: { user },
+    data: { user: authUser },
   } = await supabase.auth.getUser();
+  const user =
+    authUser && isAdminEmail(authUser.email) ? authUser : null;
 
   if (isAdmin && !isLogin && !user) {
     const redirectUrl = request.nextUrl.clone();

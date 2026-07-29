@@ -1,8 +1,15 @@
 import {
+  appendDateRangeToQuery,
+  dateRangeActive,
+  emptyDateRange,
+  formatDateRangeSummary,
+  isoDateInRange,
+  parseDateRangeFromSearchParams,
+} from "@/lib/content/date-range";
+import {
   decodePipeSeparatedList,
   encodePipeSeparatedList,
   firstSearchParamValue,
-  parseYearList,
   toQueryString,
   type SearchParamsRecord,
 } from "@/lib/content/filter-search-params";
@@ -49,18 +56,19 @@ const TECH_TAGS = new Set([
 
 export type ChronicleFilterState = {
   interests: ChronicleInterestId[];
-  years: string[];
+  from: string | null;
+  to: string | null;
   tags: string[];
 };
 
 export function emptyChronicleFilter(): ChronicleFilterState {
-  return { interests: [], years: [], tags: [] };
+  return { interests: [], ...emptyDateRange(), tags: [] };
 }
 
 export function chronicleFilterActive(filter: ChronicleFilterState): boolean {
   return (
     filter.interests.length > 0 ||
-    filter.years.length > 0 ||
+    dateRangeActive(filter) ||
     filter.tags.length > 0
   );
 }
@@ -69,7 +77,7 @@ function isInterestId(value: string): value is ChronicleInterestId {
   return value === "society" || value === "tech" || value === "personal";
 }
 
-/** Parse `/chronicle/?i=&y=&t=` */
+/** Parse `/chronicle/?i=&from=&to=&t=`（旧 `y=` も可） */
 export function parseChronicleFilter(
   searchParams: SearchParamsRecord,
 ): ChronicleFilterState {
@@ -77,10 +85,14 @@ export function parseChronicleFilter(
     .split(",")
     .map((part) => part.trim())
     .filter(isInterestId);
+  const range = parseDateRangeFromSearchParams(searchParams, {
+    legacyYearsKey: "y",
+  });
 
   return {
     interests,
-    years: parseYearList(firstSearchParamValue(searchParams, "y")),
+    from: range.from,
+    to: range.to,
     tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
   };
 }
@@ -92,12 +104,21 @@ export function serializeChronicleFilter(
   if (filter.interests.length) {
     query.set("i", filter.interests.join(","));
   }
-  if (filter.years.length) query.set("y", filter.years.join(","));
+  appendDateRangeToQuery(query, filter);
   if (filter.tags.length) {
     query.set("t", encodePipeSeparatedList(filter.tags));
   }
   return toQueryString(query);
 }
+
+export function chronicleMatchesDateRange(
+  item: { date: string },
+  range: { from: string | null; to: string | null },
+): boolean {
+  return isoDateInRange(item.date, range);
+}
+
+export { formatDateRangeSummary };
 
 export function chronicleYear(date: string): string {
   const parsed = new Date(date);

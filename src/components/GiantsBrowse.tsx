@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useRef } from "react";
 import type { ShouldersOfGiants } from "@/types/content";
-import { serializeGiantsFilter } from "@/lib/content/giants-filter";
 import { cn } from "@/lib/cn";
-import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
+import { GiantsTopicNav } from "@/components/GiantsTopicNav";
 
 type Props = {
   topics: string[];
@@ -14,25 +13,128 @@ type Props = {
   selectedTopic?: string | null;
 };
 
+type ScrollSnapshot = {
+  listTop: number;
+  mainTop: number;
+};
+
+/** popstate（戻る／進む）直後だけ true。モジュール横断でマウントをまたぐ。 */
+let giantsNavWasPop = false;
+
+function scrollStorageKey(topic: string | null): string {
+  return `giants:list-scroll:${topic ?? ""}`;
+}
+
+function readSnapshot(topic: string | null): ScrollSnapshot | null {
+  try {
+    const raw = sessionStorage.getItem(scrollStorageKey(topic));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<ScrollSnapshot>;
+    return {
+      listTop: Number(parsed.listTop) || 0,
+      mainTop: Number(parsed.mainTop) || 0,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeSnapshot(topic: string | null, snapshot: ScrollSnapshot) {
+  try {
+    sessionStorage.setItem(scrollStorageKey(topic), JSON.stringify(snapshot));
+  } catch {
+    // quota / private mode
+  }
+}
+
 /**
  * 左: 50音順トピックナビ
  * 右: Notes と同型の引用カード
+ * PC（≥1080）は左右を独立スクロール。
  */
 export function GiantsBrowse({
   topics,
   items,
   selectedTopic = null,
 }: Props) {
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // 戻る／進むを検知（Next のソフトナビでも popstate が飛ぶ）
+  useEffect(() => {
+    function onPopState() {
+      giantsNavWasPop = true;
+    }
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  // 現在トピックのスクロール位置を記憶（離脱・切替の cleanup でも保存）
+  useEffect(() => {
+    const list = listRef.current;
+    const main = document.getElementById("main-content");
+
+    function save() {
+      writeSnapshot(selectedTopic, {
+        listTop: list?.scrollTop ?? 0,
+        mainTop: main?.scrollTop ?? 0,
+      });
+    }
+
+    list?.addEventListener("scroll", save, { passive: true });
+    main?.addEventListener("scroll", save, { passive: true });
+    return () => {
+      save();
+      list?.removeEventListener("scroll", save);
+      main?.removeEventListener("scroll", save);
+    };
+  }, [selectedTopic]);
+
+  // リンク遷移 → 先頭／ブラウザバック・フォワード → 記憶位置へ
+  useEffect(() => {
+    const list = listRef.current;
+    const main = document.getElementById("main-content");
+    const wasPop = giantsNavWasPop;
+    giantsNavWasPop = false;
+
+    if (wasPop) {
+      const saved = readSnapshot(selectedTopic);
+      const restore = () => {
+        list?.scrollTo({ top: saved?.listTop ?? 0, left: 0 });
+        main?.scrollTo({ top: saved?.mainTop ?? 0, left: 0 });
+      };
+      restore();
+      // カード描画後に高さが変わることがあるのでもう一度
+      requestAnimationFrame(restore);
+      return;
+    }
+
+    list?.scrollTo({ top: 0, left: 0 });
+    main?.scrollTo({ top: 0, left: 0 });
+    window.scrollTo({ top: 0, left: 0 });
+  }, [selectedTopic]);
+
   return (
     <>
       <div id="notification" className="notification">
         リンクをコピーしました
       </div>
 
-      <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-8">
+      <div
+        className={cn(
+          "flex w-full flex-col gap-6",
+          "min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:flex-row min-[1080px]:gap-8 min-[1080px]:overflow-hidden",
+        )}
+      >
         <GiantsTopicNav topics={topics} selectedTopic={selectedTopic} />
 
-        <div className="min-w-0 flex-1 font-sans" id="giants-list">
+        <div
+          ref={listRef}
+          className={cn(
+            "min-w-0 flex-1 font-sans",
+            "min-[1080px]:min-h-0 min-[1080px]:overflow-y-auto",
+          )}
+          id="giants-list"
+        >
           {!items.length ? (
             <p className="py-10 text-sm text-muted-foreground">
               {selectedTopic
@@ -40,7 +142,7 @@ export function GiantsBrowse({
                 : "まだメモがありません。"}
             </p>
           ) : (
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+            <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 min-[1080px]:pb-6">
               {items.map((item) => (
                 <GiantsQuoteCard
                   key={item.id}
@@ -53,59 +155,5 @@ export function GiantsBrowse({
         </div>
       </div>
     </>
-  );
-}
-
-function GiantsTopicNav({
-  topics,
-  selectedTopic,
-}: {
-  topics: string[];
-  selectedTopic?: string | null;
-}) {
-  const sorted = [...topics].sort((a, b) => a.localeCompare(b, "ja"));
-
-  return (
-    <aside
-      className={cn(
-        "w-full shrink-0 lg:sticky lg:top-0 lg:w-52 lg:self-start",
-        "lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto",
-      )}
-      aria-label="トピック一覧"
-    >
-      <ul className="m-0 flex list-none flex-wrap gap-1 p-0 lg:flex-col lg:flex-nowrap lg:gap-0.5">
-        <li className="min-w-0 lg:w-full">
-          <Link
-            href="/shoulders-of-giants/"
-            className={cn(sidebarNavItemClass(!selectedTopic), "text-sm")}
-          >
-            すべて
-          </Link>
-        </li>
-        {sorted.map((topic) => {
-          const active = selectedTopic === topic;
-          return (
-            <li key={topic} className="min-w-0 lg:w-full">
-              <Link
-                href={`/shoulders-of-giants/${serializeGiantsFilter({
-                  topics: [topic],
-                })}`}
-                className={cn(
-                  sidebarNavItemClass(active),
-                  "truncate text-sm leading-snug",
-                )}
-              >
-                {topic}
-              </Link>
-            </li>
-          );
-        })}
-        {!sorted.length ? (
-          <li className="px-2 py-1.5 text-xs text-muted-foreground">
-            トピックがありません
-          </li>
-        ) : null}
-      </ul>
-    </aside>
   );
 }

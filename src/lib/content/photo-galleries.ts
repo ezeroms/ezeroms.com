@@ -1,5 +1,5 @@
-/** Photos 配下のギャラリー ID（Smile / Jampai / Kuikake）。 */
-export type PhotoGalleryId = "smile" | "jumpai" | "kuikake";
+/** Photos 配下のギャラリー ID（Smile / Jampai / Tabekake）。 */
+export type PhotoGalleryId = "smile" | "jumpai" | "tabekake";
 
 /** 公開サイトでのページ公開状態 */
 export type PhotoGalleryStatus = "published" | "private";
@@ -13,6 +13,8 @@ export type PhotoGalleryMeta = {
   description: string;
   /** published = 公開 / private = 非公開（ナビ非表示・404） */
   status: PhotoGalleryStatus;
+  /** 一覧・記事フォールバック用 OGP（空なら未設定） */
+  og_image: string;
   /** 公開一覧のパス（末尾スラッシュ付き） */
   basePath: string;
   /** 管理画面のパス（末尾スラッシュ付き） */
@@ -27,28 +29,32 @@ export const PHOTO_GALLERIES: Record<PhotoGalleryId, PhotoGalleryMeta> = {
     description:
       "作品として見せたい写真のギャラリー。Smile に収めた一枚です。",
     status: "published",
+    og_image: "",
     basePath: "/smile/",
     adminPath: "/admin/smile/",
   },
   jumpai: {
     id: "jumpai",
     table: "jumpai",
+    // UI 表記は Jampai。URL・DB id は歴史的経緯で jumpai のまま。
     label: "Jampai",
     description:
       "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
     status: "published",
+    og_image: "",
     basePath: "/jumpai/",
     adminPath: "/admin/jumpai/",
   },
-  kuikake: {
-    id: "kuikake",
-    table: "kuikake",
-    label: "Kuikake",
+  tabekake: {
+    id: "tabekake",
+    table: "tabekake",
+    label: "Tabekake",
     description:
-      "作品として見せたい写真のギャラリー。Kuikake に収めた一枚です。",
+      "作品として見せたい写真のギャラリー。Tabekake に収めた一枚です。",
     status: "published",
-    basePath: "/kuikake/",
-    adminPath: "/admin/kuikake/",
+    og_image: "",
+    basePath: "/tabekake/",
+    adminPath: "/admin/tabekake/",
   },
 };
 

@@ -11,7 +11,7 @@
     "migrate:experience": "tsx scripts/migrate-to-supabase/index.ts experience",
     "migrate:smile": "tsx scripts/migrate-to-supabase/index.ts smile",
     "migrate:jumpai": "tsx scripts/migrate-to-supabase/index.ts jumpai",
-    "migrate:kuikake": "tsx scripts/migrate-to-supabase/index.ts kuikake",
+    "migrate:tabekake": "tsx scripts/migrate-to-supabase/index.ts tabekake",
     "migrate:top-images": "tsx scripts/migrate-to-supabase/upload-top-images.ts",
     "db:apply": "tsx scripts/admin/apply-sql.ts",
     "admin:create-user": "tsx scripts/admin/create-user.ts",

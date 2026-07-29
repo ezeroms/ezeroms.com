@@ -5,8 +5,10 @@ import {
   type AdminColumnTableItem,
 } from "@/components/admin/AdminColumnListTable";
 import { ColumnCreateButton } from "@/components/admin/ColumnCreateButton";
+import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
+import { loadWritingSection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -14,6 +16,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminColumnListPage() {
   await getSessionUser();
+  const section = await loadWritingSection("column");
 
   let items: AdminColumnTableItem[] = [];
   let loadError: string | null = null;
@@ -37,7 +40,7 @@ export default async function AdminColumnListPage() {
         .eq("is_deleted", false)
         .order("date", { ascending: false })
         .limit(200);
-      data = fallback.data;
+      data = fallback.data as typeof data;
       error = fallback.error;
     }
 
@@ -78,7 +81,21 @@ export default async function AdminColumnListPage() {
 
   return (
     <AdminContent width="wide">
-      <AdminPageHeader title="Column" actions={<ColumnCreateButton />} />
+      <AdminPageHeader
+        title={section.label}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <WorksSectionSettingsModal
+              metaApiPath="/api/admin/writing/column/meta/"
+              initialLabel={section.label}
+              initialStatus={section.status}
+              initialOgImage={section.og_image}
+              ogUploadKind="column-section"
+            />
+            <ColumnCreateButton />
+          </div>
+        }
+      />
       {loadError ? (
         <p className="mb-3 text-sm text-destructive">
           一覧の取得に失敗しました: {loadError}

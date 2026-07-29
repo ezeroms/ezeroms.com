@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Chronicle } from "@/types/content";
 import {
   chronicleYear,
+  emptyChronicleFilter,
   formatChronicleWhen,
   serializeChronicleFilter,
 } from "@/lib/content/chronicle-filter";
@@ -81,8 +82,7 @@ export function ChronicleTimeline({ items }: Props) {
                     <Link
                       key={tag}
                       href={`/chronicle/${serializeChronicleFilter({
-                        interests: [],
-                        years: [],
+                        ...emptyChronicleFilter(),
                         tags: [tag],
                       })}`}
                       className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground no-underline hover:bg-accent hover:text-foreground"

@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ type Props = {
   initialLabel: string;
   initialDescription: string;
   initialStatus?: PhotoGalleryStatus;
+  initialOgImage?: string;
   /** 保存成功時（モーダルを閉じるなど） */
   onSaved?: () => void;
   /** 送信中フラグの変化（フッターボタン用） */
@@ -35,12 +37,13 @@ type Props = {
   formId?: string;
 };
 
-/** ギャラリーの表示名・説明文・公開状態を編集する。 */
+/** ギャラリーの表示名・説明文・公開状態・OGP を編集する。 */
 export function PhotoGalleryMetaForm({
   galleryId,
   initialLabel,
   initialDescription,
   initialStatus = "published",
+  initialOgImage = "",
   onSaved,
   onLoadingChange,
   hideSubmit = false,
@@ -50,6 +53,7 @@ export function PhotoGalleryMetaForm({
   const [label, setLabel] = useState(initialLabel);
   const [description, setDescription] = useState(initialDescription);
   const [status, setStatus] = useState<PhotoGalleryStatus>(initialStatus);
+  const [ogImage, setOgImage] = useState(initialOgImage);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -68,7 +72,12 @@ export function PhotoGalleryMetaForm({
       const res = await fetch(`/api/admin/photos/${galleryId}/meta/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ label, description, status }),
+        body: JSON.stringify({
+          label,
+          description,
+          status,
+          og_image: ogImage,
+        }),
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
@@ -135,6 +144,14 @@ export function PhotoGalleryMetaForm({
           <option value="private">非公開</option>
         </Select>
       </div>
+
+      <OgImageField
+        id="gallery-og-image"
+        value={ogImage}
+        onChange={setOgImage}
+        uploadKind={`photo-${galleryId}`}
+        disabled={loading}
+      />
 
       {!hideSubmit ? (
         <div>

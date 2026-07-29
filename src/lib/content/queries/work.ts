@@ -4,7 +4,6 @@ import {
   hasSupabaseConfig,
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
-import { workYear } from "@/lib/content/work-filter";
 import type { Work } from "@/types/content";
 
 export async function listWork(opts?: {
@@ -13,7 +12,8 @@ export async function listWork(opts?: {
   tag?: string;
   tags?: string[];
   clients?: string[];
-  years?: string[];
+  from?: string | null;
+  to?: string | null;
   kinds?: import("@/types/content").WorkKind[];
   /** Exclude these kinds (e.g. Creative excludes involvement) */
   excludeKinds?: import("@/types/content").WorkKind[];
@@ -48,7 +48,7 @@ export async function listWork(opts?: {
 
     const { data, error, count } = await q;
     if (error) throw error;
-    const { normalizeWorkRow, workYear } = await import(
+    const { normalizeWorkRow, workMatchesDateRange } = await import(
       "@/lib/content/work-filter"
     );
     let items = ((data ?? []) as Work[]).map((row) =>
@@ -64,12 +64,13 @@ export async function listWork(opts?: {
     if (opts?.productKey) {
       items = items.filter((w) => w.product_key === opts.productKey);
     }
-    if (opts?.years?.length) {
-      items = items.filter((w) => opts.years!.includes(workYear(w)));
+    const range = { from: opts?.from ?? null, to: opts?.to ?? null };
+    if (range.from || range.to) {
+      items = items.filter((w) => workMatchesDateRange(w, range));
     }
 
     const needsPost =
-      Boolean(opts?.years?.length) ||
+      Boolean(range.from || range.to) ||
       Boolean(opts?.excludeKinds?.length) ||
       Boolean(opts?.kinds?.length) ||
       Boolean(opts?.productKey);
@@ -124,4 +125,44 @@ export async function getWorkBySlug(slug: string): Promise<Work | null> {
   if (!data) return null;
   const { normalizeWorkRow } = await import("@/lib/content/work-filter");
   return normalizeWorkRow(data as unknown as Record<string, unknown>) as Work;
+}
+
+/** Same type (Work) posts that share ≥1 tag, ranked by overlap then date. */
+export async function listRelatedWork(
+  item: Pick<Work, "slug" | "work_tag">,
+  limit = 6,
+): Promise<Work[]> {
+  const tags = item.work_tag ?? [];
+  if (!tags.length) return [];
+  const { items } = await listWork({
+    tags,
+    excludeKinds: ["involvement"],
+  });
+  const { rankBySharedTags } = await import("@/lib/content/related");
+  return rankBySharedTags({
+    currentSlug: item.slug,
+    currentTags: tags,
+    candidates: items,
+    getTags: (w) => w.work_tag,
+    limit,
+  });
+}
+
+/**
+ * 公開 Creative を日付新しい順で見たときの隣接作品。
+ * - previous: より古い（一覧では後ろ）
+ * - next: より新しい（一覧では前）
+ */
+export async function getAdjacentWork(slug: string): Promise<{
+  previous: Work | null;
+  next: Work | null;
+}> {
+  const { items } = await listWork({ excludeKinds: ["involvement"] });
+  const index = items.findIndex((w) => w.slug === slug);
+  if (index < 0) return { previous: null, next: null };
+
+  return {
+    previous: index < items.length - 1 ? items[index + 1]! : null,
+    next: index > 0 ? items[index - 1]! : null,
+  };
 }

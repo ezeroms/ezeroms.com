@@ -20,27 +20,25 @@ type Props = {
   bodyHtml?: string;
   selectedTopic?: string | null;
   activeTopics?: string[];
-  /** When no source_url, link citation to the Giants detail page (list cards). */
-  linkCitationToDetail?: boolean;
   className?: string;
   articleClassName?: string;
 };
 
 /**
- * Giants quote card — Notes list chrome (surface, body, tags) + share at bottom-right.
+ * Giants quote card — Notes list chrome (surface, body, tags) + share after tags.
+ * 書誌行は購入リンク（source_url）があるときだけ外部リンク（別タブ）。
  */
 export function GiantsQuoteCard({
   item,
   bodyHtml,
   selectedTopic = null,
   activeTopics = [],
-  linkCitationToDetail = true,
   className,
   articleClassName,
 }: Props) {
   const permalink = giantsPermalink(item.slug);
   const citation = formatGiantsCitation(item);
-  const sourceUrl = item.source_url?.trim() || "";
+  const purchaseUrl = item.source_url?.trim() || "";
   const topics = [...(item.topic ?? [])].sort((a, b) =>
     a.localeCompare(b, "ja"),
   );
@@ -48,25 +46,16 @@ export function GiantsQuoteCard({
 
   let citationNode: ReactNode = null;
   if (citation) {
-    if (sourceUrl) {
+    if (purchaseUrl) {
       citationNode = (
         <a
-          href={sourceUrl}
+          href={purchaseUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-inherit no-underline hover:underline hover:underline-offset-2"
+          className="text-inherit underline underline-offset-2 decoration-foreground/35 transition-colors hover:decoration-foreground"
         >
           {citation}
         </a>
-      );
-    } else if (linkCitationToDetail) {
-      citationNode = (
-        <Link
-          href={permalink}
-          className="text-inherit no-underline hover:underline hover:underline-offset-2"
-        >
-          {citation}
-        </Link>
       );
     } else {
       citationNode = citation;
@@ -79,7 +68,7 @@ export function GiantsQuoteCard({
       data-permalink={permalink}
       className={contentCard({
         className: cn(
-          "group overflow-visible p-6",
+          "overflow-visible p-6",
           className,
           articleClassName,
         ),
@@ -91,33 +80,28 @@ export function GiantsQuoteCard({
       />
 
       {citationNode ? (
-        <p className="m-0 mt-4 text-base leading-relaxed text-foreground">
+        <p className="m-0 mt-4 text-base leading-[1.8] text-foreground">
           {citationNode}
         </p>
       ) : null}
 
-      <div className="mt-4 flex items-end justify-between gap-3">
-        <div className="flex min-w-0 flex-1 flex-wrap gap-2">
-          {topics.map((topic) => {
-            const active =
-              selectedTopic === topic || activeTopics.includes(topic);
-            return (
-              <Link
-                key={topic}
-                href={`/shoulders-of-giants/${serializeGiantsFilter({
-                  topics: [topic],
-                })}`}
-                className={tagChipClass(active)}
-              >
-                {topic}
-              </Link>
-            );
-          })}
-        </div>
-        <ShareButton
-          path={permalink}
-          className="-mb-1.5 -mr-1.5 shrink-0"
-        />
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        {topics.map((topic) => {
+          const active =
+            selectedTopic === topic || activeTopics.includes(topic);
+          return (
+            <Link
+              key={topic}
+              href={`/shoulders-of-giants/${serializeGiantsFilter({
+                topics: [topic],
+              })}`}
+              className={tagChipClass(active)}
+            >
+              {topic}
+            </Link>
+          );
+        })}
+        <ShareButton path={permalink} />
       </div>
     </article>
   );

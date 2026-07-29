@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { GiantsArticle } from "@/components/GiantsArticle";
-import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import {
   formatGiantsCitation,
@@ -16,6 +15,8 @@ import {
 import {
   getGiantsBySlug,
   listGiants,
+  listGiantsTopics,
+  listRelatedGiants,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
@@ -44,7 +45,7 @@ export async function generateMetadata({
   const title = citation || item.book_title || "The shoulders of Giants";
   const description = giantsExcerpt(item.body_html, 160) || undefined;
   const url = `${siteUrl()}${giantsPermalink(slug)}`;
-  const ogImage = resolveOgImageUrl(item.og_image);
+  const ogImage = resolveOgImageUrl(item.og_image, section.og_image);
   const images = ogImageMetadata(ogImage);
 
   return {
@@ -78,17 +79,33 @@ export default async function GiantsEntryPage({
   const citation = formatGiantsCitation(item);
   const bodyHtml = sanitizeBody(item.body_html);
 
+  const [topics, related] = await Promise.all([
+    listGiantsTopics().catch(() => [] as string[]),
+    listRelatedGiants(item).catch(() => []),
+  ]);
+
+  const relatedSanitized = related.map((entry) => ({
+    ...entry,
+    body_html: sanitizeBody(entry.body_html),
+  }));
+
   return (
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
-      mobileHeader={
-        <MobileHeader title={citation || "The shoulders of Giants"} />
-      }
       showTagsAside={false}
       breadcrumbCurrent={citation || item.book_title || slug}
       mainClassName="layout-main--single"
+      mainContentClassName="min-[1080px]:flex min-[1080px]:flex-col min-[1080px]:overflow-hidden"
+      contentClassName={
+        "flex w-full flex-col p-4 min-[768px]:p-5 min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:overflow-hidden min-[1080px]:p-6"
+      }
     >
-      <GiantsArticle item={item} bodyHtml={bodyHtml} />
+      <GiantsArticle
+        item={item}
+        bodyHtml={bodyHtml}
+        topics={topics}
+        related={relatedSanitized}
+      />
     </SiteShell>
   );
 }

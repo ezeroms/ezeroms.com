@@ -3,6 +3,13 @@
  * 見た目は Smile / Jampai 見出しと同系統（小さめ・muted）。
  */
 
+import {
+  isSearchPath,
+  resolveSearchScope,
+  searchPathForScope,
+  SECTION_INDEX_BY_SCOPE,
+} from "@/lib/content/search-scope";
+
 export type BreadcrumbItem = {
   label: string;
   /** 省略時は現在地（リンクなし）またはセクション見出し */
@@ -18,6 +25,18 @@ function isDetailUnder(base: string, path: string): boolean {
   // /smile/foo/ のように base 直下の1セグメント詳細
   const escaped = base.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`^${escaped}[^/]+/$`).test(path);
+}
+
+function withLinkedCurrent(
+  trail: BreadcrumbItem[],
+  indexHref: string,
+): BreadcrumbItem[] {
+  if (!trail.length) return trail;
+  return trail.map((item, index) =>
+    index === trail.length - 1 && !item.href
+      ? { ...item, href: indexHref }
+      : item,
+  );
 }
 
 /**
@@ -39,6 +58,34 @@ export function resolveBreadcrumbs(
     return [...trail, { label }];
   };
 
+  // セクション検索 / サイト全体検索（詳細スラッグより先に判定）
+  if (isSearchPath(path)) {
+    if (path === "/search/") {
+      if (currentLabel?.trim()) {
+        return [
+          { label: "Search", href: "/search/" },
+          { label: currentLabel.trim() },
+        ];
+      }
+      return [{ label: "Search" }];
+    }
+
+    const scope = resolveSearchScope(path);
+    const indexHref = SECTION_INDEX_BY_SCOPE[scope.id];
+    const sectionTrail = resolveBreadcrumbs(indexHref) ?? [];
+    const trail = withLinkedCurrent(sectionTrail, indexHref);
+    const searchHref = searchPathForScope(scope.id);
+
+    if (currentLabel?.trim()) {
+      return [
+        ...trail,
+        { label: "Search", href: searchHref },
+        { label: currentLabel.trim() },
+      ];
+    }
+    return [...trail, { label: "Search" }];
+  }
+
   // Photos
   if (path.startsWith("/smile/")) {
     if (isDetailUnder("/smile/", path)) {
@@ -58,14 +105,14 @@ export function resolveBreadcrumbs(
     }
     return [{ label: "Photos" }, { label: "Jampai" }];
   }
-  if (path.startsWith("/kuikake/")) {
-    if (isDetailUnder("/kuikake/", path)) {
+  if (path.startsWith("/tabekake/")) {
+    if (isDetailUnder("/tabekake/", path)) {
       return withCurrent(
-        [{ label: "Photos" }, { label: "Kuikake", href: "/kuikake/" }],
+        [{ label: "Photos" }, { label: "Tabekake", href: "/tabekake/" }],
         "Photo",
       );
     }
-    return [{ label: "Photos" }, { label: "Kuikake" }];
+    return [{ label: "Photos" }, { label: "Tabekake" }];
   }
 
   // Writing — Notes
@@ -176,16 +223,6 @@ export function resolveBreadcrumbs(
   }
   if (path.startsWith("/about/")) {
     return [{ label: "About" }];
-  }
-
-  if (path.startsWith("/search/")) {
-    if (currentLabel?.trim()) {
-      return [
-        { label: "Search", href: "/search/" },
-        { label: currentLabel.trim() },
-      ];
-    }
-    return [{ label: "Search" }];
   }
 
   if (path.startsWith("/ui-design-guidebook/")) {

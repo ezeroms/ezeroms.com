@@ -1,44 +1,51 @@
 import type { Metadata } from "next";
 import { ColumnFilterPanel } from "@/components/ColumnFilterPanel";
 import { ColumnList } from "@/components/ColumnList";
-import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import {
   columnFilterActive,
   parseColumnFilter,
 } from "@/lib/content/column-filter";
+import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import { summarizeColumnFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listColumn,
-  listColumnMonths,
   listColumnTaxonomy,
+  requirePublicWritingSection,
 } from "@/lib/content/queries";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Column",
-  description:
-    "長めの記事。技術・考察・エッセイなど、きちんと書き切る場所です。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicWritingSection("column").catch(() => null);
+  return sectionListingMetadata({
+    title: section?.label ?? "Column",
+    description:
+      section?.description ??
+      "長めの記事。技術・考察・エッセイなど、きちんと書き切る場所です。",
+    ogImage: section?.og_image,
+  });
+}
 
 export default async function ColumnIndexPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const section = await requirePublicWritingSection("column");
   const resolvedSearchParams = await searchParams;
-  const filter = parseColumnFilter(resolvedSearchParams);
+  const parsed = parseColumnFilter(resolvedSearchParams);
+  // Column has no weekday facet
+  const filter = { ...parsed, weekdays: [] as number[] };
   const filtering = columnFilterActive(filter);
 
-  const [months, taxonomy, listed] = await Promise.all([
-    listColumnMonths().catch(() => [] as string[]),
+  const [taxonomy, listed] = await Promise.all([
     listColumnTaxonomy().catch(() => ({ categories: [], tags: [] })),
     listColumn(
       filtering
         ? {
-            months: filter.months,
-            weekdays: filter.weekdays,
+            from: filter.from,
+            to: filter.to,
             categories: filter.categories,
             tags: filter.tags,
           }
@@ -49,10 +56,8 @@ export default async function ColumnIndexPage({
   return (
     <SiteShell
       bodyClassName="is-column"
-      mobileHeader={<MobileHeader title="Column" />}
       secondary={
         <ColumnFilterPanel
-          months={months}
           categories={taxonomy.categories}
           tags={taxonomy.tags}
           initial={filter}
@@ -67,6 +72,7 @@ export default async function ColumnIndexPage({
       <ColumnList
         items={listed.items}
         listId="column-articles-list"
+        fallbackThumbSrc={section.og_image || null}
         currentCategory={
           filter.categories.length === 1 ? filter.categories[0] : undefined
         }

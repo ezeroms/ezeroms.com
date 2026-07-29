@@ -1,14 +1,21 @@
 import {
+  appendDateRangeToQuery,
+  dateRangeActive,
+  emptyDateRange,
+  formatDateRangeSummary,
+  isoDateInRange,
+  parseDateRangeFromSearchParams,
+  type DateRangeValue,
+} from "@/lib/content/date-range";
+import {
   decodePipeSeparatedList,
   encodePipeSeparatedList,
   firstSearchParamValue,
   parseWeekdayList,
-  parseYearMonthList,
   toQueryString,
   type SearchParamsRecord,
 } from "@/lib/content/filter-search-params";
 import type { Diary } from "@/types/content";
-import { notesMonthKey } from "@/lib/content/notes-meta";
 
 export const WEEKDAY_LABELS = [
   "Sun",
@@ -21,31 +28,36 @@ export const WEEKDAY_LABELS = [
 ] as const;
 
 export type NotesFilterState = {
-  months: string[];
+  from: string | null;
+  to: string | null;
   weekdays: number[];
   tags: string[];
   places: string[];
 };
 
 export function emptyNotesFilter(): NotesFilterState {
-  return { months: [], weekdays: [], tags: [], places: [] };
+  return { ...emptyDateRange(), weekdays: [], tags: [], places: [] };
 }
 
 export function notesFilterActive(filter: NotesFilterState): boolean {
   return (
-    filter.months.length > 0 ||
+    dateRangeActive(filter) ||
     filter.weekdays.length > 0 ||
     filter.tags.length > 0 ||
     filter.places.length > 0
   );
 }
 
-/** Parse `/diary/?m=&w=&t=&p=` */
+/** Parse `/diary/?from=&to=&w=&t=&p=`（旧 `m=` 年月も可） */
 export function parseNotesFilter(
   searchParams: SearchParamsRecord,
 ): NotesFilterState {
+  const range = parseDateRangeFromSearchParams(searchParams, {
+    legacyMonthsKey: "m",
+  });
   return {
-    months: parseYearMonthList(firstSearchParamValue(searchParams, "m")),
+    from: range.from,
+    to: range.to,
     weekdays: parseWeekdayList(firstSearchParamValue(searchParams, "w")),
     tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
     places: decodePipeSeparatedList(firstSearchParamValue(searchParams, "p")),
@@ -54,7 +66,7 @@ export function parseNotesFilter(
 
 export function serializeNotesFilter(filter: NotesFilterState): string {
   const query = new URLSearchParams();
-  if (filter.months.length) query.set("m", filter.months.join(","));
+  appendDateRangeToQuery(query, filter);
   if (filter.weekdays.length) query.set("w", filter.weekdays.join(","));
   if (filter.tags.length) {
     query.set("t", encodePipeSeparatedList(filter.tags));
@@ -76,19 +88,11 @@ export function formatMonthLabel(ym: string): string {
   });
 }
 
-export function diaryMatchesMonths(item: Diary, months: string[]): boolean {
-  if (!months.length) return true;
-  const key = notesMonthKey(item);
-  if (months.includes(key)) return true;
-  return (item.diary_month ?? []).some((raw) => {
-    const slash = raw.match(/^(\d{4})\/(\d{1,2})/);
-    if (slash) {
-      return months.includes(
-        `${slash[1]}-${slash[2].padStart(2, "0")}`,
-      );
-    }
-    return months.includes(raw.slice(0, 7));
-  });
+export function diaryMatchesDateRange(
+  item: Diary,
+  range: DateRangeValue,
+): boolean {
+  return isoDateInRange(item.date, range);
 }
 
 export function diaryMatchesWeekdays(item: Diary, weekdays: number[]): boolean {
@@ -97,11 +101,12 @@ export function diaryMatchesWeekdays(item: Diary, weekdays: number[]): boolean {
   return weekdays.includes(day);
 }
 
-/** Match YYYY-MM against an ISO date string (clips / generic). */
-export function dateMatchesMonths(iso: string, months: string[]): boolean {
-  if (!months.length) return true;
-  const key = iso.slice(0, 7);
-  return months.includes(key);
+/** Match ISO date against a range (clips / column / generic). */
+export function dateMatchesRange(
+  iso: string,
+  range: DateRangeValue,
+): boolean {
+  return isoDateInRange(iso, range);
 }
 
 export function dateMatchesWeekdays(iso: string, weekdays: number[]): boolean {
@@ -109,3 +114,5 @@ export function dateMatchesWeekdays(iso: string, weekdays: number[]): boolean {
   const day = new Date(iso).getDay();
   return weekdays.includes(day);
 }
+
+export { formatDateRangeSummary };

@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 import { contentCard } from "@/lib/site/card-styles";
 
 const CARD_LINK_LAYOUT =
-  "grid grid-cols-[minmax(0,38%)_minmax(0,1fr)] items-stretch text-inherit no-underline sm:grid-cols-[minmax(0,40%)_minmax(0,1fr)]";
+  "grid grid-cols-1 items-stretch text-inherit no-underline min-[480px]:grid-cols-[minmax(0,38%)_minmax(0,1fr)] sm:grid-cols-[minmax(0,40%)_minmax(0,1fr)]";
 
 type Props = {
   href: string;
@@ -54,7 +54,7 @@ export function ContentThumbCard({
 
   const body = (
     <>
-      <div className="relative min-h-0 overflow-hidden bg-muted">
+      <div className="relative min-h-[11rem] overflow-hidden bg-muted min-[480px]:min-h-0">
         {thumbSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -116,5 +116,8 @@ export function ContentThumbCard({
 
 /** 一覧の外枠（中央寄せ・カード縦積み） */
 export function contentThumbCardListClassName(className?: string) {
-  return cn("mx-auto flex w-full max-w-3xl flex-col gap-6", className);
+  return cn(
+    "mx-auto flex w-full max-w-3xl flex-col gap-4 min-[768px]:gap-5 min-[1080px]:gap-6",
+    className,
+  );
 }

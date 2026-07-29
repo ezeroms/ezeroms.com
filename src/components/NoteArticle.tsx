@@ -33,7 +33,7 @@ export function NoteArticle({ item, bodyHtml }: Props) {
         リンクをコピーしました
       </div>
 
-      <article className={contentCard({ className: "group mx-auto min-w-0 w-full max-w-3xl overflow-visible p-6" })}>
+      <article className={contentCard({ className: "mx-auto min-w-0 w-full max-w-3xl overflow-visible p-6" })}>
         <div className="mb-4 flex items-start gap-3">
           <Link
             href="/about/me/"
@@ -73,28 +73,23 @@ export function NoteArticle({ item, bodyHtml }: Props) {
               ) : null}
             </div>
           </div>
-          <ShareButton
-            path={permalink}
-            className="-mr-1.5 -mt-1.5"
-          />
         </div>
 
         <ArticleProse className={notesBodyClass} html={bodyHtml} />
 
-        {tags.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/diary_tag/${encodeURIComponent(tag)}/`}
-                className={tagChipClass(false)}
-                data-tag={tag}
-              >
-                {tag}
-              </Link>
-            ))}
-          </div>
-        ) : null}
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          {tags.map((tag) => (
+            <Link
+              key={tag}
+              href={`/diary_tag/${encodeURIComponent(tag)}/`}
+              className={tagChipClass(false)}
+              data-tag={tag}
+            >
+              {tag}
+            </Link>
+          ))}
+          <ShareButton path={permalink} />
+        </div>
       </article>
     </div>
   );

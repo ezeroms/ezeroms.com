@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MobileHeader } from "@/components/MobileHeader";
 import { NoteArticle } from "@/components/NoteArticle";
 import { SiteShell } from "@/components/SiteShell";
 import { absoluteUrl } from "@/lib/content/absolute-url";
@@ -16,7 +15,12 @@ import {
   resolveOgImageUrl,
   siteUrl,
 } from "@/lib/content/og-image";
-import { getDiaryBySlug, listDiary, listRelatedDiary } from "@/lib/content/queries";
+import {
+  getDiaryBySlug,
+  listDiary,
+  listRelatedDiary,
+  loadWritingSection,
+} from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 import { NotesTimeline } from "@/components/NotesTimeline";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
@@ -39,9 +43,14 @@ export async function generateMetadata({
   const item = await getDiaryBySlug(slug);
   if (!item) return { title: "Notes" };
 
+  const section = await loadWritingSection("notes");
   const title = notesTitle(item);
   const description = notesExcerpt(item.body_html, 160) || undefined;
-  const ogImage = resolveOgImageUrl(item.og_image, firstImageSrc(item.body_html));
+  const ogImage = resolveOgImageUrl(
+    item.og_image,
+    section.og_image,
+    firstImageSrc(item.body_html),
+  );
   const url = absoluteUrl(notesPermalink(slug), siteUrl());
   const images = ogImageMetadata(ogImage);
 
@@ -82,7 +91,6 @@ export default async function DiaryEntryPage({
   return (
     <SiteShell
       bodyClassName="is-diary"
-      mobileHeader={<MobileHeader title={breadcrumbLabel} />}
       breadcrumbCurrent={breadcrumbLabel}
       showTagsAside={false}
       mainClassName="layout-main--single"

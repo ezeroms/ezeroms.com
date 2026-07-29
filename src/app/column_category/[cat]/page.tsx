@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
-import { serializeColumnFilter } from "@/lib/content/column-filter";
+import {
+  emptyColumnFilter,
+  serializeColumnFilter,
+} from "@/lib/content/column-filter";
 
 export const revalidate = 60;
 
@@ -13,10 +16,8 @@ export default async function ColumnCategoryPage({
   const category = decodeURIComponent(cat);
   redirect(
     `/column/${serializeColumnFilter({
-      months: [],
-      weekdays: [],
+      ...emptyColumnFilter(),
       categories: [category],
-      tags: [],
     })}`,
   );
 }

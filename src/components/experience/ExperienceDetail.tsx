@@ -77,7 +77,7 @@ export function ExperienceDetail({ item, className }: Props) {
       {item.body_html?.trim() ? (
         <div
           className={cn(
-            "mt-4 max-w-none text-base leading-relaxed text-[#3c4043]",
+            "mt-4 max-w-none text-base leading-[1.8] text-[#3c4043]",
             proseBodyClass,
           )}
           dangerouslySetInnerHTML={{ __html: item.body_html }}

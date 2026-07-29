@@ -42,7 +42,7 @@ export function AboutMeProfile({ data }: Props) {
           {profile.bio_html?.trim() ? (
             <div
               className={cn(
-                "about-me__bio min-w-0 text-base leading-relaxed text-foreground",
+                "about-me__bio min-w-0 text-base leading-[1.8] text-foreground",
                 proseBodyClass,
                 "[&_p]:m-0 [&_p+p]:mt-4",
                 "[&_a]:underline [&_a]:underline-offset-2",
@@ -56,7 +56,7 @@ export function AboutMeProfile({ data }: Props) {
               <h2 className="mb-3 mt-0 scroll-mt-6 border-b border-border pb-2 text-xl font-semibold tracking-tight">
                 😍 Favorite things
               </h2>
-              <p className="m-0 text-base leading-relaxed text-foreground">
+              <p className="m-0 text-base leading-[1.8] text-foreground">
                 {favorites.map((f) => f.label).join("、")}
               </p>
             </section>

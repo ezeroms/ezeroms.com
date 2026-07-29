@@ -1,6 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { User } from "@supabase/supabase-js";
+import { isAdminEmail } from "@/lib/supabase/admin-email";
+
+export { isAdminEmail } from "@/lib/supabase/admin-email";
 
 export function hasAnonConfig(): boolean {
   return Boolean(
@@ -44,6 +47,7 @@ export async function getSessionUser(): Promise<User | null> {
   const supabase = await createAuthClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
+  if (!isAdminEmail(data.user.email)) return null;
   return data.user;
 }
 

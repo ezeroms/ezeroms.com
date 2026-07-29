@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense, type ReactNode } from "react";
 import type { BreadcrumbItem } from "@/lib/site/breadcrumbs";
 import { BreadcrumbInfoButton } from "@/components/BreadcrumbInfoButton";
 import { HeaderSearch } from "@/components/HeaderSearch";
@@ -14,17 +15,35 @@ type Props = {
    * 詳細ページや絞り込み階層があるときは渡さない。
    */
   infoDescription?: string | null;
+  /** 検索モーダル内に出す絞り込みパネル */
+  filterPanel?: ReactNode;
+  /** 絞り込み適用中インジケーター */
+  filterActive?: boolean;
 };
+
+function HeaderSearchFallback({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex h-9 w-9 shrink-0 min-[768px]:h-7 min-[768px]:w-16",
+        className,
+      )}
+      aria-hidden
+    />
+  );
+}
 
 /**
  * Smile / Jampai 見出しと同トーンのパンくず行。
- * 左: パンくず / 右: 控えめな検索窓
+ * 左: パンくず / 右: 検索（＋条件フィルター）
  */
 export function BreadcrumbHeader({
   items,
   showSearch = true,
   className,
   infoDescription,
+  filterPanel,
+  filterActive = false,
 }: Props) {
   if (!items.length) return null;
 
@@ -34,7 +53,7 @@ export function BreadcrumbHeader({
   return (
     <div
       className={cn(
-        "flex h-full w-full items-center justify-between gap-4",
+        "flex h-full w-full items-center justify-between gap-2 min-[768px]:gap-4",
         className,
       )}
     >
@@ -88,7 +107,14 @@ export function BreadcrumbHeader({
         </ol>
       </nav>
 
-      {showSearch ? <HeaderSearch /> : null}
+      {showSearch ? (
+        <Suspense fallback={<HeaderSearchFallback />}>
+          <HeaderSearch
+            filterPanel={filterPanel}
+            filterActive={filterActive}
+          />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

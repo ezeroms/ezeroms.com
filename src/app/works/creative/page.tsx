@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import { WorkFilterPanel } from "@/components/WorkFilterPanel";
 import { WorkList } from "@/components/WorkList";
@@ -7,6 +6,7 @@ import {
   parseWorkFilter,
   workFilterActive,
 } from "@/lib/content/work-filter";
+import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import { summarizeWorkFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listWork,
@@ -18,11 +18,12 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const section = await requirePublicWorksSection("creative").catch(() => null);
-  return {
+  return sectionListingMetadata({
     title: section?.label ?? "Creative",
     description:
       "つくったもの・サイトのギャラリー。制作実績を並べて眺める場所です。",
-  };
+    ogImage: section?.og_image,
+  });
 }
 
 export default async function CreativePage({
@@ -46,7 +47,8 @@ export default async function CreativePage({
       excludeKinds: ["involvement"],
       ...(filtering
         ? {
-            years: filter.years,
+            from: filter.from,
+            to: filter.to,
             categories: filter.categories,
             tags: filter.tags,
             clients: filter.clients,
@@ -59,10 +61,8 @@ export default async function CreativePage({
   return (
     <SiteShell
       bodyClassName="is-works-creative"
-      mobileHeader={<MobileHeader title={section.label} />}
       secondary={
         <WorkFilterPanel
-          years={taxonomy.years}
           categories={taxonomy.categories}
           tags={taxonomy.tags}
           clients={taxonomy.clients}
@@ -75,7 +75,10 @@ export default async function CreativePage({
       breadcrumbFilter={filtering ? summarizeWorkFilter(filter) : null}
       breadcrumbSectionHref="/works/creative/"
     >
-      <WorkList items={listed.items} />
+      <WorkList
+        items={listed.items}
+        fallbackThumbSrc={section.og_image || null}
+      />
     </SiteShell>
   );
 }

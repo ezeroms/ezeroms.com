@@ -75,13 +75,13 @@ async function main() {
   console.log("Checking photo gallery tables…\n");
   const smileOk = await tableExists("smile");
   const jumpaiOk = await tableExists("jumpai");
-  const kuikakeOk = await tableExists("kuikake");
+  const tabekakeOk = await tableExists("tabekake");
 
-  if (!smileOk || !jumpaiOk || !kuikakeOk) {
+  if (!smileOk || !jumpaiOk || !tabekakeOk) {
     console.error("Missing tables:");
     if (!smileOk) console.error("  - smile");
     if (!jumpaiOk) console.error("  - jumpai");
-    if (!kuikakeOk) console.error("  - kuikake");
+    if (!tabekakeOk) console.error("  - tabekake");
     console.error(
       "\nApply supabase/migrations/20260719030000_photo_galleries_safe.sql in the Supabase SQL Editor, then re-run this script.",
     );
@@ -94,9 +94,9 @@ async function main() {
   console.log("\nMigrating local Markdown…");
   runMigrate("smile");
   runMigrate("jumpai");
-  runMigrate("kuikake");
+  runMigrate("tabekake");
 
-  console.log("\nDone. Admin Photos should now read from smile / jumpai / kuikake.");
+  console.log("\nDone. Admin Photos should now read from smile / jumpai / tabekake.");
 }
 
 main().catch((error) => {

@@ -18,6 +18,7 @@ type Props = {
   initialLabel: string;
   initialDescription: string;
   initialStatus?: PhotoGalleryStatus;
+  initialOgImage?: string;
 };
 
 /** ヘッダーの「編集」→ ページ設定をモーダルで編集 */
@@ -26,6 +27,7 @@ export function PhotoGallerySettingsModal({
   initialLabel,
   initialDescription,
   initialStatus = "published",
+  initialOgImage = "",
 }: Props) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -83,7 +85,7 @@ export function PhotoGallerySettingsModal({
                 aria-labelledby={titleId}
                 className={cn(
                   "relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-lg border-0 bg-card shadow-none",
-                  "max-h-[min(85vh,36rem)] font-sans text-foreground",
+                  "max-h-[min(90vh,44rem)] font-sans text-foreground",
                 )}
                 data-1p-ignore
                 data-lpignore="true"
@@ -104,6 +106,7 @@ export function PhotoGallerySettingsModal({
                     initialLabel={initialLabel}
                     initialDescription={initialDescription}
                     initialStatus={initialStatus}
+                    initialOgImage={initialOgImage}
                     hideSubmit
                     onLoadingChange={setSaving}
                     onSaved={() => setOpen(false)}

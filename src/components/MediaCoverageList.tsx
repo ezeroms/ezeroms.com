@@ -9,21 +9,32 @@ import {
   formatColumnDate,
 } from "@/lib/content/column-meta";
 
+import { firstMediaUrl } from "@/lib/content/og-image";
+
 type Props = {
   items: MediaCoverage[];
+  fallbackThumbSrc?: string | null;
 };
 
-function mediaCoverageThumbSrc(item: MediaCoverage): string | null {
-  const ogImage = (item.og_image ?? "").trim();
-  if (ogImage) return ogImage;
-  return firstImageSrc(item.body_html ?? "");
+function mediaCoverageThumbSrc(
+  item: MediaCoverage,
+  fallbackThumbSrc?: string | null,
+): string | null {
+  return firstMediaUrl(
+    item.og_image,
+    fallbackThumbSrc,
+    firstImageSrc(item.body_html ?? ""),
+  );
 }
 
 /**
  * Media coverage 一覧。
  * Column と同じ ContentThumbCard レイアウトを使う。
  */
-export function MediaCoverageList({ items }: Props) {
+export function MediaCoverageList({
+  items,
+  fallbackThumbSrc = null,
+}: Props) {
   if (!items.length) {
     return (
       <p className="py-10 text-sm text-muted-foreground">
@@ -51,7 +62,7 @@ export function MediaCoverageList({ items }: Props) {
             key={item.id}
             href={href}
             title={item.title}
-            thumbSrc={mediaCoverageThumbSrc(item)}
+            thumbSrc={mediaCoverageThumbSrc(item, fallbackThumbSrc)}
             dateTime={item.date}
             dateLabel={dateLabel}
             metaSecondary={lead ? <span>{lead}</span> : null}

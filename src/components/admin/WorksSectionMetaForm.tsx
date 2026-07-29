@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,17 +24,22 @@ type Props = {
   metaApiPath: string;
   initialLabel: string;
   initialStatus?: SectionPublishStatus;
+  initialOgImage?: string;
+  /** OgImageField の upload kind */
+  ogUploadKind?: string;
   onSaved?: () => void;
   onLoadingChange?: (loading: boolean) => void;
   hideSubmit?: boolean;
   formId?: string;
 };
 
-/** セクションの表示名・公開状態を編集する（Works / Library 共通）。 */
+/** セクションの表示名・公開状態・OGP を編集する（Works / Library / Writing 共通）。 */
 export function WorksSectionMetaForm({
   metaApiPath,
   initialLabel,
   initialStatus = "published",
+  initialOgImage = "",
+  ogUploadKind = "section",
   onSaved,
   onLoadingChange,
   hideSubmit = false,
@@ -42,6 +48,7 @@ export function WorksSectionMetaForm({
   const router = useRouter();
   const [label, setLabel] = useState(initialLabel);
   const [status, setStatus] = useState<SectionPublishStatus>(initialStatus);
+  const [ogImage, setOgImage] = useState(initialOgImage);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,7 +67,7 @@ export function WorksSectionMetaForm({
       const res = await fetch(metaApiPath, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ label, status }),
+        body: JSON.stringify({ label, status, og_image: ogImage }),
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
@@ -115,6 +122,14 @@ export function WorksSectionMetaForm({
           <option value="private">非公開</option>
         </Select>
       </div>
+
+      <OgImageField
+        id="works-section-og-image"
+        value={ogImage}
+        onChange={setOgImage}
+        uploadKind={ogUploadKind}
+        disabled={loading}
+      />
 
       {!hideSubmit ? (
         <div>

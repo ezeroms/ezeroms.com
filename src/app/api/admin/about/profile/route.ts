@@ -46,6 +46,7 @@ export async function PATCH(request: NextRequest) {
       sub_name?: string;
       bio_md?: string;
       cover_image?: string;
+      og_image?: string;
       status?: "draft" | "published" | "archived";
     };
 
@@ -58,18 +59,21 @@ export async function PATCH(request: NextRequest) {
     const bioHtml = bioMd ? markdownToHtml(bioMd) : "";
     const coverImage =
       (body.cover_image ?? "").trim() || "/images/about/profile.webp";
+    const ogImage = typeof body.og_image === "string" ? body.og_image.trim() : "";
     const status = body.status === "draft" ? "draft" : "published";
     const now = new Date().toISOString();
 
-    const row = {
+    const rowWithOg = {
       name,
       sub_name: subName,
       bio_md: bioMd,
       bio_html: bioHtml,
       cover_image: coverImage,
+      og_image: ogImage,
       status,
       published_at: status === "published" ? now : null,
     };
+    const { og_image: _og, ...rowWithoutOg } = rowWithOg;
 
     let targetId = (body.id ?? "").trim();
     if (!targetId) {
@@ -83,29 +87,32 @@ export async function PATCH(request: NextRequest) {
       targetId = existing?.id ?? "";
     }
 
-    let data;
-    let error;
-    if (targetId) {
-      const res = await getSupabaseAdmin()
-        .from("about_profile")
-        .update(row)
-        .eq("id", targetId)
-        .select("*")
-        .single();
-      data = res.data;
-      error = res.error;
-    } else {
-      const res = await getSupabaseAdmin()
-        .from("about_profile")
-        .insert({ ...row, is_deleted: false })
-        .select("*")
-        .single();
-      data = res.data;
-      error = res.error;
+    async function writeRow(includeOg: boolean) {
+      const row = includeOg ? rowWithOg : rowWithoutOg;
+      return targetId
+        ? getSupabaseAdmin()
+            .from("about_profile")
+            .update(row)
+            .eq("id", targetId)
+            .select("*")
+            .single()
+        : getSupabaseAdmin()
+            .from("about_profile")
+            .insert({ ...row, is_deleted: false })
+            .select("*")
+            .single();
+    }
+
+    let { data, error } = await writeRow(true);
+    if (error && /og_image/i.test(error.message)) {
+      ({ data, error } = await writeRow(false));
     }
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      const message = /og_image|schema cache|does not exist/i.test(error.message)
+        ? "about_profile.og_image がありません。Supabase SQL Editor で supabase/migrations/20260729200000_about_profile_og_image.sql を実行してください。"
+        : error.message;
+      return NextResponse.json({ error: message }, { status: 500 });
     }
 
     revalidatePath("/about/me/");

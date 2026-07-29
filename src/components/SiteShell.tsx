@@ -1,7 +1,8 @@
 import { headers } from "next/headers";
 import { BodyClass } from "@/components/BodyClass";
 import { BreadcrumbHeader } from "@/components/BreadcrumbHeader";
-import { FilterRail } from "@/components/FilterRail";
+import { MobileHeader } from "@/components/MobileHeader";
+import { MobileMenuButton } from "@/components/MobileMenuButton";
 import { Sidebar } from "@/components/Sidebar";
 import { SiteScripts } from "@/components/SiteScripts";
 import { withFilterBreadcrumb } from "@/lib/site/breadcrumb-filters";
@@ -9,7 +10,11 @@ import {
   resolveBreadcrumbs,
   type BreadcrumbItem,
 } from "@/lib/site/breadcrumbs";
-import { listPublicPhotoGalleries, listPublicWorksSections, listPublicLibrarySections } from "@/lib/content/queries";
+import {
+  listPublicPhotoGalleries,
+  listPublicWorksSections,
+  listPublicLibrarySections,
+} from "@/lib/content/queries";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -17,10 +22,25 @@ type Props = {
   bodyClassName?: string;
   mainClassName?: string;
   toc?: React.ReactNode;
+  /**
+   * 絞り込みパネル。ヘッダー検索モーダル内の「条件」として表示する。
+   */
   secondary?: React.ReactNode;
   /** Extra toolbar under the page header (month selector, category tabs, etc.) */
   sectionHeader?: React.ReactNode;
+  /**
+   * Fallback title for the mobile-only bar when there is no sticky page header.
+   * Prefer breadcrumbs (auto hamburger in sticky header) on normal pages.
+   */
+  mobileTitle?: string;
+  /**
+   * @deprecated Prefer sticky breadcrumbs + MobileMenuButton.
+   * Still rendered only when there is no page header (fallback).
+   */
   mobileHeader?: React.ReactNode;
+  /**
+   * @deprecated 右下 FilterRail 廃止後は未使用。互換のため残す。
+   */
   showTagsAside?: boolean;
   showLayoutHeader?: boolean;
   /**
@@ -36,7 +56,7 @@ type Props = {
   /** breadcrumbFilter 追加時に、セクション名へ付ける一覧 URL */
   breadcrumbSectionHref?: string;
   /**
-   * 右下フィルター FAB をアクティブ表示にする。
+   * 検索トリガーを条件適用中表示にする。
    * 省略時は breadcrumbFilter があるとき自動で true。
    */
   filterActive?: boolean;
@@ -49,11 +69,21 @@ type Props = {
   /** ヘッダー右の検索を隠す */
   hideHeaderSearch?: boolean;
   /**
+   * When false, skip mobile chrome entirely (home uses in-page nav).
+   * Default true.
+   */
+  showMobileChrome?: boolean;
+  /**
    * メインコンテンツ外周の余白。
-   * 省略時は上下左右とも `p-6`（ヘッダー下にも余白）。
+   * 省略時はレスポンシブ余白（phone 16 / tablet 20 / desktop 24）。
    * Chronicle など端まで敷きたいページは `p-0` を渡す。
    */
   contentClassName?: string;
+  /**
+   * `main.layout-main__content` に追加するクラス。
+   * Giants の左右独立スクロールなど、メインスクロールを止めて子に委譲するとき用。
+   */
+  mainContentClassName?: string;
 };
 
 export async function SiteShell({
@@ -63,8 +93,9 @@ export async function SiteShell({
   toc,
   secondary,
   sectionHeader,
+  mobileTitle,
   mobileHeader,
-  showTagsAside = true,
+  showTagsAside: _showTagsAside = true,
   showLayoutHeader = true,
   breadcrumbCurrent,
   breadcrumbFilter,
@@ -74,7 +105,9 @@ export async function SiteShell({
   breadcrumbs,
   hidePageHeader = false,
   hideHeaderSearch = false,
+  showMobileChrome = true,
   contentClassName,
+  mainContentClassName,
 }: Props) {
   const h = await headers();
   const pathname = h.get("x-pathname") ?? "/";
@@ -98,13 +131,10 @@ export async function SiteShell({
     label: s.label,
   }));
 
-  const showAside = Boolean(showTagsAside && secondary);
   const resolvedMain =
-    mainClassName === "layout-main--with-tags" && !showAside
+    mainClassName === "layout-main--with-tags"
       ? "layout-main--single"
-      : showAside
-        ? "layout-main--single"
-        : mainClassName;
+      : mainClassName;
 
   const baseCrumbs =
     breadcrumbs ?? resolveBreadcrumbs(pathname, breadcrumbCurrent);
@@ -123,6 +153,17 @@ export async function SiteShell({
   const isFilterActive =
     filterActive ?? Boolean(breadcrumbFilter?.trim());
 
+  const fallbackMobileChrome =
+    showMobileChrome &&
+    !showPageHeader &&
+    (mobileTitle || mobileHeader ? (
+      mobileTitle ? (
+        <MobileHeader title={mobileTitle} />
+      ) : (
+        mobileHeader
+      )
+    ) : null);
+
   return (
     <>
       <BodyClass className={bodyClassName} />
@@ -131,12 +172,18 @@ export async function SiteShell({
         className={cn(
           "layout-container",
           "flex h-screen w-full overflow-hidden bg-background text-foreground",
+          "max-[1079px]:flex-col",
         )}
       >
         <aside
           className={cn(
             "layout-sidebar",
-            "!w-56 !items-stretch !p-0 flex h-screen shrink-0 flex-col border-r border-border bg-card",
+            "flex h-screen shrink-0 flex-col border-r border-border bg-card",
+            "!items-stretch !p-0",
+            /* Desktop: in-flow rail — !w-56 beats legacy --sidebar-width (240px) */
+            "min-[1080px]:relative min-[1080px]:!w-56 min-[1080px]:translate-x-0",
+            /* ≤1079: off-canvas drawer — open via .is-open (see overrides.css) */
+            "max-[1079px]:fixed max-[1079px]:inset-y-0 max-[1079px]:left-0 max-[1079px]:z-[1000]",
           )}
           aria-label="グローバルナビゲーション"
         >
@@ -150,7 +197,7 @@ export async function SiteShell({
         </aside>
 
         <div className="layout-body relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background">
-          {mobileHeader}
+          {fallbackMobileChrome}
 
           <div className="relative flex min-h-0 flex-1 flex-col">
             <div
@@ -165,23 +212,27 @@ export async function SiteShell({
                 className={cn(
                   "layout-main__content min-h-0 flex-1 overflow-y-auto font-sans",
                   "!h-full !max-w-none !p-0",
+                  mainContentClassName,
                 )}
                 id="main-content"
               >
-                {/* sticky: 初期は通常フローで見える。スクロール時に下の投稿がヘッダー下へ隠れる */}
                 {showPageHeader ? (
                   <header
                     className={cn(
-                      "sticky top-0 z-20 flex h-11 w-full shrink-0 items-center",
+                      "sticky top-0 z-20 flex h-14 w-full shrink-0 items-center gap-2.5",
+                      "min-[1080px]:h-11",
                       "border-0 border-b border-solid border-border bg-background",
-                      "px-6",
+                      "px-4 min-[768px]:px-5 min-[1080px]:px-6",
                     )}
                   >
+                    {showMobileChrome ? <MobileMenuButton /> : null}
                     {showBreadcrumbHeader && resolvedCrumbs ? (
                       <BreadcrumbHeader
                         items={resolvedCrumbs}
                         showSearch={!hideHeaderSearch}
                         infoDescription={breadcrumbInfo}
+                        filterPanel={secondary}
+                        filterActive={isFilterActive}
                         className="min-w-0 flex-1"
                       />
                     ) : null}
@@ -189,7 +240,7 @@ export async function SiteShell({
                       <div
                         className={cn(
                           "min-w-0 flex-1 truncate text-sm",
-                          showBreadcrumbHeader && "ml-4",
+                          showBreadcrumbHeader && "ml-2 min-[1080px]:ml-4",
                         )}
                       >
                         {sectionHeader}
@@ -199,16 +250,16 @@ export async function SiteShell({
                 ) : null}
 
                 <div
-                  className={cn("w-full", contentClassName ?? "p-6")}
+                  className={cn(
+                    "w-full",
+                    contentClassName ??
+                      "p-4 min-[768px]:p-5 min-[1080px]:p-6",
+                  )}
                 >
                   {children}
                 </div>
               </main>
             </div>
-
-            {showAside ? (
-              <FilterRail active={isFilterActive}>{secondary}</FilterRail>
-            ) : null}
           </div>
         </div>
       </div>

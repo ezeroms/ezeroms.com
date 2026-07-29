@@ -1,76 +1,92 @@
 import type { Metadata } from "next";
-import { MobileHeader } from "@/components/MobileHeader";
-import { PhotoFilterPanel } from "@/components/PhotoFilterPanel";
 import { PhotoGallery } from "@/components/photos/PhotoGallery";
 import { SiteShell } from "@/components/SiteShell";
+import { absoluteUrl } from "@/lib/content/absolute-url";
+import { photoDetailHref } from "@/lib/content/photo-adjacent";
+import { formatPhotoCaption } from "@/lib/content/photo-caption";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import {
-  parsePhotoFilter,
-  photoFilterActive,
-} from "@/lib/content/photo-filter";
+  ogImageMetadata,
+  resolveOgImageUrl,
+  siteUrl,
+} from "@/lib/content/og-image";
+import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import {
+  getPhotoBySlug,
   listPhotos,
-  listPhotoTaxonomy,
   requirePublicPhotoGallery,
 } from "@/lib/content/queries";
-import { summarizePhotoFilter } from "@/lib/site/breadcrumb-filters";
 
 type Props = {
   galleryId: PhotoGalleryId;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export async function photoGalleryMetadata(
   galleryId: PhotoGalleryId,
 ): Promise<Metadata> {
   const gallery = await requirePublicPhotoGallery(galleryId);
-  return {
+  return sectionListingMetadata({
     title: gallery.label,
     description: gallery.description,
+    ogImage: gallery.og_image,
+  });
+}
+
+/**
+ * 写真詳細の metadata。
+ * OGP は当該写真の image_url を優先し、無ければギャラリー → サイト既定へフォールバック。
+ */
+export async function photoDetailMetadata(
+  galleryId: PhotoGalleryId,
+  slug: string,
+): Promise<Metadata> {
+  const gallery = await requirePublicPhotoGallery(galleryId);
+  const photo = await getPhotoBySlug(galleryId, slug);
+  if (!photo) {
+    return { title: gallery.label };
+  }
+
+  const caption = formatPhotoCaption(photo);
+  const title = caption || gallery.label;
+  const description = gallery.description || undefined;
+  const ogImage = resolveOgImageUrl(photo.image_url, gallery.og_image);
+  const url = absoluteUrl(
+    photoDetailHref(gallery.basePath, photo.slug),
+    siteUrl(),
+  );
+  const images = ogImageMetadata(ogImage);
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    ...images,
+    openGraph: {
+      ...images.openGraph,
+      title,
+      description,
+      url,
+      type: "article",
+    },
   };
 }
 
-export async function PhotoGalleryIndexPage({
-  galleryId,
-  searchParams,
-}: Props) {
+export async function PhotoGalleryIndexPage({ galleryId }: Props) {
   const gallery = await requirePublicPhotoGallery(galleryId);
-  const resolvedSearchParams = await searchParams;
-  const filter = parsePhotoFilter(resolvedSearchParams);
-  const isFiltering = photoFilterActive(filter);
-
-  const [taxonomy, listed] = await Promise.all([
-    listPhotoTaxonomy(galleryId).catch(() => ({
-      years: [] as string[],
-      tags: [] as string[],
-    })),
-    listPhotos(
-      galleryId,
-      isFiltering ? { years: filter.years } : undefined,
-    ).catch(() => ({ items: [], total: 0 })),
-  ]);
-
-  // 詳細や絞り込み階層があるときは ? を出さない（一覧の Photos / Smile のみ）
-  const breadcrumbInfo = isFiltering ? null : gallery.description;
+  const listed = await listPhotos(galleryId).catch(() => ({
+    items: [],
+    total: 0,
+  }));
 
   return (
     <SiteShell
       bodyClassName={`is-${galleryId}`}
-      mobileHeader={<MobileHeader title={gallery.label} />}
-      contentClassName="p-6"
-      secondary={
-        <PhotoFilterPanel
-          years={taxonomy.years}
-          initial={filter}
-          basePath={gallery.basePath}
-        />
-      }
-      showTagsAside
-      breadcrumbFilter={isFiltering ? summarizePhotoFilter(filter) : null}
+      contentClassName="p-4 min-[768px]:p-5 min-[1080px]:p-6"
+      showTagsAside={false}
       breadcrumbSectionHref={gallery.basePath}
-      breadcrumbInfo={breadcrumbInfo}
+      breadcrumbInfo={gallery.description}
     >
-      <PhotoGallery items={listed.items} />
+      <PhotoGallery items={listed.items} galleryId={galleryId} />
     </SiteShell>
   );
 }

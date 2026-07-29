@@ -9,11 +9,10 @@ import {
 } from "@/lib/content/column-filter";
 import type { GiantsFilterState } from "@/lib/content/giants-filter";
 import {
-  formatMonthLabel,
+  formatDateRangeSummary,
   WEEKDAY_LABELS,
   type NotesFilterState,
 } from "@/lib/content/notes-filter";
-import type { PhotoFilterState } from "@/lib/content/photo-filter";
 import {
   WORK_KIND_LABELS,
   workCategoryLabel,
@@ -31,7 +30,7 @@ export function summarizeNotesFilter(
   filter: NotesFilterState,
 ): string | null {
   return joinBreadcrumbParts([
-    ...filter.months.map(formatMonthLabel),
+    formatDateRangeSummary(filter) ?? "",
     ...filter.weekdays.map((d) => WEEKDAY_LABELS[d]),
     ...filter.tags,
     ...filter.places,
@@ -42,8 +41,7 @@ export function summarizeColumnFilter(
   filter: ColumnFilterState,
 ): string | null {
   return joinBreadcrumbParts([
-    ...filter.months.map(formatMonthLabel),
-    ...filter.weekdays.map((d) => WEEKDAY_LABELS[d]),
+    formatDateRangeSummary(filter) ?? "",
     ...filter.categories.map(categoryLabel),
     ...filter.tags,
   ]);
@@ -51,7 +49,7 @@ export function summarizeColumnFilter(
 
 export function summarizeWorkFilter(filter: WorkFilterState): string | null {
   return joinBreadcrumbParts([
-    ...filter.years.map((y) => `${y}年`),
+    formatDateRangeSummary(filter) ?? "",
     ...filter.kinds.map((k) => WORK_KIND_LABELS[k]),
     ...filter.categories.map(workCategoryLabel),
     ...filter.tags,
@@ -59,18 +57,12 @@ export function summarizeWorkFilter(filter: WorkFilterState): string | null {
   ]);
 }
 
-export function summarizePhotoFilter(
-  filter: PhotoFilterState,
-): string | null {
-  return joinBreadcrumbParts(filter.years.map((y) => `${y}年`));
-}
-
 export function summarizeChronicleFilter(
   filter: ChronicleFilterState,
 ): string | null {
   return joinBreadcrumbParts([
     ...filter.interests.map(interestLabel),
-    ...filter.years.map((y) => `${y}年`),
+    formatDateRangeSummary(filter) ?? "",
     ...filter.tags,
   ]);
 }

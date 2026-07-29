@@ -87,6 +87,7 @@ export default async function AdminMePage() {
           cover_image: String(
             row.cover_image ?? "/images/about/profile.webp",
           ),
+          og_image: String(row.og_image ?? ""),
         };
       }
       favorites = (favRes.data ?? []) as typeof favorites;

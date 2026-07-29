@@ -20,6 +20,8 @@ type Props = {
   hideEmpty?: boolean;
   /** 一覧のルート要素 id（省略可） */
   listId?: string;
+  /** 記事 og_image 未設定時のサムネフォールバック（カテゴリ OGP） */
+  fallbackThumbSrc?: string | null;
 };
 
 /**
@@ -32,6 +34,7 @@ export function ColumnList({
   currentTag,
   hideEmpty,
   listId,
+  fallbackThumbSrc = null,
 }: Props) {
   if (!items.length) {
     if (hideEmpty) return null;
@@ -46,7 +49,12 @@ export function ColumnList({
     <div className={contentThumbCardListClassName()} id={listId}>
       {items.map((item) => {
         const href = `/column/${item.slug}/`;
-        const thumb = columnThumbSrc(item.body_html, item.og_image, item.slug);
+        const thumb = columnThumbSrc(
+          item.body_html,
+          item.og_image,
+          item.slug,
+          fallbackThumbSrc,
+        );
         const excerpt = columnExcerpt(item.body_html, 120);
         const category = item.column_category?.[0];
         const categoryLabel = category

@@ -4,31 +4,30 @@ import {
   hasSupabaseConfig,
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
-import {
-  chronicleMatchesAnyInterest,
-  chronicleYear,
-} from "@/lib/content/chronicle-filter";
 import type { Chronicle } from "@/types/content";
 
 export async function listChronicle(opts?: {
   start?: string;
   end?: string;
+  from?: string | null;
+  to?: string | null;
   tags?: string[];
   category?: string;
   categories?: string[];
-  years?: string[];
   /** Interest lenses: society / tech / personal */
   interests?: import("@/lib/content/chronicle-filter").ChronicleInterestId[];
 }): Promise<{ items: Chronicle[]; total: number }> {
   if (!hasSupabaseConfig()) return emptyList();
   try {
+    const start = opts?.from || opts?.start;
+    const end = opts?.to || opts?.end;
     let q = getSupabaseAdmin()
       .from("chronicle")
       .select("*", { count: "exact" })
       .eq("status", PUBLISHED)
       .order("date", { ascending: false });
-    if (opts?.start) q = q.gte("date", opts.start);
-    if (opts?.end) q = q.lte("date", opts.end);
+    if (start) q = q.gte("date", start);
+    if (end) q = q.lte("date", end);
     if (opts?.category) q = q.eq("category", opts.category);
     if (opts?.categories?.length === 1) {
       q = q.eq("category", opts.categories[0]);
@@ -55,10 +54,6 @@ export async function listChronicle(opts?: {
       end_date: row.end_date ?? null,
     }));
 
-    if (opts?.years?.length) {
-      const { chronicleYear } = await import("@/lib/content/chronicle-filter");
-      items = items.filter((c) => opts.years!.includes(chronicleYear(c.date)));
-    }
     if (opts?.interests?.length) {
       const { chronicleMatchesAnyInterest } = await import(
         "@/lib/content/chronicle-filter"
@@ -68,8 +63,7 @@ export async function listChronicle(opts?: {
       );
     }
 
-    const needsPost =
-      Boolean(opts?.years?.length) || Boolean(opts?.interests?.length);
+    const needsPost = Boolean(opts?.interests?.length);
 
     return {
       items,

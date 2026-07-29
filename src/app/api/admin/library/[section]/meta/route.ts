@@ -12,7 +12,7 @@ type RouteParams = { params: Promise<{ section: string }> };
 
 /**
  * PATCH /api/admin/library/[section]/meta/
- * Library セクションの表示名・公開状態を更新する。
+ * Library セクションの表示名・公開状態・OGP を更新する。
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   const user = await getSessionUser();
@@ -32,6 +32,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const body = (await request.json()) as {
       label?: string;
       status?: string;
+      og_image?: string;
     };
 
     const defaults = getLibrarySection(sectionId);
@@ -39,12 +40,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const status = isLibrarySectionStatus(body.status ?? "")
       ? body.status!
       : defaults.status;
+    const og_image =
+      typeof body.og_image === "string" ? body.og_image.trim() : "";
     const now = new Date().toISOString();
 
     const row = {
       id: sectionId,
       label,
       status,
+      og_image,
       updated_at: now,
     };
 
@@ -59,12 +63,12 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           .from("library_section")
           .update(row)
           .eq("id", sectionId)
-          .select("id, label, status")
+          .select("id, label, status, og_image")
           .single()
       : getSupabaseAdmin()
           .from("library_section")
           .insert({ ...row, description: "" })
-          .select("id, label, status")
+          .select("id, label, status, og_image")
           .single();
 
     const { data, error } = await query;

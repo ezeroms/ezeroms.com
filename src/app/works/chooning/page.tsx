@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import { WorkList } from "@/components/WorkList";
+import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import { listWork, requirePublicWorksSection } from "@/lib/content/queries";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const section = await requirePublicWorksSection("chooning").catch(() => null);
-  return {
+  return sectionListingMetadata({
     title: section?.label ?? "Chooning",
     description:
       "音楽への思いを記録するプロダクト Chooning。特筆して残したい作品です。",
-  };
+    ogImage: section?.og_image,
+  });
 }
 
 export default async function ChooningPage() {
@@ -26,7 +27,6 @@ export default async function ChooningPage() {
   return (
     <SiteShell
       bodyClassName="is-works-chooning"
-      mobileHeader={<MobileHeader title={section.label} />}
       showTagsAside={false}
     >
       <div className="mx-auto max-w-3xl font-sans text-foreground">
@@ -46,7 +46,10 @@ export default async function ChooningPage() {
             <h2 className="m-0 mb-4 text-lg font-semibold tracking-tight">
               Related
             </h2>
-            <WorkList items={items} />
+            <WorkList
+              items={items}
+              fallbackThumbSrc={section.og_image || null}
+            />
           </div>
         ) : (
           <p className="mt-10 text-sm text-muted-foreground">

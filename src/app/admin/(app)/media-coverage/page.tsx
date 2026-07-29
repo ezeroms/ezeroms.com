@@ -34,6 +34,7 @@ export default async function AdminMediaCoveragePage() {
             metaApiPath="/api/admin/library/media-coverage/meta/"
             initialLabel={section.label}
             initialStatus={section.status}
+            initialOgImage={section.og_image}
           />
         }
       />

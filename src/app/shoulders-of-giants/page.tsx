@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { GiantsBrowse } from "@/components/GiantsBrowse";
-import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
 import {
   giantsFilterActive,
   parseGiantsFilter,
 } from "@/lib/content/giants-filter";
+import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import { summarizeGiantsFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listGiants,
@@ -19,10 +19,11 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const section = await requirePublicLibrarySection("giants").catch(() => null);
-  return {
+  return sectionListingMetadata({
     title: section?.label ?? "The shoulders of Giants",
     description: "影響を受けた人・作品・考え方のメモ。",
-  };
+    ogImage: section?.og_image,
+  });
 }
 
 function shuffleItems<T>(items: T[]): T[] {
@@ -63,13 +64,16 @@ export default async function GiantsPage({
   return (
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
-      mobileHeader={<MobileHeader title={section.label} />}
       showTagsAside={false}
       breadcrumbFilter={selectedTopic ? summarizeGiantsFilter({
         topics: [selectedTopic],
       }) : null}
       breadcrumbSectionHref="/shoulders-of-giants/"
       filterActive={Boolean(selectedTopic)}
+      mainContentClassName="min-[1080px]:flex min-[1080px]:flex-col min-[1080px]:overflow-hidden"
+      contentClassName={
+        "flex w-full flex-col p-4 min-[768px]:p-5 min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:overflow-hidden min-[1080px]:p-6"
+      }
     >
       <GiantsBrowse
         topics={topics}

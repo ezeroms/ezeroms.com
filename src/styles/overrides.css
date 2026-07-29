@@ -3,6 +3,175 @@
  * Keep this file small — prefer Tailwind + design tokens for new UI.
  */
 
+/* Hide native search clear; SearchClient uses Lucide X instead */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* Shared body leading (Notes / Column / Giants / etc.) */
+.notes-feed__body,
+.article-item p,
+.article-item ul > li,
+.article-item ol > li {
+  line-height: 1.8;
+}
+
+/* Detail body: same 16px as PC feels large on narrow screens — nudge down ≤1079 */
+@media (max-width: 1079px) {
+  .article-item p,
+  .article-item ul > li,
+  .article-item ol > li,
+  .article-item blockquote p,
+  .notes-feed__body {
+    font-size: 0.9375rem; /* 15px */
+  }
+}
+
+/* Icon-only hamburger (no UA button chrome; Tailwind preflight is off) */
+#sidebar-hamburger-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Responsive shell (≤1079 tablet/phone). Desktop (≥1080) stays as React/Tailwind.
+ * -------------------------------------------------------------------------- */
+
+@media (max-width: 1079px) {
+  /* Off-canvas drawer — widths/padding owned here so legacy + !w-56 cannot fight */
+  .layout-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: min(17.5rem, 88vw) !important;
+    max-width: 88vw !important;
+    height: 100dvh !important;
+    padding: 0 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    z-index: 1000 !important;
+    box-shadow: none !important;
+  }
+
+  .layout-sidebar.is-open {
+    transform: translateX(0) !important;
+    box-shadow: 8px 0 32px rgba(5, 3, 23, 0.12) !important;
+  }
+
+  .sidebar__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(5, 3, 23, 0.4);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+  .sidebar__overlay.is-active {
+    display: block;
+    opacity: 1;
+  }
+
+  /*
+   * Legacy site-shell forces height:auto / content padding under 1079,
+   * which breaks the React app-shell scroll model. Neutralize those.
+   */
+  .layout-main--centered,
+  .layout-main--single,
+  .layout-main--with-tags,
+  .layout-main--with-toc,
+  .layout-main--with-header-toc,
+  .layout-main--chronicle {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .layout-main--centered .layout-main__content,
+  .layout-main--single .layout-main__content,
+  .layout-main--with-tags .layout-main__content,
+  .layout-main--with-toc .layout-main__content,
+  .layout-main--with-header-toc .layout-main__content,
+  .layout-main--chronicle .layout-main__content {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .layout-sidebar {
+    width: min(16.25rem, 90vw) !important;
+    max-width: 90vw !important;
+  }
+}
+
+/* Home: scroll container must NOT flex-center children (that clips the hero). */
+body.is-home .layout-main,
+body.is-home .layout-main--single,
+body.is-home .layout-main--centered {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #f9f9f7 !important;
+}
+
+body.is-home .layout-main__content {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+body.is-home .layout-body {
+  background: #f9f9f7 !important;
+}
+
+/* Content density on phone / tablet (desktop page CSS untouched at ≥1080) */
+@media (max-width: 1079px) {
+  .content-card {
+    border-radius: 0.75rem;
+  }
+
+  .article-item img,
+  .article-prose img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .content-card {
+    border-radius: 0.625rem;
+  }
+}
+
+
 /*
  * Shared content card (Notes / Column list & detail).
  * Base matches Column list: soft surface, no resting outline.
@@ -28,7 +197,7 @@
   .share-btn::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: calc(100% + 6px);
+    bottom: calc(100% + 4px);
     left: 50%;
     top: auto;
     right: auto;
@@ -42,7 +211,7 @@
     opacity: 0;
     pointer-events: none;
     z-index: 30;
-    transform: translateX(-50%) translateY(6px) scale(0.96);
+    transform: translateX(-50%) translateY(4px) scale(0.96);
     transition:
       opacity 0.18s ease,
       transform 0.22s cubic-bezier(0.22, 1.2, 0.36, 1);

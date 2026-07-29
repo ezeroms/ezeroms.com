@@ -74,7 +74,7 @@ export async function listTopImages(): Promise<TopImage[]> {
         .select("*")
         .eq("status", PUBLISHED)
         .order("sort_order", { ascending: true });
-      data = fallback.data;
+      data = fallback.data as typeof data;
       error = fallback.error;
     }
 

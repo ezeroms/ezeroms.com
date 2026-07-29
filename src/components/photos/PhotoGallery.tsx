@@ -1,88 +1,90 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Photo } from "@/types/content";
 import {
   photoAccessibilityLabel,
   photoGridSrc,
-  photosWithImageUrl,
 } from "@/lib/content/photo-caption";
 import { cn } from "@/lib/cn";
 import { PhotoLightbox } from "@/components/photos/PhotoLightbox";
+import { usePhotoLightbox } from "@/components/photos/usePhotoLightbox";
+import {
+  getPhotoGallery,
+  type PhotoGalleryId,
+} from "@/lib/content/photo-galleries";
 
 type Props = {
   items: Photo[];
+  /**
+   * PC（≥1080）の列数。通常一覧は 4、検索結果などは 3。
+   * タブレット以下には影響しない。
+   */
+  desktopColumns?: 3 | 4;
+  /** 詳細ページ URL 用。指定時ライトボックスにシェアを出す。 */
+  galleryId?: PhotoGalleryId;
 };
 
-/** Tailwind sm / lg に合わせた列数（ピンタレスト風の列積み用） */
-function galleryColumnCount(): number {
+/** Shell 幅に合わせた列数: スマホ 2 / タブレット 3 / PC は指定 */
+function galleryColumnCount(desktopColumns: 3 | 4): number {
   if (typeof window === "undefined") return 2;
-  if (window.matchMedia("(min-width: 1024px)").matches) return 4;
-  if (window.matchMedia("(min-width: 640px)").matches) return 3;
+  if (window.matchMedia("(min-width: 1080px)").matches) return desktopColumns;
+  if (window.matchMedia("(min-width: 768px)").matches) return 3;
   return 2;
 }
 
-/** 新しい順の配列を、左→右に振り分けて各列へ積む（空白のない masonry） */
+/** 新しい順の配列を左→右に振り分け、各列へ上から積む（隙間のない masonry） */
 function splitIntoColumns<T>(items: T[], columnCount: number): T[][] {
   const columns: T[][] = Array.from({ length: columnCount }, () => []);
   for (let i = 0; i < items.length; i++) {
-    columns[i % columnCount].push(items[i]!);
+    columns[i % columnCount]!.push(items[i]!);
   }
   return columns;
 }
 
 /**
- * Smile / Jampai / Kuikake の写真一覧。
+ * Smile / Jampai / Tabekake の写真一覧。
  * 新しいものから左→右に振り分け、各列で上に詰める（Pinterest 風）。
  */
-export function PhotoGallery({ items }: Props) {
-  const [activePhotoId, setActivePhotoId] = useState<string | null>(null);
-  const [isClientMounted, setIsClientMounted] = useState(false);
+export function PhotoGallery({
+  items,
+  desktopColumns = 4,
+  galleryId,
+}: Props) {
+  const detailBasePath = galleryId
+    ? getPhotoGallery(galleryId).basePath
+    : undefined;
+
   const [columnCount, setColumnCount] = useState(2);
+  const {
+    displayPhotos,
+    isClientMounted,
+    activePhoto,
+    openLightbox,
+    closeLightbox,
+    showPreviousPhoto,
+    showNextPhoto,
+  } = usePhotoLightbox(items);
 
   useEffect(() => {
-    setIsClientMounted(true);
     function updateColumns() {
-      setColumnCount(galleryColumnCount());
+      setColumnCount(galleryColumnCount(desktopColumns));
     }
     updateColumns();
-    const mqSm = window.matchMedia("(min-width: 640px)");
-    const mqLg = window.matchMedia("(min-width: 1024px)");
-    mqSm.addEventListener("change", updateColumns);
-    mqLg.addEventListener("change", updateColumns);
+    const mqTablet = window.matchMedia("(min-width: 768px)");
+    const mqDesktop = window.matchMedia("(min-width: 1080px)");
+    mqTablet.addEventListener("change", updateColumns);
+    mqDesktop.addEventListener("change", updateColumns);
     return () => {
-      mqSm.removeEventListener("change", updateColumns);
-      mqLg.removeEventListener("change", updateColumns);
+      mqTablet.removeEventListener("change", updateColumns);
+      mqDesktop.removeEventListener("change", updateColumns);
     };
-  }, []);
+  }, [desktopColumns]);
 
-  const displayPhotos = photosWithImageUrl(items);
   const columns = useMemo(
     () => splitIntoColumns(displayPhotos, columnCount),
     [displayPhotos, columnCount],
   );
-
-  const activeIndex = displayPhotos.findIndex(
-    (photo) => photo.id === activePhotoId,
-  );
-  const activePhoto = activeIndex >= 0 ? displayPhotos[activeIndex] : null;
-
-  const closeLightbox = useCallback(() => {
-    setActivePhotoId(null);
-  }, []);
-
-  const showPreviousPhoto = useCallback(() => {
-    if (activeIndex < 0 || displayPhotos.length === 0) return;
-    const previousIndex =
-      (activeIndex - 1 + displayPhotos.length) % displayPhotos.length;
-    setActivePhotoId(displayPhotos[previousIndex].id);
-  }, [activeIndex, displayPhotos]);
-
-  const showNextPhoto = useCallback(() => {
-    if (activeIndex < 0 || displayPhotos.length === 0) return;
-    const nextIndex = (activeIndex + 1) % displayPhotos.length;
-    setActivePhotoId(displayPhotos[nextIndex].id);
-  }, [activeIndex, displayPhotos]);
 
   if (!items.length) {
     return (
@@ -116,7 +118,7 @@ export function PhotoGallery({ items }: Props) {
                     "block w-full border-0 bg-transparent p-0",
                     "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   )}
-                  onClick={() => setActivePhotoId(photo.id)}
+                  onClick={() => openLightbox(photo.id)}
                   aria-label={`${photoAccessibilityLabel(photo)} を拡大表示`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -141,6 +143,7 @@ export function PhotoGallery({ items }: Props) {
         <PhotoLightbox
           photo={activePhoto}
           photos={displayPhotos}
+          detailBasePath={detailBasePath}
           onClose={closeLightbox}
           onShowPrevious={showPreviousPhoto}
           onShowNext={showNextPhoto}

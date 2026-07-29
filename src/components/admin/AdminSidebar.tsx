@@ -21,6 +21,8 @@ import {
   Smile,
   User,
   Home,
+  Globe,
+  Mail,
   type LucideIcon,
 } from "lucide-react";
 import { adminNavSections, type AdminNavItem } from "@/lib/admin/nav";
@@ -44,6 +46,8 @@ const icons: Record<AdminNavItem["icon"], LucideIcon> = {
   user: User,
   home: Home,
   newspaper: Newspaper,
+  globe: Globe,
+  mail: Mail,
 };
 
 function isActive(pathname: string, href: string) {

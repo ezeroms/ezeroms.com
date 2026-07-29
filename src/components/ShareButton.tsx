@@ -13,8 +13,13 @@ function prefersNativeShare() {
 }
 
 function showCopiedNotification() {
-  const el = document.getElementById("notification");
-  if (!el) return;
+  let el = document.getElementById("notification");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "notification";
+    el.textContent = "リンクをコピーしました";
+    document.body.appendChild(el);
+  }
   el.className = "notification show";
   window.setTimeout(() => {
     el.className = "notification";
@@ -54,16 +59,20 @@ export function ShareButton({ path, className }: Props) {
       type="button"
       className={cn(
         "share-btn relative inline-flex shrink-0 items-center justify-center rounded-full border-0 bg-transparent",
-        "h-9 w-9 cursor-pointer text-foreground transition-[opacity,background-color]",
-        "opacity-30 group-hover:opacity-100",
+        "h-8 w-8 cursor-pointer text-foreground transition-[opacity,background-color]",
+        "opacity-30 hover:opacity-100",
         "hover:bg-accent",
         className,
       )}
-      onClick={() => void shareOrCopyLink()}
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        void shareOrCopyLink();
+      }}
       aria-label="Share"
       data-tooltip="Share"
     >
-      <Share2 className="h-4 w-4" aria-hidden />
+      <Share2 className="h-3.5 w-3.5" aria-hidden />
     </button>
   );
 }

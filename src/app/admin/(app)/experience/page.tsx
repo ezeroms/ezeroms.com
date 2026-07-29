@@ -81,6 +81,7 @@ export default async function AdminExperienceListPage() {
               metaApiPath="/api/admin/works/experience/meta/"
               initialLabel={section.label}
               initialStatus={section.status}
+              initialOgImage={section.og_image}
             />
             <ExperienceCreateButton />
           </div>

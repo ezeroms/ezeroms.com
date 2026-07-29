@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AboutArticle } from "@/components/AboutArticle";
 import { AboutMeProfile } from "@/components/AboutMeProfile";
 import { AboutShell } from "@/components/AboutShell";
+import { absoluteUrl } from "@/lib/content/absolute-url";
 import {
   ABOUT_PUBLIC_SLUGS,
   aboutContentSlugFromPublic,
@@ -9,6 +11,12 @@ import {
   isAboutPublicSlug,
   redirectPathForLegacyAboutSlug,
 } from "@/lib/content/about-routes";
+import { htmlToPlainText } from "@/lib/content/html-plain";
+import {
+  ogImageMetadata,
+  resolveOgImageUrl,
+  siteUrl,
+} from "@/lib/content/og-image";
 import {
   getAboutBySlug,
   getMeProfile,
@@ -26,6 +34,12 @@ function stripLeadingH1(html: string): string {
   return html.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
 }
 
+function excerptFromHtml(html: string, maxLen = 160): string {
+  const text = htmlToPlainText(html).replace(/\s+/g, " ").trim();
+  if (text.length <= maxLen) return text;
+  return `${text.slice(0, maxLen - 1).trimEnd()}…`;
+}
+
 export async function generateStaticParams() {
   const pages = await listAbout().catch(() => []);
   const fromDatabase = pages
@@ -37,6 +51,70 @@ export async function generateStaticParams() {
 
   if (fromDatabase.length) return fromDatabase;
   return ABOUT_PUBLIC_SLUGS.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug: requestedSlug } = await params;
+  if (!isAboutPublicSlug(requestedSlug)) {
+    return { title: "About" };
+  }
+
+  const contentSlug = aboutContentSlugFromPublic(requestedSlug);
+  if (!contentSlug) return { title: "About" };
+
+  // Me は構造化プロフィールの OGP を優先する
+  if (requestedSlug === "me") {
+    const meProfile = await getMeProfile();
+    if (meProfile) {
+      const title = meProfile.profile.name || "Me";
+      const description = meProfile.profile.bio_html
+        ? excerptFromHtml(meProfile.profile.bio_html) || undefined
+        : undefined;
+      const ogImage = resolveOgImageUrl(meProfile.profile.og_image);
+      const url = absoluteUrl("/about/me/", siteUrl());
+      const images = ogImageMetadata(ogImage);
+      return {
+        title,
+        description,
+        alternates: { canonical: url },
+        ...images,
+        openGraph: {
+          ...images.openGraph,
+          title,
+          description,
+          url,
+          type: "website",
+        },
+      };
+    }
+  }
+
+  const page = await getAboutBySlug(contentSlug);
+  const title = page?.title?.trim() || requestedSlug;
+  const description = page?.body_html
+    ? excerptFromHtml(page.body_html) || undefined
+    : undefined;
+  const ogImage = resolveOgImageUrl(page?.og_image);
+  const url = absoluteUrl(`/about/${requestedSlug}/`, siteUrl());
+  const images = ogImageMetadata(ogImage);
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    ...images,
+    openGraph: {
+      ...images.openGraph,
+      title,
+      description,
+      url,
+      type: "website",
+    },
+  };
 }
 
 export default async function AboutPage({
@@ -104,7 +182,7 @@ export default async function AboutPage({
           title={cardTitle}
           coverSrc={isMePage ? "/images/about/profile.webp" : null}
         />
-          ) : (
+      ) : (
         <p className="m-0 text-sm text-muted-foreground">
           コンテンツが見つかりませんでした。
         </p>

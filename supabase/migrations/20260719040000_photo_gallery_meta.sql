@@ -1,8 +1,8 @@
--- Editable metadata for Photos galleries (Smile / Jampai / Kuikake)
+-- Editable metadata for Photos galleries (Smile / Jampai / Tabekake)
 
 create table if not exists public.photo_gallery (
   id text primary key
-    check (id in ('smile', 'jumpai', 'kuikake')),
+    check (id in ('smile', 'jumpai', 'tabekake')),
   label text not null,
   description text not null default '',
   created_at timestamptz not null default now(),
@@ -31,8 +31,8 @@ insert into public.photo_gallery (id, label, description) values
     '作品として見せたい写真のギャラリー。Jampai に収めた一枚です。'
   ),
   (
-    'kuikake',
-    'Kuikake',
-    '作品として見せたい写真のギャラリー。Kuikake に収めた一枚です。'
+    'tabekake',
+    'Tabekake',
+    '作品として見せたい写真のギャラリー。Tabekake に収めた一枚です。'
   )
 on conflict (id) do nothing;

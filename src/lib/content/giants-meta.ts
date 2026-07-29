@@ -5,7 +5,16 @@ export function giantsPermalink(slug: string): string {
 }
 
 /** Bibliographic citation under a quote, e.g. 著者『書名』（出版社、年） */
-export function formatGiantsCitation(item: ShouldersOfGiants): string {
+export function formatGiantsCitation(
+  item: Pick<
+    ShouldersOfGiants,
+    | "book_title"
+    | "author"
+    | "publisher"
+    | "published_year"
+    | "citation_override"
+  >,
+): string {
   if (item.citation_override?.trim()) return item.citation_override.trim();
 
   const title = item.book_title?.trim();

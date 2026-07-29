@@ -1,12 +1,11 @@
 import { redirect } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
 import { NotesTimeline } from "@/components/NotesTimeline";
-import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
+import { dateRangeFromYearMonths } from "@/lib/content/date-range";
 import { emptyNotesFilter, formatMonthLabel } from "@/lib/content/notes-filter";
 import {
   listDiary,
-  listDiaryMonths,
   listDiaryTaxonomy,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
@@ -29,8 +28,7 @@ export default async function DiaryMonthPage({
   const month = normalizeMonthKey(raw);
   if (raw !== month) redirect(`/diary_month/${month}/`);
 
-  const [months, { items }, taxonomy] = await Promise.all([
-    listDiaryMonths(),
+  const [{ items }, taxonomy] = await Promise.all([
     listDiary({ month }),
     listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
   ]);
@@ -39,15 +37,14 @@ export default async function DiaryMonthPage({
     body_html: sanitizeBody(item.body_html),
   }));
 
-  const initial = { ...emptyNotesFilter(), months: [month] };
+  const range = dateRangeFromYearMonths([month]);
+  const initial = { ...emptyNotesFilter(), ...range };
 
   return (
     <SiteShell
       bodyClassName="is-diary"
-      mobileHeader={<MobileHeader title={month} />}
       secondary={
         <NotesFilterPanel
-          months={months}
           tags={taxonomy.tags}
           places={taxonomy.places}
           initial={initial}

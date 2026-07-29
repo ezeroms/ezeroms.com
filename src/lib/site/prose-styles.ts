@@ -24,7 +24,7 @@ export const proseBodyClass = `prose-body ${proseBodyLinkClass} ${proseBodyListC
  * Column 詳細などでもこれをベースにする。
  */
 export const notesBodyClass = cn(
-  "notes-feed__body min-w-0 overflow-hidden text-base leading-relaxed text-foreground",
+  "notes-feed__body min-w-0 overflow-hidden text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base",
   proseBodyClass,
   "[&_img]:mt-4 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg",
   "[&_p]:m-0 [&_p+p]:mt-3",

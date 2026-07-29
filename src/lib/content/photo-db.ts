@@ -14,7 +14,7 @@ export type ResolvedPhotoTable = {
 
 /**
  * Photo ギャラリーの実テーブルを解決する。
- * smile / jumpai / kuikake が未作成のあいだは、smile のみ旧 `snap` にフォールバックする。
+ * smile / jumpai / tabekake が未作成のあいだは、smile のみ旧 `snap` にフォールバックする。
  */
 export async function resolvePhotoDbTable(
   galleryId: PhotoGalleryId,

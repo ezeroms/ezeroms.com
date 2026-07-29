@@ -5,9 +5,10 @@ import {
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
 import {
-  dateMatchesMonths,
+  dateMatchesRange,
   dateMatchesWeekdays,
 } from "@/lib/content/notes-filter";
+import { dateRangeActive, type DateRangeValue } from "@/lib/content/date-range";
 import { rankBySharedTags } from "@/lib/content/related";
 import type { Column } from "@/types/content";
 
@@ -16,7 +17,8 @@ export async function listColumn(opts?: {
   categories?: string[];
   tag?: string;
   tags?: string[];
-  months?: string[];
+  from?: string | null;
+  to?: string | null;
   weekdays?: number[];
   limit?: number;
 }): Promise<{ items: Column[]; total: number }> {
@@ -40,8 +42,12 @@ export async function listColumn(opts?: {
       q = q.overlaps("column_tag", opts.tags);
     }
 
+    const range: DateRangeValue = {
+      from: opts?.from ?? null,
+      to: opts?.to ?? null,
+    };
     const needsPost =
-      (opts?.months && opts.months.length > 0) ||
+      dateRangeActive(range) ||
       (opts?.weekdays && opts.weekdays.length > 0);
     if (opts?.limit && !needsPost) q = q.limit(opts.limit);
 
@@ -49,8 +55,8 @@ export async function listColumn(opts?: {
     if (error) throw error;
     let items = (data ?? []) as Column[];
 
-    if (opts?.months?.length) {
-      items = items.filter((c) => dateMatchesMonths(c.date, opts.months!));
+    if (dateRangeActive(range)) {
+      items = items.filter((c) => dateMatchesRange(c.date, range));
     }
     if (opts?.weekdays?.length) {
       items = items.filter((c) => dateMatchesWeekdays(c.date, opts.weekdays!));

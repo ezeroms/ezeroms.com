@@ -6,15 +6,17 @@ import {
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
 import {
-  diaryMatchesMonths,
+  diaryMatchesDateRange,
   diaryMatchesWeekdays,
 } from "@/lib/content/notes-filter";
+import { dateRangeActive, type DateRangeValue } from "@/lib/content/date-range";
 import { rankBySharedTags } from "@/lib/content/related";
 import type { Diary } from "@/types/content";
 
 export async function listDiary(opts?: {
   month?: string;
-  months?: string[];
+  from?: string | null;
+  to?: string | null;
   tag?: string;
   tags?: string[];
   place?: string;
@@ -42,9 +44,13 @@ export async function listDiary(opts?: {
     q = q.in("diary_place", opts.places);
   }
 
-  // Month / weekday filters need post-processing; avoid early limit
+  const range: DateRangeValue = {
+    from: opts?.from ?? null,
+    to: opts?.to ?? null,
+  };
+  // Date / weekday filters need post-processing; avoid early limit
   const needsPost =
-    (opts?.months && opts.months.length > 0) ||
+    dateRangeActive(range) ||
     (opts?.weekdays && opts.weekdays.length > 0);
   if (opts?.limit && !needsPost) q = q.limit(opts.limit);
 
@@ -53,8 +59,8 @@ export async function listDiary(opts?: {
 
   let items = (data ?? []) as Diary[];
 
-  if (opts?.months?.length) {
-    items = items.filter((d) => diaryMatchesMonths(d, opts.months!));
+  if (dateRangeActive(range)) {
+    items = items.filter((d) => diaryMatchesDateRange(d, range));
   }
   if (opts?.weekdays?.length) {
     items = items.filter((d) => diaryMatchesWeekdays(d, opts.weekdays!));

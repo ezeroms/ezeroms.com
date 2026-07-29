@@ -1,20 +1,12 @@
 import { SiteShell } from "@/components/SiteShell";
-import { MobileHeader } from "@/components/MobileHeader";
-
-const PAGE_TITLES: Record<string, string> = {
-  "/about/me/": "Me",
-  "/about/here/": "Here",
-  "/about/media-coverage/": "Media coverage",
-  "/about/contact/": "Contact",
-};
 
 /**
  * About 配下ページ共通のシェル（パンくず・サイドバー付き SiteShell）。
  */
 export function AboutShell({
-  pathname,
   children,
 }: {
+  /** Kept for call-site compatibility; breadcrumbs resolve from SiteShell pathname. */
   pathname: string;
   children: React.ReactNode;
   /**
@@ -23,16 +15,9 @@ export function AboutShell({
    */
   wide?: boolean;
 }) {
-  const title =
-    PAGE_TITLES[pathname] ??
-    (pathname.startsWith("/about/media-coverage")
-      ? "Media coverage"
-      : "About");
-
   return (
     <SiteShell
       bodyClassName="is-about"
-      mobileHeader={<MobileHeader title={title} />}
       showTagsAside={false}
       showLayoutHeader={false}
       mainClassName="layout-main--single"

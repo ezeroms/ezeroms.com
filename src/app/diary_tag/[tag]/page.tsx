@@ -1,11 +1,9 @@
 import { SiteShell } from "@/components/SiteShell";
 import { NotesTimeline } from "@/components/NotesTimeline";
-import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
 import { emptyNotesFilter } from "@/lib/content/notes-filter";
 import {
   listDiary,
-  listDiaryMonths,
   listDiaryTaxonomy,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
@@ -19,8 +17,7 @@ export default async function DiaryTagPage({
 }) {
   const { tag } = await params;
   const decoded = decodeURIComponent(tag);
-  const [months, { items }, taxonomy] = await Promise.all([
-    listDiaryMonths(),
+  const [{ items }, taxonomy] = await Promise.all([
     listDiary({ tag: decoded }),
     listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
   ]);
@@ -34,10 +31,8 @@ export default async function DiaryTagPage({
   return (
     <SiteShell
       bodyClassName="is-diary"
-      mobileHeader={<MobileHeader title={`#${decoded}`} />}
       secondary={
         <NotesFilterPanel
-          months={months}
           tags={taxonomy.tags}
           places={taxonomy.places}
           initial={initial}

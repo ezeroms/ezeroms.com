@@ -34,6 +34,26 @@ const nextConfig: NextConfig = {
         destination: "https://ringofes.info/?from=chooning",
         permanent: false,
       },
+      {
+        source: "/kuikake",
+        destination: "/tabekake/",
+        permanent: true,
+      },
+      {
+        source: "/kuikake/:slug*",
+        destination: "/tabekake/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/admin/kuikake",
+        destination: "/admin/tabekake/",
+        permanent: true,
+      },
+      {
+        source: "/admin/kuikake/:path*",
+        destination: "/admin/tabekake/:path*",
+        permanent: true,
+      },
     ];
   },
 };

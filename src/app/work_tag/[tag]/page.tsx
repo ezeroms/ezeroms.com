@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
-import { serializeWorkFilter } from "@/lib/content/work-filter";
+import {
+  emptyWorkFilter,
+  serializeWorkFilter,
+} from "@/lib/content/work-filter";
 
 export const revalidate = 60;
 
@@ -13,11 +16,8 @@ export default async function WorkTagPage({
   const decoded = decodeURIComponent(tag);
   redirect(
     `/works/creative/${serializeWorkFilter({
-      years: [],
-      categories: [],
+      ...emptyWorkFilter(),
       tags: [decoded],
-      clients: [],
-      kinds: [],
     })}`,
   );
 }

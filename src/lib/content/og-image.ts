@@ -18,6 +18,20 @@ export function siteUrl(): string {
 }
 
 /**
+ * 先頭の空でない画像 URL（相対可）。無ければ null。
+ * 記事 og → カテゴリ og → 本文画像 などのフォールバック用。
+ */
+export function firstMediaUrl(
+  ...candidates: Array<string | null | undefined>
+): string | null {
+  for (const c of candidates) {
+    const v = (c ?? "").trim();
+    if (v) return v;
+  }
+  return null;
+}
+
+/**
  * Pick the first non-empty image URL, else site default.
  * Paths are absolutized against the site origin.
  */
@@ -25,10 +39,8 @@ export function resolveOgImageUrl(
   ...candidates: Array<string | null | undefined>
 ): string {
   const base = siteUrl();
-  for (const c of candidates) {
-    const v = (c ?? "").trim();
-    if (v) return absoluteUrl(v, base);
-  }
+  const picked = firstMediaUrl(...candidates);
+  if (picked) return absoluteUrl(picked, base);
   return absoluteUrl(DEFAULT_OG_PATH, base);
 }
 

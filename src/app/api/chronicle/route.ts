@@ -35,13 +35,24 @@ export async function GET(request: Request) {
           .split(",")
           .map((s) => s.trim())
           .filter((s) => /^\d{4}$/.test(s))
-      : undefined;
+      : [];
+    const fromParam = searchParams.get("from");
+    const toParam = searchParams.get("to");
+    const from =
+      fromParam ||
+      (years.length ? `${[...years].sort()[0]}-01-01` : undefined);
+    const to =
+      toParam ||
+      (years.length
+        ? `${[...years].sort()[years.length - 1]}-12-31`
+        : undefined);
     const data = await listChronicle({
       start: searchParams.get("start") ?? undefined,
       end: searchParams.get("end") ?? undefined,
+      from: from ?? null,
+      to: to ?? null,
       category: searchParams.get("category") ?? undefined,
       tags,
-      years,
       interests: parseInterests(
         searchParams.get("interests") ?? searchParams.get("i"),
       ),

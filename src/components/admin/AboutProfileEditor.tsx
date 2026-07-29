@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
+import { OgImageField } from "@/components/admin/OgImageField";
 import { cn } from "@/lib/cn";
 
 export type AboutProfileEditorInitial = {
@@ -21,6 +22,7 @@ export type AboutProfileEditorInitial = {
   sub_name: string;
   bio_md: string;
   cover_image: string;
+  og_image: string;
 };
 
 export function AboutProfileEditor({
@@ -37,12 +39,14 @@ export function AboutProfileEditor({
     sub_name: initial?.sub_name ?? "イワモトユウ",
     bio_md: initial?.bio_md ?? "",
     cover_image: initial?.cover_image ?? "/images/about/profile.webp",
+    og_image: initial?.og_image ?? "",
   }));
 
   const [name, setName] = useState(baseline.name);
   const [subName, setSubName] = useState(baseline.sub_name);
   const [bioMd, setBioMd] = useState(baseline.bio_md);
   const [coverImage, setCoverImage] = useState(baseline.cover_image);
+  const [ogImage, setOgImage] = useState(baseline.og_image);
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,7 +57,8 @@ export function AboutProfileEditor({
     name !== baseline.name ||
     subName !== baseline.sub_name ||
     bioMd !== baseline.bio_md ||
-    coverImage !== baseline.cover_image;
+    coverImage !== baseline.cover_image ||
+    ogImage !== baseline.og_image;
 
   const busy = loading || uploading;
 
@@ -118,6 +123,7 @@ export function AboutProfileEditor({
           sub_name: subName,
           bio_md: bioMd,
           cover_image: coverImage,
+          og_image: ogImage,
           status: "published",
         }),
       });
@@ -283,6 +289,14 @@ export function AboutProfileEditor({
           placeholder="プロフィールの紹介文を入力…"
         />
       </div>
+
+      <OgImageField
+        id="about-me-og-image"
+        value={ogImage}
+        onChange={setOgImage}
+        uploadKind="about"
+        disabled={busy}
+      />
 
       <div>
         <Button type="submit" disabled={!dirty || busy}>

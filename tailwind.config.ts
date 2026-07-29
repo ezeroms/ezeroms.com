@@ -15,6 +15,10 @@ const config: Config = {
   },
   theme: {
     extend: {
+      screens: {
+        /** Aligns with shell drawer breakpoint (legacy max-width: 1079px) */
+        desktop: "1080px",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

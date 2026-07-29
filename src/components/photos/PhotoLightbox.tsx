@@ -2,20 +2,28 @@
 
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ShareButton } from "@/components/ShareButton";
 import type { Photo } from "@/types/content";
 import {
   formatPhotoCaption,
   photoAccessibilityLabel,
 } from "@/lib/content/photo-caption";
+import { photoDetailHref } from "@/lib/content/photo-adjacent";
 
 type Props = {
   photo: Photo;
   /** 前後ナビ用。1件だけのときはナビを出さない。 */
   photos: Photo[];
+  /** 詳細ページのベースパス（例: `/smile/`）。指定時キャプション横にシェアを出す。 */
+  detailBasePath?: string;
   onClose: () => void;
   onShowPrevious: () => void;
   onShowNext: () => void;
 };
+
+const navButtonClassName =
+  "absolute top-1/2 z-10 inline-flex -translate-y-1/2 items-center justify-center border-0 bg-transparent p-2 text-white/70 transition-colors hover:text-white";
 
 /**
  * 写真拡大表示。
@@ -24,11 +32,11 @@ type Props = {
 export function PhotoLightbox({
   photo,
   photos,
+  detailBasePath,
   onClose,
   onShowPrevious,
   onShowNext,
 }: Props) {
-  // Esc / 矢印キー、および背面スクロールのロック
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
@@ -50,6 +58,9 @@ export function PhotoLightbox({
 
   const caption = formatPhotoCaption(photo);
   const showNavigation = photos.length > 1;
+  const detailPath = detailBasePath
+    ? photoDetailHref(detailBasePath, photo.slug)
+    : null;
 
   return createPortal(
     <div
@@ -58,6 +69,10 @@ export function PhotoLightbox({
       aria-modal
       aria-label={photoAccessibilityLabel(photo)}
     >
+      <div id="notification" className="notification">
+        リンクをコピーしました
+      </div>
+
       {/*
         黒オーバーレイは専用レイヤー。
         Tailwind の bg-* がレガシー CSS に負けることがあるため inline style を使う。
@@ -74,19 +89,19 @@ export function PhotoLightbox({
         <>
           <button
             type="button"
-            className="absolute left-1 top-1/2 z-10 -translate-y-1/2 border-0 bg-transparent px-3 py-2 text-3xl leading-none text-white/70 hover:text-white sm:left-4"
+            className={`${navButtonClassName} left-1 sm:left-4`}
             onClick={onShowPrevious}
             aria-label="前の写真"
           >
-            ‹
+            <ChevronLeft className="h-8 w-8" strokeWidth={1.75} aria-hidden />
           </button>
           <button
             type="button"
-            className="absolute right-1 top-1/2 z-10 -translate-y-1/2 border-0 bg-transparent px-3 py-2 text-3xl leading-none text-white/70 hover:text-white sm:right-4"
+            className={`${navButtonClassName} right-1 sm:right-4`}
             onClick={onShowNext}
             aria-label="次の写真"
           >
-            ›
+            <ChevronRight className="h-8 w-8" strokeWidth={1.75} aria-hidden />
           </button>
         </>
       ) : null}
@@ -98,9 +113,15 @@ export function PhotoLightbox({
           alt={photoAccessibilityLabel(photo)}
           className="m-0 max-h-[85vh] w-auto max-w-full object-contain"
         />
-        {caption ? (
-          <figcaption className="text-center text-sm tracking-wide text-white/65">
-            {caption}
+        {caption || detailPath ? (
+          <figcaption className="flex items-center justify-center gap-1.5 text-sm tracking-wide text-white/65">
+            {caption ? <span>{caption}</span> : null}
+            {detailPath ? (
+              <ShareButton
+                path={detailPath}
+                className="bg-transparent text-white opacity-40 hover:bg-white/20 hover:opacity-100"
+              />
+            ) : null}
           </figcaption>
         ) : null}
       </figure>

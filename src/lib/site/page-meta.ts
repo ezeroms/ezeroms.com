@@ -84,10 +84,10 @@ const JUMPAI: SitePageMeta = {
     "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
 };
 
-const KUIKAKE: SitePageMeta = {
-  title: "Kuikake",
+const TABEKAKE: SitePageMeta = {
+  title: "Tabekake",
   description:
-    "作品として見せたい写真のギャラリー。Kuikake に収めた一枚です。",
+    "作品として見せたい写真のギャラリー。Tabekake に収めた一枚です。",
 };
 
 const SEARCH: SitePageMeta = {
@@ -100,6 +100,9 @@ export function resolveSitePageMeta(pathname: string): SitePageMeta | null {
   const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
 
   if (path === "/") return null;
+
+  // セクション配下の検索ページはセクション meta より優先
+  if (path === "/search/" || path.endsWith("/search/")) return SEARCH;
 
   if (
     path.startsWith("/diary/") ||
@@ -144,10 +147,8 @@ export function resolveSitePageMeta(pathname: string): SitePageMeta | null {
   if (/^\/jumpai\/[^/]+\/$/.test(path)) return null;
   if (path.startsWith("/jumpai/")) return JUMPAI;
 
-  if (/^\/kuikake\/[^/]+\/$/.test(path)) return null;
-  if (path.startsWith("/kuikake/")) return KUIKAKE;
-
-  if (path.startsWith("/search/")) return SEARCH;
+  if (/^\/tabekake\/[^/]+\/$/.test(path)) return null;
+  if (path.startsWith("/tabekake/")) return TABEKAKE;
 
   return null;
 }

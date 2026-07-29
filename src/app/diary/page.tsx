@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { NotesTimeline } from "@/components/NotesTimeline";
-import { MobileHeader } from "@/components/MobileHeader";
 import { NotesFilterPanel } from "@/components/NotesFilterPanel";
 import { notesMonthKey } from "@/lib/content/notes-meta";
 import {
   notesFilterActive,
   parseNotesFilter,
 } from "@/lib/content/notes-filter";
+import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import { summarizeNotesFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listDiary,
-  listDiaryMonths,
   listDiaryTaxonomy,
+  requirePublicWritingSection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 
@@ -22,27 +22,34 @@ export const revalidate = 60;
 /** Notes top: recent stream when no filters. */
 const NOTES_FEED_LIMIT = 50;
 
-export const metadata: Metadata = {
-  title: "Notes",
-  description: "日常の短いメモとスナップ。気づきや記録を残す場所です。",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await requirePublicWritingSection("notes").catch(() => null);
+  return sectionListingMetadata({
+    title: section?.label ?? "Notes",
+    description:
+      section?.description ??
+      "日常の短いメモとスナップ。気づきや記録を残す場所です。",
+    ogImage: section?.og_image,
+  });
+}
 
 export default async function DiaryIndexPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  await requirePublicWritingSection("notes");
   const resolvedSearchParams = await searchParams;
   const filter = parseNotesFilter(resolvedSearchParams);
   const filtering = notesFilterActive(filter);
 
-  const [months, taxonomy, listed] = await Promise.all([
-    listDiaryMonths().catch(() => [] as string[]),
+  const [taxonomy, listed] = await Promise.all([
     listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
     listDiary(
       filtering
         ? {
-            months: filter.months,
+            from: filter.from,
+            to: filter.to,
             weekdays: filter.weekdays,
             tags: filter.tags,
             places: filter.places,
@@ -64,10 +71,8 @@ export default async function DiaryIndexPage({
   return (
     <SiteShell
       bodyClassName="is-diary"
-      mobileHeader={<MobileHeader title="Notes" />}
       secondary={
         <NotesFilterPanel
-          months={months}
           tags={taxonomy.tags}
           places={taxonomy.places}
           initial={filter}
@@ -83,7 +88,7 @@ export default async function DiaryIndexPage({
         <p className="notes-feed-more mx-auto max-w-3xl pb-8">
           最新 {items.length} 件を表示しています。それ以前は{" "}
           <Link href={`/diary_month/${continueMonth}/`}>月別アーカイブ</Link>
-          や右の絞り込みからどうぞ。
+          やヘッダーの Search から条件を指定してください。
         </p>
       ) : null}
     </SiteShell>

@@ -1,86 +1,98 @@
-import Link from "next/link";
 import type { Work } from "@/types/content";
 import { WORK_CATEGORY_NAMES } from "@/components/WorkHeaderNav";
+import {
+  ContentThumbCard,
+  contentThumbCardListClassName,
+} from "@/components/ContentThumbCard";
+import {
+  columnExcerpt,
+  firstImageSrc,
+  formatColumnDate,
+} from "@/lib/content/column-meta";
 import { formatWorkPeriod } from "@/lib/content/work-filter";
-import { cn } from "@/lib/cn";
+import { firstMediaUrl } from "@/lib/content/og-image";
+import { tagChipClass } from "@/lib/site/tag-styles";
 
 type Props = {
   items: Work[];
+  /** 関連記事など、空のときにメッセージを出さない */
+  hideEmpty?: boolean;
+  /** 記事 og / image 未設定時のサムネフォールバック（カテゴリ OGP） */
+  fallbackThumbSrc?: string | null;
 };
 
-/** Portfolio-style work cards (image + title + role/client). */
-export function WorkList({ items }: Props) {
+function workThumbSrc(
+  item: Work,
+  fallbackThumbSrc?: string | null,
+): string | null {
+  return firstMediaUrl(
+    item.image_url,
+    item.og_image,
+    fallbackThumbSrc,
+    firstImageSrc(item.body_html),
+  );
+}
+
+function workExcerpt(item: Work): string {
+  const roleClient = [item.role, item.client].filter(Boolean).join(" / ");
+  if (roleClient) return roleClient;
+  return columnExcerpt(item.body_html, 120);
+}
+
+/**
+ * Creative 一覧。Column と同じ ContentThumbCard の見た目・ホバー。
+ */
+export function WorkList({
+  items,
+  hideEmpty,
+  fallbackThumbSrc = null,
+}: Props) {
   if (!items.length) {
+    if (hideEmpty) return null;
     return (
-      <p className="py-6 text-sm text-muted-foreground">
+      <p className="py-10 text-sm text-muted-foreground">
         条件に合う作品がありません。
       </p>
     );
   }
 
   return (
-    <div className="columns-1 gap-6 sm:columns-2" id="work-articles-list">
+    <div className={contentThumbCardListClassName()} id="work-articles-list">
       {items.map((item) => {
         const href = `/works/creative/${item.slug}/`;
-        const period = formatWorkPeriod(item.start_date, item.end_date);
+        const period =
+          formatWorkPeriod(item.start_date, item.end_date) ||
+          formatColumnDate(item.date);
         const category = item.work_category?.[0];
         const categoryLabel = category
           ? (WORK_CATEGORY_NAMES[category] ?? category)
           : null;
+        const tags = [...(item.work_tag ?? [])].sort((a, b) =>
+          a.localeCompare(b, "ja"),
+        );
 
         return (
-          <article
+          <ContentThumbCard
             key={item.id}
-            className={cn(
-              "mb-6 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card shadow-sm",
-            )}
-          >
-            <Link href={href} className="block text-inherit no-underline">
-              {item.image_url || item.og_image ? (
-                <div className="aspect-[1200/630] overflow-hidden bg-muted">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={(item.image_url || item.og_image)!}
-                    alt=""
-                    className="m-0 block h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              ) : null}
-
-              <div className="flex flex-col gap-3 p-6">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
-                  {period ? <span>{period}</span> : null}
-                  {period && categoryLabel ? <span aria-hidden>·</span> : null}
-                  {categoryLabel ? <span>{categoryLabel}</span> : null}
-                </div>
-
-                <h2 className="m-0 text-base font-semibold leading-snug tracking-tight text-foreground">
-                  {item.title}
-                </h2>
-
-                {(item.role || item.client) && (
-                  <p className="m-0 text-sm leading-snug text-muted-foreground">
-                    {[item.role, item.client].filter(Boolean).join(" / ")}
-                  </p>
-                )}
-
-                {(item.work_tag ?? []).length ? (
-                  <div className="mt-1 flex flex-wrap gap-2">
-                    {[...(item.work_tag ?? [])].sort().map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            </Link>
-          </article>
+            href={href}
+            title={item.title}
+            thumbSrc={workThumbSrc(item, fallbackThumbSrc)}
+            dateTime={item.start_date || item.date}
+            dateLabel={period || undefined}
+            metaSecondary={
+              categoryLabel ? <span>{categoryLabel}</span> : null
+            }
+            excerpt={workExcerpt(item)}
+            footer={
+              tags.length
+                ? tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className={tagChipClass(false)}>
+                      {tag}
+                    </span>
+                  ))
+                : null
+            }
+          />
         );
       })}
     </div>

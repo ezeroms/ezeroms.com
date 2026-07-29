@@ -29,6 +29,8 @@ export const ABOUT_HERE_CONTENT_SLUG: AboutContentSlug = "site";
 
 export const ABOUT_HERE_PUBLIC_PATH = "/about/here/";
 export const ABOUT_ME_PUBLIC_PATH = "/about/me/";
+export const ABOUT_CONTACT_CONTENT_SLUG: AboutContentSlug = "contact";
+export const ABOUT_CONTACT_PUBLIC_PATH = "/about/contact/";
 
 /** 旧 URL（/about/site/ など）から現在の公開パスへ */
 export function redirectPathForLegacyAboutSlug(

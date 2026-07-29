@@ -9,7 +9,7 @@ import {
   formatClipDate,
   parseYoutubeVideoId,
 } from "@/lib/content/clip-meta";
-import { serializeNotesFilter } from "@/lib/content/notes-filter";
+import { serializeNotesFilter, emptyNotesFilter } from "@/lib/content/notes-filter";
 import { cn } from "@/lib/cn";
 import { contentCard } from "@/lib/site/card-styles";
 import { tagChipClass } from "@/lib/site/tag-styles";
@@ -17,13 +17,15 @@ import { tagChipClass } from "@/lib/site/tag-styles";
 type Props = {
   items: Clip[];
   activeTags?: string[];
+  /** クリップ og 未設定・YouTube 以外のときのフォールバック（カテゴリ OGP） */
+  fallbackThumbSrc?: string | null;
 };
 
-/** Tailwind sm / xl に合わせた列数（右レールありでもカードが読める幅） */
+/** Shell-aligned columns: phone 1 / tablet 2 / desktop 3 */
 function clipsColumnCount(): number {
   if (typeof window === "undefined") return 1;
-  if (window.matchMedia("(min-width: 1280px)").matches) return 3;
-  if (window.matchMedia("(min-width: 640px)").matches) return 2;
+  if (window.matchMedia("(min-width: 1080px)").matches) return 3;
+  if (window.matchMedia("(min-width: 768px)").matches) return 2;
   return 1;
 }
 
@@ -36,22 +38,30 @@ function splitIntoColumns<T>(items: T[], columnCount: number): T[][] {
   return columns;
 }
 
-function clipPreviewSrc(item: Clip, youtubeId: string | null): string | null {
+function clipPreviewSrc(
+  item: Clip,
+  youtubeId: string | null,
+  fallbackThumbSrc?: string | null,
+): string | null {
   if (youtubeId) return `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
   const og = item.og_image?.trim();
-  return og || null;
+  if (og) return og;
+  const fallback = fallbackThumbSrc?.trim();
+  return fallback || null;
 }
 
 function ClipCard({
   item,
   activeTags,
+  fallbackThumbSrc,
 }: {
   item: Clip;
   activeTags: string[];
+  fallbackThumbSrc?: string | null;
 }) {
   const sourceLabel = clipSourceLabel(item.source_url, item.source_name);
   const youtubeId = parseYoutubeVideoId(item.source_url);
-  const previewSrc = clipPreviewSrc(item, youtubeId);
+  const previewSrc = clipPreviewSrc(item, youtubeId, fallbackThumbSrc);
   const tags = [...(item.clip_tag ?? [])].sort();
 
   return (
@@ -110,10 +120,8 @@ function ClipCard({
             <div className="mt-1 flex flex-wrap gap-2">
               {tags.map((tag) => {
                 const href = `/clips/${serializeNotesFilter({
-                  months: [],
-                  weekdays: [],
+                  ...emptyNotesFilter(),
                   tags: [tag],
-                  places: [],
                 })}`;
                 return (
                   <Link
@@ -155,7 +163,11 @@ function ClipCard({
 /**
  * Clips 一覧。新しいものから左→右に振り分け、各列で上に詰める（Photos と同じ）。
  */
-export function ClipsMasonry({ items, activeTags = [] }: Props) {
+export function ClipsMasonry({
+  items,
+  activeTags = [],
+  fallbackThumbSrc = null,
+}: Props) {
   const [columnCount, setColumnCount] = useState(1);
 
   useEffect(() => {
@@ -163,13 +175,13 @@ export function ClipsMasonry({ items, activeTags = [] }: Props) {
       setColumnCount(clipsColumnCount());
     }
     updateColumns();
-    const mqSm = window.matchMedia("(min-width: 640px)");
-    const mqXl = window.matchMedia("(min-width: 1280px)");
-    mqSm.addEventListener("change", updateColumns);
-    mqXl.addEventListener("change", updateColumns);
+    const mqTablet = window.matchMedia("(min-width: 768px)");
+    const mqDesktop = window.matchMedia("(min-width: 1080px)");
+    mqTablet.addEventListener("change", updateColumns);
+    mqDesktop.addEventListener("change", updateColumns);
     return () => {
-      mqSm.removeEventListener("change", updateColumns);
-      mqXl.removeEventListener("change", updateColumns);
+      mqTablet.removeEventListener("change", updateColumns);
+      mqDesktop.removeEventListener("change", updateColumns);
     };
   }, []);
 
@@ -199,7 +211,11 @@ export function ClipsMasonry({ items, activeTags = [] }: Props) {
         >
           {column.map((item) => (
             <div key={item.id} role="listitem">
-              <ClipCard item={item} activeTags={activeTags} />
+              <ClipCard
+                item={item}
+                activeTags={activeTags}
+                fallbackThumbSrc={fallbackThumbSrc}
+              />
             </div>
           ))}
         </div>

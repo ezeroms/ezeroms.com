@@ -93,7 +93,7 @@
     .diary-timeline-item__date-circle-link::after {
         content: attr(data-tooltip);
         position: absolute;
-        bottom: calc(100% + var(--spacing-sm));
+        bottom: calc(100% + 4px);
         left: 50%;
         transform: translateX(-50%);
         padding: var(--spacing-xs) var(--spacing-sm);
@@ -116,7 +116,7 @@
     .diary-timeline-item__date-circle-link::before {
         content: '';
         position: absolute;
-        bottom: calc(100% + var(--spacing-xs));
+        bottom: 100%;
         left: 50%;
         transform: translateX(-50%);
         width: 0;

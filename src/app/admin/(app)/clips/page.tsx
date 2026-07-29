@@ -78,6 +78,7 @@ export default async function AdminClipsListPage() {
               metaApiPath="/api/admin/library/clips/meta/"
               initialLabel={section.label}
               initialStatus={section.status}
+              initialOgImage={section.og_image}
             />
             <ClipsCreateButton />
           </div>

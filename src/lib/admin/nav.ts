@@ -22,7 +22,9 @@ export type AdminNavItem = {
     | "landmark"
     | "user"
     | "home"
-    | "newspaper";
+    | "newspaper"
+    | "globe"
+    | "mail";
 };
 
 export type AdminNavSection = {
@@ -42,6 +44,13 @@ export const adminNavSections: AdminNavSection[] = [
         description: "全体の入口",
         status: "ready",
         icon: "layout-dashboard",
+      },
+      {
+        href: "/admin/site/",
+        label: "Site",
+        description: "トップの OGP などサイト全体設定",
+        status: "ready",
+        icon: "globe",
       },
     ],
   },
@@ -84,9 +93,9 @@ export const adminNavSections: AdminNavSection[] = [
         icon: "aperture",
       },
       {
-        href: "/admin/kuikake/",
-        label: "Kuikake",
-        description: "写真ギャラリー Kuikake",
+        href: "/admin/tabekake/",
+        label: "Tabekake",
+        description: "写真ギャラリー Tabekake",
         status: "ready",
         icon: "pizza",
       },
@@ -177,6 +186,13 @@ export const adminNavSections: AdminNavSection[] = [
         description: "このサイトについて",
         status: "ready",
         icon: "home",
+      },
+      {
+        href: "/admin/contact/",
+        label: "Contact",
+        description: "お問い合わせページ",
+        status: "ready",
+        icon: "mail",
       },
     ],
   },

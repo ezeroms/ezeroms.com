@@ -14,13 +14,17 @@ type Props = {
   metaApiPath: string;
   initialLabel: string;
   initialStatus?: SectionPublishStatus;
+  initialOgImage?: string;
+  ogUploadKind?: string;
 };
 
-/** ヘッダーの「編集」→ ページ設定をモーダルで編集（Works / Library 共通） */
+/** ヘッダーの「編集」→ ページ設定をモーダルで編集（Works / Library / Writing 共通） */
 export function WorksSectionSettingsModal({
   metaApiPath,
   initialLabel,
   initialStatus = "published",
+  initialOgImage = "",
+  ogUploadKind = "section",
 }: Props) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -78,7 +82,7 @@ export function WorksSectionSettingsModal({
                 aria-labelledby={titleId}
                 className={cn(
                   "relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-lg border-0 bg-card shadow-none",
-                  "max-h-[min(85vh,36rem)] font-sans text-foreground",
+                  "max-h-[min(90vh,44rem)] font-sans text-foreground",
                 )}
                 data-1p-ignore
                 data-lpignore="true"
@@ -98,6 +102,8 @@ export function WorksSectionSettingsModal({
                     metaApiPath={metaApiPath}
                     initialLabel={initialLabel}
                     initialStatus={initialStatus}
+                    initialOgImage={initialOgImage}
+                    ogUploadKind={ogUploadKind}
                     hideSubmit
                     onLoadingChange={setSaving}
                     onSaved={() => setOpen(false)}

@@ -7,12 +7,12 @@ alter table public.smile
 alter table public.jumpai
   add column if not exists image_thumb_url text;
 
-alter table public.kuikake
+alter table public.tabekake
   add column if not exists image_thumb_url text;
 
 comment on column public.smile.image_thumb_url is
   'Resized WebP for gallery grids; lightbox uses image_url (original).';
 comment on column public.jumpai.image_thumb_url is
   'Resized WebP for gallery grids; lightbox uses image_url (original).';
-comment on column public.kuikake.image_thumb_url is
+comment on column public.tabekake.image_thumb_url is
   'Resized WebP for gallery grids; lightbox uses image_url (original).';

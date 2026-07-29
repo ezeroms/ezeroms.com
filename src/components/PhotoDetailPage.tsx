@@ -1,10 +1,21 @@
 import { notFound } from "next/navigation";
-import { MobileHeader } from "@/components/MobileHeader";
+import { PhotoAdjacentNavCard } from "@/components/photos/PhotoAdjacentNavCard";
+import { PhotoDetailLightboxTrigger } from "@/components/photos/PhotoDetailLightboxTrigger";
+import { PhotoDetailMetaPanel } from "@/components/photos/PhotoDetailMetaPanel";
 import { SiteShell } from "@/components/SiteShell";
+import {
+  findAdjacentPhotosInList,
+  photoDetailHref,
+} from "@/lib/content/photo-adjacent";
 import { formatPhotoCaption } from "@/lib/content/photo-caption";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import { formatPhotoDate } from "@/lib/content/photo-filter";
-import { getPhotoBySlug, requirePublicPhotoGallery } from "@/lib/content/queries";
+import {
+  getPhotoBySlug,
+  listPhotos,
+  requirePublicPhotoGallery,
+} from "@/lib/content/queries";
+import type { Photo } from "@/types/content";
 
 type Props = {
   galleryId: PhotoGalleryId;
@@ -12,9 +23,9 @@ type Props = {
 };
 
 /**
- * 直接 URL 用の写真詳細。
+ * 写真ギャラリーの詳細ページ（Smile / Jampai / Tabekake）。
+ * デスクトップは左に写真・右にメタ情報。狭い幅では上下に積む。
  * タイトル・メモ（body_html）は公開 UI には出さない。
- * パンくず末尾には日付・場所を使う。
  */
 export async function PhotoDetailPage({ galleryId, slug }: Props) {
   const gallery = await requirePublicPhotoGallery(galleryId);
@@ -24,43 +35,63 @@ export async function PhotoDetailPage({ galleryId, slug }: Props) {
   const caption = formatPhotoCaption(photo);
   const imageAlt = caption || gallery.label;
 
+  // ライトボックス前後ナビと隣接カードの両方で使うため、一覧を一度だけ取得する
+  const listed = await listPhotos(galleryId).catch(() => ({
+    items: [] as Photo[],
+    total: 0,
+  }));
+  const { olderPhoto, newerPhoto } = findAdjacentPhotosInList(
+    listed.items,
+    slug,
+  );
+
+  const olderHref = olderPhoto
+    ? photoDetailHref(gallery.basePath, olderPhoto.slug)
+    : null;
+  const newerHref = newerPhoto
+    ? photoDetailHref(gallery.basePath, newerPhoto.slug)
+    : null;
+
   return (
     <SiteShell
       bodyClassName={`is-${galleryId}`}
-      mobileHeader={<MobileHeader title={gallery.label} />}
       breadcrumbCurrent={caption || undefined}
-      contentClassName="p-6"
+      contentClassName="p-4 min-[768px]:p-5 min-[1080px]:p-6"
     >
-      <article className="mx-auto max-w-3xl font-sans text-foreground">
-        {photo.image_url ? (
-          <div className="mb-4 overflow-hidden rounded-xl bg-muted">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={photo.image_url}
-              alt={imageAlt}
-              className="m-0 block h-auto w-full object-contain"
+      <article className="mx-auto w-full max-w-6xl font-sans text-foreground">
+        <div className="flex flex-col gap-4 min-[768px]:flex-row min-[768px]:items-start min-[768px]:gap-4">
+          <div className="min-w-0 flex-1">
+            <PhotoDetailLightboxTrigger
+              photo={photo}
+              photos={listed.items}
+              detailBasePath={gallery.basePath}
+              imageAlt={imageAlt}
             />
           </div>
-        ) : null}
 
-        <dl className="mt-2 grid gap-2 text-sm text-muted-foreground">
-          <div className="flex gap-2">
-            <dt className="shrink-0 font-medium text-foreground">撮影日</dt>
-            <dd className="m-0">{formatPhotoDate(photo.date)}</dd>
+          <div className="flex w-full shrink-0 flex-col gap-3 min-[768px]:w-72 min-[1080px]:w-80">
+            <PhotoDetailMetaPanel
+              dateLabel={formatPhotoDate(photo.date)}
+              place={photo.location?.trim() || ""}
+              camera={photo.camera?.trim() || ""}
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <PhotoAdjacentNavCard
+                href={olderHref}
+                direction="older"
+                photo={olderPhoto}
+                ariaLabel="前の写真（より古い）"
+              />
+              <PhotoAdjacentNavCard
+                href={newerHref}
+                direction="newer"
+                photo={newerPhoto}
+                ariaLabel="次の写真（より新しい）"
+              />
+            </div>
           </div>
-          {photo.location ? (
-            <div className="flex gap-2">
-              <dt className="shrink-0 font-medium text-foreground">撮影場所</dt>
-              <dd className="m-0">{photo.location}</dd>
-            </div>
-          ) : null}
-          {photo.camera ? (
-            <div className="flex gap-2">
-              <dt className="shrink-0 font-medium text-foreground">カメラ</dt>
-              <dd className="m-0">{photo.camera}</dd>
-            </div>
-          ) : null}
-        </dl>
+        </div>
       </article>
     </SiteShell>
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Column } from "@/types/content";
 import { COLUMN_CATEGORY_NAMES } from "@/components/ColumnHeaderNav";
 import { formatColumnDate } from "@/lib/content/column-meta";
-import { serializeColumnFilter } from "@/lib/content/column-filter";
+import { serializeColumnFilter, emptyColumnFilter } from "@/lib/content/column-filter";
 import { prepareColumnToc } from "@/lib/content/column-toc";
 import { cn } from "@/lib/cn";
 import { notesBodyClass } from "@/lib/site/prose-styles";
@@ -66,10 +66,8 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
                   <span aria-hidden>·</span>
                   <Link
                     href={`/column/${serializeColumnFilter({
-                      months: [],
-                      weekdays: [],
+                      ...emptyColumnFilter(),
                       categories: [category!],
-                      tags: [],
                     })}`}
                     className="truncate no-underline hover:underline"
                   >
@@ -91,9 +89,7 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
               <Link
                 key={tag}
                 href={`/column/${serializeColumnFilter({
-                  months: [],
-                  weekdays: [],
-                  categories: [],
+                  ...emptyColumnFilter(),
                   tags: [tag],
                 })}`}
                 className={tagChipClass(false)}

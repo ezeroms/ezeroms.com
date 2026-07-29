@@ -1,76 +1,68 @@
-import Link from "next/link";
+"use client";
+
 import type { ShouldersOfGiants } from "@/types/content";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
+import { GiantsTopicNav } from "@/components/GiantsTopicNav";
+import { RelatedPostsSection } from "@/components/RelatedPostsSection";
+import { cn } from "@/lib/cn";
 
 type Props = {
   item: ShouldersOfGiants;
   /** Already sanitized body HTML */
   bodyHtml: string;
+  topics: string[];
+  related?: ShouldersOfGiants[];
 };
 
 /**
  * The shoulders of Giants の個別詳細。
- * 一覧カードと同じ見た目＋書誌メタ（override がないとき）。
+ * 一覧と同じく左トピックナビ + 右コンテンツ。
  */
-export function GiantsArticle({ item, bodyHtml }: Props) {
-  const showMeta =
-    !item.citation_override?.trim() &&
-    Boolean(
-      item.book_title || item.author || item.publisher || item.published_year,
-    );
-
+export function GiantsArticle({
+  item,
+  bodyHtml,
+  topics,
+  related = [],
+}: Props) {
   return (
-    <div className="w-full font-sans text-foreground">
+    <>
       <div id="notification" className="notification">
         リンクをコピーしました
       </div>
 
-      <div className="mx-auto w-full max-w-3xl">
-        <GiantsQuoteCard
-          item={item}
-          bodyHtml={bodyHtml}
-          linkCitationToDetail={false}
-          className="mx-auto w-full max-w-3xl"
-        />
+      <div
+        className={cn(
+          "flex w-full flex-col gap-6",
+          "min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:flex-row min-[1080px]:gap-8 min-[1080px]:overflow-hidden",
+        )}
+      >
+        <GiantsTopicNav topics={topics} />
 
-        {showMeta ? (
-          <dl className="mt-4 grid gap-1.5 px-1 text-base leading-relaxed text-foreground">
-            {item.author ? (
-              <div className="flex gap-2">
-                <dt className="shrink-0 font-medium">著者</dt>
-                <dd className="m-0">{item.author}</dd>
-              </div>
-            ) : null}
-            {item.book_title ? (
-              <div className="flex gap-2">
-                <dt className="shrink-0 font-medium">書名</dt>
-                <dd className="m-0">{item.book_title}</dd>
-              </div>
-            ) : null}
-            {item.publisher ? (
-              <div className="flex gap-2">
-                <dt className="shrink-0 font-medium">出版社</dt>
-                <dd className="m-0">{item.publisher}</dd>
-              </div>
-            ) : null}
-            {item.published_year ? (
-              <div className="flex gap-2">
-                <dt className="shrink-0 font-medium">年</dt>
-                <dd className="m-0">{item.published_year}</dd>
-              </div>
-            ) : null}
-          </dl>
-        ) : null}
-      </div>
-
-      <p className="mx-auto mt-6 max-w-3xl text-sm">
-        <Link
-          href="/shoulders-of-giants/"
-          className="text-muted-foreground no-underline hover:text-foreground hover:underline"
+        <div
+          className={cn(
+            "min-w-0 flex-1 font-sans text-foreground",
+            "min-[1080px]:min-h-0 min-[1080px]:overflow-y-auto",
+          )}
         >
-          ← The shoulders of Giants に戻る
-        </Link>
-      </p>
-    </div>
+          <div className="mx-auto w-full max-w-3xl min-[1080px]:pb-6">
+            <GiantsQuoteCard
+              item={item}
+              bodyHtml={bodyHtml}
+              className="w-full"
+            />
+
+            {related.length > 0 ? (
+              <RelatedPostsSection>
+                <div className="flex flex-col gap-6">
+                  {related.map((entry) => (
+                    <GiantsQuoteCard key={entry.id} item={entry} />
+                  ))}
+                </div>
+              </RelatedPostsSection>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

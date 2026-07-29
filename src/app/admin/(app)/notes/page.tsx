@@ -5,9 +5,11 @@ import {
   type AdminNotesTableItem,
 } from "@/components/admin/AdminNotesListTable";
 import { NotesCreateButton } from "@/components/admin/NotesCreateButton";
+import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { excerptFromHtml } from "@/lib/admin/list-format";
+import { loadWritingSection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -15,6 +17,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminNotesListPage() {
   await getSessionUser();
+  const section = await loadWritingSection("notes");
 
   let items: AdminNotesTableItem[] = [];
   let loadError: string | null = null;
@@ -37,7 +40,7 @@ export default async function AdminNotesListPage() {
         .eq("is_deleted", false)
         .order("date", { ascending: false })
         .limit(200);
-      data = fallback.data;
+      data = fallback.data as typeof data;
       error = fallback.error;
     }
 
@@ -78,7 +81,21 @@ export default async function AdminNotesListPage() {
 
   return (
     <AdminContent width="wide">
-      <AdminPageHeader title="Notes" actions={<NotesCreateButton />} />
+      <AdminPageHeader
+        title={section.label}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <WorksSectionSettingsModal
+              metaApiPath="/api/admin/writing/notes/meta/"
+              initialLabel={section.label}
+              initialStatus={section.status}
+              initialOgImage={section.og_image}
+              ogUploadKind="notes-section"
+            />
+            <NotesCreateButton />
+          </div>
+        }
+      />
       {loadError ? (
         <p className="mb-3 text-sm text-destructive">
           一覧の取得に失敗しました: {loadError}

@@ -11,7 +11,8 @@ import {
 import {
   getSupabaseAdmin,
   hasSupabaseConfig,
-  isMissingRelationError,
+  isMissingColumnError,
+  isSchemaNotReadyError,
   logQueryError,
 } from "@/lib/content/queries/_shared";
 
@@ -22,6 +23,10 @@ function parseStatus(
   return typeof value === "string" && isWorksSectionStatus(value)
     ? value
     : fallback;
+}
+
+function parseOgImage(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
 }
 
 /**
@@ -35,14 +40,23 @@ export async function loadWorksSection(
   if (!hasSupabaseConfig()) return defaults;
 
   try {
-    const { data, error } = await getSupabaseAdmin()
+    const db = getSupabaseAdmin();
+    let { data, error } = await db
       .from("works_section")
-      .select("id, label, status")
+      .select("id, label, status, og_image")
       .eq("id", sectionId)
       .maybeSingle();
 
+    if (error && isMissingColumnError(error)) {
+      ({ data, error } = await db
+        .from("works_section")
+        .select("id, label, status")
+        .eq("id", sectionId)
+        .maybeSingle());
+    }
+
     if (error) {
-      if (!isMissingRelationError(error)) {
+      if (!isSchemaNotReadyError(error)) {
         logQueryError(`[loadWorksSection:${sectionId}]`, error);
       }
       return defaults;
@@ -54,6 +68,10 @@ export async function loadWorksSection(
       ...defaults,
       label: (data.label as string)?.trim() || defaults.label,
       status: parseStatus(data.status, defaults.status),
+      og_image:
+        parseOgImage(
+          "og_image" in data ? (data as { og_image?: unknown }).og_image : "",
+        ) || defaults.og_image,
     };
   } catch (error) {
     logQueryError(`[loadWorksSection:${sectionId}]`, error);

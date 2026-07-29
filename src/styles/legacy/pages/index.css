@@ -35,8 +35,9 @@
 }
 
 .top-photo {
-  width: 906px;
-  height: 514px;
+  width: 100%;
+  max-width: 906px;
+  height: auto;
   display: block;
   margin: 0 auto;
   z-index: 20;
@@ -79,10 +80,9 @@
 .top-photo-skeleton {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 906px;
-  height: 514px;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(
     90deg,
     #f0f0f0 0%,

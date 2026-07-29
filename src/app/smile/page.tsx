@@ -10,12 +10,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return photoGalleryMetadata("smile");
 }
 
-export default async function SmileIndexPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  return (
-    <PhotoGalleryIndexPage galleryId="smile" searchParams={searchParams} />
-  );
+export default async function SmileIndexPage() {
+  return <PhotoGalleryIndexPage galleryId="smile" />;
 }

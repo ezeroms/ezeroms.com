@@ -11,7 +11,8 @@ import {
 import {
   getSupabaseAdmin,
   hasSupabaseConfig,
-  isMissingRelationError,
+  isMissingColumnError,
+  isSchemaNotReadyError,
   logQueryError,
 } from "@/lib/content/queries/_shared";
 
@@ -19,6 +20,10 @@ function parseStatus(value: unknown, fallback: PhotoGalleryStatus): PhotoGallery
   return typeof value === "string" && isPhotoGalleryStatus(value)
     ? value
     : fallback;
+}
+
+function parseOgImage(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
 }
 
 /**
@@ -32,14 +37,24 @@ export async function loadPhotoGallery(
   if (!hasSupabaseConfig()) return defaults;
 
   try {
-    const { data, error } = await getSupabaseAdmin()
+    const db = getSupabaseAdmin();
+    let { data, error } = await db
       .from("photo_gallery")
-      .select("id, label, description, status")
+      .select("id, label, description, status, og_image")
       .eq("id", galleryId)
       .maybeSingle();
 
+    // og_image マイグレーション前は列なしで再取得
+    if (error && isMissingColumnError(error)) {
+      ({ data, error } = await db
+        .from("photo_gallery")
+        .select("id, label, description, status")
+        .eq("id", galleryId)
+        .maybeSingle());
+    }
+
     if (error) {
-      if (!isMissingRelationError(error)) {
+      if (!isSchemaNotReadyError(error)) {
         logQueryError(`[loadPhotoGallery:${galleryId}]`, error);
       }
       return defaults;
@@ -55,6 +70,10 @@ export async function loadPhotoGallery(
           ? data.description
           : defaults.description,
       status: parseStatus(data.status, defaults.status),
+      og_image:
+        parseOgImage(
+          "og_image" in data ? (data as { og_image?: unknown }).og_image : "",
+        ) || defaults.og_image,
     };
   } catch (error) {
     logQueryError(`[loadPhotoGallery:${galleryId}]`, error);

@@ -1,16 +1,24 @@
 import { WORK_CATEGORY_NAMES } from "@/components/WorkHeaderNav";
 import {
+  appendDateRangeToQuery,
+  dateRangeActive,
+  emptyDateRange,
+  formatDateRangeSummary,
+  isoDateInRange,
+  parseDateRangeFromSearchParams,
+} from "@/lib/content/date-range";
+import {
   decodePipeSeparatedList,
   encodePipeSeparatedList,
   firstSearchParamValue,
-  parseYearList,
   toQueryString,
   type SearchParamsRecord,
 } from "@/lib/content/filter-search-params";
 import type { WorkKind } from "@/types/content";
 
 export type WorkFilterState = {
-  years: string[];
+  from: string | null;
+  to: string | null;
   categories: string[];
   tags: string[];
   clients: string[];
@@ -24,12 +32,18 @@ export const WORK_KIND_LABELS: Record<WorkKind, string> = {
 };
 
 export function emptyWorkFilter(): WorkFilterState {
-  return { years: [], categories: [], tags: [], clients: [], kinds: [] };
+  return {
+    ...emptyDateRange(),
+    categories: [],
+    tags: [],
+    clients: [],
+    kinds: [],
+  };
 }
 
 export function workFilterActive(filter: WorkFilterState): boolean {
   return (
-    filter.years.length > 0 ||
+    dateRangeActive(filter) ||
     filter.categories.length > 0 ||
     filter.tags.length > 0 ||
     filter.clients.length > 0 ||
@@ -45,7 +59,7 @@ function isWorkKind(value: string): value is WorkKind {
   );
 }
 
-/** Parse `?y=&c=&t=&cl=&k=` */
+/** Parse `?from=&to=&c=&t=&cl=&k=`（旧 `y=` も可） */
 export function parseWorkFilter(
   searchParams: SearchParamsRecord,
 ): WorkFilterState {
@@ -53,9 +67,13 @@ export function parseWorkFilter(
     .split(",")
     .map((part) => part.trim())
     .filter(isWorkKind);
+  const range = parseDateRangeFromSearchParams(searchParams, {
+    legacyYearsKey: "y",
+  });
 
   return {
-    years: parseYearList(firstSearchParamValue(searchParams, "y")),
+    from: range.from,
+    to: range.to,
     categories: decodePipeSeparatedList(
       firstSearchParamValue(searchParams, "c"),
     ),
@@ -67,7 +85,7 @@ export function parseWorkFilter(
 
 export function serializeWorkFilter(filter: WorkFilterState): string {
   const query = new URLSearchParams();
-  if (filter.years.length) query.set("y", filter.years.join(","));
+  appendDateRangeToQuery(query, filter);
   if (filter.categories.length) {
     query.set("c", encodePipeSeparatedList(filter.categories));
   }
@@ -104,6 +122,14 @@ export function workYear(item: {
   const parsed = workPrimaryDate(item);
   if (Number.isNaN(parsed.getTime())) return "";
   return String(parsed.getFullYear());
+}
+
+export function workMatchesDateRange(
+  item: { start_date: string | null; date: string },
+  range: { from: string | null; to: string | null },
+): boolean {
+  const primary = item.start_date || item.date;
+  return isoDateInRange(primary, range);
 }
 
 export function formatWorkPeriod(
@@ -149,3 +175,5 @@ export function normalizeWorkRow<T extends Record<string, unknown>>(
     og_image: String(row.og_image ?? ""),
   };
 }
+
+export { formatDateRangeSummary };

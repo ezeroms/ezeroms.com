@@ -32,6 +32,7 @@ export default async function AdminChroniclePage() {
             metaApiPath="/api/admin/library/chronicle/meta/"
             initialLabel={section.label}
             initialStatus={section.status}
+            initialOgImage={section.og_image}
           />
         }
       />

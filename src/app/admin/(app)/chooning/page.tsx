@@ -45,7 +45,7 @@ export default async function AdminChooningListPage() {
         .eq("is_deleted", false)
         .order("date", { ascending: false })
         .limit(300);
-      data = fallback.data;
+      data = fallback.data as typeof data;
       error = fallback.error;
     }
 
@@ -108,6 +108,7 @@ export default async function AdminChooningListPage() {
               metaApiPath="/api/admin/works/chooning/meta/"
               initialLabel={section.label}
               initialStatus={section.status}
+              initialOgImage={section.og_image}
             />
             <WorkCreateButton productKey="chooning" />
           </div>

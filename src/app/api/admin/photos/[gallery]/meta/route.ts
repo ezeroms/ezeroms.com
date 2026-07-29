@@ -12,7 +12,7 @@ type RouteParams = { params: Promise<{ gallery: string }> };
 
 /**
  * PATCH /api/admin/photos/[gallery]/meta/
- * ギャラリーの表示名・説明文・公開状態を更新する。
+ * ギャラリーの表示名・説明文・公開状態・OGP を更新する。
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   const user = await getSessionUser();
@@ -33,6 +33,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       label?: string;
       description?: string;
       status?: string;
+      og_image?: string;
     };
 
     const defaults = getPhotoGallery(galleryId);
@@ -42,12 +43,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const status = isPhotoGalleryStatus(body.status ?? "")
       ? body.status
       : defaults.status;
+    const og_image =
+      typeof body.og_image === "string" ? body.og_image.trim() : "";
 
     const row = {
       id: galleryId,
       label,
       description,
       status,
+      og_image,
     };
 
     const { data, error } = await getSupabaseAdmin()

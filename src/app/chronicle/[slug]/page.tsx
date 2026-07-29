@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MobileHeader } from "@/components/MobileHeader";
 import { SiteShell } from "@/components/SiteShell";
-import { serializeChronicleFilter, formatChronicleWhen } from "@/lib/content/chronicle-filter";
+import {
+  emptyChronicleFilter,
+  serializeChronicleFilter,
+  formatChronicleWhen,
+} from "@/lib/content/chronicle-filter";
 import {
   getChronicleBySlug,
   requirePublicLibrarySection,
@@ -27,7 +30,6 @@ export default async function ChronicleEntryPage({
   return (
     <SiteShell
       bodyClassName="is-chronicle"
-      mobileHeader={<MobileHeader title="Chronicle" />}
     >
       <article className="mx-auto max-w-3xl font-sans text-foreground">
         <p className="m-0 mb-4 text-sm text-muted-foreground">
@@ -60,8 +62,7 @@ export default async function ChronicleEntryPage({
               <Link
                 key={t}
                 href={`/chronicle/${serializeChronicleFilter({
-                  interests: [],
-                  years: [],
+                  ...emptyChronicleFilter(),
                   tags: [t],
                 })}`}
                 className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground no-underline hover:text-foreground"
@@ -75,7 +76,7 @@ export default async function ChronicleEntryPage({
         {item.body_html?.trim() ? (
           <div
             className={cn(
-              "mt-6 max-w-none text-base leading-relaxed text-foreground",
+              "mt-6 max-w-none text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base",
               proseBodyClass,
             )}
             dangerouslySetInnerHTML={{ __html: sanitizeBody(item.body_html) }}

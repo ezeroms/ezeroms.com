@@ -58,8 +58,9 @@ npm run dev
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `REVALIDATE_SECRET`
 - `NEXT_PUBLIC_SITE_URL=https://ezeroms.com`
+- `ADMIN_EMAILS=you@example.com`（管理画面・admin API の許可リスト）
 
-`CONTENTFUL_*` / `VERCEL_TOKEN` は本番に不要。
+`CONTENTFUL_*` / `VERCEL_TOKEN` / `SUPABASE_ACCESS_TOKEN` は本番に不要。
 
 ## 管理画面
 
