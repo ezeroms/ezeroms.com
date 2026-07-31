@@ -8,6 +8,9 @@ export type AdminNavItem = {
   /** lucide icon name key */
   icon:
     | "layout-dashboard"
+    | "calendar"
+    | "check-square"
+    | "files"
     | "notebook-pen"
     | "bookmark"
     | "file-text"
@@ -21,10 +24,13 @@ export type AdminNavItem = {
     | "book-open"
     | "landmark"
     | "user"
+    | "users"
     | "home"
     | "newspaper"
     | "globe"
-    | "mail";
+    | "chart-column"
+    | "mail"
+    | "tags";
 };
 
 export type AdminNavSection = {
@@ -35,22 +41,70 @@ export type AdminNavSection = {
 
 export const adminNavSections: AdminNavSection[] = [
   {
-    id: "overview",
-    label: "Overview",
+    id: "workspace",
+    label: "Workspace",
     items: [
       {
-        href: "/admin/",
-        label: "ダッシュボード",
-        description: "全体の入口",
+        href: "/admin/workspace/",
+        label: "Dashboard",
+        description: "今日の予定・Tasks・Docsの入口",
         status: "ready",
         icon: "layout-dashboard",
       },
       {
+        href: "/admin/workspace/calendar/",
+        label: "Calendar",
+        description: "週グリッドで予定を確認",
+        status: "ready",
+        icon: "calendar",
+      },
+      {
+        href: "/admin/workspace/tasks/",
+        label: "Tasks",
+        description: "タスクの管理",
+        status: "ready",
+        icon: "check-square",
+      },
+      {
+        href: "/admin/workspace/docs/",
+        label: "Docs",
+        description: "非公開メモ・資料",
+        status: "ready",
+        icon: "files",
+      },
+      {
+        href: "/admin/workspace/friends/",
+        label: "Friends",
+        description: "友達一覧",
+        status: "ready",
+        icon: "users",
+      },
+      {
+        href: "/admin/workspace/activities/",
+        label: "Activities",
+        description: "Activity 一覧",
+        status: "ready",
+        icon: "tags",
+      },
+    ],
+  },
+  {
+    id: "site",
+    label: "Site",
+    items: [
+      {
         href: "/admin/site/",
-        label: "Site",
+        label: "Settings",
         description: "トップの OGP などサイト全体設定",
         status: "ready",
         icon: "globe",
+      },
+      {
+        href: "/admin/analytics/",
+        label: "Analytics",
+        description: "公開サイトのアクセス状況",
+        status: "ready",
+        icon: "chart-column",
       },
     ],
   },
@@ -204,10 +258,11 @@ export function flattenAdminNav(): AdminNavItem[] {
 
 export function findAdminNavItem(pathname: string): AdminNavItem | undefined {
   const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
-  return flattenAdminNav().find((item) => {
-    if (item.href === "/admin/") {
-      return normalized === "/admin/";
-    }
-    return normalized === item.href || normalized.startsWith(item.href);
-  });
+  // Prefer longest matching href so /admin/workspace/calendar/ wins over /admin/workspace/
+  const matches = flattenAdminNav().filter(
+    (item) =>
+      normalized === item.href || normalized.startsWith(item.href),
+  );
+  if (matches.length === 0) return undefined;
+  return matches.sort((a, b) => b.href.length - a.href.length)[0];
 }

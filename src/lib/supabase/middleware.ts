@@ -63,7 +63,7 @@ export async function updateSession(request: NextRequest) {
 
   if (isLogin && user) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/admin";
+    redirectUrl.pathname = "/admin/workspace";
     redirectUrl.search = "";
     return NextResponse.redirect(redirectUrl);
   }

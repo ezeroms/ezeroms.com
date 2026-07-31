@@ -5,25 +5,11 @@ import {
   markdownToHtml,
   parseTagList,
 } from "@/lib/admin/content";
+import { normalizePurchaseUrl } from "@/lib/affiliate/amazon";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ slug: string }> };
-
-function parseOptionalUrl(raw: string | undefined | null): {
-  value: string | null;
-  error?: string;
-} {
-  const v = (raw ?? "").trim();
-  if (!v) return { value: null };
-  try {
-    // eslint-disable-next-line no-new
-    new URL(v);
-    return { value: v };
-  } catch {
-    return { value: null, error: "購入リンクの URL が不正です" };
-  }
-}
 
 function revalidateGiantsPaths(slug: string) {
   revalidatePath("/shoulders-of-giants");
@@ -100,7 +86,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const source = parseOptionalUrl(body.source_url);
+    const source = await normalizePurchaseUrl(body.source_url);
     if (source.error) {
       return NextResponse.json({ error: source.error }, { status: 400 });
     }

@@ -45,7 +45,7 @@ export default async function AdminChroniclePage() {
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button asChild variant="outline" size="sm">
-            <Link href="/admin/">ダッシュボードへ</Link>
+            <Link href="/admin/workspace/">Workspace へ</Link>
           </Button>
         </CardContent>
       </Card>

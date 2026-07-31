@@ -1,8 +1,10 @@
+import { withAmazonAffiliateTag } from "@/lib/affiliate/amazon";
 import {
   getSupabaseAdmin,
   hasSupabaseConfig,
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
+import { loadSiteSettings } from "@/lib/content/queries/site-settings";
 import type { SearchScopeId } from "@/lib/content/search-scope";
 import { getSearchScope } from "@/lib/content/search-scope";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
@@ -284,19 +286,25 @@ export async function searchContent(
         .ilike("body_html", pattern)
         .limit(limit),
     ]);
+    const tag = (await loadSiteSettings()).amazon_affiliate_tag;
+    const records = dedupeBySlug([
+      ...((byBook.data ?? []) as Record<string, unknown>[]),
+      ...((byAuthor.data ?? []) as Record<string, unknown>[]),
+      ...((byBody.data ?? []) as Record<string, unknown>[]),
+    ])
+      .slice(0, limit)
+      .map((row) => ({
+        ...row,
+        source_url: withAmazonAffiliateTag(
+          typeof row.source_url === "string" ? row.source_url : null,
+          tag,
+        ),
+      }));
+
     return {
       query: trimmed,
       scope,
-      groups: [
-        asGroup(
-          "giants",
-          dedupeBySlug([
-            ...((byBook.data ?? []) as Record<string, unknown>[]),
-            ...((byAuthor.data ?? []) as Record<string, unknown>[]),
-            ...((byBody.data ?? []) as Record<string, unknown>[]),
-          ]).slice(0, limit),
-        ),
-      ],
+      groups: [asGroup("giants", records)],
     };
   }
 

@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 function LoginForm() {
   const router = useRouter();
   const search = useSearchParams();
-  const next = search.get("next") || "/admin/";
+  const next = search.get("next") || "/admin/workspace/";
   const configError = search.get("error") === "missing-anon-key";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,7 +43,9 @@ function LoginForm() {
         setError(data.error || "ログインに失敗しました");
         return;
       }
-      router.replace(next.startsWith("/admin") ? next : "/admin/");
+      router.replace(
+        next.startsWith("/admin") ? next : "/admin/workspace/",
+      );
       router.refresh();
     } catch {
       setError("通信エラーが発生しました");

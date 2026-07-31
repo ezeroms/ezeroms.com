@@ -179,6 +179,11 @@ body:has(.admin-root) {
   border-bottom: 1px solid #f1f3f4 !important;
 }
 
+/* tbody 内のグループ見出し（五十音・月など）も行間と同じ線で区切る */
+.admin-root table tbody th[scope="colgroup"] {
+  border-bottom: 1px solid #f1f3f4 !important;
+}
+
 /* サイドバー下部のユーザーメニューは線のみ（シャドウ禁止） */
 .admin-root .admin-user-menu,
 .admin-root .admin-user-menu button {

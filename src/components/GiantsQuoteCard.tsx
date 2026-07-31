@@ -24,9 +24,60 @@ type Props = {
   articleClassName?: string;
 };
 
+/** 購入リンク付き書名: 通常は本文色、hover で下線＋薄いリンク色（本文リンクと同系） */
+const bookTitleLinkClass =
+  "text-inherit no-underline transition-colors hover:!text-muted-foreground hover:!underline hover:underline-offset-2";
+
+function citationWithBookLink(
+  citation: string,
+  purchaseUrl: string,
+  bookTitle: string | null | undefined,
+): ReactNode {
+  const linked = (label: string) => (
+    <a
+      href={purchaseUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={bookTitleLinkClass}
+    >
+      {label}
+    </a>
+  );
+
+  const title = bookTitle?.trim();
+  if (title) {
+    const book = `『${title}』`;
+    const idx = citation.indexOf(book);
+    if (idx !== -1) {
+      return (
+        <>
+          {citation.slice(0, idx)}
+          {linked(book)}
+          {citation.slice(idx + book.length)}
+        </>
+      );
+    }
+  }
+
+  // 書誌上書きなどで『書名』が取れないときは『…』を優先、なければ全文
+  const bracket = citation.match(/『[^』]+』/);
+  if (bracket?.index != null) {
+    const { 0: book, index } = bracket;
+    return (
+      <>
+        {citation.slice(0, index)}
+        {linked(book)}
+        {citation.slice(index + book.length)}
+      </>
+    );
+  }
+
+  return linked(citation);
+}
+
 /**
  * Giants quote card — Notes list chrome (surface, body, tags) + share after tags.
- * 書誌行は購入リンク（source_url）があるときだけ外部リンク（別タブ）。
+ * 書誌行は購入リンク（source_url）があるとき、書名部分だけ外部リンク（別タブ）。
  */
 export function GiantsQuoteCard({
   item,
@@ -46,20 +97,9 @@ export function GiantsQuoteCard({
 
   let citationNode: ReactNode = null;
   if (citation) {
-    if (purchaseUrl) {
-      citationNode = (
-        <a
-          href={purchaseUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-inherit underline underline-offset-2 decoration-foreground/35 transition-colors hover:decoration-foreground"
-        >
-          {citation}
-        </a>
-      );
-    } else {
-      citationNode = citation;
-    }
+    citationNode = purchaseUrl
+      ? citationWithBookLink(citation, purchaseUrl, item.book_title)
+      : citation;
   }
 
   return (

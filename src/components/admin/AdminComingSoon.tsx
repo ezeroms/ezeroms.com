@@ -25,7 +25,7 @@ export function AdminComingSoon({ item }: { item: AdminNavItem }) {
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button asChild variant="outline" size="sm">
-            <Link href="/admin/">ダッシュボードへ</Link>
+            <Link href="/admin/workspace/">Workspace へ</Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
             <Link href="/admin/notes/new/">代わりに Notes を書く</Link>

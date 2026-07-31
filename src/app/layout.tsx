@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { headers } from "next/headers";
 import { ogImageMetadata, resolveOgImageUrl } from "@/lib/content/og-image";
 import { loadSiteSettings } from "@/lib/content/queries/site-settings";
 import "@/styles/design-tokens.css";
@@ -29,9 +30,17 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const pathname = (await headers()).get("x-pathname") ?? "";
+  const isAdmin =
+    pathname === "/admin" ||
+    pathname === "/admin/" ||
+    pathname.startsWith("/admin/");
+  const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
+  const enableGa = Boolean(gaId) && !isAdmin;
+
   return (
     <html lang="ja">
       <head>
@@ -39,14 +48,14 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        {process.env.NEXT_PUBLIC_GA_ID ? (
+        {enableGa ? (
           <>
             <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
               strategy="afterInteractive"
             />
             <Script id="ga" strategy="afterInteractive">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`}
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
             </Script>
           </>
         ) : null}

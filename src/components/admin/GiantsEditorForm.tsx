@@ -227,7 +227,11 @@ export function GiantsEditorForm({
           placeholder="https://…（Amazon / 出版社など）"
         />
         <p className="m-0 text-xs text-muted-foreground">
-          入力すると公開ページの書誌行がクリック可能になり、別タブで開きます。空の場合はリンクにしません。
+          Amazon の短縮URL（amzn.asia など）は保存時に{" "}
+          <code className="text-xs">amazon.co.jp/dp/…</code>{" "}
+          へ正規化し、公開時に Settings のアフィリエイト ID
+          を付与します。出版社サイトなど非 Amazon
+          のリンクはそのまま保存され、アフィリエイトは付きません。
         </p>
       </div>
 

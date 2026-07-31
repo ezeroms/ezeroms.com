@@ -8,7 +8,11 @@ import {
   BookOpen,
   Bookmark,
   Briefcase,
+  Calendar,
+  ChartColumn,
+  CheckSquare,
   ChevronUp,
+  Files,
   Pizza,
   FileText,
   Image as ImageIcon,
@@ -19,7 +23,9 @@ import {
   NotebookPen,
   Palette,
   Smile,
+  Tags,
   User,
+  Users,
   Home,
   Globe,
   Mail,
@@ -31,6 +37,9 @@ import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 
 const icons: Record<AdminNavItem["icon"], LucideIcon> = {
   "layout-dashboard": LayoutDashboard,
+  calendar: Calendar,
+  "check-square": CheckSquare,
+  files: Files,
   "notebook-pen": NotebookPen,
   bookmark: Bookmark,
   "file-text": FileText,
@@ -44,15 +53,21 @@ const icons: Record<AdminNavItem["icon"], LucideIcon> = {
   "book-open": BookOpen,
   landmark: Landmark,
   user: User,
+  users: Users,
   home: Home,
   newspaper: Newspaper,
   globe: Globe,
+  "chart-column": ChartColumn,
   mail: Mail,
+  tags: Tags,
 };
 
 function isActive(pathname: string, href: string) {
   const path = pathname.endsWith("/") ? pathname : `${pathname}/`;
-  if (href === "/admin/") return path === "/admin/";
+  // Exact match for nested workspace routes so Dashboard doesn't stay active on Calendar etc.
+  if (href === "/admin/workspace/") {
+    return path === "/admin/workspace/";
+  }
   return path === href || path.startsWith(href);
 }
 
@@ -140,7 +155,7 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
     <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-[rgba(0,0,0,0.08)] bg-card">
       <div className="border-b border-border px-4 pb-4 pt-6">
         <Link
-          href="/admin/"
+          href="/admin/workspace/"
           className="block opacity-100 transition-opacity hover:opacity-60"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
