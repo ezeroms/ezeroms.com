@@ -1,0 +1,273 @@
+/* ========================================
+   ハーフモーダル（タブレット/スマホのみ表示）
+   PCでは完全に非表示（display: none）
+   ======================================== */
+
+/* PCでは非表示 */
+.half-modal {
+    display: none;
+}
+
+/* タブレット/スマホでのみ表示 */
+@media (max-width: 1079px) {
+    /* オーバーレイ */
+    .half-modal__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity var(--transition-normal) var(--easing-default);
+        pointer-events: none;
+    }
+    
+    .half-modal__overlay.is-active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    /* モーダル本体 */
+    .half-modal {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 70vh;
+        background: var(--color-background-white);
+        border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+        z-index: 1001;
+        transform: translateY(100%);
+        transition: transform var(--transition-normal) var(--easing-default);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .half-modal.is-open {
+        transform: translateY(0);
+    }
+    
+    /* モーダルヘッダー */
+    .half-modal__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-lg) var(--content-padding);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        background: var(--color-background-white);
+        z-index: 1;
+    }
+    
+    .half-modal__title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-primary);
+        margin: 0;
+        padding: 0;
+    }
+    
+    .half-modal__close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        color: var(--color-text-primary);
+        transition: all var(--transition-normal) var(--easing-default);
+    }
+    
+    .half-modal__close:hover {
+        background: var(--color-background-hover);
+        border-color: var(--color-border-hover);
+    }
+    
+    .half-modal__close svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+    }
+    
+    /* モーダルコンテンツ */
+    .half-modal__content {
+        padding: var(--spacing-lg);
+        overflow-y: auto;
+        max-height: calc(70vh - 60px);
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* リストスタイル */
+    .half-modal__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .half-modal__item {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .half-modal__link {
+        display: block;
+        padding: var(--spacing-md) var(--spacing-lg);
+        text-decoration: none;
+        color: var(--color-text-primary);
+        font-size: var(--font-size-base);
+        font-weight: var(--font-weight-medium);
+        border-radius: var(--radius-md);
+        transition: all var(--transition-normal) var(--easing-default);
+        border: 1px solid transparent;
+    }
+    
+    .half-modal__link:hover,
+    .half-modal__link:focus-visible {
+        background: var(--color-background-hover);
+        border-color: var(--color-border);
+    }
+    
+    .half-modal__link.active {
+        color: var(--color-text-primary);
+        background-color: var(--color-background-active);
+        border-color: transparent;
+    }
+    
+    /* グリッドレイアウト（月選択など） */
+    .half-modal__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-sm);
+        margin: 0;
+        padding: 0;
+    }
+    
+    .half-modal__grid-item {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .half-modal__grid-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-md);
+        text-decoration: none;
+        color: var(--color-text-primary);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        background: var(--color-background-white);
+        transition: all var(--transition-normal) var(--easing-default);
+        min-height: 44px;
+    }
+    
+    .half-modal__grid-link:hover:not(.disabled) {
+        background: var(--color-background-hover);
+        border-color: var(--color-border-hover);
+    }
+    
+    .half-modal__grid-link.active {
+        background: var(--color-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-primary);
+    }
+    
+    .half-modal__grid-link.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    
+    /* 年選択セクション */
+    .half-modal__year-section {
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .half-modal__year-selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .half-modal__year-nav {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text-primary);
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        padding: 0;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all var(--transition-normal) var(--easing-default);
+    }
+    
+    .half-modal__year-nav:hover:not(.disabled) {
+        background: var(--color-background-hover);
+        border-color: var(--color-border-hover);
+    }
+    
+    .half-modal__year-nav.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    
+    .half-modal__year-display {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text-primary);
+        min-width: 60px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .half-modal {
+        max-height: 80vh;
+    }
+    
+    .half-modal__content {
+        max-height: calc(80vh - 60px);
+        padding: var(--spacing-lg);
+    }
+    
+    .half-modal__header {
+        padding: var(--spacing-md) var(--content-padding);
+    }
+    
+    .half-modal__title {
+        font-size: var(--font-size-base);
+    }
+    
+    .half-modal__grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-xs);
+    }
+    
+    .half-modal__grid-link {
+        padding: var(--spacing-sm);
+        min-height: 40px;
+        font-size: var(--font-size-xs);
+    }
+}
+

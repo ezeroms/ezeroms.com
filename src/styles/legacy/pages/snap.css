@@ -1,0 +1,239 @@
+/* Snap専用スタイル */
+
+.snap-header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.snap-year-selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.snap-year-nav {
+    background: transparent;
+    border: none;
+    color: #050317;
+    font-size: 1.5rem;
+    font-weight: 300;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.snap-year-nav:hover {
+    color: #6E6D79;
+}
+
+.snap-year-display {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #050317;
+    min-width: 3.75rem;
+    text-align: center;
+}
+
+.snap-main {
+    padding: 0 0 80px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.snap-main__content {
+    max-width: 100%;
+    width: 100%;
+    min-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+.snap-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.snap-item {
+    display: block;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.snap-item:hover {
+    transform: translateY(-4px);
+    opacity: 0.9;
+}
+
+.snap-item__image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #f9f9f7;
+    margin-bottom: 12px;
+}
+
+.snap-item__thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.snap-item__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5D5D5F;
+    font-size: 0.875rem;
+}
+
+.snap-item__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.snap-item__date {
+    font-size: 0.875rem;
+    color: #5D5D5F;
+    font-style: italic;
+    margin: 0;
+}
+
+.snap-item__location,
+.snap-item__camera {
+    font-size: 0.75rem;
+    color: #5D5D5F;
+    margin: 0;
+}
+
+/* モーダル */
+.snap-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    box-sizing: border-box;
+}
+
+.snap-modal__close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+    z-index: 1001;
+}
+
+.snap-modal__close:hover {
+    opacity: 0.7;
+}
+
+.snap-modal__prev,
+.snap-modal__next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 3rem;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+    z-index: 1001;
+}
+
+.snap-modal__prev {
+    left: 24px;
+}
+
+.snap-modal__next {
+    right: 24px;
+}
+
+.snap-modal__prev:hover,
+.snap-modal__next:hover {
+    opacity: 0.7;
+}
+
+.snap-modal__content {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.snap-modal__image {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.snap-modal__info {
+    color: #fff;
+    text-align: center;
+    max-width: 600px;
+}
+
+.snap-modal__date {
+    font-size: 1rem;
+    margin: 0 0 8px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.snap-modal__location,
+.snap-modal__camera {
+    font-size: 0.875rem;
+    margin: 4px 0;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.snap-modal__description {
+    font-size: 0.875rem;
+    margin: 16px 0 0;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+
+
+

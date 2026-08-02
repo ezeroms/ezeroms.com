@@ -1,6 +1,7 @@
 ---
 title: "リオデジャネイロオリンピック開幕"
 date: 2016-08-05
+end_date: 2016-08-21
 category: "スポーツ"
 subcategory: "オリンピック"
 chronicle_tag: ["オリンピック", "スポーツ", "国際"]

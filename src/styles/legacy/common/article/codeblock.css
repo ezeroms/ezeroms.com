@@ -1,0 +1,61 @@
+.highlight {
+  width: 100%;
+}
+
+/* スクロールバーを非表示にする */
+pre::-webkit-scrollbar {
+  display: none;
+}
+
+pre code::-webkit-scrollbar {
+  display: none;
+}
+
+pre {
+  scrollbar-width: none;  /* Firefoxでスクロールバーを非表示にする */
+  -ms-overflow-style: none;  /* Internet Explorerでスクロールバーを非表示にする */
+}
+
+pre code {
+  scrollbar-width: none;  /* Firefoxでスクロールバーを非表示にする */
+  -ms-overflow-style: none;  /* Internet Explorerでスクロールバーを非表示にする */
+}
+
+/* 基本的なコードブロックのスタイル */
+pre {
+  background: #050317!important;  /* 背景色をダークグレーに */
+  color: #ccc;  /* 文字色を薄いグレーに */
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  border-radius: 8px;  /* 角を少し丸める */
+  font-size: 0.9em;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* さりげないボックスシャドウ */
+  width: calc(100% - 2em);
+}
+
+.hljs {
+  background: #050317!important;  /* 背景色をダークグレーに */
+}
+
+/* コードブロック内のスタイル */
+pre code {
+  line-height: 1.5;  /* 行間を広げる */
+}
+
+pre code::-moz-selection {
+  background: #59769A;
+}
+
+pre code::selection {
+  background: #59769A;
+}
+
+pre code *::-moz-selection {
+  background: #59769A;
+}
+
+pre code *::selection {
+  background: #59769A;
+}

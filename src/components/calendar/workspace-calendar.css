@@ -1,0 +1,578 @@
+/**
+ * schedule-x theme overrides for the admin Workspace calendar.
+ * Maps schedule-x tokens onto the project's design tokens and tightens
+ * borders/typography toward a Google Calendar-like density.
+ */
+
+.workspace-calendar {
+  --sx-color-primary: hsl(var(--foreground));
+  --sx-color-on-primary: hsl(var(--card));
+  --sx-color-primary-container: hsl(var(--muted));
+  --sx-color-on-primary-container: hsl(var(--foreground));
+
+  --sx-color-surface: hsl(var(--card));
+  --sx-color-surface-bright: hsl(var(--card));
+  --sx-color-surface-dim: hsl(var(--muted));
+  --sx-color-surface-container: hsl(var(--muted));
+  --sx-color-surface-container-low: hsl(var(--muted));
+  --sx-color-surface-container-high: hsl(var(--secondary));
+  --sx-color-on-surface: hsl(var(--foreground));
+
+  --sx-color-background: hsl(var(--card));
+  --sx-color-on-background: hsl(var(--foreground));
+
+  --sx-color-outline: hsl(var(--muted-foreground));
+  --sx-color-outline-variant: hsl(var(--border));
+  --sx-color-neutral: hsl(var(--muted-foreground));
+  --sx-color-neutral-variant: hsl(var(--border));
+
+  --sx-internal-color-light-gray: hsl(var(--muted));
+  --sx-internal-color-text: hsl(var(--foreground));
+
+  --sx-border: 1px solid hsl(var(--border));
+  --sx-rounding-extra-small: 6px;
+  --sx-rounding-small: 8px;
+
+  --sx-font-extra-small: 0.75rem;
+  --sx-font-small: 0.8125rem;
+  --sx-font-large: 1rem;
+  --sx-font-extra-large: 1.125rem;
+}
+
+/**
+ * The React binding injects an unstyled wrapper between our sized container and
+ * .sx__calendar-wrapper. Without a height here the chain breaks and
+ * .sx__view-container can never become scrollable.
+ */
+.workspace-calendar .sx-react-calendar-wrapper {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  min-height: 0;
+}
+
+.workspace-calendar .sx__calendar-wrapper {
+  height: 100%;
+  min-height: 0;
+}
+
+.workspace-calendar .sx__calendar {
+  border: 0;
+  border-radius: 0;
+  font-family: inherit;
+  height: 100%;
+  min-height: 0;
+}
+
+/*
+ * Keep Today / day names / all-day events fixed; only the timed grid scrolls.
+ * schedule-x already marks .sx__week-header as sticky within .sx__view-container.
+ */
+.workspace-calendar .sx__view-container {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.workspace-calendar .sx__week-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: hsl(var(--card));
+}
+
+.workspace-calendar .sx__week-header-content {
+  background-color: hsl(var(--card));
+}
+
+/*
+ * Header: single horizontal row (今日 / ナビ / 月 / ビュー / 日付).
+ * `display` and `width` are restated because the admin reset
+ * (.admin-root header) forces block layout on every <header>.
+ */
+.workspace-calendar .sx__calendar-header {
+  display: flex;
+  width: 100%;
+  flex-shrink: 0;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+  gap: 0.75rem;
+}
+
+.workspace-calendar .sx__calendar-header-content {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* Same admin reset problem inside the date picker popup. */
+.workspace-calendar .sx__date-picker__month-view-header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.workspace-calendar .sx__calendar-header .sx__today-button,
+.workspace-calendar .sx__view-selection-selected-item,
+.workspace-calendar .sx-cal-date__button {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.625rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.workspace-calendar .sx__calendar-header .sx__today-button:hover,
+.workspace-calendar .sx__view-selection-selected-item:hover,
+.workspace-calendar .sx-cal-date__button:hover {
+  border-color: hsl(var(--border-hover));
+  background-color: hsl(var(--card));
+}
+
+/* Floating labels ("View" / "Date") are redundant in this compact header. */
+.workspace-calendar .sx__view-selection-label,
+.workspace-calendar .sx__calendar-header .sx__date-input-label {
+  display: none;
+}
+
+/* Replaced by .sx-cal-heading (blank on custom 2/4-day views) and
+ * .sx-cal-date (locale-locked to MM/DD/YYYY). */
+.workspace-calendar .sx__range-heading,
+.workspace-calendar .sx__calendar-header .sx__date-picker-wrapper {
+  display: none;
+}
+
+.workspace-calendar .sx-cal-heading {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.workspace-calendar .sx-cal-heading__text {
+  overflow: hidden;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-calendar .sx-cal-date {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.workspace-calendar .sx-cal-date__button {
+  gap: 0.375rem;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.workspace-calendar .sx-cal-date__icon {
+  width: 1rem;
+  height: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Transparent overlay so the platform date picker opens in place. */
+.workspace-calendar .sx-cal-date__native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.workspace-calendar .sx__forward-backward-navigation {
+  display: flex;
+  align-items: center;
+  height: auto;
+  gap: 0.125rem;
+}
+
+.workspace-calendar .sx__chevron-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  width: 2rem;
+  min-height: 0;
+  min-width: 0;
+  border-radius: 6px;
+}
+
+/* Lucide chevron-left / chevron-right in place of the CSS border arrows. */
+.workspace-calendar .sx__chevron-wrapper .sx__chevron {
+  position: static;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 0;
+  transform: none;
+  background-color: hsl(var(--foreground));
+  -webkit-mask: var(--sx-chevron) center / contain no-repeat;
+  mask: var(--sx-chevron) center / contain no-repeat;
+}
+
+.workspace-calendar .sx__chevron--previous {
+  --sx-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15 18-6-6 6-6'/%3E%3C/svg%3E");
+}
+
+.workspace-calendar .sx__chevron--next {
+  --sx-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+}
+
+/* Day header row */
+.workspace-calendar .sx__week-grid__date {
+  padding: 0.5rem 0;
+  gap: 0.125rem;
+}
+
+.workspace-calendar .sx__week-grid__day-name {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.workspace-calendar .sx__week-grid__date-number {
+  font-size: 1.125rem;
+  font-weight: 400;
+  height: 1.9em;
+  width: 1.9em;
+  color: hsl(var(--foreground));
+}
+
+.workspace-calendar .sx__week-grid__date--is-today .sx__week-grid__day-name {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.workspace-calendar .sx__week-grid__date--is-today .sx__week-grid__date-number {
+  color: hsl(var(--primary-foreground));
+  font-weight: 500;
+}
+
+/* Grid lines: hairlines instead of the default heavier strokes */
+.workspace-calendar .sx__week-grid__hour,
+.workspace-calendar .sx__time-grid-day,
+.workspace-calendar .sx__month-grid-week,
+.workspace-calendar .sx__month-grid-day:not(:last-child),
+.workspace-calendar .sx__week-header-border,
+.workspace-calendar .sx__date-grid-day {
+  border-color: hsl(var(--border) / 0.7);
+}
+
+.workspace-calendar .sx__week-grid__hour-text {
+  font-size: 0.6875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Dual timezone time axis (Google Calendar style) */
+.workspace-calendar--dual-tz {
+  --sx-calendar-week-grid-padding-left: 112px;
+}
+
+.workspace-calendar .sx-tz-hour {
+  position: absolute;
+  left: -52px;
+  top: -0.7em;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  width: 44px;
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+}
+
+.workspace-calendar .sx-tz-hour--dual {
+  left: -100px;
+  width: 92px;
+}
+
+.workspace-calendar .sx-tz-hour__secondary,
+.workspace-calendar .sx-tz-hour__primary {
+  flex: 1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.workspace-calendar .sx-tz-labels {
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  width: calc(var(--sx-calendar-week-grid-padding-left) - 12px);
+  padding-right: 4px;
+  font-size: 0.625rem;
+  line-height: 1.2;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+}
+
+.workspace-calendar .sx-tz-labels__secondary,
+.workspace-calendar .sx-tz-labels__primary {
+  flex: 1;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-calendar .sx__week-grid__date-axis {
+  position: relative;
+}
+
+/* Events: softer corners, tighter text, subtle hover */
+.workspace-calendar .sx__time-grid-event,
+.workspace-calendar .sx__date-grid-event,
+.workspace-calendar .sx__month-grid-event {
+  border-radius: 6px;
+  border-inline-start: none !important;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  box-shadow: none;
+  min-width: 0;
+  transition:
+    filter 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.workspace-calendar .sx__time-grid-event:hover,
+.workspace-calendar .sx__date-grid-event:hover,
+.workspace-calendar .sx__month-grid-event:hover {
+  filter: brightness(0.97);
+  box-shadow: 0 1px 3px hsl(var(--foreground) / 0.14);
+}
+
+.workspace-calendar .sx__time-grid-event-inner {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.workspace-calendar .sx__time-grid-event-title,
+.workspace-calendar .sx__title-and-time-compact {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Title + time only (no location / people / icons). */
+.workspace-calendar .sx__time-grid-event-location,
+.workspace-calendar .sx__time-grid-event-people {
+  display: none !important;
+}
+
+.workspace-calendar .sx__time-grid-event-time {
+  display: block;
+  margin-top: 0.2rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.workspace-calendar .sx__time-grid-event-time svg {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+ * Day timeline lanes: schedule on the left, Task work blocks on the right.
+ * --sx-schedule-lane is set by WorkspaceCalendar to match weekOptions.eventWidth.
+ * ------------------------------------------------------------------------- */
+.workspace-calendar .sx__time-grid-day::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--sx-schedule-lane, 58%);
+  border-inline-start: 1px dashed hsl(var(--border));
+  pointer-events: none;
+}
+
+.workspace-calendar .sx-task-lane-host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Rubber-band preview while click-dragging to create. */
+.workspace-calendar .sx-create-ghost {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.workspace-calendar .sx-create-ghost--schedule {
+  inset-inline-start: 2px;
+  width: calc(var(--sx-schedule-lane, 58%) - 4px);
+  border: 1px solid hsl(var(--foreground) / 0.35);
+  background-color: hsl(var(--foreground) / 0.12);
+}
+
+.workspace-calendar .sx-create-ghost--task {
+  inset-inline-start: calc(var(--sx-schedule-lane, 58%) + 4px);
+  inset-inline-end: 4px;
+  background-color: hsl(var(--brand) / 0.18);
+}
+
+.workspace-calendar--creating {
+  user-select: none;
+  cursor: crosshair;
+}
+
+.workspace-calendar--creating .sx__time-grid-day {
+  cursor: crosshair;
+}
+
+.workspace-calendar .sx-task-lane {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--sx-schedule-lane, 58%) + 4px);
+  inset-inline-end: 4px;
+}
+
+.workspace-calendar .sx-task-lane__chip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0.2rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 1.35rem;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 6px;
+  background-color: hsl(var(--brand) / 0.14);
+  color: hsl(var(--foreground));
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.workspace-calendar .sx-task-lane__chip:hover {
+  background-color: hsl(var(--brand) / 0.22);
+  box-shadow: 0 1px 3px hsl(var(--foreground) / 0.14);
+}
+
+.workspace-calendar .sx-task-lane__chip--high {
+  background-color: hsl(var(--destructive) / 0.14);
+}
+
+.workspace-calendar .sx-task-lane__chip--done {
+  background-color: hsl(var(--muted-foreground) / 0.12);
+  color: hsl(var(--muted-foreground));
+}
+
+.workspace-calendar .sx-task-lane__chip--done .sx-task-lane__title {
+  text-decoration: line-through;
+}
+
+.workspace-calendar .sx-task-lane__title {
+  flex: 0 0 auto;
+  overflow: hidden;
+  color: inherit;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.workspace-calendar .sx-task-lane__time {
+  flex: 0 1 auto;
+  overflow: hidden;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Current time indicator (Google-like red line), hybrid-day aware */
+.workspace-calendar .sx-now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ea4335;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.workspace-calendar .sx-now-line::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: -4px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: #ea4335;
+}
+
+.workspace-calendar .sx-now-line-full {
+  position: absolute;
+  left: var(--sx-calendar-week-grid-padding-left);
+  right: 0;
+  height: 1px;
+  background-color: rgb(234 67 53 / 0.3);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Scrollbar polish inside the grid */
+.workspace-calendar .sx__view-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.workspace-calendar .sx__view-container::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 9999px;
+  background-color: hsl(var(--border-hover) / 0.35);
+}
+
+.workspace-calendar .sx__view-container::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--border-hover) / 0.55);
+}
