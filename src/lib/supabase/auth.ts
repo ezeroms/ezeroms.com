@@ -44,11 +44,17 @@ export async function createAuthClient() {
 
 export async function getSessionUser(): Promise<User | null> {
   if (!hasAnonConfig()) return null;
-  const supabase = await createAuthClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user) return null;
-  if (!isAdminEmail(data.user.email)) return null;
-  return data.user;
+  try {
+    const supabase = await createAuthClient();
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) return null;
+    if (!isAdminEmail(data.user.email)) return null;
+    return data.user;
+  } catch {
+    // ネットワーク不通・不正な URL などで getUser が throw することがある
+    // （TypeError: fetch failed）。ページ全体を落とさず未ログイン扱い。
+    return null;
+  }
 }
 
 export async function requireSessionUser(): Promise<User> {
