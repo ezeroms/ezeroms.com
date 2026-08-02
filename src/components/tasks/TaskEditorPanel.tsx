@@ -202,7 +202,11 @@ export function TaskEditorPanel({
   async function toggleDone() {
     const nextStatus: TaskStatus =
       draft.status === "done" ? "active" : "done";
-    const next = { ...draft, status: nextStatus };
+    const next = {
+      ...draft,
+      status: nextStatus,
+      progress_percent: nextStatus === "done" ? "100" : draft.progress_percent,
+    };
     setDraft(next);
     setSaveState("dirty");
     await persist(next);
@@ -284,9 +288,21 @@ export function TaskEditorPanel({
           <MetaRow label="状態">
             <Select
               value={draft.status}
-              onChange={(e) =>
-                patchDraft("status", e.target.value as TaskStatus)
-              }
+              onChange={(e) => {
+                const nextStatus = e.target.value as TaskStatus;
+                setDraft((prev) => {
+                  const next = {
+                    ...prev,
+                    status: nextStatus,
+                    progress_percent:
+                      nextStatus === "done" ? "100" : prev.progress_percent,
+                  };
+                  setSaveState(
+                    draftsEqual(next, baseline) ? "saved" : "dirty",
+                  );
+                  return next;
+                });
+              }}
               className={fieldClass}
             >
               {Object.entries(TASK_STATUS_LABELS).map(([value, label]) => (

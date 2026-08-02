@@ -238,16 +238,23 @@ export function TasksBoard({
 
   async function toggleDone(task: WorkspaceTask) {
     const nextStatus = task.status === "done" ? "active" : "done";
+    const nextProgress =
+      nextStatus === "done" ? 100 : (task.progress_percent ?? 0);
     setTasks((previous) =>
       previous.map((item) =>
-        item.id === task.id ? { ...item, status: nextStatus } : item,
+        item.id === task.id
+          ? { ...item, status: nextStatus, progress_percent: nextProgress }
+          : item,
       ),
     );
     try {
       const response = await fetch(`/api/admin/workspace/tasks/${task.id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatus }),
+        body: JSON.stringify({
+          status: nextStatus,
+          ...(nextStatus === "done" ? { progress_percent: 100 } : {}),
+        }),
       });
       const data = (await response.json()) as {
         item?: WorkspaceTask;

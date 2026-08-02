@@ -45,6 +45,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       scheduled_at?: string | null;
       due_at?: string | null;
       estimated_minutes?: number | null;
+      progress_percent?: number | null;
       location?: string | null;
     };
 
@@ -63,6 +64,17 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     ) {
       return NextResponse.json(
         { error: "estimated_minutes must be a positive number" },
+        { status: 400 },
+      );
+    }
+    if (
+      body.progress_percent != null &&
+      (!Number.isFinite(body.progress_percent) ||
+        body.progress_percent < 0 ||
+        body.progress_percent > 100)
+    ) {
+      return NextResponse.json(
+        { error: "progress_percent must be 0–100" },
         { status: 400 },
       );
     }
@@ -96,6 +108,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       ...(body.due_at !== undefined ? { due_at: body.due_at } : {}),
       ...(body.estimated_minutes !== undefined
         ? { estimated_minutes: body.estimated_minutes }
+        : {}),
+      ...(body.progress_percent !== undefined
+        ? { progress_percent: body.progress_percent }
         : {}),
       ...(body.location !== undefined ? { location: body.location } : {}),
     });

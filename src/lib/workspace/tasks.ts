@@ -107,6 +107,7 @@ export type TaskWriteInput = {
   scheduled_at?: string | null;
   due_at?: string | null;
   estimated_minutes?: number | null;
+  progress_percent?: number | null;
   location?: string | null;
 };
 
@@ -124,6 +125,8 @@ export async function createTask(
   input: TaskWriteInput,
 ): Promise<WorkspaceTask> {
   const status = input.status ?? "inbox";
+  const progressPercent =
+    status === "done" ? 100 : (input.progress_percent ?? 0);
   const { data, error } = await getWorkspaceAdmin()
     .from("tasks")
     .insert({
@@ -136,6 +139,7 @@ export async function createTask(
       scheduled_at: input.scheduled_at ?? null,
       due_at: input.due_at ?? null,
       estimated_minutes: input.estimated_minutes ?? null,
+      progress_percent: progressPercent,
       location: input.location ?? null,
       completed_at: status === "done" ? new Date().toISOString() : null,
       archived_at: status === "archived" ? new Date().toISOString() : null,
@@ -162,6 +166,10 @@ export async function updateTask(
     row.archived_at = new Date().toISOString();
   } else if (patch.status) {
     row.archived_at = null;
+  }
+  // 完了にしたときは進捗を 100% に揃える
+  if (patch.status === "done") {
+    row.progress_percent = 100;
   }
 
   const { data, error } = await getWorkspaceAdmin()
