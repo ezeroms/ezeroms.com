@@ -92,6 +92,7 @@ export function TaskEditorPanel({
   const taskIdRef = useRef(task.id);
   const draftRef = useRef(draft);
   draftRef.current = draft;
+  const titleRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const next = draftFromTask(task);
@@ -101,6 +102,10 @@ export function TaskEditorPanel({
     setSaveState("idle");
     setError(null);
   }, [task.id, task.updated_at]);
+
+  useLayoutEffect(() => {
+    autosizeTitle(titleRef.current);
+  }, [draft.title, task.id]);
 
   function patchDraft<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((prev) => {
