@@ -302,10 +302,10 @@ export function TasksBoard({
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-background lg:flex-row">
       <div className="flex min-h-0 min-w-0 flex-1 flex-row overflow-hidden">
-        {/* 左ペイン: スマートリスト / Projects */}
-        <aside className="flex w-[13.5rem] shrink-0 flex-col border-r border-border bg-muted/40 sm:w-56">
-          <div className="min-h-0 flex-1 overflow-y-auto px-3 py-5">
-            <p className="mb-2 px-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        {/* 左ペイン: スマートリスト / Projects（AdminSidebar と同じナビ見た目） */}
+        <aside className="flex w-[13.5rem] shrink-0 flex-col border-r border-border bg-muted/30 sm:w-56">
+          <div className="min-h-0 flex-1 overflow-y-auto px-2.5 py-4">
+            <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               スマートリスト
             </p>
             <nav className="flex flex-col gap-0.5">
@@ -321,7 +321,7 @@ export function TasksBoard({
                     onClick={() => selectNav({ kind: "view", view: view.id })}
                     className={sidebarNavItemClass(active)}
                   >
-                    <Icon className="h-4 w-4 shrink-0 opacity-60" aria-hidden />
+                    <Icon className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
                     <span className="min-w-0 flex-1 truncate">{view.label}</span>
                     {count > 0 ? (
                       <span className="tabular-nums text-xs text-muted-foreground">
@@ -333,13 +333,13 @@ export function TasksBoard({
               })}
             </nav>
 
-            <div className="mb-2 mt-7 flex items-center justify-between gap-2 px-2">
-              <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            <div className="mb-1.5 mt-5 flex items-center justify-between gap-2 px-2">
+              <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Projects
               </p>
               <Link
                 href="/admin/workspace/projects/"
-                className="text-[11px] text-muted-foreground transition-colors hover:text-foreground"
+                className="border-0 bg-transparent p-0 text-[11px] text-muted-foreground shadow-none transition-colors hover:text-foreground"
               >
                 管理
               </Link>
@@ -368,7 +368,7 @@ export function TasksBoard({
                       className={sidebarNavItemClass(active)}
                     >
                       <Folder
-                        className="h-4 w-4 shrink-0 opacity-60"
+                        className="h-4 w-4 shrink-0 opacity-80"
                         aria-hidden
                       />
                       <span className="min-w-0 flex-1 truncate">

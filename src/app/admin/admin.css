@@ -52,6 +52,18 @@ body:has(.admin-root) {
   cursor: pointer;
 }
 
+/* ナビ用 button（border-0）は UA の枠・背景を残さない */
+.admin-root button.border-0,
+.admin-root button[class*="border-0"] {
+  border: 0 !important;
+  background-color: transparent;
+}
+
+.admin-root button.border-0.bg-accent,
+.admin-root button[class*="border-0"][class*="bg-accent"] {
+  background-color: hsl(var(--accent));
+}
+
 .admin-root button[class*="border-border"],
 .admin-root a[class*="border-border"] {
   background-color: hsl(var(--card));
