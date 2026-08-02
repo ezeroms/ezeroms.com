@@ -50,6 +50,13 @@ export const DOC_STATUS_LABELS: Record<string, string> = {
   archived: "Archived",
 };
 
+export const PROJECT_STATUS_LABELS: Record<string, string> = {
+  active: "Active",
+  paused: "Paused",
+  completed: "Completed",
+  archived: "Archived",
+};
+
 export const TASK_VIEWS = [
   { id: "inbox", label: "Inbox" },
   { id: "today", label: "Today" },

@@ -8,7 +8,7 @@ import type {
 } from "@/types/workspace";
 
 const SELECT =
-  "id, title, body_md, status, priority, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, location, created_at, updated_at, completed_at, archived_at";
+  "id, title, body_md, status, priority, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, location, created_at, updated_at, completed_at, archived_at";
 
 export type TaskListFilter = {
   status?: TaskStatus;

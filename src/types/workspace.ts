@@ -32,16 +32,35 @@ export type WorkspaceTask = {
   status: TaskStatus;
   priority: TaskPriority;
   project_id: string | null;
+  /**
+   * 次の作業枠の日付（YYYY-MM-DD）。task_work_blocks から同期。
+   * UI では編集しない（作業枠がソース・オブ・トゥルース）。
+   */
   scheduled_date: string | null;
-  /** Local work-block start (ISO). Duration: estimated_minutes or 30. */
+  /** 次の作業枠の開始（ISO）。task_work_blocks から同期。 */
   scheduled_at: string | null;
   due_at: string | null;
   estimated_minutes: number | null;
+  /** 進捗 0–100 */
+  progress_percent: number;
   location: string | null;
   created_at: string;
   updated_at: string;
   completed_at: string | null;
   archived_at: string | null;
+};
+
+/** 1 タスクに紐づく作業枠（カレンダー右レーン・こまぎれ対応）。 */
+export type TaskWorkBlock = {
+  id: string;
+  task_id: string;
+  starts_at: string;
+  ends_at: string;
+  calendar_link_id: string | null;
+  /** この枠についての任意の作業日誌 */
+  note_md: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 export type WorkspaceDoc = {
