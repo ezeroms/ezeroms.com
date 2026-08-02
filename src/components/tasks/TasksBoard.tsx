@@ -423,7 +423,7 @@ export function TasksBoard({
 
           <form
             onSubmit={onQuickAdd}
-            className="mx-4 mb-3 flex shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors focus-within:border-border-hover"
+            className="mx-5 mb-3 flex shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors focus-within:border-border-hover"
           >
             <Plus
               className="size-4 shrink-0 text-muted-foreground"
