@@ -48,11 +48,16 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user: authUser },
-  } = await supabase.auth.getUser();
-  const user =
-    authUser && isAdminEmail(authUser.email) ? authUser : null;
+  let user: { email?: string | null } | null = null;
+  try {
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+    user = authUser && isAdminEmail(authUser.email) ? authUser : null;
+  } catch {
+    // TypeError: fetch failed など。未ログイン扱いに落とす。
+    user = null;
+  }
 
   if (isAdmin && !isLogin && !user) {
     const redirectUrl = request.nextUrl.clone();
