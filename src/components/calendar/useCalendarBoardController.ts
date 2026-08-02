@@ -10,7 +10,7 @@ import type {
 import type { CalendarSlotDraft } from "@/components/calendar/CalendarSlotCreatePopover";
 import type { TaskLaneClickTarget } from "@/components/calendar/TaskLane";
 import type { CalendarCreateSlot } from "@/components/calendar/WorkspaceCalendar";
-import { localDateKey, type WeekStartsOn } from "@/lib/workspace/calendar/time";
+import { type WeekStartsOn } from "@/lib/workspace/calendar/time";
 import type {
   CalendarTaskBlock,
   GoogleCalendarEvent,
