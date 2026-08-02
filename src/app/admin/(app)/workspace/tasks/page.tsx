@@ -1,32 +1,34 @@
 import { AdminContent } from "@/components/admin/AdminContent";
-import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
-import { TasksBoard } from "@/components/tasks/TasksBoard";
+import {
+  TasksBoard,
+  type TasksNavSelection,
+} from "@/components/tasks/TasksBoard";
 import { Alert } from "@/components/ui/alert";
-import { findAdminNavItem } from "@/lib/admin/nav";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
+import { TASK_VIEWS, type TaskViewId } from "@/lib/workspace/labels";
 import { listProjects } from "@/lib/workspace/projects";
 import { listTasks } from "@/lib/workspace/tasks";
-import { TASK_VIEWS, type TaskViewId } from "@/lib/workspace/labels";
 
 export const dynamic = "force-dynamic";
 
-const navItem = findAdminNavItem("/admin/workspace/tasks/")!;
-
 function parseView(raw: string | undefined): TaskViewId {
-  const found = TASK_VIEWS.find((v) => v.id === raw);
+  const found = TASK_VIEWS.find((view) => view.id === raw);
   return found?.id ?? "inbox";
 }
 
 export default async function AdminWorkspaceTasksPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string }>;
+  searchParams: Promise<{
+    view?: string;
+    project?: string;
+    task?: string;
+  }>;
 }) {
   await getSessionUser();
-  const sp = await searchParams;
-  const view = parseView(sp.view);
+  const params = await searchParams;
 
   let loadError: string | null = null;
   let tasks = [] as Awaited<ReturnType<typeof listTasks>>;
@@ -34,8 +36,9 @@ export default async function AdminWorkspaceTasksPage({
 
   if (hasWorkspaceConfig()) {
     try {
+      // スマートリスト件数・クライアント絞り込み用に一括取得
       [tasks, projects] = await Promise.all([
-        listTasks({ view, limit: 200 }),
+        listTasks({ view: "all", limit: 500 }),
         listProjects(),
       ]);
     } catch (e) {
@@ -43,23 +46,36 @@ export default async function AdminWorkspaceTasksPage({
     }
   }
 
+  const projectId = params.project?.trim() || "";
+  const projectExists = projects.some((project) => project.id === projectId);
+  const initialSelection: TasksNavSelection =
+    projectId && projectExists
+      ? { kind: "project", projectId }
+      : { kind: "view", view: parseView(params.view) };
+
+  const initialTaskId = params.task?.trim() || null;
+
   return (
-    <AdminContent width="wide">
-      <AdminPageHeader
-        title={navItem.label}
-        description={navItem.description}
-      />
-      <WorkspaceConfigNotice />
+    <AdminContent
+      width="wide"
+      className="-mx-6 -my-8 flex min-h-0 flex-1 flex-col overflow-hidden px-0 py-0"
+    >
+      {!hasWorkspaceConfig() ? (
+        <div className="px-6 py-8">
+          <WorkspaceConfigNotice />
+        </div>
+      ) : null}
       {loadError ? (
-        <Alert variant="destructive" className="mb-4">
-          {loadError}
-        </Alert>
+        <div className="px-6 py-8">
+          <Alert variant="destructive">{loadError}</Alert>
+        </div>
       ) : null}
       {hasWorkspaceConfig() && !loadError ? (
         <TasksBoard
           initialTasks={tasks}
           projects={projects}
-          initialView={view}
+          initialSelection={initialSelection}
+          initialTaskId={initialTaskId}
         />
       ) : null}
     </AdminContent>
