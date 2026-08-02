@@ -302,10 +302,10 @@ export function TasksBoard({
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-background lg:flex-row">
       <div className="flex min-h-0 min-w-0 flex-1 flex-row overflow-hidden">
-        {/* 左ペイン */}
-        <aside className="flex w-48 shrink-0 flex-col border-r border-border bg-muted/30 sm:w-52 md:w-56">
-          <div className="min-h-0 flex-1 overflow-y-auto px-2.5 py-4">
-            <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {/* 左ペイン: スマートリスト / Projects */}
+        <aside className="flex w-[13.5rem] shrink-0 flex-col border-r border-border bg-muted/40 sm:w-56">
+          <div className="min-h-0 flex-1 overflow-y-auto px-3 py-5">
+            <p className="mb-2 px-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
               スマートリスト
             </p>
             <nav className="flex flex-col gap-0.5">
@@ -321,7 +321,7 @@ export function TasksBoard({
                     onClick={() => selectNav({ kind: "view", view: view.id })}
                     className={sidebarNavItemClass(active)}
                   >
-                    <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                    <Icon className="h-4 w-4 shrink-0 opacity-60" aria-hidden />
                     <span className="min-w-0 flex-1 truncate">{view.label}</span>
                     {count > 0 ? (
                       <span className="tabular-nums text-xs text-muted-foreground">
@@ -333,13 +333,13 @@ export function TasksBoard({
               })}
             </nav>
 
-            <div className="mb-1.5 mt-6 flex items-center justify-between gap-2 px-2">
-              <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="mb-2 mt-7 flex items-center justify-between gap-2 px-2">
+              <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
                 Projects
               </p>
               <Link
                 href="/admin/workspace/projects/"
-                className="text-[11px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                className="text-[11px] text-muted-foreground transition-colors hover:text-foreground"
               >
                 管理
               </Link>
@@ -368,7 +368,7 @@ export function TasksBoard({
                       className={sidebarNavItemClass(active)}
                     >
                       <Folder
-                        className="h-4 w-4 shrink-0 opacity-70"
+                        className="h-4 w-4 shrink-0 opacity-60"
                         aria-hidden
                       />
                       <span className="min-w-0 flex-1 truncate">
@@ -385,12 +385,12 @@ export function TasksBoard({
               )}
             </nav>
 
-            <div className="mt-3 flex items-center gap-1.5 px-1">
+            <div className="mt-3 flex items-center gap-1.5 px-0.5">
               <Input
                 value={newProjectName}
                 onChange={(e) => setNewProjectName(e.target.value)}
                 placeholder="Project を追加…"
-                className="h-8 border-border bg-card text-xs placeholder:text-muted-foreground/60"
+                className="h-8 border-border bg-card text-xs shadow-none placeholder:text-muted-foreground/55"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -413,17 +413,20 @@ export function TasksBoard({
           </div>
         </aside>
 
-        {/* 中央ペイン */}
+        {/* 中央ペイン: タスク一覧 */}
         <section className="flex min-w-0 flex-1 flex-col border-r border-border bg-card">
-          <div className="tasks-board__list-header">
-            <h1 className="text-xl font-semibold tracking-tight text-foreground">
+          <div className="shrink-0 px-5 pb-3 pt-6">
+            <h1 className="m-0 text-[1.35rem] font-semibold tracking-tight text-foreground">
               {listTitle}
             </h1>
+            <p className="m-0 mt-1 text-xs text-muted-foreground">
+              {visibleTasks.length} 件
+            </p>
           </div>
 
           <form
             onSubmit={onQuickAdd}
-            className="mx-5 mb-3 flex shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors focus-within:border-border-hover"
+            className="mx-5 mb-3 flex shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 transition-colors focus-within:border-border-hover"
           >
             <Plus
               className="size-4 shrink-0 text-muted-foreground"
@@ -433,7 +436,7 @@ export function TasksBoard({
               value={quickTitle}
               onChange={(e) => setQuickTitle(e.target.value)}
               placeholder="タスクを追加…"
-              className="admin-input-bare h-8 min-w-0 flex-1 border-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/70"
+              className="admin-input-bare h-8 min-w-0 flex-1 border-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/65"
               autoComplete="off"
               enterKeyHint="done"
             />
@@ -442,12 +445,7 @@ export function TasksBoard({
               variant="outline"
               size="sm"
               disabled={busy || !quickTitle.trim()}
-              className={cn(
-                "h-8 shrink-0 px-3 transition-opacity",
-                quickTitle.trim()
-                  ? "opacity-100"
-                  : "pointer-events-none opacity-0",
-              )}
+              className="h-8 shrink-0 px-3"
             >
               {busy ? "…" : "追加"}
             </Button>
@@ -462,9 +460,9 @@ export function TasksBoard({
             </p>
           ) : null}
 
-          <ul className="m-0 min-h-0 flex-1 list-none space-y-0.5 overflow-y-auto px-2 pb-4 pt-0">
+          <ul className="m-0 min-h-0 flex-1 list-none space-y-1 overflow-y-auto px-3 pb-5 pt-1">
             {visibleTasks.length === 0 ? (
-              <li className="px-3 py-16 text-center text-sm text-muted-foreground">
+              <li className="px-3 py-20 text-center text-sm text-muted-foreground">
                 タスクはありません
               </li>
             ) : (
@@ -475,10 +473,8 @@ export function TasksBoard({
                   <li
                     key={task.id}
                     className={cn(
-                      "group flex w-full items-start gap-3 rounded-md border border-transparent px-3 py-2.5 transition-colors duration-150",
-                      active
-                        ? "bg-accent"
-                        : "hover:bg-black/[0.025]",
+                      "group flex w-full items-start gap-3 rounded-lg px-3 py-2.5 transition-colors duration-150",
+                      active ? "bg-accent" : "hover:bg-muted/60",
                     )}
                   >
                     <TaskCheckbox
@@ -493,7 +489,7 @@ export function TasksBoard({
                     >
                       <span
                         className={cn(
-                          "block text-sm font-medium leading-snug text-foreground transition-colors",
+                          "block text-sm font-medium leading-snug text-foreground",
                           task.status === "done" &&
                             "font-normal text-muted-foreground line-through",
                         )}
@@ -537,8 +533,8 @@ export function TasksBoard({
         </section>
       </div>
 
-      {/* 右ペイン */}
-      <section className="flex min-h-[42%] min-w-0 flex-1 flex-col border-t border-border bg-card lg:min-h-0 lg:max-w-[440px] lg:border-l lg:border-t-0 xl:max-w-[480px]">
+      {/* 右ペイン: 詳細編集 */}
+      <section className="flex min-h-[42%] min-w-0 flex-1 flex-col border-t border-border bg-card lg:min-h-0 lg:max-w-[26rem] lg:border-l lg:border-t-0 xl:max-w-[28rem]">
         {selectedTask ? (
           <TaskEditorPanel
             key={selectedTask.id}
@@ -560,7 +556,7 @@ export function TasksBoard({
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-2 px-8 text-center">
-            <ListTodo className="size-8 text-muted-foreground/40" aria-hidden />
+            <ListTodo className="size-8 text-muted-foreground/35" aria-hidden />
             <p className="m-0 text-sm text-muted-foreground">
               タスクを選ぶと、ここで編集できます
             </p>

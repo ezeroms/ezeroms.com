@@ -35,7 +35,7 @@ export function TaskCheckbox({
         dim,
         checked
           ? "border-foreground bg-foreground text-background"
-          : "border-[rgba(0,0,0,0.22)] bg-card text-transparent hover:border-border-hover",
+          : "border-border-hover bg-card text-transparent hover:border-foreground/40",
         className,
       )}
     >

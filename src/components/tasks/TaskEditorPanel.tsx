@@ -29,7 +29,7 @@ function autosizeTitle(el: HTMLTextAreaElement | null) {
 const AUTOSAVE_MS = 700;
 
 const fieldClass =
-  "h-8 border-border bg-card text-sm shadow-none focus-visible:border-border-hover";
+  "h-9 border-border bg-card text-sm shadow-none focus-visible:border-border-hover";
 
 type Draft = {
   title: string;
@@ -75,8 +75,8 @@ function MetaRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-3 border-b border-border/60 py-2.5 last:border-b-0">
-      <span className="w-[4.5rem] shrink-0 text-xs text-muted-foreground">
+    <div className="flex items-center gap-3 border-b border-border/70 py-3 last:border-b-0">
+      <span className="w-[4.75rem] shrink-0 text-xs text-muted-foreground">
         {label}
       </span>
       <div className="min-w-0 flex-1">{children}</div>
@@ -235,7 +235,7 @@ export function TaskEditorPanel({
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex shrink-0 items-start gap-3 border-b border-border px-5 pb-4 pt-5">
+      <div className="flex shrink-0 items-start gap-3 border-b border-border px-5 pb-4 pt-6">
         <TaskCheckbox
           checked={draft.status === "done"}
           onChange={() => void toggleDone()}
@@ -251,14 +251,14 @@ export function TaskEditorPanel({
               autosizeTitle(e.currentTarget);
             }}
             rows={1}
-            className="admin-input-bare block w-full resize-none overflow-hidden border-0 bg-transparent text-lg font-semibold leading-snug tracking-tight text-foreground outline-none placeholder:text-muted-foreground/50"
+            className="admin-input-bare block w-full resize-none overflow-hidden border-0 bg-transparent text-[1.15rem] font-semibold leading-snug tracking-tight text-foreground outline-none placeholder:text-muted-foreground/45"
             placeholder="タイトル"
           />
           <p
             className={cn(
-              "mt-1 text-[11px] transition-opacity duration-300",
+              "mt-1.5 text-[11px] transition-opacity duration-300",
               saveState === "idle" || saveState === "saved"
-                ? "text-muted-foreground/50"
+                ? "text-muted-foreground/45"
                 : saveState === "error"
                   ? "text-red-600"
                   : "text-muted-foreground",
@@ -305,7 +305,7 @@ export function TaskEditorPanel({
             />
           </MetaRow>
           <MetaRow label="進捗">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <Input
                 type="number"
                 min={0}
@@ -315,12 +315,12 @@ export function TaskEditorPanel({
                 onChange={(e) =>
                   patchDraft("progress_percent", e.target.value)
                 }
-                className={cn(fieldClass, "max-w-[7rem]")}
+                className={cn(fieldClass, "max-w-[5.5rem]")}
               />
               <span className="text-xs text-muted-foreground">%</span>
               <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
                 <div
-                  className="h-full rounded-full bg-foreground/70 transition-[width] duration-200"
+                  className="h-full rounded-full bg-foreground/65 transition-[width] duration-200"
                   style={{
                     width: `${Math.min(
                       100,
@@ -341,7 +341,7 @@ export function TaskEditorPanel({
                 onChange={(e) =>
                   patchDraft("estimated_minutes", e.target.value)
                 }
-                className={cn(fieldClass, "max-w-[7rem]")}
+                className={cn(fieldClass, "max-w-[5.5rem]")}
                 placeholder="—"
               />
               <span className="text-xs text-muted-foreground">分</span>
@@ -365,14 +365,14 @@ export function TaskEditorPanel({
 
         <TaskWorkBlocksSection taskId={task.id} />
 
-        <div className="mt-5">
-          <p className="mb-1.5 text-xs font-medium text-muted-foreground">
+        <div className="mt-6">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">
             メモ
           </p>
           <textarea
             value={draft.body_md}
             onChange={(e) => patchDraft("body_md", e.target.value)}
-            className="min-h-[140px] w-full resize-none rounded-lg border border-border bg-accent/40 px-3 py-2.5 text-sm leading-relaxed text-foreground shadow-none outline-none placeholder:text-muted-foreground/50 focus:border-border-hover"
+            className="min-h-[148px] w-full resize-none rounded-lg border border-border bg-card px-3.5 py-3 text-sm leading-relaxed text-foreground shadow-none outline-none placeholder:text-muted-foreground/50 focus:border-border-hover"
             placeholder="タスク全体のメモ…"
           />
         </div>
@@ -384,16 +384,16 @@ export function TaskEditorPanel({
         ) : null}
       </div>
 
-      <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border px-5 py-3">
+      <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border px-5 py-3.5">
         <span className="inline-flex min-w-0 items-center gap-1.5 truncate text-xs text-muted-foreground">
-          <Folder className="size-3.5 shrink-0 opacity-70" aria-hidden />
+          <Folder className="size-3.5 shrink-0 opacity-65" aria-hidden />
           <span className="truncate">{projectName ?? "Project なし"}</span>
         </span>
         <Button
           type="button"
           variant="destructive"
           size="sm"
-          className="h-8"
+          className="h-8 px-3"
           onClick={() => void onArchive()}
         >
           アーカイブ

@@ -200,8 +200,8 @@ export function TaskWorkBlocksSection({ taskId }: Props) {
   }
 
   return (
-    <div className="mt-5 border-t border-border pt-4">
-      <div className="mb-2 flex items-center justify-between gap-2">
+    <div className="mt-6 border-t border-border pt-5">
+      <div className="mb-3 flex items-center justify-between gap-2">
         <h3 className="m-0 text-xs font-medium text-muted-foreground">
           作業枠
         </h3>
@@ -228,7 +228,7 @@ export function TaskWorkBlocksSection({ taskId }: Props) {
           return (
             <li
               key={block.id}
-              className="rounded-lg border border-border bg-card px-3 py-2 shadow-sm"
+              className="rounded-lg border border-border bg-card px-3 py-2.5"
             >
               <div className="flex items-start justify-between gap-2">
                 <button
