@@ -10,6 +10,7 @@ export type AdminNavItem = {
     | "layout-dashboard"
     | "calendar"
     | "check-square"
+    | "folder"
     | "files"
     | "notebook-pen"
     | "bookmark"
@@ -64,6 +65,13 @@ export const adminNavSections: AdminNavSection[] = [
         description: "タスクの管理",
         status: "ready",
         icon: "check-square",
+      },
+      {
+        href: "/admin/workspace/projects/",
+        label: "Projects",
+        description: "Project の名前・状態を管理",
+        status: "ready",
+        icon: "folder",
       },
       {
         href: "/admin/workspace/docs/",
