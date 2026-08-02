@@ -415,8 +415,8 @@ export function TasksBoard({
 
         {/* 中央ペイン */}
         <section className="flex min-w-0 flex-1 flex-col border-r border-border bg-card">
-          <div className="shrink-0 px-5 pb-4 pt-6">
-            <h1 className="m-0 text-xl font-semibold tracking-tight text-foreground">
+          <div className="tasks-board__list-header">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
               {listTitle}
             </h1>
           </div>

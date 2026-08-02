@@ -34,6 +34,17 @@ body:has(.admin-root) {
   display: block;
 }
 
+/* Tasks 中央ペイン見出し。legacy header / 余白リセットに負けないよう明示 */
+.admin-root .tasks-board__list-header {
+  flex-shrink: 0;
+  padding: 1.5rem 1.25rem 1rem !important;
+  margin: 0;
+}
+
+.admin-root .tasks-board__list-header h1 {
+  margin: 0;
+}
+
 .admin-root a {
   color: inherit;
   text-decoration: none;
