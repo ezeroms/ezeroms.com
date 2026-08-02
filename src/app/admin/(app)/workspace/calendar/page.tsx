@@ -20,6 +20,8 @@ import {
 } from "@/lib/workspace/calendar/tokens";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { listTasks } from "@/lib/workspace/tasks";
+import { listWorkBlocksInRange } from "@/lib/workspace/work-blocks";
+import { workBlockToCalendarBlock } from "@/types/calendar";
 
 export const dynamic = "force-dynamic";
 
@@ -73,7 +75,7 @@ export default async function AdminWorkspaceCalendarPage({
   let canWrite = false;
   let events: Awaited<ReturnType<typeof listGoogleEventsCached>> = [];
   let unscheduledTasks: Awaited<ReturnType<typeof listTasks>> = [];
-  let placedTasks: Awaited<ReturnType<typeof listTasks>> = [];
+  let workBlocks: ReturnType<typeof workBlockToCalendarBlock>[] = [];
 
   try {
     const stored = oauthConfigured ? await getStoredGoogleToken() : null;
@@ -96,8 +98,9 @@ export default async function AdminWorkspaceCalendarPage({
     secondaryTimezone = prefs.secondary_timezone;
     secondaryLabel = prefs.secondary_timezone_label;
 
+    // サイドバー: 作業枠を追加できる Inbox / Active
     unscheduledTasks = [...inbox, ...active]
-      .filter((t) => !t.scheduled_at && t.status !== "done")
+      .filter((t) => t.status !== "done")
       .filter(
         (t, i, arr) => arr.findIndex((x) => x.id === t.id) === i,
       )
@@ -105,19 +108,22 @@ export default async function AdminWorkspaceCalendarPage({
 
     if (connected) {
       const range = calendarWeekRange(new Date(), weekStartsOn);
-      [calendars, events, placedTasks] = await Promise.all([
+      const [cals, evts, blocks] = await Promise.all([
         listGoogleCalendars(),
         listGoogleEventsCached({
           timeMin: range.timeMin,
           timeMax: range.timeMax,
           hiddenCalendarIds,
         }),
-        listTasks({
-          scheduledAtFrom: range.timeMin,
-          scheduledAtTo: range.timeMax,
-          limit: 200,
+        listWorkBlocksInRange({
+          timeMin: range.timeMin,
+          timeMax: range.timeMax,
+          limit: 400,
         }),
       ]);
+      calendars = cals;
+      events = evts;
+      workBlocks = blocks.map((b) => workBlockToCalendarBlock(b, b.task));
     }
   } catch (e) {
     loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
@@ -153,7 +159,7 @@ export default async function AdminWorkspaceCalendarPage({
           secondaryLabel={secondaryLabel}
           canWrite={canWrite}
           events={events}
-          placedTasks={placedTasks}
+          workBlocks={workBlocks}
           unscheduledTasks={unscheduledTasks}
           connectError={connectError}
         />

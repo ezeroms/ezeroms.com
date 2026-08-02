@@ -8,15 +8,20 @@ import type {
   CalendarEventEditValues,
 } from "@/components/calendar/CalendarEventPopover";
 import type { CalendarSlotDraft } from "@/components/calendar/CalendarSlotCreatePopover";
+import type { TaskLaneClickTarget } from "@/components/calendar/TaskLane";
 import type { CalendarCreateSlot } from "@/components/calendar/WorkspaceCalendar";
 import { localDateKey, type WeekStartsOn } from "@/lib/workspace/calendar/time";
 import type {
+  CalendarTaskBlock,
   GoogleCalendarEvent,
   GoogleCalendarListItem,
 } from "@/types/calendar";
-import { DEFAULT_TASK_MINUTES } from "@/types/calendar";
+import {
+  DEFAULT_TASK_MINUTES,
+  workBlockToCalendarBlock,
+} from "@/types/calendar";
 import type { CalendarActivityLink } from "@/types/friends";
-import type { WorkspaceTask } from "@/types/workspace";
+import type { TaskWorkBlock, WorkspaceTask } from "@/types/workspace";
 
 const SIDEBAR_STORAGE_KEY = "workspace.calendar.tasksSidebarOpen";
 
@@ -33,7 +38,7 @@ export type CalendarBoardControllerInput = {
   secondaryLabel: string;
   canWrite: boolean;
   events: GoogleCalendarEvent[];
-  placedTasks: WorkspaceTask[];
+  workBlocks: CalendarTaskBlock[];
   unscheduledTasks: WorkspaceTask[];
 };
 
@@ -63,7 +68,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
   const [secondaryLabel, setSecondaryLabel] = useState(input.secondaryLabel);
 
   const [events, setEvents] = useState(input.events);
-  const [placedTasks, setPlacedTasks] = useState(input.placedTasks);
+  const [workBlocks, setWorkBlocks] = useState(input.workBlocks);
   const [unscheduledTasks, setUnscheduledTasks] = useState(
     input.unscheduledTasks,
   );
@@ -87,7 +92,8 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
   const [createDraft, setCreateDraft] = useState<CalendarSlotDraft | null>(
     null,
   );
-  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editingTarget, setEditingTarget] =
+    useState<TaskLaneClickTarget | null>(null);
 
   useEffect(() => {
     try {
@@ -143,22 +149,35 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     ],
   );
 
-  const loadPlacedTasks = useCallback(
+  const loadWorkBlocks = useCallback(
     async (timeMin: string, timeMax: string) => {
       const params = new URLSearchParams({
-        scheduled_at_from: timeMin,
-        scheduled_at_to: timeMax,
-        limit: "200",
+        time_min: timeMin,
+        time_max: timeMax,
+        limit: "400",
       });
-      const response = await fetch(`/api/admin/workspace/tasks/?${params}`);
+      const response = await fetch(
+        `/api/admin/workspace/work-blocks/?${params}`,
+      );
       const data = (await response.json()) as {
-        items?: WorkspaceTask[];
+        items?: Array<
+          TaskWorkBlock & {
+            task: Pick<
+              WorkspaceTask,
+              "id" | "title" | "status" | "priority" | "estimated_minutes"
+            >;
+          }
+        >;
         error?: string;
       };
       if (!response.ok) {
-        throw new Error(data.error || "タスクの取得に失敗しました");
+        throw new Error(data.error || "作業枠の取得に失敗しました");
       }
-      setPlacedTasks(data.items ?? []);
+      setWorkBlocks(
+        (data.items ?? []).map((item) =>
+          workBlockToCalendarBlock(item, item.task),
+        ),
+      );
     },
     [],
   );
@@ -172,7 +191,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
         if (opts?.refresh) params.set("refresh", "1");
         const [eventsResponse] = await Promise.all([
           fetch(`/api/admin/workspace/calendar/events/?${params}`),
-          loadPlacedTasks(timeMin, timeMax),
+          loadWorkBlocks(timeMin, timeMax),
         ]);
         const data = (await eventsResponse.json()) as {
           events?: GoogleCalendarEvent[];
@@ -192,7 +211,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
         setIsBusy(false);
       }
     },
-    [loadPlacedTasks],
+    [loadWorkBlocks],
   );
 
   const handleRangeChange = useCallback(
@@ -303,62 +322,69 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
 
   async function handleDropTask(taskId: string, start: Date) {
     setDraggingTaskId(null);
-    const task =
-      unscheduledTasks.find((item) => item.id === taskId) ??
-      placedTasks.find((item) => item.id === taskId);
-    if (!task) return;
+    const task = unscheduledTasks.find((item) => item.id === taskId);
+    const titleFromLane = workBlocks.find(
+      (b) => b.taskId === taskId,
+    )?.taskTitle;
+    if (!task && !titleFromLane) return;
 
     const estimatedMinutes =
-      task.estimated_minutes && task.estimated_minutes > 0
+      task?.estimated_minutes && task.estimated_minutes > 0
         ? task.estimated_minutes
         : DEFAULT_TASK_MINUTES;
-    const scheduledAt = start.toISOString();
-    const scheduledDate = localDateKey(start);
+    const startsAt = start.toISOString();
+    const endsAt = new Date(
+      start.getTime() + estimatedMinutes * 60_000,
+    ).toISOString();
 
-    // 失敗時に戻せるよう、楽観更新前の一覧を保持する
-    const previousUnscheduled = unscheduledTasks;
-    const previousPlaced = placedTasks;
-    const nextTask: WorkspaceTask = {
-      ...task,
-      scheduled_at: scheduledAt,
-      scheduled_date: scheduledDate,
-      estimated_minutes: estimatedMinutes,
+    const optimisticId = `optimistic-${Date.now()}`;
+    const optimisticBlock: CalendarTaskBlock = {
+      workBlockId: optimisticId,
+      taskId,
+      taskTitle: task?.title ?? titleFromLane ?? "（無題）",
+      taskStatus: task?.status ?? "inbox",
+      taskPriority: task?.priority ?? "none",
+      start: startsAt,
+      end: endsAt,
     };
-    setUnscheduledTasks((list) => list.filter((item) => item.id !== taskId));
-    setPlacedTasks((list) => {
-      const without = list.filter((item) => item.id !== taskId);
-      return [...without, nextTask];
-    });
+    const previousBlocks = workBlocks;
+    setWorkBlocks((list) => [...list, optimisticBlock]);
 
     setIsBusy(true);
     setErrorMessage(null);
     try {
-      const response = await fetch(`/api/admin/workspace/tasks/${taskId}/`, {
-        method: "PATCH",
+      const response = await fetch("/api/admin/workspace/work-blocks/", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          scheduled_at: scheduledAt,
-          scheduled_date: scheduledDate,
-          estimated_minutes: estimatedMinutes,
+          task_id: taskId,
+          starts_at: startsAt,
+          ends_at: endsAt,
         }),
       });
       const data = (await response.json()) as {
-        item?: WorkspaceTask;
+        item?: TaskWorkBlock;
         error?: string;
       };
-      if (!response.ok) {
-        throw new Error(data.error || "タスクの配置に失敗しました");
+      if (!response.ok || !data.item) {
+        throw new Error(data.error || "作業枠の配置に失敗しました");
       }
-      if (data.item) {
-        setPlacedTasks((list) =>
-          list.map((item) => (item.id === taskId ? data.item! : item)),
-        );
-      }
+      setWorkBlocks((list) =>
+        list.map((block) =>
+          block.workBlockId === optimisticId
+            ? {
+                ...block,
+                workBlockId: data.item!.id,
+                start: data.item!.starts_at,
+                end: data.item!.ends_at,
+              }
+            : block,
+        ),
+      );
     } catch (error) {
-      setUnscheduledTasks(previousUnscheduled);
-      setPlacedTasks(previousPlaced);
+      setWorkBlocks(previousBlocks);
       setErrorMessage(
-        error instanceof Error ? error.message : "タスクの配置に失敗しました",
+        error instanceof Error ? error.message : "作業枠の配置に失敗しました",
       );
     } finally {
       setIsBusy(false);
@@ -407,47 +433,61 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
   }
 
   const editingTask = useMemo(() => {
-    if (!editingTaskId) return null;
+    if (!editingTarget) return null;
     return (
-      placedTasks.find((task) => task.id === editingTaskId) ??
-      unscheduledTasks.find((task) => task.id === editingTaskId) ??
-      null
+      unscheduledTasks.find((task) => task.id === editingTarget.taskId) ?? null
     );
-  }, [editingTaskId, placedTasks, unscheduledTasks]);
+  }, [editingTarget, unscheduledTasks]);
 
-  function handleTaskSaved(task: WorkspaceTask) {
-    setPlacedTasks((list) => {
-      const exists = list.some((item) => item.id === task.id);
-      if (!task.scheduled_at) {
-        return list.filter((item) => item.id !== task.id);
-      }
-      if (exists) {
-        return list.map((item) => (item.id === task.id ? task : item));
-      }
-      return [...list, task];
-    });
+  function handleTaskSaved(
+    task: WorkspaceTask,
+    workBlock?: { id: string; starts_at: string; ends_at: string },
+  ) {
+    setWorkBlocks((list) =>
+      list.map((block) => {
+        if (workBlock && block.workBlockId === workBlock.id) {
+          return {
+            ...block,
+            taskTitle: task.title,
+            taskStatus: task.status,
+            taskPriority: task.priority,
+            start: workBlock.starts_at,
+            end: workBlock.ends_at,
+          };
+        }
+        if (block.taskId === task.id) {
+          return {
+            ...block,
+            taskTitle: task.title,
+            taskStatus: task.status,
+            taskPriority: task.priority,
+          };
+        }
+        return block;
+      }),
+    );
     setUnscheduledTasks((list) => {
-      if (task.scheduled_at) {
-        return list.filter((item) => item.id !== task.id);
-      }
       const exists = list.some((item) => item.id === task.id);
       if (exists) {
         return list.map((item) => (item.id === task.id ? task : item));
       }
       return list;
     });
-    setEditingTaskId(null);
+    if (visibleRange) {
+      void loadWorkBlocks(visibleRange.timeMin, visibleRange.timeMax);
+    }
+    setEditingTarget(null);
   }
 
   function handleTaskArchived(taskId: string) {
-    setPlacedTasks((list) => list.filter((item) => item.id !== taskId));
+    setWorkBlocks((list) => list.filter((item) => item.taskId !== taskId));
     setUnscheduledTasks((list) => list.filter((item) => item.id !== taskId));
-    setEditingTaskId(null);
+    setEditingTarget(null);
   }
 
   function openCreateSlot(slot: CalendarCreateSlot) {
     setSelectedEvent(null);
-    setEditingTaskId(null);
+    setEditingTarget(null);
     setCreateDraft({
       lane: slot.lane,
       start: slot.start.toISOString(),
@@ -479,8 +519,6 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
         body: JSON.stringify({
           title: values.title,
           status: "inbox",
-          scheduled_at: values.start,
-          scheduled_date: localDateKey(new Date(startMs)),
           estimated_minutes: minutes,
         }),
       });
@@ -491,7 +529,26 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
       if (!response.ok || !data.item) {
         throw new Error(data.error || "タスクの作成に失敗しました");
       }
-      setPlacedTasks((list) => [...list, data.item!]);
+      const blockRes = await fetch("/api/admin/workspace/work-blocks/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task_id: data.item.id,
+          starts_at: values.start,
+          ends_at: values.end,
+        }),
+      });
+      const blockData = (await blockRes.json()) as {
+        item?: TaskWorkBlock;
+        error?: string;
+      };
+      if (!blockRes.ok || !blockData.item) {
+        throw new Error(blockData.error || "作業枠の作成に失敗しました");
+      }
+      setWorkBlocks((list) => [
+        ...list,
+        workBlockToCalendarBlock(blockData.item!, data.item!),
+      ]);
       setCreateDraft(null);
       return;
     }
@@ -537,14 +594,14 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
 
   function selectEvent(event: GoogleCalendarEvent, anchor: CalendarEventAnchor) {
     setCreateDraft(null);
-    setEditingTaskId(null);
+    setEditingTarget(null);
     setSelectedEvent({ event, anchor });
   }
 
-  function selectTask(taskId: string) {
+  function selectTask(target: TaskLaneClickTarget) {
     setSelectedEvent(null);
     setCreateDraft(null);
-    setEditingTaskId(taskId);
+    setEditingTarget(target);
   }
 
   function updateActivityLinkForSelectedEvent(
@@ -590,7 +647,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
 
     // data
     visibleEvents,
-    placedTasks,
+    workBlocks,
     unscheduledTasks,
     selectedEventActivityLink,
 
@@ -607,8 +664,8 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     setSelectedEvent,
     createDraft,
     setCreateDraft,
-    editingTaskId,
-    setEditingTaskId,
+    editingTarget,
+    setEditingTarget,
     editingTask,
 
     // handlers

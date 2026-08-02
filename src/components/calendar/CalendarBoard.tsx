@@ -22,6 +22,7 @@ import type {
   GoogleCalendarEvent,
   GoogleCalendarListItem,
 } from "@/types/calendar";
+import type { CalendarTaskBlock } from "@/types/calendar";
 import { DEFAULT_TASK_MINUTES } from "@/types/calendar";
 import type { WorkspaceTask } from "@/types/workspace";
 
@@ -43,7 +44,7 @@ type Props = {
   secondaryLabel?: string;
   canWrite: boolean;
   events: GoogleCalendarEvent[];
-  placedTasks: WorkspaceTask[];
+  workBlocks: CalendarTaskBlock[];
   unscheduledTasks: WorkspaceTask[];
   connectError?: string | null;
 };
@@ -66,7 +67,7 @@ export function CalendarBoard({
   secondaryLabel = DEFAULT_SECONDARY_LABEL,
   canWrite,
   events,
-  placedTasks,
+  workBlocks,
   unscheduledTasks,
   connectError,
 }: Props) {
@@ -83,7 +84,7 @@ export function CalendarBoard({
     secondaryLabel,
     canWrite,
     events,
-    placedTasks,
+    workBlocks,
     unscheduledTasks,
   });
 
@@ -217,10 +218,23 @@ export function CalendarBoard({
       ) : null}
 
       <TaskEditModal
-        open={Boolean(board.editingTaskId)}
-        taskId={board.editingTaskId}
+        open={Boolean(board.editingTarget)}
+        taskId={board.editingTarget?.taskId ?? null}
+        workBlockId={
+          board.editingTarget?.workBlockId.startsWith("task:")
+            ? null
+            : (board.editingTarget?.workBlockId ?? null)
+        }
+        initialWorkBlock={
+          board.editingTarget
+            ? {
+                starts_at: board.editingTarget.start,
+                ends_at: board.editingTarget.end,
+              }
+            : null
+        }
         initialTask={board.editingTask}
-        onClose={() => board.setEditingTaskId(null)}
+        onClose={() => board.setEditingTarget(null)}
         onSaved={board.handleTaskSaved}
         onArchived={board.handleTaskArchived}
       />
@@ -241,7 +255,7 @@ export function CalendarBoard({
             key={`${board.weekStartsOn}:${board.dayStartsHour}:${board.primaryTimezone}:${board.secondaryTimezoneEnabled}:${board.secondaryTimezone}`}
             className="min-h-0 flex-1"
             events={board.visibleEvents}
-            placedTasks={board.placedTasks}
+            workBlocks={board.workBlocks}
             calendars={calendars}
             weekStartsOn={board.weekStartsOn}
             dayStartsHour={board.dayStartsHour}

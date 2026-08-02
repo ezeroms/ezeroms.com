@@ -58,18 +58,18 @@ import {
   patchSlidingMultiDayWeek,
 } from "@/lib/workspace/calendar/views";
 import type {
+  CalendarTaskBlock,
   GoogleCalendarEvent,
   GoogleCalendarListItem,
 } from "@/types/calendar";
-import { taskToWorkBlock } from "@/types/calendar";
-import type { WorkspaceTask } from "@/types/workspace";
+import type { TaskLaneClickTarget } from "@/components/calendar/TaskLane";
 
 export type { CalendarCreateSlot };
 
 type Props = {
   events: GoogleCalendarEvent[];
-  /** scheduled_at 付き Task — 右レーンに描画 */
-  placedTasks?: WorkspaceTask[];
+  /** 右レーンに描画する作業枠（1 タスク複数可） */
+  workBlocks?: CalendarTaskBlock[];
   calendars: GoogleCalendarListItem[];
   weekStartsOn?: WeekStartsOn;
   /** タイムグリッド上端の時（0–23） */
@@ -90,13 +90,13 @@ type Props = {
   onCreateSlot?: (slot: CalendarCreateSlot) => void;
   /** false のとき左レーン（予定）のドラッグ作成を無効化 */
   canCreateSchedule?: boolean;
-  onTaskSelect?: (taskId: string) => void;
+  onTaskSelect?: (target: TaskLaneClickTarget) => void;
   className?: string;
 };
 
 export function WorkspaceCalendar({
   events,
-  placedTasks,
+  workBlocks = [],
   calendars,
   weekStartsOn = "monday",
   dayStartsHour = 0,
@@ -136,17 +136,9 @@ export function WorkspaceCalendar({
   const googleEventsRef = useRef(events);
   googleEventsRef.current = events;
 
-  const taskBlocks = useMemo(
-    () =>
-      (placedTasks ?? [])
-        .map(taskToWorkBlock)
-        .filter((block): block is NonNullable<typeof block> => block !== null),
-    [placedTasks],
-  );
-
   const laneByDay = useMemo(
-    () => layoutTaskLane(taskBlocks, dayStartsHour),
-    [taskBlocks, dayStartsHour],
+    () => layoutTaskLane(workBlocks, dayStartsHour),
+    [workBlocks, dayStartsHour],
   );
 
   const scheduleXEvents = useMemo(

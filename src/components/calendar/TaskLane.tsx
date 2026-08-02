@@ -23,10 +23,17 @@ function timeRangeLabel(
   return formatHybridTimeRange(start, end, dayStartsHour);
 }
 
+export type TaskLaneClickTarget = {
+  taskId: string;
+  workBlockId: string;
+  start: string;
+  end: string;
+};
+
 type Props = {
   placed: PlacedTaskBlock[];
   dayStartsHour?: number;
-  onTaskClick?: (taskId: string) => void;
+  onTaskClick?: (target: TaskLaneClickTarget) => void;
 };
 
 /** Renders one day's Task work blocks into the right lane of the time grid. */
@@ -48,7 +55,7 @@ export function TaskLane({
         const label = `${range} ${p.block.taskTitle}`;
         return (
           <button
-            key={`${p.block.taskId}-${p.dateKey}-${p.column}`}
+            key={`${p.block.workBlockId}-${p.dateKey}-${p.column}`}
             type="button"
             title={label}
             aria-label={label}
@@ -66,7 +73,12 @@ export function TaskLane({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              onTaskClick?.(p.block.taskId);
+              onTaskClick?.({
+                taskId: p.block.taskId,
+                workBlockId: p.block.workBlockId,
+                start: p.block.start,
+                end: p.block.end,
+              });
             }}
             onPointerDown={(e) => e.stopPropagation()}
           >

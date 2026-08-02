@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Folder } from "lucide-react";
 import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskWorkBlocksSection } from "@/components/tasks/TaskWorkBlocksSection";
@@ -18,6 +18,13 @@ import type {
   WorkspaceProject,
   WorkspaceTask,
 } from "@/types/workspace";
+
+/** タイトル textarea の高さを内容に合わせて伸ばす（折り返し表示用） */
+function autosizeTitle(el: HTMLTextAreaElement | null) {
+  if (!el) return;
+  el.style.height = "0px";
+  el.style.height = `${el.scrollHeight}px`;
+}
 
 const AUTOSAVE_MS = 700;
 
@@ -236,10 +243,15 @@ export function TaskEditorPanel({
           className="mt-1"
         />
         <div className="min-w-0 flex-1">
-          <input
+          <textarea
+            ref={titleRef}
             value={draft.title}
-            onChange={(e) => patchDraft("title", e.target.value)}
-            className="admin-input-bare w-full border-0 bg-transparent text-lg font-semibold leading-snug tracking-tight text-foreground outline-none placeholder:text-muted-foreground/50"
+            onChange={(e) => {
+              patchDraft("title", e.target.value);
+              autosizeTitle(e.currentTarget);
+            }}
+            rows={1}
+            className="admin-input-bare block w-full resize-none overflow-hidden border-0 bg-transparent text-lg font-semibold leading-snug tracking-tight text-foreground outline-none placeholder:text-muted-foreground/50"
             placeholder="タイトル"
           />
           <p

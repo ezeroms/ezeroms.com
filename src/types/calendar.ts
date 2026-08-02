@@ -1,4 +1,5 @@
 import type { TaskPriority, TaskStatus, WorkspaceTask } from "@/types/workspace";
+import type { TaskWorkBlock } from "@/types/workspace";
 
 export type GoogleCalendarListItem = {
   id: string;
@@ -30,7 +31,7 @@ export type GoogleCalendarEvent = {
 
 /**
  * A Google event that was created as a Task work block (optional Google write).
- * Kept for API responses; the day Task lane uses local `scheduled_at` instead.
+ * Kept for API responses; the day Task lane uses local task_work_blocks.
  */
 export type CalendarTaskLink = {
   googleCalendarId: string;
@@ -44,8 +45,9 @@ export type CalendarTaskLink = {
 /** Default duration when estimated_minutes is unset. */
 export const DEFAULT_TASK_MINUTES = 30;
 
-/** A Task work block on the day timeline (right lane). Source: Workspace DB. */
+/** A Task work block on the day timeline (right lane). */
 export type CalendarTaskBlock = {
+  workBlockId: string;
   taskId: string;
   taskTitle: string;
   taskStatus: TaskStatus;
@@ -62,6 +64,22 @@ export function taskWorkMinutes(
     : DEFAULT_TASK_MINUTES;
 }
 
+export function workBlockToCalendarBlock(
+  block: TaskWorkBlock,
+  task: Pick<WorkspaceTask, "id" | "title" | "status" | "priority">,
+): CalendarTaskBlock {
+  return {
+    workBlockId: block.id,
+    taskId: task.id,
+    taskTitle: task.title,
+    taskStatus: task.status,
+    taskPriority: task.priority,
+    start: block.starts_at,
+    end: block.ends_at,
+  };
+}
+
+/** Fallback when only tasks.scheduled_at is available (no workBlockId). */
 export function taskToWorkBlock(
   task: WorkspaceTask,
 ): CalendarTaskBlock | null {
@@ -70,6 +88,7 @@ export function taskToWorkBlock(
   if (Number.isNaN(startMs)) return null;
   const mins = taskWorkMinutes(task);
   return {
+    workBlockId: `task:${task.id}`,
     taskId: task.id,
     taskTitle: task.title,
     taskStatus: task.status,
