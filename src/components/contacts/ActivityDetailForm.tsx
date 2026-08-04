@@ -8,16 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  friendDisplayName,
+  contactDisplayName,
   formatActivityTags,
   type WorkspaceActivity,
-  type WorkspaceFriend,
-} from "@/types/friends";
+  type WorkspaceContact,
+} from "@/types/contacts";
 
 type Props = {
   activity: WorkspaceActivity;
-  friends: WorkspaceFriend[];
-  allFriends: WorkspaceFriend[];
+  contacts: WorkspaceContact[];
+  allContacts: WorkspaceContact[];
   calendarLink: {
     google_calendar_id: string;
     google_event_id: string;
@@ -41,8 +41,8 @@ function fromLocalInput(value: string): string | null {
 
 export function ActivityDetailForm({
   activity,
-  friends: initialFriends,
-  allFriends,
+  contacts: initialContacts,
+  allContacts,
   calendarLink,
 }: Props) {
   const router = useRouter();
@@ -55,24 +55,24 @@ export function ActivityDetailForm({
   const [notesMd, setNotesMd] = useState(activity.notes_md ?? "");
   const [location, setLocation] = useState(activity.location ?? "");
   const [tags, setTags] = useState(formatActivityTags(activity.tags));
-  const [friendIds, setFriendIds] = useState(
-    () => new Set(initialFriends.filter((f) => !f.deleted_at).map((f) => f.id)),
+  const [contactIds, setContactIds] = useState(
+    () => new Set(initialContacts.filter((f) => !f.deleted_at).map((f) => f.id)),
   );
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const friendOptions = useMemo(
+  const contactOptions = useMemo(
     () =>
-      allFriends.map((f) => ({
+      allContacts.map((f) => ({
         id: f.id,
-        label: friendDisplayName(f),
+        label: contactDisplayName(f),
       })),
-    [allFriends],
+    [allContacts],
   );
 
-  function toggleFriend(id: string) {
-    setFriendIds((prev) => {
+  function toggleContact(id: string) {
+    setContactIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -106,17 +106,17 @@ export function ActivityDetailForm({
       const data = (await res.json()) as { error?: string };
       if (!res.ok) throw new Error(data.error || "保存に失敗しました");
 
-      const friendsRes = await fetch(
-        `/api/admin/workspace/activities/${activity.id}/friends/`,
+      const contactsRes = await fetch(
+        `/api/admin/workspace/activities/${activity.id}/contacts/`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ friend_ids: [...friendIds] }),
+          body: JSON.stringify({ contact_ids: [...contactIds] }),
         },
       );
-      const friendsData = (await friendsRes.json()) as { error?: string };
-      if (!friendsRes.ok) {
-        throw new Error(friendsData.error || "友達の保存に失敗しました");
+      const contactsData = (await contactsRes.json()) as { error?: string };
+      if (!contactsRes.ok) {
+        throw new Error(contactsData.error || "コンタクトの保存に失敗しました");
       }
 
       setMessage("保存しました");
@@ -235,28 +235,28 @@ export function ActivityDetailForm({
       </div>
 
       <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
-        <legend className="mb-1 text-sm font-medium">一緒にいた友達</legend>
-        {friendOptions.length === 0 ? (
+        <legend className="mb-1 text-sm font-medium">一緒にいた人</legend>
+        {contactOptions.length === 0 ? (
           <p className="m-0 text-sm text-muted-foreground">
-            まだ友達がいません。{" "}
+            まだコンタクトがいません。{" "}
             <Link
-              href="/admin/workspace/friends/"
+              href="/admin/workspace/contacts/"
               className="underline-offset-2 hover:underline"
             >
-              Friends
+              Contacts
             </Link>{" "}
             で追加してください。
           </p>
         ) : (
           <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {friendOptions.map((f) => (
+            {contactOptions.map((f) => (
               <li key={f.id}>
                 <label className="flex cursor-pointer items-center gap-2 text-sm">
                   <input
                     type="checkbox"
-                    checked={friendIds.has(f.id)}
+                    checked={contactIds.has(f.id)}
                     disabled={busy}
-                    onChange={() => toggleFriend(f.id)}
+                    onChange={() => toggleContact(f.id)}
                   />
                   {f.label}
                 </label>
@@ -274,7 +274,7 @@ export function ActivityDetailForm({
         </p>
       ) : (
         <p className="m-0 text-xs text-muted-foreground">
-          カレンダー未リンク。カレンダーの予定詳細から友達を付けると自動で紐づきます。
+          カレンダー未リンク。カレンダーの予定詳細からコンタクトを付けると自動で紐づきます。
         </p>
       )}
 

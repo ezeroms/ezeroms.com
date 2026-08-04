@@ -31,6 +31,28 @@ export type StoredGoogleToken = {
   updated_at: string;
 };
 
+/** Thrown when stored Google credentials are unusable and the user must reconnect. */
+export class GoogleCalendarAuthError extends Error {
+  constructor(
+    message = "Googleカレンダーの認証が切れています。カレンダー画面から再接続してください。",
+  ) {
+    super(message);
+    this.name = "GoogleCalendarAuthError";
+  }
+}
+
+export function isGoogleCalendarAuthError(error: unknown): boolean {
+  if (error instanceof GoogleCalendarAuthError) return true;
+  if (!(error instanceof Error)) return false;
+  const msg = error.message.toLowerCase();
+  return (
+    msg.includes("invalid authentication") ||
+    msg.includes("invalid_grant") ||
+    msg.includes("unauthorized") ||
+    /\b401\b/.test(msg)
+  );
+}
+
 export async function getStoredGoogleToken(): Promise<StoredGoogleToken | null> {
   const { data, error } = await getWorkspaceAdmin()
     .from("google_oauth_tokens")
@@ -84,8 +106,13 @@ export async function deleteGoogleTokens(): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
-/** Returns a valid access token, refreshing when needed. Never return to client. */
-export async function getValidGoogleAccessToken(): Promise<{
+/**
+ * Returns a valid access token, refreshing when needed. Never return to client.
+ * @param forceRefresh — ignore expiry and refresh (e.g. after Google 401).
+ */
+export async function getValidGoogleAccessToken(opts?: {
+  forceRefresh?: boolean;
+}): Promise<{
   accessToken: string;
   email: string | null;
 } | null> {
@@ -95,17 +122,32 @@ export async function getValidGoogleAccessToken(): Promise<{
   const expiryMs = stored.expiry_at
     ? new Date(stored.expiry_at).getTime()
     : 0;
-  const needsRefresh = !expiryMs || expiryMs < Date.now() + 60_000;
+  const needsRefresh =
+    Boolean(opts?.forceRefresh) ||
+    !expiryMs ||
+    expiryMs < Date.now() + 60_000;
 
   if (!needsRefresh) {
     return { accessToken: stored.access_token, email: stored.google_email };
   }
 
   if (!stored.refresh_token) {
+    if (!expiryMs || expiryMs < Date.now()) {
+      throw new GoogleCalendarAuthError();
+    }
     return { accessToken: stored.access_token, email: stored.google_email };
   }
 
-  const refreshed = await refreshAccessToken(stored.refresh_token);
-  const updated = await upsertGoogleTokens(refreshed, stored.refresh_token);
-  return { accessToken: updated.access_token, email: updated.google_email };
+  try {
+    const refreshed = await refreshAccessToken(stored.refresh_token);
+    const updated = await upsertGoogleTokens(refreshed, stored.refresh_token);
+    return { accessToken: updated.access_token, email: updated.google_email };
+  } catch (error) {
+    if (error instanceof GoogleCalendarAuthError) throw error;
+    throw new GoogleCalendarAuthError(
+      error instanceof Error
+        ? `Googleカレンダーの再認証に失敗しました（${error.message}）。カレンダー画面から再接続してください。`
+        : undefined,
+    );
+  }
 }

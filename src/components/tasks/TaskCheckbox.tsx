@@ -11,7 +11,7 @@ type Props = {
   size?: "sm" | "md";
 };
 
-/** TickTick 風の丸チェック。ネイティブ checkbox のダサさを避ける。 */
+/** 丸チェック。通常は枠線のみ、完了時は緑塗り＋✓。 */
 export function TaskCheckbox({
   checked,
   onChange,
@@ -31,21 +31,17 @@ export function TaskCheckbox({
         onChange();
       }}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full border transition-all duration-150",
+        "task-checkbox inline-flex shrink-0 items-center justify-center rounded-full",
         dim,
-        checked
-          ? "border-foreground bg-foreground text-background"
-          : "border-border-hover bg-card text-transparent hover:border-foreground/40",
         className,
       )}
     >
       <Check
         className={cn(
-          "transition-opacity duration-150",
           size === "md" ? "size-3" : "size-2.5",
           checked ? "opacity-100" : "opacity-0",
         )}
-        strokeWidth={2.5}
+        strokeWidth={3}
         aria-hidden
       />
     </button>

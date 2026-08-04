@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireWorkspaceAdmin } from "@/lib/workspace/api-auth";
-import { attachFriendsToCalendarEvent } from "@/lib/workspace/activity-calendar-links";
-import { getActivityWithFriends } from "@/lib/workspace/activities";
+import { attachContactsToCalendarEvent } from "@/lib/workspace/activity-calendar-links";
+import { getActivityWithContacts } from "@/lib/workspace/activities";
 
 /**
- * Attach friends to a Google Calendar event.
+ * Attach contacts to a Google Calendar event.
  * Creates a local Activity (with calendar link) on first attach.
  */
 export async function POST(request: NextRequest) {
@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
       start?: string | null;
       end?: string | null;
       location?: string | null;
+      contact_ids?: unknown;
       friend_ids?: unknown;
     };
 
@@ -30,27 +31,32 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-    if (!Array.isArray(body.friend_ids)) {
+    const raw = Array.isArray(body.contact_ids)
+      ? body.contact_ids
+      : Array.isArray(body.friend_ids)
+        ? body.friend_ids
+        : null;
+    if (!raw) {
       return NextResponse.json(
-        { error: "friend_ids must be an array" },
+        { error: "contact_ids must be an array" },
         { status: 400 },
       );
     }
-    const friendIds = body.friend_ids.filter(
+    const contactIds = raw.filter(
       (v): v is string => typeof v === "string" && Boolean(v),
     );
 
-    const { activity } = await attachFriendsToCalendarEvent({
+    const { activity } = await attachContactsToCalendarEvent({
       googleCalendarId,
       googleEventId,
       summary: body.summary?.trim() || "（無題）",
       start: body.start ?? null,
       end: body.end ?? null,
       location: body.location ?? null,
-      friendIds,
+      contactIds,
     });
 
-    const item = await getActivityWithFriends(activity.id);
+    const item = await getActivityWithContacts(activity.id);
     return NextResponse.json({ item });
   } catch (e) {
     return NextResponse.json(
@@ -58,7 +64,7 @@ export async function POST(request: NextRequest) {
         error:
           e instanceof Error
             ? e.message
-            : "Failed to attach friends to calendar event",
+            : "Failed to attach contacts to calendar event",
       },
       { status: 500 },
     );

@@ -6,18 +6,18 @@ import { tagChipClass } from "@/lib/site/tag-styles";
 import {
   formatActivityDate,
   type WorkspaceActivity,
-} from "@/types/friends";
+} from "@/types/contacts";
 
 export type ActivitiesTableItem = {
   activity: WorkspaceActivity;
-  friendNames: string[];
+  contactNames: string[];
 };
 
 type Props = {
   items: ActivitiesTableItem[];
   emptyMessage?: string;
   /** 友達詳細など、友達列が不要なときは false */
-  showFriends?: boolean;
+  showContacts?: boolean;
 };
 
 function ChipList({ values }: { values: string[] }) {
@@ -38,10 +38,10 @@ function ChipList({ values }: { values: string[] }) {
 export function ActivitiesListTable({
   items,
   emptyMessage = "まだ Activity がありません",
-  showFriends = true,
+  showContacts = true,
 }: Props) {
   const router = useRouter();
-  const colSpan = showFriends ? 4 : 3;
+  const colSpan = showContacts ? 4 : 3;
 
   return (
     <table className="w-full min-w-[720px] border-collapse text-left text-sm">
@@ -52,13 +52,13 @@ export function ActivitiesListTable({
             アクティビティ名
           </th>
           <th className="px-4 py-3 font-medium">タグ</th>
-          {showFriends ? (
-            <th className="px-4 py-3 font-medium">友達</th>
+          {showContacts ? (
+            <th className="px-4 py-3 font-medium">コンタクト</th>
           ) : null}
         </tr>
       </thead>
       <tbody>
-        {items.map(({ activity, friendNames }) => (
+        {items.map(({ activity, contactNames }) => (
           <AdminClickableRow
             key={activity.id}
             className="hover:bg-muted/30"
@@ -77,9 +77,9 @@ export function ActivitiesListTable({
             <td className="px-4 py-2.5 align-middle">
               <ChipList values={activity.tags} />
             </td>
-            {showFriends ? (
+            {showContacts ? (
               <td className="px-4 py-2.5 align-middle">
-                <ChipList values={friendNames} />
+                <ChipList values={contactNames} />
               </td>
             ) : null}
           </AdminClickableRow>

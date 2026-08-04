@@ -1,6 +1,9 @@
 import "server-only";
 
-import { listGoogleEventsCached } from "@/lib/workspace/calendar/events";
+import {
+  listGoogleEventsCached,
+  resolveMainCalendarId,
+} from "@/lib/workspace/calendar/events";
 import {
   formatEventTimeRange,
   todayRange,
@@ -68,10 +71,13 @@ export async function buildTodayAssistantContext(): Promise<AssistantContext> {
     const stored = await getStoredGoogleToken();
     if (stored) {
       const prefs = await getCalendarPreferences();
-      const raw = await listGoogleEventsCached({
-        ...todayRange(),
-        hiddenCalendarIds: prefs.hidden_calendar_ids,
-      });
+      const mainCalendarId = await resolveMainCalendarId(prefs.main_calendar_id);
+      const raw = mainCalendarId
+        ? await listGoogleEventsCached({
+            ...todayRange(),
+            calendarIds: [mainCalendarId],
+          })
+        : [];
       events = raw.slice(0, 20).map((ev) => ({
         summary: ev.summary,
         time: formatEventTimeRange(ev.start, ev.end, ev.allDay),

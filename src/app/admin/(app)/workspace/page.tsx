@@ -2,11 +2,18 @@ import Link from "next/link";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
+import { BlogTrendsCard } from "@/components/workspace/BlogTrendsCard";
+import { WorkloadMeter } from "@/components/workspace/WorkloadMeter";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { findAdminNavItem } from "@/lib/admin/nav";
+import { hasGaDataApiConfig } from "@/lib/analytics/config";
+import { fetchAnalyticsReport } from "@/lib/analytics/report";
 import { getSessionUser } from "@/lib/supabase/auth";
-import { listGoogleEventsCached } from "@/lib/workspace/calendar/events";
+import {
+  listGoogleEventsCached,
+  resolveMainCalendarId,
+} from "@/lib/workspace/calendar/events";
 import { hasGoogleCalendarOAuthConfig } from "@/lib/workspace/calendar/oauth";
 import {
   formatEventTimeRange,
@@ -15,12 +22,16 @@ import {
 import {
   getCalendarPreferences,
   getStoredGoogleToken,
+  isGoogleCalendarAuthError,
 } from "@/lib/workspace/calendar/tokens";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { listDocs } from "@/lib/workspace/docs";
+import { buildWorkloadSnapshot } from "@/lib/workspace/load/build";
 import { listProjects } from "@/lib/workspace/projects";
 import { listTasks } from "@/lib/workspace/tasks";
 import { todayDateKey } from "@/lib/workspace/labels";
+import type { AnalyticsReport } from "@/types/analytics";
+import type { WorkloadSnapshot } from "@/lib/workspace/load/compute";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +56,7 @@ export default async function AdminWorkspaceDashboardPage() {
   }
 
   let loadError: string | null = null;
+  let calendarError: string | null = null;
   let todayEvents: Awaited<ReturnType<typeof listGoogleEventsCached>> = [];
   let calendarConnected = false;
   let oauthConfigured = hasGoogleCalendarOAuthConfig();
@@ -53,9 +65,13 @@ export default async function AdminWorkspaceDashboardPage() {
   let inboxTasks: Awaited<ReturnType<typeof listTasks>> = [];
   let recentDocs: Awaited<ReturnType<typeof listDocs>> = [];
   let projects: Awaited<ReturnType<typeof listProjects>> = [];
+  let workload: WorkloadSnapshot | null = null;
+  let gaConfigured = hasGaDataApiConfig();
+  let gaReport: AnalyticsReport | null = null;
+  let gaError: string | null = null;
 
   try {
-    const [prefs, stored, today, overdue, inbox, docs, projs] =
+    const [prefs, stored, today, overdue, inbox, docs, projs, loadResult] =
       await Promise.all([
         getCalendarPreferences(),
         oauthConfigured ? getStoredGoogleToken() : Promise.resolve(null),
@@ -64,6 +80,7 @@ export default async function AdminWorkspaceDashboardPage() {
         listTasks({ view: "inbox", limit: 20 }),
         listDocs({ limit: 8 }),
         listProjects(),
+        buildWorkloadSnapshot(),
       ]);
 
     calendarConnected = Boolean(stored);
@@ -72,16 +89,44 @@ export default async function AdminWorkspaceDashboardPage() {
     inboxTasks = inbox;
     recentDocs = docs;
     projects = projs.filter((p) => p.status === "active");
+    workload = loadResult.snapshot;
+    calendarConnected = loadResult.calendarConnected || calendarConnected;
+    oauthConfigured = loadResult.oauthConfigured;
+    calendarError = loadResult.calendarError;
 
-    if (calendarConnected) {
-      todayEvents = await listGoogleEventsCached({
-        ...todayRange(),
-        hiddenCalendarIds: prefs.hidden_calendar_ids,
-      });
+    if (calendarConnected && !calendarError) {
+      try {
+        const mainCalendarId = await resolveMainCalendarId(
+          prefs.main_calendar_id,
+        );
+        todayEvents = mainCalendarId
+          ? await listGoogleEventsCached({
+              ...todayRange(),
+              calendarIds: [mainCalendarId],
+            })
+          : [];
+      } catch (e) {
+        calendarError =
+          e instanceof Error ? e.message : "カレンダー予定の取得に失敗しました";
+      }
     }
   } catch (e) {
     loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
   }
+
+  if (gaConfigured) {
+    try {
+      gaReport = await fetchAnalyticsReport("7");
+    } catch (e) {
+      gaError = e instanceof Error ? e.message : "Analytics の読み込みに失敗しました";
+    }
+  }
+
+  const calendarNeedsReconnect =
+    Boolean(calendarError) &&
+    (isGoogleCalendarAuthError(new Error(calendarError ?? "")) ||
+      (calendarError ?? "").includes("再接続") ||
+      (calendarError ?? "").toLowerCase().includes("invalid authentication"));
 
   return (
     <AdminContent width="wide">
@@ -109,7 +154,44 @@ export default async function AdminWorkspaceDashboardPage() {
         </Alert>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {calendarError ? (
+        <Alert variant="destructive" className="mb-4">
+          <span className="block">{calendarError}</span>
+          {calendarNeedsReconnect ? (
+            <a
+              href="/api/admin/workspace/calendar/oauth/start/"
+              className="mt-2 inline-block font-medium underline"
+            >
+              Googleカレンダーを再接続
+            </a>
+          ) : (
+            <Link
+              href="/admin/workspace/calendar/"
+              className="mt-2 inline-block font-medium underline"
+            >
+              カレンダーを開く
+            </Link>
+          )}
+        </Alert>
+      ) : null}
+
+      <div className="mb-6 grid gap-6 lg:grid-cols-2">
+        {workload ? (
+          <div className="lg:col-span-2">
+            <WorkloadMeter
+              snapshot={workload}
+              calendarConnected={calendarConnected}
+              oauthConfigured={oauthConfigured}
+            />
+          </div>
+        ) : null}
+
+        <BlogTrendsCard
+          report={gaReport}
+          configured={gaConfigured}
+          error={gaError}
+        />
+
         <section className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -166,7 +248,9 @@ export default async function AdminWorkspaceDashboardPage() {
             </ul>
           )}
         </section>
+      </div>
 
+      <div className="grid gap-6 lg:grid-cols-2">
         <section className="space-y-2">
           <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Today Tasks

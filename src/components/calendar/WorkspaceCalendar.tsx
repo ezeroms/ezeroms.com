@@ -25,12 +25,17 @@ import {
   wallClockFromGrid,
   type CalendarCreateSlot,
   type DragCreateState,
+  type WorkBlockMoveState,
 } from "@/components/calendar/calendarGridPointer";
 import {
   initialScrollTime,
   toScheduleXEvent,
 } from "@/components/calendar/scheduleXAdapter";
-import { TaskLane } from "@/components/calendar/TaskLane";
+import {
+  TaskLane,
+  type TaskLaneClickTarget,
+  type TaskLaneMoveStart,
+} from "@/components/calendar/TaskLane";
 import { TimezoneAxisHour } from "@/components/calendar/TimezoneAxisHour";
 import { TimezoneAxisLabels } from "@/components/calendar/TimezoneAxisLabels";
 import { useHybridCurrentTimeColumn } from "@/components/calendar/useHybridCurrentTimeColumn";
@@ -62,9 +67,10 @@ import type {
   GoogleCalendarEvent,
   GoogleCalendarListItem,
 } from "@/types/calendar";
-import type { TaskLaneClickTarget } from "@/components/calendar/TaskLane";
 
 export type { CalendarCreateSlot };
+
+const MOVE_ACTIVATION_PX = 6;
 
 type Props = {
   events: GoogleCalendarEvent[];
@@ -83,6 +89,8 @@ type Props = {
   /** サイドバーから Task をドラッグ中 */
   draggingTask?: boolean;
   onDropTask?: (taskId: string, start: Date) => void;
+  /** 作業枠をタイムグリッド上で移動 */
+  onMoveWorkBlock?: (workBlockId: string, start: Date) => void;
   onEventSelect?: (
     event: GoogleCalendarEvent,
     anchor: CalendarEventAnchor,
@@ -108,6 +116,7 @@ export function WorkspaceCalendar({
   onRangeChange,
   draggingTask,
   onDropTask,
+  onMoveWorkBlock,
   onEventSelect,
   onCreateSlot,
   canCreateSchedule = true,
@@ -117,10 +126,13 @@ export function WorkspaceCalendar({
   const timeZone = primaryTimezone;
   const [dropHint, setDropHint] = useState<string | null>(null);
   const [dragCreate, setDragCreate] = useState<DragCreateState | null>(null);
+  const [blockMove, setBlockMove] = useState<WorkBlockMoveState | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);
   const dragCreateRef = useRef<DragCreateState | null>(null);
   dragCreateRef.current = dragCreate;
+  const blockMoveRef = useRef<WorkBlockMoveState | null>(null);
+  blockMoveRef.current = blockMove;
   const [visibleRange, setVisibleRange] = useState<{
     start: string;
     end: string;
@@ -279,6 +291,10 @@ export function WorkspaceCalendar({
   useHybridCurrentTimeColumn(rootElement, dayStartsHour, timeZone);
   const onCreateSlotRef = useRef(onCreateSlot);
   onCreateSlotRef.current = onCreateSlot;
+  const onMoveWorkBlockRef = useRef(onMoveWorkBlock);
+  onMoveWorkBlockRef.current = onMoveWorkBlock;
+  const onTaskSelectRef = useRef(onTaskSelect);
+  onTaskSelectRef.current = onTaskSelect;
 
   const resolveGridPoint = useCallback(
     (
@@ -370,8 +386,114 @@ export function WorkspaceCalendar({
     };
   }, [dragCreate, finishDragCreate, resolveGridPoint]);
 
+  useEffect(() => {
+    if (!blockMove) return;
+
+    function onMove(event: PointerEvent) {
+      const current = blockMoveRef.current;
+      if (!current || event.pointerId !== current.pointerId) return;
+
+      const dx = event.clientX - current.originClientX;
+      const dy = event.clientY - current.originClientY;
+      const activated =
+        current.active || Math.hypot(dx, dy) >= MOVE_ACTIVATION_PX;
+
+      const point = resolveGridPoint(event.clientX, event.clientY, {
+        lane: "task",
+      });
+
+      setBlockMove((previous) => {
+        if (!previous || previous.pointerId !== event.pointerId) {
+          return previous;
+        }
+        if (!activated) return previous;
+        if (!point) {
+          return previous.active ? previous : { ...previous, active: true };
+        }
+        if (
+          previous.active &&
+          previous.dateKey === point.dateKey &&
+          previous.offsetMinutes === point.offsetMinutes
+        ) {
+          return previous;
+        }
+        return {
+          ...previous,
+          active: true,
+          dateKey: point.dateKey,
+          column: point.column,
+          offsetMinutes: point.offsetMinutes,
+          start: point.start,
+        };
+      });
+    }
+
+    function onUp(event: PointerEvent) {
+      const current = blockMoveRef.current;
+      if (!current || event.pointerId !== current.pointerId) return;
+
+      const point = resolveGridPoint(event.clientX, event.clientY, {
+        lane: "task",
+      });
+      const finalStart = point?.start ?? current.start;
+      const wasActive = current.active && Boolean(finalStart);
+      setBlockMove(null);
+
+      if (wasActive && finalStart) {
+        onMoveWorkBlockRef.current?.(current.workBlockId, finalStart);
+        return;
+      }
+
+      const block = workBlocks.find(
+        (item) => item.workBlockId === current.workBlockId,
+      );
+      if (block) {
+        onTaskSelectRef.current?.({
+          taskId: block.taskId,
+          workBlockId: block.workBlockId,
+          start: block.start,
+          end: block.end,
+        });
+      }
+    }
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [blockMove, resolveGridPoint, workBlocks]);
+
+  function handleTaskMoveStart(payload: TaskLaneMoveStart) {
+    if (!onMoveWorkBlock) return;
+    const durationMs =
+      Date.parse(payload.block.end) - Date.parse(payload.block.start);
+    const durationMinutes =
+      Number.isFinite(durationMs) && durationMs > 0
+        ? Math.max(1, Math.round(durationMs / 60_000))
+        : SNAP_MINUTES;
+    setDragCreate(null);
+    setBlockMove({
+      workBlockId: payload.block.workBlockId,
+      taskId: payload.block.taskId,
+      durationMinutes,
+      pointerId: payload.pointerId,
+      originClientX: payload.clientX,
+      originClientY: payload.clientY,
+      active: false,
+      dateKey: null,
+      column: null,
+      offsetMinutes: null,
+      start: null,
+    });
+  }
+
   function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
     if (!onCreateSlot || draggingTask || event.button !== 0) return;
+    if (blockMove) return;
     const target = event.target as HTMLElement | null;
     if (!target || target.closest(IGNORE_CREATE_SELECTOR)) return;
 
@@ -421,6 +543,31 @@ export function WorkspaceCalendar({
       );
     })();
 
+  const moveGhost =
+    blockMove?.active &&
+    blockMove.column &&
+    blockMove.offsetMinutes != null
+      ? (() => {
+          const startOffset = blockMove.offsetMinutes;
+          const endOffset = Math.min(
+            24 * 60,
+            startOffset + blockMove.durationMinutes,
+          );
+          const topPct = (startOffset / (24 * 60)) * 100;
+          const heightPct = ((endOffset - startOffset) / (24 * 60)) * 100;
+          return createPortal(
+            <div
+              className="sx-create-ghost sx-create-ghost--task sx-create-ghost--moving"
+              style={{
+                top: `${topPct}%`,
+                height: `${Math.max(heightPct, 1.2)}%`,
+              }}
+            />,
+            blockMove.column,
+          );
+        })()
+      : null;
+
   return (
     <div
       ref={(element) => {
@@ -434,6 +581,7 @@ export function WorkspaceCalendar({
         secondaryTimezoneEnabled && "workspace-calendar--dual-tz",
         draggingTask && "ring-2 ring-brand/40",
         dragCreate && "workspace-calendar--creating",
+        blockMove?.active && "workspace-calendar--moving-block",
         className,
       )}
       style={
@@ -484,6 +632,7 @@ export function WorkspaceCalendar({
         />
       </div>
       {createGhost}
+      {moveGhost}
       <CalendarHeaderExtras
         root={rootElement}
         rangeStart={visibleRange?.start ?? null}
@@ -512,6 +661,12 @@ export function WorkspaceCalendar({
                 placed={placed}
                 dayStartsHour={dayStartsHour}
                 onTaskClick={onTaskSelect}
+                onTaskMoveStart={
+                  onMoveWorkBlock ? handleTaskMoveStart : undefined
+                }
+                movingWorkBlockId={
+                  blockMove?.active ? blockMove.workBlockId : null
+                }
               />,
               host,
               hostId,

@@ -65,6 +65,7 @@ export default async function AdminWorkspaceCalendarPage({
   let calendars: Awaited<ReturnType<typeof listGoogleCalendars>> = [];
   let hiddenCalendarIds: string[] = [];
   let writableCalendarId: string | null = null;
+  let mainCalendarId: string | null = null;
   let weekStartsOn: "monday" | "sunday" = "monday";
   let dayStartsHour = 0;
   let primaryTimezone = "Asia/Tokyo";
@@ -83,13 +84,15 @@ export default async function AdminWorkspaceCalendarPage({
     email = stored?.google_email ?? null;
     canWrite = tokenHasCalendarWriteScope(stored?.scope);
 
-    const [prefs, inbox, active] = await Promise.all([
+    const [prefs, inbox, active, waiting] = await Promise.all([
       getCalendarPreferences(),
       listTasks({ view: "inbox", limit: 50 }),
       listTasks({ status: "active", limit: 50 }),
+      listTasks({ status: "waiting", limit: 50 }),
     ]);
     hiddenCalendarIds = prefs.hidden_calendar_ids;
     writableCalendarId = prefs.writable_calendar_id;
+    mainCalendarId = prefs.main_calendar_id;
     weekStartsOn = prefs.week_starts_on;
     dayStartsHour = prefs.day_starts_hour;
     primaryTimezone = prefs.primary_timezone;
@@ -98,12 +101,16 @@ export default async function AdminWorkspaceCalendarPage({
     secondaryTimezone = prefs.secondary_timezone;
     secondaryLabel = prefs.secondary_timezone_label;
 
-    // サイドバー: 作業枠を追加できる Inbox / Active
-    unscheduledTasks = [...inbox, ...active]
-      .filter((t) => t.status !== "done")
-      .filter(
-        (t, i, arr) => arr.findIndex((x) => x.id === t.id) === i,
-      )
+    // サイドバー: 未完了（Inbox / Active / Waiting）を期限が近い順
+    unscheduledTasks = [...inbox, ...active, ...waiting]
+      .filter((t) => t.status !== "done" && t.status !== "archived")
+      .filter((t, i, arr) => arr.findIndex((x) => x.id === t.id) === i)
+      .sort((a, b) => {
+        const aDue = a.due_at ? Date.parse(a.due_at) : Number.POSITIVE_INFINITY;
+        const bDue = b.due_at ? Date.parse(b.due_at) : Number.POSITIVE_INFINITY;
+        if (aDue !== bDue) return aDue - bDue;
+        return a.title.localeCompare(b.title, "ja");
+      })
       .slice(0, 40);
 
     if (connected) {
@@ -150,6 +157,7 @@ export default async function AdminWorkspaceCalendarPage({
           calendars={calendars}
           hiddenCalendarIds={hiddenCalendarIds}
           writableCalendarId={writableCalendarId}
+          mainCalendarId={mainCalendarId}
           weekStartsOn={weekStartsOn}
           dayStartsHour={dayStartsHour}
           primaryTimezone={primaryTimezone}

@@ -91,7 +91,8 @@ export async function fetchAnalyticsReport(
     throw new Error("GA Data API is not configured");
   }
 
-  const cached = cache.get(range);
+  const cacheKey = `${range}:v2-titles`;
+  const cached = cache.get(cacheKey);
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
     return cached.report;
   }
@@ -127,10 +128,11 @@ export async function fetchAnalyticsReport(
     runReport({
       startDate,
       endDate,
-      dimensions: [{ name: "pagePath" }],
+      dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
       metrics: [{ name: "screenPageViews" }, { name: "activeUsers" }],
       orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
-      limit: 15,
+      // Extra rows so we can merge same path with differing titles.
+      limit: 40,
     }),
     runReport({
       startDate,
@@ -161,11 +163,18 @@ export async function fetchAnalyticsReport(
     sessions: Number(row.metricValues?.[2]?.value || 0),
   }));
 
-  const pages: AnalyticsPageRow[] = (pagesRes.rows ?? []).map((row) => ({
-    path: row.dimensionValues?.[0]?.value || "/",
-    views: Number(row.metricValues?.[0]?.value || 0),
-    activeUsers: Number(row.metricValues?.[1]?.value || 0),
-  }));
+  const pages = mergePagesByPath(
+    (pagesRes.rows ?? []).map((row) => {
+      const path = row.dimensionValues?.[0]?.value || "/";
+      const rawTitle = (row.dimensionValues?.[1]?.value || "").trim();
+      return {
+        path,
+        title: rawTitle || path,
+        views: Number(row.metricValues?.[0]?.value || 0),
+        activeUsers: Number(row.metricValues?.[1]?.value || 0),
+      };
+    }),
+  ).slice(0, 15);
 
   const sources: AnalyticsSourceRow[] = (sourcesRes.rows ?? []).map((row) => ({
     source: row.dimensionValues?.[0]?.value || "(direct)",
@@ -193,10 +202,34 @@ export async function fetchAnalyticsReport(
     cachedAt: new Date().toISOString(),
   };
 
-  cache.set(range, { at: Date.now(), report });
+  cache.set(cacheKey, { at: Date.now(), report });
   return report;
 }
 
 export function clearAnalyticsCache(): void {
   cache.clear();
+}
+
+/** Collapse path+title combinations into one row per path. */
+function mergePagesByPath(rows: AnalyticsPageRow[]): AnalyticsPageRow[] {
+  const byPath = new Map<string, AnalyticsPageRow>();
+  for (const row of rows) {
+    const existing = byPath.get(row.path);
+    if (!existing) {
+      byPath.set(row.path, { ...row });
+      continue;
+    }
+    // Prefer the title from the higher-traffic variant.
+    const title =
+      row.views > existing.views && row.title !== row.path
+        ? row.title
+        : existing.title;
+    byPath.set(row.path, {
+      path: row.path,
+      title,
+      views: existing.views + row.views,
+      activeUsers: existing.activeUsers + row.activeUsers,
+    });
+  }
+  return [...byPath.values()].sort((a, b) => b.views - a.views);
 }

@@ -87,14 +87,16 @@ npm run dev
    npm run db:apply -- supabase/workspace/migrations/20260731170000_calendar_week_starts_on.sql
    npm run db:apply -- supabase/workspace/migrations/20260731180000_calendar_day_starts_hour.sql
    npm run db:apply -- supabase/workspace/migrations/20260731190000_calendar_timezones.sql
-   npm run db:apply -- supabase/workspace/migrations/20260801090000_friends_activities.sql
+   npm run db:apply:workspace -- supabase/workspace/migrations/20260801090000_friends_activities.sql
+   npm run db:apply:workspace -- supabase/workspace/migrations/20260804140000_contacts.sql
    ```
 7. `/admin/workspace/calendar/` から「Googleカレンダーを接続」
 
-Friends / Activities（交友録）:
-- `/admin/workspace/friends/` — 友達一覧
+Contacts / Friends / Activities:
+- `/admin/workspace/contacts/` — 人台帳（名刺・仕事・友人）
+- `/admin/workspace/friends/` — `is_friend` のコンタクトのみ（交友録）
 - `/admin/workspace/activities/` — Activity 一覧
-- カレンダー予定の詳細から友達を紐づけると、ローカル Activity が自動作成されます
+- カレンダー予定の詳細からコンタクトを紐づけると、ローカル Activity が自動作成されます
 
 スコープは `calendar.readonly` + `calendar.events`（表示と承認付き作業枠作成）。
 既存接続がある場合は**一度解除して再接続**し、書き込み権限を付与する。

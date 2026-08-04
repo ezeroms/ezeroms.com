@@ -11,6 +11,7 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { WorkspaceLinkedItems } from "@/components/workspace/WorkspaceLinkedItems";
 import {
+  endOfTodayDatetimeLocalValue,
   fromDatetimeLocalValue,
   TASK_PRIORITY_LABELS,
   TASK_STATUS_LABELS,
@@ -262,12 +263,24 @@ export function TaskDetailForm({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="task-due">期限</Label>
-            <Input
-              id="task-due"
-              type="datetime-local"
-              value={dueAt}
-              onChange={(e) => setDueAt(e.target.value)}
-            />
+            <div className="flex items-center gap-2">
+              <Input
+                id="task-due"
+                type="datetime-local"
+                value={dueAt}
+                onChange={(e) => setDueAt(e.target.value)}
+                className="min-w-0 flex-1"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-10 shrink-0"
+                onClick={() => setDueAt(endOfTodayDatetimeLocalValue())}
+              >
+                今日中
+              </Button>
+            </div>
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="task-estimate">見積もり（分）</Label>

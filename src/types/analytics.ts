@@ -21,6 +21,8 @@ export type AnalyticsTrendPoint = {
 
 export type AnalyticsPageRow = {
   path: string;
+  /** Document title from GA (pageTitle). Falls back to path when empty. */
+  title: string;
   views: number;
   activeUsers: number;
 };

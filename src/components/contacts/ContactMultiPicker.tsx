@@ -11,33 +11,34 @@ import {
 } from "react";
 import { Input } from "@/components/ui/input";
 import {
-  compareFriendsByKana,
-  friendListNameWithNickname,
-  friendSortKey,
-  type WorkspaceFriend,
-} from "@/types/friends";
+  compareContactsByKana,
+  contactListNameWithNickname,
+  contactSortKey,
+  type WorkspaceContact,
+} from "@/types/contacts";
 
 type Props = {
-  friends: WorkspaceFriend[];
+  contacts: WorkspaceContact[];
   selectedIds: Set<string>;
   onChange: (next: Set<string>) => void;
   disabled?: boolean;
   loading?: boolean;
 };
 
-function matchesQuery(friend: WorkspaceFriend, q: string): boolean {
+function matchesQuery(contact: WorkspaceContact, q: string): boolean {
   const hay = [
-    friend.family_name,
-    friend.given_name,
-    friend.middle_name,
-    friend.family_name_kana,
-    friend.given_name_kana,
-    friend.middle_name_kana,
-    friend.family_name_en,
-    friend.given_name_en,
-    friend.english_name,
-    friend.nickname,
-    friendSortKey(friend),
+    contact.family_name,
+    contact.given_name,
+    contact.middle_name,
+    contact.family_name_kana,
+    contact.given_name_kana,
+    contact.middle_name_kana,
+    contact.family_name_en,
+    contact.given_name_en,
+    contact.english_name,
+    contact.nickname,
+    ...contact.tags,
+    contactSortKey(contact),
   ]
     .filter(Boolean)
     .join(" ")
@@ -45,8 +46,8 @@ function matchesQuery(friend: WorkspaceFriend, q: string): boolean {
   return hay.includes(q);
 }
 
-export function FriendMultiPicker({
-  friends,
+export function ContactMultiPicker({
+  contacts,
   selectedIds,
   onChange,
   disabled = false,
@@ -60,20 +61,20 @@ export function FriendMultiPicker({
 
   const selected = useMemo(
     () =>
-      friends
-        .filter((f) => selectedIds.has(f.id) && !f.deleted_at)
-        .sort(compareFriendsByKana),
-    [friends, selectedIds],
+      contacts
+        .filter((c) => selectedIds.has(c.id) && !c.deleted_at)
+        .sort(compareContactsByKana),
+    [contacts, selectedIds],
   );
 
   const candidates = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return friends
-      .filter((f) => !f.deleted_at && !selectedIds.has(f.id))
-      .filter((f) => !q || matchesQuery(f, q))
-      .sort(compareFriendsByKana)
+    return contacts
+      .filter((c) => !c.deleted_at && !selectedIds.has(c.id))
+      .filter((c) => !q || matchesQuery(c, q))
+      .sort(compareContactsByKana)
       .slice(0, 40);
-  }, [friends, selectedIds, query]);
+  }, [contacts, selectedIds, query]);
 
   useEffect(() => {
     setHighlight(0);
@@ -90,7 +91,7 @@ export function FriendMultiPicker({
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [open]);
 
-  function addFriend(id: string) {
+  function addContact(id: string) {
     if (disabled || selectedIds.has(id)) return;
     const next = new Set(selectedIds);
     next.add(id);
@@ -99,7 +100,7 @@ export function FriendMultiPicker({
     setOpen(false);
   }
 
-  function removeFriend(id: string) {
+  function removeContact(id: string) {
     if (disabled) return;
     const next = new Set(selectedIds);
     next.delete(id);
@@ -125,7 +126,7 @@ export function FriendMultiPicker({
     } else if (e.key === "Enter") {
       e.preventDefault();
       const pick = candidates[highlight];
-      if (pick) addFriend(pick.id);
+      if (pick) addContact(pick.id);
     }
   }
 
@@ -133,10 +134,10 @@ export function FriendMultiPicker({
     return <p className="m-0 text-xs text-muted-foreground">読み込み中…</p>;
   }
 
-  if (friends.length === 0) {
+  if (contacts.length === 0) {
     return (
       <p className="m-0 text-xs text-muted-foreground">
-        まだ友達がいません。Friends で追加できます。
+        まだコンタクトがいません。Contacts で追加できます。
       </p>
     );
   }
@@ -147,7 +148,7 @@ export function FriendMultiPicker({
         <Input
           value={query}
           disabled={disabled}
-          placeholder="友達を検索して追加…"
+          placeholder="コンタクトを検索して追加…"
           role="combobox"
           aria-expanded={open}
           aria-controls={listId}
@@ -170,8 +171,8 @@ export function FriendMultiPicker({
                 該当なし
               </li>
             ) : (
-              candidates.map((f, i) => (
-                <li key={f.id} role="option" aria-selected={i === highlight}>
+              candidates.map((c, i) => (
+                <li key={c.id} role="option" aria-selected={i === highlight}>
                   <button
                     type="button"
                     className={
@@ -180,13 +181,13 @@ export function FriendMultiPicker({
                         : "flex w-full cursor-pointer appearance-none items-baseline justify-between gap-2 border-0 bg-transparent px-3 py-2 text-left text-sm hover:bg-muted/60"
                     }
                     onMouseEnter={() => setHighlight(i)}
-                    onClick={() => addFriend(f.id)}
+                    onClick={() => addContact(c.id)}
                   >
                     <span className="font-medium text-foreground">
-                      {friendListNameWithNickname(f)}
+                      {contactListNameWithNickname(c)}
                     </span>
                     <span className="shrink-0 text-xs text-muted-foreground">
-                      {[f.family_name_kana, f.given_name_kana]
+                      {[c.family_name_kana, c.given_name_kana]
                         .filter(Boolean)
                         .join(" ")}
                     </span>
@@ -210,13 +211,13 @@ export function FriendMultiPicker({
             </tr>
           </thead>
           <tbody>
-            {selected.map((f) => (
-              <tr key={f.id} className="border-t border-border">
+            {selected.map((c) => (
+              <tr key={c.id} className="border-t border-border">
                 <td className="px-3 py-2 align-middle font-medium text-foreground">
-                  {friendListNameWithNickname(f)}
+                  {contactListNameWithNickname(c)}
                 </td>
                 <td className="whitespace-nowrap px-3 py-2 align-middle text-muted-foreground">
-                  {[f.family_name_kana, f.given_name_kana]
+                  {[c.family_name_kana, c.given_name_kana]
                     .filter(Boolean)
                     .join(" ") || "—"}
                 </td>
@@ -224,9 +225,9 @@ export function FriendMultiPicker({
                   <button
                     type="button"
                     disabled={disabled}
-                    aria-label={`${friendListNameWithNickname(f)} を外す`}
+                    aria-label={`${contactListNameWithNickname(c)} を外す`}
                     className="inline-flex size-7 cursor-pointer appearance-none items-center justify-center rounded-md border-0 bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
-                    onClick={() => removeFriend(f.id)}
+                    onClick={() => removeContact(c.id)}
                   >
                     <X className="size-3.5" aria-hidden />
                   </button>

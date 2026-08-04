@@ -21,6 +21,12 @@ export function toDatetimeLocalValue(iso: string | null | undefined): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+/** datetime-local value for end of local today (23:59). */
+export function endOfTodayDatetimeLocalValue(d = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T23:59`;
+}
+
 export function fromDatetimeLocalValue(value: string): string | null {
   const v = value.trim();
   if (!v) return null;

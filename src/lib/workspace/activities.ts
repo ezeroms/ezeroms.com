@@ -2,20 +2,23 @@ import "server-only";
 
 import { getWorkspaceAdmin } from "@/lib/workspace/db/server";
 import {
-  compareFriendsByKana,
-  friendDisplayName,
-  friendListNameWithNickname,
+  compareContactsByKana,
+  contactDisplayName,
+  contactListNameWithNickname,
   parseActivityTags,
   type ActivityTitleSource,
   type WorkspaceActivity,
-  type WorkspaceFriend,
-} from "@/types/friends";
+  type WorkspaceContact,
+} from "@/types/contacts";
 
 const SELECT =
   "id, title, title_source, occurred_at, ended_at, what_md, notes_md, location, tags, created_at, updated_at, deleted_at";
 
+const CONTACT_EMBED =
+  "id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, family_name_en, given_name_en, middle_name_en, english_name, nickname, birthday, birthday_year_known, notes_md, is_friend, tags, created_at, updated_at, deleted_at";
+
 export type ActivityListFilter = {
-  friendId?: string;
+  contactId?: string;
   from?: string;
   to?: string;
   tag?: string;
@@ -34,8 +37,8 @@ export type ActivityWriteInput = {
   tags?: string[] | string | null;
 };
 
-export type ActivityWithFriends = WorkspaceActivity & {
-  friends: WorkspaceFriend[];
+export type ActivityWithContacts = WorkspaceActivity & {
+  contacts: WorkspaceContact[];
 };
 
 export async function listActivities(
@@ -61,11 +64,11 @@ export async function listActivities(
     query = query.contains("tags", [filter.tag]);
   }
 
-  if (filter.friendId) {
+  if (filter.contactId) {
     const { data: links, error: linkError } = await getWorkspaceAdmin()
-      .from("activity_friends")
+      .from("activity_contacts")
       .select("activity_id")
-      .eq("friend_id", filter.friendId);
+      .eq("contact_id", filter.contactId);
     if (linkError) throw new Error(linkError.message);
     const activityIds = (links ?? []).map((row) => row.activity_id as string);
     if (activityIds.length === 0) return [];
@@ -89,13 +92,13 @@ export async function getActivity(
   return data ? normalizeActivity(data as WorkspaceActivity) : null;
 }
 
-export async function getActivityWithFriends(
+export async function getActivityWithContacts(
   id: string,
-): Promise<ActivityWithFriends | null> {
+): Promise<ActivityWithContacts | null> {
   const activity = await getActivity(id);
   if (!activity) return null;
-  const friends = await listFriendsForActivity(id);
-  return { ...activity, friends };
+  const contacts = await listContactsForActivity(id);
+  return { ...activity, contacts };
 }
 
 function normalizeActivity(row: WorkspaceActivity): WorkspaceActivity {
@@ -158,7 +161,6 @@ export async function updateActivity(
   if (patch.title !== undefined && !String(row.title ?? "").trim()) {
     throw new Error("title is required");
   }
-  // タイトルを手編集したら、明示指定がない限り title_source を manual に戻す
   if (patch.title !== undefined && patch.title_source === undefined) {
     row.title_source = "manual";
   }
@@ -188,12 +190,12 @@ export async function softDeleteActivity(
 }
 
 /**
- * friendId → 最新 Activity（未削除・occurred_at ありのみ）。
+ * contactId → 最新 Activity（未削除・occurred_at ありのみ）。
  */
-export async function listLastActivityByFriendIds(
-  friendIds: string[],
+export async function listLastActivityByContactIds(
+  contactIds: string[],
 ): Promise<Map<string, { occurredAt: string; title: string; activityId: string }>> {
-  const ids = [...new Set(friendIds)].filter(Boolean);
+  const ids = [...new Set(contactIds)].filter(Boolean);
   const map = new Map<
     string,
     { occurredAt: string; title: string; activityId: string }
@@ -201,15 +203,15 @@ export async function listLastActivityByFriendIds(
   if (ids.length === 0) return map;
 
   const { data, error } = await getWorkspaceAdmin()
-    .from("activity_friends")
+    .from("activity_contacts")
     .select(
-      "friend_id, activity:activities (id, title, occurred_at, deleted_at)",
+      "contact_id, activity:activities (id, title, occurred_at, deleted_at)",
     )
-    .in("friend_id", ids);
+    .in("contact_id", ids);
   if (error) throw new Error(error.message);
 
   type Row = {
-    friend_id: string;
+    contact_id: string;
     activity:
       | {
           id: string;
@@ -227,14 +229,13 @@ export async function listLastActivityByFriendIds(
   };
 
   for (const row of (data ?? []) as unknown as Row[]) {
-    // PostgREST の埋め込みは単一オブジェクト or 配列になり得る
     const activity = Array.isArray(row.activity)
       ? row.activity[0]
       : row.activity;
     if (!activity || activity.deleted_at || !activity.occurred_at) continue;
-    const previous = map.get(row.friend_id);
+    const previous = map.get(row.contact_id);
     if (!previous || activity.occurred_at > previous.occurredAt) {
-      map.set(row.friend_id, {
+      map.set(row.contact_id, {
         occurredAt: activity.occurred_at,
         title: activity.title,
         activityId: activity.id,
@@ -245,9 +246,9 @@ export async function listLastActivityByFriendIds(
 }
 
 /**
- * activityId → 未削除友達の表示名一覧（五十音順）。
+ * activityId → 未削除コンタクトの表示名一覧（五十音順）。
  */
-export async function listFriendNamesByActivityIds(
+export async function listContactNamesByActivityIds(
   activityIds: string[],
 ): Promise<Map<string, string[]>> {
   const ids = [...new Set(activityIds)].filter(Boolean);
@@ -255,15 +256,15 @@ export async function listFriendNamesByActivityIds(
   if (ids.length === 0) return map;
 
   const { data, error } = await getWorkspaceAdmin()
-    .from("activity_friends")
+    .from("activity_contacts")
     .select(
-      "activity_id, friend:friends (id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, english_name, nickname, deleted_at)",
+      `activity_id, contact:contacts (id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, english_name, nickname, deleted_at)`,
     )
     .in("activity_id", ids);
   if (error) throw new Error(error.message);
 
-  type FriendLite = Pick<
-    WorkspaceFriend,
+  type ContactLite = Pick<
+    WorkspaceContact,
     | "id"
     | "family_name"
     | "given_name"
@@ -278,96 +279,99 @@ export async function listFriendNamesByActivityIds(
 
   type Row = {
     activity_id: string;
-    friend: FriendLite | FriendLite[] | null;
+    contact: ContactLite | ContactLite[] | null;
   };
 
-  const buckets = new Map<string, FriendLite[]>();
+  const buckets = new Map<string, ContactLite[]>();
   for (const row of (data ?? []) as unknown as Row[]) {
-    const friend = Array.isArray(row.friend) ? row.friend[0] : row.friend;
-    if (!friend || friend.deleted_at) continue;
+    const contact = Array.isArray(row.contact) ? row.contact[0] : row.contact;
+    if (!contact || contact.deleted_at) continue;
     const list = buckets.get(row.activity_id) ?? [];
-    list.push(friend);
+    list.push(contact);
     buckets.set(row.activity_id, list);
   }
 
-  for (const [activityId, friends] of buckets) {
-    friends.sort(compareFriendsByKana);
+  for (const [activityId, contacts] of buckets) {
+    contacts.sort(compareContactsByKana);
     map.set(
       activityId,
-      friends.map((f) => friendListNameWithNickname(f)),
+      contacts.map((c) => contactListNameWithNickname(c)),
     );
   }
   return map;
 }
 
-export async function listFriendsForActivity(
+export async function listContactsForActivity(
   activityId: string,
-): Promise<WorkspaceFriend[]> {
+): Promise<WorkspaceContact[]> {
   const { data, error } = await getWorkspaceAdmin()
-    .from("activity_friends")
-    .select(
-      "friend:friends (id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, family_name_en, given_name_en, middle_name_en, english_name, nickname, birthday, birthday_year_known, notes_md, created_at, updated_at, deleted_at)",
-    )
+    .from("activity_contacts")
+    .select(`contact:contacts (${CONTACT_EMBED})`)
     .eq("activity_id", activityId);
   if (error) throw new Error(error.message);
 
   type Row = {
-    friend: WorkspaceFriend | WorkspaceFriend[] | null;
+    contact: WorkspaceContact | WorkspaceContact[] | null;
   };
   return ((data ?? []) as unknown as Row[])
-    .map((r) => (Array.isArray(r.friend) ? r.friend[0] : r.friend))
-    .filter((f): f is WorkspaceFriend => Boolean(f));
+    .map((r) => (Array.isArray(r.contact) ? r.contact[0] : r.contact))
+    .filter((c): c is WorkspaceContact => Boolean(c))
+    .map((c) => ({
+      ...c,
+      is_friend: Boolean(c.is_friend),
+      tags: Array.isArray(c.tags) ? c.tags : [],
+    }));
 }
 
-/** Replace the friend set for an activity. */
-export async function setActivityFriends(
+/** Replace the contact set for an activity. */
+export async function setActivityContacts(
   activityId: string,
-  friendIds: string[],
-): Promise<WorkspaceFriend[]> {
-  const unique = [...new Set(friendIds.filter(Boolean))];
+  contactIds: string[],
+): Promise<WorkspaceContact[]> {
+  const unique = [...new Set(contactIds.filter(Boolean))];
   const { error: delError } = await getWorkspaceAdmin()
-    .from("activity_friends")
+    .from("activity_contacts")
     .delete()
     .eq("activity_id", activityId);
   if (delError) throw new Error(delError.message);
 
   if (unique.length > 0) {
     const { error: insError } = await getWorkspaceAdmin()
-      .from("activity_friends")
+      .from("activity_contacts")
       .insert(
-        unique.map((friend_id) => ({
+        unique.map((contact_id) => ({
           activity_id: activityId,
-          friend_id,
+          contact_id,
         })),
       );
     if (insError) throw new Error(insError.message);
   }
-  return listFriendsForActivity(activityId);
+  return listContactsForActivity(activityId);
 }
 
-export async function addFriendToActivity(
+export async function addContactToActivity(
   activityId: string,
-  friendId: string,
+  contactId: string,
 ): Promise<void> {
   const { error } = await getWorkspaceAdmin()
-    .from("activity_friends")
+    .from("activity_contacts")
     .upsert(
-      { activity_id: activityId, friend_id: friendId },
-      { onConflict: "activity_id,friend_id" },
+      { activity_id: activityId, contact_id: contactId },
+      { onConflict: "activity_id,contact_id" },
     );
   if (error) throw new Error(error.message);
 }
 
-export async function removeFriendFromActivity(
+export async function removeContactFromActivity(
   activityId: string,
-  friendId: string,
+  contactId: string,
 ): Promise<void> {
   const { error } = await getWorkspaceAdmin()
-    .from("activity_friends")
+    .from("activity_contacts")
     .delete()
     .eq("activity_id", activityId)
-    .eq("friend_id", friendId);
+    .eq("contact_id", contactId);
   if (error) throw new Error(error.message);
 }
 
-export { friendDisplayName };
+export { contactDisplayName };

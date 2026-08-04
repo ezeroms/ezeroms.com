@@ -484,11 +484,13 @@ export function TasksBoard({
                       active ? "bg-accent" : "hover:bg-muted/60",
                     )}
                   >
-                    <TaskCheckbox
-                      checked={task.status === "done"}
-                      onChange={() => void toggleDone(task)}
-                      className="mt-0.5"
-                    />
+                    {/* 1行目の行高に合わせてチェックを縦中央揃え */}
+                    <span className="flex h-[1.375em] shrink-0 items-center text-sm leading-snug">
+                      <TaskCheckbox
+                        checked={task.status === "done"}
+                        onChange={() => void toggleDone(task)}
+                      />
+                    </span>
                     <button
                       type="button"
                       onClick={() => setSelectedTaskId(task.id)}

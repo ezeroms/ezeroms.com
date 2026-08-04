@@ -6,7 +6,7 @@ export type ActivityLogActor = "user" | "ai" | "sync";
 
 /**
  * workspace の監査ログ（activity_log テーブル）へ追記する。
- * Friends の「Activities」機能とは別物なので、モジュール名も activity-log としている。
+ * Contacts / 「Activities」機能とは別物なので、モジュール名も activity-log としている。
  */
 export async function logActivity(input: {
   entityType: string;

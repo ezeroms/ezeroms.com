@@ -25,6 +25,23 @@ export type DragCreateState = {
   pointerId: number;
 };
 
+/** 作業枠チップをタイムグリッド上で移動するときの状態。 */
+export type WorkBlockMoveState = {
+  workBlockId: string;
+  taskId: string;
+  /** 元の枠の長さ（分）。移動先でも維持する。 */
+  durationMinutes: number;
+  pointerId: number;
+  originClientX: number;
+  originClientY: number;
+  /** 閾値を超えて実際に移動中か。false のあいだはクリック扱い。 */
+  active: boolean;
+  dateKey: string | null;
+  column: HTMLElement | null;
+  offsetMinutes: number | null;
+  start: Date | null;
+};
+
 export type CalendarCreateSlot = {
   lane: CalendarCreateLane;
   start: Date;

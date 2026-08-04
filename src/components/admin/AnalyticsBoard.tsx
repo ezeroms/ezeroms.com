@@ -188,52 +188,97 @@ export function AnalyticsBoard({
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <section className="overflow-hidden rounded-md border border-border bg-card">
+          <h2 className="m-0 border-b border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             人気ページ
           </h2>
-          <ul className="m-0 flex list-none flex-col gap-1 p-0">
-            {report.pages.length === 0 ? (
-              <li className="text-sm text-muted-foreground">データなし</li>
-            ) : (
-              report.pages.map((p) => (
-                <li
-                  key={p.path}
-                  className="flex items-baseline justify-between gap-3 border-b border-border py-2 text-sm last:border-0"
-                >
-                  <span className="min-w-0 truncate font-medium">{p.path}</span>
-                  <span className="shrink-0 tabular-nums text-muted-foreground">
-                    {formatNumber(p.views)}
-                  </span>
-                </li>
-              ))
-            )}
-          </ul>
+          {report.pages.length === 0 ? (
+            <p className="m-0 px-4 py-6 text-sm text-muted-foreground">
+              データなし
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[420px] border-collapse text-left text-sm">
+                <thead>
+                  <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="px-4 py-3 font-medium">ページ</th>
+                    <th className="w-24 px-4 py-3 text-right font-medium">
+                      Views
+                    </th>
+                    <th className="w-24 px-4 py-3 text-right font-medium">
+                      Users
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.pages.map((p) => (
+                    <tr
+                      key={p.path}
+                      className="border-t border-border bg-card align-top hover:bg-muted/30"
+                    >
+                      <td className="max-w-[320px] px-4 py-2.5">
+                        <span className="block font-medium text-foreground">
+                          {p.title || p.path}
+                        </span>
+                        <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                          {p.path}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5 text-right tabular-nums text-muted-foreground">
+                        {formatNumber(p.views)}
+                      </td>
+                      <td className="px-4 py-2.5 text-right tabular-nums text-muted-foreground">
+                        {formatNumber(p.activeUsers)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
-        <section>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <section className="overflow-hidden rounded-md border border-border bg-card">
+          <h2 className="m-0 border-b border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             主な流入元
           </h2>
-          <ul className="m-0 flex list-none flex-col gap-1 p-0">
-            {report.sources.length === 0 ? (
-              <li className="text-sm text-muted-foreground">データなし</li>
-            ) : (
-              report.sources.map((sRow) => (
-                <li
-                  key={`${sRow.source}/${sRow.medium}`}
-                  className="flex items-baseline justify-between gap-3 border-b border-border py-2 text-sm last:border-0"
-                >
-                  <span className="min-w-0 truncate font-medium">
-                    {sRow.source} / {sRow.medium}
-                  </span>
-                  <span className="shrink-0 tabular-nums text-muted-foreground">
-                    {formatNumber(sRow.sessions)}
-                  </span>
-                </li>
-              ))
-            )}
-          </ul>
+          {report.sources.length === 0 ? (
+            <p className="m-0 px-4 py-6 text-sm text-muted-foreground">
+              データなし
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[360px] border-collapse text-left text-sm">
+                <thead>
+                  <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="px-4 py-3 font-medium">Source</th>
+                    <th className="px-4 py-3 font-medium">Medium</th>
+                    <th className="w-28 px-4 py-3 text-right font-medium">
+                      Sessions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.sources.map((sRow) => (
+                    <tr
+                      key={`${sRow.source}/${sRow.medium}`}
+                      className="border-t border-border bg-card hover:bg-muted/30"
+                    >
+                      <td className="max-w-[180px] truncate px-4 py-2.5 font-medium">
+                        {sRow.source}
+                      </td>
+                      <td className="max-w-[140px] truncate px-4 py-2.5 text-muted-foreground">
+                        {sRow.medium}
+                      </td>
+                      <td className="px-4 py-2.5 text-right tabular-nums text-muted-foreground">
+                        {formatNumber(sRow.sessions)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
       </div>
     </div>

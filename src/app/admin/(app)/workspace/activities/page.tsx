@@ -1,22 +1,22 @@
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
-import { ActivityCreateButton } from "@/components/friends/ActivityCreateButton";
+import { ActivityCreateButton } from "@/components/contacts/ActivityCreateButton";
 import {
   ActivitiesListTable,
   type ActivitiesTableItem,
-} from "@/components/friends/ActivitiesListTable";
+} from "@/components/contacts/ActivitiesListTable";
 import { Alert } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { getSessionUser } from "@/lib/supabase/auth";
 import {
   listActivities,
-  listFriendNamesByActivityIds,
+  listContactNamesByActivityIds,
 } from "@/lib/workspace/activities";
+import { listContacts } from "@/lib/workspace/contacts";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
-import { listFriends } from "@/lib/workspace/friends";
-import type { WorkspaceFriend } from "@/types/friends";
+import type { WorkspaceContact } from "@/types/contacts";
 
 export const dynamic = "force-dynamic";
 
@@ -27,21 +27,21 @@ export default async function AdminWorkspaceActivitiesPage() {
 
   let loadError: string | null = null;
   let items: ActivitiesTableItem[] = [];
-  let friends: WorkspaceFriend[] = [];
+  let contacts: WorkspaceContact[] = [];
 
   if (hasWorkspaceConfig()) {
     try {
-      const [activities, friendList] = await Promise.all([
+      const [activities, contactList] = await Promise.all([
         listActivities({ limit: 200 }),
-        listFriends({ limit: 500 }),
+        listContacts({ limit: 500 }),
       ]);
-      friends = friendList;
-      const friendNames = await listFriendNamesByActivityIds(
+      contacts = contactList;
+      const contactNames = await listContactNamesByActivityIds(
         activities.map((a) => a.id),
       );
       items = activities.map((activity) => ({
         activity,
-        friendNames: friendNames.get(activity.id) ?? [],
+        contactNames: contactNames.get(activity.id) ?? [],
       }));
     } catch (e) {
       loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
@@ -54,7 +54,7 @@ export default async function AdminWorkspaceActivitiesPage() {
         title={navItem.label}
         actions={
           hasWorkspaceConfig() ? (
-            <ActivityCreateButton friends={friends} />
+            <ActivityCreateButton contacts={contacts} />
           ) : null
         }
       />

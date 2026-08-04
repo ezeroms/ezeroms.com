@@ -1,6 +1,10 @@
 import "server-only";
 
-import { getValidGoogleAccessToken } from "@/lib/workspace/calendar/tokens";
+import {
+  getValidGoogleAccessToken,
+  isGoogleCalendarAuthError,
+  GoogleCalendarAuthError,
+} from "@/lib/workspace/calendar/tokens";
 import type {
   GoogleCalendarEvent,
   GoogleCalendarListItem,
@@ -32,7 +36,16 @@ function isReadOnlyRole(role: string | undefined): boolean {
   return role === "reader" || role === "freeBusyReader";
 }
 
-async function googleGet<T>(
+class GoogleHttpError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "GoogleHttpError";
+    this.status = status;
+  }
+}
+
+async function googleGetOnce<T>(
   accessToken: string,
   url: string,
 ): Promise<T> {
@@ -42,11 +55,42 @@ async function googleGet<T>(
   });
   const data = (await res.json()) as T & { error?: { message?: string } };
   if (!res.ok) {
-    throw new Error(
+    throw new GoogleHttpError(
+      res.status,
       data.error?.message || `Google Calendar API ${res.status}`,
     );
   }
   return data;
+}
+
+/** GET with one forced token refresh on 401. */
+async function googleGet<T>(url: string): Promise<T> {
+  const auth = await getValidGoogleAccessToken();
+  if (!auth) {
+    throw new GoogleCalendarAuthError();
+  }
+  try {
+    return await googleGetOnce<T>(auth.accessToken, url);
+  } catch (error) {
+    const unauthorized =
+      (error instanceof GoogleHttpError && error.status === 401) ||
+      isGoogleCalendarAuthError(error);
+    if (!unauthorized) throw error;
+
+    const refreshed = await getValidGoogleAccessToken({ forceRefresh: true });
+    if (!refreshed) throw new GoogleCalendarAuthError();
+    try {
+      return await googleGetOnce<T>(refreshed.accessToken, url);
+    } catch (retryError) {
+      if (
+        (retryError instanceof GoogleHttpError && retryError.status === 401) ||
+        isGoogleCalendarAuthError(retryError)
+      ) {
+        throw new GoogleCalendarAuthError();
+      }
+      throw retryError;
+    }
+  }
 }
 
 export async function listGoogleCalendars(): Promise<GoogleCalendarListItem[]> {
@@ -54,7 +98,6 @@ export async function listGoogleCalendars(): Promise<GoogleCalendarListItem[]> {
   if (!auth) return [];
 
   const data = await googleGet<{ items?: CalendarListApiItem[] }>(
-    auth.accessToken,
     "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader&maxResults=250",
   );
 
@@ -83,8 +126,8 @@ export async function listGoogleEvents(opts: {
   const calendars = await listGoogleCalendars();
   const hidden = new Set(opts.hiddenCalendarIds ?? []);
   const selected = calendars.filter((c) => {
-    if (hidden.has(c.id)) return false;
     if (opts.calendarIds?.length) return opts.calendarIds.includes(c.id);
+    if (hidden.has(c.id)) return false;
     return true;
   });
 
@@ -101,10 +144,7 @@ export async function listGoogleEvents(opts: {
       });
       const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?${params}`;
       try {
-        const data = await googleGet<{ items?: EventApiItem[] }>(
-          auth.accessToken,
-          url,
-        );
+        const data = await googleGet<{ items?: EventApiItem[] }>(url);
         for (const item of data.items ?? []) {
           if (!item.id) continue;
           if (item.status === "cancelled") continue;
@@ -128,8 +168,12 @@ export async function listGoogleEvents(opts: {
             backgroundColor: cal.backgroundColor,
           });
         }
-      } catch {
-        // Skip calendars that fail (permissions / deleted) without breaking the page.
+      } catch (error) {
+        // Auth errors must surface; other per-calendar failures are skipped.
+        if (isGoogleCalendarAuthError(error)) throw error;
+        if (error instanceof GoogleHttpError && error.status === 401) {
+          throw new GoogleCalendarAuthError();
+        }
       }
     }),
   );
@@ -149,11 +193,13 @@ export async function listGoogleEventsCached(opts: {
   timeMin: string;
   timeMax: string;
   hiddenCalendarIds?: string[];
+  calendarIds?: string[];
 }): Promise<GoogleCalendarEvent[]> {
   const key = JSON.stringify({
     timeMin: opts.timeMin,
     timeMax: opts.timeMax,
     hidden: [...(opts.hiddenCalendarIds ?? [])].sort(),
+    calendars: [...(opts.calendarIds ?? [])].sort(),
   });
   const hit = eventCache.get(key);
   if (hit && Date.now() - hit.at < CACHE_TTL_MS) {
@@ -162,6 +208,19 @@ export async function listGoogleEventsCached(opts: {
   const events = await listGoogleEvents(opts);
   eventCache.set(key, { at: Date.now(), events });
   return events;
+}
+
+/**
+ * Resolve the calendar used for dashboard / meeting-load.
+ * Prefs main → Google primary → first listed calendar.
+ */
+export async function resolveMainCalendarId(
+  mainCalendarId: string | null | undefined,
+): Promise<string | null> {
+  if (mainCalendarId) return mainCalendarId;
+  const calendars = await listGoogleCalendars();
+  if (calendars.length === 0) return null;
+  return calendars.find((c) => c.primary)?.id ?? calendars[0]?.id ?? null;
 }
 
 export function clearGoogleEventsCache(): void {

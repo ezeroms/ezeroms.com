@@ -4,20 +4,24 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
-import { FriendMultiPicker } from "@/components/friends/FriendMultiPicker";
+import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
+import { ContactMultiPicker } from "@/components/contacts/ContactMultiPicker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import type { GoogleCalendarEvent } from "@/types/calendar";
+import {
+  googleDescriptionToMarkdown,
+  markdownToGoogleDescription,
+} from "@/lib/admin/rich-text";
 import {
   datetimeLocalToIso,
   isoToDatetimeLocal,
 } from "@/lib/workspace/calendar/time";
 import {
-  friendDisplayName,
+  contactDisplayName,
   type CalendarActivityLink,
-  type WorkspaceFriend,
-} from "@/types/friends";
+  type WorkspaceContact,
+} from "@/types/contacts";
 
 export type CalendarEventAnchor = {
   top: number;
@@ -73,7 +77,7 @@ function formFromEvent(
 ): FormState {
   const shared = {
     summary: event.summary,
-    description: event.description ?? "",
+    description: googleDescriptionToMarkdown(event.description ?? ""),
     location: event.location ?? "",
   };
   if (event.allDay) {
@@ -109,30 +113,30 @@ export function CalendarEventPopover({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [friends, setFriends] = useState<WorkspaceFriend[]>([]);
-  const [friendIds, setFriendIds] = useState<Set<string>>(
-    () => new Set(initialActivityLink?.friendIds ?? []),
+  const [contacts, setContacts] = useState<WorkspaceContact[]>([]);
+  const [contactIds, setContactIds] = useState<Set<string>>(
+    () => new Set(initialActivityLink?.contactIds ?? []),
   );
   const [activityId, setActivityId] = useState<string | null>(
     initialActivityLink?.activityId ?? null,
   );
-  const [friendsLoaded, setFriendsLoaded] = useState(false);
-  const [friendsDirty, setFriendsDirty] = useState(false);
-  const [friendsBusy, setFriendsBusy] = useState(false);
+  const [contactsLoaded, setContactsLoaded] = useState(false);
+  const [contactsDirty, setContactsDirty] = useState(false);
+  const [contactsBusy, setContactsBusy] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     void (async () => {
       try {
-        const res = await fetch("/api/admin/workspace/friends/?limit=500");
+        const res = await fetch("/api/admin/workspace/contacts/?limit=500");
         const data = (await res.json()) as {
-          items?: WorkspaceFriend[];
+          items?: WorkspaceContact[];
         };
         if (!cancelled && res.ok) {
-          setFriends(data.items ?? []);
+          setContacts(data.items ?? []);
         }
       } finally {
-        if (!cancelled) setFriendsLoaded(true);
+        if (!cancelled) setContactsLoaded(true);
       }
     })();
     return () => {
@@ -149,13 +153,13 @@ export function CalendarEventPopover({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function setFriendSelection(next: Set<string>) {
-    setFriendIds(next);
-    setFriendsDirty(true);
+  function setContactSelection(next: Set<string>) {
+    setContactIds(next);
+    setContactsDirty(true);
   }
 
-  async function saveFriends() {
-    setFriendsBusy(true);
+  async function saveContacts() {
+    setContactsBusy(true);
     setError(null);
     try {
       const res = await fetch(
@@ -170,7 +174,7 @@ export function CalendarEventPopover({
             start: event.start,
             end: event.end,
             location: form.location.trim() || event.location,
-            friend_ids: [...friendIds],
+            contact_ids: [...contactIds],
           }),
         },
       );
@@ -178,48 +182,48 @@ export function CalendarEventPopover({
         item?: {
           id: string;
           title: string;
-          friends?: WorkspaceFriend[];
+          contacts?: WorkspaceContact[];
         };
         error?: string;
       };
-      if (!res.ok) throw new Error(data.error || "友達の保存に失敗しました");
+      if (!res.ok) throw new Error(data.error || "コンタクトの保存に失敗しました");
       const item = data.item;
       if (item) {
         setActivityId(item.id);
-        const activeFriends = (item.friends ?? []).filter((f) => !f.deleted_at);
+        const activeContacts = (item.contacts ?? []).filter((c) => !c.deleted_at);
         const link: CalendarActivityLink = {
           googleCalendarId: event.calendarId,
           googleEventId: event.id,
           activityId: item.id,
           activityTitle: item.title,
-          friendIds: activeFriends.map((f) => f.id),
-          friendNames: activeFriends.map(friendDisplayName),
+          contactIds: activeContacts.map((c) => c.id),
+          contactNames: activeContacts.map(contactDisplayName),
         };
-        setFriendIds(new Set(link.friendIds));
+        setContactIds(new Set(link.contactIds));
         onActivityLinkChange?.(link);
       }
-      setFriendsDirty(false);
+      setContactsDirty(false);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "友達の保存に失敗しました",
+        err instanceof Error ? err.message : "コンタクトの保存に失敗しました",
       );
       throw err;
     } finally {
-      setFriendsBusy(false);
+      setContactsBusy(false);
     }
   }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    if (saving || friendsBusy) return;
+    if (saving || contactsBusy) return;
     setError(null);
     setSaving(true);
     const hadEventDirty = editable && dirty;
-    const hadFriendsDirty = friendsDirty;
+    const hadContactsDirty = contactsDirty;
     try {
-      // Friends first — Google save closes the modal via onSave.
-      if (hadFriendsDirty) {
-        await saveFriends();
+      // Contacts first — Google save closes the modal via onSave.
+      if (hadContactsDirty) {
+        await saveContacts();
       }
       if (hadEventDirty) {
         let nextStart = form.start;
@@ -237,7 +241,7 @@ export function CalendarEventPopover({
           start: nextStart,
           end: nextEnd,
           allDay: event.allDay,
-          description: form.description,
+          description: markdownToGoogleDescription(form.description),
           location: form.location.trim(),
         });
       } else {
@@ -251,7 +255,7 @@ export function CalendarEventPopover({
   }
 
   const canSubmit =
-    (editable && dirty && Boolean(form.summary.trim())) || friendsDirty;
+    (editable && dirty && Boolean(form.summary.trim())) || contactsDirty;
 
   return (
     <AdminContentModal
@@ -260,7 +264,7 @@ export function CalendarEventPopover({
       title={event.summary ? `予定: ${event.summary}` : "予定"}
       formId={formId}
       isEdit
-      saving={saving || friendsBusy}
+      saving={saving || contactsBusy}
       dirty={canSubmit}
       deleteError={error}
       updateLabel="保存"
@@ -322,24 +326,24 @@ export function CalendarEventPopover({
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="cal-event-description">詳細</Label>
-          <Textarea
+          <AdminRichTextEditor
             id="cal-event-description"
             value={form.description}
+            onChange={(markdown) => patchForm("description", markdown)}
             disabled={!editable || saving}
-            className="min-h-[100px] text-sm"
             placeholder="詳細を追加"
-            onChange={(e) => patchForm("description", e.target.value)}
+            minHeightClassName="min-h-[120px]"
           />
         </div>
 
         <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
-          <legend className="mb-1 text-sm font-medium">一緒にいた友達</legend>
-          <FriendMultiPicker
-            friends={friends}
-            selectedIds={friendIds}
-            onChange={setFriendSelection}
-            disabled={saving || friendsBusy}
-            loading={!friendsLoaded}
+          <legend className="mb-1 text-sm font-medium">一緒にいた人</legend>
+          <ContactMultiPicker
+            contacts={contacts}
+            selectedIds={contactIds}
+            onChange={setContactSelection}
+            disabled={saving || contactsBusy}
+            loading={!contactsLoaded}
           />
           {activityId ? (
             <p className="m-0 text-xs">

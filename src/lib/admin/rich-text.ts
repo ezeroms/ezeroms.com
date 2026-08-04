@@ -42,3 +42,25 @@ export function editorHtmlToMarkdown(html: string): string {
   if (!trimmed || trimmed === "<p></p>") return "";
   return turndown.turndown(trimmed).trim();
 }
+
+function looksLikeHtml(value: string): boolean {
+  return /<\/?[a-z][\s\S]*>/i.test(value);
+}
+
+/**
+ * Google Calendar の description（多くは HTML）→ エディタ用 Markdown。
+ * 素のテキストはそのまま扱う。
+ */
+export function googleDescriptionToMarkdown(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  if (looksLikeHtml(trimmed)) {
+    return editorHtmlToMarkdown(trimmed);
+  }
+  return trimmed;
+}
+
+/** エディタ Markdown → Google Calendar に渡す HTML。 */
+export function markdownToGoogleDescription(md: string): string {
+  return markdownToEditorHtml(md);
+}

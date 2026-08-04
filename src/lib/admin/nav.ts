@@ -81,9 +81,16 @@ export const adminNavSections: AdminNavSection[] = [
         icon: "files",
       },
       {
+        href: "/admin/workspace/contacts/",
+        label: "Contacts",
+        description: "人・名刺・仕事の連絡先",
+        status: "ready",
+        icon: "user",
+      },
+      {
         href: "/admin/workspace/friends/",
         label: "Friends",
-        description: "友達一覧",
+        description: "交友録（Friend フラグ）",
         status: "ready",
         icon: "users",
       },

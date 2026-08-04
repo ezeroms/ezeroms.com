@@ -3,10 +3,10 @@ import { requireWorkspaceAdmin } from "@/lib/workspace/api-auth";
 import {
   createActivity,
   listActivities,
-  setActivityFriends,
+  setActivityContacts,
   type ActivityWriteInput,
 } from "@/lib/workspace/activities";
-import { isActivityTitleSource } from "@/types/friends";
+import { isActivityTitleSource } from "@/types/contacts";
 
 export async function GET(request: NextRequest) {
   const auth = await requireWorkspaceAdmin();
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   try {
     const sp = request.nextUrl.searchParams;
     const items = await listActivities({
-      friendId: sp.get("friend_id") ?? undefined,
+      contactId: sp.get("contact_id") ?? sp.get("friend_id") ?? undefined,
       from: sp.get("from") ?? undefined,
       to: sp.get("to") ?? undefined,
       tag: sp.get("tag") ?? undefined,
@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
       notes_md?: string | null;
       location?: string | null;
       tags?: string | string[] | null;
+      contact_ids?: string[];
       friend_ids?: string[];
     };
 
@@ -76,8 +77,13 @@ export async function POST(request: NextRequest) {
     };
 
     const item = await createActivity(input);
-    if (Array.isArray(body.friend_ids) && body.friend_ids.length > 0) {
-      await setActivityFriends(item.id, body.friend_ids);
+    const contactIds = Array.isArray(body.contact_ids)
+      ? body.contact_ids
+      : Array.isArray(body.friend_ids)
+        ? body.friend_ids
+        : null;
+    if (contactIds && contactIds.length > 0) {
+      await setActivityContacts(item.id, contactIds);
     }
     return NextResponse.json({ item }, { status: 201 });
   } catch (e) {

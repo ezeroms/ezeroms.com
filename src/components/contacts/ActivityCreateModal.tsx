@@ -7,17 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  compareFriendsByKana,
-  friendDisplayName,
-  type WorkspaceFriend,
-} from "@/types/friends";
+  compareContactsByKana,
+  contactDisplayName,
+  type WorkspaceContact,
+} from "@/types/contacts";
 
 const FORM_ID = "activity-create-form";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  friends: WorkspaceFriend[];
+  contacts: WorkspaceContact[];
 };
 
 type FormState = {
@@ -28,7 +28,7 @@ type FormState = {
   tags: string;
   what_md: string;
   notes_md: string;
-  friendIds: string[];
+  contactIds: string[];
 };
 
 function nowLocalInput(): string {
@@ -46,7 +46,7 @@ function emptyForm(): FormState {
     tags: "",
     what_md: "",
     notes_md: "",
-    friendIds: [],
+    contactIds: [],
   };
 }
 
@@ -57,7 +57,7 @@ function fromLocalInput(value: string): string | null {
   return d.toISOString();
 }
 
-export function ActivityCreateModal({ open, onClose, friends }: Props) {
+export function ActivityCreateModal({ open, onClose, contacts }: Props) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState<FormState>(emptyForm);
@@ -86,25 +86,25 @@ export function ActivityCreateModal({ open, onClose, friends }: Props) {
     [form, baseline],
   );
 
-  const friendOptions = useMemo(
+  const contactOptions = useMemo(
     () =>
-      [...friends]
+      [...contacts]
         .filter((f) => !f.deleted_at)
-        .sort(compareFriendsByKana)
-        .map((f) => ({ id: f.id, label: friendDisplayName(f) })),
-    [friends],
+        .sort(compareContactsByKana)
+        .map((f) => ({ id: f.id, label: contactDisplayName(f) })),
+    [contacts],
   );
 
   function patch<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function toggleFriend(id: string) {
+  function toggleContact(id: string) {
     setForm((prev) => {
-      const set = new Set(prev.friendIds);
+      const set = new Set(prev.contactIds);
       if (set.has(id)) set.delete(id);
       else set.add(id);
-      return { ...prev, friendIds: [...set] };
+      return { ...prev, contactIds: [...set] };
     });
   }
 
@@ -131,7 +131,7 @@ export function ActivityCreateModal({ open, onClose, friends }: Props) {
           tags: form.tags,
           what_md: form.what_md || null,
           notes_md: form.notes_md || null,
-          friend_ids: form.friendIds,
+          contact_ids: form.contactIds,
         }),
       });
       const data = (await res.json()) as { error?: string };
@@ -245,21 +245,21 @@ export function ActivityCreateModal({ open, onClose, friends }: Props) {
         </div>
 
         <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
-          <legend className="mb-1 text-sm font-medium">一緒にいた友達</legend>
-          {friendOptions.length === 0 ? (
+          <legend className="mb-1 text-sm font-medium">一緒にいた人</legend>
+          {contactOptions.length === 0 ? (
             <p className="m-0 text-xs text-muted-foreground">
-              まだ友達がいません。Friends から追加できます。
+              まだコンタクトがいません。Contacts から追加できます。
             </p>
           ) : (
             <ul className="m-0 grid max-h-40 list-none gap-2 overflow-y-auto p-0 sm:grid-cols-2">
-              {friendOptions.map((f) => (
+              {contactOptions.map((f) => (
                 <li key={f.id}>
                   <label className="flex cursor-pointer items-center gap-2 text-sm">
                     <input
                       type="checkbox"
-                      checked={form.friendIds.includes(f.id)}
+                      checked={form.contactIds.includes(f.id)}
                       disabled={saving}
-                      onChange={() => toggleFriend(f.id)}
+                      onChange={() => toggleContact(f.id)}
                     />
                     {f.label}
                   </label>

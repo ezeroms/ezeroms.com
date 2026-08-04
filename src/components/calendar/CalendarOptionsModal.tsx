@@ -18,6 +18,7 @@ export type CalendarOptionsValues = {
   weekStartsOn: WeekStartsOn;
   dayStartsHour: number;
   writableCalendarId: string | null;
+  mainCalendarId: string | null;
   primaryTimezone: string;
   primaryLabel: string;
   secondaryTimezoneEnabled: boolean;
@@ -65,6 +66,13 @@ export function CalendarOptionsModal({
   const [weekStartsOn, setWeekStartsOn] = useState(initial.weekStartsOn);
   const [dayStartsHour, setDayStartsHour] = useState(initial.dayStartsHour);
   const [writableId, setWritableId] = useState(initial.writableCalendarId);
+  const [mainId, setMainId] = useState(
+    () =>
+      initial.mainCalendarId ??
+      calendars.find((c) => c.primary)?.id ??
+      calendars[0]?.id ??
+      null,
+  );
   const [primaryTimezone, setPrimaryTimezone] = useState(
     initial.primaryTimezone,
   );
@@ -96,13 +104,19 @@ export function CalendarOptionsModal({
     setWeekStartsOn(initial.weekStartsOn);
     setDayStartsHour(initial.dayStartsHour);
     setWritableId(initial.writableCalendarId);
+    setMainId(
+      initial.mainCalendarId ??
+        calendars.find((c) => c.primary)?.id ??
+        calendars[0]?.id ??
+        null,
+    );
     setPrimaryTimezone(initial.primaryTimezone);
     setPrimaryLabel(initial.primaryLabel);
     setSecondaryEnabled(initial.secondaryTimezoneEnabled);
     setSecondaryTimezone(initial.secondaryTimezone);
     setSecondaryLabel(initial.secondaryLabel);
     setSaving(false);
-  }, [open, initial]);
+  }, [open, initial, calendars]);
 
   useEffect(() => {
     if (!open) return;
@@ -122,6 +136,11 @@ export function CalendarOptionsModal({
     weekStartsOn !== initial.weekStartsOn ||
     dayStartsHour !== initial.dayStartsHour ||
     writableId !== initial.writableCalendarId ||
+    mainId !==
+      (initial.mainCalendarId ??
+        calendars.find((c) => c.primary)?.id ??
+        calendars[0]?.id ??
+        null) ||
     primaryTimezone !== initial.primaryTimezone ||
     primaryLabel !== initial.primaryLabel ||
     secondaryEnabled !== initial.secondaryTimezoneEnabled ||
@@ -144,6 +163,7 @@ export function CalendarOptionsModal({
         weekStartsOn,
         dayStartsHour,
         writableCalendarId: writableId,
+        mainCalendarId: mainId,
         primaryTimezone,
         primaryLabel: primaryLabel.trim() || defaultLabelForTimeZone(primaryTimezone),
         secondaryTimezoneEnabled: secondaryEnabled,
@@ -199,44 +219,105 @@ export function CalendarOptionsModal({
             <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               My calendars
             </h3>
-            <ul className="m-0 max-h-48 list-none space-y-0.5 overflow-y-auto p-0">
-              {calendars.map((cal) => {
-                const checked = !hidden.has(cal.id);
-                return (
-                  <li key={cal.id}>
-                    <label className="flex cursor-pointer items-center gap-2 rounded-md px-1 py-1.5 text-sm hover:bg-black/[0.02]">
-                      <span
-                        className="h-3 w-3 shrink-0 rounded-sm border"
-                        style={{
-                          backgroundColor: checked
-                            ? cal.backgroundColor || "#1a73e8"
-                            : "transparent",
-                          borderColor: cal.backgroundColor || "#1a73e8",
-                        }}
-                      />
-                      <input
-                        type="checkbox"
-                        className="sr-only"
-                        checked={checked}
-                        disabled={locked}
-                        onChange={() => {
-                          setHidden((prev) => {
-                            const next = new Set(prev);
-                            if (next.has(cal.id)) next.delete(cal.id);
-                            else next.add(cal.id);
-                            return next;
-                          });
-                        }}
-                      />
-                      <span className="min-w-0 flex-1 truncate">
-                        {cal.summary}
-                        {cal.primary ? "（メイン）" : ""}
-                      </span>
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="max-h-56 overflow-auto rounded-md border border-solid border-foreground/20">
+              <table className="w-full border-collapse text-left text-sm">
+                <thead className="sticky top-0 z-[1] bg-card">
+                  <tr className="border-b border-solid border-foreground/15 text-xs text-muted-foreground">
+                    <th className="px-3 py-2 font-medium">カレンダー</th>
+                    <th className="w-16 px-2 py-2 text-center font-medium">
+                      メイン
+                    </th>
+                    <th className="w-16 px-2 py-2 text-center font-medium">
+                      表示
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {calendars.map((cal) => {
+                    const visible = !hidden.has(cal.id);
+                    const isMain = mainId === cal.id;
+                    return (
+                      <tr
+                        key={cal.id}
+                        className="border-b border-solid border-foreground/10 last:border-b-0 hover:bg-muted/30"
+                      >
+                        <td className="px-3 py-2">
+                          <div className="flex min-w-0 items-center gap-2">
+                            <span
+                              className="h-3 w-3 shrink-0 rounded-sm border"
+                              style={{
+                                backgroundColor: visible
+                                  ? cal.backgroundColor || "#1a73e8"
+                                  : "transparent",
+                                borderColor: cal.backgroundColor || "#1a73e8",
+                              }}
+                              aria-hidden
+                            />
+                            <span className="min-w-0 truncate">
+                              {cal.summary}
+                              {cal.primary ? (
+                                <span className="text-muted-foreground">
+                                  {" "}
+                                  （Google 既定）
+                                </span>
+                              ) : null}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-2 py-2 text-center">
+                          <input
+                            type="radio"
+                            name="main-calendar"
+                            className="h-4 w-4 cursor-pointer accent-foreground"
+                            checked={isMain}
+                            disabled={locked}
+                            title="メインに設定"
+                            aria-label={`${cal.summary}をメインにする`}
+                            onChange={() => {
+                              setMainId(cal.id);
+                              setHidden((prev) => {
+                                if (!prev.has(cal.id)) return prev;
+                                const next = new Set(prev);
+                                next.delete(cal.id);
+                                return next;
+                              });
+                            }}
+                          />
+                        </td>
+                        <td className="px-2 py-2 text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 cursor-pointer rounded accent-foreground"
+                            checked={visible}
+                            disabled={locked || isMain}
+                            title={
+                              isMain
+                                ? "メインカレンダーは非表示にできません"
+                                : visible
+                                  ? "非表示にする"
+                                  : "表示する"
+                            }
+                            aria-label={`${cal.summary}を表示`}
+                            onChange={() => {
+                              setHidden((prev) => {
+                                const next = new Set(prev);
+                                if (next.has(cal.id)) {
+                                  next.delete(cal.id);
+                                } else {
+                                  if (isMain) return prev;
+                                  next.add(cal.id);
+                                }
+                                return next;
+                              });
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section className="space-y-3 border-t border-border pt-4">
@@ -389,9 +470,6 @@ export function CalendarOptionsModal({
                 </option>
               ))}
             </Select>
-            <p className="m-0 text-xs text-muted-foreground">
-              タイムラインの最上段の時刻です（例: 06:00 なら 6 時から表示）。
-            </p>
           </section>
 
           <section className="space-y-2 border-t border-border pt-4">

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireWorkspaceAdmin } from "@/lib/workspace/api-auth";
 import {
-  getActivityWithFriends,
+  getActivityWithContacts,
   softDeleteActivity,
   updateActivity,
 } from "@/lib/workspace/activities";
-import { isActivityTitleSource } from "@/types/friends";
+import { isActivityTitleSource } from "@/types/contacts";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -15,7 +15,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
   const { id } = await params;
   try {
-    const item = await getActivityWithFriends(id);
+    const item = await getActivityWithContacts(id);
     if (!item || item.deleted_at) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -34,7 +34,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
   const { id } = await params;
   try {
-    const existing = await getActivityWithFriends(id);
+    const existing = await getActivityWithContacts(id);
     if (!existing || existing.deleted_at) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -93,7 +93,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
 
   const { id } = await params;
   try {
-    const existing = await getActivityWithFriends(id);
+    const existing = await getActivityWithContacts(id);
     if (!existing || existing.deleted_at) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }

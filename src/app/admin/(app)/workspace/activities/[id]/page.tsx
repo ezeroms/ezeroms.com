@@ -2,13 +2,13 @@ import { notFound } from "next/navigation";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
-import { ActivityDetailForm } from "@/components/friends/ActivityDetailForm";
+import { ActivityDetailForm } from "@/components/contacts/ActivityDetailForm";
 import { Alert } from "@/components/ui/alert";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getActivityCalendarLink } from "@/lib/workspace/activity-calendar-links";
-import { getActivityWithFriends } from "@/lib/workspace/activities";
+import { getActivityWithContacts } from "@/lib/workspace/activities";
+import { listContacts } from "@/lib/workspace/contacts";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
-import { listFriends } from "@/lib/workspace/friends";
 
 export const dynamic = "force-dynamic";
 
@@ -23,23 +23,23 @@ export default async function AdminWorkspaceActivityDetailPage({
   if (!hasWorkspaceConfig()) {
     return (
       <AdminContent width="wide">
-        <AdminPageHeader title="Activity" description="交友録" />
+        <AdminPageHeader title="Activity" />
         <WorkspaceConfigNotice />
       </AdminContent>
     );
   }
 
   let loadError: string | null = null;
-  let activity = null as Awaited<ReturnType<typeof getActivityWithFriends>>;
-  let allFriends = [] as Awaited<ReturnType<typeof listFriends>>;
+  let activity = null as Awaited<ReturnType<typeof getActivityWithContacts>>;
+  let allContacts = [] as Awaited<ReturnType<typeof listContacts>>;
   let calendarLink = null as Awaited<
     ReturnType<typeof getActivityCalendarLink>
   >;
 
   try {
-    [activity, allFriends, calendarLink] = await Promise.all([
-      getActivityWithFriends(id),
-      listFriends({ limit: 500 }),
+    [activity, allContacts, calendarLink] = await Promise.all([
+      getActivityWithContacts(id),
+      listContacts({ limit: 500 }),
       getActivityCalendarLink(id),
     ]);
   } catch (e) {
@@ -54,7 +54,7 @@ export default async function AdminWorkspaceActivityDetailPage({
     <AdminContent width="wide">
       <AdminPageHeader
         title={activity?.title ?? "Activity"}
-        description="メモと友達"
+        description="メモとコンタクト"
       />
       <WorkspaceConfigNotice />
       {loadError ? (
@@ -65,8 +65,8 @@ export default async function AdminWorkspaceActivityDetailPage({
       {activity && !activity.deleted_at ? (
         <ActivityDetailForm
           activity={activity}
-          friends={activity.friends}
-          allFriends={allFriends}
+          contacts={activity.contacts}
+          allContacts={allContacts}
           calendarLink={
             calendarLink
               ? {

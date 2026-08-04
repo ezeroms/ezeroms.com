@@ -25,6 +25,7 @@ function prefsPayload(prefs: CalendarPreferences) {
   return {
     hiddenCalendarIds: prefs.hidden_calendar_ids,
     writableCalendarId: prefs.writable_calendar_id,
+    mainCalendarId: prefs.main_calendar_id,
     weekStartsOn: prefs.week_starts_on,
     dayStartsHour: prefs.day_starts_hour,
     primaryTimezone: prefs.primary_timezone,
@@ -47,6 +48,7 @@ export async function GET() {
         calendars: [],
         hiddenCalendarIds: [],
         writableCalendarId: null,
+        mainCalendarId: null,
         weekStartsOn: "monday" as WeekStartsOn,
         dayStartsHour: 0,
         primaryTimezone: DEFAULT_PRIMARY_TIMEZONE,
@@ -86,6 +88,7 @@ export async function PATCH(request: NextRequest) {
     const body = (await request.json()) as {
       hiddenCalendarIds?: string[];
       writableCalendarId?: string | null;
+      mainCalendarId?: string | null;
       weekStartsOn?: WeekStartsOn;
       dayStartsHour?: number;
       primaryTimezone?: string;
@@ -118,6 +121,38 @@ export async function PATCH(request: NextRequest) {
         await assertCalendarIsWritable(body.writableCalendarId);
       }
       patch.writable_calendar_id = body.writableCalendarId;
+    }
+
+    if (body.mainCalendarId !== undefined) {
+      if (
+        body.mainCalendarId !== null &&
+        typeof body.mainCalendarId !== "string"
+      ) {
+        return NextResponse.json(
+          { error: "mainCalendarId must be a string or null" },
+          { status: 400 },
+        );
+      }
+      if (body.mainCalendarId) {
+        const calendars = await listGoogleCalendars();
+        if (!calendars.some((c) => c.id === body.mainCalendarId)) {
+          return NextResponse.json(
+            { error: "mainCalendarId is not in your calendar list" },
+            { status: 400 },
+          );
+        }
+      }
+      patch.main_calendar_id = body.mainCalendarId;
+    }
+
+    const nextMainId =
+      patch.main_calendar_id !== undefined
+        ? patch.main_calendar_id
+        : current.main_calendar_id;
+    const nextHidden =
+      patch.hidden_calendar_ids ?? current.hidden_calendar_ids;
+    if (nextMainId && nextHidden.includes(nextMainId)) {
+      patch.hidden_calendar_ids = nextHidden.filter((id) => id !== nextMainId);
     }
 
     if (body.weekStartsOn !== undefined) {

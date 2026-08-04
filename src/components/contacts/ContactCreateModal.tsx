@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { friendHasIdentity } from "@/types/friends";
+import { contactHasIdentity } from "@/types/contacts";
 
-const FORM_ID = "friend-create-form";
+const FORM_ID = "contact-create-form";
 
 type Props = {
   open: boolean;
   onClose: () => void;
+  /** Default Friend flag (true when opened from Friends). */
+  defaultIsFriend?: boolean;
 };
 
 type FormState = {
@@ -25,25 +27,39 @@ type FormState = {
   nickname: string;
   birthday: string;
   birthday_year_known: boolean;
+  is_friend: boolean;
+  tags: string;
+  company_name: string;
+  title: string;
 };
 
-const EMPTY: FormState = {
-  family_name: "",
-  given_name: "",
-  middle_name: "",
-  family_name_kana: "",
-  given_name_kana: "",
-  middle_name_kana: "",
-  english_name: "",
-  nickname: "",
-  birthday: "",
-  birthday_year_known: false,
-};
+function emptyForm(defaultIsFriend: boolean): FormState {
+  return {
+    family_name: "",
+    given_name: "",
+    middle_name: "",
+    family_name_kana: "",
+    given_name_kana: "",
+    middle_name_kana: "",
+    english_name: "",
+    nickname: "",
+    birthday: "",
+    birthday_year_known: false,
+    is_friend: defaultIsFriend,
+    tags: "",
+    company_name: "",
+    title: "",
+  };
+}
 
-export function FriendCreateModal({ open, onClose }: Props) {
+export function ContactCreateModal({
+  open,
+  onClose,
+  defaultIsFriend = false,
+}: Props) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [form, setForm] = useState<FormState>(EMPTY);
+  const [form, setForm] = useState(() => emptyForm(defaultIsFriend));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const titleId = useId();
@@ -54,15 +70,19 @@ export function FriendCreateModal({ open, onClose }: Props) {
 
   useEffect(() => {
     if (!open) {
-      setForm(EMPTY);
+      setForm(emptyForm(defaultIsFriend));
       setSaving(false);
       setError(null);
     }
-  }, [open]);
+  }, [open, defaultIsFriend]);
 
+  const baseline = useMemo(
+    () => emptyForm(defaultIsFriend),
+    [defaultIsFriend],
+  );
   const dirty = useMemo(
-    () => JSON.stringify(form) !== JSON.stringify(EMPTY),
-    [form],
+    () => JSON.stringify(form) !== JSON.stringify(baseline),
+    [form, baseline],
   );
 
   function patch<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -73,7 +93,7 @@ export function FriendCreateModal({ open, onClose }: Props) {
     e.preventDefault();
     if (saving) return;
     if (
-      !friendHasIdentity({
+      !contactHasIdentity({
         family_name: form.family_name || null,
         given_name: form.given_name || null,
         english_name: form.english_name || null,
@@ -89,7 +109,16 @@ export function FriendCreateModal({ open, onClose }: Props) {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/workspace/friends/", {
+      const employments = form.company_name.trim()
+        ? [
+            {
+              company_name: form.company_name.trim(),
+              title: form.title || null,
+              is_current: true,
+            },
+          ]
+        : [];
+      const res = await fetch("/api/admin/workspace/contacts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -103,6 +132,9 @@ export function FriendCreateModal({ open, onClose }: Props) {
           nickname: form.nickname || null,
           birthday: form.birthday || null,
           birthday_year_known: form.birthday_year_known,
+          is_friend: form.is_friend,
+          tags: form.tags,
+          employments,
         }),
       });
       const data = (await res.json()) as { error?: string };
@@ -122,7 +154,7 @@ export function FriendCreateModal({ open, onClose }: Props) {
     <AdminContentModal
       open={open}
       onClose={onClose}
-      title="友達を追加"
+      title="コンタクトを追加"
       formId={FORM_ID}
       isEdit={false}
       saving={saving}
@@ -137,6 +169,16 @@ export function FriendCreateModal({ open, onClose }: Props) {
         onSubmit={onSubmit}
         className="flex flex-col gap-4"
       >
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={form.is_friend}
+            disabled={saving}
+            onChange={(e) => patch("is_friend", e.target.checked)}
+          />
+          Friend（交友録に表示）
+        </label>
+
         <div className="grid gap-4 sm:grid-cols-3">
           <Field
             id="create-family"
@@ -201,6 +243,34 @@ export function FriendCreateModal({ open, onClose }: Props) {
             value={form.nickname}
             onChange={(v) => patch("nickname", v)}
             disabled={saving}
+          />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field
+            id="create-company"
+            label="会社名"
+            value={form.company_name}
+            onChange={(v) => patch("company_name", v)}
+            disabled={saving}
+          />
+          <Field
+            id="create-title"
+            label="役職"
+            value={form.title}
+            onChange={(v) => patch("title", v)}
+            disabled={saving}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="create-tags">タグ（カンマ区切り）</Label>
+          <Input
+            id="create-tags"
+            value={form.tags}
+            disabled={saving}
+            placeholder="work, networking"
+            onChange={(e) => patch("tags", e.target.value)}
           />
         </div>
 

@@ -20,7 +20,7 @@ import {
   DEFAULT_TASK_MINUTES,
   workBlockToCalendarBlock,
 } from "@/types/calendar";
-import type { CalendarActivityLink } from "@/types/friends";
+import type { CalendarActivityLink } from "@/types/contacts";
 import type { TaskWorkBlock, WorkspaceTask } from "@/types/workspace";
 
 const SIDEBAR_STORAGE_KEY = "workspace.calendar.tasksSidebarOpen";
@@ -29,6 +29,7 @@ export type CalendarBoardControllerInput = {
   calendars: GoogleCalendarListItem[];
   hiddenCalendarIds: string[];
   writableCalendarId: string | null;
+  mainCalendarId: string | null;
   weekStartsOn: WeekStartsOn;
   dayStartsHour: number;
   primaryTimezone: string;
@@ -55,6 +56,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
   const [writableCalendarId, setWritableCalendarId] = useState(
     input.writableCalendarId,
   );
+  const [mainCalendarId, setMainCalendarId] = useState(input.mainCalendarId);
   const [weekStartsOn, setWeekStartsOn] = useState(input.weekStartsOn);
   const [dayStartsHour, setDayStartsHour] = useState(input.dayStartsHour);
   const [primaryTimezone, setPrimaryTimezone] = useState(input.primaryTimezone);
@@ -130,6 +132,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
       weekStartsOn,
       dayStartsHour,
       writableCalendarId,
+      mainCalendarId,
       primaryTimezone,
       primaryLabel,
       secondaryTimezoneEnabled,
@@ -141,6 +144,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
       weekStartsOn,
       dayStartsHour,
       writableCalendarId,
+      mainCalendarId,
       primaryTimezone,
       primaryLabel,
       secondaryTimezoneEnabled,
@@ -245,6 +249,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
             weekStartsOn: next.weekStartsOn,
             dayStartsHour: next.dayStartsHour,
             writableCalendarId: next.writableCalendarId,
+            mainCalendarId: next.mainCalendarId,
             primaryTimezone: next.primaryTimezone,
             primaryLabel: next.primaryLabel,
             secondaryTimezoneEnabled: next.secondaryTimezoneEnabled,
@@ -258,6 +263,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
         weekStartsOn?: WeekStartsOn;
         dayStartsHour?: number;
         writableCalendarId?: string | null;
+        mainCalendarId?: string | null;
         primaryTimezone?: string;
         primaryLabel?: string;
         secondaryTimezoneEnabled?: boolean;
@@ -278,6 +284,11 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
         data.writableCalendarId !== undefined
           ? data.writableCalendarId
           : next.writableCalendarId,
+      );
+      setMainCalendarId(
+        data.mainCalendarId !== undefined
+          ? data.mainCalendarId
+          : next.mainCalendarId,
       );
       setPrimaryTimezone(data.primaryTimezone ?? next.primaryTimezone);
       setPrimaryLabel(data.primaryLabel ?? next.primaryLabel);
@@ -391,6 +402,78 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     }
   }
 
+  async function handleMoveWorkBlock(workBlockId: string, start: Date) {
+    const block = workBlocks.find((item) => item.workBlockId === workBlockId);
+    if (!block) return;
+    if (
+      workBlockId.startsWith("optimistic-") ||
+      workBlockId.startsWith("task:")
+    ) {
+      return;
+    }
+
+    const durationMs = Date.parse(block.end) - Date.parse(block.start);
+    if (!Number.isFinite(durationMs) || durationMs <= 0) return;
+
+    const startsAt = start.toISOString();
+    const endsAt = new Date(start.getTime() + durationMs).toISOString();
+    if (
+      Math.abs(Date.parse(block.start) - start.getTime()) < 30_000 &&
+      Math.abs(Date.parse(block.end) - Date.parse(endsAt)) < 30_000
+    ) {
+      return;
+    }
+
+    const previousBlocks = workBlocks;
+    setWorkBlocks((list) =>
+      list.map((item) =>
+        item.workBlockId === workBlockId
+          ? { ...item, start: startsAt, end: endsAt }
+          : item,
+      ),
+    );
+    setIsBusy(true);
+    setErrorMessage(null);
+    try {
+      const response = await fetch(
+        `/api/admin/workspace/work-blocks/${workBlockId}/`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            starts_at: startsAt,
+            ends_at: endsAt,
+          }),
+        },
+      );
+      const data = (await response.json()) as {
+        item?: TaskWorkBlock;
+        error?: string;
+      };
+      if (!response.ok || !data.item) {
+        throw new Error(data.error || "作業枠の移動に失敗しました");
+      }
+      setWorkBlocks((list) =>
+        list.map((item) =>
+          item.workBlockId === workBlockId
+            ? {
+                ...item,
+                start: data.item!.starts_at,
+                end: data.item!.ends_at,
+              }
+            : item,
+        ),
+      );
+    } catch (error) {
+      setWorkBlocks(previousBlocks);
+      setErrorMessage(
+        error instanceof Error ? error.message : "作業枠の移動に失敗しました",
+      );
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
   async function saveCalendarEvent(values: CalendarEventEditValues) {
     if (!selectedEvent) return;
     const current = selectedEvent.event;
@@ -467,11 +550,18 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
       }),
     );
     setUnscheduledTasks((list) => {
-      const exists = list.some((item) => item.id === task.id);
-      if (exists) {
-        return list.map((item) => (item.id === task.id ? task : item));
+      if (task.status === "done" || task.status === "archived") {
+        return list.filter((item) => item.id !== task.id);
       }
-      return list;
+      const next = list.some((item) => item.id === task.id)
+        ? list.map((item) => (item.id === task.id ? task : item))
+        : [...list, task];
+      return [...next].sort((a, b) => {
+        const aDue = a.due_at ? Date.parse(a.due_at) : Number.POSITIVE_INFINITY;
+        const bDue = b.due_at ? Date.parse(b.due_at) : Number.POSITIVE_INFINITY;
+        if (aDue !== bDue) return aDue - bDue;
+        return a.title.localeCompare(b.title, "ja");
+      });
     });
     if (visibleRange) {
       void loadWorkBlocks(visibleRange.timeMin, visibleRange.timeMax);
@@ -482,6 +572,13 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
   function handleTaskArchived(taskId: string) {
     setWorkBlocks((list) => list.filter((item) => item.taskId !== taskId));
     setUnscheduledTasks((list) => list.filter((item) => item.id !== taskId));
+    setEditingTarget(null);
+  }
+
+  function handleWorkBlockDeleted(workBlockId: string) {
+    setWorkBlocks((list) =>
+      list.filter((item) => item.workBlockId !== workBlockId),
+    );
     setEditingTarget(null);
   }
 
@@ -604,6 +701,92 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     setEditingTarget(target);
   }
 
+  /** サイドバーの未完了タスク → 作業枠なしで編集モーダル */
+  function openIncompleteTask(taskId: string) {
+    setSelectedEvent(null);
+    setCreateDraft(null);
+    setEditingTarget({
+      taskId,
+      workBlockId: "task:sidebar",
+      start: "",
+      end: "",
+    });
+  }
+
+  async function toggleIncompleteTaskDone(task: WorkspaceTask) {
+    const nextStatus = task.status === "done" ? "active" : "done";
+    const nextProgress =
+      nextStatus === "done" ? 100 : (task.progress_percent ?? 0);
+    const optimistic: WorkspaceTask = {
+      ...task,
+      status: nextStatus,
+      progress_percent: nextProgress,
+    };
+    setUnscheduledTasks((list) => {
+      if (nextStatus === "done") {
+        return list.filter((item) => item.id !== task.id);
+      }
+      return list.map((item) => (item.id === task.id ? optimistic : item));
+    });
+    try {
+      const response = await fetch(`/api/admin/workspace/tasks/${task.id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: nextStatus,
+          ...(nextStatus === "done" ? { progress_percent: 100 } : {}),
+        }),
+      });
+      const data = (await response.json()) as {
+        item?: WorkspaceTask;
+        error?: string;
+      };
+      if (!response.ok || !data.item) {
+        throw new Error(data.error || "更新に失敗しました");
+      }
+      setUnscheduledTasks((list) => {
+        if (data.item!.status === "done" || data.item!.status === "archived") {
+          return list.filter((item) => item.id !== task.id);
+        }
+        const exists = list.some((item) => item.id === task.id);
+        if (exists) {
+          return list.map((item) =>
+            item.id === task.id ? data.item! : item,
+          );
+        }
+        return [...list, data.item!];
+      });
+      setWorkBlocks((list) =>
+        list.map((block) =>
+          block.taskId === task.id
+            ? {
+                ...block,
+                taskStatus: data.item!.status,
+                taskPriority: data.item!.priority,
+                taskTitle: data.item!.title,
+              }
+            : block,
+        ),
+      );
+    } catch (error) {
+      setUnscheduledTasks((list) => {
+        const exists = list.some((item) => item.id === task.id);
+        if (exists) {
+          return list.map((item) => (item.id === task.id ? task : item));
+        }
+        return [...list, task].sort((a, b) => {
+          const aDue = a.due_at ? Date.parse(a.due_at) : Number.POSITIVE_INFINITY;
+          const bDue = b.due_at ? Date.parse(b.due_at) : Number.POSITIVE_INFINITY;
+          if (aDue !== bDue) return aDue - bDue;
+          return a.title.localeCompare(b.title, "ja");
+        });
+      });
+      setErrorMessage(
+        error instanceof Error ? error.message : "更新に失敗しました",
+      );
+    }
+  }
+
   function updateActivityLinkForSelectedEvent(
     link: CalendarActivityLink | null,
   ) {
@@ -674,13 +857,17 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     disconnectGoogleCalendar,
     handleRangeChange,
     handleDropTask,
+    handleMoveWorkBlock,
     saveCalendarEvent,
     handleTaskSaved,
     handleTaskArchived,
+    handleWorkBlockDeleted,
     openCreateSlot,
     createFromSlot,
     selectEvent,
     selectTask,
+    openIncompleteTask,
+    toggleIncompleteTaskDone,
     updateActivityLinkForSelectedEvent,
   };
 }

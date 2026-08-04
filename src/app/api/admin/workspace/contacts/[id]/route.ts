@@ -1,43 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireWorkspaceAdmin } from "@/lib/workspace/api-auth";
-import {
-  getFriend,
-  softDeleteFriend,
-  updateFriend,
-  type FriendWriteInput,
-} from "@/lib/workspace/friends";
 import { listActivities } from "@/lib/workspace/activities";
-import { friendHasIdentity } from "@/types/friends";
+import {
+  hasContactChildrenPayload,
+  readContactBody,
+  readContactChildren,
+} from "@/lib/workspace/contact-api";
+import {
+  getContact,
+  getContactDetail,
+  softDeleteContact,
+  updateContact,
+} from "@/lib/workspace/contacts";
+import { contactHasIdentity } from "@/types/contacts";
 
 type RouteParams = { params: Promise<{ id: string }> };
-
-function readFriendBody(body: Record<string, unknown>): FriendWriteInput {
-  const str = (k: string) =>
-    body[k] === undefined
-      ? undefined
-      : body[k] == null
-        ? null
-        : String(body[k]);
-  return {
-    family_name: str("family_name"),
-    given_name: str("given_name"),
-    middle_name: str("middle_name"),
-    family_name_kana: str("family_name_kana"),
-    given_name_kana: str("given_name_kana"),
-    middle_name_kana: str("middle_name_kana"),
-    family_name_en: str("family_name_en"),
-    given_name_en: str("given_name_en"),
-    middle_name_en: str("middle_name_en"),
-    english_name: str("english_name"),
-    nickname: str("nickname"),
-    birthday: str("birthday"),
-    birthday_year_known:
-      body.birthday_year_known === undefined
-        ? undefined
-        : Boolean(body.birthday_year_known),
-    notes_md: str("notes_md"),
-  };
-}
 
 export async function GET(_request: NextRequest, { params }: RouteParams) {
   const auth = await requireWorkspaceAdmin();
@@ -45,15 +22,15 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
   const { id } = await params;
   try {
-    const item = await getFriend(id);
+    const item = await getContactDetail(id);
     if (!item || item.deleted_at) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
-    const activities = await listActivities({ friendId: id, limit: 100 });
+    const activities = await listActivities({ contactId: id, limit: 100 });
     return NextResponse.json({ item, activities });
   } catch (e) {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Failed to load friend" },
+      { error: e instanceof Error ? e.message : "Failed to load contact" },
       { status: 500 },
     );
   }
@@ -65,13 +42,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
   const { id } = await params;
   try {
-    const existing = await getFriend(id);
+    const existing = await getContact(id);
     if (!existing || existing.deleted_at) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
     const body = (await request.json()) as Record<string, unknown>;
-    const input = readFriendBody(body);
+    const input = readContactBody(body);
     const merged = {
       family_name:
         input.family_name !== undefined
@@ -86,7 +63,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       nickname:
         input.nickname !== undefined ? input.nickname : existing.nickname,
     };
-    if (!friendHasIdentity(merged)) {
+    if (!contactHasIdentity(merged)) {
       return NextResponse.json(
         {
           error:
@@ -105,11 +82,14 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const item = await updateFriend(id, input);
+    const children = hasContactChildrenPayload(body)
+      ? readContactChildren(body)
+      : undefined;
+    const item = await updateContact(id, input, children);
     return NextResponse.json({ item });
   } catch (e) {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Failed to update friend" },
+      { error: e instanceof Error ? e.message : "Failed to update contact" },
       { status: 500 },
     );
   }
@@ -121,15 +101,15 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
 
   const { id } = await params;
   try {
-    const existing = await getFriend(id);
+    const existing = await getContact(id);
     if (!existing || existing.deleted_at) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
-    const item = await softDeleteFriend(id);
+    const item = await softDeleteContact(id);
     return NextResponse.json({ item });
   } catch (e) {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Failed to delete friend" },
+      { error: e instanceof Error ? e.message : "Failed to delete contact" },
       { status: 500 },
     );
   }

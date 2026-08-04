@@ -1,19 +1,19 @@
 import "server-only";
 
 import {
-  addFriendToActivity,
+  addContactToActivity,
   createActivity,
   getActivity,
-  listFriendsForActivity,
-  setActivityFriends,
+  listContactsForActivity,
+  setActivityContacts,
 } from "@/lib/workspace/activities";
 import { getWorkspaceAdmin } from "@/lib/workspace/db/server";
 import {
-  friendDisplayName,
+  contactDisplayName,
   type ActivityCalendarLink,
   type CalendarActivityLink,
   type WorkspaceActivity,
-} from "@/types/friends";
+} from "@/types/contacts";
 
 const LINK_SELECT =
   "id, activity_id, google_calendar_id, google_event_id, sync_status, last_synced_at, created_at, updated_at";
@@ -110,26 +110,26 @@ export async function listActivityLinksForEvents(
 
   const out: CalendarActivityLink[] = [];
   for (const row of rows) {
-    const friends = await listFriendsForActivity(row.activityId);
-    const active = friends.filter((f) => !f.deleted_at);
+    const contacts = await listContactsForActivity(row.activityId);
+    const active = contacts.filter((c) => !c.deleted_at);
     out.push({
       ...row,
-      friendIds: active.map((f) => f.id),
-      friendNames: active.map(friendDisplayName),
+      contactIds: active.map((c) => c.id),
+      contactNames: active.map(contactDisplayName),
     });
   }
   return out;
 }
 
-export type AttachFriendsToCalendarEventInput = {
+export type AttachContactsToCalendarEventInput = {
   googleCalendarId: string;
   googleEventId: string;
   summary: string;
   start: string | null;
   end: string | null;
   location?: string | null;
-  /** Full friend set for the activity (replaces existing). */
-  friendIds: string[];
+  /** Full contact set for the activity (replaces existing). */
+  contactIds: string[];
 };
 
 type EnsureActivityFromGoogleEventInput = {
@@ -144,7 +144,6 @@ type EnsureActivityFromGoogleEventInput = {
 /**
  * Google 予定に紐づく Activity を返す。
  * リンク未作成・紐づき Activity が削除済みなら新規作成し、リンクを張り直す。
- * （attach / addFriend で同じ手順を繰り返さないための共通処理）
  */
 async function ensureActivityForGoogleEvent(
   input: EnsureActivityFromGoogleEventInput,
@@ -177,31 +176,31 @@ async function ensureActivityForGoogleEvent(
 }
 
 /**
- * Google 予定に対応する Activity を確保し、友達一覧を置き換える。
+ * Google 予定に対応する Activity を確保し、コンタクト一覧を置き換える。
  * タイトル・時刻は初回作成時のみ Google からコピーする。
  */
-export async function attachFriendsToCalendarEvent(
-  input: AttachFriendsToCalendarEventInput,
-): Promise<{ activity: WorkspaceActivity; friendIds: string[] }> {
+export async function attachContactsToCalendarEvent(
+  input: AttachContactsToCalendarEventInput,
+): Promise<{ activity: WorkspaceActivity; contactIds: string[] }> {
   const activity = await ensureActivityForGoogleEvent(input);
-  const friends = await setActivityFriends(activity.id, input.friendIds);
+  const contacts = await setActivityContacts(activity.id, input.contactIds);
   return {
     activity,
-    friendIds: friends.filter((f) => !f.deleted_at).map((f) => f.id),
+    contactIds: contacts.filter((c) => !c.deleted_at).map((c) => c.id),
   };
 }
 
-export async function addFriendToCalendarEvent(input: {
+export async function addContactToCalendarEvent(input: {
   googleCalendarId: string;
   googleEventId: string;
   summary: string;
   start: string | null;
   end: string | null;
   location?: string | null;
-  friendId: string;
+  contactId: string;
 }): Promise<WorkspaceActivity> {
   const ensured = await ensureActivityForGoogleEvent(input);
-  await addFriendToActivity(ensured.id, input.friendId);
+  await addContactToActivity(ensured.id, input.contactId);
   const activity = await getActivity(ensured.id);
   if (!activity) throw new Error("Activity missing after attach");
   return activity;

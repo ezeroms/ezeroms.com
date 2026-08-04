@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import {
+  endOfTodayDatetimeLocalValue,
   fromDatetimeLocalValue,
   TASK_STATUS_LABELS,
   toDatetimeLocalValue,
@@ -240,12 +241,14 @@ export function TaskEditorPanel({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex shrink-0 items-start gap-3 border-b border-border px-5 pb-4 pt-6">
-        <TaskCheckbox
-          checked={draft.status === "done"}
-          onChange={() => void toggleDone()}
-          size="md"
-          className="mt-1"
-        />
+        {/* タイトル1行目の行高に合わせてチェックを縦中央揃え */}
+        <span className="flex h-[1.375em] shrink-0 items-center text-[1.15rem] font-semibold leading-snug">
+          <TaskCheckbox
+            checked={draft.status === "done"}
+            onChange={() => void toggleDone()}
+            size="md"
+          />
+        </span>
         <div className="min-w-0 flex-1">
           <textarea
             ref={titleRef}
@@ -313,12 +316,29 @@ export function TaskEditorPanel({
             </Select>
           </MetaRow>
           <MetaRow label="期限">
-            <Input
-              type="datetime-local"
-              value={draft.due_at}
-              onChange={(e) => patchDraft("due_at", e.target.value)}
-              className={cn(fieldClass, dueOverdue && "text-red-600")}
-            />
+            <div className="flex items-center gap-2">
+              <Input
+                type="datetime-local"
+                value={draft.due_at}
+                onChange={(e) => patchDraft("due_at", e.target.value)}
+                className={cn(
+                  fieldClass,
+                  "min-w-0 flex-1",
+                  dueOverdue && "text-red-600",
+                )}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-9 shrink-0"
+                onClick={() =>
+                  patchDraft("due_at", endOfTodayDatetimeLocalValue())
+                }
+              >
+                今日中
+              </Button>
+            </div>
           </MetaRow>
           <MetaRow label="進捗">
             <div className="flex items-center gap-2.5">

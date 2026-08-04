@@ -445,6 +445,11 @@
   background-color: hsl(var(--brand) / 0.18);
 }
 
+.workspace-calendar .sx-create-ghost--moving {
+  border: 1px dashed hsl(var(--brand) / 0.55);
+  background-color: hsl(var(--brand) / 0.28);
+}
+
 .workspace-calendar--creating {
   user-select: none;
   cursor: crosshair;
@@ -452,6 +457,15 @@
 
 .workspace-calendar--creating .sx__time-grid-day {
   cursor: crosshair;
+}
+
+.workspace-calendar--moving-block {
+  user-select: none;
+  cursor: grabbing;
+}
+
+.workspace-calendar--moving-block .sx__time-grid-day {
+  cursor: grabbing;
 }
 
 .workspace-calendar .sx-task-lane {
@@ -484,9 +498,20 @@
   text-decoration: none;
   cursor: pointer;
   pointer-events: auto;
+  touch-action: none;
   transition:
     background-color 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.workspace-calendar .sx-task-lane__chip--movable {
+  cursor: grab;
+}
+
+.workspace-calendar .sx-task-lane__chip--moving {
+  opacity: 0.35;
+  cursor: grabbing;
 }
 
 .workspace-calendar .sx-task-lane__chip:hover {

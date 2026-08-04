@@ -80,6 +80,49 @@ body:has(.admin-root) {
   background-color: hsl(var(--card));
 }
 
+/* Task 完了チェック: 枠線を確実に見せる（レガシー / button 上書き対策） */
+.admin-root button.task-checkbox {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  margin: 0;
+  padding: 0;
+  box-shadow: none !important;
+  filter: none !important;
+  outline: none;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-radius: 9999px !important;
+  background-clip: padding-box;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+.admin-root button.task-checkbox:not([aria-checked="true"]) {
+  /* 入力欄と同系の白地＋はっきりしたグレー枠（#E7E7E9 だと背景に溶ける） */
+  background-color: #fff !important;
+  border-color: #9a9a9e !important;
+  color: transparent !important;
+}
+.admin-root button.task-checkbox:not([aria-checked="true"]):hover {
+  border-color: #6e6d79 !important;
+  background-color: #fff !important;
+}
+.admin-root button.task-checkbox[aria-checked="true"] {
+  background-color: #059669 !important; /* emerald-600 */
+  border-color: #059669 !important;
+  color: #fff !important;
+}
+.admin-root button.task-checkbox[aria-checked="true"]:hover {
+  background-color: #047857 !important; /* emerald-700 */
+  border-color: #047857 !important;
+  color: #fff !important;
+}
+.admin-root button.task-checkbox:focus-visible {
+  outline: 2px solid hsl(var(--border-hover));
+  outline-offset: 2px;
+}
+
 /* 削除など destructive: Tailwind red 系を維持（hover で線を濃く） */
 .admin-root button[class*="border-red-"],
 .admin-root a[class*="border-red-"] {

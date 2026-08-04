@@ -16,6 +16,8 @@ export type { WeekStartsOn };
 export type CalendarPreferences = {
   hidden_calendar_ids: string[];
   writable_calendar_id: string | null;
+  /** Dashboard / workload meeting hours. Null → Google primary. */
+  main_calendar_id: string | null;
   week_starts_on: WeekStartsOn;
   day_starts_hour: number;
   primary_timezone: string;
@@ -28,6 +30,7 @@ export type CalendarPreferences = {
 export type CalendarPreferencesPatch = Partial<{
   hidden_calendar_ids: string[];
   writable_calendar_id: string | null;
+  main_calendar_id: string | null;
   week_starts_on: WeekStartsOn;
   day_starts_hour: number;
   primary_timezone: string;
@@ -60,6 +63,8 @@ function mapPrefsRow(data: Record<string, unknown> | null): CalendarPreferences 
     hidden_calendar_ids: (data?.hidden_calendar_ids as string[] | null) ?? [],
     writable_calendar_id:
       (data?.writable_calendar_id as string | null | undefined) ?? null,
+    main_calendar_id:
+      (data?.main_calendar_id as string | null | undefined) ?? null,
     week_starts_on: parseWeekStartsOn(data?.week_starts_on),
     day_starts_hour: parseDayStartsHour(data?.day_starts_hour),
     primary_timezone: primaryTimezone,
@@ -77,7 +82,7 @@ function mapPrefsRow(data: Record<string, unknown> | null): CalendarPreferences 
 }
 
 const PREFS_SELECT =
-  "hidden_calendar_ids, writable_calendar_id, week_starts_on, day_starts_hour, primary_timezone, primary_timezone_label, secondary_timezone_enabled, secondary_timezone, secondary_timezone_label";
+  "hidden_calendar_ids, writable_calendar_id, main_calendar_id, week_starts_on, day_starts_hour, primary_timezone, primary_timezone_label, secondary_timezone_enabled, secondary_timezone, secondary_timezone_label";
 
 export async function getCalendarPreferences(): Promise<CalendarPreferences> {
   const { data, error } = await getWorkspaceAdmin()
@@ -105,6 +110,10 @@ export async function updateCalendarPreferences(
           patch.writable_calendar_id !== undefined
             ? patch.writable_calendar_id
             : current.writable_calendar_id,
+        main_calendar_id:
+          patch.main_calendar_id !== undefined
+            ? patch.main_calendar_id
+            : current.main_calendar_id,
         week_starts_on: patch.week_starts_on ?? current.week_starts_on,
         day_starts_hour:
           patch.day_starts_hour !== undefined
@@ -149,6 +158,12 @@ export async function setWritableCalendarId(
   calendarId: string | null,
 ): Promise<CalendarPreferences> {
   return updateCalendarPreferences({ writable_calendar_id: calendarId });
+}
+
+export async function setMainCalendarId(
+  calendarId: string | null,
+): Promise<CalendarPreferences> {
+  return updateCalendarPreferences({ main_calendar_id: calendarId });
 }
 
 export async function setWeekStartsOn(

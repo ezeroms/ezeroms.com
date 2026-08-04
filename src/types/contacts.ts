@@ -1,6 +1,6 @@
 export type ActivityTitleSource = "manual" | "calendar";
 
-export type WorkspaceFriend = {
+export type WorkspaceContact = {
   id: string;
   family_name: string | null;
   given_name: string | null;
@@ -16,9 +16,63 @@ export type WorkspaceFriend = {
   birthday: string | null;
   birthday_year_known: boolean;
   notes_md: string | null;
+  is_friend: boolean;
+  tags: string[];
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+};
+
+export type ContactPhone = {
+  id: string;
+  contact_id: string;
+  label: string | null;
+  value: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ContactAddress = {
+  id: string;
+  contact_id: string;
+  label: string | null;
+  value: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ContactLink = {
+  id: string;
+  contact_id: string;
+  label: string | null;
+  url: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ContactEmployment = {
+  id: string;
+  contact_id: string;
+  company_name: string;
+  title: string | null;
+  started_on: string | null;
+  ended_on: string | null;
+  is_current: boolean;
+  notes: string | null;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Contact with related child rows (detail view / nested write). */
+export type WorkspaceContactDetail = WorkspaceContact & {
+  phones: ContactPhone[];
+  addresses: ContactAddress[];
+  links: ContactLink[];
+  employments: ContactEmployment[];
 };
 
 export type WorkspaceActivity = {
@@ -53,8 +107,8 @@ export type CalendarActivityLink = {
   googleEventId: string;
   activityId: string;
   activityTitle: string;
-  friendIds: string[];
-  friendNames: string[];
+  contactIds: string[];
+  contactNames: string[];
 };
 
 export const ACTIVITY_TITLE_SOURCES: ActivityTitleSource[] = [
@@ -76,9 +130,9 @@ function nonEmpty(v: string | null | undefined): string | null {
 }
 
 /** Japanese-style display: 姓 [ミドル] 名 */
-export function friendDisplayName(
-  friend: Pick<
-    WorkspaceFriend,
+export function contactDisplayName(
+  contact: Pick<
+    WorkspaceContact,
     | "family_name"
     | "given_name"
     | "middle_name"
@@ -87,21 +141,21 @@ export function friendDisplayName(
   >,
 ): string {
   const parts = [
-    nonEmpty(friend.family_name),
-    nonEmpty(friend.middle_name),
-    nonEmpty(friend.given_name),
+    nonEmpty(contact.family_name),
+    nonEmpty(contact.middle_name),
+    nonEmpty(contact.given_name),
   ].filter(Boolean) as string[];
   if (parts.length > 0) return parts.join(" ");
   return (
-    nonEmpty(friend.english_name) ??
-    nonEmpty(friend.nickname) ??
+    nonEmpty(contact.english_name) ??
+    nonEmpty(contact.nickname) ??
     "（無名）"
   );
 }
 
-export function friendHasIdentity(
+export function contactHasIdentity(
   input: Pick<
-    WorkspaceFriend,
+    WorkspaceContact,
     "family_name" | "given_name" | "english_name" | "nickname"
   >,
 ): boolean {
@@ -114,11 +168,11 @@ export function friendHasIdentity(
 }
 
 /** Parse comma / full-width comma / whitespace-separated tags. */
-export function parseActivityTags(raw: string | string[] | null | undefined): string[] {
+export function parseContactTags(
+  raw: string | string[] | null | undefined,
+): string[] {
   if (raw == null) return [];
-  const parts = Array.isArray(raw)
-    ? raw
-    : raw.split(/[,、，]/);
+  const parts = Array.isArray(raw) ? raw : raw.split(/[,、，]/);
   const seen = new Set<string>();
   const out: string[] = [];
   for (const p of parts) {
@@ -130,14 +184,19 @@ export function parseActivityTags(raw: string | string[] | null | undefined): st
   return out;
 }
 
-export function formatActivityTags(tags: string[]): string {
+/** Alias used by Activities. */
+export const parseActivityTags = parseContactTags;
+
+export function formatContactTags(tags: string[]): string {
   return tags.join(", ");
 }
 
+export const formatActivityTags = formatContactTags;
+
 /** 漢字の姓・名（ミドル含む）。なければ英語名など。 */
-export function friendListName(
-  friend: Pick<
-    WorkspaceFriend,
+export function contactListName(
+  contact: Pick<
+    WorkspaceContact,
     | "family_name"
     | "given_name"
     | "middle_name"
@@ -146,22 +205,22 @@ export function friendListName(
   >,
 ): string {
   const parts = [
-    nonEmpty(friend.family_name),
-    nonEmpty(friend.middle_name),
-    nonEmpty(friend.given_name),
+    nonEmpty(contact.family_name),
+    nonEmpty(contact.middle_name),
+    nonEmpty(contact.given_name),
   ].filter(Boolean) as string[];
   if (parts.length > 0) return parts.join(" ");
   return (
-    nonEmpty(friend.english_name) ??
-    nonEmpty(friend.nickname) ??
+    nonEmpty(contact.english_name) ??
+    nonEmpty(contact.nickname) ??
     "（無名）"
   );
 }
 
 /** 一覧用: 名前（ニックネーム） */
-export function friendListNameWithNickname(
-  friend: Pick<
-    WorkspaceFriend,
+export function contactListNameWithNickname(
+  contact: Pick<
+    WorkspaceContact,
     | "family_name"
     | "given_name"
     | "middle_name"
@@ -169,9 +228,8 @@ export function friendListNameWithNickname(
     | "nickname"
   >,
 ): string {
-  const name = friendListName(friend);
-  const nick = nonEmpty(friend.nickname);
-  // 表示名がニックネームそのもののときは重複しない
+  const name = contactListName(contact);
+  const nick = nonEmpty(contact.nickname);
   if (!nick || name === nick) return name;
   return `${name}（${nick}）`;
 }
@@ -184,9 +242,9 @@ export function toHiragana(input: string): string {
 }
 
 /** 五十音ソートキー（読み優先、なければ漢字名） */
-export function friendSortKey(
-  friend: Pick<
-    WorkspaceFriend,
+export function contactSortKey(
+  contact: Pick<
+    WorkspaceContact,
     | "family_name_kana"
     | "given_name_kana"
     | "middle_name_kana"
@@ -198,21 +256,21 @@ export function friendSortKey(
   >,
 ): string {
   const kana = [
-    nonEmpty(friend.family_name_kana),
-    nonEmpty(friend.middle_name_kana),
-    nonEmpty(friend.given_name_kana),
+    nonEmpty(contact.family_name_kana),
+    nonEmpty(contact.middle_name_kana),
+    nonEmpty(contact.given_name_kana),
   ]
     .filter(Boolean)
     .join("");
   if (kana) return toHiragana(kana).toLowerCase();
-  return toHiragana(friendListName(friend)).toLowerCase();
+  return toHiragana(contactListName(contact)).toLowerCase();
 }
 
-export function compareFriendsByKana(
-  a: Parameters<typeof friendSortKey>[0],
-  b: Parameters<typeof friendSortKey>[0],
+export function compareContactsByKana(
+  a: Parameters<typeof contactSortKey>[0],
+  b: Parameters<typeof contactSortKey>[0],
 ): number {
-  return friendSortKey(a).localeCompare(friendSortKey(b), "ja");
+  return contactSortKey(a).localeCompare(contactSortKey(b), "ja");
 }
 
 const SMALL_HIRAGANA: Record<string, string> = {
@@ -232,10 +290,10 @@ const SMALL_HIRAGANA: Record<string, string> = {
  * 一覧セクション見出し用の先頭文字（読みの1文字目）。
  * 存在する読みだけ見出しにする前提で、呼び出し側でグルーピングする。
  */
-export function friendSectionLabel(
-  friend: Parameters<typeof friendSortKey>[0],
+export function contactSectionLabel(
+  contact: Parameters<typeof contactSortKey>[0],
 ): string {
-  const key = friendSortKey(friend).trim();
+  const key = contactSortKey(contact).trim();
   if (!key) return "その他";
 
   let ch = toHiragana(key.charAt(0));
@@ -248,22 +306,22 @@ export function friendSectionLabel(
 }
 
 /** Birthday month (1–12) or null when unset / unparseable. */
-export function friendBirthdayMonth(
-  friend: Pick<WorkspaceFriend, "birthday">,
+export function contactBirthdayMonth(
+  contact: Pick<WorkspaceContact, "birthday">,
 ): number | null {
-  if (!friend.birthday) return null;
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(friend.birthday.slice(0, 10));
+  if (!contact.birthday) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(contact.birthday.slice(0, 10));
   if (!m) return null;
   const month = Number(m[2]);
   return month >= 1 && month <= 12 ? month : null;
 }
 
 /** Birthday day-of-month (1–31) or null. */
-export function friendBirthdayDay(
-  friend: Pick<WorkspaceFriend, "birthday">,
+export function contactBirthdayDay(
+  contact: Pick<WorkspaceContact, "birthday">,
 ): number | null {
-  if (!friend.birthday) return null;
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(friend.birthday.slice(0, 10));
+  if (!contact.birthday) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(contact.birthday.slice(0, 10));
   if (!m) return null;
   const day = Number(m[3]);
   return day >= 1 && day <= 31 ? day : null;
@@ -276,12 +334,12 @@ export function monthSectionLabel(month: number | null): string {
 }
 
 /** 誕生日表示。年不明時は月日のみ。年齢は年が正確なときだけ。 */
-export function formatFriendBirthday(
-  friend: Pick<WorkspaceFriend, "birthday" | "birthday_year_known">,
+export function formatContactBirthday(
+  contact: Pick<WorkspaceContact, "birthday" | "birthday_year_known">,
   now: Date = new Date(),
 ): string {
-  if (!friend.birthday) return "";
-  const raw = friend.birthday.slice(0, 10);
+  if (!contact.birthday) return "";
+  const raw = contact.birthday.slice(0, 10);
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
   if (!m) return raw;
 
@@ -292,7 +350,7 @@ export function formatFriendBirthday(
   const dd = String(day).padStart(2, "0");
   const md = `${mm}/${dd}`;
 
-  if (!friend.birthday_year_known) {
+  if (!contact.birthday_year_known) {
     return md;
   }
 
@@ -364,7 +422,7 @@ export function formatRelativeAgo(
   return `${months}ヶ月前`;
 }
 
-/** 最終アクティビティ日 + （相対）。Friends 一覧の「最後に遊んだ日」列で使う。 */
+/** 最終アクティビティ日 + （相対）。一覧の「最後の記録」列で使う。 */
 export function formatLastActivityAt(
   occurredAt: string | null | undefined,
   now: Date = new Date(),
@@ -387,4 +445,18 @@ export function formatActivityDate(
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}/${m}/${day}`;
+}
+
+export function formatEmploymentLabel(
+  employment: Pick<ContactEmployment, "company_name" | "title">,
+): string {
+  const company = employment.company_name.trim();
+  const title = nonEmpty(employment.title);
+  return title ? `${company} / ${title}` : company;
+}
+
+export function currentEmployment(
+  employments: ContactEmployment[],
+): ContactEmployment | null {
+  return employments.find((e) => e.is_current) ?? null;
 }

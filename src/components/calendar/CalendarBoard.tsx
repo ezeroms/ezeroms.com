@@ -1,13 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { CalendarCog, ChevronRight, PanelRightClose } from "lucide-react";
+import {
+  CalendarCog,
+  ChevronRight,
+  PanelRightClose,
+  RefreshCw,
+} from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { CalendarOptionsModal } from "@/components/calendar/CalendarOptionsModal";
 import { CalendarEventPopover } from "@/components/calendar/CalendarEventPopover";
 import { CalendarSlotCreatePopover } from "@/components/calendar/CalendarSlotCreatePopover";
 import { useCalendarBoardController } from "@/components/calendar/useCalendarBoardController";
 import { WorkspaceCalendar } from "@/components/calendar/WorkspaceCalendar";
+import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskEditModal } from "@/components/tasks/TaskEditModal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -23,8 +28,17 @@ import type {
   GoogleCalendarListItem,
 } from "@/types/calendar";
 import type { CalendarTaskBlock } from "@/types/calendar";
-import { DEFAULT_TASK_MINUTES } from "@/types/calendar";
 import type { WorkspaceTask } from "@/types/workspace";
+
+function formatTaskDueLabel(dueAt: string | null): string | null {
+  if (!dueAt) return null;
+  const date = new Date(dueAt);
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat("ja-JP", {
+    month: "numeric",
+    day: "numeric",
+  }).format(date);
+}
 
 type Props = {
   title: string;
@@ -35,6 +49,7 @@ type Props = {
   calendars: GoogleCalendarListItem[];
   hiddenCalendarIds: string[];
   writableCalendarId: string | null;
+  mainCalendarId: string | null;
   weekStartsOn: WeekStartsOn;
   dayStartsHour: number;
   primaryTimezone?: string;
@@ -58,6 +73,7 @@ export function CalendarBoard({
   calendars,
   hiddenCalendarIds,
   writableCalendarId,
+  mainCalendarId,
   weekStartsOn,
   dayStartsHour,
   primaryTimezone = DEFAULT_PRIMARY_TIMEZONE,
@@ -75,6 +91,7 @@ export function CalendarBoard({
     calendars,
     hiddenCalendarIds,
     writableCalendarId,
+    mainCalendarId,
     weekStartsOn,
     dayStartsHour,
     primaryTimezone,
@@ -131,16 +148,30 @@ export function CalendarBoard({
     );
   }
 
+  const refreshTitleAction = (
+    <button
+      type="button"
+      className={cn(
+        "share-btn relative inline-flex size-8 shrink-0 items-center justify-center rounded-md border-0 bg-transparent",
+        "text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+        "disabled:pointer-events-none disabled:opacity-50",
+      )}
+      data-tooltip="再取得"
+      title="再取得"
+      aria-label="再取得"
+      aria-busy={board.isBusy}
+      disabled={board.isBusy}
+      onClick={() => void board.refresh()}
+    >
+      <RefreshCw
+        className={cn("size-4", board.isBusy && "animate-spin")}
+        aria-hidden
+      />
+    </button>
+  );
+
   const headerActions = (
     <>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={board.refresh}
-        disabled={board.isBusy}
-      >
-        再取得
-      </Button>
       <Button
         type="button"
         variant="outline"
@@ -155,7 +186,7 @@ export function CalendarBoard({
         variant="outline"
         aria-pressed={board.sidebarOpen}
         aria-label={
-          board.sidebarOpen ? "未配置 Tasks を隠す" : "未配置 Tasks を表示"
+          board.sidebarOpen ? "未完了タスクを閉じる" : "未完了タスクを表示"
         }
         onClick={() => board.setSidebar(!board.sidebarOpen)}
       >
@@ -164,7 +195,7 @@ export function CalendarBoard({
         ) : (
           <ChevronRight className="size-4" aria-hidden />
         )}
-        未配置 Tasks
+        未完了タスク
       </Button>
     </>
   );
@@ -175,6 +206,7 @@ export function CalendarBoard({
         <AdminPageHeader
           title={title}
           description={description}
+          titleAction={refreshTitleAction}
           actions={headerActions}
         />
       </div>
@@ -218,15 +250,22 @@ export function CalendarBoard({
       ) : null}
 
       <TaskEditModal
+        key={
+          board.editingTarget
+            ? `${board.editingTarget.taskId}:${board.editingTarget.workBlockId}`
+            : "closed"
+        }
         open={Boolean(board.editingTarget)}
         taskId={board.editingTarget?.taskId ?? null}
         workBlockId={
-          board.editingTarget?.workBlockId.startsWith("task:")
-            ? null
-            : (board.editingTarget?.workBlockId ?? null)
+          board.editingTarget?.workBlockId &&
+          !board.editingTarget.workBlockId.startsWith("task:")
+            ? board.editingTarget.workBlockId
+            : null
         }
         initialWorkBlock={
-          board.editingTarget
+          board.editingTarget?.workBlockId &&
+          !board.editingTarget.workBlockId.startsWith("task:")
             ? {
                 starts_at: board.editingTarget.start,
                 ends_at: board.editingTarget.end,
@@ -237,6 +276,7 @@ export function CalendarBoard({
         onClose={() => board.setEditingTarget(null)}
         onSaved={board.handleTaskSaved}
         onArchived={board.handleTaskArchived}
+        onWorkBlockDeleted={board.handleWorkBlockDeleted}
       />
 
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden lg:flex-row lg:items-stretch">
@@ -267,6 +307,7 @@ export function CalendarBoard({
             onRangeChange={board.handleRangeChange}
             draggingTask={Boolean(board.draggingTaskId)}
             onDropTask={board.handleDropTask}
+            onMoveWorkBlock={board.handleMoveWorkBlock}
             onEventSelect={board.selectEvent}
             onCreateSlot={board.openCreateSlot}
             canCreateSchedule={canWrite && Boolean(board.writableCalendarId)}
@@ -278,27 +319,36 @@ export function CalendarBoard({
           <aside className="flex max-h-full w-full shrink-0 flex-col space-y-3 overflow-y-auto lg:w-64">
             <div className="flex shrink-0 items-center justify-between gap-2">
               <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                未配置 Tasks
+                未完了タスク
               </h2>
-              <button
+              <Button
                 type="button"
-                className="text-xs text-muted-foreground underline-offset-2 hover:underline"
+                variant="outline"
+                size="sm"
+                className="h-8"
                 onClick={() => board.setSidebar(false)}
               >
-                隠す
-              </button>
+                閉じる
+              </Button>
             </div>
             {board.unscheduledTasks.length === 0 ? (
               <p className="m-0 text-xs text-muted-foreground">
-                作業時間が未設定の Active / Inbox Task はありません。
+                未完了の Task はありません。
               </p>
             ) : (
               <ul className="m-0 flex list-none flex-col gap-2 p-0">
                 {board.unscheduledTasks.map((task) => {
-                  const minutes =
-                    task.estimated_minutes && task.estimated_minutes > 0
-                      ? task.estimated_minutes
-                      : DEFAULT_TASK_MINUTES;
+                  const hasEstimate =
+                    task.estimated_minutes != null &&
+                    task.estimated_minutes > 0;
+                  const progress = Math.min(
+                    100,
+                    Math.max(0, task.progress_percent ?? 0),
+                  );
+                  const dueLabel = formatTaskDueLabel(task.due_at);
+                  const dueOverdue =
+                    task.due_at != null &&
+                    Date.parse(task.due_at) < Date.now();
                   return (
                     <li
                       key={task.id}
@@ -318,22 +368,46 @@ export function CalendarBoard({
                         board.draggingTaskId === task.id && "opacity-50",
                       )}
                     >
-                      <Link
-                        href={`/admin/workspace/tasks/${task.id}/`}
-                        className="block text-sm font-medium text-foreground no-underline hover:underline"
-                        draggable={false}
-                        onClick={(event) => {
-                          if (board.draggingTaskId === task.id) {
-                            event.preventDefault();
-                          }
-                        }}
-                      >
-                        {task.title}
-                      </Link>
-                      <p className="m-0 mt-1 text-xs text-muted-foreground">
-                        {minutes} 分
-                        {task.priority !== "none" ? ` · ${task.priority}` : ""}
-                      </p>
+                      <div className="flex items-start gap-2.5">
+                        <span className="flex h-[1.375em] shrink-0 items-center text-sm leading-snug">
+                          <TaskCheckbox
+                            checked={task.status === "done"}
+                            onChange={() =>
+                              void board.toggleIncompleteTaskDone(task)
+                            }
+                          />
+                        </span>
+                        <button
+                          type="button"
+                          className="min-w-0 flex-1 border-0 bg-transparent p-0 text-left shadow-none"
+                          draggable={false}
+                          onClick={() => board.openIncompleteTask(task.id)}
+                        >
+                          <span className="block text-sm font-medium leading-snug text-foreground">
+                            {task.title}
+                          </span>
+                          <p className="m-0 mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+                            <span className="tabular-nums">
+                              {hasEstimate
+                                ? `${task.estimated_minutes} 分`
+                                : "見積もり未設定"}
+                            </span>
+                            <span className="tabular-nums">{progress}%</span>
+                            {dueLabel ? (
+                              <span
+                                className={cn(
+                                  "tabular-nums",
+                                  dueOverdue && "text-red-700",
+                                )}
+                              >
+                                期限 {dueLabel}
+                              </span>
+                            ) : (
+                              <span>期限なし</span>
+                            )}
+                          </p>
+                        </button>
+                      </div>
                     </li>
                   );
                 })}

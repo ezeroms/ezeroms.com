@@ -1,25 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { ActivityCreateModal } from "@/components/friends/ActivityCreateModal";
+import { ContactCreateModal } from "@/components/contacts/ContactCreateModal";
 import { Button } from "@/components/ui/button";
-import type { WorkspaceFriend } from "@/types/friends";
 
 type Props = {
-  friends: WorkspaceFriend[];
+  defaultIsFriend?: boolean;
+  label?: string;
 };
 
-export function ActivityCreateButton({ friends }: Props) {
+export function ContactCreateButton({
+  defaultIsFriend = false,
+  label = "＋ コンタクトを追加",
+}: Props) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Button type="button" onClick={() => setOpen(true)}>
-        ＋ Activity を追加
+        {label}
       </Button>
-      <ActivityCreateModal
+      <ContactCreateModal
         open={open}
         onClose={() => setOpen(false)}
-        friends={friends}
+        defaultIsFriend={defaultIsFriend}
       />
     </>
   );

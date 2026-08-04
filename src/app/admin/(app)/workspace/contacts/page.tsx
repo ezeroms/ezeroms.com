@@ -10,16 +10,21 @@ import { Alert } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { getSessionUser } from "@/lib/supabase/auth";
-import { listLastActivityByContactIds } from "@/lib/workspace/activities";
-import { listContacts } from "@/lib/workspace/contacts";
+import {
+  listContacts,
+  listCurrentEmploymentsByContactIds,
+} from "@/lib/workspace/contacts";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
-import { compareContactsByKana } from "@/types/contacts";
+import {
+  compareContactsByKana,
+  formatEmploymentLabel,
+} from "@/types/contacts";
 
 export const dynamic = "force-dynamic";
 
-const navItem = findAdminNavItem("/admin/workspace/friends/")!;
+const navItem = findAdminNavItem("/admin/workspace/contacts/")!;
 
-export default async function AdminWorkspaceFriendsPage() {
+export default async function AdminWorkspaceContactsPage() {
   await getSessionUser();
 
   let loadError: string | null = null;
@@ -27,17 +32,20 @@ export default async function AdminWorkspaceFriendsPage() {
 
   if (hasWorkspaceConfig()) {
     try {
-      const contacts = await listContacts({ limit: 500, isFriend: true });
+      const contacts = await listContacts({ limit: 500 });
       contacts.sort(compareContactsByKana);
-      const lastMap = await listLastActivityByContactIds(
+      const employmentMap = await listCurrentEmploymentsByContactIds(
         contacts.map((c) => c.id),
       );
       items = contacts.map((contact) => {
-        const last = lastMap.get(contact.id);
+        const employment = employmentMap.get(contact.id);
         return {
           contact,
-          lastActivityAt: last?.occurredAt ?? null,
-          lastActivityTitle: last?.title ?? null,
+          lastActivityAt: null,
+          lastActivityTitle: null,
+          currentCompany: employment
+            ? formatEmploymentLabel(employment)
+            : null,
         };
       });
     } catch (e) {
@@ -49,14 +57,7 @@ export default async function AdminWorkspaceFriendsPage() {
     <AdminContent width="wide">
       <AdminPageHeader
         title={navItem.label}
-        actions={
-          hasWorkspaceConfig() ? (
-            <ContactCreateButton
-              defaultIsFriend
-              label="＋ 友達を追加"
-            />
-          ) : null
-        }
+        actions={hasWorkspaceConfig() ? <ContactCreateButton /> : null}
       />
       <WorkspaceConfigNotice />
       {loadError ? (
@@ -69,7 +70,10 @@ export default async function AdminWorkspaceFriendsPage() {
           <CardContent className="overflow-x-auto p-0">
             <ContactsListTable
               items={items}
-              emptyMessage="まだ友達がいません"
+              showCompany
+              showTags
+              showBirthday={false}
+              showLastActivity={false}
             />
           </CardContent>
         </Card>
