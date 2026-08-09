@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OgImageField } from "@/components/admin/OgImageField";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,10 +77,7 @@ export function SiteSettingsForm({
       id={formId}
       className="flex flex-col gap-8"
       onSubmit={onSubmit}
-      autoComplete="off"
-      data-1p-ignore
-      data-lpignore="true"
-      data-form-type="other"
+      {...ignorePasswordManagersProps}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       {saved ? <Alert variant="success">サイト設定を保存しました</Alert> : null}

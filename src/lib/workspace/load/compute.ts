@@ -40,6 +40,17 @@ export type UnplacedTask = {
   progressPercent: number;
 };
 
+/** Work block overlapping the horizon (for dashboard list). */
+export type ScheduledWorkBlock = {
+  id: string;
+  taskId: string;
+  title: string;
+  startsAt: string;
+  endsAt: string;
+  /** Minutes overlapping the horizon window. */
+  minutes: number;
+};
+
 export type HorizonLoad = {
   horizon: LoadHorizon;
   label: string;
@@ -62,6 +73,8 @@ export type HorizonLoad = {
   level: "light" | "busy" | "over";
   days: DayLoad[];
   unplacedTasks: UnplacedTask[];
+  /** Work blocks in this horizon, earliest first. */
+  workBlocks: ScheduledWorkBlock[];
 };
 
 export type WorkloadSnapshot = {
@@ -214,6 +227,7 @@ export function computeWorkloadSnapshot(input: {
   workBlocks: Array<
     Pick<TaskWorkBlock, "id" | "task_id" | "starts_at" | "ends_at"> & {
       taskStatus?: string;
+      taskTitle?: string;
     }
   >;
   tasks: WorkspaceTask[];
@@ -226,6 +240,7 @@ export function computeWorkloadSnapshot(input: {
     input.capacityMinutesPerDay ?? DEFAULT_CAPACITY_MINUTES_PER_DAY;
 
   const openTasks = input.tasks.filter((t) => OPEN_STATUSES.has(t.status));
+  const taskTitleById = new Map(input.tasks.map((t) => [t.id, t.title]));
   const blocksForLoad = input.workBlocks.filter(
     (b) => b.taskStatus !== "archived",
   );
@@ -240,18 +255,29 @@ export function computeWorkloadSnapshot(input: {
     const horizonEnd = endOfLocalDay(dateFromKey(keys[keys.length - 1]));
 
     const taskIdsWithBlock = new Set<string>();
+    const scheduledBlocks: ScheduledWorkBlock[] = [];
     for (const block of blocksForLoad) {
-      if (
-        overlapMinutes(
-          block.starts_at,
-          block.ends_at,
-          horizonStart,
-          horizonEnd,
-        ) > 0
-      ) {
-        taskIdsWithBlock.add(block.task_id);
-      }
+      const mins = overlapMinutes(
+        block.starts_at,
+        block.ends_at,
+        horizonStart,
+        horizonEnd,
+      );
+      if (mins <= 0) continue;
+      taskIdsWithBlock.add(block.task_id);
+      scheduledBlocks.push({
+        id: block.id,
+        taskId: block.task_id,
+        title:
+          block.taskTitle?.trim() ||
+          taskTitleById.get(block.task_id) ||
+          "（無題）",
+        startsAt: block.starts_at,
+        endsAt: block.ends_at,
+        minutes: mins,
+      });
     }
+    scheduledBlocks.sort((a, b) => a.startsAt.localeCompare(b.startsAt));
 
     const unplacedTasks: UnplacedTask[] = [];
     let unplacedMinutes = 0;
@@ -389,6 +415,7 @@ export function computeWorkloadSnapshot(input: {
       level: levelFromRatio(Math.max(scheduledRatio, pressureRatio)),
       days,
       unplacedTasks: unplacedTasks.slice(0, 12),
+      workBlocks: scheduledBlocks.slice(0, 24),
     };
   }
 

@@ -58,7 +58,7 @@ export default async function AdminWorkspaceTasksPage({
   return (
     <AdminContent
       width="wide"
-      className="-mx-6 -my-8 flex min-h-0 flex-1 flex-col overflow-hidden px-0 py-0"
+      className="absolute inset-0 mx-0 flex w-auto max-w-none flex-col overflow-hidden bg-background px-0 py-0"
     >
       {!hasWorkspaceConfig() ? (
         <div className="px-6 py-8">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MetricCard } from "@/components/charts/MetricCard";
+import { surfaceCard } from "@/lib/site/card-styles";
 import type { AnalyticsReport } from "@/types/analytics";
 
 function formatNumber(n: number): string {
@@ -14,18 +15,18 @@ type Props = {
 
 export function BlogTrendsCard({ report, configured, error }: Props) {
   return (
-    <section className="rounded-md border border-border bg-card p-4">
+    <section className={surfaceCard({ className: "p-4" })}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            ブログ動向（GA・直近7日）
+            ブログ動向（GA・直近24時間）
           </h2>
           <p className="m-0 mt-1 text-sm text-muted-foreground">
             公開サイトの閲覧トレンド
           </p>
         </div>
         <Link
-          href="/admin/analytics/?range=7"
+          href="/admin/analytics/?range=1"
           className="text-xs text-muted-foreground no-underline hover:underline"
         >
           Analytics を開く
@@ -65,7 +66,7 @@ export function BlogTrendsCard({ report, configured, error }: Props) {
             />
           </div>
 
-          <div className="overflow-hidden rounded-md border border-border bg-card">
+          <div className={surfaceCard({ className: "overflow-hidden" })}>
             <h3 className="m-0 border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               人気ページ
             </h3>
@@ -79,8 +80,11 @@ export function BlogTrendsCard({ report, configured, error }: Props) {
                   <thead>
                     <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
                       <th className="px-3 py-2 font-medium">ページ</th>
-                      <th className="w-20 px-3 py-2 text-right font-medium">
+                      <th className="w-16 px-3 py-2 text-right font-medium">
                         Views
+                      </th>
+                      <th className="w-16 px-3 py-2 text-right font-medium">
+                        Users
                       </th>
                     </tr>
                   </thead>
@@ -100,6 +104,9 @@ export function BlogTrendsCard({ report, configured, error }: Props) {
                         </td>
                         <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
                           {formatNumber(p.views)}
+                        </td>
+                        <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
+                          {formatNumber(p.activeUsers)}
                         </td>
                       </tr>
                     ))}

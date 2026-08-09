@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { surfaceCard } from "@/lib/site/card-styles";
 
 const DEFAULT_QUESTION =
   "今日の予定、期限、優先度、最近の Docs を考慮して、今日の進め方を提案して。";
@@ -44,7 +45,11 @@ export function WorkspaceAssistantPanel({ configured }: Props) {
 
   if (!configured) {
     return (
-      <div className="rounded-md border border-border bg-card p-4 text-sm text-muted-foreground">
+      <div
+        className={surfaceCard({
+          className: "p-4 text-sm text-muted-foreground",
+        })}
+      >
         AI 相談は未設定です。.env.local に{" "}
         <code className="text-xs">WORKSPACE_AI_API_KEY</code>{" "}
         を設定してください（ENV_SETUP.md）。未設定でも他のカードは使えます。
@@ -53,7 +58,7 @@ export function WorkspaceAssistantPanel({ configured }: Props) {
   }
 
   return (
-    <div className="rounded-md border border-border bg-card p-4">
+    <div className={surfaceCard({ className: "p-4" })}>
       <p className="m-0 mb-3 text-xs text-muted-foreground">
         提案のみです。Tasks / カレンダーは自動では変更しません。
       </p>

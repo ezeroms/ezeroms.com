@@ -3,29 +3,20 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OgImageField } from "@/components/admin/OgImageField";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
+import {
+  dateOnlyValue,
+  nowDatetimeLocalValue,
+  toDatetimeLocalValue,
+} from "@/lib/workspace/labels";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-function localDatetimeValue(d = new Date()) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
-function dateOnlyValue(raw?: string | null) {
-  if (!raw?.trim()) return "";
-  return raw.trim().slice(0, 10);
-}
-
 export const WORK_EDITOR_FORM_ID = "work-editor-form";
 
-const IGNORE_PASSWORD_MANAGERS = {
-  "data-1p-ignore": true,
-  "data-lpignore": "true",
-  autoComplete: "off",
-} as const;
 
 export type WorkEditorInitial = {
   slug: string;
@@ -71,8 +62,8 @@ export function WorkEditorForm({
     title: initial?.title ?? "",
     bodyMd: initial?.body_md ?? "",
     date: initial?.date
-      ? localDatetimeValue(new Date(initial.date))
-      : localDatetimeValue(),
+      ? toDatetimeLocalValue(initial.date)
+      : nowDatetimeLocalValue(),
     imageUrl: initial?.image_url ?? "",
     startDate: dateOnlyValue(initial?.start_date),
     endDate: dateOnlyValue(initial?.end_date),
@@ -178,10 +169,7 @@ export function WorkEditorForm({
       id={formId}
       className="flex flex-col gap-4"
       onSubmit={onSubmit}
-      autoComplete="off"
-      data-1p-ignore
-      data-lpignore="true"
-      data-form-type="other"
+      {...ignorePasswordManagersProps}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
 
@@ -193,7 +181,7 @@ export function WorkEditorForm({
           onChange={(e) => setTitle(e.target.value)}
           placeholder="作品タイトル"
           required
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -205,7 +193,7 @@ export function WorkEditorForm({
           onChange={(e) => setBodyMd(e.target.value)}
           placeholder="プロジェクトの概要・担当内容…"
           rows={8}
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -217,7 +205,7 @@ export function WorkEditorForm({
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
           placeholder="https://…"
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -237,7 +225,7 @@ export function WorkEditorForm({
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -248,7 +236,7 @@ export function WorkEditorForm({
             onChange={(e) =>
               setStatus(e.target.value === "draft" ? "draft" : "published")
             }
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           >
             <option value="published">公開</option>
             <option value="draft">非公開</option>
@@ -264,7 +252,7 @@ export function WorkEditorForm({
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -274,7 +262,7 @@ export function WorkEditorForm({
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>
@@ -287,7 +275,7 @@ export function WorkEditorForm({
             value={categories}
             onChange={(e) => setCategories(e.target.value)}
             placeholder="Web, Branding"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -297,7 +285,7 @@ export function WorkEditorForm({
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="React, Design"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>
@@ -310,7 +298,7 @@ export function WorkEditorForm({
             value={role}
             onChange={(e) => setRole(e.target.value)}
             placeholder="Designer"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -319,7 +307,7 @@ export function WorkEditorForm({
             id="work-client"
             value={client}
             onChange={(e) => setClient(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -328,7 +316,7 @@ export function WorkEditorForm({
             id="work-agency"
             value={agency}
             onChange={(e) => setAgency(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>

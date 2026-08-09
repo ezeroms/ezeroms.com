@@ -25,11 +25,7 @@ import {
   isGoogleCalendarAuthError,
 } from "@/lib/workspace/calendar/tokens";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
-import { listDocs } from "@/lib/workspace/docs";
 import { buildWorkloadSnapshot } from "@/lib/workspace/load/build";
-import { listProjects } from "@/lib/workspace/projects";
-import { listTasks } from "@/lib/workspace/tasks";
-import { todayDateKey } from "@/lib/workspace/labels";
 import type { AnalyticsReport } from "@/types/analytics";
 import type { WorkloadSnapshot } from "@/lib/workspace/load/compute";
 
@@ -60,35 +56,19 @@ export default async function AdminWorkspaceDashboardPage() {
   let todayEvents: Awaited<ReturnType<typeof listGoogleEventsCached>> = [];
   let calendarConnected = false;
   let oauthConfigured = hasGoogleCalendarOAuthConfig();
-  let todayTasks: Awaited<ReturnType<typeof listTasks>> = [];
-  let overdueTasks: Awaited<ReturnType<typeof listTasks>> = [];
-  let inboxTasks: Awaited<ReturnType<typeof listTasks>> = [];
-  let recentDocs: Awaited<ReturnType<typeof listDocs>> = [];
-  let projects: Awaited<ReturnType<typeof listProjects>> = [];
   let workload: WorkloadSnapshot | null = null;
   let gaConfigured = hasGaDataApiConfig();
   let gaReport: AnalyticsReport | null = null;
   let gaError: string | null = null;
 
   try {
-    const [prefs, stored, today, overdue, inbox, docs, projs, loadResult] =
-      await Promise.all([
-        getCalendarPreferences(),
-        oauthConfigured ? getStoredGoogleToken() : Promise.resolve(null),
-        listTasks({ view: "today", limit: 20 }),
-        listTasks({ view: "overdue", limit: 20 }),
-        listTasks({ view: "inbox", limit: 20 }),
-        listDocs({ limit: 8 }),
-        listProjects(),
-        buildWorkloadSnapshot(),
-      ]);
+    const [prefs, stored, loadResult] = await Promise.all([
+      getCalendarPreferences(),
+      oauthConfigured ? getStoredGoogleToken() : Promise.resolve(null),
+      buildWorkloadSnapshot(),
+    ]);
 
     calendarConnected = Boolean(stored);
-    todayTasks = today;
-    overdueTasks = overdue;
-    inboxTasks = inbox;
-    recentDocs = docs;
-    projects = projs.filter((p) => p.status === "active");
     workload = loadResult.snapshot;
     calendarConnected = loadResult.calendarConnected || calendarConnected;
     oauthConfigured = loadResult.oauthConfigured;
@@ -116,7 +96,7 @@ export default async function AdminWorkspaceDashboardPage() {
 
   if (gaConfigured) {
     try {
-      gaReport = await fetchAnalyticsReport("7");
+      gaReport = await fetchAnalyticsReport("1");
     } catch (e) {
       gaError = e instanceof Error ? e.message : "Analytics の読み込みに失敗しました";
     }
@@ -175,7 +155,7 @@ export default async function AdminWorkspaceDashboardPage() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {workload ? (
           <div className="lg:col-span-2">
             <WorkloadMeter
@@ -243,117 +223,6 @@ export default async function AdminWorkspaceDashboardPage() {
                   ) : (
                     <span className="font-medium">{ev.summary}</span>
                   )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <section className="space-y-2">
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Today Tasks
-          </h2>
-          {todayTasks.length === 0 ? (
-            <p className="m-0 text-sm text-muted-foreground">
-              予定日が {todayDateKey()} の Task はありません
-            </p>
-          ) : (
-            <ul className="m-0 flex list-none flex-col gap-1 p-0">
-              {todayTasks.map((t) => (
-                <li key={t.id}>
-                  <Link
-                    href={`/admin/workspace/tasks/${t.id}/`}
-                    className="block rounded-md px-1 py-1.5 text-sm no-underline hover:bg-black/[0.02]"
-                  >
-                    {t.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Overdue
-          </h2>
-          {overdueTasks.length === 0 ? (
-            <p className="m-0 text-sm text-muted-foreground">期限切れはありません</p>
-          ) : (
-            <ul className="m-0 flex list-none flex-col gap-1 p-0">
-              {overdueTasks.map((t) => (
-                <li key={t.id}>
-                  <Link
-                    href={`/admin/workspace/tasks/${t.id}/`}
-                    className="block rounded-md px-1 py-1.5 text-sm text-red-700 no-underline hover:bg-black/[0.02]"
-                  >
-                    {t.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Inbox
-          </h2>
-          {inboxTasks.length === 0 ? (
-            <p className="m-0 text-sm text-muted-foreground">Inbox は空です</p>
-          ) : (
-            <ul className="m-0 flex list-none flex-col gap-1 p-0">
-              {inboxTasks.slice(0, 8).map((t) => (
-                <li key={t.id}>
-                  <Link
-                    href={`/admin/workspace/tasks/${t.id}/`}
-                    className="block rounded-md px-1 py-1.5 text-sm no-underline hover:bg-black/[0.02]"
-                  >
-                    {t.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            最近の Docs
-          </h2>
-          {recentDocs.length === 0 ? (
-            <p className="m-0 text-sm text-muted-foreground">Docs はまだありません</p>
-          ) : (
-            <ul className="m-0 flex list-none flex-col gap-1 p-0">
-              {recentDocs.map((d) => (
-                <li key={d.id}>
-                  <Link
-                    href={`/admin/workspace/docs/${d.id}/`}
-                    className="block rounded-md px-1 py-1.5 text-sm no-underline hover:bg-black/[0.02]"
-                  >
-                    {d.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Active Projects
-          </h2>
-          {projects.length === 0 ? (
-            <p className="m-0 text-sm text-muted-foreground">
-              Active Project はありません
-            </p>
-          ) : (
-            <ul className="m-0 flex list-none flex-col gap-1 p-0">
-              {projects.map((p) => (
-                <li key={p.id} className="px-1 py-1.5 text-sm">
-                  {p.name}
                 </li>
               ))}
             </ul>

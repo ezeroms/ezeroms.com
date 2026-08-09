@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { ScheduleWorkBlockPanel } from "@/components/calendar/ScheduleWorkBlockPanel";
+import { CreateWorkBlockPanel } from "@/components/calendar/CreateWorkBlockPanel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,7 @@ import {
   TASK_STATUS_LABELS,
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
+import { parseEstimatedMinutesInput } from "@/lib/workspace/task-form";
 import type { GoogleCalendarListItem } from "@/types/calendar";
 import type {
   TaskPriority,
@@ -110,12 +111,8 @@ export function TaskDetailForm({
     setError(null);
     setMessage(null);
     try {
-      const minutes = estimatedMinutes.trim()
-        ? Number(estimatedMinutes)
-        : null;
-      if (minutes != null && (!Number.isFinite(minutes) || minutes <= 0)) {
-        throw new Error("見積もりは正の整数で入力してください");
-      }
+      const minutesParsed = parseEstimatedMinutesInput(estimatedMinutes);
+      if (!minutesParsed.ok) throw new Error(minutesParsed.error);
       const res = await fetch(`/api/admin/workspace/tasks/${task.id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -127,7 +124,7 @@ export function TaskDetailForm({
           project_id: projectId || null,
           scheduled_date: scheduledDate || null,
           due_at: fromDatetimeLocalValue(dueAt),
-          estimated_minutes: minutes,
+          estimated_minutes: minutesParsed.value,
           location: location.trim() || null,
         }),
       });
@@ -192,7 +189,7 @@ export function TaskDetailForm({
   return (
     <div className="flex flex-col gap-8">
       {scheduleOpen ? (
-        <ScheduleWorkBlockPanel
+        <CreateWorkBlockPanel
           task={{
             ...task,
             title: title.trim() || task.title,
@@ -283,7 +280,7 @@ export function TaskDetailForm({
             </div>
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="task-estimate">見積もり（分）</Label>
+            <Label htmlFor="task-estimate">作業時間（見積・分）</Label>
             <Input
               id="task-estimate"
               type="number"

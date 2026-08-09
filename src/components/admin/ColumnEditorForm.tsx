@@ -3,6 +3,11 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
+import {
+  nowDatetimeLocalValue,
+  toDatetimeLocalValue,
+} from "@/lib/workspace/labels";
 import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
@@ -10,18 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { generateContentSlug } from "@/lib/admin/content";
 
-function localDatetimeValue(d = new Date()) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
 export const COLUMN_EDITOR_FORM_ID = "column-editor-form";
 
-const IGNORE_PASSWORD_MANAGERS = {
-  "data-1p-ignore": true,
-  "data-lpignore": "true",
-  autoComplete: "off",
-} as const;
 
 export type ColumnEditorInitial = {
   slug: string;
@@ -60,8 +55,8 @@ export function ColumnEditorForm({
     title: initial?.title ?? "",
     bodyMd: initial?.body_md ?? "",
     date: initial?.date
-      ? localDatetimeValue(new Date(initial.date))
-      : localDatetimeValue(),
+      ? toDatetimeLocalValue(initial.date)
+      : nowDatetimeLocalValue(),
     categories: initial?.categories ?? "",
     tags: initial?.tags ?? "",
     ogImage: initial?.og_image ?? "",
@@ -164,10 +159,7 @@ export function ColumnEditorForm({
       id={formId}
       className="flex flex-col gap-4"
       onSubmit={onSubmit}
-      autoComplete="off"
-      data-1p-ignore
-      data-lpignore="true"
-      data-form-type="other"
+      {...ignorePasswordManagersProps}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
 
@@ -179,7 +171,7 @@ export function ColumnEditorForm({
           onChange={(e) => setTitle(e.target.value)}
           placeholder="記事タイトル"
           required
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -215,7 +207,7 @@ export function ColumnEditorForm({
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -226,7 +218,7 @@ export function ColumnEditorForm({
             onChange={(e) =>
               setStatus(e.target.value === "draft" ? "draft" : "published")
             }
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           >
             <option value="published">公開</option>
             <option value="draft">非公開</option>
@@ -242,7 +234,7 @@ export function ColumnEditorForm({
             value={categories}
             onChange={(e) => setCategories(e.target.value)}
             placeholder="エッセイ, 技術"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -252,7 +244,7 @@ export function ColumnEditorForm({
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="思考, 日常"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>

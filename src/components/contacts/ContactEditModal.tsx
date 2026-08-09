@@ -3,14 +3,21 @@
 import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
-import { ContactDetailForm } from "@/components/contacts/ContactDetailForm";
+import {
+  ContactModalBody,
+  type ContactModalTab,
+} from "@/components/contacts/ContactModalBody";
 import {
   contactDisplayName,
+  currentEmployment,
   type WorkspaceActivity,
   type WorkspaceContactDetail,
 } from "@/types/contacts";
 
-const FORM_ID = "contact-edit-form";
+const TABS: { id: ContactModalTab; label: string }[] = [
+  { id: "activity", label: "アクティビティログ" },
+  { id: "info", label: "情報" },
+];
 
 type Props = {
   open: boolean;
@@ -25,8 +32,7 @@ export function ContactEditModal({ open, contactId, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [contact, setContact] = useState<WorkspaceContactDetail | null>(null);
   const [activities, setActivities] = useState<WorkspaceActivity[]>([]);
-  const [dirty, setDirty] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [modalTab, setModalTab] = useState<ContactModalTab>("activity");
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,8 +44,7 @@ export function ContactEditModal({ open, contactId, onClose }: Props) {
     if (!open || !contactId) {
       setContact(null);
       setActivities([]);
-      setDirty(false);
-      setBusy(false);
+      setModalTab("activity");
       setDeleting(false);
       setError(null);
       setLoading(false);
@@ -49,6 +54,7 @@ export function ContactEditModal({ open, contactId, onClose }: Props) {
     let cancelled = false;
     setLoading(true);
     setError(null);
+    setModalTab("activity");
     void (async () => {
       try {
         const res = await fetch(`/api/admin/workspace/contacts/${contactId}/`);
@@ -77,7 +83,7 @@ export function ContactEditModal({ open, contactId, onClose }: Props) {
   }, [open, contactId]);
 
   async function onDelete() {
-    if (!contact || busy || deleting) return;
+    if (!contact || deleting) return;
     if (!confirm(`${contactDisplayName(contact)} を削除しますか？`)) return;
     setDeleting(true);
     setError(null);
@@ -97,44 +103,89 @@ export function ContactEditModal({ open, contactId, onClose }: Props) {
 
   if (!mounted) return null;
 
+  const displayTitle = contact
+    ? contactDisplayName(contact)
+    : loading
+      ? "読み込み中…"
+      : "コンタクト";
+
+  const workplace = contact
+    ? (
+        currentEmployment(contact.employments) ??
+        contact.employments[0] ??
+        null
+      )?.company_name.trim() || null
+    : null;
+
   return (
     <AdminContentModal
       open={open}
       onClose={onClose}
-      title={
-        contact
-          ? contactDisplayName(contact)
-          : loading
-            ? "読み込み中…"
-            : "コンタクト"
-      }
-      formId={FORM_ID}
+      title={displayTitle}
       isEdit
-      saving={busy}
-      dirty={dirty && Boolean(contact)}
+      saving={false}
+      dirty={false}
+      showSave={false}
       deleting={deleting}
       deleteError={error}
-      onDelete={contact ? () => void onDelete() : undefined}
-      updateLabel="保存"
+      cancelLabel="閉じる"
       maxWidthClassName="max-w-3xl"
-      maxHeightClassName="max-h-[min(90vh,52rem)]"
+      maxHeightClassName="h-[calc(100vh-2rem)] sm:h-[calc(100vh-3rem)]"
+      header={
+        contact ? (
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-2 px-6 pb-4 pt-5">
+              <h2
+                id={titleId}
+                className="m-0 text-2xl font-semibold tracking-tight text-foreground"
+              >
+                {contactDisplayName(contact)}
+              </h2>
+              {workplace ? (
+                <p className="m-0 text-sm text-muted-foreground">{workplace}</p>
+              ) : null}
+            </div>
+            <div
+              role="tablist"
+              aria-label="コンタクト詳細"
+              className="admin-underline-tabs"
+            >
+              {TABS.map((tab) => {
+                const selected = modalTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    id={`contact-modal-tab-${tab.id}`}
+                    onClick={() => setModalTab(tab.id)}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : undefined
+      }
     >
-      <span className="sr-only" id={titleId}>
-        コンタクト編集
-      </span>
       {loading ? (
         <p className="m-0 text-sm text-muted-foreground">読み込み中…</p>
       ) : contact ? (
-        <ContactDetailForm
+        <ContactModalBody
           contact={contact}
           activities={activities}
-          variant="modal"
-          formId={FORM_ID}
-          onDirtyChange={setDirty}
-          onBusyChange={setBusy}
-          onSaved={() => {
-            onClose();
-            router.refresh();
+          modalTab={modalTab}
+          deleting={deleting}
+          onDelete={() => void onDelete()}
+          onContactUpdated={setContact}
+          onActivityUpdated={(updated) => {
+            setActivities((prev) =>
+              prev.map((activity) =>
+                activity.id === updated.id ? updated : activity,
+              ),
+            );
           }}
         />
       ) : (

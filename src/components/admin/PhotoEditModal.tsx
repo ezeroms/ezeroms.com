@@ -10,6 +10,7 @@ import {
   type PhotoEditorInitial,
 } from "@/components/admin/PhotoEditorForm";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -121,9 +122,7 @@ export function PhotoEditModal({
           "relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border-0 bg-card shadow-none",
           "max-h-[min(90vh,44rem)] font-sans text-foreground",
         )}
-        data-1p-ignore
-        data-lpignore="true"
-        data-form-type="other"
+        {...ignorePasswordManagersProps}
       >
         <div className="shrink-0 border-0 border-b border-solid border-border px-6 py-4">
           <h2
@@ -185,6 +184,6 @@ export function PhotoEditModal({
         </div>
       </div>
     </div>,
-    document.querySelector(".admin-root") ?? document.body,
+    document.querySelector(".admin-app") ?? document.querySelector(".admin-root") ?? document.body,
   );
 }

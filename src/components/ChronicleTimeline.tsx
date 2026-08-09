@@ -7,6 +7,7 @@ import {
   serializeChronicleFilter,
 } from "@/lib/content/chronicle-filter";
 import { cn } from "@/lib/cn";
+import { cardOutlineClass } from "@/lib/site/card-styles";
 
 type Props = {
   items: Chronicle[];
@@ -58,7 +59,7 @@ export function ChronicleTimeline({ items }: Props) {
               </p>
             ) : null}
 
-            <article className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <article className={cn("rounded-xl bg-card p-6", cardOutlineClass)}>
               <p className="m-0 mb-2 text-sm text-muted-foreground">
                 {formatChronicleWhen(item)}
                 {meta ? ` · ${meta}` : ""}

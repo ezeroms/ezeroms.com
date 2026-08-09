@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { surfaceCard } from "@/lib/site/card-styles";
+import { formatEventTimeRange, localDateKeyFromIso } from "@/lib/workspace/calendar/time";
 import type {
   HorizonLoad,
   LoadHorizon,
+  ScheduledWorkBlock,
   WorkloadSnapshot,
 } from "@/lib/workspace/load/compute";
 
@@ -29,6 +32,20 @@ function formatHoursJa(minutes: number): string {
   if (Math.abs(h - Math.round(h)) < 0.05) return `${Math.round(h)}時間`;
   if (h < 10) return `${h.toFixed(1)}時間`;
   return `${Math.round(h)}時間`;
+}
+
+function monthDayLabel(dateKey: string): string {
+  const [, m, d] = dateKey.split("-");
+  return `${Number(m)}/${Number(d)}`;
+}
+
+function formatWorkBlockWhen(
+  block: ScheduledWorkBlock,
+  singleDay: boolean,
+): string {
+  const time = formatEventTimeRange(block.startsAt, block.endsAt, false);
+  if (singleDay) return time;
+  return `${monthDayLabel(localDateKeyFromIso(block.startsAt))} ${time}`;
 }
 
 function levelLabel(level: HorizonLoad["level"]): string {
@@ -77,7 +94,7 @@ export function WorkloadMeter({
   const pressurePct = Math.min(100, Math.round(data.pressureRatio * 100));
 
   return (
-    <section className="rounded-md border border-border bg-card p-4">
+    <section className={surfaceCard({ className: "p-4" })}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -263,31 +280,34 @@ export function WorkloadMeter({
         </ul>
       </div>
 
-      {data.unplacedTasks.length > 0 ? (
+      {data.workBlocks.length > 0 ? (
         <div className="mt-5 border-t border-border pt-4">
           <div className="mb-2 flex items-center justify-between gap-2">
             <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              未配置（期限がこの期間）
+              作業予定枠
             </h3>
             <Link
               href="/admin/workspace/calendar/"
               className="text-xs text-muted-foreground no-underline hover:underline"
             >
-              カレンダーで枠を置く
+              カレンダー
             </Link>
           </div>
           <ul className="m-0 flex list-none flex-col gap-1 p-0">
-            {data.unplacedTasks.map((t) => (
-              <li key={t.id}>
+            {data.workBlocks.map((block) => (
+              <li key={block.id}>
                 <Link
-                  href={`/admin/workspace/tasks/${t.id}/`}
+                  href={`/admin/workspace/tasks/${block.taskId}/`}
                   className="flex items-baseline justify-between gap-3 rounded-md px-1 py-1.5 text-sm no-underline hover:bg-black/[0.02]"
                 >
-                  <span className="min-w-0 truncate">{t.title}</span>
+                  <span className="min-w-0 truncate">
+                    <span className="mr-2 text-xs tabular-nums text-muted-foreground">
+                      {formatWorkBlockWhen(block, data.dayCount === 1)}
+                    </span>
+                    {block.title}
+                  </span>
                   <span className="shrink-0 tabular-nums text-xs text-muted-foreground">
-                    {t.remainingMinutes == null
-                      ? "見積もりなし"
-                      : formatHours(t.remainingMinutes)}
+                    {formatHours(block.minutes)}
                   </span>
                 </Link>
               </li>
@@ -296,7 +316,7 @@ export function WorkloadMeter({
         </div>
       ) : (
         <p className="mt-5 m-0 border-t border-border pt-4 text-sm text-muted-foreground">
-          この期間に期限があり、作業枠がないタスクはありません。
+          この期間に作業予定枠はありません。
         </p>
       )}
     </section>

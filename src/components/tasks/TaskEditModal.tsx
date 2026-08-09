@@ -4,18 +4,27 @@ import Link from "next/link";
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import { Button } from "@/components/ui/button";
+import {
+  ClickToEditField,
+  ClickToEditFieldBlock,
+} from "@/components/ui/click-to-edit-field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import {
   endOfTodayDatetimeLocalValue,
   fromDatetimeLocalValue,
   TASK_STATUS_LABELS,
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
+import {
+  formatEstimatedMinutesInput,
+  parseEstimatedMinutesInput,
+  parseProgressPercentInput,
+  sumWorkBlockMinutes,
+} from "@/lib/workspace/task-form";
 import type {
   TaskStatus,
+  TaskWorkBlock,
   WorkspaceProject,
   WorkspaceTask,
 } from "@/types/workspace";
@@ -40,17 +49,17 @@ type Props = {
 
 type FormState = {
   title: string;
-  bodyMd: string;
+  body_md: string;
   status: TaskStatus;
-  projectId: string;
-  dueAt: string;
-  estimatedMinutes: string;
-  progressPercent: string;
+  project_id: string;
+  due_at: string;
+  estimated_minutes: string;
+  progress_percent: string;
   location: string;
-  workStartsAt: string;
-  workEndsAt: string;
+  starts_at: string;
+  ends_at: string;
   /** 作業枠の日誌（Markdown） */
-  workNoteMd: string;
+  note_md: string;
 };
 
 type WorkSeed = {
@@ -59,31 +68,22 @@ type WorkSeed = {
   note_md?: string | null;
 };
 
-function formatEstimatedMinutes(
-  value: WorkspaceTask["estimated_minutes"],
-): string {
-  if (value == null) return "";
-  const n = typeof value === "number" ? value : Number(value);
-  if (!Number.isFinite(n) || n <= 0) return "";
-  return String(Math.round(n));
-}
-
 function formFromTask(
   task: WorkspaceTask,
   work?: WorkSeed | null,
 ): FormState {
   return {
     title: task.title,
-    bodyMd: task.body_md ?? "",
+    body_md: task.body_md ?? "",
     status: task.status,
-    projectId: task.project_id ?? "",
-    dueAt: toDatetimeLocalValue(task.due_at),
-    estimatedMinutes: formatEstimatedMinutes(task.estimated_minutes),
-    progressPercent: String(task.progress_percent ?? 0),
+    project_id: task.project_id ?? "",
+    due_at: toDatetimeLocalValue(task.due_at),
+    estimated_minutes: formatEstimatedMinutesInput(task.estimated_minutes),
+    progress_percent: String(task.progress_percent ?? 0),
     location: task.location ?? "",
-    workStartsAt: toDatetimeLocalValue(work?.starts_at ?? null),
-    workEndsAt: toDatetimeLocalValue(work?.ends_at ?? null),
-    workNoteMd: work?.note_md ?? "",
+    starts_at: toDatetimeLocalValue(work?.starts_at ?? null),
+    ends_at: toDatetimeLocalValue(work?.ends_at ?? null),
+    note_md: work?.note_md ?? "",
   };
 }
 
@@ -116,6 +116,22 @@ export function TaskEditModal({
   const [archiving, setArchiving] = useState(false);
   const [deletingBlock, setDeletingBlock] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [actualMinutes, setActualMinutes] = useState(0);
+
+  async function refreshActualMinutes(forTaskId: string) {
+    try {
+      const res = await fetch(
+        `/api/admin/workspace/work-blocks/?task_id=${encodeURIComponent(forTaskId)}`,
+      );
+      const data = (await res.json()) as {
+        items?: TaskWorkBlock[];
+      };
+      if (!res.ok) return;
+      setActualMinutes(sumWorkBlockMinutes(data.items ?? []));
+    } catch {
+      // 実績は補助表示なので失敗してもフォーム編集は続ける
+    }
+  }
 
   useEffect(() => {
     if (!open || !taskId) return;
@@ -126,6 +142,7 @@ export function TaskEditModal({
     setDeletingBlock(false);
     setResolvedWorkBlockId(workBlockId);
     setProjects([]);
+    setActualMinutes(0);
     // タイトル表示用のみ先行セット。form は API 完了まで出さない
     // （projects 未取得のまま Select を出すと value が「なし」に落ちることがある）
     if (initialTask && initialTask.id === taskId) {
@@ -188,13 +205,14 @@ export function TaskEditModal({
         if (cancelled) return;
 
         let projectItems = projectsData.items ?? [];
-        const projectId = taskData.item.project_id;
+        // タスクに紐づくプロジェクトがアーカイブ済みでも、選択肢に残す
+        const linkedProjectId = taskData.item.project_id;
         if (
-          projectId &&
-          !projectItems.some((project) => project.id === projectId)
+          linkedProjectId &&
+          !projectItems.some((project) => project.id === linkedProjectId)
         ) {
           const projectRes = await fetch(
-            `/api/admin/workspace/projects/${projectId}/`,
+            `/api/admin/workspace/projects/${linkedProjectId}/`,
           );
           const projectData = (await projectRes.json()) as {
             item?: WorkspaceProject;
@@ -207,7 +225,7 @@ export function TaskEditModal({
         // 編集用はアーカイブ以外を優先表示（現在紐づいているものは残す）
         const selectable = projectItems.filter(
           (project) =>
-            project.status !== "archived" || project.id === projectId,
+            project.status !== "archived" || project.id === linkedProjectId,
         );
 
         const next = formFromTask(taskData.item, work);
@@ -216,6 +234,7 @@ export function TaskEditModal({
         setResolvedWorkBlockId(blockId);
         setForm(next);
         setBaseline(next);
+        void refreshActualMinutes(taskData.item.id);
       } catch (err) {
         if (!cancelled) {
           setError(
@@ -249,26 +268,20 @@ export function TaskEditModal({
     setSaving(true);
     setError(null);
     try {
-      const minutes = form.estimatedMinutes.trim()
-        ? Number(form.estimatedMinutes)
-        : null;
-      if (minutes != null && (!Number.isFinite(minutes) || minutes <= 0)) {
-        throw new Error("見積もりは正の整数で入力してください");
-      }
-      const progress = form.progressPercent.trim()
-        ? Number(form.progressPercent)
-        : 0;
-      if (!Number.isFinite(progress) || progress < 0 || progress > 100) {
-        throw new Error("進捗は 0〜100 で入力してください");
-      }
+      const minutesParsed = parseEstimatedMinutesInput(form.estimated_minutes);
+      if (!minutesParsed.ok) throw new Error(minutesParsed.error);
+      const progressParsed = parseProgressPercentInput(form.progress_percent);
+      if (!progressParsed.ok) throw new Error(progressParsed.error);
+      const minutes = minutesParsed.value;
+      const progress = progressParsed.value;
 
       let savedBlock:
         | { id: string; starts_at: string; ends_at: string }
         | undefined;
 
       if (editingWorkBlock) {
-        const startsAt = fromDatetimeLocalValue(form.workStartsAt);
-        const endsAt = fromDatetimeLocalValue(form.workEndsAt);
+        const startsAt = fromDatetimeLocalValue(form.starts_at);
+        const endsAt = fromDatetimeLocalValue(form.ends_at);
         if (!startsAt || !endsAt) {
           throw new Error("作業枠の開始・終了を入力してください");
         }
@@ -285,7 +298,7 @@ export function TaskEditModal({
               body: JSON.stringify({
                 starts_at: startsAt,
                 ends_at: endsAt,
-                note_md: form.workNoteMd.trim() || null,
+                note_md: form.note_md.trim() || null,
               }),
             },
           );
@@ -310,10 +323,10 @@ export function TaskEditModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: form.title.trim(),
-          body_md: form.bodyMd,
+          body_md: form.body_md,
           status: form.status,
-          project_id: form.projectId || null,
-          due_at: fromDatetimeLocalValue(form.dueAt),
+          project_id: form.project_id || null,
+          due_at: fromDatetimeLocalValue(form.due_at),
           estimated_minutes: minutes,
           progress_percent:
             form.status === "done" ? 100 : Math.round(progress),
@@ -333,13 +346,13 @@ export function TaskEditModal({
           ? {
               starts_at: savedBlock.starts_at,
               ends_at: savedBlock.ends_at,
-              note_md: form.workNoteMd,
+              note_md: form.note_md,
             }
           : editingWorkBlock
             ? {
-                starts_at: fromDatetimeLocalValue(form.workStartsAt)!,
-                ends_at: fromDatetimeLocalValue(form.workEndsAt)!,
-                note_md: form.workNoteMd,
+                starts_at: fromDatetimeLocalValue(form.starts_at)!,
+                ends_at: fromDatetimeLocalValue(form.ends_at)!,
+                note_md: form.note_md,
               }
             : null,
       );
@@ -423,23 +436,37 @@ export function TaskEditModal({
       {loading ? (
         <p className="m-0 text-sm text-muted-foreground">読み込み中…</p>
       ) : form ? (
-        <form id={formId} onSubmit={onSave} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cal-task-title">タイトル</Label>
-            <Input
-              id="cal-task-title"
-              value={form.title}
-              onChange={(e) => patchForm("title", e.target.value)}
-              required
-            />
-          </div>
+        <form id={formId} onSubmit={onSave} className="flex flex-col gap-6">
+          <ClickToEditField
+            value={form.title}
+            emptyLabel="タイトルを入力"
+            required
+            requiredMessage="タイトルは必須です"
+            ariaLabel="タイトル"
+            displayClassName="text-lg font-semibold text-foreground"
+            onSave={async (next) => {
+              patchForm("title", next);
+            }}
+          />
+          <ClickToEditField
+            value={form.body_md}
+            inputType="textarea"
+            emptyDisplay="hover-add"
+            emptyAddLabel="詳細を追加"
+            emptyLabel="詳細"
+            ariaLabel="詳細"
+            displayClassName="text-sm leading-relaxed text-foreground"
+            onSave={async (next) => {
+              patchForm("body_md", next);
+            }}
+          />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="cal-task-status">状態</Label>
+            <ClickToEditFieldBlock label="状態">
               <Select
                 id="cal-task-status"
                 value={form.status}
+                className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
                 onChange={(e) => {
                   const nextStatus = e.target.value as TaskStatus;
                   setForm((prev) =>
@@ -447,10 +474,10 @@ export function TaskEditModal({
                       ? {
                           ...prev,
                           status: nextStatus,
-                          progressPercent:
+                          progress_percent:
                             nextStatus === "done"
                               ? "100"
-                              : prev.progressPercent,
+                              : prev.progress_percent,
                         }
                       : prev,
                   );
@@ -462,142 +489,160 @@ export function TaskEditModal({
                   </option>
                 ))}
               </Select>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="cal-task-due">期限</Label>
+            </ClickToEditFieldBlock>
+
+            <ClickToEditFieldBlock label="期限">
               <div className="flex items-center gap-2">
                 <Input
                   id="cal-task-due"
                   type="datetime-local"
-                  value={form.dueAt}
-                  onChange={(e) => patchForm("dueAt", e.target.value)}
-                  className="min-w-0 flex-1"
+                  value={form.due_at}
+                  onChange={(e) => patchForm("due_at", e.target.value)}
+                  className="admin-input-bare h-8 min-w-0 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
                 />
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-10 shrink-0"
+                  className="h-7 shrink-0 px-2.5 text-xs"
                   onClick={() =>
-                    patchForm("dueAt", endOfTodayDatetimeLocalValue())
+                    patchForm("due_at", endOfTodayDatetimeLocalValue())
                   }
                 >
                   今日中
                 </Button>
               </div>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="cal-task-progress">進捗（%）</Label>
-              <div className="flex items-center gap-2.5">
+            </ClickToEditFieldBlock>
+
+            <ClickToEditFieldBlock label="進捗">
+              <div className="flex items-center gap-1">
                 <Input
                   id="cal-task-progress"
                   type="number"
                   min={0}
                   max={100}
                   inputMode="numeric"
-                  value={form.progressPercent}
+                  value={form.progress_percent}
                   onChange={(e) =>
-                    patchForm("progressPercent", e.target.value)
+                    patchForm("progress_percent", e.target.value)
                   }
-                  className="max-w-[5.5rem]"
+                  className="admin-input-bare h-8 w-10 shrink-0 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
                 />
-                <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
+                <span className="text-sm text-muted-foreground">%</span>
+                <div className="ml-2 h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full bg-foreground/65 transition-[width] duration-200"
                     style={{
                       width: `${Math.min(
                         100,
-                        Math.max(0, Number(form.progressPercent) || 0),
+                        Math.max(0, Number(form.progress_percent) || 0),
                       )}%`,
                     }}
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="cal-task-estimate">見積もり（分）</Label>
-              <Input
-                id="cal-task-estimate"
-                type="number"
-                min={1}
-                inputMode="numeric"
-                value={form.estimatedMinutes}
-                onChange={(e) => patchForm("estimatedMinutes", e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5 sm:col-span-2">
-              <Label htmlFor="cal-task-location">場所</Label>
-              <Input
-                id="cal-task-location"
+            </ClickToEditFieldBlock>
+
+            <ClickToEditFieldBlock label="作業時間">
+              <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                <span className="text-sm text-muted-foreground">見積</span>
+                <Input
+                  id="cal-task-estimate"
+                  type="number"
+                  min={1}
+                  inputMode="numeric"
+                  value={form.estimated_minutes}
+                  onChange={(e) =>
+                    patchForm("estimated_minutes", e.target.value)
+                  }
+                  className="admin-input-bare h-8 w-12 shrink-0 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                  aria-label="見積（分）"
+                />
+                <span className="text-sm text-muted-foreground">分</span>
+                <span className="text-sm text-muted-foreground">
+                  （実績：{actualMinutes} 分）
+                </span>
+              </div>
+            </ClickToEditFieldBlock>
+
+            <ClickToEditFieldBlock label="場所" className="sm:col-span-2">
+              <ClickToEditField
                 value={form.location}
-                onChange={(e) => patchForm("location", e.target.value)}
+                emptyLabel="未設定"
+                ariaLabel="場所"
+                onSave={async (next) => {
+                  patchForm("location", next);
+                }}
               />
-            </div>
+            </ClickToEditFieldBlock>
           </div>
 
           {editingWorkBlock ? (
-            <div className="rounded-md border border-border bg-accent/40 p-3">
-              <p className="m-0 mb-3 text-xs font-medium text-muted-foreground">
-                この作業枠
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-                <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="cal-work-start">開始</Label>
-                    <Input
-                      id="cal-work-start"
-                      type="datetime-local"
-                      value={form.workStartsAt}
-                      onChange={(e) =>
-                        patchForm("workStartsAt", e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="cal-work-end">終了</Label>
-                    <Input
-                      id="cal-work-end"
-                      type="datetime-local"
-                      value={form.workEndsAt}
-                      onChange={(e) => patchForm("workEndsAt", e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
+            <section className="flex flex-col gap-3">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  作業枠
+                </h3>
                 {resolvedWorkBlockId ? (
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    className="h-10 shrink-0 border-red-200 text-red-600 hover:border-red-500"
+                    className="h-7 px-2 text-xs text-red-600 hover:text-red-700"
                     disabled={deletingBlock || saving || archiving}
                     onClick={() => void onDeleteWorkBlock()}
                   >
-                    {deletingBlock ? "削除中…" : "枠を削除"}
+                    {deletingBlock ? "削除中…" : "削除"}
                   </Button>
                 ) : null}
               </div>
-              <div className="mt-3 flex flex-col gap-1.5">
-                <Label htmlFor="cal-work-note">作業日誌</Label>
-                <Textarea
-                  id="cal-work-note"
-                  value={form.workNoteMd}
-                  onChange={(e) => patchForm("workNoteMd", e.target.value)}
-                  rows={4}
-                  placeholder="この枠でやったこと・気づき…"
-                  className="min-h-[96px] text-sm"
-                />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <ClickToEditFieldBlock label="開始">
+                  <Input
+                    id="cal-work-start"
+                    type="datetime-local"
+                    value={form.starts_at}
+                    onChange={(e) =>
+                      patchForm("starts_at", e.target.value)
+                    }
+                    required
+                    className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                  />
+                </ClickToEditFieldBlock>
+                <ClickToEditFieldBlock label="終了">
+                  <Input
+                    id="cal-work-end"
+                    type="datetime-local"
+                    value={form.ends_at}
+                    onChange={(e) => patchForm("ends_at", e.target.value)}
+                    required
+                    className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+                  />
+                </ClickToEditFieldBlock>
               </div>
-            </div>
+              <ClickToEditFieldBlock label="作業日誌">
+                <ClickToEditField
+                  value={form.note_md}
+                  inputType="textarea"
+                  emptyDisplay="hover-add"
+                  emptyAddLabel="日誌を追加"
+                  emptyLabel="この枠でやったこと・気づき…"
+                  ariaLabel="作業日誌"
+                  displayClassName="text-sm leading-relaxed text-foreground"
+                  onSave={async (next) => {
+                    patchForm("note_md", next);
+                  }}
+                />
+              </ClickToEditFieldBlock>
+            </section>
           ) : null}
 
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cal-task-project">Project</Label>
+          <ClickToEditFieldBlock label="Project">
             <Select
               id="cal-task-project"
-              value={form.projectId}
-              onChange={(e) => patchForm("projectId", e.target.value)}
+              value={form.project_id}
+              className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+              onChange={(e) => patchForm("project_id", e.target.value)}
             >
               <option value="">（なし）</option>
               {projects.map((project) => (
@@ -606,17 +651,7 @@ export function TaskEditModal({
                 </option>
               ))}
             </Select>
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="cal-task-body">メモ</Label>
-            <Textarea
-              id="cal-task-body"
-              value={form.bodyMd}
-              onChange={(e) => patchForm("bodyMd", e.target.value)}
-              rows={5}
-            />
-          </div>
+          </ClickToEditFieldBlock>
 
           {error ? (
             <p className="m-0 text-sm text-red-600" role="alert">

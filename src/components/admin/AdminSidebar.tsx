@@ -154,7 +154,7 @@ export function AdminSidebar({ userEmail }: { userEmail: string | null }) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-[rgba(0,0,0,0.08)] bg-card">
+    <aside className="admin-sidebar flex h-screen w-56 shrink-0 flex-col border-0 border-r border-solid border-[rgba(0,0,0,0.08)] bg-card">
       <div className="border-b border-border px-4 pb-4 pt-6">
         <Link
           href="/admin/workspace/"

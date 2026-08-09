@@ -42,7 +42,7 @@ function defaultStartLocal(initial?: Date | null): string {
   return toDatetimeLocalValue(d.toISOString());
 }
 
-export function ScheduleWorkBlockPanel({
+export function CreateWorkBlockPanel({
   task,
   writableCalendars,
   writableCalendarId,
@@ -149,14 +149,14 @@ export function ScheduleWorkBlockPanel({
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="schedule-work-block-title"
+      aria-labelledby="create-work-block-title"
       onClick={(e) => {
         if (e.target === e.currentTarget && !busy) onClose();
       }}
     >
       <div className="w-full max-w-md rounded-md border border-border bg-card p-4 shadow-lg">
         <h2
-          id="schedule-work-block-title"
+          id="create-work-block-title"
           className="m-0 text-base font-semibold text-foreground"
         >
           {step === "edit" ? "作業枠を作成" : "作成内容の確認"}

@@ -41,6 +41,7 @@ import { TimezoneAxisLabels } from "@/components/calendar/TimezoneAxisLabels";
 import { useHybridCurrentTimeColumn } from "@/components/calendar/useHybridCurrentTimeColumn";
 import { useTaskLaneHosts } from "@/components/calendar/useTaskLaneHosts";
 import { cn } from "@/lib/cn";
+import { cardOutlineClass } from "@/lib/site/card-styles";
 import {
   calendarColors,
   calendarKey,
@@ -61,6 +62,8 @@ import {
 import {
   createWorkspaceCalendarViews,
   patchSlidingMultiDayWeek,
+  readStoredCalendarView,
+  writeStoredCalendarView,
 } from "@/lib/workspace/calendar/views";
 import type {
   CalendarTaskBlock,
@@ -210,11 +213,13 @@ export function WorkspaceCalendar({
   );
 
   const views = useMemo(() => createWorkspaceCalendarViews(), []);
+  // クライアント遷移時はここで復元。フルリロード時は SSR 後の effect でも再適用する
+  const defaultView = useMemo(() => readStoredCalendarView(), []);
 
   const calendarApp = useNextCalendarApp(
     {
       views,
-      defaultView: "week",
+      defaultView,
       // ビュー名は英語（View / Day / 2 days / …）
       locale: "en-US",
       firstDayOfWeek: toScheduleXFirstDay(
@@ -265,6 +270,12 @@ export function WorkspaceCalendar({
               : { start, end },
           );
           onRangeChangeRef.current?.(start, end);
+          // ビュー切替でも range が更新されるので、ここで選択中ビューを残す
+          try {
+            writeStoredCalendarView(calendarControls.getView());
+          } catch {
+            // プラグイン未接続時は無視
+          }
         },
         onSelectedDateUpdate(date) {
           setSelectedDate(date.toString());
@@ -283,6 +294,19 @@ export function WorkspaceCalendar({
     if (!calendarApp) return;
     patchSlidingMultiDayWeek(calendarApp);
   }, [calendarApp]);
+
+  // SSR 時は localStorage を読めないため、マウント後に保存済みビューへ合わせる
+  useEffect(() => {
+    if (!calendarApp) return;
+    const savedView = readStoredCalendarView();
+    try {
+      if (calendarControls.getView() !== savedView) {
+        calendarControls.setView(savedView);
+      }
+    } catch {
+      // プラグイン未接続時は無視
+    }
+  }, [calendarApp, calendarControls]);
 
   // weekStartsOn / dayStartsHour は初回 create 時の config のみ。
   // 変更時は親が key でリマウントする（calendarControls は render 前だと不安全）。
@@ -577,7 +601,8 @@ export function WorkspaceCalendar({
         );
       }}
       className={cn(
-        "workspace-calendar flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card",
+        "workspace-calendar flex min-h-0 flex-col overflow-hidden rounded-lg bg-card",
+        cardOutlineClass,
         secondaryTimezoneEnabled && "workspace-calendar--dual-tz",
         draggingTask && "ring-2 ring-brand/40",
         dragCreate && "workspace-calendar--creating",

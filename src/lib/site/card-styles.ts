@@ -1,11 +1,22 @@
 import { cn } from "@/lib/cn";
 
-/** Shared card chrome: Column-list style (rounded surface, no resting border). */
-export const contentCardClass =
-  "content-card overflow-hidden rounded-xl bg-card";
+/**
+ * TRIAL: resting card outline.
+ * Match admin table thead rule (`#e8eaed` / `--border`).
+ */
+export const cardOutlineClass = "border border-solid border-border";
 
-/** Add when the whole card is a link — border appears only on hover/focus. */
+/** Shared blog card chrome (Notes / Column / Works / etc.). */
+export const contentCardClass = cn(
+  "content-card overflow-hidden rounded-xl bg-card",
+  cardOutlineClass,
+);
+
+/** Add when the whole card is a link — outline strengthens on hover/focus. */
 export const contentCardLinkClass = "content-card--link";
+
+/** Admin / workspace surface panels (Projects, dashboard cards, calendar shell). */
+export const surfaceCardClass = cn("rounded-md bg-card", cardOutlineClass);
 
 export function contentCard(opts?: { link?: boolean; className?: string }) {
   return cn(
@@ -13,4 +24,8 @@ export function contentCard(opts?: { link?: boolean; className?: string }) {
     opts?.link && contentCardLinkClass,
     opts?.className,
   );
+}
+
+export function surfaceCard(opts?: { className?: string }) {
+  return cn(surfaceCardClass, opts?.className);
 }

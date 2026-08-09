@@ -1,6 +1,7 @@
 import "server-only";
 
 import { getWorkspaceAdmin } from "@/lib/workspace/db/server";
+import { CONTACT_SELECT } from "@/lib/workspace/contacts";
 import {
   compareContactsByKana,
   contactDisplayName,
@@ -13,9 +14,6 @@ import {
 
 const SELECT =
   "id, title, title_source, occurred_at, ended_at, what_md, notes_md, location, tags, created_at, updated_at, deleted_at";
-
-const CONTACT_EMBED =
-  "id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, family_name_en, given_name_en, middle_name_en, english_name, nickname, birthday, birthday_year_known, notes_md, is_friend, tags, created_at, updated_at, deleted_at";
 
 export type ActivityListFilter = {
   contactId?: string;
@@ -306,7 +304,7 @@ export async function listContactsForActivity(
 ): Promise<WorkspaceContact[]> {
   const { data, error } = await getWorkspaceAdmin()
     .from("activity_contacts")
-    .select(`contact:contacts (${CONTACT_EMBED})`)
+    .select(`contact:contacts (${CONTACT_SELECT})`)
     .eq("activity_id", activityId);
   if (error) throw new Error(error.message);
 

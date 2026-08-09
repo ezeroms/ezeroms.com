@@ -1,12 +1,14 @@
 import * as React from "react";
 import { cn } from "@/lib/cn";
+import { cardOutlineClass } from "@/lib/site/card-styles";
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        "rounded-lg border border-border bg-card text-card-foreground shadow-none",
+        "rounded-lg bg-card text-card-foreground shadow-none",
+        cardOutlineClass,
         className,
       )}
       {...props}

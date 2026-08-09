@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/select";
 import { PROJECT_STATUS_LABELS } from "@/lib/workspace/labels";
 import type { ProjectStatus, WorkspaceProject } from "@/types/workspace";
 import { PROJECT_STATUSES } from "@/types/workspace";
+import { surfaceCard } from "@/lib/site/card-styles";
 
 type Props = {
   initialProjects: WorkspaceProject[];
@@ -172,7 +173,7 @@ export function ProjectsBoard({ initialProjects }: Props) {
 
   return (
     <div className="space-y-4">
-      <section className="rounded-md border border-border bg-card p-4">
+      <section className={surfaceCard({ className: "p-4" })}>
         <h2 className="m-0 text-sm font-semibold text-foreground">
           Project を追加
         </h2>
@@ -206,7 +207,7 @@ export function ProjectsBoard({ initialProjects }: Props) {
         </p>
       ) : null}
 
-      <section className="overflow-hidden rounded-md border border-border bg-card">
+      <section className={surfaceCard({ className: "overflow-hidden" })}>
         {projects.length === 0 ? (
           <p className="m-0 px-4 py-10 text-center text-sm text-muted-foreground">
             Project はまだありません

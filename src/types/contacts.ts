@@ -11,6 +11,12 @@ export type WorkspaceContact = {
   family_name_en: string | null;
   given_name_en: string | null;
   middle_name_en: string | null;
+  /** 旧姓（現在の姓とは別に保持） */
+  former_family_name: string | null;
+  /**
+   * イングリッシュネーム（通称の英語名）。
+   * family_name_en など「英語表記」（正式なローマ字姓名）とは別フィールド。
+   */
   english_name: string | null;
   nickname: string | null;
   birthday: string | null;
@@ -193,29 +199,8 @@ export function formatContactTags(tags: string[]): string {
 
 export const formatActivityTags = formatContactTags;
 
-/** 漢字の姓・名（ミドル含む）。なければ英語名など。 */
-export function contactListName(
-  contact: Pick<
-    WorkspaceContact,
-    | "family_name"
-    | "given_name"
-    | "middle_name"
-    | "english_name"
-    | "nickname"
-  >,
-): string {
-  const parts = [
-    nonEmpty(contact.family_name),
-    nonEmpty(contact.middle_name),
-    nonEmpty(contact.given_name),
-  ].filter(Boolean) as string[];
-  if (parts.length > 0) return parts.join(" ");
-  return (
-    nonEmpty(contact.english_name) ??
-    nonEmpty(contact.nickname) ??
-    "（無名）"
-  );
-}
+/** 漢字の姓・名（ミドル含む）。なければ英語名など。contactDisplayName と同じ。 */
+export const contactListName = contactDisplayName;
 
 /** 一覧用: 名前（ニックネーム） */
 export function contactListNameWithNickname(
@@ -305,26 +290,39 @@ export function contactSectionLabel(
   return "その他";
 }
 
+/**
+ * DB の birthday（YYYY-MM-DD）を年・月・日に分解する。
+ * 形式が違う／空のときは null。
+ */
+export function parseBirthdayYmd(
+  birthday: string | null | undefined,
+): { year: number; month: number; day: number } | null {
+  if (!birthday) return null;
+  const matched = /^(\d{4})-(\d{2})-(\d{2})$/.exec(birthday.slice(0, 10));
+  if (!matched) return null;
+  return {
+    year: Number(matched[1]),
+    month: Number(matched[2]),
+    day: Number(matched[3]),
+  };
+}
+
 /** Birthday month (1–12) or null when unset / unparseable. */
 export function contactBirthdayMonth(
   contact: Pick<WorkspaceContact, "birthday">,
 ): number | null {
-  if (!contact.birthday) return null;
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(contact.birthday.slice(0, 10));
-  if (!m) return null;
-  const month = Number(m[2]);
-  return month >= 1 && month <= 12 ? month : null;
+  const parts = parseBirthdayYmd(contact.birthday);
+  if (!parts) return null;
+  return parts.month >= 1 && parts.month <= 12 ? parts.month : null;
 }
 
 /** Birthday day-of-month (1–31) or null. */
 export function contactBirthdayDay(
   contact: Pick<WorkspaceContact, "birthday">,
 ): number | null {
-  if (!contact.birthday) return null;
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(contact.birthday.slice(0, 10));
-  if (!m) return null;
-  const day = Number(m[3]);
-  return day >= 1 && day <= 31 ? day : null;
+  const parts = parseBirthdayYmd(contact.birthday);
+  if (!parts) return null;
+  return parts.day >= 1 && parts.day <= 31 ? parts.day : null;
 }
 
 /** Section heading like `1月` / `未設定`. */
@@ -333,19 +331,125 @@ export function monthSectionLabel(month: number | null): string {
   return `${month}月`;
 }
 
-/** 誕生日表示。年不明時は月日のみ。年齢は年が正確なときだけ。 */
+/**
+ * 年不明の誕生日を PostgreSQL `date` に入れるときのダミー年（sentinel）。
+ * UI では年を空欄にし、この値は表示・年齢計算に使わない。
+ */
+export const BIRTHDAY_UNKNOWN_YEAR = 1;
+
+export type BirthdayInputParts = {
+  /** 空なら年不明 */
+  year: string;
+  month: string;
+  day: string;
+};
+
+/** DB の date + year_known を、年任意の入力パーツへ。 */
+export function birthdayToInputParts(
+  birthday: string | null | undefined,
+  yearKnown: boolean,
+): BirthdayInputParts {
+  const parts = parseBirthdayYmd(birthday);
+  if (!parts) return { year: "", month: "", day: "" };
+  return {
+    year: yearKnown ? String(parts.year).padStart(4, "0") : "",
+    month: String(parts.month).padStart(2, "0"),
+    day: String(parts.day).padStart(2, "0"),
+  };
+}
+
+function isValidCalendarDate(year: number, month: number, day: number): boolean {
+  const dt = new Date(year, month - 1, day);
+  return (
+    dt.getFullYear() === year &&
+    dt.getMonth() === month - 1 &&
+    dt.getDate() === day
+  );
+}
+
+/**
+ * 年／月／日入力を DB 用にシリアライズ。
+ * 年空欄 + 月日あり → sentinel 年 + birthday_year_known=false。
+ */
+export function inputPartsToBirthday(parts: BirthdayInputParts): {
+  birthday: string | null;
+  birthday_year_known: boolean;
+  error?: string;
+} {
+  const yearRaw = parts.year.trim();
+  const monthRaw = parts.month.trim();
+  const dayRaw = parts.day.trim();
+
+  if (!yearRaw && !monthRaw && !dayRaw) {
+    return { birthday: null, birthday_year_known: false };
+  }
+
+  if (!monthRaw || !dayRaw) {
+    return {
+      birthday: null,
+      birthday_year_known: false,
+      error: "月と日を入力してください",
+    };
+  }
+
+  const month = Number(monthRaw);
+  const day = Number(dayRaw);
+  if (!Number.isInteger(month) || month < 1 || month > 12) {
+    return {
+      birthday: null,
+      birthday_year_known: false,
+      error: "月は 1–12 で入力してください",
+    };
+  }
+  if (!Number.isInteger(day) || day < 1 || day > 31) {
+    return {
+      birthday: null,
+      birthday_year_known: false,
+      error: "日は 1–31 で入力してください",
+    };
+  }
+
+  const yearKnown = yearRaw.length > 0;
+  let year = BIRTHDAY_UNKNOWN_YEAR;
+  if (yearKnown) {
+    year = Number(yearRaw);
+    if (!Number.isInteger(year) || year < 1000 || year > 2100) {
+      return {
+        birthday: null,
+        birthday_year_known: false,
+        error: "年は西暦4桁で入力してください",
+      };
+    }
+  }
+
+  // 年不明時はうるう年で 2/29 の妥当性だけ見る
+  const checkYear = yearKnown ? year : 2020;
+  if (!isValidCalendarDate(checkYear, month, day)) {
+    return {
+      birthday: null,
+      birthday_year_known: false,
+      error: "存在しない日付です",
+    };
+  }
+
+  const mm = String(month).padStart(2, "0");
+  const dd = String(day).padStart(2, "0");
+  return {
+    birthday: `${String(year).padStart(4, "0")}-${mm}-${dd}`,
+    birthday_year_known: yearKnown,
+  };
+}
+
+/** 誕生日表示。年不明時は月日のみ。年齢は年があるときだけ。 */
 export function formatContactBirthday(
   contact: Pick<WorkspaceContact, "birthday" | "birthday_year_known">,
   now: Date = new Date(),
 ): string {
   if (!contact.birthday) return "";
-  const raw = contact.birthday.slice(0, 10);
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
-  if (!m) return raw;
+  const parts = parseBirthdayYmd(contact.birthday);
+  if (!parts) return contact.birthday.slice(0, 10);
 
-  const year = Number(m[1]);
-  const month = Number(m[2]);
-  const day = Number(m[3]);
+  const { year, month, day } = parts;
   const mm = String(month).padStart(2, "0");
   const dd = String(day).padStart(2, "0");
   const md = `${mm}/${dd}`;

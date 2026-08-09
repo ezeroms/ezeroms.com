@@ -3,6 +3,10 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ClipYoutubeEmbed } from "@/components/ClipYoutubeEmbed";
+import {
+  nowDatetimeLocalValue,
+  toDatetimeLocalValue,
+} from "@/lib/workspace/labels";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,11 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { parseYoutubeVideoId } from "@/lib/content/clip-meta";
-
-function localDatetimeValue(d = new Date()) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export const CLIPS_EDITOR_FORM_ID = "clips-editor-form";
 
@@ -54,8 +53,8 @@ export function ClipsEditorForm({
     sourceUrl: initial?.source_url ?? "",
     sourceName: initial?.source_name ?? "",
     date: initial?.date
-      ? localDatetimeValue(new Date(initial.date))
-      : localDatetimeValue(),
+      ? toDatetimeLocalValue(initial.date)
+      : nowDatetimeLocalValue(),
     memo: initial?.memo ?? "",
     tags: initial?.tags ?? "",
     status: (initial?.status ?? "published") as "published" | "draft",

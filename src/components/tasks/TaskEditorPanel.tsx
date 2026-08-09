@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Folder } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskWorkBlocksSection } from "@/components/tasks/TaskWorkBlocksSection";
 import { Button } from "@/components/ui/button";
+import {
+  ClickToEditField,
+  ClickToEditRow,
+} from "@/components/ui/click-to-edit-field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import {
@@ -13,6 +16,11 @@ import {
   TASK_STATUS_LABELS,
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
+import {
+  formatEstimatedMinutesInput,
+  parseEstimatedMinutesInput,
+  parseProgressPercentInput,
+} from "@/lib/workspace/task-form";
 import { cn } from "@/lib/cn";
 import type {
   TaskStatus,
@@ -20,17 +28,10 @@ import type {
   WorkspaceTask,
 } from "@/types/workspace";
 
-/** タイトル textarea の高さを内容に合わせて伸ばす（折り返し表示用） */
-function autosizeTitle(el: HTMLTextAreaElement | null) {
-  if (!el) return;
-  el.style.height = "0px";
-  el.style.height = `${el.scrollHeight}px`;
-}
-
 const AUTOSAVE_MS = 700;
 
-const fieldClass =
-  "h-9 border-border bg-card text-sm shadow-none focus-visible:border-border-hover";
+const bareControlClass =
+  "admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0";
 
 type Draft = {
   title: string;
@@ -50,8 +51,7 @@ function draftFromTask(task: WorkspaceTask): Draft {
     status: task.status,
     project_id: task.project_id ?? "",
     due_at: toDatetimeLocalValue(task.due_at),
-    estimated_minutes:
-      task.estimated_minutes != null ? String(task.estimated_minutes) : "",
+    estimated_minutes: formatEstimatedMinutesInput(task.estimated_minutes),
     progress_percent: String(task.progress_percent ?? 0),
     location: task.location ?? "",
   };
@@ -68,23 +68,6 @@ type Props = {
   onArchived: (taskId: string) => void;
 };
 
-function MetaRow({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex items-center gap-3 border-b border-border/70 py-3 last:border-b-0">
-      <span className="w-[4.75rem] shrink-0 text-xs text-muted-foreground">
-        {label}
-      </span>
-      <div className="min-w-0 flex-1">{children}</div>
-    </div>
-  );
-}
-
 export function TaskEditorPanel({
   task,
   projects,
@@ -97,10 +80,11 @@ export function TaskEditorPanel({
     "idle" | "dirty" | "saving" | "saved" | "error"
   >("idle");
   const [error, setError] = useState<string | null>(null);
+  // 作業枠の合計分（実績）。子セクションから通知を受ける
+  const [actualMinutes, setActualMinutes] = useState(0);
   const taskIdRef = useRef(task.id);
   const draftRef = useRef(draft);
   draftRef.current = draft;
-  const titleRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const next = draftFromTask(task);
@@ -109,11 +93,8 @@ export function TaskEditorPanel({
     setBaseline(next);
     setSaveState("idle");
     setError(null);
+    setActualMinutes(0);
   }, [task.id, task.updated_at]);
-
-  useLayoutEffect(() => {
-    autosizeTitle(titleRef.current);
-  }, [draft.title, task.id]);
 
   function patchDraft<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((prev) => {
@@ -124,23 +105,15 @@ export function TaskEditorPanel({
   }
 
   async function persist(current: Draft): Promise<boolean> {
-    const minutes = current.estimated_minutes.trim()
-      ? Number(current.estimated_minutes)
-      : null;
-    if (minutes != null && (!Number.isFinite(minutes) || minutes <= 0)) {
-      setError("見積もりは正の整数で入力してください");
+    const minutesParsed = parseEstimatedMinutesInput(current.estimated_minutes);
+    if (!minutesParsed.ok) {
+      setError(minutesParsed.error);
       setSaveState("error");
       return false;
     }
-    const progress = current.progress_percent.trim()
-      ? Number(current.progress_percent)
-      : 0;
-    if (
-      !Number.isFinite(progress) ||
-      progress < 0 ||
-      progress > 100
-    ) {
-      setError("進捗は 0〜100 で入力してください");
+    const progressParsed = parseProgressPercentInput(current.progress_percent);
+    if (!progressParsed.ok) {
+      setError(progressParsed.error);
       setSaveState("error");
       return false;
     }
@@ -162,8 +135,8 @@ export function TaskEditorPanel({
           status: current.status,
           project_id: current.project_id || null,
           due_at: fromDatetimeLocalValue(current.due_at),
-          estimated_minutes: minutes,
-          progress_percent: Math.round(progress),
+          estimated_minutes: minutesParsed.value,
+          progress_percent: progressParsed.value,
           location: current.location.trim() || null,
         }),
       });
@@ -235,14 +208,10 @@ export function TaskEditorPanel({
     draft.status !== "done" &&
     new Date(dueIso) < new Date();
 
-  const projectName =
-    projects.find((p) => p.id === draft.project_id)?.name ?? null;
-
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex shrink-0 items-start gap-3 border-b border-border px-5 pb-4 pt-6">
-        {/* タイトル1行目の行高に合わせてチェックを縦中央揃え */}
-        <span className="flex h-[1.375em] shrink-0 items-center text-[1.15rem] font-semibold leading-snug">
+        <span className="mt-0.5 flex shrink-0 items-center">
           <TaskCheckbox
             checked={draft.status === "done"}
             onChange={() => void toggleDone()}
@@ -250,17 +219,31 @@ export function TaskEditorPanel({
           />
         </span>
         <div className="min-w-0 flex-1">
-          <textarea
-            ref={titleRef}
+          <ClickToEditField
             value={draft.title}
-            onChange={(e) => {
-              patchDraft("title", e.target.value);
-              autosizeTitle(e.currentTarget);
+            emptyLabel="タイトル"
+            required
+            requiredMessage="タイトルは必須です"
+            ariaLabel="タイトル"
+            displayClassName="text-[1.15rem] font-semibold leading-snug tracking-tight text-foreground"
+            onSave={async (next) => {
+              patchDraft("title", next);
             }}
-            rows={1}
-            className="admin-input-bare block w-full resize-none overflow-hidden border-0 bg-transparent text-[1.15rem] font-semibold leading-snug tracking-tight text-foreground outline-none placeholder:text-muted-foreground/45"
-            placeholder="タイトル"
           />
+          <div className="mt-2">
+            <ClickToEditField
+              value={draft.body_md}
+              inputType="textarea"
+              emptyDisplay="hover-add"
+              emptyAddLabel="詳細を追加"
+              emptyLabel="詳細"
+              ariaLabel="詳細"
+              displayClassName="text-sm leading-relaxed text-foreground"
+              onSave={async (next) => {
+                patchDraft("body_md", next);
+              }}
+            />
+          </div>
           <p
             className={cn(
               "mt-1.5 text-[11px] transition-opacity duration-300",
@@ -286,9 +269,11 @@ export function TaskEditorPanel({
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-6 pt-1">
-        <div className="mb-1">
-          <MetaRow label="状態">
+      <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-6 pt-5">
+        <div className="flex gap-3">
+          <span className="w-5 shrink-0" aria-hidden />
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <ClickToEditRow label="状態" align="center">
             <Select
               value={draft.status}
               onChange={(e) => {
@@ -306,7 +291,7 @@ export function TaskEditorPanel({
                   return next;
                 });
               }}
-              className={fieldClass}
+              className={bareControlClass}
             >
               {Object.entries(TASK_STATUS_LABELS).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -314,15 +299,16 @@ export function TaskEditorPanel({
                 </option>
               ))}
             </Select>
-          </MetaRow>
-          <MetaRow label="期限">
+          </ClickToEditRow>
+
+          <ClickToEditRow label="期限" align="center">
             <div className="flex items-center gap-2">
               <Input
                 type="datetime-local"
                 value={draft.due_at}
                 onChange={(e) => patchDraft("due_at", e.target.value)}
                 className={cn(
-                  fieldClass,
+                  bareControlClass,
                   "min-w-0 flex-1",
                   dueOverdue && "text-red-600",
                 )}
@@ -331,7 +317,7 @@ export function TaskEditorPanel({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-9 shrink-0"
+                className="h-7 shrink-0 px-2.5 text-xs"
                 onClick={() =>
                   patchDraft("due_at", endOfTodayDatetimeLocalValue())
                 }
@@ -339,9 +325,10 @@ export function TaskEditorPanel({
                 今日中
               </Button>
             </div>
-          </MetaRow>
-          <MetaRow label="進捗">
-            <div className="flex items-center gap-2.5">
+          </ClickToEditRow>
+
+          <ClickToEditRow label="進捗" align="center">
+            <div className="flex items-center gap-1">
               <Input
                 type="number"
                 min={0}
@@ -351,10 +338,10 @@ export function TaskEditorPanel({
                 onChange={(e) =>
                   patchDraft("progress_percent", e.target.value)
                 }
-                className={cn(fieldClass, "max-w-[5.5rem]")}
+                className={cn(bareControlClass, "w-10 shrink-0")}
               />
-              <span className="text-xs text-muted-foreground">%</span>
-              <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
+              <span className="text-sm text-muted-foreground">%</span>
+              <div className="ml-2 h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
                 <div
                   className="h-full rounded-full bg-foreground/65 transition-[width] duration-200"
                   style={{
@@ -366,9 +353,11 @@ export function TaskEditorPanel({
                 />
               </div>
             </div>
-          </MetaRow>
-          <MetaRow label="見積もり">
-            <div className="flex items-center gap-2">
+          </ClickToEditRow>
+
+          <ClickToEditRow label="作業時間" align="center">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <span className="text-sm text-muted-foreground">見積</span>
               <Input
                 type="number"
                 min={1}
@@ -377,17 +366,22 @@ export function TaskEditorPanel({
                 onChange={(e) =>
                   patchDraft("estimated_minutes", e.target.value)
                 }
-                className={cn(fieldClass, "max-w-[5.5rem]")}
+                className={cn(bareControlClass, "w-12 shrink-0")}
                 placeholder="—"
+                aria-label="見積（分）"
               />
-              <span className="text-xs text-muted-foreground">分</span>
+              <span className="text-sm text-muted-foreground">分</span>
+              <span className="text-sm text-muted-foreground">
+                （実績：{actualMinutes} 分）
+              </span>
             </div>
-          </MetaRow>
-          <MetaRow label="Project">
+          </ClickToEditRow>
+
+          <ClickToEditRow label="Project" align="center">
             <Select
               value={draft.project_id}
               onChange={(e) => patchDraft("project_id", e.target.value)}
-              className={fieldClass}
+              className={bareControlClass}
             >
               <option value="">（なし）</option>
               {projects.map((project) => (
@@ -396,40 +390,31 @@ export function TaskEditorPanel({
                 </option>
               ))}
             </Select>
-          </MetaRow>
-        </div>
+          </ClickToEditRow>
 
-        <TaskWorkBlocksSection taskId={task.id} />
-
-        <div className="mt-6">
-          <p className="mb-2 text-xs font-medium text-muted-foreground">
-            メモ
-          </p>
-          <textarea
-            value={draft.body_md}
-            onChange={(e) => patchDraft("body_md", e.target.value)}
-            className="min-h-[148px] w-full resize-none rounded-lg border border-border bg-card px-3.5 py-3 text-sm leading-relaxed text-foreground shadow-none outline-none placeholder:text-muted-foreground/50 focus:border-border-hover"
-            placeholder="タスク全体のメモ…"
-          />
+          <ClickToEditRow label="作業枠">
+            <TaskWorkBlocksSection
+              taskId={task.id}
+              embedded
+              onActualMinutesChange={setActualMinutes}
+            />
+          </ClickToEditRow>
+          </div>
         </div>
 
         {error ? (
-          <p className="mt-2 text-sm text-red-600" role="alert">
+          <p className="mt-3 text-sm text-red-600" role="alert">
             {error}
           </p>
         ) : null}
       </div>
 
-      <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border px-5 py-3.5">
-        <span className="inline-flex min-w-0 items-center gap-1.5 truncate text-xs text-muted-foreground">
-          <Folder className="size-3.5 shrink-0 opacity-65" aria-hidden />
-          <span className="truncate">{projectName ?? "Project なし"}</span>
-        </span>
+      <div className="flex shrink-0 items-center justify-end gap-3 border-t border-border px-5 py-3.5">
         <Button
           type="button"
-          variant="destructive"
+          variant="outline"
           size="sm"
-          className="h-8 px-3"
+          className="h-8 border-red-200 px-3 text-red-600 hover:border-red-500 hover:bg-red-50 hover:text-red-700"
           onClick={() => void onArchive()}
         >
           アーカイブ

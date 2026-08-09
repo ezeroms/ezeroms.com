@@ -8,6 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  fromDatetimeLocalValue,
+  toDatetimeLocalValue,
+} from "@/lib/workspace/labels";
+import {
   contactDisplayName,
   formatActivityTags,
   type WorkspaceActivity,
@@ -24,19 +28,27 @@ type Props = {
   } | null;
 };
 
-function toLocalInput(iso: string | null): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
+/** 作成モーダルと同じ API 形の編集状態 */
+type FormState = {
+  title: string;
+  occurred_at: string;
+  ended_at: string;
+  location: string;
+  tags: string;
+  what_md: string;
+  notes_md: string;
+};
 
-function fromLocalInput(value: string): string | null {
-  if (!value) return null;
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toISOString();
+function formFromActivity(activity: WorkspaceActivity): FormState {
+  return {
+    title: activity.title,
+    occurred_at: toDatetimeLocalValue(activity.occurred_at),
+    ended_at: toDatetimeLocalValue(activity.ended_at),
+    location: activity.location ?? "",
+    tags: formatActivityTags(activity.tags),
+    what_md: activity.what_md ?? "",
+    notes_md: activity.notes_md ?? "",
+  };
 }
 
 export function ActivityDetailForm({
@@ -46,17 +58,10 @@ export function ActivityDetailForm({
   calendarLink,
 }: Props) {
   const router = useRouter();
-  const [title, setTitle] = useState(activity.title);
-  const [occurredAt, setOccurredAt] = useState(
-    toLocalInput(activity.occurred_at),
-  );
-  const [endedAt, setEndedAt] = useState(toLocalInput(activity.ended_at));
-  const [whatMd, setWhatMd] = useState(activity.what_md ?? "");
-  const [notesMd, setNotesMd] = useState(activity.notes_md ?? "");
-  const [location, setLocation] = useState(activity.location ?? "");
-  const [tags, setTags] = useState(formatActivityTags(activity.tags));
+  const [form, setForm] = useState(() => formFromActivity(activity));
+  // チェックボックス切替用。API の contact_ids 配列とは別で Set のまま扱う
   const [contactIds, setContactIds] = useState(
-    () => new Set(initialContacts.filter((f) => !f.deleted_at).map((f) => f.id)),
+    () => new Set(initialContacts.filter((c) => !c.deleted_at).map((c) => c.id)),
   );
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -64,12 +69,16 @@ export function ActivityDetailForm({
 
   const contactOptions = useMemo(
     () =>
-      allContacts.map((f) => ({
-        id: f.id,
-        label: contactDisplayName(f),
+      allContacts.map((contact) => ({
+        id: contact.id,
+        label: contactDisplayName(contact),
       })),
     [allContacts],
   );
+
+  function patchForm<K extends keyof FormState>(key: K, value: FormState[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
 
   function toggleContact(id: string) {
     setContactIds((prev) => {
@@ -93,13 +102,13 @@ export function ActivityDetailForm({
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            title: title.trim(),
-            occurred_at: fromLocalInput(occurredAt),
-            ended_at: fromLocalInput(endedAt),
-            what_md: whatMd,
-            notes_md: notesMd,
-            location: location.trim() || null,
-            tags,
+            title: form.title.trim(),
+            occurred_at: fromDatetimeLocalValue(form.occurred_at),
+            ended_at: fromDatetimeLocalValue(form.ended_at),
+            what_md: form.what_md,
+            notes_md: form.notes_md,
+            location: form.location.trim() || null,
+            tags: form.tags,
           }),
         },
       );
@@ -161,10 +170,10 @@ export function ActivityDetailForm({
         <Label htmlFor="activity-title">タイトル</Label>
         <Input
           id="activity-title"
-          value={title}
+          value={form.title}
           disabled={busy}
           required
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => patchForm("title", e.target.value)}
         />
       </div>
 
@@ -174,9 +183,9 @@ export function ActivityDetailForm({
           <Input
             id="activity-start"
             type="datetime-local"
-            value={occurredAt}
+            value={form.occurred_at}
             disabled={busy}
-            onChange={(e) => setOccurredAt(e.target.value)}
+            onChange={(e) => patchForm("occurred_at", e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -184,9 +193,9 @@ export function ActivityDetailForm({
           <Input
             id="activity-end"
             type="datetime-local"
-            value={endedAt}
+            value={form.ended_at}
             disabled={busy}
-            onChange={(e) => setEndedAt(e.target.value)}
+            onChange={(e) => patchForm("ended_at", e.target.value)}
           />
         </div>
       </div>
@@ -195,9 +204,9 @@ export function ActivityDetailForm({
         <Label htmlFor="activity-location">場所</Label>
         <Input
           id="activity-location"
-          value={location}
+          value={form.location}
           disabled={busy}
-          onChange={(e) => setLocation(e.target.value)}
+          onChange={(e) => patchForm("location", e.target.value)}
         />
       </div>
 
@@ -205,10 +214,10 @@ export function ActivityDetailForm({
         <Label htmlFor="activity-tags">タグ（カンマ区切り）</Label>
         <Input
           id="activity-tags"
-          value={tags}
+          value={form.tags}
           disabled={busy}
           placeholder="飲み, 旅行"
-          onChange={(e) => setTags(e.target.value)}
+          onChange={(e) => patchForm("tags", e.target.value)}
         />
       </div>
 
@@ -216,10 +225,10 @@ export function ActivityDetailForm({
         <Label htmlFor="activity-what">何をしたか</Label>
         <Textarea
           id="activity-what"
-          value={whatMd}
+          value={form.what_md}
           disabled={busy}
           className="min-h-[100px]"
-          onChange={(e) => setWhatMd(e.target.value)}
+          onChange={(e) => patchForm("what_md", e.target.value)}
         />
       </div>
 
@@ -227,10 +236,10 @@ export function ActivityDetailForm({
         <Label htmlFor="activity-notes">どんな話をしたかなど</Label>
         <Textarea
           id="activity-notes"
-          value={notesMd}
+          value={form.notes_md}
           disabled={busy}
           className="min-h-[120px]"
-          onChange={(e) => setNotesMd(e.target.value)}
+          onChange={(e) => patchForm("notes_md", e.target.value)}
         />
       </div>
 
@@ -249,16 +258,16 @@ export function ActivityDetailForm({
           </p>
         ) : (
           <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {contactOptions.map((f) => (
-              <li key={f.id}>
+            {contactOptions.map((option) => (
+              <li key={option.id}>
                 <label className="flex cursor-pointer items-center gap-2 text-sm">
                   <input
                     type="checkbox"
-                    checked={contactIds.has(f.id)}
+                    checked={contactIds.has(option.id)}
                     disabled={busy}
-                    onChange={() => toggleContact(f.id)}
+                    onChange={() => toggleContact(option.id)}
                   />
-                  {f.label}
+                  {option.label}
                 </label>
               </li>
             ))}
@@ -288,7 +297,7 @@ export function ActivityDetailForm({
       ) : null}
 
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={busy || !title.trim()}>
+        <Button type="submit" disabled={busy || !form.title.trim()}>
           保存
         </Button>
         <Button

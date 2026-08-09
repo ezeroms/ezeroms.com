@@ -35,6 +35,7 @@ function matchesQuery(contact: WorkspaceContact, q: string): boolean {
     contact.middle_name_kana,
     contact.family_name_en,
     contact.given_name_en,
+    contact.former_family_name,
     contact.english_name,
     contact.nickname,
     ...contact.tags,

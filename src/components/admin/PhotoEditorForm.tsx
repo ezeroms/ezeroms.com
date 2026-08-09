@@ -5,6 +5,11 @@ import { FormEvent, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, X } from "lucide-react";
 import { Alert } from "@/components/ui/alert";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
+import {
+  nowDatetimeLocalValue,
+  toDatetimeLocalValue,
+} from "@/lib/workspace/labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,16 +24,6 @@ import {
 import { cn } from "@/lib/cn";
 
 /** 1Password / LastPass などの自動入力を抑止 */
-const IGNORE_PASSWORD_MANAGERS = {
-  "data-1p-ignore": true,
-  "data-lpignore": "true",
-  autoComplete: "off",
-} as const;
-
-function localDatetimeValue(d = new Date()) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export const PHOTO_EDITOR_FORM_ID = "photo-editor-form";
 
@@ -77,8 +72,8 @@ export function PhotoEditorForm({
       filename,
       slug: initial?.slug ?? "",
       date: initial?.date
-        ? localDatetimeValue(new Date(initial.date))
-        : localDatetimeValue(),
+        ? toDatetimeLocalValue(initial.date)
+      : nowDatetimeLocalValue(),
       location: initial?.location ?? "",
       camera: initial?.camera ?? "",
       imageUrl: initial?.image_url ?? "",
@@ -267,10 +262,7 @@ export function PhotoEditorForm({
       id={formId}
       className="flex flex-col gap-5"
       onSubmit={onSubmit}
-      autoComplete="off"
-      data-1p-ignore
-      data-lpignore="true"
-      data-form-type="other"
+      {...ignorePasswordManagersProps}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       {ok && !onSaved ? (
@@ -409,7 +401,7 @@ export function PhotoEditorForm({
           }}
           placeholder="例: abcdefghijklmnop.jpg"
           required
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -426,7 +418,7 @@ export function PhotoEditorForm({
           required
           pattern="[A-Za-z0-9_-]+"
           title="半角英数字・ハイフン・アンダースコア"
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -439,7 +431,7 @@ export function PhotoEditorForm({
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -450,7 +442,7 @@ export function PhotoEditorForm({
             onChange={(e) =>
               setStatus(e.target.value === "draft" ? "draft" : "published")
             }
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           >
             <option value="published">公開</option>
             <option value="draft">非公開</option>
@@ -466,7 +458,7 @@ export function PhotoEditorForm({
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="任意"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -476,7 +468,7 @@ export function PhotoEditorForm({
             value={camera}
             onChange={(e) => setCamera(e.target.value)}
             placeholder="任意"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>
@@ -489,7 +481,7 @@ export function PhotoEditorForm({
           onChange={(e) => setCaption(e.target.value)}
           rows={5}
           placeholder="管理用のメモ（公開ページには表示されません）"
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 

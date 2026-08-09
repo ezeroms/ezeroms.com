@@ -23,6 +23,7 @@ export function readContactBody(
     family_name_en: str("family_name_en"),
     given_name_en: str("given_name_en"),
     middle_name_en: str("middle_name_en"),
+    former_family_name: str("former_family_name"),
     english_name: str("english_name"),
     nickname: str("nickname"),
     birthday: str("birthday"),

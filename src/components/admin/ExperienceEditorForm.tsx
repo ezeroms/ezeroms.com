@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OgImageField } from "@/components/admin/OgImageField";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
+import { dateOnlyValue } from "@/lib/workspace/labels";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,11 +13,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const EXPERIENCE_EDITOR_FORM_ID = "experience-editor-form";
 
-const IGNORE_PASSWORD_MANAGERS = {
-  "data-1p-ignore": true,
-  "data-lpignore": "true",
-  autoComplete: "off",
-} as const;
 
 const EMPTY_PROJECTS_JSON = "[]";
 
@@ -39,10 +36,6 @@ export type ExperienceEditorInitial = {
   status: "published" | "draft";
 };
 
-function dateOnlyValue(raw?: string | null) {
-  if (!raw?.trim()) return "";
-  return raw.trim().slice(0, 10);
-}
 
 export function ExperienceEditorForm({
   initial,
@@ -182,10 +175,7 @@ export function ExperienceEditorForm({
       id={formId}
       className="flex flex-col gap-4"
       onSubmit={onSubmit}
-      autoComplete="off"
-      data-1p-ignore
-      data-lpignore="true"
-      data-form-type="other"
+      {...ignorePasswordManagersProps}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
 
@@ -197,7 +187,7 @@ export function ExperienceEditorForm({
           onChange={(e) => setOrganization(e.target.value)}
           placeholder="株式会社…"
           required
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -209,7 +199,7 @@ export function ExperienceEditorForm({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="デザイナー"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -219,7 +209,7 @@ export function ExperienceEditorForm({
             value={employmentType}
             onChange={(e) => setEmploymentType(e.target.value)}
             placeholder="正社員 / 業務委託"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>
@@ -230,7 +220,7 @@ export function ExperienceEditorForm({
           id="exp-role"
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -243,7 +233,7 @@ export function ExperienceEditorForm({
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             required
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -253,7 +243,7 @@ export function ExperienceEditorForm({
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>
@@ -266,7 +256,7 @@ export function ExperienceEditorForm({
           onChange={(e) => setSummary(e.target.value)}
           rows={3}
           placeholder="担当内容の要約…"
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -277,7 +267,7 @@ export function ExperienceEditorForm({
           value={business}
           onChange={(e) => setBusiness(e.target.value)}
           rows={2}
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -289,7 +279,7 @@ export function ExperienceEditorForm({
             value={employeeCount}
             onChange={(e) => setEmployeeCount(e.target.value)}
             placeholder="175名"
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -298,7 +288,7 @@ export function ExperienceEditorForm({
             id="exp-capital"
             value={capital}
             onChange={(e) => setCapital(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
       </div>
@@ -310,7 +300,7 @@ export function ExperienceEditorForm({
           value={note}
           onChange={(e) => setNote(e.target.value)}
           placeholder="売却・社名変更など"
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -321,7 +311,7 @@ export function ExperienceEditorForm({
           value={bodyMd}
           onChange={(e) => setBodyMd(e.target.value)}
           rows={4}
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -334,7 +324,7 @@ export function ExperienceEditorForm({
           rows={8}
           className="font-mono text-xs"
           spellCheck={false}
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
         <p className="m-0 text-xs text-muted-foreground">
           title / description / start_date / end_date / role / team_scale /
@@ -357,7 +347,7 @@ export function ExperienceEditorForm({
             type="number"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           />
         </div>
         <div className="space-y-2">
@@ -368,7 +358,7 @@ export function ExperienceEditorForm({
             onChange={(e) =>
               setStatus(e.target.value === "draft" ? "draft" : "published")
             }
-            {...IGNORE_PASSWORD_MANAGERS}
+            {...ignorePasswordManagersProps}
           >
             <option value="published">公開</option>
             <option value="draft">非公開</option>

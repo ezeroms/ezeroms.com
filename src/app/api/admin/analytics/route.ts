@@ -5,7 +5,7 @@ import { getSessionUser } from "@/lib/supabase/auth";
 import type { AnalyticsRange } from "@/types/analytics";
 
 function parseRange(raw: string | null): AnalyticsRange {
-  if (raw === "30" || raw === "90" || raw === "7") return raw;
+  if (raw === "1" || raw === "30" || raw === "90" || raw === "7") return raw;
   return "7";
 }
 

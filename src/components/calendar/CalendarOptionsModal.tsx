@@ -536,6 +536,6 @@ export function CalendarOptionsModal({
         </div>
       </div>
     </div>,
-    document.querySelector(".admin-root") ?? document.body,
+    document.querySelector(".admin-app") ?? document.querySelector(".admin-root") ?? document.body,
   );
 }

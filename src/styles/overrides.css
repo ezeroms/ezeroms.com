@@ -174,22 +174,24 @@ body.is-home .layout-body {
 
 /*
  * Shared content card (Notes / Column list & detail).
- * Base matches Column list: soft surface, no resting outline.
- * `.content-card--link` shows a line only on hover / focus-within.
+ * TRIAL: resting outline using table-header border color (`--border` / #e8eaed).
+ * `.content-card--link` strengthens the line on hover / focus-within.
  */
 .content-card {
-  border: none;
+  border: 1px solid hsl(var(--border));
   box-shadow: none;
 }
 
 .content-card--link {
-  transition: box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .content-card--link:hover,
 .content-card--link:focus-within {
-  /* Slightly stronger than sidebar `--border` (#E7E7E9) */
-  box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.22);
+  border-color: hsl(var(--border-hover));
+  box-shadow: none;
 }
 
 /* Share button tooltip — above icon center, short delay, pop up from below */

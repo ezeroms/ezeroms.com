@@ -21,6 +21,11 @@ export function toDatetimeLocalValue(iso: string | null | undefined): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+/** いまのローカル時刻を datetime-local 用文字列にする（新規作成フォームの初期値向け） */
+export function nowDatetimeLocalValue(d = new Date()): string {
+  return toDatetimeLocalValue(d.toISOString());
+}
+
 /** datetime-local value for end of local today (23:59). */
 export function endOfTodayDatetimeLocalValue(d = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -33,6 +38,12 @@ export function fromDatetimeLocalValue(value: string): string | null {
   const d = new Date(v);
   if (Number.isNaN(d.getTime())) return null;
   return d.toISOString();
+}
+
+/** date / date-only フィールド用。先頭 10 文字（YYYY-MM-DD）だけ残す。 */
+export function dateOnlyValue(raw?: string | null): string {
+  if (!raw?.trim()) return "";
+  return raw.trim().slice(0, 10);
 }
 
 export const TASK_STATUS_LABELS: Record<string, string> = {

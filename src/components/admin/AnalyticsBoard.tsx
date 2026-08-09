@@ -5,10 +5,12 @@ import { useState } from "react";
 import { MetricCard } from "@/components/charts/MetricCard";
 import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { Button } from "@/components/ui/button";
+import { surfaceCard } from "@/lib/site/card-styles";
 import { cn } from "@/lib/cn";
 import type { AnalyticsRange, AnalyticsReport } from "@/types/analytics";
 
 const RANGES: { id: AnalyticsRange; label: string }[] = [
+  { id: "1", label: "24時間" },
   { id: "7", label: "7日" },
   { id: "30", label: "30日" },
   { id: "90", label: "90日" },
@@ -73,7 +75,7 @@ export function AnalyticsBoard({
 
   if (!configured) {
     return (
-      <div className="space-y-3 rounded-md border border-border bg-card p-4 text-sm text-muted-foreground">
+      <div className={surfaceCard({ className: "space-y-3 p-4 text-sm text-muted-foreground" })}>
         <p className="m-0">
           Analytics Data API が未設定です。ENV_SETUP.md の手順で次を設定してください。
         </p>
@@ -176,7 +178,7 @@ export function AnalyticsBoard({
         />
       </div>
 
-      <section className="rounded-md border border-border bg-card p-4">
+      <section className={surfaceCard({ className: "p-4" })}>
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           日別 Views
         </h2>
@@ -188,7 +190,7 @@ export function AnalyticsBoard({
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="overflow-hidden rounded-md border border-border bg-card">
+        <section className={surfaceCard({ className: "overflow-hidden" })}>
           <h2 className="m-0 border-b border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             人気ページ
           </h2>
@@ -238,7 +240,7 @@ export function AnalyticsBoard({
           )}
         </section>
 
-        <section className="overflow-hidden rounded-md border border-border bg-card">
+        <section className={surfaceCard({ className: "overflow-hidden" })}>
           <h2 className="m-0 border-b border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             主な流入元
           </h2>

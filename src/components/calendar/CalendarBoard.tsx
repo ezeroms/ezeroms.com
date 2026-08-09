@@ -16,6 +16,7 @@ import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskEditModal } from "@/components/tasks/TaskEditModal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { surfaceCard } from "@/lib/site/card-styles";
 import type { WeekStartsOn } from "@/lib/workspace/calendar/time";
 import {
   DEFAULT_PRIMARY_LABEL,
@@ -109,7 +110,7 @@ export function CalendarBoard({
     return (
       <>
         <AdminPageHeader title={title} description={description} />
-        <div className="rounded-md border border-border bg-card p-4 text-sm text-muted-foreground">
+        <div className={surfaceCard({ className: "p-4 text-sm text-muted-foreground" })}>
           Google OAuth が未設定です。.env.local に{" "}
           <code className="text-xs">GOOGLE_CLIENT_ID</code> と{" "}
           <code className="text-xs">GOOGLE_CLIENT_SECRET</code>{" "}
@@ -133,7 +134,7 @@ export function CalendarBoard({
             </Button>
           }
         />
-        <div className="flex flex-col gap-3 rounded-md border border-border bg-card p-4">
+        <div className={surfaceCard({ className: "flex flex-col gap-3 p-4" })}>
           <p className="m-0 text-sm text-muted-foreground">
             Googleカレンダーを接続すると、予定の表示と Task
             からの作業枠作成ができます。書き込みは承認後のみです。

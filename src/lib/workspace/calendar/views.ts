@@ -12,6 +12,51 @@ type RangeSetter = Parameters<typeof setRangeForWeek>[0];
 /** Views that slide by N days from the selected date (not week-aligned). */
 export const SLIDING_MULTI_DAY_VIEWS = new Set(["two-days", "four-days"]);
 
+/** ドロップダウンに出すビュー名（schedule-x の name） */
+export const WORKSPACE_CALENDAR_VIEW_NAMES = [
+  "day",
+  "two-days",
+  "four-days",
+  "week",
+  "month-grid",
+] as const;
+
+export type WorkspaceCalendarViewName =
+  (typeof WORKSPACE_CALENDAR_VIEW_NAMES)[number];
+
+export const DEFAULT_WORKSPACE_CALENDAR_VIEW: WorkspaceCalendarViewName =
+  "week";
+
+const VIEW_STORAGE_KEY = "workspace.calendar.view";
+
+export function isWorkspaceCalendarViewName(
+  value: string,
+): value is WorkspaceCalendarViewName {
+  return (WORKSPACE_CALENDAR_VIEW_NAMES as readonly string[]).includes(value);
+}
+
+/** 前回選んだビューを読む。無ければ Week。 */
+export function readStoredCalendarView(): WorkspaceCalendarViewName {
+  if (typeof window === "undefined") return DEFAULT_WORKSPACE_CALENDAR_VIEW;
+  try {
+    const saved = localStorage.getItem(VIEW_STORAGE_KEY);
+    if (saved && isWorkspaceCalendarViewName(saved)) return saved;
+  } catch {
+    // localStorage 不可環境では既定の Week を使う
+  }
+  return DEFAULT_WORKSPACE_CALENDAR_VIEW;
+}
+
+/** ビュー切替を localStorage に残す（ページ再訪時の復元用） */
+export function writeStoredCalendarView(view: string): void {
+  if (!isWorkspaceCalendarViewName(view)) return;
+  try {
+    localStorage.setItem(VIEW_STORAGE_KEY, view);
+  } catch {
+    // 永続化失敗は無視（セッション中の表示はそのまま）
+  }
+}
+
 type SlidingMultiDayApp = {
   calendarState: { view: { value: string } };
   config: { timezone: { value: string } };

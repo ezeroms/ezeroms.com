@@ -23,6 +23,12 @@ body:has(.admin-root) {
   box-sizing: border-box;
 }
 
+/* Match public `.layout-sidebar` — right edge only (site-shell.css) */
+.admin-root .admin-sidebar {
+  border: 0;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
 /* legacy header.css targets bare `header` */
 .admin-root header {
   position: static;
@@ -62,6 +68,92 @@ body:has(.admin-root) {
 .admin-root button.border-0.bg-accent,
 .admin-root button[class*="border-0"][class*="bg-accent"] {
   background-color: hsl(var(--accent));
+}
+
+/* Segmented tabs: UA の立体枠を消し、フラットなセグメントにする */
+.admin-root .admin-segmented-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.375rem;
+  background-color: hsl(var(--muted));
+}
+
+.admin-root .admin-segmented-tabs > button {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  margin: 0;
+  border: 0 !important;
+  border-radius: calc(0.375rem - 2px);
+  padding: 0.375rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.25;
+  box-shadow: none !important;
+  background-color: transparent;
+  color: hsl(var(--muted-foreground));
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.admin-root .admin-segmented-tabs > button:hover {
+  color: hsl(var(--foreground));
+}
+
+.admin-root .admin-segmented-tabs > button[aria-selected="true"] {
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+.admin-root .admin-segmented-tabs > button:focus-visible {
+  outline: 2px solid hsl(var(--border-hover));
+  outline-offset: 1px;
+}
+
+/* Contact modal: Odoo-like underline tabs under the profile header */
+.admin-root .admin-underline-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0 1.5rem;
+  overflow-x: auto;
+}
+
+.admin-root .admin-underline-tabs > button {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  margin: 0;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  box-shadow: none !important;
+  background-color: transparent;
+  color: hsl(var(--muted-foreground));
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.admin-root .admin-underline-tabs > button:hover {
+  color: hsl(var(--foreground));
+}
+
+.admin-root .admin-underline-tabs > button[aria-selected="true"] {
+  color: hsl(var(--foreground));
+  border-bottom-color: hsl(var(--foreground)) !important;
+}
+
+.admin-root .admin-underline-tabs > button:focus-visible {
+  outline: 2px solid hsl(var(--border-hover));
+  outline-offset: 1px;
 }
 
 .admin-root button[class*="border-border"],
@@ -182,6 +274,66 @@ body:has(.admin-root) {
   outline: none;
   border-color: hsl(var(--border-hover)); /* コラムカード hover と同じ #6E6D79 */
   box-shadow: none !important;
+}
+
+/* Click-to-edit: 表示テキストと同じ位置で入力（枠・背景・UA余白なし） */
+.admin-root input.cte-input,
+.admin-root textarea.cte-input {
+  border: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  margin: 0 !important;
+  padding: 0.125rem 0 !important;
+}
+
+.admin-root textarea.cte-input {
+  overflow: hidden;
+  field-sizing: content;
+}
+
+.admin-root input.cte-input:focus,
+.admin-root textarea.cte-input:focus {
+  border: 0 !important;
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/*
+ * 閲覧寄りのメタ入力（状態・期限など）。
+ * .admin-root input/select の枠強制より優先させる。
+ */
+.admin-root input.admin-input-bare,
+.admin-root textarea.admin-input-bare,
+.admin-root select.admin-input-bare {
+  border: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.admin-root input.admin-input-bare:focus,
+.admin-root textarea.admin-input-bare:focus,
+.admin-root select.admin-input-bare:focus {
+  border: 0 !important;
+  background-color: transparent !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* number のスピンボタンは見積などでは不要なので隠す */
+.admin-root input.admin-input-bare[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.admin-root input.admin-input-bare[type="number"]::-webkit-inner-spin-button,
+.admin-root input.admin-input-bare[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* TipTap など contenteditable 枠も input/textarea と同じ線・フォーカス */

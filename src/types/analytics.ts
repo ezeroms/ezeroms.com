@@ -1,4 +1,4 @@
-export type AnalyticsRange = "7" | "30" | "90";
+export type AnalyticsRange = "1" | "7" | "30" | "90";
 
 export type AnalyticsMetricSummary = {
   views: number;

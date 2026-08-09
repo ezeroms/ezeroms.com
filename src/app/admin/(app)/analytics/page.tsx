@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 const navItem = findAdminNavItem("/admin/analytics/")!;
 
 function parseRange(raw: string | undefined): AnalyticsRange {
-  if (raw === "30" || raw === "90" || raw === "7") return raw;
+  if (raw === "1" || raw === "30" || raw === "90" || raw === "7") return raw;
   return "7";
 }
 

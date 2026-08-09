@@ -12,8 +12,9 @@ import {
   type WorkspaceContactDetail,
 } from "@/types/contacts";
 
-const SELECT =
-  "id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, family_name_en, given_name_en, middle_name_en, english_name, nickname, birthday, birthday_year_known, notes_md, is_friend, tags, created_at, updated_at, deleted_at";
+/** contacts テーブルの標準カラム一覧（activities の embed でも共有） */
+export const CONTACT_SELECT =
+  "id, family_name, given_name, middle_name, family_name_kana, given_name_kana, middle_name_kana, family_name_en, given_name_en, middle_name_en, former_family_name, english_name, nickname, birthday, birthday_year_known, notes_md, is_friend, tags, created_at, updated_at, deleted_at";
 
 const PHONE_SELECT =
   "id, contact_id, label, value, sort_order, created_at, updated_at";
@@ -43,6 +44,7 @@ export type ContactWriteInput = {
   family_name_en?: string | null;
   given_name_en?: string | null;
   middle_name_en?: string | null;
+  former_family_name?: string | null;
   english_name?: string | null;
   nickname?: string | null;
   birthday?: string | null;
@@ -122,6 +124,8 @@ function normalizeWrite(input: ContactWriteInput): Record<string, unknown> {
     row.given_name_en = trimOrNull(input.given_name_en);
   if (input.middle_name_en !== undefined)
     row.middle_name_en = trimOrNull(input.middle_name_en);
+  if (input.former_family_name !== undefined)
+    row.former_family_name = trimOrNull(input.former_family_name);
   if (input.english_name !== undefined)
     row.english_name = trimOrNull(input.english_name);
   if (input.nickname !== undefined) row.nickname = trimOrNull(input.nickname);
@@ -143,7 +147,7 @@ export async function listContacts(
   const limit = filter.limit ?? 200;
   let q = getWorkspaceAdmin()
     .from("contacts")
-    .select(SELECT)
+    .select(CONTACT_SELECT)
     .order("updated_at", { ascending: false })
     .limit(limit);
 
@@ -172,6 +176,7 @@ export async function listContacts(
         c.given_name_kana,
         c.family_name_en,
         c.given_name_en,
+        c.former_family_name,
         c.english_name,
         c.nickname,
         ...c.tags,
@@ -188,7 +193,7 @@ export async function listContacts(
 export async function getContact(id: string): Promise<WorkspaceContact | null> {
   const { data, error } = await getWorkspaceAdmin()
     .from("contacts")
-    .select(SELECT)
+    .select(CONTACT_SELECT)
     .eq("id", id)
     .maybeSingle();
   if (error) throw new Error(error.message);
@@ -314,7 +319,7 @@ export async function createContact(
   const { data, error } = await getWorkspaceAdmin()
     .from("contacts")
     .insert(row)
-    .select(SELECT)
+    .select(CONTACT_SELECT)
     .single();
   if (error) throw new Error(error.message);
   const contact = normalizeContact(data as WorkspaceContact);
@@ -382,7 +387,7 @@ export async function softDeleteContact(
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .is("deleted_at", null)
-    .select(SELECT)
+    .select(CONTACT_SELECT)
     .single();
   if (error) throw new Error(error.message);
   return normalizeContact(data as WorkspaceContact);

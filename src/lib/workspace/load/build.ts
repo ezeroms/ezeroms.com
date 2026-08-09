@@ -96,6 +96,7 @@ export async function buildWorkloadSnapshot(): Promise<WorkloadBuildResult> {
       starts_at: b.starts_at,
       ends_at: b.ends_at,
       taskStatus: b.task.status,
+      taskTitle: b.task.title,
     })),
     tasks,
     now,

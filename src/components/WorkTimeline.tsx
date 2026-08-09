@@ -7,6 +7,7 @@ import {
   workYear,
 } from "@/lib/content/work-filter";
 import { cn } from "@/lib/cn";
+import { cardOutlineClass } from "@/lib/site/card-styles";
 
 type Props = {
   items: Work[];
@@ -60,7 +61,7 @@ export function WorkTimeline({ items }: Props) {
               </p>
             ) : null}
 
-            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+            <div className={cn("rounded-xl bg-card p-6", cardOutlineClass)}>
               <Link
                 href={`/works/creative/${item.slug}/`}
                 className="block text-inherit no-underline"

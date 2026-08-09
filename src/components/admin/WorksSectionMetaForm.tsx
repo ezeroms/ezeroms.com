@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OgImageField } from "@/components/admin/OgImageField";
+import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +12,6 @@ import { Select } from "@/components/ui/select";
 
 export const WORKS_SECTION_META_FORM_ID = "works-section-meta-form";
 
-const IGNORE_PASSWORD_MANAGERS = {
-  "data-1p-ignore": true,
-  "data-lpignore": "true",
-  autoComplete: "off",
-} as const;
 
 export type SectionPublishStatus = "published" | "private";
 
@@ -89,10 +85,7 @@ export function WorksSectionMetaForm({
       id={formId}
       className="flex flex-col gap-4"
       onSubmit={onSubmit}
-      autoComplete="off"
-      data-1p-ignore
-      data-lpignore="true"
-      data-form-type="other"
+      {...ignorePasswordManagersProps}
     >
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       {saved ? <Alert variant="success">ページ設定を保存しました</Alert> : null}
@@ -104,7 +97,7 @@ export function WorksSectionMetaForm({
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           required
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         />
       </div>
 
@@ -116,7 +109,7 @@ export function WorksSectionMetaForm({
           onChange={(e) =>
             setStatus(e.target.value === "private" ? "private" : "published")
           }
-          {...IGNORE_PASSWORD_MANAGERS}
+          {...ignorePasswordManagersProps}
         >
           <option value="published">公開</option>
           <option value="private">非公開</option>

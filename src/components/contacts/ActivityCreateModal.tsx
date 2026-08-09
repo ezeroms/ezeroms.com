@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  fromDatetimeLocalValue,
+  toDatetimeLocalValue,
+} from "@/lib/workspace/labels";
+import {
   compareContactsByKana,
   contactDisplayName,
   type WorkspaceContact,
@@ -31,16 +35,11 @@ type FormState = {
   contactIds: string[];
 };
 
-function nowLocalInput(): string {
-  const d = new Date();
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
 function emptyForm(): FormState {
   return {
     title: "",
-    occurred_at: nowLocalInput(),
+    // 新規作成時は「いま」を開始時刻の初期値にする
+    occurred_at: toDatetimeLocalValue(new Date().toISOString()),
     ended_at: "",
     location: "",
     tags: "",
@@ -48,13 +47,6 @@ function emptyForm(): FormState {
     notes_md: "",
     contactIds: [],
   };
-}
-
-function fromLocalInput(value: string): string | null {
-  if (!value) return null;
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toISOString();
 }
 
 export function ActivityCreateModal({ open, onClose, contacts }: Props) {
@@ -125,8 +117,8 @@ export function ActivityCreateModal({ open, onClose, contacts }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
-          occurred_at: fromLocalInput(form.occurred_at),
-          ended_at: fromLocalInput(form.ended_at),
+          occurred_at: fromDatetimeLocalValue(form.occurred_at),
+          ended_at: fromDatetimeLocalValue(form.ended_at),
           location: form.location.trim() || null,
           tags: form.tags,
           what_md: form.what_md || null,

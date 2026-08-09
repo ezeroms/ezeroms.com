@@ -3,9 +3,14 @@
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
+import { BirthdayPartsFields } from "@/components/contacts/BirthdayPartsFields";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { contactHasIdentity } from "@/types/contacts";
+import {
+  contactHasIdentity,
+  inputPartsToBirthday,
+  type BirthdayInputParts,
+} from "@/types/contacts";
 
 const FORM_ID = "contact-create-form";
 
@@ -23,10 +28,10 @@ type FormState = {
   family_name_kana: string;
   given_name_kana: string;
   middle_name_kana: string;
+  former_family_name: string;
   english_name: string;
   nickname: string;
-  birthday: string;
-  birthday_year_known: boolean;
+  birthdayParts: BirthdayInputParts;
   is_friend: boolean;
   tags: string;
   company_name: string;
@@ -41,10 +46,10 @@ function emptyForm(defaultIsFriend: boolean): FormState {
     family_name_kana: "",
     given_name_kana: "",
     middle_name_kana: "",
+    former_family_name: "",
     english_name: "",
     nickname: "",
-    birthday: "",
-    birthday_year_known: false,
+    birthdayParts: { year: "", month: "", day: "" },
     is_friend: defaultIsFriend,
     tags: "",
     company_name: "",
@@ -109,6 +114,12 @@ export function ContactCreateModal({
     setSaving(true);
     setError(null);
     try {
+      const birthdaySerialized = inputPartsToBirthday(form.birthdayParts);
+      if (birthdaySerialized.error) {
+        setError(birthdaySerialized.error);
+        setSaving(false);
+        return;
+      }
       const employments = form.company_name.trim()
         ? [
             {
@@ -128,10 +139,11 @@ export function ContactCreateModal({
           family_name_kana: form.family_name_kana || null,
           given_name_kana: form.given_name_kana || null,
           middle_name_kana: form.middle_name_kana || null,
+          former_family_name: form.former_family_name || null,
           english_name: form.english_name || null,
           nickname: form.nickname || null,
-          birthday: form.birthday || null,
-          birthday_year_known: form.birthday_year_known,
+          birthday: birthdaySerialized.birthday,
+          birthday_year_known: birthdaySerialized.birthday_year_known,
           is_friend: form.is_friend,
           tags: form.tags,
           employments,
@@ -231,10 +243,10 @@ export function ContactCreateModal({
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            id="create-english"
-            label="イングリッシュネーム"
-            value={form.english_name}
-            onChange={(v) => patch("english_name", v)}
+            id="create-former-family"
+            label="旧姓"
+            value={form.former_family_name}
+            onChange={(v) => patch("former_family_name", v)}
             disabled={saving}
           />
           <Field
@@ -242,6 +254,13 @@ export function ContactCreateModal({
             label="ニックネーム"
             value={form.nickname}
             onChange={(v) => patch("nickname", v)}
+            disabled={saving}
+          />
+          <Field
+            id="create-english"
+            label="イングリッシュネーム"
+            value={form.english_name}
+            onChange={(v) => patch("english_name", v)}
             disabled={saving}
           />
         </div>
@@ -274,26 +293,16 @@ export function ContactCreateModal({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="create-birthday">誕生日</Label>
-            <Input
-              id="create-birthday"
-              type="date"
-              value={form.birthday}
-              disabled={saving}
-              onChange={(e) => patch("birthday", e.target.value)}
-            />
-          </div>
-          <label className="flex items-end gap-2 pb-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.birthday_year_known}
-              disabled={saving || !form.birthday}
-              onChange={(e) => patch("birthday_year_known", e.target.checked)}
-            />
-            年も正確
-          </label>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="create-birthday-year">誕生日</Label>
+          <BirthdayPartsFields
+            idPrefix="create-birthday"
+            parts={form.birthdayParts}
+            disabled={saving}
+            onChange={(birthdayParts) =>
+              setForm((prev) => ({ ...prev, birthdayParts }))
+            }
+          />
         </div>
       </form>
     </AdminContentModal>
