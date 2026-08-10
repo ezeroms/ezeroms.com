@@ -4,6 +4,8 @@ import { createCleanPhotoAssets } from "@/lib/media/photo-clean";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
+export const maxDuration = 60;
+
 const FOLDER_RE = /^[a-z0-9_-]{1,64}$/i;
 const MAX_FILENAME_ATTEMPTS = 12;
 
@@ -70,7 +72,9 @@ export async function POST(request: NextRequest) {
           upsert: false,
         });
 
-      if (originalError) continue;
+      if (originalError) {
+        continue;
+      }
 
       const originalPublic = sb.storage.from("media").getPublicUrl(originalPath);
       return NextResponse.json({

@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
 import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
+import { compressImageForUpload } from "@/lib/media/client-compress-image";
 import {
   nowDatetimeLocalValue,
   toDatetimeLocalValue,
@@ -92,23 +93,46 @@ export function NotesEditorForm({
   }, [dirty, onDirtyChange]);
 
   async function uploadBodyImage(file: File): Promise<string | null> {
-    const form = new FormData();
-    form.set("file", file);
-    form.set("folder", mediaFolder);
-    const res = await fetch("/api/admin/notes/media/upload/", {
-      method: "POST",
-      body: form,
-    });
-    const data = (await res.json()) as {
-      error?: string;
-      image_url?: string;
-    };
-    if (!res.ok || !data.image_url) {
-      setError(data.error || "画像のアップロードに失敗しました");
+    try {
+      const prepared = await compressImageForUpload(file);
+      const form = new FormData();
+      form.set("file", prepared);
+      form.set("folder", mediaFolder);
+      const res = await fetch("/api/admin/notes/media/upload/", {
+        method: "POST",
+        body: form,
+      });
+      const rawText = await res.text();
+      let data: { error?: string; image_url?: string; path?: string } = {};
+      try {
+        data = JSON.parse(rawText) as typeof data;
+      } catch {
+        const tooLarge =
+          res.status === 413 ||
+          /request entity too large|payload too large|body.*limit/i.test(
+            rawText,
+          );
+        setError(
+          tooLarge
+            ? "画像が大きすぎてアップロードできませんでした。もう少し小さい画像でお試しください。"
+            : `画像アップロードの応答が不正です（HTTP ${res.status}）`,
+        );
+        return null;
+      }
+      if (!res.ok || !data.image_url) {
+        setError(data.error || "画像のアップロードに失敗しました");
+        return null;
+      }
+      setError(null);
+      return data.image_url;
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "画像のアップロードに失敗しました",
+      );
       return null;
     }
-    setError(null);
-    return data.image_url;
   }
 
   async function onSubmit(e: FormEvent) {
@@ -129,14 +153,14 @@ export function NotesEditorForm({
         og_image: ogImage,
         status,
       };
-      const res = await fetch(
-        isEdit ? `/api/admin/notes/${initial!.slug}/` : "/api/admin/notes/",
-        {
-          method: isEdit ? "PATCH" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      );
+      const url = isEdit
+        ? `/api/admin/notes/${initial!.slug}/`
+        : "/api/admin/notes/";
+      const res = await fetch(url, {
+        method: isEdit ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       const data = (await res.json()) as {
         error?: string;
         item?: { slug: string };
@@ -174,9 +198,6 @@ export function NotesEditorForm({
           minHeightClassName="min-h-[240px]"
           onUploadImage={uploadBodyImage}
         />
-        <p className="m-0 text-xs text-muted-foreground">
-          ツールバーの画像ボタン、または画像のドラッグ＆ドロップ／ペーストで本文に挿入できます。
-        </p>
       </div>
 
       <OgImageField

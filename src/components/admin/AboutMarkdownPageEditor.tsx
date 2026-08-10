@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
+import { compressImageForUpload } from "@/lib/media/client-compress-image";
 import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -68,23 +69,46 @@ export function AboutMarkdownPageEditor({
     status !== baseline.status;
 
   async function uploadBodyImage(file: File): Promise<string | null> {
-    const form = new FormData();
-    form.set("file", file);
-    form.set("folder", uploadFolder);
-    const res = await fetch("/api/admin/notes/media/upload/", {
-      method: "POST",
-      body: form,
-    });
-    const data = (await res.json()) as {
-      error?: string;
-      image_url?: string;
-    };
-    if (!res.ok || !data.image_url) {
-      setError(data.error || "画像のアップロードに失敗しました");
+    try {
+      const prepared = await compressImageForUpload(file);
+      const form = new FormData();
+      form.set("file", prepared);
+      form.set("folder", uploadFolder);
+      const res = await fetch("/api/admin/notes/media/upload/", {
+        method: "POST",
+        body: form,
+      });
+      const rawText = await res.text();
+      let data: { error?: string; image_url?: string } = {};
+      try {
+        data = JSON.parse(rawText) as typeof data;
+      } catch {
+        const tooLarge =
+          res.status === 413 ||
+          /request entity too large|payload too large|body.*limit/i.test(
+            rawText,
+          );
+        setError(
+          tooLarge
+            ? "画像が大きすぎてアップロードできませんでした。もう少し小さい画像でお試しください。"
+            : `画像アップロードの応答が不正です（HTTP ${res.status}）`,
+        );
+        return null;
+      }
+      if (!res.ok || !data.image_url) {
+        setError(data.error || "画像のアップロードに失敗しました");
+        return null;
+      }
+      setError(null);
+      return data.image_url;
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "画像のアップロードに失敗しました",
+      );
       return null;
     }
-    setError(null);
-    return data.image_url;
   }
 
   async function onSubmit(e: FormEvent) {
@@ -149,9 +173,6 @@ export function AboutMarkdownPageEditor({
           minHeightClassName="min-h-[320px]"
           onUploadImage={uploadBodyImage}
         />
-        <p className="m-0 text-xs text-muted-foreground">
-          画像はツールバーまたはドラッグ＆ドロップ／ペーストで挿入できます。
-        </p>
       </div>
 
       <OgImageField
