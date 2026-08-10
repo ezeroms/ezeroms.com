@@ -44,7 +44,7 @@ export function GiantsArticle({
             "min-[1080px]:min-h-0 min-[1080px]:overflow-y-auto",
           )}
         >
-          <div className="mx-auto w-full max-w-3xl min-[1080px]:pb-6">
+          <div className="mx-auto w-full max-w-3xl pb-20 min-[1080px]:pb-6">
             <GiantsQuoteCard
               item={item}
               bodyHtml={bodyHtml}

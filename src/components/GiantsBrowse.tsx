@@ -142,7 +142,7 @@ export function GiantsBrowse({
                 : "まだメモがありません。"}
             </p>
           ) : (
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 min-[1080px]:pb-6">
+            <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-20 min-[1080px]:pb-6">
               {items.map((item) => (
                 <GiantsQuoteCard
                   key={item.id}
