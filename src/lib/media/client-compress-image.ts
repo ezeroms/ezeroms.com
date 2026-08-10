@@ -5,8 +5,15 @@
 
 /** multipart オーバーヘッド分を見て余裕を残す */
 export const MAX_UPLOAD_BYTES = 3_500_000;
-const MAX_EDGE_PX = 2560;
+const DEFAULT_MAX_EDGE_PX = 2560;
+/** 写真ギャラリー向け（Web 表示に十分な長辺） */
+export const PHOTO_MAX_EDGE_PX = 4096;
 const QUALITY_STEPS = [0.88, 0.8, 0.72, 0.64, 0.55, 0.45];
+
+export type CompressImageOptions = {
+  maxBytes?: number;
+  maxEdgePx?: number;
+};
 
 function isHeicLike(file: File): boolean {
   const name = file.name.toLowerCase();
@@ -56,8 +63,14 @@ function jpegFileName(originalName: string): string {
  * アップロード前に JPEG へ圧縮。既に十分小さければそのまま返す。
  * デコードできない HEIC 等が上限超過のときは分かりやすい Error を投げる。
  */
-export async function compressImageForUpload(file: File): Promise<File> {
-  if (file.size <= MAX_UPLOAD_BYTES && !isHeicLike(file)) {
+export async function compressImageForUpload(
+  file: File,
+  options?: CompressImageOptions,
+): Promise<File> {
+  const maxBytes = options?.maxBytes ?? MAX_UPLOAD_BYTES;
+  const maxEdgePx = options?.maxEdgePx ?? DEFAULT_MAX_EDGE_PX;
+
+  if (file.size <= maxBytes && !isHeicLike(file)) {
     // 小さい JPEG/PNG/WebP はそのまま（サーバー側でメタ削除）
     if (file.type.startsWith("image/") || !file.type) {
       return file;
@@ -68,10 +81,10 @@ export async function compressImageForUpload(file: File): Promise<File> {
   try {
     bitmap = await loadBitmap(file);
   } catch {
-    if (file.size > MAX_UPLOAD_BYTES) {
+    if (file.size > maxBytes) {
       throw new Error(
         `画像が大きすぎます（${(file.size / 1024 / 1024).toFixed(1)}MB）。` +
-          `JPEG/PNG に変換するか、${Math.floor(MAX_UPLOAD_BYTES / 1024 / 1024)}MB 以下にしてください。`,
+          `JPEG/PNG に変換するか、${Math.floor(maxBytes / 1024 / 1024)}MB 以下にしてください。`,
       );
     }
     // 小さい HEIC 等はサーバー変換に任せる
@@ -79,7 +92,7 @@ export async function compressImageForUpload(file: File): Promise<File> {
   }
 
   try {
-    const scale = Math.min(1, MAX_EDGE_PX / Math.max(bitmap.width, bitmap.height));
+    const scale = Math.min(1, maxEdgePx / Math.max(bitmap.width, bitmap.height));
     const width = Math.max(1, Math.round(bitmap.width * scale));
     const height = Math.max(1, Math.round(bitmap.height * scale));
 
@@ -96,13 +109,13 @@ export async function compressImageForUpload(file: File): Promise<File> {
     for (const quality of QUALITY_STEPS) {
       const blob = await canvasToJpegBlob(canvas, quality);
       best = blob;
-      if (blob.size <= MAX_UPLOAD_BYTES) break;
+      if (blob.size <= maxBytes) break;
     }
 
     if (!best) {
       throw new Error("画像の圧縮に失敗しました");
     }
-    if (best.size > MAX_UPLOAD_BYTES) {
+    if (best.size > maxBytes) {
       throw new Error(
         `圧縮後も画像が大きすぎます（${(best.size / 1024 / 1024).toFixed(1)}MB）。` +
           `解像度を下げて再度お試しください。`,
@@ -110,7 +123,7 @@ export async function compressImageForUpload(file: File): Promise<File> {
     }
 
     // 圧縮しても元より大きい／同程度なら元を使う（ただし上限内のときだけ）
-    if (file.size <= MAX_UPLOAD_BYTES && best.size >= file.size * 0.95) {
+    if (file.size <= maxBytes && best.size >= file.size * 0.95) {
       return file;
     }
 

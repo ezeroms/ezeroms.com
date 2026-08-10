@@ -14,6 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import {
+  compressImageForUpload,
+  PHOTO_MAX_EDGE_PX,
+} from "@/lib/media/client-compress-image";
+import {
   filenameFromImageUrl,
   slugFromFilename,
 } from "@/lib/media/photo-name";
@@ -136,18 +140,37 @@ export function TopImageEditorForm({
     setError(null);
     setUploading(true);
     try {
+      const prepared = await compressImageForUpload(file, {
+        maxEdgePx: PHOTO_MAX_EDGE_PX,
+      });
       const form = new FormData();
-      form.set("file", file);
+      form.set("file", prepared);
       const res = await fetch("/api/admin/top-images/upload/", {
         method: "POST",
         body: form,
       });
-      const data = (await res.json()) as {
+      const rawText = await res.text();
+      let data: {
         error?: string;
         image_url?: string;
         path?: string;
         file_id?: string;
-      };
+      } = {};
+      try {
+        data = JSON.parse(rawText) as typeof data;
+      } catch {
+        const tooLarge =
+          res.status === 413 ||
+          /request entity too large|payload too large|body.*limit/i.test(
+            rawText,
+          );
+        setError(
+          tooLarge
+            ? "画像が大きすぎてアップロードできませんでした。もう少し小さい画像でお試しください。"
+            : `画像アップロードの応答が不正です（HTTP ${res.status}）`,
+        );
+        return;
+      }
       if (!res.ok) {
         setError(data.error || "画像のアップロードに失敗しました");
         return;
@@ -161,8 +184,12 @@ export function TopImageEditorForm({
             ? filenameFromImageUrl(data.image_url)
             : "");
       if (confirmedName) applyFilename(confirmedName);
-    } catch {
-      setError("アップロード中に通信エラーが発生しました");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "アップロード中に通信エラーが発生しました",
+      );
     } finally {
       setUploading(false);
     }
@@ -353,7 +380,7 @@ export function TopImageEditorForm({
             setSlug(e.target.value);
           }}
           required
-          pattern="[A-Za-z0-9_-]+"
+          pattern="[-A-Za-z0-9_]+"
         />
       </div>
 

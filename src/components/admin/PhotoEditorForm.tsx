@@ -18,12 +18,14 @@ import { Textarea } from "@/components/ui/textarea";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import { getPhotoGallery } from "@/lib/content/photo-galleries";
 import {
+  compressImageForUpload,
+  PHOTO_MAX_EDGE_PX,
+} from "@/lib/media/client-compress-image";
+import {
   filenameFromImageUrl,
   slugFromFilename,
 } from "@/lib/media/photo-name";
 import { cn } from "@/lib/cn";
-
-/** 1Password / LastPass などの自動入力を抑止 */
 
 export const PHOTO_EDITOR_FORM_ID = "photo-editor-form";
 
@@ -64,16 +66,15 @@ export function PhotoEditorForm({
   const fileRef = useRef<HTMLInputElement>(null);
   const isEdit = Boolean(initial?.slug);
 
-  const [baseline] = useState(() => {
+  const [baseline, setBaseline] = useState(() => {
     const filename =
       initial?.filename?.trim() ||
       (initial?.image_url ? filenameFromImageUrl(initial.image_url) : "");
     return {
       filename,
       slug: initial?.slug ?? "",
-      date: initial?.date
-        ? toDatetimeLocalValue(initial.date)
-      : nowDatetimeLocalValue(),
+      // SSR / クライアントで時刻がズレないよう、新規はマウント後に埋める
+      date: initial?.date ? toDatetimeLocalValue(initial.date) : "",
       location: initial?.location ?? "",
       camera: initial?.camera ?? "",
       imageUrl: initial?.image_url ?? "",
@@ -107,6 +108,13 @@ export function PhotoEditorForm({
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+
+  useEffect(() => {
+    if (initial?.date) return;
+    const now = nowDatetimeLocalValue();
+    setDate(now);
+    setBaseline((prev) => ({ ...prev, date: now }));
+  }, [initial?.date]);
 
   const dirty =
     filename !== baseline.filename ||
@@ -163,19 +171,38 @@ export function PhotoEditorForm({
     setError(null);
     setUploading(true);
     try {
+      const prepared = await compressImageForUpload(file, {
+        maxEdgePx: PHOTO_MAX_EDGE_PX,
+      });
       const form = new FormData();
-      form.set("file", file);
+      form.set("file", prepared);
       const res = await fetch(`/api/admin/photos/${galleryId}/upload/`, {
         method: "POST",
         body: form,
       });
-      const data = (await res.json()) as {
+      const rawText = await res.text();
+      let data: {
         error?: string;
         image_url?: string;
         image_thumb_url?: string;
         file_id?: string;
         path?: string;
-      };
+      } = {};
+      try {
+        data = JSON.parse(rawText) as typeof data;
+      } catch {
+        const tooLarge =
+          res.status === 413 ||
+          /request entity too large|payload too large|body.*limit/i.test(
+            rawText,
+          );
+        setError(
+          tooLarge
+            ? "画像が大きすぎてアップロードできませんでした。もう少し小さい画像でお試しください。"
+            : `画像アップロードの応答が不正です（HTTP ${res.status}）`,
+        );
+        return;
+      }
       if (!res.ok) {
         setError(data.error || "画像のアップロードに失敗しました");
         return;
@@ -193,8 +220,12 @@ export function PhotoEditorForm({
             ? filenameFromImageUrl(data.image_url)
             : "");
       if (confirmedName) applyFilename(confirmedName);
-    } catch {
-      setError("アップロード中に通信エラーが発生しました");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "アップロード中に通信エラーが発生しました",
+      );
     } finally {
       setUploading(false);
     }
@@ -416,7 +447,7 @@ export function PhotoEditorForm({
           }}
           placeholder="例: abcdefghijklmnop"
           required
-          pattern="[A-Za-z0-9_-]+"
+          pattern="[-A-Za-z0-9_]+"
           title="半角英数字・ハイフン・アンダースコア"
           {...ignorePasswordManagersProps}
         />
