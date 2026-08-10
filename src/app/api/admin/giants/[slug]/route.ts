@@ -9,6 +9,8 @@ import { normalizePurchaseUrl } from "@/lib/affiliate/amazon";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
+export const maxDuration = 30;
+
 type RouteParams = { params: Promise<{ slug: string }> };
 
 function revalidateGiantsPaths(slug: string) {
@@ -88,7 +90,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     const source = await normalizePurchaseUrl(body.source_url);
     if (source.error) {
-      return NextResponse.json({ error: source.error }, { status: 400 });
+      return NextResponse.json(
+        { error: source.error, debug: source.debug },
+        { status: 400 },
+      );
     }
 
     const status =

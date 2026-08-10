@@ -97,6 +97,13 @@ export function GiantsEditorForm({
     if (!dirty || loading) return;
     setError(null);
     setLoading(true);
+    const endpoint = isEdit
+      ? `/api/admin/giants/${initial!.slug}/`
+      : "/api/admin/giants/";
+    console.info("[Giants save] start", {
+      endpoint,
+      source_url: sourceUrl.trim() || null,
+    });
     try {
       const payload = {
         body_md: bodyMd,
@@ -110,28 +117,61 @@ export function GiantsEditorForm({
         og_image: ogImage,
         status,
       };
-      const res = await fetch(
-        isEdit
-          ? `/api/admin/giants/${initial!.slug}/`
-          : "/api/admin/giants/",
-        {
-          method: isEdit ? "PATCH" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      );
-      const data = (await res.json()) as {
+      const res = await fetch(endpoint, {
+        method: isEdit ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(20_000),
+      });
+      const rawText = await res.text();
+      let data: {
         error?: string;
         item?: { slug: string };
-      };
+        debug?: Record<string, unknown>;
+      } = {};
+      try {
+        data = JSON.parse(rawText) as typeof data;
+      } catch (parseErr) {
+        console.error("[Giants save] non-JSON response", {
+          status: res.status,
+          body: rawText.slice(0, 500),
+          parseErr,
+        });
+        setError(
+          res.ok
+            ? "保存結果の応答が不正です"
+            : `保存に失敗しました（HTTP ${res.status}）`,
+        );
+        return;
+      }
       if (!res.ok) {
+        console.error("[Giants save] API error", {
+          status: res.status,
+          error: data.error,
+          debug: data.debug,
+          source_url: sourceUrl.trim() || null,
+        });
         setError(data.error || "保存に失敗しました");
         return;
       }
+      console.info("[Giants save] ok", { slug: data.item?.slug });
       router.refresh();
       onSaved?.();
-    } catch {
-      setError("通信エラーが発生しました");
+    } catch (err) {
+      const timedOut =
+        err instanceof DOMException && err.name === "TimeoutError";
+      console.error("[Giants save] failed", {
+        timedOut,
+        name: err instanceof Error ? err.name : typeof err,
+        message: err instanceof Error ? err.message : String(err),
+        source_url: sourceUrl.trim() || null,
+        err,
+      });
+      setError(
+        timedOut
+          ? "保存がタイムアウトしました。購入リンクに Amazon 短縮URLがある場合は amazon.co.jp の商品URLに変えて再試行してください。"
+          : "通信エラーが発生しました",
+      );
     } finally {
       setLoading(false);
     }

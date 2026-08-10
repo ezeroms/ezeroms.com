@@ -9,6 +9,8 @@ import { normalizePurchaseUrl } from "@/lib/affiliate/amazon";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
+export const maxDuration = 30;
+
 function revalidateGiantsPaths(slug?: string) {
   revalidatePath("/shoulders-of-giants");
   if (slug) {
@@ -73,7 +75,10 @@ export async function POST(request: NextRequest) {
 
     const source = await normalizePurchaseUrl(body.source_url);
     if (source.error) {
-      return NextResponse.json({ error: source.error }, { status: 400 });
+      return NextResponse.json(
+        { error: source.error, debug: source.debug },
+        { status: 400 },
+      );
     }
 
     const status = body.status === "draft" ? "draft" : "published";

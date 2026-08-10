@@ -85,6 +85,7 @@ export function canonicalizeAmazonProductUrl(url: string): string | null {
 
 /**
  * 短縮 URL をたどって最終 URL を得る（本文は読み捨て）。
+ * Amazon 側が応答しない場合に備えタイムアウトする。
  */
 export async function resolveAmazonShortUrl(url: string): Promise<string> {
   const key = url.trim();
@@ -92,20 +93,46 @@ export async function resolveAmazonShortUrl(url: string): Promise<string> {
   if (cached) return cached;
 
   const pending = (async () => {
-    const res = await fetch(key, {
-      method: "GET",
-      redirect: "follow",
-      headers: {
-        "User-Agent": BROWSER_UA,
-        Accept: "text/html,application/xhtml+xml",
-      },
-    });
-    const finalUrl = res.url || key;
-    await res.body?.cancel().catch(() => undefined);
-    if (!res.ok && !extractAmazonAsin(finalUrl)) {
-      throw new Error(`Amazon short URL resolve failed (${res.status})`);
+    const started = Date.now();
+    try {
+      const res = await fetch(key, {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+          "User-Agent": BROWSER_UA,
+          Accept: "text/html,application/xhtml+xml",
+        },
+        signal: AbortSignal.timeout(8_000),
+        cache: "no-store",
+      });
+      const finalUrl = res.url || key;
+      await res.body?.cancel().catch(() => undefined);
+      console.info("[amazon] short URL resolved", {
+        from: key,
+        to: finalUrl,
+        status: res.status,
+        ms: Date.now() - started,
+      });
+      if (!res.ok && !extractAmazonAsin(finalUrl)) {
+        throw new Error(`Amazon short URL resolve failed (${res.status})`);
+      }
+      return finalUrl;
+    } catch (error) {
+      const timedOut =
+        error instanceof Error &&
+        (error.name === "TimeoutError" || error.name === "AbortError");
+      console.error("[amazon] short URL resolve failed", {
+        url: key,
+        timedOut,
+        name: error instanceof Error ? error.name : typeof error,
+        message: error instanceof Error ? error.message : String(error),
+        ms: Date.now() - started,
+      });
+      if (timedOut) {
+        throw new Error("Amazon short URL resolve timed out");
+      }
+      throw error;
     }
-    return finalUrl;
   })();
 
   resolveCache.set(key, pending);
@@ -125,7 +152,11 @@ export async function resolveAmazonShortUrl(url: string): Promise<string> {
  */
 export async function normalizePurchaseUrl(
   url: string | null | undefined,
-): Promise<{ value: string | null; error?: string }> {
+): Promise<{
+  value: string | null;
+  error?: string;
+  debug?: Record<string, unknown>;
+}> {
   const raw = typeof url === "string" ? url.trim() : "";
   if (!raw) return { value: null };
 
@@ -133,7 +164,11 @@ export async function normalizePurchaseUrl(
   try {
     parsed = new URL(raw);
   } catch {
-    return { value: null, error: "購入リンクの URL が不正です" };
+    return {
+      value: null,
+      error: "購入リンクの URL が不正です",
+      debug: { stage: "parse", raw },
+    };
   }
 
   if (!isAmazonHostname(parsed.hostname)) {
@@ -144,20 +179,37 @@ export async function normalizePurchaseUrl(
   if (isAmazonShortHostname(parsed.hostname)) {
     try {
       candidate = await resolveAmazonShortUrl(raw);
-    } catch {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      const timedOut = /timed out/i.test(message);
       return {
         value: null,
-        error:
-          "Amazon 短縮URLを商品ページに解決できませんでした。amazon.co.jp の商品URLを貼ってください",
+        error: timedOut
+          ? "Amazon 短縮URLの解決がタイムアウトしました。amazon.co.jp の商品URL（/dp/…）を貼ってください"
+          : "Amazon 短縮URLを商品ページに解決できませんでした。amazon.co.jp の商品URL（/dp/…）を貼ってください",
+        debug: {
+          stage: "resolve-short",
+          raw,
+          timedOut,
+          message,
+        },
       };
     }
   }
 
   const canonical = canonicalizeAmazonProductUrl(candidate);
-  if (canonical) return { value: canonical };
+  if (canonical) {
+    return {
+      value: canonical,
+      debug: { stage: "canonical", raw, candidate, canonical },
+    };
+  }
 
   // Amazon だが ASIN 不明（検索結果ページ等）→ tag だけ落として保存
-  return { value: stripAmazonAffiliateTag(candidate) ?? candidate };
+  return {
+    value: stripAmazonAffiliateTag(candidate) ?? candidate,
+    debug: { stage: "strip-tag-fallback", raw, candidate },
+  };
 }
 
 /**
