@@ -38,7 +38,15 @@ export type TaskLaneMoveStart = {
   clientY: number;
 };
 
-function isMovableWorkBlockId(id: string): boolean {
+export type TaskLaneResizeStart = {
+  block: CalendarTaskBlock;
+  pointerId: number;
+  clientX: number;
+  clientY: number;
+};
+
+/** DB に保存済みの作業枠 ID（楽観 ID・仮 ID は除外） */
+export function isPersistedWorkBlockId(id: string): boolean {
   return !id.startsWith("optimistic-") && !id.startsWith("task:");
 }
 
@@ -48,7 +56,9 @@ type Props = {
   onTaskClick?: (target: TaskLaneClickTarget) => void;
   /** 作業枠のドラッグ移動開始（ポインタダウン時）。 */
   onTaskMoveStart?: (payload: TaskLaneMoveStart) => void;
-  /** いまドラッグ中の作業枠（半透明表示）。 */
+  /** 作業枠の下端リサイズ開始。 */
+  onTaskResizeStart?: (payload: TaskLaneResizeStart) => void;
+  /** いまドラッグ／リサイズ中の作業枠（半透明表示）。 */
   movingWorkBlockId?: string | null;
 };
 
@@ -58,6 +68,7 @@ export function TaskLane({
   dayStartsHour = 0,
   onTaskClick,
   onTaskMoveStart,
+  onTaskResizeStart,
   movingWorkBlockId = null,
 }: Props) {
   return (
@@ -71,8 +82,9 @@ export function TaskLane({
           dayStartsHour,
         );
         const label = `${range} ${p.block.taskTitle}`;
-        const movable =
-          Boolean(onTaskMoveStart) && isMovableWorkBlockId(p.block.workBlockId);
+        const persisted = isPersistedWorkBlockId(p.block.workBlockId);
+        const movable = Boolean(onTaskMoveStart) && persisted;
+        const resizable = Boolean(onTaskResizeStart) && persisted;
         const moving = movingWorkBlockId === p.block.workBlockId;
         return (
           <button
@@ -80,6 +92,7 @@ export function TaskLane({
             type="button"
             title={label}
             aria-label={label}
+            aria-busy={!persisted}
             className={cn(
               "sx-task-lane__chip",
               done && "sx-task-lane__chip--done",
@@ -96,8 +109,8 @@ export function TaskLane({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              // 移動可能な枠は click を親の pointerup で処理する
-              if (movable) return;
+              // 保存前の楽観枠は開かない／移動可能な枠は click を親の pointerup で処理
+              if (!persisted || movable) return;
               onTaskClick?.({
                 taskId: p.block.taskId,
                 workBlockId: p.block.workBlockId,
@@ -125,6 +138,23 @@ export function TaskLane({
               {range}
               {p.continuesAfter ? " ↓" : ""}
             </span>
+            {resizable ? (
+              <span
+                className="sx-task-lane__resize"
+                aria-hidden
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (e.button !== 0) return;
+                  onTaskResizeStart?.({
+                    block: p.block,
+                    pointerId: e.pointerId,
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                  });
+                }}
+              />
+            ) : null}
           </button>
         );
       })}

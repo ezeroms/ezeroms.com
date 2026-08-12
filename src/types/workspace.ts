@@ -43,7 +43,6 @@ export type WorkspaceTask = {
   estimated_minutes: number | null;
   /** 進捗 0–100 */
   progress_percent: number;
-  location: string | null;
   created_at: string;
   updated_at: string;
   completed_at: string | null;

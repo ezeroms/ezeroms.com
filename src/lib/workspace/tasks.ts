@@ -8,7 +8,7 @@ import type {
 } from "@/types/workspace";
 
 const SELECT =
-  "id, title, body_md, status, priority, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, location, created_at, updated_at, completed_at, archived_at";
+  "id, title, body_md, status, priority, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, created_at, updated_at, completed_at, archived_at";
 
 export type TaskListFilter = {
   status?: TaskStatus;
@@ -108,7 +108,6 @@ export type TaskWriteInput = {
   due_at?: string | null;
   estimated_minutes?: number | null;
   progress_percent?: number | null;
-  location?: string | null;
 };
 
 function completedAtForStatus(
@@ -140,7 +139,6 @@ export async function createTask(
       due_at: input.due_at ?? null,
       estimated_minutes: input.estimated_minutes ?? null,
       progress_percent: progressPercent,
-      location: input.location ?? null,
       completed_at: status === "done" ? new Date().toISOString() : null,
       archived_at: status === "archived" ? new Date().toISOString() : null,
     })

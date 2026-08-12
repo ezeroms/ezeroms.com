@@ -64,7 +64,6 @@ export async function POST(request: NextRequest) {
       scheduled_at?: string | null;
       due_at?: string | null;
       estimated_minutes?: number | null;
-      location?: string | null;
     };
 
     const title = body.title?.trim();
@@ -110,7 +109,6 @@ export async function POST(request: NextRequest) {
       scheduled_at: body.scheduled_at ?? null,
       due_at: body.due_at ?? null,
       estimated_minutes: body.estimated_minutes ?? null,
-      location: body.location ?? null,
     });
     return NextResponse.json({ item }, { status: 201 });
   } catch (e) {

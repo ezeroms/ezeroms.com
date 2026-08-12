@@ -471,6 +471,28 @@
   cursor: grabbing;
 }
 
+.workspace-calendar--resizing-block {
+  user-select: none;
+  cursor: ns-resize;
+}
+
+.workspace-calendar--resizing-block .sx__time-grid-day {
+  cursor: ns-resize;
+}
+
+.workspace-calendar .sx__time-grid-event--moving {
+  opacity: 0.35;
+}
+
+.workspace-calendar .sx__time-grid-event {
+  cursor: grab;
+  touch-action: none;
+}
+
+.workspace-calendar .sx__time-grid-event-resize-handle {
+  z-index: 2;
+}
+
 .workspace-calendar .sx-task-lane {
   position: absolute;
   inset-block: 0;
@@ -515,6 +537,16 @@
 .workspace-calendar .sx-task-lane__chip--moving {
   opacity: 0.35;
   cursor: grabbing;
+}
+
+.workspace-calendar .sx-task-lane__resize {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: clamp(8px, 12px, 40%);
+  cursor: ns-resize;
+  touch-action: none;
+  z-index: 2;
 }
 
 .workspace-calendar .sx-task-lane__chip:hover {

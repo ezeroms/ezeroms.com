@@ -8,7 +8,10 @@ import type {
   CalendarEventEditValues,
 } from "@/components/calendar/CalendarEventPopover";
 import type { CalendarSlotDraft } from "@/components/calendar/CalendarSlotCreatePopover";
-import type { TaskLaneClickTarget } from "@/components/calendar/TaskLane";
+import {
+  isPersistedWorkBlockId,
+  type TaskLaneClickTarget,
+} from "@/components/calendar/TaskLane";
 import type { CalendarCreateSlot } from "@/components/calendar/WorkspaceCalendar";
 import { type WeekStartsOn } from "@/lib/workspace/calendar/time";
 import type {
@@ -380,17 +383,30 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
       if (!response.ok || !data.item) {
         throw new Error(data.error || "作業枠の配置に失敗しました");
       }
+      const savedId = data.item.id;
+      const savedStart = data.item.starts_at;
+      const savedEnd = data.item.ends_at;
       setWorkBlocks((list) =>
         list.map((block) =>
           block.workBlockId === optimisticId
             ? {
                 ...block,
-                workBlockId: data.item!.id,
-                start: data.item!.starts_at,
-                end: data.item!.ends_at,
+                workBlockId: savedId,
+                start: savedStart,
+                end: savedEnd,
               }
             : block,
         ),
+      );
+      setEditingTarget((prev) =>
+        prev?.workBlockId === optimisticId
+          ? {
+              ...prev,
+              workBlockId: savedId,
+              start: savedStart,
+              end: savedEnd,
+            }
+          : prev,
       );
     } catch (error) {
       setWorkBlocks(previousBlocks);
@@ -406,8 +422,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     const block = workBlocks.find((item) => item.workBlockId === workBlockId);
     if (!block) return;
     if (
-      workBlockId.startsWith("optimistic-") ||
-      workBlockId.startsWith("task:")
+      !isPersistedWorkBlockId(workBlockId)
     ) {
       return;
     }
@@ -472,6 +487,151 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     } finally {
       setIsBusy(false);
     }
+  }
+
+  async function handleResizeWorkBlock(workBlockId: string, end: Date) {
+    const block = workBlocks.find((item) => item.workBlockId === workBlockId);
+    if (!block || !isPersistedWorkBlockId(workBlockId)) return;
+
+    const startMs = Date.parse(block.start);
+    const endMs = end.getTime();
+    if (!Number.isFinite(startMs) || endMs <= startMs) return;
+    if (Math.abs(Date.parse(block.end) - endMs) < 30_000) return;
+
+    const endsAt = end.toISOString();
+    const previousBlocks = workBlocks;
+    setWorkBlocks((list) =>
+      list.map((item) =>
+        item.workBlockId === workBlockId
+          ? { ...item, end: endsAt }
+          : item,
+      ),
+    );
+    setIsBusy(true);
+    setErrorMessage(null);
+    try {
+      const response = await fetch(
+        `/api/admin/workspace/work-blocks/${workBlockId}/`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ends_at: endsAt }),
+        },
+      );
+      const data = (await response.json()) as {
+        item?: TaskWorkBlock;
+        error?: string;
+      };
+      if (!response.ok || !data.item) {
+        throw new Error(data.error || "作業枠の変更に失敗しました");
+      }
+      setWorkBlocks((list) =>
+        list.map((item) =>
+          item.workBlockId === workBlockId
+            ? {
+                ...item,
+                start: data.item!.starts_at,
+                end: data.item!.ends_at,
+              }
+            : item,
+        ),
+      );
+    } catch (error) {
+      setWorkBlocks(previousBlocks);
+      setErrorMessage(
+        error instanceof Error ? error.message : "作業枠の変更に失敗しました",
+      );
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
+  async function patchCalendarEventTimes(
+    event: GoogleCalendarEvent,
+    start: Date,
+    end: Date,
+    errorLabel: string,
+  ) {
+    if (event.readOnly || !input.canWrite || event.allDay) return;
+    if (end.getTime() <= start.getTime()) return;
+    if (
+      Math.abs(Date.parse(event.start) - start.getTime()) < 30_000 &&
+      Math.abs(Date.parse(event.end) - end.getTime()) < 30_000
+    ) {
+      return;
+    }
+
+    const startIso = start.toISOString();
+    const endIso = end.toISOString();
+    const previousEvents = events;
+    setEvents((list) =>
+      list.map((item) =>
+        item.id === event.id && item.calendarId === event.calendarId
+          ? { ...item, start: startIso, end: endIso }
+          : item,
+      ),
+    );
+    setIsBusy(true);
+    setErrorMessage(null);
+    try {
+      const response = await fetch("/api/admin/workspace/calendar/events/", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          calendarId: event.calendarId,
+          eventId: event.id,
+          summary: event.summary,
+          start: startIso,
+          end: endIso,
+          allDay: false,
+          description: event.description,
+          location: event.location,
+          timeZone: primaryTimezone,
+        }),
+      });
+      const data = (await response.json()) as {
+        event?: GoogleCalendarEvent;
+        error?: string;
+      };
+      if (!response.ok || !data.event) {
+        throw new Error(data.error || errorLabel);
+      }
+      setEvents((list) =>
+        list.map((item) =>
+          item.id === event.id && item.calendarId === event.calendarId
+            ? data.event!
+            : item,
+        ),
+      );
+    } catch (error) {
+      setEvents(previousEvents);
+      setErrorMessage(
+        error instanceof Error ? error.message : errorLabel,
+      );
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
+  async function handleMoveEvent(
+    event: GoogleCalendarEvent,
+    start: Date,
+    end: Date,
+  ) {
+    await patchCalendarEventTimes(event, start, end, "予定の移動に失敗しました");
+  }
+
+  async function handleResizeEvent(
+    event: GoogleCalendarEvent,
+    start: Date,
+    end: Date,
+  ) {
+    await patchCalendarEventTimes(
+      event,
+      start,
+      end,
+      "予定の変更に失敗しました",
+    );
   }
 
   async function saveCalendarEvent(values: CalendarEventEditValues) {
@@ -696,6 +856,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
   }
 
   function selectTask(target: TaskLaneClickTarget) {
+    if (!isPersistedWorkBlockId(target.workBlockId)) return;
     setSelectedEvent(null);
     setCreateDraft(null);
     setEditingTarget(target);
@@ -858,6 +1019,9 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
     handleRangeChange,
     handleDropTask,
     handleMoveWorkBlock,
+    handleResizeWorkBlock,
+    handleMoveEvent,
+    handleResizeEvent,
     saveCalendarEvent,
     handleTaskSaved,
     handleTaskArchived,

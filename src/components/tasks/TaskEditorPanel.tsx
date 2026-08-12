@@ -41,7 +41,6 @@ type Draft = {
   due_at: string;
   estimated_minutes: string;
   progress_percent: string;
-  location: string;
 };
 
 function draftFromTask(task: WorkspaceTask): Draft {
@@ -53,7 +52,6 @@ function draftFromTask(task: WorkspaceTask): Draft {
     due_at: toDatetimeLocalValue(task.due_at),
     estimated_minutes: formatEstimatedMinutesInput(task.estimated_minutes),
     progress_percent: String(task.progress_percent ?? 0),
-    location: task.location ?? "",
   };
 }
 
@@ -137,7 +135,6 @@ export function TaskEditorPanel({
           due_at: fromDatetimeLocalValue(current.due_at),
           estimated_minutes: minutesParsed.value,
           progress_percent: progressParsed.value,
-          location: current.location.trim() || null,
         }),
       });
       const data = (await response.json()) as {
@@ -234,9 +231,7 @@ export function TaskEditorPanel({
             <ClickToEditField
               value={draft.body_md}
               inputType="textarea"
-              emptyDisplay="hover-add"
-              emptyAddLabel="詳細を追加"
-              emptyLabel="詳細"
+              emptyLabel="詳細を追加"
               ariaLabel="詳細"
               displayClassName="text-sm leading-relaxed text-foreground"
               onSave={async (next) => {

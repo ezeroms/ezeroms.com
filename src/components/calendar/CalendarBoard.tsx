@@ -14,6 +14,7 @@ import { useCalendarBoardController } from "@/components/calendar/useCalendarBoa
 import { WorkspaceCalendar } from "@/components/calendar/WorkspaceCalendar";
 import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskEditModal } from "@/components/tasks/TaskEditModal";
+import { isPersistedWorkBlockId } from "@/components/calendar/TaskLane";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { surfaceCard } from "@/lib/site/card-styles";
@@ -260,13 +261,13 @@ export function CalendarBoard({
         taskId={board.editingTarget?.taskId ?? null}
         workBlockId={
           board.editingTarget?.workBlockId &&
-          !board.editingTarget.workBlockId.startsWith("task:")
+          isPersistedWorkBlockId(board.editingTarget.workBlockId)
             ? board.editingTarget.workBlockId
             : null
         }
         initialWorkBlock={
           board.editingTarget?.workBlockId &&
-          !board.editingTarget.workBlockId.startsWith("task:")
+          isPersistedWorkBlockId(board.editingTarget.workBlockId)
             ? {
                 starts_at: board.editingTarget.start,
                 ends_at: board.editingTarget.end,
@@ -309,6 +310,9 @@ export function CalendarBoard({
             draggingTask={Boolean(board.draggingTaskId)}
             onDropTask={board.handleDropTask}
             onMoveWorkBlock={board.handleMoveWorkBlock}
+            onResizeWorkBlock={board.handleResizeWorkBlock}
+            onMoveEvent={canWrite ? board.handleMoveEvent : undefined}
+            onResizeEvent={canWrite ? board.handleResizeEvent : undefined}
             onEventSelect={board.selectEvent}
             onCreateSlot={board.openCreateSlot}
             canCreateSchedule={canWrite && Boolean(board.writableCalendarId)}

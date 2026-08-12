@@ -46,7 +46,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       due_at?: string | null;
       estimated_minutes?: number | null;
       progress_percent?: number | null;
-      location?: string | null;
     };
 
     if (body.title !== undefined && !body.title.trim()) {
@@ -112,7 +111,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       ...(body.progress_percent !== undefined
         ? { progress_percent: body.progress_percent }
         : {}),
-      ...(body.location !== undefined ? { location: body.location } : {}),
     });
     return NextResponse.json({ item });
   } catch (e) {

@@ -25,12 +25,12 @@ type Props = {
   galleryId?: PhotoGalleryId;
 };
 
-/** Shell 幅に合わせた列数: スマホ 2 / タブレット 3 / PC は指定 */
+/** Shell 幅に合わせた列数: スマホ 1 / タブレット 3 / PC は指定 */
 function galleryColumnCount(desktopColumns: 3 | 4): number {
-  if (typeof window === "undefined") return 2;
+  if (typeof window === "undefined") return 1;
   if (window.matchMedia("(min-width: 1080px)").matches) return desktopColumns;
   if (window.matchMedia("(min-width: 768px)").matches) return 3;
-  return 2;
+  return 1;
 }
 
 /** 新しい順の配列を左→右に振り分け、各列へ上から積む（隙間のない masonry） */
@@ -55,7 +55,7 @@ export function PhotoGallery({
     ? getPhotoGallery(galleryId).basePath
     : undefined;
 
-  const [columnCount, setColumnCount] = useState(2);
+  const [columnCount, setColumnCount] = useState(1);
   const {
     displayPhotos,
     isClientMounted,

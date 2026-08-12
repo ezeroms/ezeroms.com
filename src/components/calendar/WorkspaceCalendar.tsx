@@ -18,14 +18,19 @@ import { CalendarHeaderExtras } from "@/components/calendar/CalendarHeaderExtras
 import type { CalendarEventAnchor } from "@/components/calendar/CalendarEventPopover";
 import {
   dragCreateAnchor,
+  gridOffsetFromInstant,
   IGNORE_CREATE_SELECTOR,
+  INTERACT_SNAP_MINUTES,
+  isNearBottomEdge,
   resolveCalendarGridPoint,
   SCHEDULE_LANE_WIDTH_PERCENT,
+  CREATE_SNAP_MINUTES,
   SNAP_MINUTES,
   wallClockFromGrid,
   type CalendarCreateSlot,
   type DragCreateState,
-  type WorkBlockMoveState,
+  type TimedBlockMoveState,
+  type TimedBlockResizeState,
 } from "@/components/calendar/calendarGridPointer";
 import {
   initialScrollTime,
@@ -35,6 +40,7 @@ import {
   TaskLane,
   type TaskLaneClickTarget,
   type TaskLaneMoveStart,
+  type TaskLaneResizeStart,
 } from "@/components/calendar/TaskLane";
 import { TimezoneAxisHour } from "@/components/calendar/TimezoneAxisHour";
 import { TimezoneAxisLabels } from "@/components/calendar/TimezoneAxisLabels";
@@ -94,6 +100,20 @@ type Props = {
   onDropTask?: (taskId: string, start: Date) => void;
   /** 作業枠をタイムグリッド上で移動 */
   onMoveWorkBlock?: (workBlockId: string, start: Date) => void;
+  /** 作業枠の終了時刻をリサイズ */
+  onResizeWorkBlock?: (workBlockId: string, end: Date) => void;
+  /** 予定を移動（書き込み可のとき） */
+  onMoveEvent?: (
+    event: GoogleCalendarEvent,
+    start: Date,
+    end: Date,
+  ) => void;
+  /** 予定の終了時刻をリサイズ */
+  onResizeEvent?: (
+    event: GoogleCalendarEvent,
+    start: Date,
+    end: Date,
+  ) => void;
   onEventSelect?: (
     event: GoogleCalendarEvent,
     anchor: CalendarEventAnchor,
@@ -120,6 +140,9 @@ export function WorkspaceCalendar({
   draggingTask,
   onDropTask,
   onMoveWorkBlock,
+  onResizeWorkBlock,
+  onMoveEvent,
+  onResizeEvent,
   onEventSelect,
   onCreateSlot,
   canCreateSchedule = true,
@@ -129,13 +152,18 @@ export function WorkspaceCalendar({
   const timeZone = primaryTimezone;
   const [dropHint, setDropHint] = useState<string | null>(null);
   const [dragCreate, setDragCreate] = useState<DragCreateState | null>(null);
-  const [blockMove, setBlockMove] = useState<WorkBlockMoveState | null>(null);
+  const [blockMove, setBlockMove] = useState<TimedBlockMoveState | null>(null);
+  const [blockResize, setBlockResize] =
+    useState<TimedBlockResizeState | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const [rootElement, setRootElement] = useState<HTMLDivElement | null>(null);
   const dragCreateRef = useRef<DragCreateState | null>(null);
   dragCreateRef.current = dragCreate;
-  const blockMoveRef = useRef<WorkBlockMoveState | null>(null);
+  const blockMoveRef = useRef<TimedBlockMoveState | null>(null);
   blockMoveRef.current = blockMove;
+  const blockResizeRef = useRef<TimedBlockResizeState | null>(null);
+  blockResizeRef.current = blockResize;
+  const suppressNextEventClickRef = useRef(false);
   const [visibleRange, setVisibleRange] = useState<{
     start: string;
     end: string;
@@ -241,6 +269,10 @@ export function WorkspaceCalendar({
       },
       callbacks: {
         onEventClick(event, nativeEvent) {
+          if (suppressNextEventClickRef.current) {
+            suppressNextEventClickRef.current = false;
+            return;
+          }
           const source = googleEventsRef.current.find(
             (item) => eventKey(item.calendarId, item.id) === String(event.id),
           );
@@ -317,6 +349,12 @@ export function WorkspaceCalendar({
   onCreateSlotRef.current = onCreateSlot;
   const onMoveWorkBlockRef = useRef(onMoveWorkBlock);
   onMoveWorkBlockRef.current = onMoveWorkBlock;
+  const onResizeWorkBlockRef = useRef(onResizeWorkBlock);
+  onResizeWorkBlockRef.current = onResizeWorkBlock;
+  const onMoveEventRef = useRef(onMoveEvent);
+  onMoveEventRef.current = onMoveEvent;
+  const onResizeEventRef = useRef(onResizeEvent);
+  onResizeEventRef.current = onResizeEvent;
   const onTaskSelectRef = useRef(onTaskSelect);
   onTaskSelectRef.current = onTaskSelect;
 
@@ -324,13 +362,18 @@ export function WorkspaceCalendar({
     (
       clientX: number,
       clientY: number,
-      opts?: { lane?: DragCreateState["lane"]; column?: HTMLElement },
+      opts?: {
+        lane?: DragCreateState["lane"];
+        column?: HTMLElement;
+        snapMinutes?: number;
+      },
     ) =>
       resolveCalendarGridPoint(clientX, clientY, {
         dayStartsHour,
         timeZone,
         lane: opts?.lane,
         column: opts?.column,
+        snapMinutes: opts?.snapMinutes,
       }),
     [dayStartsHour, timeZone],
   );
@@ -423,7 +466,8 @@ export function WorkspaceCalendar({
         current.active || Math.hypot(dx, dy) >= MOVE_ACTIVATION_PX;
 
       const point = resolveGridPoint(event.clientX, event.clientY, {
-        lane: "task",
+        lane: current.lane,
+        snapMinutes: INTERACT_SNAP_MINUTES,
       });
 
       setBlockMove((previous) => {
@@ -457,27 +501,69 @@ export function WorkspaceCalendar({
       if (!current || event.pointerId !== current.pointerId) return;
 
       const point = resolveGridPoint(event.clientX, event.clientY, {
-        lane: "task",
+        lane: current.lane,
+        snapMinutes: INTERACT_SNAP_MINUTES,
       });
       const finalStart = point?.start ?? current.start;
       const wasActive = current.active && Boolean(finalStart);
       setBlockMove(null);
 
+      if (current.kind === "event") {
+        // 自分でクリック／移動を処理したので Schedule-X の onEventClick を抑止
+        suppressNextEventClickRef.current = true;
+      }
+
       if (wasActive && finalStart) {
-        onMoveWorkBlockRef.current?.(current.workBlockId, finalStart);
+        const finalEnd = new Date(finalStart.getTime() + current.durationMs);
+        if (current.kind === "task" && current.workBlockId) {
+          onMoveWorkBlockRef.current?.(current.workBlockId, finalStart);
+        } else if (current.kind === "event" && current.eventId) {
+          const source = googleEventsRef.current.find(
+            (item) =>
+              item.id === current.eventId &&
+              item.calendarId === current.calendarId,
+          );
+          if (source) {
+            onMoveEventRef.current?.(source, finalStart, finalEnd);
+          }
+        }
         return;
       }
 
-      const block = workBlocks.find(
-        (item) => item.workBlockId === current.workBlockId,
-      );
-      if (block) {
-        onTaskSelectRef.current?.({
-          taskId: block.taskId,
-          workBlockId: block.workBlockId,
-          start: block.start,
-          end: block.end,
-        });
+      if (current.kind === "task" && current.workBlockId) {
+        const block = workBlocks.find(
+          (item) => item.workBlockId === current.workBlockId,
+        );
+        if (block) {
+          onTaskSelectRef.current?.({
+            taskId: block.taskId,
+            workBlockId: block.workBlockId,
+            start: block.start,
+            end: block.end,
+          });
+        }
+      } else if (current.kind === "event" && current.eventId) {
+        const source = googleEventsRef.current.find(
+          (item) =>
+            item.id === current.eventId &&
+            item.calendarId === current.calendarId,
+        );
+        if (source) {
+          const el = document.querySelector<HTMLElement>(
+            `[data-event-id="${CSS.escape(eventKey(source.calendarId, source.id))}"]`,
+          );
+          const rect = el?.getBoundingClientRect();
+          if (rect) {
+            onEventSelectRef.current?.(source, {
+              top: rect.top,
+              left: rect.left,
+              right: rect.right,
+              bottom: rect.bottom,
+              width: rect.width,
+              height: rect.height,
+            });
+          }
+        }
       }
     }
 
@@ -491,19 +577,120 @@ export function WorkspaceCalendar({
     };
   }, [blockMove, resolveGridPoint, workBlocks]);
 
+  useEffect(() => {
+    if (!blockResize) return;
+
+    function onMove(event: PointerEvent) {
+      const current = blockResizeRef.current;
+      if (!current || event.pointerId !== current.pointerId) return;
+
+      const dx = event.clientX - current.originClientX;
+      const dy = event.clientY - current.originClientY;
+      const activated =
+        current.active || Math.hypot(dx, dy) >= MOVE_ACTIVATION_PX;
+
+      const point = resolveGridPoint(event.clientX, event.clientY, {
+        lane: current.lane,
+        column: current.column,
+        snapMinutes: INTERACT_SNAP_MINUTES,
+      });
+      if (!point) {
+        if (activated && !current.active) {
+          setBlockResize((previous) =>
+            previous ? { ...previous, active: true } : previous,
+          );
+        }
+        return;
+      }
+
+      const minEnd = current.startOffsetMinutes + INTERACT_SNAP_MINUTES;
+      const endOffset = Math.max(
+        minEnd,
+        Math.min(24 * 60, point.offsetMinutes),
+      );
+      const end = wallClockFromGrid(
+        current.dateKey,
+        endOffset,
+        dayStartsHour,
+        timeZone,
+      );
+
+      setBlockResize((previous) => {
+        if (!previous || previous.pointerId !== event.pointerId) {
+          return previous;
+        }
+        if (!activated) return previous;
+        if (
+          previous.active &&
+          previous.endOffsetMinutes === endOffset
+        ) {
+          return previous;
+        }
+        return {
+          ...previous,
+          active: true,
+          endOffsetMinutes: endOffset,
+          end,
+        };
+      });
+    }
+
+    function onUp(event: PointerEvent) {
+      const current = blockResizeRef.current;
+      if (!current || event.pointerId !== current.pointerId) return;
+
+      const wasActive = current.active && Boolean(current.end);
+      const finalEnd = current.end;
+      setBlockResize(null);
+
+      if (current.kind === "event") {
+        suppressNextEventClickRef.current = true;
+      }
+
+      if (wasActive && finalEnd) {
+        if (current.kind === "task" && current.workBlockId) {
+          onResizeWorkBlockRef.current?.(current.workBlockId, finalEnd);
+        } else if (current.kind === "event" && current.eventId) {
+          const source = googleEventsRef.current.find(
+            (item) =>
+              item.id === current.eventId &&
+              item.calendarId === current.calendarId,
+          );
+          if (source) {
+            onResizeEventRef.current?.(
+              source,
+              current.startFixed,
+              finalEnd,
+            );
+          }
+        }
+      }
+    }
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [blockResize, dayStartsHour, resolveGridPoint, timeZone]);
+
   function handleTaskMoveStart(payload: TaskLaneMoveStart) {
     if (!onMoveWorkBlock) return;
     const durationMs =
       Date.parse(payload.block.end) - Date.parse(payload.block.start);
-    const durationMinutes =
-      Number.isFinite(durationMs) && durationMs > 0
-        ? Math.max(1, Math.round(durationMs / 60_000))
-        : SNAP_MINUTES;
+    if (!Number.isFinite(durationMs) || durationMs <= 0) return;
     setDragCreate(null);
+    setBlockResize(null);
     setBlockMove({
+      kind: "task",
       workBlockId: payload.block.workBlockId,
       taskId: payload.block.taskId,
-      durationMinutes,
+      calendarId: null,
+      eventId: null,
+      durationMs,
       pointerId: payload.pointerId,
       originClientX: payload.clientX,
       originClientY: payload.clientY,
@@ -512,16 +699,177 @@ export function WorkspaceCalendar({
       column: null,
       offsetMinutes: null,
       start: null,
+      lane: "task",
     });
   }
 
+  function handleTaskResizeStart(payload: TaskLaneResizeStart) {
+    if (!onResizeWorkBlock) return;
+    const startMs = Date.parse(payload.block.start);
+    const endMs = Date.parse(payload.block.end);
+    if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) {
+      return;
+    }
+    const startFixed = new Date(startMs);
+    const placed = gridOffsetFromInstant(startFixed, dayStartsHour, timeZone);
+    if (!placed) return;
+    const column = document.querySelector<HTMLElement>(
+      `[data-time-grid-date="${placed.dateKey}"]`,
+    );
+    if (!column) return;
+    const endPlaced = gridOffsetFromInstant(
+      new Date(endMs),
+      dayStartsHour,
+      timeZone,
+    );
+    setDragCreate(null);
+    setBlockMove(null);
+    setBlockResize({
+      kind: "task",
+      workBlockId: payload.block.workBlockId,
+      taskId: payload.block.taskId,
+      calendarId: null,
+      eventId: null,
+      startOffsetMinutes: placed.offsetMinutes,
+      startFixed,
+      dateKey: placed.dateKey,
+      column,
+      pointerId: payload.pointerId,
+      originClientX: payload.clientX,
+      originClientY: payload.clientY,
+      active: false,
+      endOffsetMinutes:
+        endPlaced && endPlaced.dateKey === placed.dateKey
+          ? endPlaced.offsetMinutes
+          : placed.offsetMinutes + INTERACT_SNAP_MINUTES,
+      end: new Date(endMs),
+      lane: "task",
+    });
+  }
+
+  // 予定（Schedule-X）の移動・下端リサイズ
+  useEffect(() => {
+    const root = rootElement;
+    if (!root) return;
+    const canInteract = Boolean(onMoveEvent || onResizeEvent);
+
+    function onPointerDown(event: PointerEvent) {
+      if (!canInteract || event.button !== 0) return;
+      if (blockMoveRef.current || blockResizeRef.current || dragCreateRef.current) {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      const eventEl = target.closest<HTMLElement>(".sx__time-grid-event");
+      if (!eventEl || eventEl.classList.contains("is-event-copy")) return;
+
+      const sxEventId = eventEl.dataset.eventId;
+      if (!sxEventId) return;
+
+      const source = googleEventsRef.current.find(
+        (item) => eventKey(item.calendarId, item.id) === sxEventId,
+      );
+      if (!source || source.allDay || source.readOnly) return;
+
+      const startMs = Date.parse(source.start);
+      const endMs = Date.parse(source.end);
+      if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) {
+        return;
+      }
+
+      const resizeHandle = target.closest(".sx__time-grid-event-resize-handle");
+      const wantResize =
+        Boolean(onResizeEvent) &&
+        (Boolean(resizeHandle) || isNearBottomEdge(event.clientY, eventEl));
+
+      const column = eventEl.closest<HTMLElement>("[data-time-grid-date]");
+      if (!column) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      setDragCreate(null);
+
+      if (wantResize) {
+        const startFixed = new Date(startMs);
+        const placed = gridOffsetFromInstant(
+          startFixed,
+          dayStartsHour,
+          timeZone,
+        );
+        if (!placed) return;
+        const endPlaced = gridOffsetFromInstant(
+          new Date(endMs),
+          dayStartsHour,
+          timeZone,
+        );
+        setBlockMove(null);
+        setBlockResize({
+          kind: "event",
+          workBlockId: null,
+          taskId: null,
+          calendarId: source.calendarId,
+          eventId: source.id,
+          startOffsetMinutes: placed.offsetMinutes,
+          startFixed,
+          dateKey: placed.dateKey,
+          column,
+          pointerId: event.pointerId,
+          originClientX: event.clientX,
+          originClientY: event.clientY,
+          active: false,
+          endOffsetMinutes:
+            endPlaced && endPlaced.dateKey === placed.dateKey
+              ? endPlaced.offsetMinutes
+              : placed.offsetMinutes + INTERACT_SNAP_MINUTES,
+          end: new Date(endMs),
+          lane: "schedule",
+        });
+        return;
+      }
+
+      if (!onMoveEvent) return;
+      setBlockResize(null);
+      setBlockMove({
+        kind: "event",
+        workBlockId: null,
+        taskId: null,
+        calendarId: source.calendarId,
+        eventId: source.id,
+        durationMs: endMs - startMs,
+        pointerId: event.pointerId,
+        originClientX: event.clientX,
+        originClientY: event.clientY,
+        active: false,
+        dateKey: null,
+        column: null,
+        offsetMinutes: null,
+        start: null,
+        lane: "schedule",
+      });
+    }
+
+    root.addEventListener("pointerdown", onPointerDown, true);
+    return () => {
+      root.removeEventListener("pointerdown", onPointerDown, true);
+    };
+  }, [
+    rootElement,
+    onMoveEvent,
+    onResizeEvent,
+    dayStartsHour,
+    timeZone,
+  ]);
+
   function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
     if (!onCreateSlot || draggingTask || event.button !== 0) return;
-    if (blockMove) return;
+    if (blockMove || blockResize) return;
     const target = event.target as HTMLElement | null;
     if (!target || target.closest(IGNORE_CREATE_SELECTOR)) return;
 
-    const point = resolveGridPoint(event.clientX, event.clientY);
+    const point = resolveGridPoint(event.clientX, event.clientY, {
+      snapMinutes: CREATE_SNAP_MINUTES,
+    });
     if (!point) return;
     if (point.lane === "schedule" && !canCreateSchedule) return;
 
@@ -573,15 +921,22 @@ export function WorkspaceCalendar({
     blockMove.offsetMinutes != null
       ? (() => {
           const startOffset = blockMove.offsetMinutes;
-          const endOffset = Math.min(
-            24 * 60,
-            startOffset + blockMove.durationMinutes,
+          const durationMinutes = Math.max(
+            INTERACT_SNAP_MINUTES,
+            Math.round(blockMove.durationMs / 60_000),
           );
+          const endOffset = Math.min(24 * 60, startOffset + durationMinutes);
           const topPct = (startOffset / (24 * 60)) * 100;
           const heightPct = ((endOffset - startOffset) / (24 * 60)) * 100;
           return createPortal(
             <div
-              className="sx-create-ghost sx-create-ghost--task sx-create-ghost--moving"
+              className={cn(
+                "sx-create-ghost",
+                "sx-create-ghost--moving",
+                blockMove.lane === "task"
+                  ? "sx-create-ghost--task"
+                  : "sx-create-ghost--schedule",
+              )}
               style={{
                 top: `${topPct}%`,
                 height: `${Math.max(heightPct, 1.2)}%`,
@@ -591,6 +946,64 @@ export function WorkspaceCalendar({
           );
         })()
       : null;
+
+  const resizeGhost =
+    blockResize?.active && blockResize.column
+      ? (() => {
+          const startOffset = blockResize.startOffsetMinutes;
+          const endOffset = Math.max(
+            startOffset + INTERACT_SNAP_MINUTES,
+            blockResize.endOffsetMinutes,
+          );
+          const topPct = (startOffset / (24 * 60)) * 100;
+          const heightPct = ((endOffset - startOffset) / (24 * 60)) * 100;
+          return createPortal(
+            <div
+              className={cn(
+                "sx-create-ghost",
+                "sx-create-ghost--moving",
+                blockResize.lane === "task"
+                  ? "sx-create-ghost--task"
+                  : "sx-create-ghost--schedule",
+              )}
+              style={{
+                top: `${topPct}%`,
+                height: `${Math.max(heightPct, 1.2)}%`,
+              }}
+            />,
+            blockResize.column,
+          );
+        })()
+      : null;
+
+  const interactingBlockId =
+    (blockMove?.active &&
+      (blockMove.kind === "task"
+        ? blockMove.workBlockId
+        : blockMove.eventId
+          ? eventKey(blockMove.calendarId ?? "", blockMove.eventId)
+          : null)) ||
+    (blockResize?.active &&
+      (blockResize.kind === "task"
+        ? blockResize.workBlockId
+        : blockResize.eventId
+          ? eventKey(blockResize.calendarId ?? "", blockResize.eventId)
+          : null)) ||
+    null;
+
+  useEffect(() => {
+    if (!interactingBlockId) return;
+    const selector =
+      blockMove?.kind === "event" || blockResize?.kind === "event"
+        ? `[data-event-id="${CSS.escape(interactingBlockId)}"]`
+        : null;
+    if (!selector) return;
+    const el = document.querySelector(selector);
+    el?.classList.add("sx__time-grid-event--moving");
+    return () => {
+      el?.classList.remove("sx__time-grid-event--moving");
+    };
+  }, [interactingBlockId, blockMove?.kind, blockResize?.kind]);
 
   return (
     <div
@@ -607,6 +1020,7 @@ export function WorkspaceCalendar({
         draggingTask && "ring-2 ring-brand/40",
         dragCreate && "workspace-calendar--creating",
         blockMove?.active && "workspace-calendar--moving-block",
+        blockResize?.active && "workspace-calendar--resizing-block",
         className,
       )}
       style={
@@ -658,6 +1072,7 @@ export function WorkspaceCalendar({
       </div>
       {createGhost}
       {moveGhost}
+      {resizeGhost}
       <CalendarHeaderExtras
         root={rootElement}
         rangeStart={visibleRange?.start ?? null}
@@ -689,8 +1104,15 @@ export function WorkspaceCalendar({
                 onTaskMoveStart={
                   onMoveWorkBlock ? handleTaskMoveStart : undefined
                 }
+                onTaskResizeStart={
+                  onResizeWorkBlock ? handleTaskResizeStart : undefined
+                }
                 movingWorkBlockId={
-                  blockMove?.active ? blockMove.workBlockId : null
+                  blockMove?.active && blockMove.kind === "task"
+                    ? blockMove.workBlockId
+                    : blockResize?.active && blockResize.kind === "task"
+                      ? blockResize.workBlockId
+                      : null
                 }
               />,
               host,
@@ -701,3 +1123,4 @@ export function WorkspaceCalendar({
     </div>
   );
 }
+

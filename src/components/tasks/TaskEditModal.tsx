@@ -1,15 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import { Button } from "@/components/ui/button";
 import {
   ClickToEditField,
-  ClickToEditFieldBlock,
+  ClickToEditRow,
 } from "@/components/ui/click-to-edit-field";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { cn } from "@/lib/cn";
 import {
   endOfTodayDatetimeLocalValue,
   fromDatetimeLocalValue,
@@ -55,7 +55,6 @@ type FormState = {
   due_at: string;
   estimated_minutes: string;
   progress_percent: string;
-  location: string;
   starts_at: string;
   ends_at: string;
   /** 作業枠の日誌（Markdown） */
@@ -67,6 +66,16 @@ type WorkSeed = {
   ends_at: string;
   note_md?: string | null;
 };
+
+type TaskModalTab = "work" | "task";
+
+const TABS: { id: TaskModalTab; label: string }[] = [
+  { id: "work", label: "作業枠" },
+  { id: "task", label: "タスク" },
+];
+
+const bareControlClass =
+  "admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0";
 
 function formFromTask(
   task: WorkspaceTask,
@@ -80,7 +89,6 @@ function formFromTask(
     due_at: toDatetimeLocalValue(task.due_at),
     estimated_minutes: formatEstimatedMinutesInput(task.estimated_minutes),
     progress_percent: String(task.progress_percent ?? 0),
-    location: task.location ?? "",
     starts_at: toDatetimeLocalValue(work?.starts_at ?? null),
     ends_at: toDatetimeLocalValue(work?.ends_at ?? null),
     note_md: work?.note_md ?? "",
@@ -99,6 +107,7 @@ export function TaskEditModal({
   onWorkBlockDeleted,
 }: Props) {
   const formId = useId();
+  const titleId = useId();
   const editingWorkBlock = Boolean(workBlockId || initialWorkBlock);
   const [task, setTask] = useState<WorkspaceTask | null>(initialTask);
   const [projects, setProjects] = useState<WorkspaceProject[]>([]);
@@ -111,6 +120,7 @@ export function TaskEditModal({
   const [baseline, setBaseline] = useState<FormState | null>(
     initialTask ? formFromTask(initialTask, initialWorkBlock) : null,
   );
+  const [modalTab, setModalTab] = useState<TaskModalTab>("work");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [archiving, setArchiving] = useState(false);
@@ -134,7 +144,10 @@ export function TaskEditModal({
   }
 
   useEffect(() => {
-    if (!open || !taskId) return;
+    if (!open || !taskId) {
+      setModalTab("work");
+      return;
+    }
 
     let cancelled = false;
     setLoading(true);
@@ -143,6 +156,7 @@ export function TaskEditModal({
     setResolvedWorkBlockId(workBlockId);
     setProjects([]);
     setActualMinutes(0);
+    setModalTab(editingWorkBlock ? "work" : "task");
     // タイトル表示用のみ先行セット。form は API 完了まで出さない
     // （projects 未取得のまま Select を出すと value が「なし」に落ちることがある）
     if (initialTask && initialTask.id === taskId) {
@@ -179,7 +193,12 @@ export function TaskEditModal({
 
         let work: WorkSeed | null | undefined = seedWorkBlock;
         let blockId = seedWorkBlockId;
-        if (seedWorkBlockId) {
+        // 楽観 ID など未保存の ID では API を叩かない（UUID 以外は 500 になる）
+        if (
+          seedWorkBlockId &&
+          !seedWorkBlockId.startsWith("optimistic-") &&
+          !seedWorkBlockId.startsWith("task:")
+        ) {
           const blockRes = await fetch(
             `/api/admin/workspace/work-blocks/${seedWorkBlockId}/`,
           );
@@ -330,7 +349,6 @@ export function TaskEditModal({
           estimated_minutes: minutes,
           progress_percent:
             form.status === "done" ? 100 : Math.round(progress),
-          location: form.location.trim() || null,
         }),
       });
       const data = (await res.json()) as {
@@ -409,34 +427,23 @@ export function TaskEditModal({
     }
   }
 
-  return (
-    <AdminContentModal
-      open={open}
-      onClose={onClose}
-      title={
-        editingWorkBlock
-          ? task?.title
-            ? `作業枠: ${task.title}`
-            : "作業枠"
-          : task?.title
-            ? `Task: ${task.title}`
-            : "Task"
-      }
-      formId={formId}
-      isEdit
-      saving={saving}
-      dirty={dirty && Boolean(form?.title.trim())}
-      deleting={archiving}
-      deleteError={error}
-      onDelete={onArchive}
-      updateLabel="保存"
-      maxWidthClassName="max-w-2xl"
-      maxHeightClassName="max-h-[min(90vh,48rem)]"
-    >
-      {loading ? (
-        <p className="m-0 text-sm text-muted-foreground">読み込み中…</p>
-      ) : form ? (
-        <form id={formId} onSubmit={onSave} className="flex flex-col gap-6">
+  const displayTitle =
+    form?.title.trim() ||
+    task?.title ||
+    (loading ? "読み込み中…" : editingWorkBlock ? "作業枠" : "Task");
+
+  const dueIso = form ? fromDatetimeLocalValue(form.due_at) : null;
+  const dueOverdue =
+    Boolean(form) &&
+    dueIso != null &&
+    form!.status !== "done" &&
+    new Date(dueIso) < new Date();
+
+  function renderTaskFields() {
+    if (!form) return null;
+    return (
+      <div className="flex flex-col gap-8">
+        <section className="flex flex-col gap-3">
           <ClickToEditField
             value={form.title}
             emptyLabel="タイトルを入力"
@@ -451,197 +458,131 @@ export function TaskEditModal({
           <ClickToEditField
             value={form.body_md}
             inputType="textarea"
-            emptyDisplay="hover-add"
-            emptyAddLabel="詳細を追加"
-            emptyLabel="詳細"
+            emptyLabel="詳細を追加"
             ariaLabel="詳細"
             displayClassName="text-sm leading-relaxed text-foreground"
             onSave={async (next) => {
               patchForm("body_md", next);
             }}
           />
+        </section>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <ClickToEditFieldBlock label="状態">
-              <Select
-                id="cal-task-status"
-                value={form.status}
-                className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                onChange={(e) => {
-                  const nextStatus = e.target.value as TaskStatus;
-                  setForm((prev) =>
-                    prev
-                      ? {
-                          ...prev,
-                          status: nextStatus,
-                          progress_percent:
-                            nextStatus === "done"
-                              ? "100"
-                              : prev.progress_percent,
-                        }
-                      : prev,
-                  );
-                }}
-              >
-                {Object.entries(TASK_STATUS_LABELS).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
-            </ClickToEditFieldBlock>
+        <section className="flex flex-col gap-3">
+          <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            基本情報
+          </h3>
+          <ClickToEditRow label="状態" align="center">
+            <Select
+              id="cal-task-status"
+              value={form.status}
+              className={bareControlClass}
+              onChange={(e) => {
+                const nextStatus = e.target.value as TaskStatus;
+                setForm((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        status: nextStatus,
+                        progress_percent:
+                          nextStatus === "done"
+                            ? "100"
+                            : prev.progress_percent,
+                      }
+                    : prev,
+                );
+              }}
+            >
+              {Object.entries(TASK_STATUS_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </ClickToEditRow>
 
-            <ClickToEditFieldBlock label="期限">
-              <div className="flex items-center gap-2">
-                <Input
-                  id="cal-task-due"
-                  type="datetime-local"
-                  value={form.due_at}
-                  onChange={(e) => patchForm("due_at", e.target.value)}
-                  className="admin-input-bare h-8 min-w-0 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-7 shrink-0 px-2.5 text-xs"
-                  onClick={() =>
-                    patchForm("due_at", endOfTodayDatetimeLocalValue())
-                  }
-                >
-                  今日中
-                </Button>
-              </div>
-            </ClickToEditFieldBlock>
-
-            <ClickToEditFieldBlock label="進捗">
-              <div className="flex items-center gap-1">
-                <Input
-                  id="cal-task-progress"
-                  type="number"
-                  min={0}
-                  max={100}
-                  inputMode="numeric"
-                  value={form.progress_percent}
-                  onChange={(e) =>
-                    patchForm("progress_percent", e.target.value)
-                  }
-                  className="admin-input-bare h-8 w-10 shrink-0 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                />
-                <span className="text-sm text-muted-foreground">%</span>
-                <div className="ml-2 h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
-                  <div
-                    className="h-full rounded-full bg-foreground/65 transition-[width] duration-200"
-                    style={{
-                      width: `${Math.min(
-                        100,
-                        Math.max(0, Number(form.progress_percent) || 0),
-                      )}%`,
-                    }}
-                  />
-                </div>
-              </div>
-            </ClickToEditFieldBlock>
-
-            <ClickToEditFieldBlock label="作業時間">
-              <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-                <span className="text-sm text-muted-foreground">見積</span>
-                <Input
-                  id="cal-task-estimate"
-                  type="number"
-                  min={1}
-                  inputMode="numeric"
-                  value={form.estimated_minutes}
-                  onChange={(e) =>
-                    patchForm("estimated_minutes", e.target.value)
-                  }
-                  className="admin-input-bare h-8 w-12 shrink-0 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                  aria-label="見積（分）"
-                />
-                <span className="text-sm text-muted-foreground">分</span>
-                <span className="text-sm text-muted-foreground">
-                  （実績：{actualMinutes} 分）
-                </span>
-              </div>
-            </ClickToEditFieldBlock>
-
-            <ClickToEditFieldBlock label="場所" className="sm:col-span-2">
-              <ClickToEditField
-                value={form.location}
-                emptyLabel="未設定"
-                ariaLabel="場所"
-                onSave={async (next) => {
-                  patchForm("location", next);
-                }}
+          <ClickToEditRow label="期限" align="center">
+            <div className="flex items-center gap-2">
+              <Input
+                id="cal-task-due"
+                type="datetime-local"
+                value={form.due_at}
+                onChange={(e) => patchForm("due_at", e.target.value)}
+                className={cn(
+                  bareControlClass,
+                  "min-w-0 flex-1",
+                  dueOverdue && "text-red-600",
+                )}
               />
-            </ClickToEditFieldBlock>
-          </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 shrink-0 px-2.5 text-xs"
+                onClick={() =>
+                  patchForm("due_at", endOfTodayDatetimeLocalValue())
+                }
+              >
+                今日中
+              </Button>
+            </div>
+          </ClickToEditRow>
 
-          {editingWorkBlock ? (
-            <section className="flex flex-col gap-3">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  作業枠
-                </h3>
-                {resolvedWorkBlockId ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 px-2 text-xs text-red-600 hover:text-red-700"
-                    disabled={deletingBlock || saving || archiving}
-                    onClick={() => void onDeleteWorkBlock()}
-                  >
-                    {deletingBlock ? "削除中…" : "削除"}
-                  </Button>
-                ) : null}
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <ClickToEditFieldBlock label="開始">
-                  <Input
-                    id="cal-work-start"
-                    type="datetime-local"
-                    value={form.starts_at}
-                    onChange={(e) =>
-                      patchForm("starts_at", e.target.value)
-                    }
-                    required
-                    className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                  />
-                </ClickToEditFieldBlock>
-                <ClickToEditFieldBlock label="終了">
-                  <Input
-                    id="cal-work-end"
-                    type="datetime-local"
-                    value={form.ends_at}
-                    onChange={(e) => patchForm("ends_at", e.target.value)}
-                    required
-                    className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                  />
-                </ClickToEditFieldBlock>
-              </div>
-              <ClickToEditFieldBlock label="作業日誌">
-                <ClickToEditField
-                  value={form.note_md}
-                  inputType="textarea"
-                  emptyDisplay="hover-add"
-                  emptyAddLabel="日誌を追加"
-                  emptyLabel="この枠でやったこと・気づき…"
-                  ariaLabel="作業日誌"
-                  displayClassName="text-sm leading-relaxed text-foreground"
-                  onSave={async (next) => {
-                    patchForm("note_md", next);
+          <ClickToEditRow label="進捗" align="center">
+            <div className="flex items-center gap-1">
+              <Input
+                id="cal-task-progress"
+                type="number"
+                min={0}
+                max={100}
+                inputMode="numeric"
+                value={form.progress_percent}
+                onChange={(e) =>
+                  patchForm("progress_percent", e.target.value)
+                }
+                className={cn(bareControlClass, "w-10 shrink-0")}
+              />
+              <span className="text-sm text-muted-foreground">%</span>
+              <div className="ml-2 h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-foreground/65 transition-[width] duration-200"
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      Math.max(0, Number(form.progress_percent) || 0),
+                    )}%`,
                   }}
                 />
-              </ClickToEditFieldBlock>
-            </section>
-          ) : null}
+              </div>
+            </div>
+          </ClickToEditRow>
 
-          <ClickToEditFieldBlock label="Project">
+          <ClickToEditRow label="作業時間" align="center">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <span className="text-sm text-muted-foreground">見積</span>
+              <Input
+                id="cal-task-estimate"
+                type="number"
+                min={1}
+                inputMode="numeric"
+                value={form.estimated_minutes}
+                onChange={(e) =>
+                  patchForm("estimated_minutes", e.target.value)
+                }
+                className={cn(bareControlClass, "w-12 shrink-0")}
+                aria-label="見積（分）"
+              />
+              <span className="text-sm text-muted-foreground">分</span>
+              <span className="text-sm text-muted-foreground">
+                （実績：{actualMinutes} 分）
+              </span>
+            </div>
+          </ClickToEditRow>
+
+          <ClickToEditRow label="Project" align="center">
             <Select
               id="cal-task-project"
               value={form.project_id}
-              className="admin-input-bare h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+              className={bareControlClass}
               onChange={(e) => patchForm("project_id", e.target.value)}
             >
               <option value="">（なし）</option>
@@ -651,21 +592,171 @@ export function TaskEditModal({
                 </option>
               ))}
             </Select>
-          </ClickToEditFieldBlock>
+          </ClickToEditRow>
+        </section>
+
+        <div className="flex justify-start">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-8 border-red-200 px-3 text-red-600 hover:border-red-500 hover:bg-red-50 hover:text-red-700"
+            disabled={archiving || saving || deletingBlock}
+            onClick={() => void onArchive()}
+          >
+            {archiving ? "削除中…" : "タスクを削除"}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  function renderWorkFields() {
+    if (!form) return null;
+    return (
+      <div className="flex flex-col gap-8">
+        <section className="flex flex-col gap-3">
+          <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            スケジュール
+          </h3>
+          <ClickToEditRow label="開始" align="center">
+            <Input
+              id="cal-work-start"
+              type="datetime-local"
+              value={form.starts_at}
+              onChange={(e) => patchForm("starts_at", e.target.value)}
+              required
+              className={bareControlClass}
+            />
+          </ClickToEditRow>
+          <ClickToEditRow label="終了" align="center">
+            <Input
+              id="cal-work-end"
+              type="datetime-local"
+              value={form.ends_at}
+              onChange={(e) => patchForm("ends_at", e.target.value)}
+              required
+              className={bareControlClass}
+            />
+          </ClickToEditRow>
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            作業日誌
+          </h3>
+          <ClickToEditField
+            value={form.note_md}
+            inputType="textarea"
+            emptyLabel="日誌を追加"
+            placeholder="この枠でやったこと・気づき…"
+            ariaLabel="作業日誌"
+            displayClassName="text-sm leading-relaxed text-foreground"
+            onSave={async (next) => {
+              patchForm("note_md", next);
+            }}
+          />
+        </section>
+
+        {resolvedWorkBlockId ? (
+          <div className="flex justify-start">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 border-red-200 px-3 text-red-600 hover:border-red-500 hover:bg-red-50 hover:text-red-700"
+              disabled={deletingBlock || saving || archiving}
+              onClick={() => void onDeleteWorkBlock()}
+            >
+              {deletingBlock ? "削除中…" : "作業枠を削除"}
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <AdminContentModal
+      open={open}
+      onClose={onClose}
+      title={displayTitle}
+      formId={formId}
+      isEdit
+      saving={saving}
+      dirty={dirty && Boolean(form?.title.trim())}
+      deleting={archiving || deletingBlock}
+      deleteError={error}
+      updateLabel="保存"
+      maxWidthClassName="max-w-2xl"
+      maxHeightClassName="max-h-[min(90vh,48rem)]"
+      header={
+        editingWorkBlock ? (
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-2 px-6 pb-4 pt-5">
+              <h2
+                id={titleId}
+                className="m-0 text-2xl font-semibold tracking-tight text-foreground"
+              >
+                {displayTitle}
+              </h2>
+            </div>
+            <div
+              role="tablist"
+              aria-label="作業枠とタスク"
+              className="admin-underline-tabs"
+            >
+              {TABS.map((tab) => {
+                const selected = modalTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    id={`task-modal-tab-${tab.id}`}
+                    onClick={() => setModalTab(tab.id)}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : undefined
+      }
+    >
+      {loading ? (
+        <p className="m-0 text-sm text-muted-foreground">読み込み中…</p>
+      ) : form ? (
+        <form id={formId} onSubmit={onSave} className="flex flex-col gap-6">
+          {editingWorkBlock ? (
+            <>
+              {modalTab === "work" ? (
+                <div
+                  role="tabpanel"
+                  aria-labelledby="task-modal-tab-work"
+                >
+                  {renderWorkFields()}
+                </div>
+              ) : (
+                <div
+                  role="tabpanel"
+                  aria-labelledby="task-modal-tab-task"
+                >
+                  {renderTaskFields()}
+                </div>
+              )}
+            </>
+          ) : (
+            renderTaskFields()
+          )}
 
           {error ? (
             <p className="m-0 text-sm text-red-600" role="alert">
               {error}
             </p>
           ) : null}
-
-          <div className="flex justify-end">
-            <Button type="button" variant="outline" size="sm" asChild>
-              <Link href={`/admin/workspace/tasks/?task=${task?.id ?? taskId}`}>
-                Tasks で開く
-              </Link>
-            </Button>
-          </div>
         </form>
       ) : (
         <p className="m-0 text-sm text-red-600" role="alert">

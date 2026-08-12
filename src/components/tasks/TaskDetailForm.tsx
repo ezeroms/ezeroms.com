@@ -54,7 +54,6 @@ export function TaskDetailForm({
   const [estimatedMinutes, setEstimatedMinutes] = useState(
     task.estimated_minutes != null ? String(task.estimated_minutes) : "",
   );
-  const [location, setLocation] = useState(task.location ?? "");
   const [newProjectName, setNewProjectName] = useState("");
   const [projectList, setProjectList] = useState(projects);
   const [busy, setBusy] = useState(false);
@@ -125,7 +124,6 @@ export function TaskDetailForm({
           scheduled_date: scheduledDate || null,
           due_at: fromDatetimeLocalValue(dueAt),
           estimated_minutes: minutesParsed.value,
-          location: location.trim() || null,
         }),
       });
       const data = (await res.json()) as { error?: string };
@@ -288,14 +286,6 @@ export function TaskDetailForm({
               inputMode="numeric"
               value={estimatedMinutes}
               onChange={(e) => setEstimatedMinutes(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="task-location">場所</Label>
-            <Input
-              id="task-location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
             />
           </div>
         </div>
