@@ -120,7 +120,7 @@ export function GiantsQuoteCard({
       />
 
       {citationNode ? (
-        <p className="m-0 mt-4 text-base leading-[1.8] text-foreground">
+        <p className="m-0 mt-4 text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base">
           {citationNode}
         </p>
       ) : null}

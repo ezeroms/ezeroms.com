@@ -30,6 +30,33 @@ import {
   markdownToEditorHtml,
 } from "@/lib/admin/rich-text";
 
+/**
+ * TipTap ドキュメント上で、画像の直前の空段落だけ削除する。
+ * （直後の空段落はカーソル置き場として残す）
+ */
+function pruneEmptyParagraphsBeforeImages(editor: Editor): number {
+  const ranges: { from: number; to: number }[] = [];
+  editor.state.doc.descendants((node, pos) => {
+    if (node.type.name !== "paragraph" || node.content.size > 0) return;
+    const $pos = editor.state.doc.resolve(pos);
+    const index = $pos.index($pos.depth);
+    const parent = $pos.node($pos.depth);
+    const next =
+      index < parent.childCount - 1 ? parent.child(index + 1) : null;
+    if (next?.type.name === "image") {
+      ranges.push({ from: pos, to: pos + node.nodeSize });
+    }
+  });
+  if (!ranges.length) return 0;
+  let { tr } = editor.state;
+  for (let i = ranges.length - 1; i >= 0; i--) {
+    const range = ranges[i]!;
+    tr = tr.delete(range.from, range.to);
+  }
+  editor.view.dispatch(tr);
+  return ranges.length;
+}
+
 /** autolink は維持しつつ、マーク終端で isActive が残り続けないようにする */
 const EditorLink = Link.extend({
   inclusive() {
@@ -149,6 +176,8 @@ export function AdminRichTextEditor({
   const uploadRef = useRef(onUploadImage);
   uploadRef.current = onUploadImage;
   const editorRef = useRef<Editor | null>(null);
+  /** setContent 後の prune で onChange が走り外部 value と戦うのを防ぐ */
+  const suppressOnChangeRef = useRef(false);
 
   async function insertUploadedImages(files: File[]) {
     const upload = uploadRef.current;
@@ -161,6 +190,7 @@ export function AdminRichTextEditor({
         if (!url) continue;
         ed.chain().focus().setImage({ src: url }).run();
       }
+      pruneEmptyParagraphsBeforeImages(ed);
     } finally {
       setUploadingImage(false);
     }
@@ -190,7 +220,11 @@ export function AdminRichTextEditor({
           class: "max-h-80 w-auto rounded-md",
         },
       }),
-      Placeholder.configure({ placeholder }),
+      Placeholder.configure({
+        placeholder,
+        // カーソル位置以外の空行にも is-empty を付け、余白調整 CSS を効かせる
+        showOnlyCurrent: false,
+      }),
     ],
     content: markdownToEditorHtml(value),
     editable: !disabled,
@@ -199,7 +233,8 @@ export function AdminRichTextEditor({
         id: id ?? "",
         class: cn(
           "prose prose-sm max-w-none px-3 py-2 text-sm leading-relaxed text-foreground outline-none",
-          "[&_p]:my-2 [&_ul]:my-2 [&_ol]:my-2 [&_blockquote]:my-2",
+          // 公開側 notesBody と同じく隣接段落マージン方式（空行の二重余白を避ける）
+          "[&_p]:m-0 [&_p+p]:mt-2 [&_ul]:my-2 [&_ol]:my-2 [&_blockquote]:my-2",
           "[&_h1]:mb-2 [&_h1]:mt-3 [&_h1]:text-lg [&_h1]:font-semibold",
           "[&_h2]:mb-2 [&_h2]:mt-4 [&_h2]:text-base [&_h2]:font-semibold",
           "[&_h3]:mb-2 [&_h3]:mt-3 [&_h3]:text-sm [&_h3]:font-semibold",
@@ -237,6 +272,7 @@ export function AdminRichTextEditor({
       },
     },
     onUpdate: ({ editor: ed }) => {
+      if (suppressOnChangeRef.current) return;
       onChange(editorHtmlToMarkdown(ed.getHTML()));
     },
   });
@@ -253,6 +289,13 @@ export function AdminRichTextEditor({
     editor.setEditable(!disabled && !uploadingImage);
   }, [disabled, editor, uploadingImage]);
 
+  useEffect(() => {
+    if (!editor) return;
+    suppressOnChangeRef.current = true;
+    pruneEmptyParagraphsBeforeImages(editor);
+    suppressOnChangeRef.current = false;
+  }, [editor]);
+
   // External value changes only (e.g. after save/refresh); avoid fighting while typing.
   useEffect(() => {
     if (!editor || editor.isFocused) return;
@@ -261,6 +304,10 @@ export function AdminRichTextEditor({
     editor.commands.setContent(markdownToEditorHtml(value), {
       emitUpdate: false,
     });
+    // setContent 後も TipTap が画像前に空段落を差し込むことがある
+    suppressOnChangeRef.current = true;
+    pruneEmptyParagraphsBeforeImages(editor);
+    suppressOnChangeRef.current = false;
   }, [editor, value]);
 
   function openLinkModal() {

@@ -38,5 +38,8 @@ export const notesBodyClass = cn(
   proseBlockquoteClass,
   "[&_img]:mt-4 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg",
   "[&_p]:m-0 [&_p+p]:mt-3",
+  // 空行スペーサーは段落マージンを付けず、1行分の高さだけ空ける
+  "[&_p.rt-blank]:my-0 [&_p.rt-blank]:h-[1.8em] [&_p.rt-blank]:overflow-hidden",
+  "[&_p:has(+p.rt-blank)]:mb-0 [&_p.rt-blank+p]:mt-0",
   "[&_hr]:my-4 [&_hr]:h-0 [&_hr]:border-0 [&_hr]:bg-transparent",
 );

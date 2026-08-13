@@ -361,6 +361,55 @@ body:has(.admin-root) {
   box-shadow: none;
 }
 
+/*
+ * TipTap 空段落（Enter 連打の空白行）:
+ * 通常の段落マージンが前後に乗ると「空行が2つ」に見える。
+ * TipTap は `<p><br></p>` に trailingBreak を足して br が2つになることがあり、
+ * :only-child では拾えない → 「br 以外の要素子を持たない p」を対象にする。
+ * 高さは公開側 .rt-blank と同じく固定してクランプする（min-height + br の二重化防止）。
+ */
+.admin-root .admin-rich-text .ProseMirror p:empty,
+.admin-root .admin-rich-text .ProseMirror p.is-empty,
+.admin-root .admin-rich-text .ProseMirror p:has(> br):not(:has(> :not(br))) {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  height: 1.5em !important;
+  max-height: 1.5em !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* 画像直前の空段落は表示しない（ログ: `<p></p><img>` が写真上の空行になる） */
+.admin-root .admin-rich-text .ProseMirror p:empty:has(+ img),
+.admin-root .admin-rich-text .ProseMirror p.is-empty:has(+ img),
+.admin-root .admin-rich-text .ProseMirror
+  p:has(> br):not(:has(> :not(br))):has(+ img) {
+  display: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.admin-root .admin-rich-text .ProseMirror p:has(+ p:empty),
+.admin-root .admin-rich-text .ProseMirror p:has(+ p.is-empty),
+.admin-root .admin-rich-text .ProseMirror
+  p:has(+ p:has(> br):not(:has(> :not(br)))) {
+  margin-bottom: 0 !important;
+}
+
+.admin-root .admin-rich-text .ProseMirror p:empty + p,
+.admin-root .admin-rich-text .ProseMirror p.is-empty + p,
+.admin-root .admin-rich-text .ProseMirror
+  p:has(> br):not(:has(> :not(br)))
+  + p {
+  margin-top: 0 !important;
+}
+
 /* 管理テーブル線（chronicle マトリクスに準拠）
  * ヘッダー下 = ややはっきりした実線
  * 行間 = 月と月の区切りと同じ薄い実線（#f1f3f4）

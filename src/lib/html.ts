@@ -4,6 +4,7 @@ import {
   youtubeEmbedSrc,
 } from "@/lib/content/clip-meta";
 import { repairLiteralMarkdownInHtml } from "@/lib/content/legacy-markdown";
+import { applyBlankParagraphClass } from "@/lib/admin/rich-text";
 
 /** Responsive 16:9 YouTube block for body HTML. */
 export function youtubeEmbedBlock(videoId: string): string {
@@ -125,8 +126,10 @@ export function repairLegacyCodeFencesInHtml(html: string): string {
 
 export function sanitizeBody(html: string): string {
   return sanitizeHtml(
-    embedYoutubeInHtml(
-      repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+    applyBlankParagraphClass(
+      embedYoutubeInHtml(
+        repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+      ),
     ),
     {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([

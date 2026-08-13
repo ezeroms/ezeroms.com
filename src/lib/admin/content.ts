@@ -6,7 +6,10 @@ import {
   repairLiteralMarkdownInHtml,
   unescapeOverEscapedMarkdown,
 } from "@/lib/content/legacy-markdown";
-import { editorHtmlToMarkdown } from "@/lib/admin/rich-text";
+import {
+  applyBlankParagraphClass,
+  editorHtmlToMarkdown,
+} from "@/lib/admin/rich-text";
 
 /** Generate a short URL-safe slug (diary-style). */
 export function generateContentSlug(length = 16): string {
@@ -33,9 +36,10 @@ export function parseTagList(raw: string): string[] {
 
 export function markdownToHtml(md: string): string {
   const prepared = normalizeLegacyMarkdown(unescapeOverEscapedMarkdown(md));
-  return marked.parse(preprocessMarkdownMedia(prepared), {
+  const html = marked.parse(preprocessMarkdownMedia(prepared), {
     async: false,
   }) as string;
+  return applyBlankParagraphClass(html);
 }
 
 /** Markdown → HTML without wrapping block `<p>` (for list item bodies). */
