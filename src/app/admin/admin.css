@@ -350,6 +350,14 @@ body:has(.admin-root) {
   box-shadow: none !important;
 }
 
+/* Docs 集中モード: 入力枠・フォーカス線なし。ヘッダー下線は残す */
+.admin-root .admin-rich-text.admin-rich-text--focus,
+.admin-root .admin-rich-text.admin-rich-text--focus:focus-within {
+  border-color: transparent;
+  background-color: hsl(var(--card));
+  box-shadow: none !important;
+}
+
 .admin-root .admin-rich-text .tiptap,
 .admin-root .admin-rich-text .ProseMirror {
   outline: none;

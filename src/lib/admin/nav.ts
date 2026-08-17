@@ -218,7 +218,7 @@ export const adminNavSections: AdminNavSection[] = [
       {
         href: "/admin/giants/",
         label: "The shoulders of Giants",
-        description: "引用・巨人の肩の上",
+        description: "",
         status: "ready",
         icon: "book-open",
       },

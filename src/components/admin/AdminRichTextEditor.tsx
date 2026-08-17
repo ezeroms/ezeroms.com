@@ -74,6 +74,17 @@ type Props = {
   minHeightClassName?: string;
   /** 指定時にツールバー／ペースト／ドロップで本文画像を挿入できる */
   onUploadImage?: (file: File) => Promise<string | null>;
+  /**
+   * document: ツールバーを上部ヘッダーに固定し、beforeContent と本文を
+   * まとめてスクロールする（Docs 集中モード向け）
+   */
+  variant?: "default" | "document";
+  /** ツールバー右端（集中モードの最小化など） */
+  toolbarEnd?: ReactNode;
+  /** スクロール領域内・本文の直前（タイトルなど） */
+  beforeContent?: ReactNode;
+  /** variant="document" のスクロール内ラッパー */
+  scrollInnerClassName?: string;
 };
 
 function ToolbarButton({
@@ -168,6 +179,10 @@ export function AdminRichTextEditor({
   className,
   minHeightClassName = "min-h-[180px]",
   onUploadImage,
+  variant = "default",
+  toolbarEnd,
+  beforeContent,
+  scrollInnerClassName,
 }: Props) {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -232,7 +247,8 @@ export function AdminRichTextEditor({
       attributes: {
         id: id ?? "",
         class: cn(
-          "prose prose-sm max-w-none px-3 py-2 text-sm leading-relaxed text-foreground outline-none",
+          "prose prose-sm max-w-none text-sm leading-relaxed text-foreground outline-none",
+          variant === "document" ? "px-0 py-1" : "px-3 py-2",
           // 公開側 notesBody と同じく隣接段落マージン方式（空行の二重余白を避ける）
           "[&_p]:m-0 [&_p+p]:mt-2 [&_ul]:my-2 [&_ol]:my-2 [&_blockquote]:my-2",
           "[&_h1]:mb-2 [&_h1]:mt-3 [&_h1]:text-lg [&_h1]:font-semibold",
@@ -310,6 +326,16 @@ export function AdminRichTextEditor({
     suppressOnChangeRef.current = false;
   }, [editor, value]);
 
+  useEffect(() => {
+    if (!editor) return;
+    const el = editor.view.dom;
+    const documentMode = variant === "document";
+    el.classList.toggle("px-3", !documentMode);
+    el.classList.toggle("py-2", !documentMode);
+    el.classList.toggle("px-0", documentMode);
+    el.classList.toggle("py-1", documentMode);
+  }, [editor, variant]);
+
   function openLinkModal() {
     if (!editor) return;
     setLinkModalHref(toolbar.linkHref);
@@ -350,6 +376,7 @@ export function AdminRichTextEditor({
   }
 
   const toolbarDisabled = disabled || !editor || uploadingImage;
+  const isDocument = variant === "document";
 
   return (
     <div
@@ -373,129 +400,148 @@ export function AdminRichTextEditor({
           }}
         />
       ) : null}
-      <div className="flex shrink-0 flex-wrap items-center gap-0.5 border-b border-border bg-card px-1 py-1">
-        <ToolbarButton
-          label="太字"
-          disabled={toolbarDisabled}
-          active={toolbar.isBold}
-          onClick={() => editor?.chain().focus().toggleBold().run()}
-        >
-          <Bold className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="斜体"
-          disabled={toolbarDisabled}
-          active={toolbar.isItalic}
-          onClick={() => editor?.chain().focus().toggleItalic().run()}
-        >
-          <Italic className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="打ち消し"
-          disabled={toolbarDisabled}
-          active={toolbar.isStrike}
-          onClick={() => editor?.chain().focus().toggleStrike().run()}
-        >
-          <Strikethrough className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="リンク"
-          disabled={toolbarDisabled}
-          active={toolbar.isLink}
-          onClick={openLinkModal}
-        >
-          <Link2 className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="インラインコード"
-          disabled={toolbarDisabled}
-          active={toolbar.isCode}
-          onClick={() => editor?.chain().focus().toggleCode().run()}
-        >
-          <Code className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="コードブロック"
-          disabled={toolbarDisabled}
-          active={toolbar.isCodeBlock}
-          onClick={toggleCodeBlock}
-        >
-          <SquareCode className="h-4 w-4" />
-        </ToolbarButton>
-        {onUploadImage ? (
+      <div
+        className={cn(
+          "flex shrink-0 items-center gap-1 bg-card",
+          isDocument
+            ? "border-b border-border px-2 py-1 sm:px-3"
+            : "flex-wrap gap-0.5 border-b border-border px-1 py-1",
+        )}
+      >
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-0.5">
           <ToolbarButton
-            label={uploadingImage ? "画像アップロード中" : "画像を挿入"}
+            label="太字"
             disabled={toolbarDisabled}
-            onClick={() => imageInputRef.current?.click()}
+            active={toolbar.isBold}
+            onClick={() => editor?.chain().focus().toggleBold().run()}
           >
-            <ImageIcon className="h-4 w-4" />
+            <Bold className="h-4 w-4" />
           </ToolbarButton>
+          <ToolbarButton
+            label="斜体"
+            disabled={toolbarDisabled}
+            active={toolbar.isItalic}
+            onClick={() => editor?.chain().focus().toggleItalic().run()}
+          >
+            <Italic className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="打ち消し"
+            disabled={toolbarDisabled}
+            active={toolbar.isStrike}
+            onClick={() => editor?.chain().focus().toggleStrike().run()}
+          >
+            <Strikethrough className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="リンク"
+            disabled={toolbarDisabled}
+            active={toolbar.isLink}
+            onClick={openLinkModal}
+          >
+            <Link2 className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="インラインコード"
+            disabled={toolbarDisabled}
+            active={toolbar.isCode}
+            onClick={() => editor?.chain().focus().toggleCode().run()}
+          >
+            <Code className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="コードブロック"
+            disabled={toolbarDisabled}
+            active={toolbar.isCodeBlock}
+            onClick={toggleCodeBlock}
+          >
+            <SquareCode className="h-4 w-4" />
+          </ToolbarButton>
+          {onUploadImage ? (
+            <ToolbarButton
+              label={uploadingImage ? "画像アップロード中" : "画像を挿入"}
+              disabled={toolbarDisabled}
+              onClick={() => imageInputRef.current?.click()}
+            >
+              <ImageIcon className="h-4 w-4" />
+            </ToolbarButton>
+          ) : null}
+          <span className="mx-1 h-4 w-px bg-border" aria-hidden />
+          <ToolbarButton
+            label="見出し 1"
+            disabled={toolbarDisabled}
+            active={toolbar.isH1}
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 1 }).run()
+            }
+          >
+            <Heading1 className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="見出し 2"
+            disabled={toolbarDisabled}
+            active={toolbar.isH2}
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+          >
+            <Heading2 className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="見出し 3"
+            disabled={toolbarDisabled}
+            active={toolbar.isH3}
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level: 3 }).run()
+            }
+          >
+            <Heading3 className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="箇条書き"
+            disabled={toolbarDisabled}
+            active={toolbar.isBulletList}
+            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+          >
+            <List className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="番号付きリスト"
+            disabled={toolbarDisabled}
+            active={toolbar.isOrderedList}
+            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+          >
+            <ListOrdered className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="引用"
+            disabled={toolbarDisabled}
+            active={toolbar.isBlockquote}
+            onClick={() => editor?.chain().focus().toggleBlockquote().run()}
+          >
+            <Quote className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="区切り線"
+            disabled={toolbarDisabled}
+            onClick={() => editor?.chain().focus().setHorizontalRule().run()}
+          >
+            <Minus className="h-4 w-4" />
+          </ToolbarButton>
+        </div>
+        {toolbarEnd ? (
+          <div className="shrink-0 pl-1">{toolbarEnd}</div>
         ) : null}
-        <span className="mx-1 h-4 w-px bg-border" aria-hidden />
-        <ToolbarButton
-          label="見出し 1"
-          disabled={toolbarDisabled}
-          active={toolbar.isH1}
-          onClick={() =>
-            editor?.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-        >
-          <Heading1 className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="見出し 2"
-          disabled={toolbarDisabled}
-          active={toolbar.isH2}
-          onClick={() =>
-            editor?.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-        >
-          <Heading2 className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="見出し 3"
-          disabled={toolbarDisabled}
-          active={toolbar.isH3}
-          onClick={() =>
-            editor?.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-        >
-          <Heading3 className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="箇条書き"
-          disabled={toolbarDisabled}
-          active={toolbar.isBulletList}
-          onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        >
-          <List className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="番号付きリスト"
-          disabled={toolbarDisabled}
-          active={toolbar.isOrderedList}
-          onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        >
-          <ListOrdered className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="引用"
-          disabled={toolbarDisabled}
-          active={toolbar.isBlockquote}
-          onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-        >
-          <Quote className="h-4 w-4" />
-        </ToolbarButton>
-        <ToolbarButton
-          label="区切り線"
-          disabled={toolbarDisabled}
-          onClick={() => editor?.chain().focus().setHorizontalRule().run()}
-        >
-          <Minus className="h-4 w-4" />
-        </ToolbarButton>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-        <EditorContent editor={editor} />
+        {isDocument ? (
+          <div className={scrollInnerClassName}>
+            {beforeContent}
+            <EditorContent editor={editor} />
+          </div>
+        ) : (
+          <EditorContent editor={editor} />
+        )}
       </div>
       {uploadingImage ? (
         <p className="m-0 shrink-0 border-t border-border px-3 py-1.5 text-xs text-muted-foreground">

@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireWorkspaceAdmin } from "@/lib/workspace/api-auth";
 import { createDoc, listDocs } from "@/lib/workspace/docs";
-import { isDocStatus, type DocStatus } from "@/types/workspace";
+import {
+  isDocStatus,
+  parseDocTags,
+  type DocStatus,
+} from "@/types/workspace";
 
 export async function GET(request: NextRequest) {
   const auth = await requireWorkspaceAdmin();
@@ -12,6 +16,7 @@ export async function GET(request: NextRequest) {
     const statusRaw = sp.get("status") ?? undefined;
     const items = await listDocs({
       includeArchived: sp.get("include_archived") === "1",
+      tag: sp.get("tag") ?? undefined,
       projectId: sp.get("project_id") ?? undefined,
       q: sp.get("q") ?? undefined,
       limit: Number(sp.get("limit") ?? 100) || 100,
@@ -35,15 +40,13 @@ export async function POST(request: NextRequest) {
       title?: string;
       body_md?: string;
       status?: string;
+      tags?: string | string[] | null;
       project_id?: string | null;
       occurred_at?: string | null;
       review_at?: string | null;
     };
 
-    const title = body.title?.trim();
-    if (!title) {
-      return NextResponse.json({ error: "title is required" }, { status: 400 });
-    }
+    const title = body.title?.trim() ?? "";
     if (body.status !== undefined && !isDocStatus(body.status)) {
       return NextResponse.json({ error: "invalid status" }, { status: 400 });
     }
@@ -52,6 +55,7 @@ export async function POST(request: NextRequest) {
       title,
       body_md: body.body_md ?? "",
       status: (body.status as DocStatus | undefined) ?? "inbox",
+      tags: parseDocTags(body.tags),
       project_id: body.project_id ?? null,
       occurred_at: body.occurred_at ?? null,
       review_at: body.review_at ?? null,

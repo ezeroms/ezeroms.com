@@ -67,6 +67,7 @@ export type WorkspaceDoc = {
   title: string;
   body_md: string;
   status: DocStatus;
+  tags: string[];
   project_id: string | null;
   occurred_at: string | null;
   review_at: string | null;
@@ -144,4 +145,21 @@ export function isItemLinkRelation(v: unknown): v is ItemLinkRelation {
     typeof v === "string" &&
     ITEM_LINK_RELATIONS.includes(v as ItemLinkRelation)
   );
+}
+
+/** Parse comma / full-width comma / array tags. Preserve first-seen order. */
+export function parseDocTags(
+  raw: string | string[] | null | undefined,
+): string[] {
+  if (raw == null) return [];
+  const parts = Array.isArray(raw) ? raw : raw.split(/[,、，]/);
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const part of parts) {
+    const tag = part.trim();
+    if (!tag || seen.has(tag)) continue;
+    seen.add(tag);
+    out.push(tag);
+  }
+  return out;
 }

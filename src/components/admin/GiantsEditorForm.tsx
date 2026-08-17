@@ -100,10 +100,6 @@ export function GiantsEditorForm({
     const endpoint = isEdit
       ? `/api/admin/giants/${initial!.slug}/`
       : "/api/admin/giants/";
-    console.info("[Giants save] start", {
-      endpoint,
-      source_url: sourceUrl.trim() || null,
-    });
     try {
       const payload = {
         body_md: bodyMd,
@@ -121,57 +117,19 @@ export function GiantsEditorForm({
         method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(20_000),
       });
-      const rawText = await res.text();
-      let data: {
+      const data = (await res.json()) as {
         error?: string;
         item?: { slug: string };
-        debug?: Record<string, unknown>;
-      } = {};
-      try {
-        data = JSON.parse(rawText) as typeof data;
-      } catch (parseErr) {
-        console.error("[Giants save] non-JSON response", {
-          status: res.status,
-          body: rawText.slice(0, 500),
-          parseErr,
-        });
-        setError(
-          res.ok
-            ? "保存結果の応答が不正です"
-            : `保存に失敗しました（HTTP ${res.status}）`,
-        );
-        return;
-      }
+      };
       if (!res.ok) {
-        console.error("[Giants save] API error", {
-          status: res.status,
-          error: data.error,
-          debug: data.debug,
-          source_url: sourceUrl.trim() || null,
-        });
         setError(data.error || "保存に失敗しました");
         return;
       }
-      console.info("[Giants save] ok", { slug: data.item?.slug });
       router.refresh();
       onSaved?.();
-    } catch (err) {
-      const timedOut =
-        err instanceof DOMException && err.name === "TimeoutError";
-      console.error("[Giants save] failed", {
-        timedOut,
-        name: err instanceof Error ? err.name : typeof err,
-        message: err instanceof Error ? err.message : String(err),
-        source_url: sourceUrl.trim() || null,
-        err,
-      });
-      setError(
-        timedOut
-          ? "保存がタイムアウトしました。購入リンクに Amazon 短縮URLがある場合は amazon.co.jp の商品URLに変えて再試行してください。"
-          : "通信エラーが発生しました",
-      );
+    } catch {
+      setError("通信エラーが発生しました");
     } finally {
       setLoading(false);
     }
@@ -266,13 +224,6 @@ export function GiantsEditorForm({
           onChange={(e) => setSourceUrl(e.target.value)}
           placeholder="https://…（Amazon / 出版社など）"
         />
-        <p className="m-0 text-xs text-muted-foreground">
-          Amazon の短縮URL（amzn.asia など）は保存時に{" "}
-          <code className="text-xs">amazon.co.jp/dp/…</code>{" "}
-          へ正規化し、公開時に Settings のアフィリエイト ID
-          を付与します。出版社サイトなど非 Amazon
-          のリンクはそのまま保存され、アフィリエイトは付きません。
-        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

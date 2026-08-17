@@ -9,7 +9,7 @@ import { GiantsTopicNav } from "@/components/GiantsTopicNav";
 type Props = {
   topics: string[];
   items: ShouldersOfGiants[];
-  /** 単一選択。空なら全件（シャッフル済み）表示 */
+  /** 単一選択。空なら全件。並びはサーバー側でシャッフル済み */
   selectedTopic?: string | null;
 };
 

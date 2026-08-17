@@ -8,13 +8,10 @@ import {
 
 export type SiteSettings = {
   og_image: string;
-  /** Amazon Associates tracking ID. Empty = no affiliate params. */
-  amazon_affiliate_tag: string;
 };
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   og_image: "",
-  amazon_affiliate_tag: "",
 };
 
 function parseText(value: unknown): string {
@@ -32,17 +29,9 @@ export async function loadSiteSettings(): Promise<SiteSettings> {
     const db = getSupabaseAdmin();
     let { data, error } = await db
       .from("site_settings")
-      .select("id, og_image, amazon_affiliate_tag")
+      .select("id, og_image")
       .eq("id", "site")
       .maybeSingle();
-
-    if (error && isMissingColumnError(error)) {
-      ({ data, error } = await db
-        .from("site_settings")
-        .select("id, og_image")
-        .eq("id", "site")
-        .maybeSingle());
-    }
 
     if (error && isMissingColumnError(error)) {
       ({ data, error } = await db
@@ -61,17 +50,10 @@ export async function loadSiteSettings(): Promise<SiteSettings> {
 
     if (!data) return DEFAULT_SITE_SETTINGS;
 
-    const row = data as {
-      og_image?: unknown;
-      amazon_affiliate_tag?: unknown;
-    };
+    const row = data as { og_image?: unknown };
 
     return {
-      og_image:
-        parseText(row.og_image) || DEFAULT_SITE_SETTINGS.og_image,
-      amazon_affiliate_tag:
-        parseText(row.amazon_affiliate_tag) ||
-        DEFAULT_SITE_SETTINGS.amazon_affiliate_tag,
+      og_image: parseText(row.og_image) || DEFAULT_SITE_SETTINGS.og_image,
     };
   } catch (error) {
     logQueryError("[loadSiteSettings]", error);

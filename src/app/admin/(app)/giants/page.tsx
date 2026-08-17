@@ -12,14 +12,11 @@ import {
   formatGiantsCitation,
   giantsExcerpt,
 } from "@/lib/content/giants-meta";
-import { flattenAdminNav } from "@/lib/admin/nav";
 import { loadLibrarySection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
-
-const navItem = flattenAdminNav().find((i) => i.href === "/admin/giants/")!;
 
 export default async function AdminGiantsPage() {
   await getSessionUser();
@@ -84,7 +81,6 @@ export default async function AdminGiantsPage() {
     <AdminContent width="wide">
       <AdminPageHeader
         title={section.label}
-        description={navItem.description}
         actions={
           <div className="flex flex-wrap gap-2">
             <WorksSectionSettingsModal

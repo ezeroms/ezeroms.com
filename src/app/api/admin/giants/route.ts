@@ -5,11 +5,8 @@ import {
   markdownToHtml,
   parseTagList,
 } from "@/lib/admin/content";
-import { normalizePurchaseUrl } from "@/lib/affiliate/amazon";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
-
-export const maxDuration = 30;
 
 function revalidateGiantsPaths(slug?: string) {
   revalidatePath("/shoulders-of-giants");
@@ -73,13 +70,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const source = await normalizePurchaseUrl(body.source_url);
-    if (source.error) {
-      return NextResponse.json(
-        { error: source.error, debug: source.debug },
-        { status: 400 },
-      );
-    }
+    const source_url = (body.source_url ?? "").trim() || null;
 
     const status = body.status === "draft" ? "draft" : "published";
     const slug =
@@ -97,7 +88,7 @@ export async function POST(request: NextRequest) {
       publisher: (body.publisher ?? "").trim() || null,
       published_year: (body.published_year ?? "").trim() || null,
       citation_override: (body.citation_override ?? "").trim() || null,
-      source_url: source.value,
+      source_url,
       body_html: markdownToHtml(bodyMd),
       og_image: (body.og_image ?? "").trim(),
       status,

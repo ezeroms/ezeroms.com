@@ -59,7 +59,7 @@ export default async function GiantsPage({
     body_html: sanitizeBody(item.body_html),
   }));
 
-  const items = selectedTopic ? sanitized : shuffleItems(sanitized);
+  const items = shuffleItems(sanitized);
 
   return (
     <SiteShell

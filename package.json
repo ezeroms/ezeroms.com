@@ -17,7 +17,6 @@
     "db:apply": "tsx scripts/admin/apply-sql.ts",
     "db:apply:workspace": "tsx scripts/admin/apply-sql.ts --workspace",
     "admin:create-user": "tsx scripts/admin/create-user.ts",
-    "admin:normalize-giants-amazon-urls": "tsx scripts/admin/normalize-giants-amazon-urls.ts",
     "db:types": "echo \"Run: npx supabase gen types typescript --project-id <id> > src/types/database.ts\""
   },
   "dependencies": {

@@ -1,18 +1,13 @@
-import { withAmazonAffiliateTag } from "@/lib/affiliate/amazon";
 import {
   emptyList,
   getSupabaseAdmin,
   hasSupabaseConfig,
   PUBLISHED,
 } from "@/lib/content/queries/_shared";
-import { loadSiteSettings } from "@/lib/content/queries/site-settings";
 import { rankBySharedTags } from "@/lib/content/related";
 import type { ShouldersOfGiants } from "@/types/content";
 
-function normalizeGiantsRow(
-  row: ShouldersOfGiants,
-  amazonAffiliateTag = "",
-): ShouldersOfGiants {
+function normalizeGiantsRow(row: ShouldersOfGiants): ShouldersOfGiants {
   return {
     ...row,
     topic: row.topic ?? [],
@@ -21,15 +16,10 @@ function normalizeGiantsRow(
     publisher: row.publisher ?? null,
     published_year: row.published_year ?? null,
     citation_override: row.citation_override ?? null,
-    source_url: withAmazonAffiliateTag(row.source_url, amazonAffiliateTag),
+    source_url: row.source_url ?? null,
     body_html: row.body_html ?? "",
     og_image: row.og_image ?? "",
   };
-}
-
-async function amazonAffiliateTag(): Promise<string> {
-  const settings = await loadSiteSettings();
-  return settings.amazon_affiliate_tag;
 }
 
 export async function listGiants(opts?: {
@@ -54,10 +44,7 @@ export async function listGiants(opts?: {
 
     const { data, error, count } = await q;
     if (error) throw error;
-    const tag = await amazonAffiliateTag();
-    const items = ((data ?? []) as ShouldersOfGiants[]).map((row) =>
-      normalizeGiantsRow(row, tag),
-    );
+    const items = ((data ?? []) as ShouldersOfGiants[]).map(normalizeGiantsRow);
     return { items, total: count ?? items.length };
   } catch (e) {
     console.error("[listGiants]", e);
@@ -99,8 +86,7 @@ export async function getGiantsBySlug(
       .maybeSingle();
     if (error) throw error;
     if (!data) return null;
-    const tag = await amazonAffiliateTag();
-    return normalizeGiantsRow(data as ShouldersOfGiants, tag);
+    return normalizeGiantsRow(data as ShouldersOfGiants);
   } catch (e) {
     console.error("[getGiantsBySlug]", e);
     return null;

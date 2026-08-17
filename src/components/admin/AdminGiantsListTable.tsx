@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
+import { DuplicateContentButton } from "@/components/admin/DuplicateContentButton";
 import { GiantsEditModal } from "@/components/admin/GiantsEditModal";
 import type { GiantsEditorInitial } from "@/components/admin/GiantsEditorForm";
 import { OpenContentButton } from "@/components/admin/OpenContentButton";
@@ -24,11 +26,47 @@ type Props = {
 };
 
 export function AdminGiantsListTable({ items, empty }: Props) {
+  const router = useRouter();
   const [editing, setEditing] = useState<GiantsEditorInitial | null>(null);
+  const [duplicatingSlug, setDuplicatingSlug] = useState<string | null>(null);
+  const [duplicateError, setDuplicateError] = useState<string | null>(null);
   const close = useCallback(() => setEditing(null), []);
+
+  const duplicate = useCallback(
+    async (slug: string) => {
+      if (duplicatingSlug) return;
+      setDuplicateError(null);
+      setDuplicatingSlug(slug);
+      try {
+        const res = await fetch(`/api/admin/giants/${slug}/`, {
+          method: "POST",
+        });
+        const data = (await res.json()) as {
+          error?: string;
+          editor?: GiantsEditorInitial;
+        };
+        if (!res.ok || !data.editor) {
+          setDuplicateError(data.error || "複製に失敗しました");
+          return;
+        }
+        router.refresh();
+        setEditing(data.editor);
+      } catch {
+        setDuplicateError("複製中に通信エラーが発生しました");
+      } finally {
+        setDuplicatingSlug(null);
+      }
+    },
+    [duplicatingSlug, router],
+  );
 
   return (
     <>
+      {duplicateError ? (
+        <p className="px-4 py-2 text-sm text-destructive" role="alert">
+          {duplicateError}
+        </p>
+      ) : null}
       <table className="w-full min-w-[800px] border-collapse text-left text-sm">
         <thead>
           <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
@@ -36,7 +74,7 @@ export function AdminGiantsListTable({ items, empty }: Props) {
             <th className="px-4 py-3 font-medium">書誌</th>
             <th className="w-28 px-4 py-3 font-medium">購入リンク</th>
             <th className="w-24 px-4 py-3 font-medium">ステータス</th>
-            <th className="w-16 px-4 py-3 font-medium text-right">
+            <th className="w-24 px-4 py-3 font-medium text-right">
               <span className="sr-only">操作</span>
             </th>
           </tr>
@@ -80,7 +118,12 @@ export function AdminGiantsListTable({ items, empty }: Props) {
                 </span>
               </td>
               <td className="px-4 py-2.5 align-middle">
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-0.5">
+                  <DuplicateContentButton
+                    loading={duplicatingSlug === item.slug}
+                    disabled={Boolean(duplicatingSlug)}
+                    onClick={() => void duplicate(item.slug)}
+                  />
                   <OpenContentButton href={giantsPermalink(item.slug)} />
                 </div>
               </td>
