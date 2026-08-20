@@ -9,7 +9,6 @@ import {
   nowDatetimeLocalValue,
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
-import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,7 +62,6 @@ export function NotesEditorForm({
       : nowDatetimeLocalValue(),
     tags: initial?.tags ?? "",
     place: initial?.place ?? "",
-    ogImage: initial?.og_image ?? "",
     status: (initial?.status ?? "published") as "published" | "draft",
   }));
 
@@ -71,7 +69,6 @@ export function NotesEditorForm({
   const [date, setDate] = useState(baseline.date);
   const [tags, setTags] = useState(baseline.tags);
   const [place, setPlace] = useState(baseline.place);
-  const [ogImage, setOgImage] = useState(baseline.ogImage);
   const [status, setStatus] = useState<"published" | "draft">(baseline.status);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -81,7 +78,6 @@ export function NotesEditorForm({
     date !== baseline.date ||
     tags !== baseline.tags ||
     place !== baseline.place ||
-    ogImage !== baseline.ogImage ||
     status !== baseline.status;
 
   useEffect(() => {
@@ -150,7 +146,7 @@ export function NotesEditorForm({
         date: new Date(date).toISOString(),
         tags,
         place,
-        og_image: ogImage,
+        og_image: initial?.og_image ?? "",
         status,
       };
       const url = isEdit
@@ -199,13 +195,6 @@ export function NotesEditorForm({
           onUploadImage={uploadBodyImage}
         />
       </div>
-
-      <OgImageField
-        value={ogImage}
-        onChange={setOgImage}
-        uploadKind="diary"
-        disabled={loading}
-      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">

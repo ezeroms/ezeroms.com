@@ -56,10 +56,14 @@ export function AdminRichTextLinkModal({
   useEffect(() => {
     if (!open) return;
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      onClose();
     }
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
   }, [open, onClose]);
 
   if (typeof document === "undefined" || !open) return null;
@@ -102,6 +106,7 @@ export function AdminRichTextLinkModal({
           className="flex flex-col gap-4 px-5 py-4"
           onSubmit={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             submit();
           }}
           {...ignorePasswordManagersProps}

@@ -350,10 +350,21 @@ body:has(.admin-root) {
   box-shadow: none !important;
 }
 
-/* Docs 集中モード: 入力枠・フォーカス線なし。ヘッダー下線は残す */
+/* ツールバー直下の区切り：--border-subtle（Chronicle 月と月の境と同じ） */
+.admin-root .admin-rich-text__toolbar-rule {
+  height: 1px;
+  width: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background-color: hsl(var(--border-subtle));
+}
+
+/* Docs 集中モード: 外枠を完全に消す（ヘッダー下線はツールバー直下の 1px） */
 .admin-root .admin-rich-text.admin-rich-text--focus,
 .admin-root .admin-rich-text.admin-rich-text--focus:focus-within {
-  border-color: transparent;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: none !important;
   background-color: hsl(var(--card));
   box-shadow: none !important;
 }
@@ -367,6 +378,71 @@ body:has(.admin-root) {
 .admin-root .admin-rich-text .ProseMirror:focus {
   outline: none;
   box-shadow: none;
+}
+
+/*
+ * リスト見た目は公開側 .prose-body（app.css）に合わせる。
+ * preflight オフのため UA の padding-inline-start: 40px が残るので、
+ * ここでもゼロにする。li>p は TipTap が包む段落。
+ */
+.admin-root .admin-rich-text .ProseMirror ul,
+.admin-root .admin-rich-text .ProseMirror ol {
+  margin: 1rem 0;
+  padding-left: 0;
+  padding-inline-start: 0;
+  margin-left: 0;
+  list-style: none;
+}
+
+.admin-root .admin-rich-text .ProseMirror ul > li,
+.admin-root .admin-rich-text .ProseMirror ol > li {
+  position: relative;
+  margin: 0.5rem 0;
+  padding-left: 1.25em;
+}
+
+.admin-root .admin-rich-text .ProseMirror ul > li::before,
+.admin-root .admin-rich-text .ProseMirror ol > li::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.1em;
+  text-align: center;
+  line-height: inherit;
+  transform: translateY(-0.05em);
+}
+
+.admin-root .admin-rich-text .ProseMirror ul > li::before {
+  content: "•";
+}
+
+.admin-root .admin-rich-text .ProseMirror ol {
+  counter-reset: prose-ol;
+}
+
+.admin-root .admin-rich-text .ProseMirror ol > li {
+  counter-increment: prose-ol;
+}
+
+.admin-root .admin-rich-text .ProseMirror ol > li::before {
+  content: counter(prose-ol) ".";
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-root .admin-rich-text .ProseMirror ul ul,
+.admin-root .admin-rich-text .ProseMirror ol ol,
+.admin-root .admin-rich-text .ProseMirror ul ol,
+.admin-root .admin-rich-text .ProseMirror ol ul {
+  margin: 0.5rem 0;
+}
+
+.admin-root .admin-rich-text .ProseMirror ul ul > li::before {
+  content: "◦";
+}
+
+.admin-root .admin-rich-text .ProseMirror li > p {
+  display: inline;
+  margin: 0;
 }
 
 /*
@@ -419,8 +495,8 @@ body:has(.admin-root) {
 }
 
 /* 管理テーブル線（chronicle マトリクスに準拠）
- * ヘッダー下 = ややはっきりした実線
- * 行間 = 月と月の区切りと同じ薄い実線（#f1f3f4）
+ * ヘッダー下 = --border（ややはっきり）
+ * 行間 = --border-subtle（月と月の区切りと同じ薄い実線）
  */
 .admin-root table {
   border-collapse: collapse;
@@ -435,16 +511,16 @@ body:has(.admin-root) {
 }
 
 .admin-root table thead th {
-  border-bottom: 1px solid #e8eaed !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
 }
 
 .admin-root table tbody tr:not(:last-child) td {
-  border-bottom: 1px solid #f1f3f4 !important;
+  border-bottom: 1px solid hsl(var(--border-subtle)) !important;
 }
 
 /* tbody 内のグループ見出し（五十音・月など）も行間と同じ線で区切る */
 .admin-root table tbody th[scope="colgroup"] {
-  border-bottom: 1px solid #f1f3f4 !important;
+  border-bottom: 1px solid hsl(var(--border-subtle)) !important;
 }
 
 /* サイドバー下部のユーザーメニューは線のみ（シャドウ禁止） */

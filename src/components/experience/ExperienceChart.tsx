@@ -31,9 +31,9 @@ const GUTTER_W = 48;
 const ROW_H = 40;
 const OTHER_COL = "その他";
 
-const LINE_YEAR = "#dadce0";
-const LINE_MONTH = "#f1f3f4";
-const LINE_COL = "#e8eaed";
+const LINE_YEAR = "hsl(var(--border))";
+const LINE_MONTH = "hsl(var(--border-subtle))";
+const LINE_COL = "hsl(var(--border))";
 
 /** 期間バー用。罫線色（#f1f3f4 等）と被らない彩度のある色だけ使う */
 const CHIP_PALETTE = [

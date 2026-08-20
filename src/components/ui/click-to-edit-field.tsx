@@ -84,6 +84,7 @@ export function ClickToEditField({
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
   const skipBlurCommit = useRef(false);
+  const composingRef = useRef(false);
   const onEditEndRef = useRef(onEditEnd);
   onEditEndRef.current = onEditEnd;
 
@@ -166,9 +167,30 @@ export function ClickToEditField({
     endEditing();
   }
 
+  function isImeConfirmKey(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    return (
+      composingRef.current ||
+      event.nativeEvent.isComposing ||
+      event.keyCode === 229
+    );
+  }
+
+  function onCompositionStart() {
+    composingRef.current = true;
+  }
+
+  function onCompositionEnd() {
+    // Safari などは compositionend の直後に Enter の keydown を飛ばす
+    composingRef.current = true;
+    window.setTimeout(() => {
+      composingRef.current = false;
+    }, 0);
+  }
+
   function onKeyDown(
     event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
+    if (isImeConfirmKey(event)) return;
     if (event.key === "Escape") {
       event.preventDefault();
       cancel();
@@ -212,6 +234,8 @@ export function ClickToEditField({
             {...ignorePasswordManagersProps}
             onChange={(e) => setDraft(e.target.value)}
             onBlur={() => void commit()}
+            onCompositionStart={onCompositionStart}
+            onCompositionEnd={onCompositionEnd}
             onKeyDown={onKeyDown}
           />
         ) : (
@@ -226,6 +250,8 @@ export function ClickToEditField({
             {...ignorePasswordManagersProps}
             onChange={(e) => setDraft(e.target.value)}
             onBlur={() => void commit()}
+            onCompositionStart={onCompositionStart}
+            onCompositionEnd={onCompositionEnd}
             onKeyDown={onKeyDown}
           />
         )}

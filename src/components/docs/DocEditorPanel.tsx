@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Maximize2, Minimize2 } from "lucide-react";
 import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
 import { DocTagsInput } from "@/components/docs/DocTagsInput";
@@ -195,87 +196,87 @@ export function DocEditorPanel({
     />
   );
 
-  const saveStatus = (
-    <p
-      className={cn(
-        "text-[11px] transition-opacity duration-300",
-        saveState === "idle"
-          ? "mt-0 h-0 overflow-hidden opacity-0"
-          : "mt-0.5",
-        saveState === "saved"
-          ? "text-muted-foreground/45"
+  const saveStatusLabel =
+    saveState === "saving"
+      ? "保存中…"
+      : saveState === "dirty"
+        ? "編集中"
+        : saveState === "saved"
+          ? "保存済み"
           : saveState === "error"
-            ? "text-red-600"
-            : "text-muted-foreground",
-      )}
-      aria-live="polite"
-    >
-      {saveState === "saving"
-        ? "保存中…"
-        : saveState === "dirty"
-          ? "編集中"
-          : saveState === "saved"
-            ? "保存済み"
-            : saveState === "error"
-              ? "エラー"
-              : "\u00a0"}
-    </p>
+            ? "エラー"
+            : "\u00a0";
+
+  const saveStatusColor =
+    saveState === "saved"
+      ? "text-muted-foreground/45"
+      : saveState === "error"
+        ? "text-red-600"
+        : "text-muted-foreground";
+
+  const focusEditor = (
+    <AdminRichTextEditor
+      id={`doc-body-${doc.id}`}
+      value={draft.body_md}
+      onChange={(markdown) => patchDraft("body_md", markdown)}
+      placeholder="本文を書く…"
+      variant="document"
+      toolbarEnd={
+        <>
+          <p
+            className={cn(
+              "m-0 whitespace-nowrap text-[11px] leading-none transition-opacity duration-300",
+              saveStatusColor,
+              saveState === "idle" && "opacity-0",
+            )}
+            aria-live="polite"
+          >
+            {saveStatusLabel}
+          </p>
+          {focusToggle}
+        </>
+      }
+      beforeContent={
+        <div className="pb-3">
+          {titleField}
+          {error ? (
+            <p className="m-0 mt-2 text-sm text-red-600" role="alert">
+              {error}
+            </p>
+          ) : null}
+        </div>
+      }
+      scrollInnerClassName="mx-auto w-full max-w-3xl px-6 pb-20 pt-8 sm:px-10"
+      className="admin-rich-text--focus h-full max-h-none min-h-0 flex-1 !border-0 !rounded-none !shadow-none"
+      minHeightClassName="min-h-[12rem]"
+    />
   );
 
+  const focusOverlay =
+    focusMode && typeof document !== "undefined"
+      ? createPortal(
+          <div className="fixed inset-0 z-[100] flex flex-col border-0 bg-card">
+            {focusEditor}
+          </div>,
+          document.querySelector(".admin-app") ??
+            document.querySelector(".admin-root") ??
+            document.body,
+        )
+      : null;
+
   return (
-    <div
-      className={cn(
-        "flex h-full min-h-0 flex-col bg-card",
-        focusMode && "fixed inset-0 z-[100] bg-card",
-      )}
-    >
-      {focusMode ? (
-        <AdminRichTextEditor
-          id={`doc-body-${doc.id}`}
-          value={draft.body_md}
-          onChange={(markdown) => patchDraft("body_md", markdown)}
-          placeholder="本文を書く…"
-          variant="document"
-          toolbarEnd={focusToggle}
-          beforeContent={
-            <div className="pb-3">
-              {titleField}
-              {saveStatus}
-              {error ? (
-                <p className="m-0 mt-2 text-sm text-red-600" role="alert">
-                  {error}
-                </p>
-              ) : null}
-            </div>
-          }
-          scrollInnerClassName="mx-auto w-full max-w-3xl px-6 pb-20 pt-8 sm:px-10"
-          className="h-full max-h-none min-h-0 flex-1 admin-rich-text--focus"
-          minHeightClassName="min-h-[12rem]"
-        />
-      ) : (
+    <div className="flex h-full min-h-0 flex-col bg-card">
+      {focusOverlay}
+      {focusMode ? null : (
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <div className="shrink-0 border-b border-border px-5 pb-4 pt-6">
             <div className="flex items-start gap-3">
-              <div className="min-w-0 flex-1">
-                {titleField}
-                {saveStatus}
-              </div>
+              <div className="min-w-0 flex-1">{titleField}</div>
               {focusToggle}
             </div>
           </div>
 
           <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden px-5 pb-4 pt-5">
-            <div className="shrink-0">
-              <p className="mb-1.5 text-xs font-medium text-muted-foreground">
-                タグ
-              </p>
-              <DocTagsInput
-                value={draft.tags}
-                suggestions={tagSuggestions}
-                onChange={(tags) => patchDraft("tags", tags)}
-              />
-            </div>
-
             <div className="flex min-h-0 min-w-0 flex-1 flex-col">
               <AdminRichTextEditor
                 id={`doc-body-${doc.id}`}
@@ -287,6 +288,17 @@ export function DocEditorPanel({
               />
             </div>
 
+            <div className="shrink-0">
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">
+                タグ
+              </p>
+              <DocTagsInput
+                value={draft.tags}
+                suggestions={tagSuggestions}
+                onChange={(tags) => patchDraft("tags", tags)}
+              />
+            </div>
+
             {error ? (
               <p className="m-0 shrink-0 text-sm text-red-600" role="alert">
                 {error}
@@ -294,7 +306,7 @@ export function DocEditorPanel({
             ) : null}
           </div>
 
-          <div className="flex shrink-0 items-center justify-end gap-3 border-t border-border px-5 py-3.5">
+          <div className="flex shrink-0 items-center justify-between gap-3 border-t border-border px-5 py-3.5">
             <Button
               type="button"
               variant="outline"
@@ -304,6 +316,16 @@ export function DocEditorPanel({
             >
               アーカイブ
             </Button>
+            <p
+              className={cn(
+                "m-0 text-[11px] transition-opacity duration-300",
+                saveStatusColor,
+                saveState === "idle" && "opacity-0",
+              )}
+              aria-live="polite"
+            >
+              {saveStatusLabel}
+            </p>
           </div>
         </div>
       )}

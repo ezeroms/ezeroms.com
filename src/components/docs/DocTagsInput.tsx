@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type KeyboardEvent } from "react";
+import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { tagChipClass } from "@/lib/site/tag-styles";
@@ -24,6 +24,9 @@ export function DocTagsInput({
   ariaLabel = "タグ",
 }: Props) {
   const [draft, setDraft] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const composingRef = useRef(false);
+  const skipChangeRef = useRef(false);
   const tags = parseDocTags(value);
 
   const filteredSuggestions = useMemo(() => {
@@ -37,18 +40,37 @@ export function DocTagsInput({
       .slice(0, 6);
   }, [draft, suggestions, tags]);
 
+  function clearDraft() {
+    skipChangeRef.current = true;
+    setDraft("");
+    const el = inputRef.current;
+    if (el) el.value = "";
+  }
+
   function addTag(raw: string) {
     const next = parseDocTags([...tags, raw]);
-    if (next.length === tags.length) return;
+    if (next.length === tags.length) {
+      clearDraft();
+      return;
+    }
     onChange(next);
-    setDraft("");
+    clearDraft();
   }
 
   function removeTag(tag: string) {
     onChange(tags.filter((item) => item !== tag));
   }
 
+  function isImeKey(event: KeyboardEvent<HTMLInputElement>) {
+    return (
+      composingRef.current ||
+      event.nativeEvent.isComposing ||
+      event.keyCode === 229
+    );
+  }
+
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (isImeKey(event)) return;
     if (event.key === "Enter" || event.key === "," || event.key === "、") {
       event.preventDefault();
       if (draft.trim()) addTag(draft);
@@ -83,8 +105,26 @@ export function DocTagsInput({
           </span>
         ))}
         <input
+          ref={inputRef}
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={(e) => {
+            if (skipChangeRef.current) {
+              skipChangeRef.current = false;
+              e.target.value = "";
+              setDraft("");
+              return;
+            }
+            setDraft(e.target.value);
+          }}
+          onCompositionStart={() => {
+            composingRef.current = true;
+          }}
+          onCompositionEnd={() => {
+            composingRef.current = true;
+            window.setTimeout(() => {
+              composingRef.current = false;
+            }, 0);
+          }}
           onKeyDown={onKeyDown}
           onBlur={() => {
             if (draft.trim()) addTag(draft);

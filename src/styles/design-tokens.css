@@ -18,8 +18,9 @@
   --accent-foreground: 240 40% 5%;
   --destructive: 0 72% 40%;
   --destructive-foreground: 0 0% 100%;
-  --border: 240 6% 90%; /* #E7E7E9 */
-  --border-hover: 245 5% 45%; /* #6E6D79 — legacy --color-border-hover */
+  --border: 240 6% 90%; /* #E7E7E9 — カード外枠・ヘッダー下など（ややはっきり） */
+  --border-subtle: 200 12% 95%; /* #f1f3f4 — 行間・Chronicle 月と月の境（一段薄い） */
+  --border-hover: 245 5% 45%; /* #6E6D79 — 線のホバー（静的な罫線ではない） */
   --input: 240 6% 90%;
   --ring: 240 40% 5%;
   --radius: 0.5rem;
@@ -34,6 +35,7 @@
   --ez-primary-hover: #39393d;
   --ez-bg: #f9f9f7;
   --ez-border: #e7e7e9;
+  --ez-border-subtle: #f1f3f4;
   --ez-border-hover: #6e6d79;
   --ez-text-secondary: #5d5d5f;
   --ez-brand: #06c655;

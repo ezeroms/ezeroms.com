@@ -27,11 +27,11 @@ const GUTTER_W = 56;
 const ROW_MIN_H = 88;
 
 /** 年の境目（ややはっきり） */
-const LINE_YEAR = "#dadce0";
+const LINE_YEAR = "hsl(var(--border))";
 /** 月の境目（年より弱く） */
-const LINE_MONTH = "#f1f3f4";
+const LINE_MONTH = "hsl(var(--border-subtle))";
 /** 縦線・ヘッダー */
-const LINE_COL = "#e8eaed";
+const LINE_COL = "hsl(var(--border))";
 
 const CHIP_PALETTE = [
   { bg: "bg-[#e8f0fe]", text: "text-[#1967d2]", ring: "ring-[#d2e3fc]" },

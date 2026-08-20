@@ -29,6 +29,7 @@ import {
   editorHtmlToMarkdown,
   markdownToEditorHtml,
 } from "@/lib/admin/rich-text";
+import { proseBodyListClass } from "@/lib/site/prose-styles";
 
 /**
  * TipTap ドキュメント上で、画像の直前の空段落だけ削除する。
@@ -247,10 +248,14 @@ export function AdminRichTextEditor({
       attributes: {
         id: id ?? "",
         class: cn(
-          "prose prose-sm max-w-none text-sm leading-relaxed text-foreground outline-none",
+          "prose-body prose prose-sm max-w-none text-sm leading-relaxed text-foreground outline-none",
           variant === "document" ? "px-0 py-1" : "px-3 py-2",
+          // 公開側 .prose-body と同じリスト（UA の 40px インデントを打ち消す）
+          proseBodyListClass,
+          "[&_ul]:ps-0 [&_ol]:ps-0 [&_ul]:ml-0 [&_ol]:ml-0 [&_ul]:list-none [&_ol]:list-none",
+          "[&_li]:relative [&_li]:my-2 [&_li]:pl-[1.25em]",
           // 公開側 notesBody と同じく隣接段落マージン方式（空行の二重余白を避ける）
-          "[&_p]:m-0 [&_p+p]:mt-2 [&_ul]:my-2 [&_ol]:my-2 [&_blockquote]:my-2",
+          "[&_p]:m-0 [&_p+p]:mt-2 [&_blockquote]:my-2",
           "[&_h1]:mb-2 [&_h1]:mt-3 [&_h1]:text-lg [&_h1]:font-semibold",
           "[&_h2]:mb-2 [&_h2]:mt-4 [&_h2]:text-base [&_h2]:font-semibold",
           "[&_h3]:mb-2 [&_h3]:mt-3 [&_h3]:text-sm [&_h3]:font-semibold",
@@ -402,10 +407,8 @@ export function AdminRichTextEditor({
       ) : null}
       <div
         className={cn(
-          "flex shrink-0 items-center gap-1 bg-card",
-          isDocument
-            ? "border-b border-border px-2 py-1 sm:px-3"
-            : "flex-wrap gap-0.5 border-b border-border px-1 py-1",
+          "flex shrink-0 items-center gap-1 border-0 bg-card",
+          isDocument ? "px-2 py-1 sm:px-3" : "flex-wrap gap-0.5 px-1 py-1",
         )}
       >
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-0.5">
@@ -530,9 +533,15 @@ export function AdminRichTextEditor({
           </ToolbarButton>
         </div>
         {toolbarEnd ? (
-          <div className="shrink-0 pl-1">{toolbarEnd}</div>
+          <div className="ml-auto flex shrink-0 items-center gap-2 pl-2">
+            {toolbarEnd}
+          </div>
         ) : null}
       </div>
+      <div
+        className="admin-rich-text__toolbar-rule"
+        aria-hidden
+      />
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
         {isDocument ? (
           <div className={scrollInnerClassName}>
