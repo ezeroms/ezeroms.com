@@ -20,9 +20,12 @@ import {
   todayRange,
 } from "@/lib/workspace/calendar/time";
 import {
+  GOOGLE_CALENDAR_OAUTH_START_PATH,
+  googleCalendarMessageNeedsReconnect,
+} from "@/lib/workspace/calendar/auth-error";
+import {
   getCalendarPreferences,
   getStoredGoogleToken,
-  isGoogleCalendarAuthError,
 } from "@/lib/workspace/calendar/tokens";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { buildWorkloadSnapshot } from "@/lib/workspace/load/build";
@@ -103,10 +106,7 @@ export default async function AdminWorkspaceDashboardPage() {
   }
 
   const calendarNeedsReconnect =
-    Boolean(calendarError) &&
-    (isGoogleCalendarAuthError(new Error(calendarError ?? "")) ||
-      (calendarError ?? "").includes("再接続") ||
-      (calendarError ?? "").toLowerCase().includes("invalid authentication"));
+    googleCalendarMessageNeedsReconnect(calendarError);
 
   return (
     <AdminContent width="wide">
@@ -139,7 +139,7 @@ export default async function AdminWorkspaceDashboardPage() {
           <span className="block">{calendarError}</span>
           {calendarNeedsReconnect ? (
             <a
-              href="/api/admin/workspace/calendar/oauth/start/"
+              href={GOOGLE_CALENDAR_OAUTH_START_PATH}
               className="mt-2 inline-block font-medium underline"
             >
               Googleカレンダーを再接続
@@ -194,7 +194,7 @@ export default async function AdminWorkspaceDashboardPage() {
                 カレンダー未接続
               </p>
               <Button asChild size="sm" variant="outline">
-                <a href="/api/admin/workspace/calendar/oauth/start/">
+                <a href={GOOGLE_CALENDAR_OAUTH_START_PATH}>
                   接続する
                 </a>
               </Button>

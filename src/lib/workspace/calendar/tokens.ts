@@ -2,6 +2,9 @@ import "server-only";
 
 import { getWorkspaceAdmin } from "@/lib/workspace/db/server";
 import {
+  GoogleCalendarAuthError,
+} from "@/lib/workspace/calendar/auth-error";
+import {
   fetchGoogleAccountEmail,
   refreshAccessToken,
   type GoogleTokenResponse,
@@ -18,6 +21,10 @@ export {
   setDayStartsHour,
   setTimezonePreferences,
 } from "@/lib/workspace/calendar/prefs";
+export {
+  GoogleCalendarAuthError,
+  isGoogleCalendarAuthError,
+} from "@/lib/workspace/calendar/auth-error";
 
 export type StoredGoogleToken = {
   id: string;
@@ -30,28 +37,6 @@ export type StoredGoogleToken = {
   created_at: string;
   updated_at: string;
 };
-
-/** Thrown when stored Google credentials are unusable and the user must reconnect. */
-export class GoogleCalendarAuthError extends Error {
-  constructor(
-    message = "Googleカレンダーの認証が切れています。カレンダー画面から再接続してください。",
-  ) {
-    super(message);
-    this.name = "GoogleCalendarAuthError";
-  }
-}
-
-export function isGoogleCalendarAuthError(error: unknown): boolean {
-  if (error instanceof GoogleCalendarAuthError) return true;
-  if (!(error instanceof Error)) return false;
-  const msg = error.message.toLowerCase();
-  return (
-    msg.includes("invalid authentication") ||
-    msg.includes("invalid_grant") ||
-    msg.includes("unauthorized") ||
-    /\b401\b/.test(msg)
-  );
-}
 
 export async function getStoredGoogleToken(): Promise<StoredGoogleToken | null> {
   const { data, error } = await getWorkspaceAdmin()

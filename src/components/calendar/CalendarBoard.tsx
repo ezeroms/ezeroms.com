@@ -18,6 +18,10 @@ import { isPersistedWorkBlockId } from "@/components/calendar/TaskLane";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { surfaceCard } from "@/lib/site/card-styles";
+import {
+  GOOGLE_CALENDAR_OAUTH_START_PATH,
+  googleCalendarMessageNeedsReconnect,
+} from "@/lib/workspace/calendar/auth-error";
 import type { WeekStartsOn } from "@/lib/workspace/calendar/time";
 import {
   DEFAULT_PRIMARY_LABEL,
@@ -122,6 +126,7 @@ export function CalendarBoard({
   }
 
   if (!connected) {
+    const reconnect = googleCalendarMessageNeedsReconnect(connectError);
     return (
       <>
         <AdminPageHeader
@@ -129,8 +134,10 @@ export function CalendarBoard({
           description={description}
           actions={
             <Button asChild>
-              <a href="/api/admin/workspace/calendar/oauth/start/">
-                Googleカレンダーを接続
+              <a href={GOOGLE_CALENDAR_OAUTH_START_PATH}>
+                {reconnect
+                  ? "Googleカレンダーを再接続"
+                  : "Googleカレンダーを接続"}
               </a>
             </Button>
           }
@@ -142,7 +149,7 @@ export function CalendarBoard({
           </p>
           {connectError ? (
             <p className="m-0 text-sm text-red-600" role="alert">
-              接続エラー: {connectError}
+              {reconnect ? connectError : `接続エラー: ${connectError}`}
             </p>
           ) : null}
         </div>
@@ -288,9 +295,19 @@ export function CalendarBoard({
           ) : null}
 
           {board.errorMessage ? (
-            <p className="m-0 shrink-0 text-sm text-red-600" role="alert">
-              {board.errorMessage}
-            </p>
+            <div
+              className="flex shrink-0 flex-wrap items-center gap-3"
+              role="alert"
+            >
+              <p className="m-0 text-sm text-red-600">{board.errorMessage}</p>
+              {googleCalendarMessageNeedsReconnect(board.errorMessage) ? (
+                <Button asChild size="sm">
+                  <a href={GOOGLE_CALENDAR_OAUTH_START_PATH}>
+                    Googleカレンダーを再接続
+                  </a>
+                </Button>
+              ) : null}
+            </div>
           ) : null}
 
           <WorkspaceCalendar

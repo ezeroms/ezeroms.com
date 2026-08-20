@@ -3,8 +3,13 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
 import { CalendarBoard } from "@/components/calendar/CalendarBoard";
 import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { getSessionUser } from "@/lib/supabase/auth";
+import {
+  GOOGLE_CALENDAR_OAUTH_START_PATH,
+  googleCalendarMessageNeedsReconnect,
+} from "@/lib/workspace/calendar/auth-error";
 import {
   listGoogleCalendars,
   listGoogleEventsCached,
@@ -136,6 +141,15 @@ export default async function AdminWorkspaceCalendarPage({
     loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
   }
 
+  const needsReconnect = googleCalendarMessageNeedsReconnect(loadError);
+  const reconnectAction = (
+    <Button asChild>
+      <a href={GOOGLE_CALENDAR_OAUTH_START_PATH}>
+        Googleカレンダーを再接続
+      </a>
+    </Button>
+  );
+
   return (
     <AdminContent
       width="wide"
@@ -143,9 +157,20 @@ export default async function AdminWorkspaceCalendarPage({
     >
       {loadError ? (
         <>
-          <AdminPageHeader title={navItem.label} />
+          <AdminPageHeader
+            title={navItem.label}
+            actions={needsReconnect ? reconnectAction : undefined}
+          />
           <Alert variant="destructive" className="mb-4">
-            {loadError}
+            <span className="block">{loadError}</span>
+            {needsReconnect ? (
+              <a
+                href={GOOGLE_CALENDAR_OAUTH_START_PATH}
+                className="mt-2 inline-block font-medium underline"
+              >
+                Googleカレンダーを再接続
+              </a>
+            ) : null}
           </Alert>
         </>
       ) : (
