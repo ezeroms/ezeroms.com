@@ -32,6 +32,8 @@ type Props = {
    * 指定時は `title` は aria-label 用に残す。
    */
   header?: ReactNode;
+  /** false のとき Escape で閉じない（集中モード中など） */
+  closeOnEscape?: boolean;
   children: ReactNode;
 };
 
@@ -58,6 +60,7 @@ export function AdminContentModal({
   maxHeightClassName = "max-h-[min(90vh,44rem)]",
   headerRight,
   header,
+  closeOnEscape = true,
   children,
 }: Props) {
   const titleId = useId();
@@ -69,7 +72,7 @@ export function AdminContentModal({
     if (!open) return;
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && !busy) onClose();
+      if (event.key === "Escape" && !busy && closeOnEscape) onClose();
     }
 
     const previousOverflow = document.body.style.overflow;
@@ -80,7 +83,7 @@ export function AdminContentModal({
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, onClose, busy]);
+  }, [open, onClose, busy, closeOnEscape]);
 
   if (typeof document === "undefined" || !open) return null;
 

@@ -3,6 +3,13 @@ import {
   parseYoutubeVideoId,
   youtubeEmbedSrc,
 } from "@/lib/content/clip-meta";
+import {
+  parseSpotifyEmbed,
+  spotifyEmbedHeight,
+  spotifyEmbedSrc,
+  spotifyEmbedVariant,
+  type SpotifyEmbed,
+} from "@/lib/content/spotify-embed";
 import { repairLiteralMarkdownInHtml } from "@/lib/content/legacy-markdown";
 import { applyBlankParagraphClass } from "@/lib/admin/rich-text";
 
@@ -69,12 +76,84 @@ export function embedYoutubeInHtml(html: string): string {
   return out;
 }
 
-/** Expand `[](youtube:ID)` (and labeled variants) before markdown parse. */
+/** Compact (track/episode) or expanded Spotify iframe for body HTML. */
+export function spotifyEmbedBlock(embed: SpotifyEmbed): string {
+  const src = spotifyEmbedSrc(embed);
+  const height = spotifyEmbedHeight(embed.type);
+  const variant = spotifyEmbedVariant(embed.type);
+  const title = `Spotify ${embed.type}`;
+  return (
+    `<div class="spotify-embed spotify-embed--${variant}">` +
+    `<iframe src="${src}" title="${title}" ` +
+    `width="100%" height="${height}" ` +
+    `allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" ` +
+    `allowfullscreen loading="lazy">` +
+    `</iframe></div>`
+  );
+}
+
+/**
+ * Turn standalone Spotify links / bare embed iframes into widgets.
+ * Inline “listen here” links in running text stay as normal anchors.
+ * Safe to run before sanitizeBody.
+ */
+export function embedSpotifyInHtml(html: string): string {
+  if (!html) return html;
+
+  let out = html;
+
+  out = out.replace(
+    /<p>\s*<a\b[^>]*\bhref=(["'])([^"']+)\1[^>]*>[\s\S]*?<\/a>\s*<\/p>/gi,
+    (match, _q, href: string) => {
+      const parsed = parseSpotifyEmbed(href);
+      return parsed ? spotifyEmbedBlock(parsed) : match;
+    },
+  );
+
+  out = out.replace(
+    /<a\b[^>]*\bhref=(["'])(spotify:(?:track|album|playlist|episode|show|artist|podcast)[:/][0-9A-Za-z]+)\1[^>]*>\s*<\/a>/gi,
+    (match, _q, href: string) => {
+      const parsed = parseSpotifyEmbed(href);
+      return parsed ? spotifyEmbedBlock(parsed) : match;
+    },
+  );
+
+  out = out.replace(
+    /(?:<div class="spotify-embed\b[^"]*">[\s\S]*?<\/div>)|(<iframe\b[^>]*\bsrc=["']https?:\/\/open\.spotify\.com\/embed\/(?:intl-[a-z]{2}\/)?(track|album|playlist|episode|show|artist)\/([0-9A-Za-z]{22})[^"']*["'][^>]*>\s*<\/iframe>)/gi,
+    (match, iframe: string | undefined, type: string | undefined, id: string | undefined) => {
+      if (!iframe || !type || !id) return match;
+      const parsed = parseSpotifyEmbed(`spotify:${type}/${id}`);
+      return parsed ? spotifyEmbedBlock(parsed) : match;
+    },
+  );
+
+  out = out.replace(
+    /<div class="spotify-embed\b[^"]*">\s*<div class="spotify-embed\b[^"]*">([\s\S]*?)<\/div>\s*<\/div>/gi,
+    '<div class="spotify-embed">$1</div>',
+  );
+
+  out = out.replace(
+    /<p>\s*(<div class="spotify-embed\b[^"]*">[\s\S]*?<\/div>)\s*<\/p>/gi,
+    "$1",
+  );
+
+  return out;
+}
+
+/** Expand `[](youtube:ID)` / `[](spotify:type/ID)` (and labeled variants) before markdown parse. */
 export function preprocessMarkdownMedia(md: string): string {
-  return md.replace(
+  let out = md.replace(
     /\[([^\]]*)\]\(youtube:([\w-]{11})\)/g,
     (_m, _text, id: string) => youtubeEmbedBlock(id),
   );
+  out = out.replace(
+    /\[([^\]]*)\]\(spotify:(track|album|playlist|episode|show|artist|podcast)[:/]([0-9A-Za-z]+)\)/gi,
+    (match, _text, type: string, id: string) => {
+      const parsed = parseSpotifyEmbed(`spotify:${type}/${id}`);
+      return parsed ? spotifyEmbedBlock(parsed) : match;
+    },
+  );
+  return out;
 }
 
 function decodeBasicHtmlEntities(s: string): string {
@@ -127,8 +206,10 @@ export function repairLegacyCodeFencesInHtml(html: string): string {
 export function sanitizeBody(html: string): string {
   return sanitizeHtml(
     applyBlankParagraphClass(
-      embedYoutubeInHtml(
-        repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+      embedSpotifyInHtml(
+        embedYoutubeInHtml(
+          repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+        ),
       ),
     ),
     {

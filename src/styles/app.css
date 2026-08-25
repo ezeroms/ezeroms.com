@@ -90,3 +90,26 @@
   border: 0;
 }
 
+/* Spotify embeds in body HTML: fixed widget heights, not 16:9 */
+.spotify-embed {
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.spotify-embed iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+}
+
+.spotify-embed--compact iframe {
+  height: 152px;
+}
+
+.spotify-embed--expanded iframe {
+  height: 352px;
+}
+

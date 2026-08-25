@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import {
   NOTES_EDITOR_FORM_ID,
   NotesEditorForm,
+  NotesFocusModeButton,
   type NotesEditorInitial,
 } from "@/components/admin/NotesEditorForm";
 
@@ -22,6 +23,8 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
   const [dirty, setDirty] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [focusMode, setFocusMode] = useState(false);
+  const focusModeToggleRef = useRef<(() => void) | null>(null);
   const isEdit = Boolean(initial?.slug);
 
   useEffect(() => {
@@ -34,6 +37,7 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
       setDirty(false);
       setDeleting(false);
       setDeleteError(null);
+      setFocusMode(false);
     }
   }, [open]);
 
@@ -78,6 +82,13 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
       deleting={deleting}
       deleteError={deleteError}
       onDelete={isEdit ? onDelete : undefined}
+      closeOnEscape={!focusMode}
+      headerRight={
+        <NotesFocusModeButton
+          active={focusMode}
+          onClick={() => focusModeToggleRef.current?.()}
+        />
+      }
     >
       <NotesEditorForm
         key={initial?.slug ?? "new"}
@@ -86,6 +97,10 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
         onLoadingChange={setSaving}
         onDirtyChange={setDirty}
         onSaved={onClose}
+        focusMode={focusMode}
+        onFocusModeChange={setFocusMode}
+        showInlineFocusToggle={false}
+        focusModeToggleRef={focusModeToggleRef}
       />
     </AdminContentModal>
   );

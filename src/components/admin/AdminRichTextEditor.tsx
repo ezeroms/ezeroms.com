@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
@@ -88,6 +95,10 @@ type Props = {
   scrollInnerClassName?: string;
 };
 
+export type AdminRichTextEditorHandle = {
+  getMarkdown: () => string;
+};
+
 function ToolbarButton({
   onClick,
   active,
@@ -171,20 +182,24 @@ function readToolbarState(editor: Editor | null): ToolbarState {
   };
 }
 
-export function AdminRichTextEditor({
-  id,
-  value,
-  onChange,
-  disabled = false,
-  placeholder = "紹介文を入力…",
-  className,
-  minHeightClassName = "min-h-[180px]",
-  onUploadImage,
-  variant = "default",
-  toolbarEnd,
-  beforeContent,
-  scrollInnerClassName,
-}: Props) {
+export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
+  function AdminRichTextEditor(
+    {
+      id,
+      value,
+      onChange,
+      disabled = false,
+      placeholder = "紹介文を入力…",
+      className,
+      minHeightClassName = "min-h-[180px]",
+      onUploadImage,
+      variant = "default",
+      toolbarEnd,
+      beforeContent,
+      scrollInnerClassName,
+    },
+    ref,
+  ) {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [linkModalOpen, setLinkModalOpen] = useState(false);
@@ -192,8 +207,18 @@ export function AdminRichTextEditor({
   const uploadRef = useRef(onUploadImage);
   uploadRef.current = onUploadImage;
   const editorRef = useRef<Editor | null>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+  const lastEmittedRef = useRef(value);
   /** setContent 後の prune で onChange が走り外部 value と戦うのを防ぐ */
   const suppressOnChangeRef = useRef(false);
+
+  function emitMarkdown(ed: Editor) {
+    const markdown = editorHtmlToMarkdown(ed.getHTML());
+    lastEmittedRef.current = markdown;
+    onChangeRef.current(markdown);
+    return markdown;
+  }
 
   async function insertUploadedImages(files: File[]) {
     const upload = uploadRef.current;
@@ -207,6 +232,7 @@ export function AdminRichTextEditor({
         ed.chain().focus().setImage({ src: url }).run();
       }
       pruneEmptyParagraphsBeforeImages(ed);
+      emitMarkdown(ed);
     } finally {
       setUploadingImage(false);
     }
@@ -294,11 +320,23 @@ export function AdminRichTextEditor({
     },
     onUpdate: ({ editor: ed }) => {
       if (suppressOnChangeRef.current) return;
-      onChange(editorHtmlToMarkdown(ed.getHTML()));
+      emitMarkdown(ed);
+    },
+    onBlur: ({ editor: ed }) => {
+      if (suppressOnChangeRef.current) return;
+      emitMarkdown(ed);
     },
   });
 
   editorRef.current = editor;
+
+  useImperativeHandle(ref, () => ({
+    getMarkdown: () => {
+      const ed = editorRef.current;
+      if (!ed) return lastEmittedRef.current;
+      return editorHtmlToMarkdown(ed.getHTML());
+    },
+  }));
 
   const toolbar = useEditorState({
     editor,
@@ -307,8 +345,9 @@ export function AdminRichTextEditor({
 
   useEffect(() => {
     if (!editor) return;
-    editor.setEditable(!disabled && !uploadingImage);
-  }, [disabled, editor, uploadingImage]);
+    // 画像アップロード中に false にすると blur し、親の古い value で本文が戻ることがある
+    editor.setEditable(!disabled, false);
+  }, [disabled, editor]);
 
   useEffect(() => {
     if (!editor) return;
@@ -317,14 +356,22 @@ export function AdminRichTextEditor({
     suppressOnChangeRef.current = false;
   }, [editor]);
 
-  // External value changes only (e.g. after save/refresh); avoid fighting while typing.
+  // 親から来た本当の外部更新だけ反映する。
+  // isFocused で弾くと、画像挿入後の blur / 保存クリックで古い value に巻き戻る。
   useEffect(() => {
-    if (!editor || editor.isFocused) return;
+    if (!editor) return;
+    if (value === lastEmittedRef.current) return;
     const current = editorHtmlToMarkdown(editor.getHTML());
-    if (current === value.trim()) return;
+    if (current === value || current === value.trim()) {
+      lastEmittedRef.current = value;
+      return;
+    }
+    // 親の state が追いついていないときは上書きしない
+    if (current === lastEmittedRef.current) return;
     editor.commands.setContent(markdownToEditorHtml(value), {
       emitUpdate: false,
     });
+    lastEmittedRef.current = value;
     // setContent 後も TipTap が画像前に空段落を差し込むことがある
     suppressOnChangeRef.current = true;
     pruneEmptyParagraphsBeforeImages(editor);
@@ -387,7 +434,7 @@ export function AdminRichTextEditor({
     <div
       className={cn(
         "admin-rich-text flex h-auto max-h-[min(32rem,55vh)] w-full flex-col items-stretch gap-0 overflow-hidden p-0 text-sm text-foreground shadow-none transition-colors",
-        (disabled || uploadingImage) && "opacity-50",
+        disabled && "opacity-50",
         className,
       )}
     >
@@ -566,4 +613,5 @@ export function AdminRichTextEditor({
       />
     </div>
   );
-}
+  },
+);
