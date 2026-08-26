@@ -4,10 +4,10 @@ import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import {
-  WORKS_SECTION_META_FORM_ID,
-  WorksSectionMetaForm,
+  SECTION_PAGE_META_FORM_ID,
+  SectionPageMetaForm,
   type SectionPublishStatus,
-} from "@/components/admin/WorksSectionMetaForm";
+} from "@/components/admin/SectionPageMetaForm";
 import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
 import { cn } from "@/lib/cn";
 
@@ -18,16 +18,18 @@ type Props = {
   initialStatus?: SectionPublishStatus;
   initialOgImage?: string;
   ogUploadKind?: string;
+  descriptionHelp?: string;
 };
 
-/** ヘッダーの「編集」→ ページ設定をモーダルで編集（Works / Library / Writing 共通） */
-export function WorksSectionSettingsModal({
+/** ヘッダーの「編集」→ ページ設定をモーダルで編集（Library / Writing / Works / Photo 共通） */
+export function SectionPageSettingsModal({
   metaApiPath,
   initialLabel,
   initialDescription = "",
   initialStatus = "published",
   initialOgImage = "",
   ogUploadKind = "section",
+  descriptionHelp,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -99,13 +101,14 @@ export function WorksSectionSettingsModal({
                 </div>
 
                 <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-                  <WorksSectionMetaForm
+                  <SectionPageMetaForm
                     metaApiPath={metaApiPath}
                     initialLabel={initialLabel}
                     initialDescription={initialDescription}
                     initialStatus={initialStatus}
                     initialOgImage={initialOgImage}
                     ogUploadKind={ogUploadKind}
+                    descriptionHelp={descriptionHelp}
                     hideSubmit
                     onLoadingChange={setSaving}
                     onSaved={() => setOpen(false)}
@@ -123,7 +126,7 @@ export function WorksSectionSettingsModal({
                   </Button>
                   <Button
                     type="submit"
-                    form={WORKS_SECTION_META_FORM_ID}
+                    form={SECTION_PAGE_META_FORM_ID}
                     disabled={saving}
                   >
                     {saving ? "保存中…" : "設定を保存"}

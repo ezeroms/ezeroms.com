@@ -1,37 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 import {
   generateContentSlug,
   markdownToHtml,
+  parseOptionalDate,
   parseTagList,
 } from "@/lib/admin/content";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
-
-function parseOptionalDate(raw: string | undefined | null): string | null {
-  const v = (raw ?? "").trim();
-  if (!v) return null;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
-  return v;
-}
-
-function revalidateWorkPaths(slug: string, productKey?: string | null) {
-  revalidatePath("/works/creative");
-  revalidatePath(`/works/creative/${slug}/`);
-  revalidatePath(`/work/${slug}/`);
-  if (productKey === "chooning") {
-    revalidatePath("/works/chooning");
-  }
-}
+import { requireAdminSession } from "@/lib/admin/require-admin";
+import { revalidateWorkPaths } from "@/lib/admin/work";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 export async function GET() {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   const { data, error } = await getSupabaseAdmin()
     .from("work")
@@ -49,13 +29,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   try {
     const body = (await request.json()) as {
@@ -148,7 +123,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    revalidateWorkPaths(slug, productKey);
+    revalidateWorkPaths(slug, { chooning: productKey === "chooning" });
 
     return NextResponse.json({ ok: true, item: data });
   } catch (e) {

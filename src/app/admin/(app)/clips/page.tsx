@@ -5,7 +5,7 @@ import {
   type AdminClipsTableItem,
 } from "@/components/admin/AdminClipsListTable";
 import { ClipsCreateButton } from "@/components/admin/ClipsCreateButton";
-import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { loadLibrarySection } from "@/lib/content/queries";
 import { getSessionUser } from "@/lib/supabase/auth";
@@ -74,7 +74,7 @@ export default async function AdminClipsListPage() {
         description="Web記事のクリップ・短いメモ付きブックマーク"
         actions={
           <div className="flex flex-wrap gap-2">
-            <WorksSectionSettingsModal
+            <SectionPageSettingsModal
               metaApiPath="/api/admin/library/clips/meta/"
               initialLabel={section.label}
               initialDescription={section.description}

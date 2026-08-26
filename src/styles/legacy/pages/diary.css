@@ -351,7 +351,8 @@
     color: var(--color-text-secondary);
 }
 
-.notes-feed-more {
+.listing-more {
+    /* 一覧末尾の続き案内（いま Diary のみ） */
     max-width: 688px;
     margin: 0 auto 48px;
     padding: 0 0 24px;
@@ -361,7 +362,7 @@
     line-height: 1.6;
 }
 
-.notes-feed-more a {
+.listing-more a {
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 0.2em;

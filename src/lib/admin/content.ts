@@ -34,6 +34,14 @@ export function parseTagList(raw: string): string[] {
     .filter(Boolean);
 }
 
+/** `YYYY-MM-DD`。空や不正なら null。 */
+export function parseOptionalDate(raw: string | undefined | null): string | null {
+  const v = (raw ?? "").trim();
+  if (!v) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
+  return v;
+}
+
 export function markdownToHtml(md: string): string {
   const prepared = normalizeLegacyMarkdown(unescapeOverEscapedMarkdown(md));
   const html = marked.parse(preprocessMarkdownMedia(prepared), {

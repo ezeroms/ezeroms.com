@@ -29,6 +29,7 @@ export function parseGiantsFilter(
   );
   if (fromTagsParam.length) return { tags: fromTagsParam };
 
+  // 公開初期の URL は `?topic=`。ブックマークを壊さないために残している。
   const legacyTopic = firstSearchParamValue(searchParams, "topic").trim();
   if (legacyTopic) {
     try {

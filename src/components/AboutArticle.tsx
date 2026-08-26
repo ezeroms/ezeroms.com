@@ -1,7 +1,11 @@
 import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
 import type { AboutHereCard } from "@/lib/content/about-here";
-import { notesBodyClass } from "@/lib/site/prose-styles";
+import {
+  articleBodyClass,
+  articleFigureClass,
+  articleHeadingClass,
+} from "@/lib/site/prose-styles";
 
 type Props = {
   /** Already sanitized body HTML */
@@ -12,14 +16,12 @@ type Props = {
 };
 
 const proseClassName = cn(
-  notesBodyClass,
+  articleBodyClass,
+  articleHeadingClass,
+  articleFigureClass,
   "[&_h1]:mb-4 [&_h1]:mt-0 [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:leading-snug [&_h1]:tracking-tight sm:[&_h1]:text-3xl",
-  "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
   "[&_h2:first-child]:mt-0",
-  "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight",
   "[&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:text-sm",
-  "[&_figure]:my-6",
-  "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground",
   "[&_strong]:font-semibold",
 );
 

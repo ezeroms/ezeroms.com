@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,10 @@ import {
   PhotoEditorForm,
   type PhotoEditorInitial,
 } from "@/components/admin/PhotoEditorForm";
+import {
+  deleteAdminItem,
+  useAdminEditorModal,
+} from "@/components/admin/useAdminEditorModal";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
 import { cn } from "@/lib/cn";
@@ -29,19 +33,21 @@ export function PhotoEditModal({
   onClose,
 }: Props) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [dirty, setDirty] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const {
+    mounted,
+    saving,
+    setSaving,
+    dirty,
+    setDirty,
+    deleting,
+    setDeleting,
+    deleteError,
+    setDeleteError,
+  } = useAdminEditorModal(open);
   const titleId = useId();
   const isEdit = Boolean(initial?.slug);
   const busy = saving || deleting;
   const canSubmit = dirty && !busy;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -60,41 +66,18 @@ export function PhotoEditModal({
     };
   }, [open, onClose, busy]);
 
-  useEffect(() => {
-    if (!open) {
-      setSaving(false);
-      setDirty(false);
-      setDeleting(false);
-      setDeleteError(null);
-    }
-  }, [open]);
-
   async function onDelete() {
-    if (!initial?.slug || deleting) return;
-    const ok = window.confirm(
-      "このコンテンツを削除しますか？\n（一覧・公開ページから非表示になります）",
-    );
-    if (!ok) return;
-
-    setDeleteError(null);
-    setDeleting(true);
-    try {
-      const res = await fetch(
-        `/api/admin/photos/${galleryId}/${initial.slug}/`,
-        { method: "DELETE" },
-      );
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) {
-        setDeleteError(data.error || "削除に失敗しました");
-        return;
-      }
-      onClose();
-      router.refresh();
-    } catch {
-      setDeleteError("削除中に通信エラーが発生しました");
-    } finally {
-      setDeleting(false);
-    }
+    if (!initial?.slug) return;
+    await deleteAdminItem({
+      url: `/api/admin/photos/${galleryId}/${initial.slug}/`,
+      deleting,
+      setDeleting,
+      setDeleteError,
+      onSuccess: () => {
+        onClose();
+        router.refresh();
+      },
+    });
   }
 
   if (!mounted || !open) return null;

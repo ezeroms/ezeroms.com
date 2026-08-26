@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Tag / topic chip styles.
+ * Tag chip styles.
  * Active is based on the default tag: same bg, body text color, foreground border.
  * `!` so legacy `a:link { color: inherit }` does not win.
  */

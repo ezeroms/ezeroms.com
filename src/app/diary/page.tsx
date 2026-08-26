@@ -3,22 +3,22 @@ import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
-import {
-  ReadingTopicsAside,
-  diaryTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
 import { diaryMonthKey } from "@/lib/content/diary-meta";
 import {
   diaryFilterActive,
+  diaryTagHref,
   parseDiaryFilter,
 } from "@/lib/content/diary-filter";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { summarizeDiaryFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listDiary,
   listDiaryTaxonomy,
   requirePublicWritingSection,
 } from "@/lib/content/queries";
+import { getWritingSection } from "@/lib/content/writing-sections";
+import { listingMoreClass } from "@/lib/site/prose-styles";
 import { sanitizeBody } from "@/lib/html";
 
 export const revalidate = 60;
@@ -27,13 +27,10 @@ export const revalidate = 60;
 const DIARY_FEED_LIMIT = 50;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicWritingSection("diary").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "Diary",
-    description:
-      section?.description || "日々のできごとや考えたことの記録。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicWritingSection("diary"),
+    getWritingSection("diary"),
+  );
 }
 
 export default async function DiaryIndexPage({
@@ -81,13 +78,12 @@ export default async function DiaryIndexPage({
           initial={filter}
         />
       }
-      showTagsAside
       mainClassName="layout-main--single"
       breadcrumbFilter={filtering ? summarizeDiaryFilter(filter) : null}
       breadcrumbSectionHref="/diary/"
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={diaryTagHref}
             allHref="/diary/"
@@ -98,7 +94,7 @@ export default async function DiaryIndexPage({
     >
       <DiaryTimeline items={sanitized} />
       {hasMore && continueMonth ? (
-        <p className="notes-feed-more mx-auto max-w-2xl pb-8">
+        <p className={listingMoreClass}>
           最新 {items.length} 件を表示しています。それ以前は{" "}
           <Link href={`/diary_month/${continueMonth}/`}>月別アーカイブ</Link>
           やヘッダーの Search から条件を指定してください。

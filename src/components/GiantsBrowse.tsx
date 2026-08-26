@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { ShouldersOfGiants } from "@/types/content";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
-import { GiantsTopicNav } from "@/components/GiantsTopicNav";
+import { GiantsTagNav } from "@/components/GiantsTagNav";
 
 type Props = {
   items: ShouldersOfGiants[];
@@ -112,7 +112,7 @@ export function GiantsBrowse({
 
   return (
     <>
-      <GiantsTopicNav tags={tags} selectedTag={selectedTag} />
+      <GiantsTagNav tags={tags} selectedTag={selectedTag} />
       <div id="notification" className="notification">
         リンクをコピーしました
       </div>

@@ -9,7 +9,7 @@ import {
 } from "@/lib/content/diary-meta";
 import { cn } from "@/lib/cn";
 import { tagPillClass } from "@/lib/site/tag-styles";
-import { notesBodyClass } from "@/lib/site/prose-styles";
+import { articleBodyClass } from "@/lib/site/prose-styles";
 import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
 
@@ -121,7 +121,7 @@ export function DiaryTimeline({
                   </div>
 
                   <ArticleProse
-                    className={notesBodyClass}
+                    className={articleBodyClass}
                     html={item.body_html}
                   />
 

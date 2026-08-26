@@ -1,28 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 import {
   generateContentSlug,
   markdownToHtml,
   parseTagList,
 } from "@/lib/admin/content";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
-
-function revalidateGiantsPaths(slug?: string) {
-  revalidatePath("/shoulders-of-giants");
-  if (slug) {
-    revalidatePath(`/shoulders-of-giants/${slug}`);
-  }
-}
+import { revalidateGiantsPaths } from "@/lib/admin/giants";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 export async function GET() {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   const { data, error } = await getSupabaseAdmin()
     .from("shoulders_of_giants")
@@ -39,13 +27,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   try {
     const body = (await request.json()) as {
@@ -78,6 +61,7 @@ export async function POST(request: NextRequest) {
       (body.slug?.trim() && /^[a-z0-9-]+$/i.test(body.slug.trim())
         ? body.slug.trim()
         : null) || generateContentSlug();
+    // 旧クライアントは `topics` を送る。現在の正式名は tags。
     const tags = parseTagList(body.tags ?? body.topics ?? "");
     const now = new Date().toISOString();
 

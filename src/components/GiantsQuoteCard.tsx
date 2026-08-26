@@ -9,7 +9,7 @@ import {
 } from "@/lib/content/giants-meta";
 import { giantsTagHref } from "@/lib/content/giants-filter";
 import { cn } from "@/lib/cn";
-import { notesBodyClass } from "@/lib/site/prose-styles";
+import { articleBodyClass, articleTypeClass } from "@/lib/site/prose-styles";
 import { tagPillClass } from "@/lib/site/tag-styles";
 import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
@@ -26,7 +26,7 @@ type Props = {
 
 /** 購入リンク付き書名: 通常は本文色、hover で下線＋薄いリンク色（本文リンクと同系） */
 const bookTitleLinkClass =
-  "text-inherit no-underline transition-colors hover:!text-muted-foreground hover:!underline hover:underline-offset-2";
+  "text-inherit no-underline leading-[inherit] transition-colors hover:!text-muted-foreground hover:!underline hover:underline-offset-2";
 
 function citationWithBookLink(
   citation: string,
@@ -106,10 +106,10 @@ export function GiantsQuoteCard({
       data-permalink={permalink}
       className={cn("overflow-visible", className, articleClassName)}
     >
-      <ArticleProse className={notesBodyClass} html={html} />
+      <ArticleProse className={articleBodyClass} html={html} />
 
       {citationNode ? (
-        <p className="m-0 mt-5 text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base">
+        <p className={cn(articleTypeClass, "m-0 mt-5")}>
           {citationNode}
         </p>
       ) : null}

@@ -1,17 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { AdminCreateButton } from "@/components/admin/AdminCreateButton";
 import { GiantsEditModal } from "@/components/admin/GiantsEditModal";
 
 export function GiantsCreateButton() {
-  const [open, setOpen] = useState(false);
   return (
-    <>
-      <Button type="button" onClick={() => setOpen(true)}>
-        ＋ コンテンツを追加
-      </Button>
-      <GiantsEditModal open={open} onClose={() => setOpen(false)} />
-    </>
+    <AdminCreateButton>
+      {({ open, onClose }) => (
+        <GiantsEditModal open={open} onClose={onClose} />
+      )}
+    </AdminCreateButton>
   );
 }

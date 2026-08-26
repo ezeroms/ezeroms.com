@@ -2,33 +2,30 @@ import type { Metadata } from "next";
 import { ClipsBrowse } from "@/components/ClipsBrowse";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
 import {
-  ReadingTopicsAside,
-} from "@/components/ReadingTopicsAside";
+  ReadingTagsAside,
+} from "@/components/ReadingTagsAside";
 import { SiteShell } from "@/components/SiteShell";
 import {
   diaryFilterActive,
   parseDiaryFilter,
 } from "@/lib/content/diary-filter";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { summarizeDiaryFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listClip,
   listClipTags,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
-import { clipListingHref } from "@/lib/content/clip-meta";
+import { getLibrarySection } from "@/lib/content/library-sections";
+import { clipHrefsForDate } from "@/lib/content/clip-meta";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicLibrarySection("clips").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "Clips",
-    description:
-      section?.description ||
-      "Webのニュースや記事のクリップ。出典と短いメモだけを残す場所です。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicLibrarySection("clips"),
+    getLibrarySection("clips"),
+  );
 }
 
 export default async function ClipsIndexPage({
@@ -60,6 +57,8 @@ export default async function ClipsIndexPage({
     ).catch(() => ({ items: [], total: 0 })),
   ]);
 
+  const clipHrefs = clipHrefsForDate(clipFilter);
+
   return (
     <SiteShell
       bodyClassName="is-clips"
@@ -74,7 +73,6 @@ export default async function ClipsIndexPage({
           basePath="/clips/"
         />
       }
-      showTagsAside={false}
       showTagsRail
       tagsRailDefaultOpen
       breadcrumbFilter={filtering ? summarizeDiaryFilter(clipFilter) : null}
@@ -82,19 +80,10 @@ export default async function ClipsIndexPage({
       filterActive={filtering}
       aside={
         tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={tags}
-            hrefFor={(tag) =>
-              clipListingHref({
-                tag,
-                from: clipFilter.from,
-                to: clipFilter.to,
-              })
-            }
-            allHref={clipListingHref({
-              from: clipFilter.from,
-              to: clipFilter.to,
-            })}
+            hrefFor={clipHrefs.forTag}
+            allHref={clipHrefs.all}
             selected={selectedTag}
           />
         ) : undefined

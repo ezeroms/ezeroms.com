@@ -20,10 +20,8 @@ import {
   requirePublicWorksSection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
-import {
-  ReadingTopicsAside,
-  workTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
+import { workTagHref } from "@/lib/content/work-filter";
 
 export const revalidate = 60;
 
@@ -99,13 +97,12 @@ export default async function CreativeDetailPage({
   return (
     <SiteShell
       bodyClassName="is-works-creative"
-      showTagsAside={false}
       breadcrumbCurrent={item.title}
       showLayoutHeader={false}
       mainClassName="layout-main--single"
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={workTagHref}
             allHref="/works/creative/"

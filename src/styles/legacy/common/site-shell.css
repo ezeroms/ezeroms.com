@@ -451,12 +451,10 @@
 }
 
 /* 空のリンクを非表示 */
-.layout-toc__list a[data-topic=""],
 .layout-toc__list a:empty {
     display: none;
 }
 
-.layout-toc__list li:has(a[data-topic=""]),
 .layout-toc__list li:has(a:empty) {
     display: none;
 }

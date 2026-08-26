@@ -1,22 +1,14 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 /**
  * PATCH /api/admin/site/ — サイト全体設定（デフォルト OGP）を更新する。
  */
 export async function PATCH(request: Request) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json(
-      { error: "Supabase not configured" },
-      { status: 500 },
-    );
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   try {
     const body = (await request.json()) as {

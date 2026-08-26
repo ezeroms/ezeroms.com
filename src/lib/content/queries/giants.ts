@@ -25,22 +25,12 @@ function normalizeGiantsRow(row: ShouldersOfGiants): ShouldersOfGiants {
 export async function listGiants(opts?: {
   tag?: string;
   tags?: string[];
-  /** @deprecated Use `tag` */
-  topic?: string;
-  /** @deprecated Use `tags` */
-  topics?: string[];
   limit?: number;
 }): Promise<{ items: ShouldersOfGiants[]; total: number }> {
   if (!hasSupabaseConfig()) return emptyList();
   try {
     const tags =
-      opts?.tags ??
-      opts?.topics ??
-      (opts?.tag
-        ? [opts.tag]
-        : opts?.topic
-          ? [opts.topic]
-          : undefined);
+      opts?.tags ?? (opts?.tag ? [opts.tag] : undefined);
 
     let q = getSupabaseAdmin()
       .from("shoulders_of_giants")

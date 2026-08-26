@@ -5,7 +5,7 @@ import {
   type AdminDiaryTableItem,
 } from "@/components/admin/AdminDiaryListTable";
 import { DiaryCreateButton } from "@/components/admin/DiaryCreateButton";
-import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { excerptFromHtml } from "@/lib/admin/list-format";
@@ -85,7 +85,7 @@ export default async function AdminDiaryListPage() {
         title={section.label}
         actions={
           <div className="flex flex-wrap gap-2">
-            <WorksSectionSettingsModal
+            <SectionPageSettingsModal
               metaApiPath="/api/admin/writing/diary/meta/"
               initialLabel={section.label}
               initialDescription={section.description}

@@ -66,6 +66,13 @@ export function serializeColumnFilter(filter: ColumnFilterState): string {
   return toQueryString(query);
 }
 
+export function columnTagHref(tag: string): string {
+  return `/column/${serializeColumnFilter({
+    ...emptyColumnFilter(),
+    tags: [tag],
+  })}`;
+}
+
 export {
   dateMatchesRange,
   dateMatchesWeekdays,

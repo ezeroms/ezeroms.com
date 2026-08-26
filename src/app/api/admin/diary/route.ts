@@ -6,17 +6,12 @@ import {
   monthKeyFromDate,
   parseTagList,
 } from "@/lib/admin/content";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 export async function GET() {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
@@ -32,13 +27,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   try {
     const body = (await request.json()) as {

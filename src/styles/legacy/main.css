@@ -37,7 +37,6 @@
 @import url('pages/works.css');
 
 @import url('pages/diary.css');
-@import url('pages/keyword.css');
 @import url('pages/tweet.css');
 @import url('pages/column.css');
 @import url('pages/clips.css');
@@ -50,6 +49,4 @@
 @import url('pages/chronicle-modal.css');
 @import url('pages/ui-design-guidebook.css');
 
-/* モバイル専用コンポーネント（タブレット/スマホのみ表示） */
-@import url('common/mobile-header.css');
 @import url('common/half-modal.css');

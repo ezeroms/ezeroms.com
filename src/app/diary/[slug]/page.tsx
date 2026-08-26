@@ -25,10 +25,8 @@ import {
 import { sanitizeBody } from "@/lib/html";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
-import {
-  ReadingTopicsAside,
-  diaryTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
+import { diaryTagHref } from "@/lib/content/diary-filter";
 
 export const revalidate = 60;
 
@@ -100,11 +98,10 @@ export default async function DiaryEntryPage({
     <SiteShell
       bodyClassName="is-diary"
       breadcrumbCurrent={breadcrumbLabel}
-      showTagsAside={false}
       mainClassName="layout-main--single"
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={diaryTagHref}
             allHref="/diary/"

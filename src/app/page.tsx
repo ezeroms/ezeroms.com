@@ -35,7 +35,6 @@ export default async function HomePage() {
       bodyClassName="is-home"
       /* Avoid layout-main--centered: its justify-content:center clips tall content */
       mainClassName="layout-main--single"
-      showTagsAside={false}
       showLayoutHeader={false}
       showMobileChrome={false}
       contentClassName="p-0"

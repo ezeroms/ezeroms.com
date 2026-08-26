@@ -5,7 +5,7 @@ import {
   type AdminGiantsTableItem,
 } from "@/components/admin/AdminGiantsListTable";
 import { GiantsCreateButton } from "@/components/admin/GiantsCreateButton";
-import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import {
@@ -83,7 +83,7 @@ export default async function AdminGiantsPage() {
         title={section.label}
         actions={
           <div className="flex flex-wrap gap-2">
-            <WorksSectionSettingsModal
+            <SectionPageSettingsModal
               metaApiPath="/api/admin/library/giants/meta/"
               initialLabel={section.label}
               initialDescription={section.description}

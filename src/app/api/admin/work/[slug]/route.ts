@@ -1,44 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 import {
   htmlToEditableMarkdown,
   markdownToHtml,
+  parseOptionalDate,
   parseTagList,
 } from "@/lib/admin/content";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
+import { revalidateWorkPaths } from "@/lib/admin/work";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ slug: string }> };
 
-function parseOptionalDate(raw: string | undefined | null): string | null {
-  const v = (raw ?? "").trim();
-  if (!v) return null;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
-  return v;
-}
-
-function revalidateWorkPaths(slug: string) {
-  revalidatePath("/works/creative");
-  revalidatePath(`/works/creative/${slug}/`);
-  revalidatePath(`/work/${slug}/`);
-  revalidatePath("/works/chooning");
-}
-
-async function requireAdmin() {
-  const user = await getSessionUser();
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  if (!hasSupabaseConfig()) {
-    return {
-      error: NextResponse.json({ error: "Supabase not configured" }, { status: 500 }),
-    };
-  }
-  return { user };
-}
-
 export async function GET(_request: NextRequest, { params }: RouteParams) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   const { slug } = await params;
@@ -80,7 +54,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 }
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   const { slug } = await params;
@@ -182,7 +156,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    revalidateWorkPaths(slug);
+    revalidateWorkPaths(slug, { chooning: true });
 
     return NextResponse.json({ ok: true, item: data });
   } catch (e) {
@@ -194,7 +168,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   const { slug } = await params;
@@ -213,7 +187,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  revalidateWorkPaths(slug);
+  revalidateWorkPaths(slug, { chooning: true });
 
   return NextResponse.json({ ok: true, slug });
 }

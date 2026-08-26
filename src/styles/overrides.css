@@ -11,12 +11,18 @@ input[type="search"]::-webkit-search-decoration {
   display: none;
 }
 
-/* Shared body leading (Notes / Column / Giants / etc.) */
-.notes-feed__body,
+/* Shared body leading (Diary / Column / Giants / etc.) */
+.article-prose,
 .article-item p,
 .article-item ul > li,
 .article-item ol > li {
   line-height: 1.8;
+}
+
+/* 折り返したインラインリンクも親の行間・字サイズを使う（Giants 書誌の書名など） */
+.article-prose a {
+  font-size: inherit;
+  line-height: inherit;
 }
 
 /* Detail body: same 16px as PC feels large on narrow screens — nudge down ≤1079 */
@@ -25,7 +31,7 @@ input[type="search"]::-webkit-search-decoration {
   .article-item ul > li,
   .article-item ol > li,
   .article-item blockquote p,
-  .notes-feed__body {
+  .article-prose {
     font-size: 0.9375rem; /* 15px */
   }
 }

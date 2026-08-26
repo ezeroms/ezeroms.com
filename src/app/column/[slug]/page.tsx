@@ -21,10 +21,8 @@ import {
 import { sanitizeBody } from "@/lib/html";
 import { ColumnList } from "@/components/ColumnList";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
-import {
-  ReadingTopicsAside,
-  columnTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
+import { columnTagHref } from "@/lib/content/column-filter";
 
 export const revalidate = 60;
 
@@ -99,13 +97,12 @@ export default async function ColumnPage({
   return (
     <SiteShell
       bodyClassName="is-column"
-      showTagsAside={false}
       breadcrumbCurrent={item.title}
       showLayoutHeader={false}
       mainClassName="layout-main--single"
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={columnTagHref}
             allHref="/column/"

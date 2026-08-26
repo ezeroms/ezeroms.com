@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { emptyColumnFilter, serializeColumnFilter } from "@/lib/content/column-filter";
-import { emptyWorkFilter, serializeWorkFilter } from "@/lib/content/work-filter";
 import { cn } from "@/lib/cn";
 import { tagPillClass } from "@/lib/site/tag-styles";
 
@@ -12,29 +10,10 @@ type Props = {
   selected?: string | string[] | null;
 };
 
-export function diaryTagHref(tag: string) {
-  return `/diary_tag/${encodeURIComponent(tag)}/`;
-}
-
-export function columnTagHref(tag: string) {
-  return `/column/${serializeColumnFilter({
-    ...emptyColumnFilter(),
-    tags: [tag],
-  })}`;
-}
-
-export function workTagHref(tag: string) {
-  return `/works/creative/${serializeWorkFilter({
-    ...emptyWorkFilter(),
-    tags: [tag],
-  })}`;
-}
-
 /**
- * 読み物ページ右側のタグ（Medium の Recommended topics 相当）。
- * PC（≥1080）のみ。SiteShell の aside スロットから出す。
+ * 読み物ページ右側のタグ一覧。PC（≥1080）のみ。SiteShell の aside から出す。
  */
-export function ReadingTopicsAside({
+export function ReadingTagsAside({
   tags,
   hrefFor,
   allHref,

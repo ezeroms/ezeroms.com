@@ -123,3 +123,16 @@ export function clipListingHref(opts?: {
     tags: opts?.tag ? [opts.tag] : [],
   })}`;
 }
+
+/** 時期を残したままタグ／全件へ飛ぶ。 */
+export function clipHrefsForDate(dateFilter?: {
+  from?: string | null;
+  to?: string | null;
+}) {
+  const from = dateFilter?.from ?? null;
+  const to = dateFilter?.to ?? null;
+  return {
+    all: clipListingHref({ from, to }),
+    forTag: (tag: string) => clipListingHref({ tag, from, to }),
+  };
+}

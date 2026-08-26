@@ -5,7 +5,7 @@ import {
   type AdminColumnTableItem,
 } from "@/components/admin/AdminColumnListTable";
 import { ColumnCreateButton } from "@/components/admin/ColumnCreateButton";
-import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWritingSection } from "@/lib/content/queries";
@@ -85,7 +85,7 @@ export default async function AdminColumnListPage() {
         title={section.label}
         actions={
           <div className="flex flex-wrap gap-2">
-            <WorksSectionSettingsModal
+            <SectionPageSettingsModal
               metaApiPath="/api/admin/writing/column/meta/"
               initialLabel={section.label}
               initialDescription={section.description}

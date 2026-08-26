@@ -135,7 +135,6 @@ export default async function AboutPage({
     redirect("/about/me/");
   }
 
-  const pathname = `/about/${requestedSlug}/`;
   const isMePage = requestedSlug === "me";
 
   // Me は構造化プロフィール（about_profile など）を優先
@@ -143,7 +142,7 @@ export default async function AboutPage({
     const meProfile = await getMeProfile();
     if (meProfile) {
       return (
-        <AboutShell pathname={pathname}>
+        <AboutShell>
           <AboutMeProfile
             data={{
               ...meProfile,
@@ -182,7 +181,7 @@ export default async function AboutPage({
     : [];
 
   return (
-    <AboutShell pathname={pathname}>
+    <AboutShell>
       {page ? (
         requestedSlug === "here" ? (
           <AboutHereArticles cards={hereCards} pageTitle={page.title} />

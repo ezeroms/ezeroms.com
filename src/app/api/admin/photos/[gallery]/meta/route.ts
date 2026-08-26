@@ -1,32 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { requirePhotoGalleryAdmin } from "@/lib/admin/require-admin";
 import {
   getPhotoGallery,
-  isPhotoGalleryId,
   isPhotoGalleryStatus,
 } from "@/lib/content/photo-galleries";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ gallery: string }> };
 
 /**
  * PATCH /api/admin/photos/[gallery]/meta/
  * ギャラリーの表示名・説明文・公開状態・OGP を更新する。
+ * description は trim しない（空文字＝説明なし）。Library / Writing / Works の
+ * upsertSectionPageSettingsRow とは意図が違うので、ここは専用の upsert。
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
-
   const { gallery: galleryId } = await params;
-  if (!isPhotoGalleryId(galleryId)) {
-    return NextResponse.json({ error: "Unknown gallery" }, { status: 404 });
-  }
+  const auth = await requirePhotoGalleryAdmin(galleryId);
+  if (auth.error) return auth.error;
 
   try {
     const body = (await request.json()) as {
@@ -36,7 +28,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       og_image?: string;
     };
 
-    const defaults = getPhotoGallery(galleryId);
+    const defaults = getPhotoGallery(auth.galleryId);
     const label = (body.label ?? "").trim() || defaults.label;
     const description =
       typeof body.description === "string" ? body.description : "";
@@ -47,7 +39,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       typeof body.og_image === "string" ? body.og_image.trim() : "";
 
     const row = {
-      id: galleryId,
+      id: auth.galleryId,
       label,
       description,
       status,

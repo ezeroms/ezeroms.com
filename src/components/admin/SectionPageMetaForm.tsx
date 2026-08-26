@@ -10,45 +10,48 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type {
-  PhotoGalleryId,
-  PhotoGalleryStatus,
-} from "@/lib/content/photo-galleries";
 
-export const PHOTO_GALLERY_META_FORM_ID = "photo-gallery-meta-form";
+export const SECTION_PAGE_META_FORM_ID = "section-page-meta-form";
 
+
+export type SectionPublishStatus = "published" | "private";
 
 type Props = {
-  galleryId: PhotoGalleryId;
+  /** PATCH 先（例: /api/admin/library/clips/meta/） */
+  metaApiPath: string;
   initialLabel: string;
-  initialDescription: string;
-  initialStatus?: PhotoGalleryStatus;
+  /** 一覧ページの OGP description */
+  initialDescription?: string;
+  initialStatus?: SectionPublishStatus;
   initialOgImage?: string;
-  /** 保存成功時（モーダルを閉じるなど） */
+  /** OgImageField の upload kind */
+  ogUploadKind?: string;
+  /** OGP 説明文の下に出す補足（Photo の「? アイコン」など） */
+  descriptionHelp?: string;
   onSaved?: () => void;
-  /** 送信中フラグの変化（フッターボタン用） */
   onLoadingChange?: (loading: boolean) => void;
-  /** フォーム内の送信ボタンを出さない（フッターに置く場合） */
   hideSubmit?: boolean;
   formId?: string;
 };
 
-/** ギャラリーの表示名・説明文・公開状態・OGP を編集する。 */
-export function PhotoGalleryMetaForm({
-  galleryId,
+/** セクションのタイトル・説明文・公開状態・OGP を編集する。 */
+export function SectionPageMetaForm({
+  metaApiPath,
   initialLabel,
-  initialDescription,
+  initialDescription = "",
   initialStatus = "published",
   initialOgImage = "",
+  ogUploadKind = "section",
+  descriptionHelp,
   onSaved,
   onLoadingChange,
   hideSubmit = false,
-  formId = PHOTO_GALLERY_META_FORM_ID,
+  formId = SECTION_PAGE_META_FORM_ID,
 }: Props) {
   const router = useRouter();
   const [label, setLabel] = useState(initialLabel);
   const [description, setDescription] = useState(initialDescription);
-  const [status, setStatus] = useState<PhotoGalleryStatus>(initialStatus);
+  const [status, setStatus] = useState<SectionPublishStatus>(initialStatus);
   const [ogImage, setOgImage] = useState(initialOgImage);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -65,7 +68,7 @@ export function PhotoGalleryMetaForm({
     setSaved(false);
     setLoadingState(true);
     try {
-      const res = await fetch(`/api/admin/photos/${galleryId}/meta/`, {
+      const res = await fetch(metaApiPath, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -101,9 +104,9 @@ export function PhotoGalleryMetaForm({
       {saved ? <Alert variant="success">ページ設定を保存しました</Alert> : null}
 
       <div className="space-y-2">
-        <Label htmlFor="gallery-label">タイトル</Label>
+        <Label htmlFor="section-page-label">タイトル</Label>
         <Input
-          id="gallery-label"
+          id="section-page-label"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           required
@@ -115,24 +118,24 @@ export function PhotoGalleryMetaForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="gallery-description">OGP 説明文</Label>
+        <Label htmlFor="section-page-description">OGP 説明文</Label>
         <Textarea
-          id="gallery-description"
+          id="section-page-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           placeholder="SNS や検索結果に出る説明文"
           {...ignorePasswordManagersProps}
         />
-        <p className="m-0 text-xs text-muted-foreground">
-          公開ページの ? アイコンにも使います。
-        </p>
+        {descriptionHelp ? (
+          <p className="m-0 text-xs text-muted-foreground">{descriptionHelp}</p>
+        ) : null}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="gallery-status">ステータス</Label>
+        <Label htmlFor="section-page-status">ステータス</Label>
         <Select
-          id="gallery-status"
+          id="section-page-status"
           value={status}
           onChange={(e) =>
             setStatus(e.target.value === "private" ? "private" : "published")
@@ -145,10 +148,10 @@ export function PhotoGalleryMetaForm({
       </div>
 
       <OgImageField
-        id="gallery-og-image"
+        id="section-page-og-image"
         value={ogImage}
         onChange={setOgImage}
-        uploadKind={`photo-${galleryId}`}
+        uploadKind={ogUploadKind}
         disabled={loading}
       />
 

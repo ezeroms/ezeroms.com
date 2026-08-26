@@ -15,7 +15,6 @@ export default async function UidgIndexPage() {
     <SiteShell
       bodyClassName="is-ui-design-guidebook"
       mainClassName="layout-main--with-header-toc"
-      showTagsAside={false}
     >
       <h1>UI Design Guidebook</h1>
       {Object.entries(bySection).map(([section, list]) => (

@@ -1,5 +1,6 @@
 import type { Clip } from "@/types/content";
 import Link from "next/link";
+import { PenLine } from "lucide-react";
 import {
   ContentThumbCard,
   contentPlainListClassName,
@@ -23,21 +24,12 @@ type Props = {
 
 function ClipMemo({ children }: { children: string }) {
   return (
-    <div className="rounded-md border border-solid border-border px-3 py-2.5">
-      <div className="flex items-center gap-2">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/about/profile.png"
-          alt=""
-          width={20}
-          height={20}
-          className="h-5 w-5 shrink-0 rounded-full object-cover"
-        />
-        <span className="text-xs font-medium leading-none text-foreground">
-          ezeroms
-        </span>
-      </div>
-      <p className="m-0 mt-2 min-w-0 whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
+    <div className="flex items-start gap-2 rounded-md border border-solid border-border px-3 py-2.5">
+      <PenLine
+        className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
+        aria-hidden
+      />
+      <p className="m-0 min-w-0 whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
         <span className="sr-only">メモ: </span>
         {children}
       </p>

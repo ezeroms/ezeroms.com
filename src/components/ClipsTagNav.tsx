@@ -1,11 +1,11 @@
 "use client";
 
+import { type DiaryFilterState } from "@/lib/content/diary-filter";
+import { clipHrefsForDate } from "@/lib/content/clip-meta";
 import {
-  emptyDiaryFilter,
-  serializeDiaryFilter,
-  type DiaryFilterState,
-} from "@/lib/content/diary-filter";
-import { SectionFacetNav } from "@/components/SectionFacetNav";
+  TAGS_BOTTOM_SHEET_COPY,
+  TagsBottomSheet,
+} from "@/components/TagsBottomSheet";
 
 type Props = {
   tags: string[];
@@ -14,33 +14,22 @@ type Props = {
   dateFilter?: Pick<DiaryFilterState, "from" | "to">;
 };
 
-function clipsHref(tag: string | null, dateFilter?: Pick<DiaryFilterState, "from" | "to">) {
-  return `/clips/${serializeDiaryFilter({
-    ...emptyDiaryFilter(),
-    from: dateFilter?.from ?? null,
-    to: dateFilter?.to ?? null,
-    tags: tag ? [tag] : [],
-  })}`;
-}
-
 /**
- * Clips 一覧のタグナビ（Giants タグナビと同型）。
+ * Giants タグナビと同型。右下 FAB → ボトムシート。
  */
 export function ClipsTagNav({
   tags,
   selectedTag = null,
   dateFilter,
 }: Props) {
+  const hrefs = clipHrefsForDate(dateFilter);
   return (
-    <SectionFacetNav
+    <TagsBottomSheet
       items={tags}
       selected={selectedTag}
-      allHref={clipsHref(null, dateFilter)}
-      hrefFor={(tag) => clipsHref(tag, dateFilter)}
-      ariaLabel="タグ一覧"
-      sheetTitle="Tags"
-      emptyLabel="タグがありません"
-      chooseLabel="タグを選ぶ"
+      allHref={hrefs.all}
+      hrefFor={hrefs.forTag}
+      {...TAGS_BOTTOM_SHEET_COPY}
     />
   );
 }

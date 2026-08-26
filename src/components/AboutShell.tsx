@@ -7,20 +7,12 @@ export function AboutShell({
   children,
   bodyClassName = "is-about",
 }: {
-  /** Kept for call-site compatibility; breadcrumbs resolve from SiteShell pathname. */
-  pathname: string;
   children: React.ReactNode;
   bodyClassName?: string;
-  /**
-   * 以前はカードグリッド用の幅指定だった。
-   * 現状 SiteShell 側で幅を制御するため未使用（呼び出し互換のため残す）。
-   */
-  wide?: boolean;
 }) {
   return (
     <SiteShell
       bodyClassName={bodyClassName}
-      showTagsAside={false}
       showLayoutHeader={false}
       mainClassName="layout-main--single"
     >

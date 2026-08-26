@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
 import { ExperienceChart } from "@/components/ExperienceChart";
 import { SiteShell } from "@/components/SiteShell";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { listExperience, requirePublicWorksSection } from "@/lib/content/queries";
+import { getWorksSection } from "@/lib/content/works-sections";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicWorksSection("experience").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "Experience",
-    description:
-      section?.description ||
-      "いつ・どこで・何に関わったか。職歴と関与の年表です。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicWorksSection("experience"),
+    getWorksSection("experience"),
+  );
 }
 
 export default async function ExperiencePage() {
@@ -25,7 +22,6 @@ export default async function ExperiencePage() {
     <SiteShell
       bodyClassName="is-works-experience"
       mainClassName="layout-main--single"
-      showTagsAside={false}
       contentClassName="p-0"
     >
       <ExperienceChart items={items} />

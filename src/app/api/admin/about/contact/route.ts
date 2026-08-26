@@ -5,25 +5,12 @@ import {
   ABOUT_CONTACT_CONTENT_SLUG,
   ABOUT_CONTACT_PUBLIC_PATH,
 } from "@/lib/content/about-routes";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
-
-async function requireAdmin() {
-  const user = await getSessionUser();
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  if (!hasSupabaseConfig()) {
-    return {
-      error: NextResponse.json({ error: "Supabase not configured" }, { status: 500 }),
-    };
-  }
-  return { user };
-}
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 /** Contact 記事（DB slug = contact）を1件取得 */
 export async function GET() {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   let { data, error } = await getSupabaseAdmin()
@@ -56,7 +43,7 @@ export async function GET() {
 
 /** Contact 記事を保存（タイトル・本文 Markdown・OGP・公開状態） */
 export async function PATCH(request: NextRequest) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   try {

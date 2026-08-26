@@ -5,21 +5,8 @@ import {
   ABOUT_HERE_CONTENT_SLUG,
   ABOUT_HERE_PUBLIC_PATH,
 } from "@/lib/content/about-routes";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
-
-async function requireAdmin() {
-  const user = await getSessionUser();
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  if (!hasSupabaseConfig()) {
-    return {
-      error: NextResponse.json({ error: "Supabase not configured" }, { status: 500 }),
-    };
-  }
-  return { user };
-}
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 const SELECT_FULL =
   "id, slug, title, body_md, body_html, intro_md, intro_html, rights_md, rights_html, updates_md, updates_html, og_image, status, published_at, updated_at";
@@ -30,7 +17,7 @@ const SELECT_MIN =
 
 /** Here 記事（DB slug = site）を1件取得 */
 export async function GET() {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   const sb = getSupabaseAdmin();
@@ -70,7 +57,7 @@ export async function GET() {
 
 /** Here 記事を保存（3 カード本文・OGP・公開状態） */
 export async function PATCH(request: NextRequest) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   try {

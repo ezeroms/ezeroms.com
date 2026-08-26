@@ -2,20 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { WorkList } from "@/components/WorkList";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { listWork, requirePublicWorksSection } from "@/lib/content/queries";
+import { getWorksSection } from "@/lib/content/works-sections";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicWorksSection("chooning").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "Chooning",
-    description:
-      section?.description ||
-      "音楽への思いを記録するプロダクト Chooning。特筆して残したい作品です。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicWorksSection("chooning"),
+    getWorksSection("chooning"),
+  );
 }
 
 export default async function ChooningPage() {
@@ -28,7 +25,6 @@ export default async function ChooningPage() {
   return (
     <SiteShell
       bodyClassName="is-works-chooning"
-      showTagsAside={false}
     >
       <div className="mx-auto max-w-3xl font-sans text-foreground">
         <p className="m-0 text-sm text-muted-foreground">

@@ -18,7 +18,6 @@ export async function renderSearchPage(
   return (
     <SiteShell
       bodyClassName={scope === "creative" ? "is-works-creative" : undefined}
-      showTagsAside={false}
       hideHeaderSearch
       breadcrumbCurrent={initialQuery || undefined}
     >

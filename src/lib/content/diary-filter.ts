@@ -115,4 +115,8 @@ export function dateMatchesWeekdays(iso: string, weekdays: number[]): boolean {
   return weekdays.includes(day);
 }
 
+export function diaryTagHref(tag: string): string {
+  return `/diary_tag/${encodeURIComponent(tag)}/`;
+}
+
 export { formatDateRangeSummary };

@@ -1,6 +1,6 @@
 import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
-import { notesBodyClass, proseBodyClass } from "@/lib/site/prose-styles";
+import { articleBodyClass, proseBodyClass } from "@/lib/site/prose-styles";
 import type { MeProfilePayload } from "@/types/content";
 
 type Props = {
@@ -42,7 +42,7 @@ export function AboutMeProfile({ data }: Props) {
           <ArticleProse
             html={profile.bio_html}
             className={cn(
-              notesBodyClass,
+              articleBodyClass,
               "about-me__bio",
               "[&_p]:m-0 [&_p+p]:mt-4",
             )}

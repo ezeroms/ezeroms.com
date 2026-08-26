@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateContentSlug } from "@/lib/admin/content";
 import { createCleanPhotoAssets } from "@/lib/media/photo-clean";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 const KIND_RE = /^[a-z0-9_-]{1,32}$/i;
 const MAX_FILENAME_ATTEMPTS = 12;
@@ -35,13 +35,8 @@ async function allocateUniqueOgFileId(kind: string): Promise<string> {
  * FormData: file, kind? (default "content")
  */
 export async function POST(request: NextRequest) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   try {
     const form = await request.formData();

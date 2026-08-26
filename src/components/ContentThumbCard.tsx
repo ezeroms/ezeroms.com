@@ -25,10 +25,10 @@ type Props = {
   showExcerpt?: boolean;
   /** false ならタイトルを折り返して全文表示（Clips） */
   clampTitle?: boolean;
-  /** タイトル下（Clips のメモなど） */
-  note?: ReactNode;
-  /** 末尾のタグ列など */
+  /** タイトル下のタグ列など */
   footer?: ReactNode;
+  /** タグの下（Clips のメモなど） */
+  note?: ReactNode;
   /** 最小高さを保ち、足りない分はタイトル下を伸ばす（Clips） */
   fillBelowTitle?: boolean;
   /**
@@ -180,12 +180,14 @@ export function ContentThumbCard({
             <div className="min-h-0 flex-1" aria-hidden />
           ) : null}
 
-          {note ? <div className="mt-3 min-w-0">{note}</div> : null}
-
           {footer ? (
             <div className="mt-3 flex flex-nowrap items-center gap-2 overflow-hidden">
               {footer}
             </div>
+          ) : null}
+
+          {note ? (
+            <div className="mt-3 min-w-0 overflow-visible">{note}</div>
           ) : null}
         </div>
       </div>

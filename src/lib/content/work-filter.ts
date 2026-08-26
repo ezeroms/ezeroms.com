@@ -99,6 +99,13 @@ export function serializeWorkFilter(filter: WorkFilterState): string {
   return toQueryString(query);
 }
 
+export function workTagHref(tag: string): string {
+  return `/works/creative/${serializeWorkFilter({
+    ...emptyWorkFilter(),
+    tags: [tag],
+  })}`;
+}
+
 export function workCategoryLabel(cat: string): string {
   return WORK_CATEGORY_NAMES[cat] ?? cat;
 }

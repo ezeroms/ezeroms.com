@@ -1,17 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { AdminCreateButton } from "@/components/admin/AdminCreateButton";
 import { ClipsEditModal } from "@/components/admin/ClipsEditModal";
 
 export function ClipsCreateButton() {
-  const [open, setOpen] = useState(false);
   return (
-    <>
-      <Button type="button" onClick={() => setOpen(true)}>
-        ＋ 新規クリップ
-      </Button>
-      <ClipsEditModal open={open} onClose={() => setOpen(false)} />
-    </>
+    <AdminCreateButton label="＋ 新規クリップ">
+      {({ open, onClose }) => <ClipsEditModal open={open} onClose={onClose} />}
+    </AdminCreateButton>
   );
 }

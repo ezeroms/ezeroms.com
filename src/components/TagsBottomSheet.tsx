@@ -14,7 +14,7 @@ import { Tags, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 
-export type SectionFacetNavProps = {
+export type TagsBottomSheetProps = {
   items: string[];
   selected?: string | null;
   allHref: string;
@@ -25,17 +25,25 @@ export type SectionFacetNavProps = {
   chooseLabel: string;
 };
 
+export const TAGS_BOTTOM_SHEET_COPY = {
+  ariaLabel: "タグ一覧",
+  sheetTitle: "Tags",
+  emptyLabel: "タグがありません",
+  chooseLabel: "タグを選ぶ",
+} as const;
+
 const SHEET_EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
 const SHEET_MS = 340;
+/** この距離以上下にドラッグしたら閉じる */
 const DISMISS_PX = 88;
+/** 短いドラッグでも、下方向の速度がこれ以上なら閉じる */
 const DISMISS_VELOCITY = 0.55;
 
 /**
- * スマホ／タブレット: 右下 FAB → ボトムシート。
- * PC のタグ一覧は SiteShell 右レール（ReadingTopicsAside）。
- * Giants / Clips のタグで共用。
+ * スマホ／タブレット: 右下 FAB → ボトムシートでタグを選ぶ。
+ * PC のタグ一覧は SiteShell 右レール（ReadingTagsAside）。
  */
-export function SectionFacetNav({
+export function TagsBottomSheet({
   items,
   selected = null,
   allHref,
@@ -44,12 +52,12 @@ export function SectionFacetNav({
   sheetTitle,
   emptyLabel,
   chooseLabel,
-}: SectionFacetNavProps) {
+}: TagsBottomSheetProps) {
   const sorted = [...items].sort((a, b) => a.localeCompare(b, "ja"));
   if (!sorted.length) return null;
 
   return (
-    <SectionFacetBottomSheet
+    <TagsBottomSheetPanel
       items={sorted}
       selected={selected}
       allHref={allHref}
@@ -62,7 +70,7 @@ export function SectionFacetNav({
   );
 }
 
-function SectionFacetBottomSheet({
+function TagsBottomSheetPanel({
   items,
   selected = null,
   allHref,
@@ -71,7 +79,7 @@ function SectionFacetBottomSheet({
   sheetTitle,
   emptyLabel,
   chooseLabel,
-}: SectionFacetNavProps) {
+}: TagsBottomSheetProps) {
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);

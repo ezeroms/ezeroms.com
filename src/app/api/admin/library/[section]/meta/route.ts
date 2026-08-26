@@ -1,27 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { applySectionPageSettingsPatch } from "@/lib/admin/section-page-settings";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 import {
   getLibrarySection,
   isLibrarySectionId,
   isLibrarySectionStatus,
 } from "@/lib/content/library-sections";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ section: string }> };
 
 /**
  * PATCH /api/admin/library/[section]/meta/
- * Library セクションの表示名・説明文・公開状態・OGP を更新する。
+ * Library セクションのページ設定（タイトル・説明文・公開状態・OGP）を更新する。
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
+  const auth = await requireAdminSession();
+  if (auth.error) return auth.error;
 
   const { section: sectionId } = await params;
   if (!isLibrarySectionId(sectionId)) {
@@ -29,68 +23,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   }
 
   try {
-    const body = (await request.json()) as {
-      label?: string;
-      description?: string;
-      status?: string;
-      og_image?: string;
-    };
-
-    const defaults = getLibrarySection(sectionId);
-    const label = (body.label ?? "").trim() || defaults.label;
-    const description =
-      typeof body.description === "string"
-        ? body.description.trim()
-        : undefined;
-    const status = isLibrarySectionStatus(body.status ?? "")
-      ? body.status!
-      : defaults.status;
-    const og_image =
-      typeof body.og_image === "string" ? body.og_image.trim() : "";
-    const now = new Date().toISOString();
-
-    const row = {
+    return await applySectionPageSettingsPatch({
+      body: await request.json(),
+      table: "library_section",
       id: sectionId,
-      label,
-      status,
-      og_image,
-      updated_at: now,
-      ...(description !== undefined ? { description } : {}),
-    };
-
-    const { data: existing } = await getSupabaseAdmin()
-      .from("library_section")
-      .select("id")
-      .eq("id", sectionId)
-      .maybeSingle();
-
-    const selectCols = "id, label, description, status, og_image";
-    const query = existing?.id
-      ? getSupabaseAdmin()
-          .from("library_section")
-          .update(row)
-          .eq("id", sectionId)
-          .select(selectCols)
-          .single()
-      : getSupabaseAdmin()
-          .from("library_section")
-          .insert({
-            ...row,
-            description: description ?? defaults.description,
-          })
-          .select(selectCols)
-          .single();
-
-    const { data, error } = await query;
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    revalidatePath(defaults.basePath);
-    revalidatePath(defaults.adminPath);
-    revalidatePath("/");
-
-    return NextResponse.json({ ok: true, item: data });
+      defaults: getLibrarySection(sectionId),
+      isAllowedStatus: isLibrarySectionStatus,
+    });
   } catch (e) {
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Failed" },

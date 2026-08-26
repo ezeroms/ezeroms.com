@@ -1,34 +1,32 @@
 import type { Metadata } from "next";
 import { GiantsBrowse } from "@/components/GiantsBrowse";
 import {
-  ReadingTopicsAside,
-} from "@/components/ReadingTopicsAside";
+  ReadingTagsAside,
+} from "@/components/ReadingTagsAside";
 import { SiteShell } from "@/components/SiteShell";
 import {
   giantsFilterActive,
   giantsTagHref,
   parseGiantsFilter,
 } from "@/lib/content/giants-filter";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { summarizeGiantsFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listGiants,
   listGiantsTags,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
+import { getLibrarySection } from "@/lib/content/library-sections";
 import { sanitizeBody } from "@/lib/html";
 import type { ShouldersOfGiants } from "@/types/content";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicLibrarySection("giants").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "The shoulders of Giants",
-    description:
-      section?.description || "先人の知恵を集めておこう。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicLibrarySection("giants"),
+    getLibrarySection("giants"),
+  );
 }
 
 function shuffleItems<T>(items: T[]): T[] {
@@ -69,7 +67,6 @@ export default async function GiantsPage({
   return (
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
-      showTagsAside={false}
       showTagsRail
       tagsRailDefaultOpen
       breadcrumbFilter={selectedTag ? summarizeGiantsFilter({
@@ -79,7 +76,7 @@ export default async function GiantsPage({
       filterActive={Boolean(selectedTag)}
       aside={
         tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={tags}
             hrefFor={giantsTagHref}
             allHref="/shoulders-of-giants/"

@@ -1,7 +1,10 @@
 "use client";
 
 import { DateRangeField } from "@/components/filter/DateRangeField";
-import { FilterOptionChips } from "@/components/filter/FilterOptionChips";
+import {
+  FilterOptionChips,
+  sameLabelOptions,
+} from "@/components/filter/FilterOptionChips";
 import { FilterSection } from "@/components/filter/FilterSection";
 import {
   useRegisterSearchFilter,
@@ -64,7 +67,7 @@ export function ColumnFilterPanel({
         contentClassName="max-h-40 overflow-y-auto"
       >
         <FilterOptionChips
-          options={tags.map((tag) => ({ value: tag, label: tag }))}
+          options={sameLabelOptions(tags)}
           value={draft.tags}
           onChange={(next) => setDraft((d) => ({ ...d, tags: next }))}
           emptyMessage="タグがありません"

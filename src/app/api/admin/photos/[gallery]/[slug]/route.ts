@@ -1,40 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { markdownToHtml } from "@/lib/admin/content";
-import {
-  getPhotoGallery,
-  isPhotoGalleryId,
-} from "@/lib/content/photo-galleries";
+import { requirePhotoGalleryAdmin } from "@/lib/admin/require-admin";
+import { getPhotoGallery } from "@/lib/content/photo-galleries";
 import {
   isLegacySnapTable,
   resolvePhotoDbTable,
 } from "@/lib/content/photo-db";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ gallery: string; slug: string }> };
 
-async function requireAdmin(galleryParam: string) {
-  const user = await getSessionUser();
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  if (!hasSupabaseConfig()) {
-    return {
-      error: NextResponse.json({ error: "Supabase not configured" }, { status: 500 }),
-    };
-  }
-  if (!isPhotoGalleryId(galleryParam)) {
-    return {
-      error: NextResponse.json({ error: "Unknown gallery" }, { status: 404 }),
-    };
-  }
-  return { galleryId: galleryParam };
-}
-
 export async function GET(_request: NextRequest, { params }: RouteParams) {
   const { gallery: galleryId, slug } = await params;
-  const auth = await requireAdmin(galleryId);
+  const auth = await requirePhotoGalleryAdmin(galleryId);
   if (auth.error) return auth.error;
 
   const { table } = await resolvePhotoDbTable(auth.galleryId);
@@ -57,7 +36,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   const { gallery: galleryId, slug } = await params;
-  const auth = await requireAdmin(galleryId);
+  const auth = await requirePhotoGalleryAdmin(galleryId);
   if (auth.error) return auth.error;
   const galleryMeta = getPhotoGallery(auth.galleryId);
   const { table } = await resolvePhotoDbTable(auth.galleryId);
@@ -182,7 +161,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {
   const { gallery: galleryId, slug } = await params;
-  const auth = await requireAdmin(galleryId);
+  const auth = await requirePhotoGalleryAdmin(galleryId);
   if (auth.error) return auth.error;
   const galleryMeta = getPhotoGallery(auth.galleryId);
   const { table } = await resolvePhotoDbTable(auth.galleryId);

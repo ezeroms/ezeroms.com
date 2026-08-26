@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isPhotoGalleryId } from "@/lib/content/photo-galleries";
 import { createCleanPhotoAssets } from "@/lib/media/photo-clean";
 import { allocateUniquePhotoFileId } from "@/lib/media/photo-filename";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { requirePhotoGalleryAdmin } from "@/lib/admin/require-admin";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 type RouteParams = { params: Promise<{ gallery: string }> };
 
@@ -13,18 +12,10 @@ type RouteParams = { params: Promise<{ gallery: string }> };
  * 2. 英数字 16 桁のユニーク名で Storage へ保存
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
-  const user = await getSessionUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!hasSupabaseConfig()) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-  }
-
   const { gallery } = await params;
-  if (!isPhotoGalleryId(gallery)) {
-    return NextResponse.json({ error: "Unknown gallery" }, { status: 404 });
-  }
+  const auth = await requirePhotoGalleryAdmin(gallery);
+  if (auth.error) return auth.error;
+  const galleryId = auth.galleryId;
 
   try {
     const form = await request.formData();
@@ -40,9 +31,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // list と upload の間の極稀な衝突に備え、最大 2 回試す
     for (let attempt = 0; attempt < 2; attempt++) {
-      const fileId = await allocateUniquePhotoFileId(sb, gallery);
-      const originalPath = `photos/${gallery}/${fileId}${assets.original.extension}`;
-      const thumbPath = `photos/${gallery}/${fileId}-thumb.webp`;
+      const fileId = await allocateUniquePhotoFileId(sb, galleryId);
+      const originalPath = `photos/${galleryId}/${fileId}${assets.original.extension}`;
+      const thumbPath = `photos/${galleryId}/${fileId}-thumb.webp`;
 
       const { error: originalError } = await sb.storage
         .from("media")

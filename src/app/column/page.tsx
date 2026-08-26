@@ -2,33 +2,28 @@ import type { Metadata } from "next";
 import { ColumnFilterPanel } from "@/components/ColumnFilterPanel";
 import { ColumnList } from "@/components/ColumnList";
 import { SiteShell } from "@/components/SiteShell";
-import {
-  ReadingTopicsAside,
-  columnTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
 import {
   columnFilterActive,
+  columnTagHref,
   parseColumnFilter,
 } from "@/lib/content/column-filter";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { summarizeColumnFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listColumn,
   listColumnTaxonomy,
   requirePublicWritingSection,
 } from "@/lib/content/queries";
+import { getWritingSection } from "@/lib/content/writing-sections";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicWritingSection("column").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "Column",
-    description:
-      section?.description ||
-      "長めの記事。技術・考察・エッセイなど、きちんと書き切る場所です。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicWritingSection("column"),
+    getWritingSection("column"),
+  );
 }
 
 export default async function ColumnIndexPage({
@@ -66,13 +61,12 @@ export default async function ColumnIndexPage({
           basePath="/column/"
         />
       }
-      showTagsAside
       mainClassName="layout-main--single"
       breadcrumbFilter={filtering ? summarizeColumnFilter(filter) : null}
       breadcrumbSectionHref="/column/"
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={columnTagHref}
             allHref="/column/"

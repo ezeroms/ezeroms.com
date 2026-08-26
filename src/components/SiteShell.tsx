@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
 import { BodyClass } from "@/components/BodyClass";
 import { BreadcrumbHeader } from "@/components/BreadcrumbHeader";
-import { MobileHeader } from "@/components/MobileHeader";
 import { MobileMenuButton } from "@/components/MobileMenuButton";
 import { Sidebar } from "@/components/Sidebar";
 import { SiteScripts } from "@/components/SiteScripts";
@@ -18,10 +17,21 @@ import {
 import { cn } from "@/lib/cn";
 import { isPhotoGalleryId } from "@/lib/content/photo-galleries";
 import {
-  ReadingTopicsPanel,
-  ReadingTopicsProvider,
-  ReadingTopicsToggle,
-} from "@/components/ReadingTopicsRail";
+  ReadingTagsPanel,
+  ReadingTagsProvider,
+  ReadingTagsToggle,
+} from "@/components/ReadingTagsRail";
+
+const READING_CANVAS_BODY_CLASSES = new Set([
+  "is-about",
+  "is-diary",
+  "is-column",
+  "is-clips",
+  "is-shoulders-of-giants",
+  "is-chronicle",
+  "is-media-coverage",
+  "is-works-creative",
+]);
 
 type Props = {
   children: React.ReactNode;
@@ -46,20 +56,6 @@ type Props = {
   secondary?: React.ReactNode;
   /** Extra toolbar under the page header (month selector, category tabs, etc.) */
   sectionHeader?: React.ReactNode;
-  /**
-   * Fallback title for the mobile-only bar when there is no sticky page header.
-   * Prefer breadcrumbs (auto hamburger in sticky header) on normal pages.
-   */
-  mobileTitle?: string;
-  /**
-   * @deprecated Prefer sticky breadcrumbs + MobileMenuButton.
-   * Still rendered only when there is no page header (fallback).
-   */
-  mobileHeader?: React.ReactNode;
-  /**
-   * @deprecated 右下 FilterRail 廃止後は未使用。互換のため残す。
-   */
-  showTagsAside?: boolean;
   showLayoutHeader?: boolean;
   /**
    * パンくず末尾のラベル（詳細ページのタイトルなど）。
@@ -114,9 +110,6 @@ export async function SiteShell({
   tagsRailDefaultOpen = false,
   secondary,
   sectionHeader,
-  mobileTitle,
-  mobileHeader,
-  showTagsAside: _showTagsAside = true,
   showLayoutHeader = true,
   breadcrumbCurrent,
   breadcrumbFilter,
@@ -175,14 +168,7 @@ export async function SiteShell({
     filterActive ?? Boolean(breadcrumbFilter?.trim());
 
   const paperCanvas =
-    bodyClassName === "is-about" ||
-    bodyClassName === "is-diary" ||
-    bodyClassName === "is-column" ||
-    bodyClassName === "is-clips" ||
-    bodyClassName === "is-shoulders-of-giants" ||
-    bodyClassName === "is-chronicle" ||
-    bodyClassName === "is-media-coverage" ||
-    bodyClassName === "is-works-creative" ||
+    READING_CANVAS_BODY_CLASSES.has(bodyClassName) ||
     isPhotoGalleryId(bodyClassName.replace(/^is-/, ""));
   const hasAside = Boolean(aside) && showTagsRail;
   const contentPad =
@@ -209,7 +195,7 @@ export async function SiteShell({
           infoDescription={breadcrumbInfo}
           filterPanel={secondary}
           filterActive={isFilterActive}
-          beforeSearch={hasAside ? <ReadingTopicsToggle /> : null}
+          beforeSearch={hasAside ? <ReadingTagsToggle /> : null}
           className="min-w-0 flex-1"
         />
       ) : null}
@@ -225,17 +211,6 @@ export async function SiteShell({
       ) : null}
     </header>
   ) : null;
-
-  const fallbackMobileChrome =
-    showMobileChrome &&
-    !showPageHeader &&
-    (mobileTitle || mobileHeader ? (
-      mobileTitle ? (
-        <MobileHeader title={mobileTitle} />
-      ) : (
-        mobileHeader
-      )
-    ) : null);
 
   return (
     <>
@@ -271,11 +246,9 @@ export async function SiteShell({
         </aside>
 
         <div className="layout-body relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background">
-          {fallbackMobileChrome}
-
           <div className="relative flex min-h-0 flex-1 flex-col">
             {hasAside ? (
-              <ReadingTopicsProvider defaultOpen={tagsRailDefaultOpen}>
+              <ReadingTagsProvider defaultOpen={tagsRailDefaultOpen}>
                 {pageHeader}
                 <div
                   className={cn(
@@ -297,9 +270,9 @@ export async function SiteShell({
                       {children}
                     </div>
                   </main>
-                  <ReadingTopicsPanel>{aside}</ReadingTopicsPanel>
+                  <ReadingTagsPanel>{aside}</ReadingTagsPanel>
                 </div>
-              </ReadingTopicsProvider>
+              </ReadingTagsProvider>
             ) : (
               <>
                 <div

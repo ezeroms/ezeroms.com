@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import {
@@ -8,6 +7,10 @@ import {
   WorkEditorForm,
   type WorkEditorInitial,
 } from "@/components/admin/WorkEditorForm";
+import {
+  deleteAdminItem,
+  useAdminEditorModal,
+} from "@/components/admin/useAdminEditorModal";
 
 type Props = {
   initial?: WorkEditorInitial | null;
@@ -23,51 +26,31 @@ export function WorkEditModal({
   productKey = null,
 }: Props) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [dirty, setDirty] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const {
+    mounted,
+    saving,
+    setSaving,
+    dirty,
+    setDirty,
+    deleting,
+    setDeleting,
+    deleteError,
+    setDeleteError,
+  } = useAdminEditorModal(open);
   const isEdit = Boolean(initial?.slug);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!open) {
-      setSaving(false);
-      setDirty(false);
-      setDeleting(false);
-      setDeleteError(null);
-    }
-  }, [open]);
-
   async function onDelete() {
-    if (!initial?.slug || deleting) return;
-    const ok = window.confirm(
-      "このコンテンツを削除しますか？\n（一覧・公開ページから非表示になります）",
-    );
-    if (!ok) return;
-
-    setDeleteError(null);
-    setDeleting(true);
-    try {
-      const res = await fetch(`/api/admin/work/${initial.slug}/`, {
-        method: "DELETE",
-      });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) {
-        setDeleteError(data.error || "削除に失敗しました");
-        return;
-      }
-      onClose();
-      router.refresh();
-    } catch {
-      setDeleteError("削除中に通信エラーが発生しました");
-    } finally {
-      setDeleting(false);
-    }
+    if (!initial?.slug) return;
+    await deleteAdminItem({
+      url: `/api/admin/work/${initial.slug}/`,
+      deleting,
+      setDeleting,
+      setDeleteError,
+      onSuccess: () => {
+        onClose();
+        router.refresh();
+      },
+    });
   }
 
   if (!mounted) return null;

@@ -1,41 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
-
-async function requireAdmin() {
-  const user = await getSessionUser();
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  if (!hasSupabaseConfig()) {
-    return {
-      error: NextResponse.json({ error: "Supabase not configured" }, { status: 500 }),
-    };
-  }
-  return { user };
-}
-
-function parseCapturedYear(raw: unknown): number | null {
-  if (raw === null || raw === undefined || raw === "") return null;
-  const n = typeof raw === "number" ? raw : Number(String(raw).trim());
-  if (!Number.isInteger(n) || n < 1900 || n > 2100) return null;
-  return n;
-}
-
-function buildAlt(
-  location: string | null,
-  year: number | null,
-  fallback?: string,
-): string {
-  if (location && year != null) return `${location}, ${year}`;
-  if (location) return location;
-  if (year != null) return String(year);
-  return (fallback ?? "").trim() || "Random Image";
-}
+import { requireAdminSession } from "@/lib/admin/require-admin";
+import {
+  buildTopImageAlt,
+  parseCapturedYear,
+} from "@/lib/admin/top-images";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 export async function GET() {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   const { data, error } = await getSupabaseAdmin()
@@ -52,7 +25,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
 
   try {
@@ -103,7 +76,7 @@ export async function POST(request: NextRequest) {
     const status = body.status === "draft" ? "draft" : "published";
     const sortOrder = Number(body.sort_order ?? 0);
     const now = new Date().toISOString();
-    const alt = buildAlt(location, capturedYear, body.alt);
+    const alt = buildTopImageAlt(location, capturedYear, body.alt);
 
     const row = {
       slug: slugRaw,

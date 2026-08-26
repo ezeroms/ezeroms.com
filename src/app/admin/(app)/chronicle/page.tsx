@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,7 +28,7 @@ export default async function AdminChroniclePage() {
         title={section.label}
         description={navItem.description}
         actions={
-          <WorksSectionSettingsModal
+          <SectionPageSettingsModal
             metaApiPath="/api/admin/library/chronicle/meta/"
             initialLabel={section.label}
             initialDescription={section.description}

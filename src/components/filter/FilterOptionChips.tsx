@@ -10,6 +10,13 @@ export type FilterChipOption<T extends string | number = string> = {
   description?: string;
 };
 
+/** ラベルと値が同じチップ（タグ・場所など）。 */
+export function sameLabelOptions<T extends string>(
+  values: readonly T[],
+): FilterChipOption<T>[] {
+  return values.map((value) => ({ value, label: value }));
+}
+
 type Props<T extends string | number> = {
   options: FilterChipOption<T>[];
   value: T[];

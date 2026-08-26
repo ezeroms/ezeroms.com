@@ -5,7 +5,7 @@ import {
   type AdminWorkTableItem,
 } from "@/components/admin/AdminWorkListTable";
 import { WorkCreateButton } from "@/components/admin/WorkCreateButton";
-import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
+import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWorksSection } from "@/lib/content/queries";
@@ -107,7 +107,7 @@ export default async function AdminCreativeListPage() {
         title={section.label}
         actions={
           <div className="flex flex-wrap gap-2">
-            <WorksSectionSettingsModal
+            <SectionPageSettingsModal
               metaApiPath="/api/admin/works/creative/meta/"
               initialLabel={section.label}
               initialDescription={section.description}

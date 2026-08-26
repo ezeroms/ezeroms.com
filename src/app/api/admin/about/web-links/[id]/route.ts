@@ -1,26 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { softDeleteAboutItem } from "@/lib/admin/about-items";
-import { getSessionUser } from "@/lib/supabase/auth";
-import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
+import { requireAdminSession } from "@/lib/admin/require-admin";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-async function requireAdmin() {
-  const user = await getSessionUser();
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  if (!hasSupabaseConfig()) {
-    return {
-      error: NextResponse.json({ error: "Supabase not configured" }, { status: 500 }),
-    };
-  }
-  return { user };
-}
-
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
   const { id } = await params;
 
@@ -58,7 +45,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 }
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminSession();
   if (auth.error) return auth.error;
   const { id } = await params;
   return softDeleteAboutItem({ table: "about_web_link", id });

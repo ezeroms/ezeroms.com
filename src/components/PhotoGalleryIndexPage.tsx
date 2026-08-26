@@ -82,7 +82,6 @@ export async function PhotoGalleryIndexPage({ galleryId }: Props) {
     <SiteShell
       bodyClassName={`is-${galleryId}`}
       contentClassName="p-4 min-[768px]:p-5 min-[1080px]:p-6"
-      showTagsAside={false}
       breadcrumbSectionHref={gallery.basePath}
       breadcrumbInfo={gallery.description}
     >

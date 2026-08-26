@@ -18,7 +18,6 @@ export default async function UidgPage({
     <SiteShell
       bodyClassName="is-ui-design-guidebook"
       mainClassName="layout-main--with-header-toc"
-      showTagsAside={false}
     >
       <article className="article-container">
         <h1>{item.title}</h1>

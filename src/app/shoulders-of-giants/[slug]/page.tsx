@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { GiantsArticle } from "@/components/GiantsArticle";
 import {
-  ReadingTopicsAside,
-} from "@/components/ReadingTopicsAside";
+  ReadingTagsAside,
+} from "@/components/ReadingTagsAside";
 import { SiteShell } from "@/components/SiteShell";
 import {
   formatGiantsCitation,
@@ -96,14 +96,13 @@ export default async function GiantsEntryPage({
   return (
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
-      showTagsAside={false}
       showTagsRail
       tagsRailDefaultOpen
       breadcrumbCurrent={citation || item.book_title || slug}
       mainClassName="layout-main--single"
       aside={
         tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={tags}
             hrefFor={giantsTagHref}
             allHref="/shoulders-of-giants/"

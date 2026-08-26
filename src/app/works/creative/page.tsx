@@ -2,33 +2,28 @@ import type { Metadata } from "next";
 import { SiteShell } from "@/components/SiteShell";
 import { WorkFilterPanel } from "@/components/WorkFilterPanel";
 import { WorkList } from "@/components/WorkList";
-import {
-  ReadingTopicsAside,
-  workTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
 import {
   parseWorkFilter,
   workFilterActive,
+  workTagHref,
 } from "@/lib/content/work-filter";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { summarizeWorkFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listWork,
   listWorkTaxonomy,
   requirePublicWorksSection,
 } from "@/lib/content/queries";
+import { getWorksSection } from "@/lib/content/works-sections";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicWorksSection("creative").catch(() => null);
-  return sectionListingMetadata({
-    title: section?.label ?? "Creative",
-    description:
-      section?.description ||
-      "つくったもの・サイトのギャラリー。制作実績を並べて眺める場所です。",
-    ogImage: section?.og_image,
-  });
+  return listingMetadataForSection(
+    () => requirePublicWorksSection("creative"),
+    getWorksSection("creative"),
+  );
 }
 
 export default async function CreativePage({
@@ -76,13 +71,12 @@ export default async function CreativePage({
           showKinds
         />
       }
-      showTagsAside
       mainClassName="layout-main--single"
       breadcrumbFilter={filtering ? summarizeWorkFilter(filter) : null}
       breadcrumbSectionHref="/works/creative/"
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={workTagHref}
             allHref="/works/creative/"

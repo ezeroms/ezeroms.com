@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { AdminCreateButton } from "@/components/admin/AdminCreateButton";
 import { WorkEditModal } from "@/components/admin/WorkEditModal";
 
 type Props = {
@@ -10,17 +9,15 @@ type Props = {
 };
 
 export function WorkCreateButton({ productKey = null }: Props) {
-  const [open, setOpen] = useState(false);
   return (
-    <>
-      <Button type="button" onClick={() => setOpen(true)}>
-        ＋ コンテンツを追加
-      </Button>
-      <WorkEditModal
-        open={open}
-        onClose={() => setOpen(false)}
-        productKey={productKey}
-      />
-    </>
+    <AdminCreateButton>
+      {({ open, onClose }) => (
+        <WorkEditModal
+          open={open}
+          onClose={onClose}
+          productKey={productKey}
+        />
+      )}
+    </AdminCreateButton>
   );
 }

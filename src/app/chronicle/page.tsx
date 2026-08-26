@@ -7,27 +7,22 @@ import {
   parseChronicleFilter,
 } from "@/lib/content/chronicle-filter";
 import { resolveChronicleThemes } from "@/lib/content/chronicle-themes";
-import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
+import { listingMetadataForSection } from "@/lib/content/section-listing-metadata";
 import { summarizeChronicleFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listChronicle,
   listChronicleTaxonomy,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
+import { getLibrarySection } from "@/lib/content/library-sections";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicLibrarySection("chronicle").catch(
-    () => null,
+  return listingMetadataForSection(
+    () => requirePublicLibrarySection("chronicle"),
+    getLibrarySection("chronicle"),
   );
-  return sectionListingMetadata({
-    title: section?.label ?? "Chronicle",
-    description:
-      section?.description ||
-      "関心ごとの年表。テーマを横軸・時系列を縦軸に、出来事を横断して辿ります。",
-    ogImage: section?.og_image,
-  });
 }
 
 export default async function ChroniclePage({
@@ -75,7 +70,6 @@ export default async function ChroniclePage({
           basePath="/chronicle/"
         />
       }
-      showTagsAside
       breadcrumbFilter={filtering ? summarizeChronicleFilter(filter) : null}
       breadcrumbSectionHref="/chronicle/"
     >

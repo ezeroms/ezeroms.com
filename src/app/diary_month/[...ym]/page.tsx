@@ -2,12 +2,13 @@ import { redirect } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
-import {
-  ReadingTopicsAside,
-  diaryTagHref,
-} from "@/components/ReadingTopicsAside";
+import { ReadingTagsAside } from "@/components/ReadingTagsAside";
 import { dateRangeFromYearMonths } from "@/lib/content/date-range";
-import { emptyDiaryFilter, formatMonthLabel } from "@/lib/content/diary-filter";
+import {
+  diaryTagHref,
+  emptyDiaryFilter,
+  formatMonthLabel,
+} from "@/lib/content/diary-filter";
 import {
   listDiary,
   listDiaryTaxonomy,
@@ -54,13 +55,12 @@ export default async function DiaryMonthPage({
           initial={initial}
         />
       }
-      showTagsAside
       mainClassName="layout-main--single"
       breadcrumbCurrent={formatMonthLabel(month) || month}
       filterActive
       aside={
         taxonomy.tags.length ? (
-          <ReadingTopicsAside
+          <ReadingTagsAside
             tags={taxonomy.tags}
             hrefFor={diaryTagHref}
             allHref="/diary/"
