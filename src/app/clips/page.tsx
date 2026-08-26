@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClipsMasonry } from "@/components/ClipsMasonry";
+import { ClipsBrowse } from "@/components/ClipsBrowse";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
 import { SiteShell } from "@/components/SiteShell";
 import {
@@ -34,13 +34,13 @@ export default async function ClipsIndexPage({
   const section = await requirePublicLibrarySection("clips");
   const resolvedSearchParams = await searchParams;
   const filter = parseDiaryFilter(resolvedSearchParams);
-  // Clips have no place / weekday facets
   const clipFilter = {
     ...filter,
     places: [] as string[],
     weekdays: [] as number[],
   };
   const filtering = diaryFilterActive(clipFilter);
+  const selectedTag = clipFilter.tags[0] ?? null;
 
   const [tags, listed] = await Promise.all([
     listClipTags().catch(() => [] as string[]),
@@ -49,7 +49,7 @@ export default async function ClipsIndexPage({
         ? {
             from: clipFilter.from,
             to: clipFilter.to,
-            tags: clipFilter.tags,
+            tags: selectedTag ? [selectedTag] : clipFilter.tags,
           }
         : undefined,
     ).catch(() => ({ items: [], total: 0 })),
@@ -64,21 +64,27 @@ export default async function ClipsIndexPage({
           places={[]}
           showPlaces={false}
           showWeekdays={false}
+          showTags={false}
           initial={clipFilter}
           basePath="/clips/"
         />
       }
-      showTagsAside
+      showTagsAside={false}
       breadcrumbFilter={filtering ? summarizeDiaryFilter(clipFilter) : null}
       breadcrumbSectionHref="/clips/"
+      filterActive={filtering}
+      mainContentClassName="min-[1080px]:flex min-[1080px]:flex-col min-[1080px]:overflow-hidden"
+      contentClassName={
+        "flex w-full flex-col p-4 min-[768px]:p-5 min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:overflow-hidden min-[1080px]:p-6"
+      }
     >
-      <div className="w-full py-0 font-sans text-foreground">
-        <ClipsMasonry
-          items={listed.items}
-          activeTags={clipFilter.tags}
-          fallbackThumbSrc={section.og_image || null}
-        />
-      </div>
+      <ClipsBrowse
+        tags={tags}
+        items={listed.items}
+        selectedTag={selectedTag}
+        dateFilter={{ from: clipFilter.from, to: clipFilter.to }}
+        fallbackThumbSrc={section.og_image || null}
+      />
     </SiteShell>
   );
 }

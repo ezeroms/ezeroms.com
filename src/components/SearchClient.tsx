@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
-import { ClipsMasonry } from "@/components/ClipsMasonry";
+import { ClipList } from "@/components/ClipList";
 import { ColumnList } from "@/components/ColumnList";
 import { ContentThumbCard, contentThumbCardListClassName } from "@/components/ContentThumbCard";
 import { ExperienceDetail } from "@/components/experience/ExperienceDetail";
@@ -89,7 +89,7 @@ function SearchGroupResults({ group }: { group: SearchGroup }) {
     );
   }
   if (scope === "clips") {
-    return <ClipsMasonry items={records as unknown as Clip[]} />;
+    return <ClipList items={records as unknown as Clip[]} hideEmpty />;
   }
   if (scope === "giants") {
     return (

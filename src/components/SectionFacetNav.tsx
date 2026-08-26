@@ -4,28 +4,107 @@ import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { Tags, X } from "lucide-react";
-import { serializeGiantsFilter } from "@/lib/content/giants-filter";
 import { cn } from "@/lib/cn";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 
-type Props = {
-  topics: string[];
-  selectedTopic?: string | null;
+export type SectionFacetNavProps = {
+  items: string[];
+  selected?: string | null;
+  allHref: string;
+  hrefFor: (item: string) => string;
+  ariaLabel: string;
+  sheetTitle: string;
+  emptyLabel: string;
+  chooseLabel: string;
 };
 
 /**
- * スマホ／タブレット向けトピック選択。
- * 右下 FAB → ボトムシートで縦リスト（どちらも portal）。
+ * PC（≥1080）は左カラム縦リスト、スマホ／タブレットは右下 FAB → ボトムシート。
+ * Giants トピック／Clips タグで共用。
  */
-export function GiantsTopicBottomSheet({
-  topics,
-  selectedTopic = null,
-}: Props) {
+export function SectionFacetNav({
+  items,
+  selected = null,
+  allHref,
+  hrefFor,
+  ariaLabel,
+  sheetTitle,
+  emptyLabel,
+  chooseLabel,
+}: SectionFacetNavProps) {
+  const sorted = [...items].sort((a, b) => a.localeCompare(b, "ja"));
+
+  return (
+    <>
+      <aside
+        className={cn(
+          "hidden w-full shrink-0",
+          "min-[1080px]:flex min-[1080px]:h-full min-[1080px]:w-52 min-[1080px]:min-h-0 min-[1080px]:flex-col",
+          "min-[1080px]:overflow-y-auto",
+        )}
+        aria-label={ariaLabel}
+      >
+        <ul className="m-0 flex list-none flex-col flex-nowrap gap-0.5 p-0">
+          <li className="min-w-0 w-full">
+            <Link
+              href={allHref}
+              className={cn(sidebarNavItemClass(!selected), "text-sm")}
+            >
+              すべて
+            </Link>
+          </li>
+          {sorted.map((item) => {
+            const active = selected === item;
+            return (
+              <li key={item} className="min-w-0 w-full">
+                <Link
+                  href={hrefFor(item)}
+                  className={cn(
+                    sidebarNavItemClass(active),
+                    "truncate text-sm leading-snug",
+                  )}
+                >
+                  {item}
+                </Link>
+              </li>
+            );
+          })}
+          {!sorted.length ? (
+            <li className="px-2 py-1.5 text-xs text-muted-foreground">
+              {emptyLabel}
+            </li>
+          ) : null}
+        </ul>
+      </aside>
+
+      <SectionFacetBottomSheet
+        items={sorted}
+        selected={selected}
+        allHref={allHref}
+        hrefFor={hrefFor}
+        ariaLabel={ariaLabel}
+        sheetTitle={sheetTitle}
+        emptyLabel={emptyLabel}
+        chooseLabel={chooseLabel}
+      />
+    </>
+  );
+}
+
+function SectionFacetBottomSheet({
+  items,
+  selected = null,
+  allHref,
+  hrefFor,
+  ariaLabel,
+  sheetTitle,
+  emptyLabel,
+  chooseLabel,
+}: SectionFacetNavProps) {
   const titleId = useId();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const sorted = [...topics].sort((a, b) => a.localeCompare(b, "ja"));
-  const filtered = Boolean(selectedTopic);
+  const filtered = Boolean(selected);
 
   useEffect(() => {
     setMounted(true);
@@ -45,10 +124,9 @@ export function GiantsTopicBottomSheet({
     };
   }, [open]);
 
-  // トピック切替で URL が変わったら閉じる
   useEffect(() => {
     setOpen(false);
-  }, [selectedTopic]);
+  }, [selected]);
 
   if (!mounted) return null;
 
@@ -64,9 +142,7 @@ export function GiantsTopicBottomSheet({
           "focus-visible:ring-2 focus-visible:ring-border-hover focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           "right-2 bottom-[calc(0.5rem+env(safe-area-inset-bottom,0px))]",
         )}
-        aria-label={
-          filtered ? `トピックを選ぶ（${selectedTopic}）` : "トピックを選ぶ"
-        }
+        aria-label={filtered ? `${chooseLabel}（${selected}）` : chooseLabel}
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen(true)}
@@ -108,7 +184,7 @@ export function GiantsTopicBottomSheet({
                 id={titleId}
                 className="m-0 text-sm font-semibold tracking-wide text-foreground"
               >
-                トピック
+                {sheetTitle}
               </h2>
               <button
                 type="button"
@@ -125,40 +201,38 @@ export function GiantsTopicBottomSheet({
 
             <nav
               className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-2"
-              aria-label="トピック一覧"
+              aria-label={ariaLabel}
             >
               <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
                 <li>
                   <Link
-                    href="/shoulders-of-giants/"
-                    className={cn(sidebarNavItemClass(!selectedTopic), "text-sm")}
+                    href={allHref}
+                    className={cn(sidebarNavItemClass(!selected), "text-sm")}
                     onClick={() => setOpen(false)}
                   >
                     すべて
                   </Link>
                 </li>
-                {sorted.map((topic) => {
-                  const active = selectedTopic === topic;
+                {items.map((item) => {
+                  const active = selected === item;
                   return (
-                    <li key={topic}>
+                    <li key={item}>
                       <Link
-                        href={`/shoulders-of-giants/${serializeGiantsFilter({
-                          topics: [topic],
-                        })}`}
+                        href={hrefFor(item)}
                         className={cn(
                           sidebarNavItemClass(active),
                           "text-sm leading-snug",
                         )}
                         onClick={() => setOpen(false)}
                       >
-                        {topic}
+                        {item}
                       </Link>
                     </li>
                   );
                 })}
-                {!sorted.length ? (
+                {!items.length ? (
                   <li className="px-2 py-3 text-xs text-muted-foreground">
-                    トピックがありません
+                    {emptyLabel}
                   </li>
                 ) : null}
               </ul>

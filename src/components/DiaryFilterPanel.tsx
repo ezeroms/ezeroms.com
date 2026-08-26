@@ -26,6 +26,8 @@ type Props = {
   showPlaces?: boolean;
   /** Hide weekday filter (e.g. Clips). Default true. */
   showWeekdays?: boolean;
+  /** Hide tag chips when a left-rail tag list is used (Clips). */
+  showTags?: boolean;
 };
 
 export function DiaryFilterPanel({
@@ -35,6 +37,7 @@ export function DiaryFilterPanel({
   basePath = "/diary/",
   showPlaces = true,
   showWeekdays = true,
+  showTags = true,
 }: Props) {
   const [draft, setDraft] = useState<DiaryFilterState>(() =>
     showWeekdays ? initial : { ...initial, weekdays: [] },
@@ -50,9 +53,14 @@ export function DiaryFilterPanel({
       getQueryString: () => serializeDiaryFilter(normalized),
       getBasePath: () => basePath,
       isActive: () => diaryFilterActive(normalized),
-      clearDraft: () => setDraft(emptyDiaryFilter()),
+      clearDraft: () =>
+        setDraft(
+          showTags
+            ? emptyDiaryFilter()
+            : { ...emptyDiaryFilter(), tags: draft.tags },
+        ),
     }),
-    [normalized, basePath],
+    [normalized, basePath, showTags, draft.tags],
   );
   useRegisterSearchFilter(api);
 
@@ -82,17 +90,19 @@ export function DiaryFilterPanel({
         </FilterSection>
       ) : null}
 
-      <FilterSection
-        label="タグ"
-        contentClassName="max-h-40 overflow-y-auto"
-      >
-        <FilterOptionChips
-          options={tags.map((tag) => ({ value: tag, label: tag }))}
-          value={draft.tags}
-          onChange={(next) => setDraft((d) => ({ ...d, tags: next }))}
-          emptyMessage="タグがありません"
-        />
-      </FilterSection>
+      {showTags ? (
+        <FilterSection
+          label="タグ"
+          contentClassName="max-h-40 overflow-y-auto"
+        >
+          <FilterOptionChips
+            options={tags.map((tag) => ({ value: tag, label: tag }))}
+            value={draft.tags}
+            onChange={(next) => setDraft((d) => ({ ...d, tags: next }))}
+            emptyMessage="タグがありません"
+          />
+        </FilterSection>
+      ) : null}
 
       {showPlaces ? (
         <FilterSection

@@ -18,8 +18,16 @@ type Props = {
   /** 日付の右に並べるメタ（カテゴリ・媒体名など） */
   metaSecondary?: ReactNode;
   excerpt?: string;
+  /** false なら抜粋行を出さない（Clips） */
+  showExcerpt?: boolean;
+  /** false ならタイトルを折り返して全文表示（Clips） */
+  clampTitle?: boolean;
   /** タイトル下〜抜粋の下（タグ列など） */
   footer?: ReactNode;
+  /** 右カラム末尾の注釈（Clips のメモ）。グリッド内なので左画像も同じ高さになる */
+  note?: ReactNode;
+  /** 最小高さを保ち、足りない分はタイトル下を伸ばす（Clips） */
+  fillBelowTitle?: boolean;
   /** 外部リンクなら true（target=_blank） */
   external?: boolean;
 };
@@ -36,7 +44,11 @@ export function ContentThumbCard({
   dateLabel,
   metaSecondary,
   excerpt,
+  showExcerpt = true,
+  clampTitle = true,
   footer,
+  note,
+  fillBelowTitle = false,
   external = false,
 }: Props) {
   const metaRow =
@@ -54,48 +66,73 @@ export function ContentThumbCard({
 
   const body = (
     <>
-      <div className="relative min-h-[11rem] overflow-hidden bg-muted min-[480px]:min-h-0">
+      <div
+        className={cn(
+          "relative min-h-[11rem] overflow-hidden bg-muted",
+          !fillBelowTitle && "min-[480px]:min-h-0",
+        )}
+      >
         {thumbSrc ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={thumbSrc}
             alt=""
-            className="absolute inset-0 m-0 block h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+            className="absolute inset-0 m-0 block h-full w-full object-cover"
             loading="lazy"
             decoding="async"
+            referrerPolicy="no-referrer"
           />
         ) : (
           <div
-            className="absolute inset-0 bg-gradient-to-br from-muted to-secondary/40 transition-transform duration-300 ease-out group-hover:scale-105"
+            className="absolute inset-0 bg-gradient-to-br from-muted to-secondary/40"
             aria-hidden
           />
         )}
       </div>
 
-      <div className="flex min-w-0 flex-col justify-center gap-2 overflow-hidden px-4 py-4 sm:gap-2.5 sm:px-6 sm:py-5">
+      <div
+        className={cn(
+          "flex min-w-0 flex-col gap-2 px-4 py-4 sm:gap-2.5 sm:px-6 sm:py-5",
+          clampTitle ? "overflow-hidden" : "overflow-x-hidden",
+          fillBelowTitle || note ? "h-full justify-start" : "justify-center",
+        )}
+      >
         {metaRow}
 
-        <h2 className="m-0 line-clamp-2 text-base font-semibold leading-normal tracking-tight text-foreground">
+        <h2
+          className={cn(
+            "m-0 text-base font-semibold leading-normal tracking-tight text-foreground",
+            clampTitle && "line-clamp-2",
+          )}
+        >
           <span className="hover:underline hover:underline-offset-2">
             {title}
           </span>
         </h2>
 
-        <p className="m-0 mt-1 line-clamp-2 text-sm leading-normal text-muted-foreground">
-          {excerpt?.trim() ? excerpt : "\u00A0"}
-        </p>
+        {showExcerpt ? (
+          <p className="m-0 mt-1 line-clamp-2 text-sm leading-normal text-muted-foreground">
+            {excerpt?.trim() ? excerpt : "\u00A0"}
+          </p>
+        ) : null}
+
+        {fillBelowTitle ? (
+          <div className="min-h-0 flex-1" aria-hidden />
+        ) : null}
 
         {footer ? (
           <div className="flex flex-nowrap items-center gap-2 overflow-hidden">
             {footer}
           </div>
         ) : null}
+
+        {note}
       </div>
     </>
   );
 
   return (
-    <article className={contentCard({ link: true, className: "group" })}>
+    <article className={contentCard({ link: true })}>
       {external ? (
         <a
           href={href}

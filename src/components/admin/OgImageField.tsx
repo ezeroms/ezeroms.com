@@ -17,6 +17,8 @@ type Props = {
   /** Upload folder prefix under media/og/, e.g. "diary" */
   uploadKind?: string;
   disabled?: boolean;
+  label?: string;
+  helpText?: string;
 };
 
 /**
@@ -29,6 +31,8 @@ export function OgImageField({
   onChange,
   uploadKind = "content",
   disabled = false,
+  label = "OGP 画像（1200×630）",
+  helpText = "推奨 1200×630（1.91:1）。メタデータは自動削除されます。",
 }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -84,7 +88,7 @@ export function OgImageField({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>OGP 画像（1200×630）</Label>
+      <Label htmlFor={id}>{label}</Label>
       <input
         ref={fileRef}
         id={id}
@@ -101,7 +105,7 @@ export function OgImageField({
         role="button"
         tabIndex={busy ? -1 : 0}
         aria-controls={id}
-        aria-label="OGP 画像をアップロード"
+        aria-label={`${label}をアップロード`}
         aria-disabled={busy}
         onClick={() => {
           if (busy) return;
@@ -154,7 +158,7 @@ export function OgImageField({
                 "opacity-30 hover:bg-accent hover:opacity-100",
                 "disabled:pointer-events-none disabled:opacity-20",
               )}
-              aria-label="OGP 画像を削除"
+              aria-label={`${label}を削除`}
               data-tooltip="削除"
               disabled={busy}
               onClick={clearImage}
@@ -172,6 +176,7 @@ export function OgImageField({
                 src={value}
                 alt=""
                 className="m-0 block h-full w-full object-cover"
+                referrerPolicy="no-referrer"
               />
             </div>
             <p className="mb-0 px-4 py-3 text-sm text-muted-foreground">
@@ -187,13 +192,13 @@ export function OgImageField({
               aria-hidden
             />
             <p className="m-0 text-sm font-medium text-foreground">
-              OGP 画像をドラッグ＆ドロップ
+              画像をドラッグ＆ドロップ
             </p>
             <p className="mb-0 mt-1 text-sm text-muted-foreground">
               またはクリックしてファイルを選択
             </p>
             <p className="mb-0 mt-2 text-xs text-muted-foreground">
-              推奨 1200×630（1.91:1）。メタデータは自動削除されます。
+              {helpText}
             </p>
             {uploading ? (
               <p className="mb-0 mt-3 text-xs text-muted-foreground">

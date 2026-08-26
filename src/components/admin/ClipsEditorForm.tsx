@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { parseYoutubeVideoId } from "@/lib/content/clip-meta";
+import { OgImageField } from "@/components/admin/OgImageField";
 
 export const CLIPS_EDITOR_FORM_ID = "clips-editor-form";
 
@@ -127,8 +128,10 @@ export function ClipsEditorForm({
       if (data.siteName) setSourceName(data.siteName);
       // 明示的な再取得では既存値も上書きする（文字化けしたタイトルが残らないように）
       if (data.title) setTitle(data.title);
-      if (!data.image && !data.title && !data.siteName) {
-        setError("OGP 情報が見つかりませんでした（保存は可能です）");
+      if (!youtubeId && !data.image) {
+        setError(
+          "OGP から画像を取得できませんでした。下のカード画像から手動で追加できます。",
+        );
       }
     } catch {
       setError("OGP 取得中に通信エラーが発生しました");
@@ -214,7 +217,7 @@ export function ClipsEditorForm({
         <p className="m-0 text-xs text-muted-foreground">
           {youtubeId
             ? "YouTube URL を検出したので、公開カードでは埋め込み動画を表示します。"
-            : "OGP 取得で画像・タイトル候補・出典名が入ります。"}
+            : "OGP 取得で画像・タイトル候補・出典名が入ります。画像が取れないときは下から手動で追加できます。"}
         </p>
       </div>
 
@@ -236,17 +239,17 @@ export function ClipsEditorForm({
         <div className="overflow-hidden rounded-lg border border-border">
           <ClipYoutubeEmbed videoId={youtubeId} title={title || "YouTube"} />
         </div>
-      ) : ogImage ? (
-        <div className="overflow-hidden rounded-lg border border-border bg-muted">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={ogImage}
-            alt=""
-            className="m-0 max-h-48 w-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-      ) : null}
+      ) : (
+        <OgImageField
+          id="clip-card-image"
+          value={ogImage}
+          onChange={setOgImage}
+          uploadKind="clips"
+          disabled={loading || ogLoading}
+          label="カード画像"
+          helpText="OGP で取得できないときは、ここに画像をドロップしてください。推奨 1200×630。メタデータは自動削除されます。"
+        />
+      )}
 
       <div className="space-y-2">
         <Label htmlFor="clip-title">タイトル</Label>

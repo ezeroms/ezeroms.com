@@ -17,6 +17,31 @@ export function clipSourceLabel(
   return clipSourceHost(sourceUrl) || "—";
 }
 
+export function clipThumbSrc(
+  item: {
+    source_url: string;
+    og_image?: string | null;
+  },
+  fallbackThumbSrc?: string | null,
+): string | null {
+  const youtubeId = parseYoutubeVideoId(item.source_url);
+  if (youtubeId) return `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
+  const og = item.og_image?.trim();
+  if (og) return og;
+  const fallback = fallbackThumbSrc?.trim();
+  return fallback || null;
+}
+
+/** 出典の説明文（メモは一覧では使わない）。 */
+export function clipExcerpt(
+  item: { og_description?: string | null },
+  max = 120,
+): string {
+  const desc = item.og_description?.trim() ?? "";
+  if (!desc) return "";
+  return desc.length <= max ? desc : `${desc.slice(0, max).trim()}…`;
+}
+
 export function formatClipDate(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
