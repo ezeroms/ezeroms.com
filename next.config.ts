@@ -71,6 +71,31 @@ const nextConfig: NextConfig = {
         destination: "/admin/tabekake/:path*",
         permanent: true,
       },
+      {
+        source: "/admin/notes",
+        destination: "/admin/diary/",
+        permanent: true,
+      },
+      {
+        source: "/admin/notes/:path*",
+        destination: "/admin/diary/:path*",
+        permanent: true,
+      },
+      {
+        source: "/api/admin/notes",
+        destination: "/api/admin/diary/",
+        permanent: true,
+      },
+      {
+        source: "/api/admin/notes/:path*",
+        destination: "/api/admin/diary/:path*",
+        permanent: true,
+      },
+      {
+        source: "/api/admin/writing/notes/meta",
+        destination: "/api/admin/writing/diary/meta/",
+        permanent: true,
+      },
     ];
   },
 };

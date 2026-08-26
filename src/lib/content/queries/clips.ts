@@ -7,7 +7,7 @@ import {
 import {
   dateMatchesRange,
   dateMatchesWeekdays,
-} from "@/lib/content/notes-filter";
+} from "@/lib/content/diary-filter";
 import { dateRangeActive, type DateRangeValue } from "@/lib/content/date-range";
 import type { Clip } from "@/types/content";
 

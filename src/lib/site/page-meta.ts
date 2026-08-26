@@ -3,9 +3,9 @@ export type SitePageMeta = {
   description?: string;
 };
 
-const NOTES: SitePageMeta = {
-  title: "Notes",
-  description: "日常の短いメモとスナップ。気づきや記録を残す場所です。",
+const DIARY: SitePageMeta = {
+  title: "Diary",
+  description: "日々のできごとや考えたことの記録。",
 };
 
 const CLIPS: SitePageMeta = {
@@ -110,8 +110,8 @@ export function resolveSitePageMeta(pathname: string): SitePageMeta | null {
     path.startsWith("/diary_tag/") ||
     path.startsWith("/diary_place/")
   ) {
-    // Permalink detail still shows Notes chrome (timeline context)
-    return NOTES;
+    // Permalink detail still shows Diary chrome (timeline context)
+    return DIARY;
   }
 
   if (path.startsWith("/clips/")) return CLIPS;

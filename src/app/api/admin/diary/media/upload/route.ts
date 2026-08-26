@@ -9,9 +9,9 @@ export const maxDuration = 60;
 const FOLDER_RE = /^[a-z0-9_-]{1,64}$/i;
 const MAX_FILENAME_ATTEMPTS = 12;
 
-async function allocateUniqueNotesFileId(folder: string): Promise<string> {
+async function allocateUniqueDiaryFileId(folder: string): Promise<string> {
   const sb = getSupabaseAdmin();
-  const path = `notes/${folder}`;
+  const path = `diary/${folder}`;
   for (let attempt = 0; attempt < MAX_FILENAME_ATTEMPTS; attempt++) {
     const fileId = generateContentSlug(16);
     const { data, error } = await sb.storage.from("media").list(path, {
@@ -33,7 +33,7 @@ async function allocateUniqueNotesFileId(folder: string): Promise<string> {
 }
 
 /**
- * Notes 本文画像: Photos 同様にメタ削除 JPEG → media/notes/{folder}/
+ * Diary 本文画像: Photos 同様にメタ削除 JPEG → media/diary/{folder}/
  * FormData: file, folder? (slug or draft id)
  */
 export async function POST(request: NextRequest) {
@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
     const sb = getSupabaseAdmin();
 
     for (let attempt = 0; attempt < 2; attempt++) {
-      const fileId = await allocateUniqueNotesFileId(folderRaw);
-      const originalPath = `notes/${folderRaw}/${fileId}${assets.original.extension}`;
+      const fileId = await allocateUniqueDiaryFileId(folderRaw);
+      const originalPath = `diary/${folderRaw}/${fileId}${assets.original.extension}`;
 
       const { error: originalError } = await sb.storage
         .from("media")

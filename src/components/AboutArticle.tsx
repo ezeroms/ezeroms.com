@@ -1,5 +1,6 @@
 import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
+import type { AboutHereCard } from "@/lib/content/about-here";
 import { notesBodyClass } from "@/lib/site/prose-styles";
 import { contentCard } from "@/lib/site/card-styles";
 
@@ -11,11 +12,27 @@ type Props = {
   coverSrc?: string | null;
 };
 
+const proseClassName = cn(
+  notesBodyClass,
+  "[&_h1]:mb-4 [&_h1]:mt-0 [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:leading-snug [&_h1]:tracking-tight sm:[&_h1]:text-3xl",
+  "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
+  "[&_h2:first-child]:mt-0",
+  "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight",
+  "[&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:text-sm",
+  "[&_figure]:my-6",
+  "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground",
+  "[&_strong]:font-semibold",
+);
+
 /**
  * About（Me / Here / Contact）本文。
  * Column 詳細と同じ読み物カード・区切り（hr は余白のみ）に揃える。
  */
-export function AboutArticle({ bodyHtml, title, coverSrc }: Props) {
+export function AboutArticle({
+  bodyHtml,
+  title,
+  coverSrc,
+}: Props) {
   return (
     <div className="w-full font-sans text-foreground">
       <article
@@ -44,21 +61,26 @@ export function AboutArticle({ bodyHtml, title, coverSrc }: Props) {
             </>
           ) : null}
 
-          <ArticleProse
-            html={bodyHtml}
-            className={cn(
-              notesBodyClass,
-              "[&_h1]:mb-4 [&_h1]:mt-0 [&_h1]:text-2xl [&_h1]:font-semibold [&_h1]:leading-snug [&_h1]:tracking-tight sm:[&_h1]:text-3xl",
-              "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
-              "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight",
-              "[&_:not(pre)>code]:rounded [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:text-sm",
-              "[&_figure]:my-6",
-              "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground",
-              "[&_strong]:font-semibold",
-            )}
-          />
+          <ArticleProse html={bodyHtml} className={proseClassName} />
         </div>
       </article>
+    </div>
+  );
+}
+
+export function AboutHereArticles({
+  cards,
+  pageTitle,
+}: {
+  cards: AboutHereCard[];
+  pageTitle?: string;
+}) {
+  return (
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+      {pageTitle ? <h1 className="sr-only">{pageTitle}</h1> : null}
+      {cards.map((card) => (
+        <AboutArticle key={card.key} bodyHtml={card.html} />
+      ))}
     </div>
   );
 }

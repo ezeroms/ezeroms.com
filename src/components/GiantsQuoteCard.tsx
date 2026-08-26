@@ -76,7 +76,7 @@ function citationWithBookLink(
 }
 
 /**
- * Giants quote card — Notes list chrome (surface, body, tags) + share after tags.
+ * Giants quote card — Diary list chrome (surface, body, tags) + share after tags.
  * 書誌行は購入リンク（source_url）があるとき、書名部分だけ外部リンク（別タブ）。
  */
 export function GiantsQuoteCard({

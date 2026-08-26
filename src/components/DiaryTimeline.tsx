@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Diary } from "@/types/content";
 import {
-  notesPermalink,
-  formatNotesDate,
-} from "@/lib/content/notes-meta";
+  diaryPermalink,
+  formatDiaryDate,
+} from "@/lib/content/diary-meta";
 import { cn } from "@/lib/cn";
 import { tagChipClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
@@ -25,10 +25,10 @@ type Props = {
 };
 
 /**
- * Notes 一覧・関連投稿のタイムライン。
+ * Diary 一覧・関連投稿のタイムライン。
  * DB / URL は diary のままなので、DOM id も互換のため diary-list を維持する。
  */
-export function NotesTimeline({
+export function DiaryTimeline({
   items,
   currentTag,
   focusSlug,
@@ -85,8 +85,8 @@ export function NotesTimeline({
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
           {items.map((item) => {
             const isFocused = activeFocus === item.slug;
-            const permalink = notesPermalink(item.slug);
-            const dateLabel = formatNotesDate(item.date);
+            const permalink = diaryPermalink(item.slug);
+            const dateLabel = formatDiaryDate(item.date);
             return (
               <article
                 key={item.id}

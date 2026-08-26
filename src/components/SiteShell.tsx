@@ -111,7 +111,7 @@ export async function SiteShell({
 }: Props) {
   const h = await headers();
   const pathname = h.get("x-pathname") ?? "/";
-  const notesLatestHref = "/diary/";
+  const diaryLatestHref = "/diary/";
   const publicPhotos = await listPublicPhotoGalleries().catch(() => []);
   const photoNav = publicPhotos.map((g) => ({
     id: g.id,
@@ -189,7 +189,7 @@ export async function SiteShell({
         >
           <Sidebar
             pathname={pathname}
-            notesLatestHref={notesLatestHref}
+            diaryLatestHref={diaryLatestHref}
             photoNav={photoNav}
             worksNav={worksNav}
             libraryNav={libraryNav}

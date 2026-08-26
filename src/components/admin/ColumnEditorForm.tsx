@@ -97,7 +97,7 @@ export function ColumnEditorForm({
       const form = new FormData();
       form.set("file", prepared);
       form.set("folder", mediaFolder);
-      const res = await fetch("/api/admin/notes/media/upload/", {
+      const res = await fetch("/api/admin/diary/media/upload/", {
         method: "POST",
         body: form,
       });

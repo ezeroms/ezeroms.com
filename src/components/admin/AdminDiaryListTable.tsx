@@ -2,31 +2,31 @@
 
 import { useCallback, useState } from "react";
 import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
-import { NotesEditModal } from "@/components/admin/NotesEditModal";
-import type { NotesEditorInitial } from "@/components/admin/NotesEditorForm";
+import { DiaryEditModal } from "@/components/admin/DiaryEditModal";
+import type { DiaryEditorInitial } from "@/components/admin/DiaryEditorForm";
 import { OpenContentButton } from "@/components/admin/OpenContentButton";
 import {
   adminStatusLabel,
   formatAdminListDate,
 } from "@/lib/admin/list-format";
 
-export type AdminNotesTableItem = {
+export type AdminDiaryTableItem = {
   slug: string;
   date: string;
   status: string;
   place: string | null;
   tags: string[];
   excerpt: string;
-  editor: NotesEditorInitial;
+  editor: DiaryEditorInitial;
 };
 
 type Props = {
-  items: AdminNotesTableItem[];
+  items: AdminDiaryTableItem[];
   empty: boolean;
 };
 
-export function AdminNotesListTable({ items, empty }: Props) {
-  const [editing, setEditing] = useState<NotesEditorInitial | null>(null);
+export function AdminDiaryListTable({ items, empty }: Props) {
+  const [editing, setEditing] = useState<DiaryEditorInitial | null>(null);
   const close = useCallback(() => setEditing(null), []);
 
   return (
@@ -91,7 +91,7 @@ export function AdminNotesListTable({ items, empty }: Props) {
       </table>
 
       {editing ? (
-        <NotesEditModal initial={editing} open onClose={close} />
+        <DiaryEditModal initial={editing} open onClose={close} />
       ) : null}
     </>
   );

@@ -7,5 +7,5 @@ export default async function Page({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  return renderSearchPage("notes", searchParams);
+  return renderSearchPage("diary", searchParams);
 }

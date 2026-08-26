@@ -21,30 +21,44 @@ async function requireAdmin() {
   return { user };
 }
 
+const SELECT_FULL =
+  "id, slug, title, body_md, body_html, intro_md, intro_html, rights_md, rights_html, updates_md, updates_html, og_image, status, published_at, updated_at";
+const SELECT_WITHOUT_SECTIONS =
+  "id, slug, title, body_md, body_html, og_image, status, published_at, updated_at";
+const SELECT_MIN =
+  "id, slug, title, body_md, body_html, status, published_at, updated_at";
+
 /** Here 記事（DB slug = site）を1件取得 */
 export async function GET() {
   const auth = await requireAdmin();
   if (auth.error) return auth.error;
 
-  let { data, error } = await getSupabaseAdmin()
+  const sb = getSupabaseAdmin();
+  let { data, error } = await sb
     .from("about")
-    .select(
-      "id, slug, title, body_md, body_html, og_image, status, published_at, updated_at",
-    )
+    .select(SELECT_FULL)
     .eq("slug", ABOUT_HERE_CONTENT_SLUG)
     .maybeSingle();
 
-  if (error && /og_image/i.test(error.message)) {
-    const fallback = await getSupabaseAdmin()
+  if (error && /intro_md|rights_md|updates_md/i.test(error.message)) {
+    const fallback = await sb
       .from("about")
-      .select(
-        "id, slug, title, body_md, body_html, status, published_at, updated_at",
-      )
+      .select(SELECT_WITHOUT_SECTIONS)
       .eq("slug", ABOUT_HERE_CONTENT_SLUG)
       .maybeSingle();
-    data = fallback.data
+    data = fallback.data as typeof data;
+    error = fallback.error;
+  }
+
+  if (error && /og_image/i.test(error.message)) {
+    const fallback = await sb
+      .from("about")
+      .select(SELECT_MIN)
+      .eq("slug", ABOUT_HERE_CONTENT_SLUG)
+      .maybeSingle();
+    data = (fallback.data
       ? { ...fallback.data, og_image: "" }
-      : fallback.data;
+      : fallback.data) as typeof data;
     error = fallback.error;
   }
 
@@ -54,7 +68,7 @@ export async function GET() {
   return NextResponse.json({ item: data });
 }
 
-/** Here 記事を保存（タイトル・本文 Markdown・OGP・公開状態） */
+/** Here 記事を保存（3 カード本文・OGP・公開状態） */
 export async function PATCH(request: NextRequest) {
   const auth = await requireAdmin();
   if (auth.error) return auth.error;
@@ -62,6 +76,9 @@ export async function PATCH(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       title?: string;
+      intro_md?: string;
+      rights_md?: string;
+      updates_md?: string;
       body_md?: string;
       og_image?: string;
       status?: "draft" | "published" | "archived";
@@ -75,30 +92,41 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const bodyMarkdown = (body.body_md ?? "").trim();
-    if (!bodyMarkdown) {
+    const introMd = (body.intro_md ?? "").trim();
+    const rightsMd = (body.rights_md ?? "").trim();
+    const updatesMd = (body.updates_md ?? "").trim();
+    if (!introMd) {
       return NextResponse.json(
-        { error: "本文を入力してください" },
+        { error: "「このサイトについて」を入力してください" },
         { status: 400 },
       );
     }
 
+    const introHtml = markdownToHtml(introMd);
+    const rightsHtml = rightsMd ? markdownToHtml(rightsMd) : "";
+    const updatesHtml = updatesMd ? markdownToHtml(updatesMd) : "";
+    const bodyMarkdown = [introMd, rightsMd, updatesMd].filter(Boolean).join("\n\n");
     const bodyHtml = markdownToHtml(bodyMarkdown);
     const ogImage = (body.og_image ?? "").trim();
     const status = body.status === "draft" ? "draft" : "published";
     const now = new Date().toISOString();
 
-    const rowWithOg = {
+    const rowFull = {
       slug: ABOUT_HERE_CONTENT_SLUG,
       title,
       body_md: bodyMarkdown,
       body_html: bodyHtml,
+      intro_md: introMd,
+      intro_html: introHtml,
+      rights_md: rightsMd,
+      rights_html: rightsHtml,
+      updates_md: updatesMd,
+      updates_html: updatesHtml,
       og_image: ogImage,
       status,
       published_at: status === "published" ? now : null,
       updated_at: now,
     };
-    const { og_image: _og, ...rowWithoutOg } = rowWithOg;
 
     const { data: existing } = await getSupabaseAdmin()
       .from("about")
@@ -106,25 +134,39 @@ export async function PATCH(request: NextRequest) {
       .eq("slug", ABOUT_HERE_CONTENT_SLUG)
       .maybeSingle();
 
-    async function writeRow(includeOg: boolean) {
-      const row = includeOg ? rowWithOg : rowWithoutOg;
+    async function writeRow(
+      row: Record<string, unknown>,
+    ) {
       return existing?.id
         ? getSupabaseAdmin()
             .from("about")
             .update(row)
             .eq("id", existing.id)
-            .select("id, slug, title, body_md, status, updated_at")
+            .select("id, slug, title, status, updated_at")
             .single()
         : getSupabaseAdmin()
             .from("about")
             .insert(row)
-            .select("id, slug, title, body_md, status, updated_at")
+            .select("id, slug, title, status, updated_at")
             .single();
     }
 
-    let { data, error } = await writeRow(true);
+    let { data, error } = await writeRow(rowFull);
+    if (error && /intro_md|rights_md|updates_md/i.test(error.message)) {
+      const {
+        intro_md: _i,
+        intro_html: _ih,
+        rights_md: _r,
+        rights_html: _rh,
+        updates_md: _u,
+        updates_html: _uh,
+        ...withoutSections
+      } = rowFull;
+      ({ data, error } = await writeRow(withoutSections));
+    }
     if (error && /og_image/i.test(error.message)) {
-      ({ data, error } = await writeRow(false));
+      const { og_image: _og, ...withoutOg } = rowFull;
+      ({ data, error } = await writeRow(withoutOg));
     }
 
     if (error) {
@@ -132,7 +174,6 @@ export async function PATCH(request: NextRequest) {
     }
 
     revalidatePath(ABOUT_HERE_PUBLIC_PATH);
-    // 旧パス向け（リダイレクト先キャッシュ）
     revalidatePath("/about/site/");
     return NextResponse.json({ ok: true, item: data });
   } catch (e) {

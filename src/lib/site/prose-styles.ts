@@ -21,7 +21,7 @@ export const proseBodyClass = `prose-body ${proseBodyLinkClass} ${proseBodyListC
 
 /**
  * 引用ブロック: イタリック・サブテキスト色・左縦線。
- * Notes / Column ほか notesBodyClass 経由で共通適用。
+ * Diary / Column ほか notesBodyClass 経由で共通適用。
  *
  * preflight 無効のため border-style と UA の blockquote margin を明示的に打ち消す。
  */
@@ -29,7 +29,7 @@ export const proseBlockquoteClass =
   "[&_blockquote]:my-4 [&_blockquote]:mx-0 [&_blockquote]:border-0 [&_blockquote]:border-l-[3px] [&_blockquote]:border-solid [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground";
 
 /**
- * Notes 一覧 / 詳細と同じ本文クロム（段落間隔・画像・区切り線＝余白）。
+ * Diary 一覧 / 詳細と同じ本文クロム（段落間隔・画像・区切り線＝余白）。
  * Column 詳細などでもこれをベースにする。
  */
 export const notesBodyClass = cn(

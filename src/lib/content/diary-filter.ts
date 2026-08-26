@@ -27,7 +27,7 @@ export const WEEKDAY_LABELS = [
   "Sat",
 ] as const;
 
-export type NotesFilterState = {
+export type DiaryFilterState = {
   from: string | null;
   to: string | null;
   weekdays: number[];
@@ -35,11 +35,11 @@ export type NotesFilterState = {
   places: string[];
 };
 
-export function emptyNotesFilter(): NotesFilterState {
+export function emptyDiaryFilter(): DiaryFilterState {
   return { ...emptyDateRange(), weekdays: [], tags: [], places: [] };
 }
 
-export function notesFilterActive(filter: NotesFilterState): boolean {
+export function diaryFilterActive(filter: DiaryFilterState): boolean {
   return (
     dateRangeActive(filter) ||
     filter.weekdays.length > 0 ||
@@ -49,9 +49,9 @@ export function notesFilterActive(filter: NotesFilterState): boolean {
 }
 
 /** Parse `/diary/?from=&to=&w=&t=&p=`（旧 `m=` 年月も可） */
-export function parseNotesFilter(
+export function parseDiaryFilter(
   searchParams: SearchParamsRecord,
-): NotesFilterState {
+): DiaryFilterState {
   const range = parseDateRangeFromSearchParams(searchParams, {
     legacyMonthsKey: "m",
   });
@@ -64,7 +64,7 @@ export function parseNotesFilter(
   };
 }
 
-export function serializeNotesFilter(filter: NotesFilterState): string {
+export function serializeDiaryFilter(filter: DiaryFilterState): string {
   const query = new URLSearchParams();
   appendDateRangeToQuery(query, filter);
   if (filter.weekdays.length) query.set("w", filter.weekdays.join(","));

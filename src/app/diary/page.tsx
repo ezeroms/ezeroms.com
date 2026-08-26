@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
-import { NotesTimeline } from "@/components/NotesTimeline";
-import { NotesFilterPanel } from "@/components/NotesFilterPanel";
-import { notesMonthKey } from "@/lib/content/notes-meta";
+import { DiaryTimeline } from "@/components/DiaryTimeline";
+import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
+import { diaryMonthKey } from "@/lib/content/diary-meta";
 import {
-  notesFilterActive,
-  parseNotesFilter,
-} from "@/lib/content/notes-filter";
+  diaryFilterActive,
+  parseDiaryFilter,
+} from "@/lib/content/diary-filter";
 import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
-import { summarizeNotesFilter } from "@/lib/site/breadcrumb-filters";
+import { summarizeDiaryFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listDiary,
   listDiaryTaxonomy,
@@ -19,16 +19,16 @@ import { sanitizeBody } from "@/lib/html";
 
 export const revalidate = 60;
 
-/** Notes top: recent stream when no filters. */
-const NOTES_FEED_LIMIT = 50;
+/** Diary top: recent stream when no filters. */
+const DIARY_FEED_LIMIT = 50;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await requirePublicWritingSection("notes").catch(() => null);
+  const section = await requirePublicWritingSection("diary").catch(() => null);
   return sectionListingMetadata({
-    title: section?.label ?? "Notes",
+    title: section?.label ?? "Diary",
     description:
       section?.description ??
-      "日常の短いメモとスナップ。気づきや記録を残す場所です。",
+      "日々のできごとや考えたことの記録。",
     ogImage: section?.og_image,
   });
 }
@@ -38,10 +38,10 @@ export default async function DiaryIndexPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  await requirePublicWritingSection("notes");
+  await requirePublicWritingSection("diary");
   const resolvedSearchParams = await searchParams;
-  const filter = parseNotesFilter(resolvedSearchParams);
-  const filtering = notesFilterActive(filter);
+  const filter = parseDiaryFilter(resolvedSearchParams);
+  const filtering = diaryFilterActive(filter);
 
   const [taxonomy, listed] = await Promise.all([
     listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
@@ -54,7 +54,7 @@ export default async function DiaryIndexPage({
             tags: filter.tags,
             places: filter.places,
           }
-        : { limit: NOTES_FEED_LIMIT },
+        : { limit: DIARY_FEED_LIMIT },
     ).catch(() => ({ items: [], total: 0 })),
   ]);
 
@@ -65,14 +65,14 @@ export default async function DiaryIndexPage({
   }));
 
   const oldestInFeed = items[items.length - 1];
-  const continueMonth = oldestInFeed ? notesMonthKey(oldestInFeed) : "";
+  const continueMonth = oldestInFeed ? diaryMonthKey(oldestInFeed) : "";
   const hasMore = !filtering && total > items.length;
 
   return (
     <SiteShell
       bodyClassName="is-diary"
       secondary={
-        <NotesFilterPanel
+        <DiaryFilterPanel
           tags={taxonomy.tags}
           places={taxonomy.places}
           initial={filter}
@@ -80,10 +80,10 @@ export default async function DiaryIndexPage({
       }
       showTagsAside
       mainClassName="layout-main--single"
-      breadcrumbFilter={filtering ? summarizeNotesFilter(filter) : null}
+      breadcrumbFilter={filtering ? summarizeDiaryFilter(filter) : null}
       breadcrumbSectionHref="/diary/"
     >
-      <NotesTimeline items={sanitized} />
+      <DiaryTimeline items={sanitized} />
       {hasMore && continueMonth ? (
         <p className="notes-feed-more mx-auto max-w-3xl pb-8">
           最新 {items.length} 件を表示しています。それ以前は{" "}

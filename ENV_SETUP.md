@@ -185,7 +185,7 @@ WORKSPACE_AI_API_KEY=sk-...
 - ログイン: `/admin/login/`
 - ホーム: `/admin/workspace/`（ログイン後の標準遷移先。`/admin/` からもリダイレクト）
 - Site Settings: `/admin/site/` · Analytics: `/admin/analytics/`
-- Notes: `/admin/notes/` · `/admin/notes/new/`
+- Diary: `/admin/diary/` · `/admin/diary/new/`
 - Clips: `/admin/clips/` · `/admin/clips/new/`
 
 ナビ定義: `src/lib/admin/nav.ts`

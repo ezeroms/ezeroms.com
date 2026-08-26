@@ -100,7 +100,7 @@ export async function searchContent(
   const sb = getSupabaseAdmin();
   const pattern = patternOf(trimmed);
 
-  if (scope === "notes") {
+  if (scope === "diary") {
     const { data } = await sb
       .from("diary")
       .select("*")
@@ -112,7 +112,7 @@ export async function searchContent(
     return {
       query: trimmed,
       scope,
-      groups: [asGroup("notes", (data ?? []) as Record<string, unknown>[])],
+      groups: [asGroup("diary", (data ?? []) as Record<string, unknown>[])],
     };
   }
 
@@ -358,7 +358,7 @@ export async function searchContent(
   // all — 横断
   const per = Math.max(5, Math.ceil(limit / 6));
   const chunks = await Promise.all([
-    searchContent(trimmed, "notes", per),
+    searchContent(trimmed, "diary", per),
     searchContent(trimmed, "column", per),
     searchContent(trimmed, "creative", per),
     searchContent(trimmed, "chronicle", per),

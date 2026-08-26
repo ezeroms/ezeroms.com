@@ -9,7 +9,7 @@ import {
   formatClipDate,
   parseYoutubeVideoId,
 } from "@/lib/content/clip-meta";
-import { serializeNotesFilter, emptyNotesFilter } from "@/lib/content/notes-filter";
+import { serializeDiaryFilter, emptyDiaryFilter } from "@/lib/content/diary-filter";
 import { cn } from "@/lib/cn";
 import { contentCard } from "@/lib/site/card-styles";
 import { tagChipClass } from "@/lib/site/tag-styles";
@@ -119,8 +119,8 @@ function ClipCard({
           {tags.length ? (
             <div className="mt-1 flex flex-wrap gap-2">
               {tags.map((tag) => {
-                const href = `/clips/${serializeNotesFilter({
-                  ...emptyNotesFilter(),
+                const href = `/clips/${serializeDiaryFilter({
+                  ...emptyDiaryFilter(),
                   tags: [tag],
                 })}`;
                 return (

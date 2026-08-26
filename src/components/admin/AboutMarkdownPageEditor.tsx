@@ -74,7 +74,7 @@ export function AboutMarkdownPageEditor({
       const form = new FormData();
       form.set("file", prepared);
       form.set("folder", uploadFolder);
-      const res = await fetch("/api/admin/notes/media/upload/", {
+      const res = await fetch("/api/admin/diary/media/upload/", {
         method: "POST",
         body: form,
       });

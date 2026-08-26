@@ -17,7 +17,7 @@ import {
 import {
   dateMatchesRange,
   dateMatchesWeekdays,
-} from "@/lib/content/notes-filter";
+} from "@/lib/content/diary-filter";
 
 export type ColumnFilterState = {
   from: string | null;

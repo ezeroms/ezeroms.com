@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { firstSearchParamValue } from "@/lib/content/filter-search-params";
 import {
   buildSearchHref,
-  isSearchScopeId,
+  coerceSearchScopeId,
 } from "@/lib/content/search-scope";
 import { renderSearchPage } from "@/lib/site/render-search-page";
 
@@ -20,8 +20,9 @@ export default async function SearchPage({
   const initialQuery = firstSearchParamValue(resolved, "q").trim();
   const scopeParam = firstSearchParamValue(resolved, "scope").trim();
 
-  if (isSearchScopeId(scopeParam) && scopeParam !== "all") {
-    redirect(buildSearchHref(scopeParam, initialQuery));
+  const scope = coerceSearchScopeId(scopeParam);
+  if (scope && scope !== "all") {
+    redirect(buildSearchHref(scope, initialQuery));
   }
 
   return renderSearchPage("all", searchParams);

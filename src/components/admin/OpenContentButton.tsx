@@ -10,7 +10,7 @@ type Props = {
 
 /**
  * 公開ページを開くアイコン。
- * Notes カードの Share（リンクコピー）と同じ見た目。ツールチップだけ Open。
+ * Diary カードの Share（リンクコピー）と同じ見た目。ツールチップだけ Open。
  */
 export function OpenContentButton({ href, className }: Props) {
   return (

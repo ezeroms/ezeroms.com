@@ -9,7 +9,7 @@ import { ContentThumbCard, contentThumbCardListClassName } from "@/components/Co
 import { ExperienceDetail } from "@/components/experience/ExperienceDetail";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
 import { MediaCoverageList } from "@/components/MediaCoverageList";
-import { NotesTimeline } from "@/components/NotesTimeline";
+import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { PhotoGallery } from "@/components/photos/PhotoGallery";
 import { WorkList } from "@/components/WorkList";
 import { applySearchResultFilters } from "@/lib/content/apply-search-result-filters";
@@ -55,9 +55,9 @@ function SearchGroupResults({ group }: { group: SearchGroup }) {
   const { scope, records } = group;
   if (!records.length) return null;
 
-  if (scope === "notes") {
+  if (scope === "diary") {
     return (
-      <NotesTimeline
+      <DiaryTimeline
         items={records as unknown as Diary[]}
         hideEmpty
         showNotification={false}

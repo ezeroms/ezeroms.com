@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
  */
 export const cardOutlineClass = "border border-solid border-border";
 
-/** Shared blog card chrome (Notes / Column / Works / etc.). */
+/** Shared blog card chrome (Diary / Column / Works / etc.). */
 export const contentCardClass = cn(
   "content-card overflow-hidden rounded-xl bg-card",
   cardOutlineClass,

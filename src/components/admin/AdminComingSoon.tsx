@@ -28,7 +28,7 @@ export function AdminComingSoon({ item }: { item: AdminNavItem }) {
             <Link href="/admin/workspace/">Workspace へ</Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link href="/admin/notes/new/">代わりに Notes を書く</Link>
+            <Link href="/admin/diary/new/">代わりに Diary を書く</Link>
           </Button>
         </CardContent>
       </Card>

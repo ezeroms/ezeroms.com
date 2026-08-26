@@ -23,7 +23,7 @@ export async function GET() {
 
   for (const d of diary.items) {
     items.push({
-      title: `Notes ${d.date}`,
+      title: `Diary ${d.date}`,
       link: `${site}/diary/${d.slug}/`,
       date: d.date,
       desc: "",

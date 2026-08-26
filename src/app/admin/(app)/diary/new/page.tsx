@@ -1,6 +1,6 @@
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { NotesEditorForm } from "@/components/admin/NotesEditorForm";
+import { DiaryEditorForm } from "@/components/admin/DiaryEditorForm";
 import {
   Card,
   CardContent,
@@ -11,20 +11,20 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export default function AdminNotesNewPage() {
+export default function AdminDiaryNewPage() {
   return (
     <AdminContent>
       <AdminPageHeader
-        title="Notes を書く"
-        description="タイムラインに載る短いメモを投稿します。"
+        title="Diary を書く"
+        description="タイムラインに載る日記を投稿します。"
       />
       <Card>
         <CardHeader>
-          <CardTitle>新規 Notes</CardTitle>
+          <CardTitle>新規 Diary</CardTitle>
           <CardDescription>Markdown が使えます。</CardDescription>
         </CardHeader>
         <CardContent>
-          <NotesEditorForm />
+          <DiaryEditorForm />
         </CardContent>
       </Card>
     </AdminContent>

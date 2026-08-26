@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { ClipsMasonry } from "@/components/ClipsMasonry";
-import { NotesFilterPanel } from "@/components/NotesFilterPanel";
+import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
 import { SiteShell } from "@/components/SiteShell";
 import {
-  notesFilterActive,
-  parseNotesFilter,
-} from "@/lib/content/notes-filter";
+  diaryFilterActive,
+  parseDiaryFilter,
+} from "@/lib/content/diary-filter";
 import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
-import { summarizeNotesFilter } from "@/lib/site/breadcrumb-filters";
+import { summarizeDiaryFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listClip,
   listClipTags,
@@ -33,14 +33,14 @@ export default async function ClipsIndexPage({
 }) {
   const section = await requirePublicLibrarySection("clips");
   const resolvedSearchParams = await searchParams;
-  const filter = parseNotesFilter(resolvedSearchParams);
+  const filter = parseDiaryFilter(resolvedSearchParams);
   // Clips have no place / weekday facets
   const clipFilter = {
     ...filter,
     places: [] as string[],
     weekdays: [] as number[],
   };
-  const filtering = notesFilterActive(clipFilter);
+  const filtering = diaryFilterActive(clipFilter);
 
   const [tags, listed] = await Promise.all([
     listClipTags().catch(() => [] as string[]),
@@ -59,7 +59,7 @@ export default async function ClipsIndexPage({
     <SiteShell
       bodyClassName="is-clips"
       secondary={
-        <NotesFilterPanel
+        <DiaryFilterPanel
           tags={tags}
           places={[]}
           showPlaces={false}
@@ -69,7 +69,7 @@ export default async function ClipsIndexPage({
         />
       }
       showTagsAside
-      breadcrumbFilter={filtering ? summarizeNotesFilter(clipFilter) : null}
+      breadcrumbFilter={filtering ? summarizeDiaryFilter(clipFilter) : null}
       breadcrumbSectionHref="/clips/"
     >
       <div className="w-full py-0 font-sans text-foreground">

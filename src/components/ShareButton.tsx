@@ -32,7 +32,7 @@ type Props = {
   className?: string;
 };
 
-/** Notes / Giants など、投稿カード共通のシェアボタン。 */
+/** Diary / Giants など、投稿カード共通のシェアボタン。 */
 export function ShareButton({ path, className }: Props) {
   async function shareOrCopyLink() {
     const url = `${window.location.origin}${path}`;

@@ -11,8 +11,8 @@ import type { GiantsFilterState } from "@/lib/content/giants-filter";
 import {
   formatDateRangeSummary,
   WEEKDAY_LABELS,
-  type NotesFilterState,
-} from "@/lib/content/notes-filter";
+  type DiaryFilterState,
+} from "@/lib/content/diary-filter";
 import {
   WORK_KIND_LABELS,
   workCategoryLabel,
@@ -26,8 +26,8 @@ export function joinBreadcrumbParts(parts: string[]): string | null {
   return cleaned.join(" · ");
 }
 
-export function summarizeNotesFilter(
-  filter: NotesFilterState,
+export function summarizeDiaryFilter(
+  filter: DiaryFilterState,
 ): string | null {
   return joinBreadcrumbParts([
     formatDateRangeSummary(filter) ?? "",

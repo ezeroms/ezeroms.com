@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { AboutArticle } from "@/components/AboutArticle";
+import { AboutArticle, AboutHereArticles } from "@/components/AboutArticle";
 import { AboutMeProfile } from "@/components/AboutMeProfile";
 import { AboutShell } from "@/components/AboutShell";
 import { absoluteUrl } from "@/lib/content/absolute-url";
@@ -11,6 +11,7 @@ import {
   isAboutPublicSlug,
   redirectPathForLegacyAboutSlug,
 } from "@/lib/content/about-routes";
+import { hereCardsFromFields } from "@/lib/content/about-here";
 import { htmlToPlainText } from "@/lib/content/html-plain";
 import {
   ogImageMetadata,
@@ -168,20 +169,30 @@ export default async function AboutPage({
 
   const page = await getAboutBySlug(contentSlug);
 
-  // Me は本文内の名前見出しを使う。Here / Contact は front matter / DB の title をカード見出しに使う
-  const cardTitle = isMePage ? undefined : page?.title;
+  // Contact は title をカード見出しに使う。Here の title は OGP 用。
+  const cardTitle = isMePage || requestedSlug === "here" ? undefined : page?.title;
   const rawBodyHtml = page?.body_html ?? "";
   const bodyForCard = cardTitle ? stripLeadingH1(rawBodyHtml) : rawBodyHtml;
   const bodyHtml = page ? sanitizeBody(bodyForCard) : "";
+  const hereCards = page
+    ? hereCardsFromFields(page).map((card) => ({
+        ...card,
+        html: sanitizeBody(card.html),
+      }))
+    : [];
 
   return (
     <AboutShell pathname={pathname}>
       {page ? (
-        <AboutArticle
-          bodyHtml={bodyHtml}
-          title={cardTitle}
-          coverSrc={isMePage ? "/images/about/profile.webp" : null}
-        />
+        requestedSlug === "here" ? (
+          <AboutHereArticles cards={hereCards} pageTitle={page.title} />
+        ) : (
+          <AboutArticle
+            bodyHtml={bodyHtml}
+            title={cardTitle}
+            coverSrc={isMePage ? "/images/about/profile.webp" : null}
+          />
+        )
       ) : (
         <p className="m-0 text-sm text-muted-foreground">
           コンテンツが見つかりませんでした。

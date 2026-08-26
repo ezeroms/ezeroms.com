@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { NotesEditModal } from "@/components/admin/NotesEditModal";
+import { DiaryEditModal } from "@/components/admin/DiaryEditModal";
 
-export function NotesCreateButton() {
+export function DiaryCreateButton() {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Button type="button" onClick={() => setOpen(true)}>
         ＋ コンテンツを追加
       </Button>
-      <NotesEditModal open={open} onClose={() => setOpen(false)} />
+      <DiaryEditModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 }

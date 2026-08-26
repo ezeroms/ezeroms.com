@@ -4,19 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import {
-  NOTES_EDITOR_FORM_ID,
-  NotesEditorForm,
-  NotesFocusModeButton,
-  type NotesEditorInitial,
-} from "@/components/admin/NotesEditorForm";
+  DIARY_EDITOR_FORM_ID,
+  DiaryEditorForm,
+  DiaryFocusModeButton,
+  type DiaryEditorInitial,
+} from "@/components/admin/DiaryEditorForm";
 
 type Props = {
-  initial?: NotesEditorInitial | null;
+  initial?: DiaryEditorInitial | null;
   open: boolean;
   onClose: () => void;
 };
 
-export function NotesEditModal({ initial = null, open, onClose }: Props) {
+export function DiaryEditModal({ initial = null, open, onClose }: Props) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -51,7 +51,7 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
     setDeleteError(null);
     setDeleting(true);
     try {
-      const res = await fetch(`/api/admin/notes/${initial.slug}/`, {
+      const res = await fetch(`/api/admin/diary/${initial.slug}/`, {
         method: "DELETE",
       });
       const data = (await res.json()) as { error?: string };
@@ -75,7 +75,7 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
       open={open}
       onClose={onClose}
       title={isEdit ? "コンテンツを編集" : "コンテンツを追加"}
-      formId={NOTES_EDITOR_FORM_ID}
+      formId={DIARY_EDITOR_FORM_ID}
       isEdit={isEdit}
       saving={saving}
       dirty={dirty}
@@ -84,13 +84,13 @@ export function NotesEditModal({ initial = null, open, onClose }: Props) {
       onDelete={isEdit ? onDelete : undefined}
       closeOnEscape={!focusMode}
       headerRight={
-        <NotesFocusModeButton
+        <DiaryFocusModeButton
           active={focusMode}
           onClick={() => focusModeToggleRef.current?.()}
         />
       }
     >
-      <NotesEditorForm
+      <DiaryEditorForm
         key={initial?.slug ?? "new"}
         initial={initial ?? undefined}
         hideSubmit

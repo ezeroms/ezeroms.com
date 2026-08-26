@@ -4,7 +4,7 @@
  */
 
 export type SearchScopeId =
-  | "notes"
+  | "diary"
   | "column"
   | "smile"
   | "jumpai"
@@ -28,7 +28,7 @@ export type SearchScope = {
 };
 
 const SCOPE_LABELS: Record<SearchScopeId, string> = {
-  notes: "Notes",
+  diary: "Diary",
   column: "Column",
   smile: "Smile",
   jumpai: "Jampai",
@@ -49,7 +49,7 @@ const SCOPE_LABELS: Record<SearchScopeId, string> = {
 /** スコープごとの検索ページ URL（trailing slash 付き） */
 export const SEARCH_PATH_BY_SCOPE: Record<SearchScopeId, string> = {
   all: "/search/",
-  notes: "/diary/search/",
+  diary: "/diary/search/",
   column: "/column/search/",
   smile: "/smile/search/",
   jumpai: "/jumpai/search/",
@@ -69,7 +69,7 @@ export const SEARCH_PATH_BY_SCOPE: Record<SearchScopeId, string> = {
 /** スコープの一覧トップ（パンくず用） */
 export const SECTION_INDEX_BY_SCOPE: Record<SearchScopeId, string> = {
   all: "/",
-  notes: "/diary/",
+  diary: "/diary/",
   column: "/column/",
   smile: "/smile/",
   jumpai: "/jumpai/",
@@ -87,6 +87,12 @@ export const SECTION_INDEX_BY_SCOPE: Record<SearchScopeId, string> = {
 };
 
 const VALID_SCOPES = new Set<string>(Object.keys(SCOPE_LABELS));
+
+export function coerceSearchScopeId(value: string): SearchScopeId | null {
+  if (value === "notes") return "diary";
+  if (VALID_SCOPES.has(value)) return value as SearchScopeId;
+  return null;
+}
 
 export function isSearchScopeId(value: string): value is SearchScopeId {
   return VALID_SCOPES.has(value);
@@ -129,7 +135,7 @@ export function resolveSearchScope(pathname: string): SearchScope {
     path.startsWith("/diary_tag/") ||
     path.startsWith("/diary_place/")
   ) {
-    return getSearchScope("notes");
+    return getSearchScope("diary");
   }
   if (path.startsWith("/column/") || path.startsWith("/column_")) {
     return getSearchScope("column");

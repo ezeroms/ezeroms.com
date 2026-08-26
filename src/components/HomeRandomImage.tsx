@@ -64,7 +64,7 @@ export type HomeLibraryNavItem = {
 };
 
 type Props = {
-  notesHref: string;
+  diaryHref: string;
   photoNav?: HomePhotoNavItem[];
   worksNav?: HomeWorksNavItem[];
   libraryNav?: HomeLibraryNavItem[];
@@ -139,7 +139,7 @@ function HomeNavSection({
  * not a separate markup branch (avoids legacy dual-layout clipping bugs).
  */
 export function HomeRandomImage({
-  notesHref,
+  diaryHref,
   photoNav = [
     { id: "smile", href: "/smile/", label: "Smile" },
     { id: "jumpai", href: "/jumpai/", label: "Jampai" },
@@ -294,7 +294,7 @@ export function HomeRandomImage({
         aria-label="サイトメニュー"
       >
         <HomeNavSection title="Writing">
-          <HomeNavCard href={notesHref} label="Notes" icon={NotebookPen} />
+          <HomeNavCard href={diaryHref} label="Diary" icon={NotebookPen} />
           <HomeNavCard href="/column/" label="Column" icon={FileText} />
         </HomeNavSection>
 

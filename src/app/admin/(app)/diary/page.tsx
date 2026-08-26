@@ -1,10 +1,10 @@
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import {
-  AdminNotesListTable,
-  type AdminNotesTableItem,
-} from "@/components/admin/AdminNotesListTable";
-import { NotesCreateButton } from "@/components/admin/NotesCreateButton";
+  AdminDiaryListTable,
+  type AdminDiaryTableItem,
+} from "@/components/admin/AdminDiaryListTable";
+import { DiaryCreateButton } from "@/components/admin/DiaryCreateButton";
 import { WorksSectionSettingsModal } from "@/components/admin/WorksSectionSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
@@ -15,11 +15,11 @@ import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminNotesListPage() {
+export default async function AdminDiaryListPage() {
   await getSessionUser();
-  const section = await loadWritingSection("notes");
+  const section = await loadWritingSection("diary");
 
-  let items: AdminNotesTableItem[] = [];
+  let items: AdminDiaryTableItem[] = [];
   let loadError: string | null = null;
 
   if (hasSupabaseConfig()) {
@@ -46,7 +46,7 @@ export default async function AdminNotesListPage() {
 
     if (error) {
       loadError = error.message;
-      console.error("[admin/notes]", error.message);
+      console.error("[admin/diary]", error.message);
     } else {
       items = ((data ?? []) as Record<string, unknown>[]).map((row) => {
         const slug = String(row.slug ?? "");
@@ -86,13 +86,13 @@ export default async function AdminNotesListPage() {
         actions={
           <div className="flex flex-wrap gap-2">
             <WorksSectionSettingsModal
-              metaApiPath="/api/admin/writing/notes/meta/"
+              metaApiPath="/api/admin/writing/diary/meta/"
               initialLabel={section.label}
               initialStatus={section.status}
               initialOgImage={section.og_image}
-              ogUploadKind="notes-section"
+              ogUploadKind="diary-section"
             />
-            <NotesCreateButton />
+            <DiaryCreateButton />
           </div>
         }
       />
@@ -103,7 +103,7 @@ export default async function AdminNotesListPage() {
       ) : null}
       <Card className="overflow-hidden">
         <CardContent className="overflow-x-auto p-0">
-          <AdminNotesListTable items={items} empty={!items.length} />
+          <AdminDiaryListTable items={items} empty={!items.length} />
         </CardContent>
       </Card>
     </AdminContent>

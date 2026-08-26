@@ -5,17 +5,49 @@ import {
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { ABOUT_HERE_CONTENT_SLUG } from "@/lib/content/about-routes";
+import { parseAboutHereMarkdown } from "@/lib/content/about-here";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 const SELECT_FULL =
+  "id, title, body_md, body_html, intro_md, intro_html, rights_md, rights_html, updates_md, updates_html, og_image, status";
+const SELECT_WITHOUT_SECTIONS =
   "id, title, body_md, body_html, og_image, status";
 const SELECT_WITHOUT_OG = "id, title, body_md, body_html, status";
+
+function initialFromRow(row: Record<string, unknown>): AboutHereEditorInitial {
+  const bodyMarkdown =
+    String(row.body_md ?? "").trim() ||
+    htmlToEditableMarkdown(String(row.body_html ?? ""));
+  const parsed = parseAboutHereMarkdown(bodyMarkdown);
+
+  const introMd =
+    String(row.intro_md ?? "").trim() ||
+    htmlToEditableMarkdown(String(row.intro_html ?? "")).trim() ||
+    parsed.intro_md;
+  const rightsMd =
+    String(row.rights_md ?? "").trim() ||
+    htmlToEditableMarkdown(String(row.rights_html ?? "")).trim() ||
+    parsed.rights_md;
+  const updatesMd =
+    String(row.updates_md ?? "").trim() ||
+    htmlToEditableMarkdown(String(row.updates_html ?? "")).trim() ||
+    parsed.updates_md;
+
+  return {
+    id: String(row.id),
+    title: String(row.title ?? "このサイトについて"),
+    intro_md: introMd,
+    rights_md: rightsMd,
+    updates_md: updatesMd,
+    og_image: String(row.og_image ?? ""),
+    status: row.status === "draft" ? "draft" : "published",
+  };
+}
 
 export default async function AdminHerePage() {
   await getSessionUser();
@@ -33,7 +65,20 @@ export default async function AdminHerePage() {
       .eq("slug", ABOUT_HERE_CONTENT_SLUG)
       .maybeSingle();
 
-    // og_image 未マイグレーション時は SELECT 全体が落ちるためフォールバック
+    if (error && /intro_md|rights_md|updates_md/i.test(error.message)) {
+      const fallback = await getSupabaseAdmin()
+        .from("about")
+        .select(SELECT_WITHOUT_SECTIONS)
+        .eq("slug", ABOUT_HERE_CONTENT_SLUG)
+        .maybeSingle();
+      data = fallback.data as typeof data;
+      error = fallback.error;
+      if (!error) {
+        loadWarn =
+          "about の Here 3欄カラムが未作成です。supabase/migrations/20260826093000_about_here_sections.sql を適用してください。";
+      }
+    }
+
     if (error && /og_image/i.test(error.message)) {
       const fallback = await getSupabaseAdmin()
         .from("about")
@@ -53,18 +98,7 @@ export default async function AdminHerePage() {
         ? "about.body_md が未作成です。supabase/migrations/20260720140000_about_here_body_md.sql を適用してください。"
         : error.message;
     } else if (data) {
-      const row = data as Record<string, unknown>;
-      // body_md が空のレガシー行は HTML から編集用 Markdown を起こす
-      const bodyMarkdown =
-        String(row.body_md ?? "").trim() ||
-        htmlToEditableMarkdown(String(row.body_html ?? ""));
-      initial = {
-        id: String(row.id),
-        title: String(row.title ?? "このサイトについて"),
-        body_md: bodyMarkdown,
-        og_image: String(row.og_image ?? ""),
-        status: row.status === "draft" ? "draft" : "published",
-      };
+      initial = initialFromRow(data as Record<string, unknown>);
     }
   }
 
@@ -80,14 +114,7 @@ export default async function AdminHerePage() {
         </Alert>
       ) : null}
       {loadWarn ? <Alert className="mb-4">{loadWarn}</Alert> : null}
-      <Card>
-        <CardHeader>
-          <CardTitle>記事を編集</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AboutHereEditor initial={initial} />
-        </CardContent>
-      </Card>
+      <AboutHereEditor initial={initial} />
     </AdminContent>
   );
 }

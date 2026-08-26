@@ -115,7 +115,7 @@ export function resolveBreadcrumbs(
     return [{ label: "Photos" }, { label: "Tabekake" }];
   }
 
-  // Writing — Notes
+  // Writing — Diary
   if (
     path.startsWith("/diary/") ||
     path.startsWith("/diary_month/") ||
@@ -123,11 +123,11 @@ export function resolveBreadcrumbs(
     path.startsWith("/diary_place/")
   ) {
     if (path === "/diary/") {
-      return [{ label: "Writing" }, { label: "Notes" }];
+      return [{ label: "Writing" }, { label: "Diary" }];
     }
     return withCurrent(
-      [{ label: "Writing" }, { label: "Notes", href: "/diary/" }],
-      "Note",
+      [{ label: "Writing" }, { label: "Diary", href: "/diary/" }],
+      "Diary",
     );
   }
 

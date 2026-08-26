@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import {
   getWritingSection,
-  isWritingSectionId,
   isWritingSectionStatus,
+  resolveWritingSectionId,
 } from "@/lib/content/writing-sections";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
@@ -23,8 +23,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
   }
 
-  const { section: sectionId } = await params;
-  if (!isWritingSectionId(sectionId)) {
+  const { section } = await params;
+  const sectionId = resolveWritingSectionId(section);
+  if (!sectionId) {
     return NextResponse.json({ error: "Unknown section" }, { status: 404 });
   }
 

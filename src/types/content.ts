@@ -7,6 +7,12 @@ export type About = {
   body_html: string;
   /** Markdown source for admin editing (may be empty for legacy rows). */
   body_md?: string;
+  intro_md?: string;
+  intro_html?: string;
+  rights_md?: string;
+  rights_html?: string;
+  updates_md?: string;
+  updates_html?: string;
   og_image?: string;
   status: ContentStatus;
   published_at: string | null;

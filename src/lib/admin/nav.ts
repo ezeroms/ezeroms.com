@@ -128,8 +128,8 @@ export const adminNavSections: AdminNavSection[] = [
     label: "Writing",
     items: [
       {
-        href: "/admin/notes/",
-        label: "Notes",
+        href: "/admin/diary/",
+        label: "Diary",
         description: "日記・メモのタイムライン",
         status: "ready",
         icon: "notebook-pen",

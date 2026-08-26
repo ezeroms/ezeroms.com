@@ -17,9 +17,9 @@ import { isoDateInRange } from "@/lib/content/date-range";
 import type { SearchParamsRecord } from "@/lib/content/filter-search-params";
 import {
   dateMatchesWeekdays,
-  notesFilterActive,
-  parseNotesFilter,
-} from "@/lib/content/notes-filter";
+  diaryFilterActive,
+  parseDiaryFilter,
+} from "@/lib/content/diary-filter";
 import type { SearchScopeId } from "@/lib/content/search-scope";
 import {
   parseWorkFilter,
@@ -64,9 +64,9 @@ export function applySearchResultFilters(
 ): Record<string, unknown>[] {
   const params = paramsRecordFromSearch(search);
 
-  if (scope === "notes") {
-    const filter = parseNotesFilter(params);
-    if (!notesFilterActive(filter)) return records;
+  if (scope === "diary") {
+    const filter = parseDiaryFilter(params);
+    if (!diaryFilterActive(filter)) return records;
     return records.filter((row) => {
       const date = String(row.date ?? "");
       if (!isoDateInRange(date, filter)) return false;
@@ -83,13 +83,13 @@ export function applySearchResultFilters(
   }
 
   if (scope === "clips") {
-    const filter = parseNotesFilter(params);
+    const filter = parseDiaryFilter(params);
     const clipFilter = {
       ...filter,
       places: [] as string[],
       weekdays: [] as number[],
     };
-    if (!notesFilterActive(clipFilter)) return records;
+    if (!diaryFilterActive(clipFilter)) return records;
     return records.filter((row) => {
       const date = String(row.date ?? "");
       if (!isoDateInRange(date, clipFilter)) return false;

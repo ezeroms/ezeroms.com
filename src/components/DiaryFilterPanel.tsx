@@ -10,16 +10,16 @@ import {
 import { useMemo, useState } from "react";
 import {
   WEEKDAY_LABELS,
-  emptyNotesFilter,
-  notesFilterActive,
-  serializeNotesFilter,
-  type NotesFilterState,
-} from "@/lib/content/notes-filter";
+  emptyDiaryFilter,
+  diaryFilterActive,
+  serializeDiaryFilter,
+  type DiaryFilterState,
+} from "@/lib/content/diary-filter";
 
 type Props = {
   tags: string[];
   places?: string[];
-  initial: NotesFilterState;
+  initial: DiaryFilterState;
   /** Base path for filter apply (default /diary/) */
   basePath?: string;
   /** Hide place filter (e.g. Clips). Default true when places provided. */
@@ -28,7 +28,7 @@ type Props = {
   showWeekdays?: boolean;
 };
 
-export function NotesFilterPanel({
+export function DiaryFilterPanel({
   tags,
   places = [],
   initial,
@@ -36,7 +36,7 @@ export function NotesFilterPanel({
   showPlaces = true,
   showWeekdays = true,
 }: Props) {
-  const [draft, setDraft] = useState<NotesFilterState>(() =>
+  const [draft, setDraft] = useState<DiaryFilterState>(() =>
     showWeekdays ? initial : { ...initial, weekdays: [] },
   );
 
@@ -47,10 +47,10 @@ export function NotesFilterPanel({
 
   const api = useMemo<SearchFilterApi>(
     () => ({
-      getQueryString: () => serializeNotesFilter(normalized),
+      getQueryString: () => serializeDiaryFilter(normalized),
       getBasePath: () => basePath,
-      isActive: () => notesFilterActive(normalized),
-      clearDraft: () => setDraft(emptyNotesFilter()),
+      isActive: () => diaryFilterActive(normalized),
+      clearDraft: () => setDraft(emptyDiaryFilter()),
     }),
     [normalized, basePath],
   );

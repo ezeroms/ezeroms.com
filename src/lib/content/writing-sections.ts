@@ -1,5 +1,5 @@
-/** Writing 配下のセクション ID（Notes / Column）。 */
-export type WritingSectionId = "notes" | "column";
+/** Writing 配下のセクション ID（Diary / Column）。 */
+export type WritingSectionId = "diary" | "column";
 
 /** 公開サイトでのページ公開状態 */
 export type WritingSectionStatus = "published" | "private";
@@ -16,14 +16,14 @@ export type WritingSectionMeta = {
 };
 
 export const WRITING_SECTIONS: Record<WritingSectionId, WritingSectionMeta> = {
-  notes: {
-    id: "notes",
-    label: "Notes",
-    description: "日常の短いメモとスナップ。気づきや記録を残す場所です。",
+  diary: {
+    id: "diary",
+    label: "Diary",
+    description: "日々のできごとや考えたことの記録。",
     status: "published",
     og_image: "",
     basePath: "/diary/",
-    adminPath: "/admin/notes/",
+    adminPath: "/admin/diary/",
   },
   column: {
     id: "column",
@@ -38,7 +38,14 @@ export const WRITING_SECTIONS: Record<WritingSectionId, WritingSectionMeta> = {
 };
 
 export function isWritingSectionId(v: string): v is WritingSectionId {
-  return Object.keys(WRITING_SECTIONS).includes(v);
+  return v === "diary" || v === "column";
+}
+
+/** 旧 ID `notes` も Diary として扱う。 */
+export function resolveWritingSectionId(v: string): WritingSectionId | null {
+  if (v === "notes") return "diary";
+  if (isWritingSectionId(v)) return v;
+  return null;
 }
 
 export function isWritingSectionStatus(v: string): v is WritingSectionStatus {

@@ -41,7 +41,7 @@ export default async function HomePage() {
       contentClassName="p-0"
     >
       <HomeRandomImage
-        notesHref="/diary/"
+        diaryHref="/diary/"
         photoNav={photoNav}
         worksNav={worksNav}
         libraryNav={libraryNav}

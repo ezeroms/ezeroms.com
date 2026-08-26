@@ -49,7 +49,7 @@ function writeSnapshot(topic: string | null, snapshot: ScrollSnapshot) {
 
 /**
  * 左: 50音順トピックナビ
- * 右: Notes と同型の引用カード
+ * 右: Diary と同型の引用カード
  * PC（≥1080）は左右を独立スクロール。
  */
 export function GiantsBrowse({

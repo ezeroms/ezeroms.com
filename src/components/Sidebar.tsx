@@ -42,7 +42,7 @@ export type SidebarLibraryNavItem = {
 
 type Props = {
   pathname: string;
-  notesLatestHref?: string;
+  diaryLatestHref?: string;
   /** 公開中の Photos ナビ（非公開は含めない） */
   photoNav?: SidebarPhotoNavItem[];
   /** 公開中の Works ナビ（非公開は含めない） */
@@ -109,7 +109,7 @@ const LIBRARY_ACTIVE: Record<
 
 export function Sidebar({
   pathname,
-  notesLatestHref = "/diary/",
+  diaryLatestHref = "/diary/",
   photoNav,
   worksNav,
   libraryNav,
@@ -189,8 +189,8 @@ export function Sidebar({
       label: "Writing",
       items: [
         {
-          href: notesLatestHref,
-          label: "Notes",
+          href: diaryLatestHref,
+          label: "Diary",
           icon: NotebookPen,
           active: isDiary,
         },

@@ -8,7 +8,7 @@ import {
 import {
   diaryMatchesDateRange,
   diaryMatchesWeekdays,
-} from "@/lib/content/notes-filter";
+} from "@/lib/content/diary-filter";
 import { dateRangeActive, type DateRangeValue } from "@/lib/content/date-range";
 import { rankBySharedTags } from "@/lib/content/related";
 import type { Diary } from "@/types/content";
@@ -88,7 +88,7 @@ export async function getDiaryBySlug(slug: string): Promise<Diary | null> {
   return data as Diary | null;
 }
 
-/** Same type (Notes) posts that share ≥1 tag, ranked by overlap then date. */
+/** Same type (Diary) posts that share ≥1 tag, ranked by overlap then date. */
 export async function listRelatedDiary(
   item: Pick<Diary, "slug" | "diary_tag">,
   limit = 6,
@@ -121,7 +121,7 @@ export async function listDiaryMonths(): Promise<string[]> {
   return [...set].sort();
 }
 
-/** Tags / places for Notes secondary nav (lightweight select). */
+/** Tags / places for Diary secondary nav (lightweight select). */
 export async function listDiaryTaxonomy(): Promise<{
   tags: string[];
   places: string[];

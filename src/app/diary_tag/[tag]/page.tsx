@@ -1,7 +1,7 @@
 import { SiteShell } from "@/components/SiteShell";
-import { NotesTimeline } from "@/components/NotesTimeline";
-import { NotesFilterPanel } from "@/components/NotesFilterPanel";
-import { emptyNotesFilter } from "@/lib/content/notes-filter";
+import { DiaryTimeline } from "@/components/DiaryTimeline";
+import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
+import { emptyDiaryFilter } from "@/lib/content/diary-filter";
 import {
   listDiary,
   listDiaryTaxonomy,
@@ -26,13 +26,13 @@ export default async function DiaryTagPage({
     body_html: sanitizeBody(item.body_html),
   }));
 
-  const initial = { ...emptyNotesFilter(), tags: [decoded] };
+  const initial = { ...emptyDiaryFilter(), tags: [decoded] };
 
   return (
     <SiteShell
       bodyClassName="is-diary"
       secondary={
-        <NotesFilterPanel
+        <DiaryFilterPanel
           tags={taxonomy.tags}
           places={taxonomy.places}
           initial={initial}
@@ -43,7 +43,7 @@ export default async function DiaryTagPage({
       breadcrumbCurrent={`#${decoded}`}
       filterActive
     >
-      <NotesTimeline items={sanitized} currentTag={decoded} />
+      <DiaryTimeline items={sanitized} currentTag={decoded} />
     </SiteShell>
   );
 }

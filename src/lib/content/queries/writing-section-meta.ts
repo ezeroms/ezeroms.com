@@ -62,6 +62,21 @@ export async function loadWritingSection(
       return defaults;
     }
 
+    if (!data && sectionId === "diary") {
+      ({ data, error } = await db
+        .from("writing_section")
+        .select("id, label, description, status, og_image")
+        .eq("id", "notes")
+        .maybeSingle());
+      if (error && isMissingColumnError(error)) {
+        ({ data, error } = await db
+          .from("writing_section")
+          .select("id, label, description, status")
+          .eq("id", "notes")
+          .maybeSingle());
+      }
+    }
+
     if (!data) return defaults;
 
     return {

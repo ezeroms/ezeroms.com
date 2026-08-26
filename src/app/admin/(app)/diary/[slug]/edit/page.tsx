@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import {
-  NotesEditorForm,
-  type NotesEditorInitial,
-} from "@/components/admin/NotesEditorForm";
+  DiaryEditorForm,
+  type DiaryEditorInitial,
+} from "@/components/admin/DiaryEditorForm";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-export default async function AdminNotesEditPage({ params }: PageProps) {
+export default async function AdminDiaryEditPage({ params }: PageProps) {
   await getSessionUser();
   const { slug } = await params;
 
@@ -49,7 +49,7 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
     (data.body_md as string | null)?.trim() ||
     htmlToEditableMarkdown((data.body_html as string) ?? "");
 
-  const initial: NotesEditorInitial = {
+  const initial: DiaryEditorInitial = {
     slug: data.slug as string,
     body_md: bodyMd,
     date: data.date as string,
@@ -62,7 +62,7 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
   return (
     <AdminContent>
       <AdminPageHeader
-        title="Notes を編集"
+        title="Diary を編集"
         description={new Date(initial.date).toLocaleString("ja-JP")}
         actions={
           <Button asChild variant="outline" size="sm">
@@ -76,7 +76,7 @@ export default async function AdminNotesEditPage({ params }: PageProps) {
           <CardDescription>Markdown で更新できます。</CardDescription>
         </CardHeader>
         <CardContent>
-          <NotesEditorForm initial={initial} />
+          <DiaryEditorForm initial={initial} />
         </CardContent>
       </Card>
     </AdminContent>

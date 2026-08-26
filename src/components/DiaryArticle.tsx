@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Diary } from "@/types/content";
 import {
-  notesPermalink,
-  formatNotesDate,
-} from "@/lib/content/notes-meta";
+  diaryPermalink,
+  formatDiaryDate,
+} from "@/lib/content/diary-meta";
 import { tagChipClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
 import { ArticleProse } from "@/components/ArticleProse";
@@ -17,15 +17,15 @@ type Props = {
 };
 
 /**
- * Notes（公開 URL / DB は diary）の個別詳細。
- * カード内レイアウトは一覧（NotesTimeline）に揃える。
+ * Diary の個別詳細。
+ * カード内レイアウトは一覧（DiaryTimeline）に揃える。
  */
-export function NoteArticle({ item, bodyHtml }: Props) {
+export function DiaryArticle({ item, bodyHtml }: Props) {
   const tags = [...(item.diary_tag ?? [])].sort((a, b) =>
     a.localeCompare(b, "ja"),
   );
-  const dateLabel = formatNotesDate(item.date);
-  const permalink = notesPermalink(item.slug);
+  const dateLabel = formatDiaryDate(item.date);
+  const permalink = diaryPermalink(item.slug);
 
   return (
     <div className="w-full font-sans text-foreground">

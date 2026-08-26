@@ -32,9 +32,9 @@ function draftMediaFolderId(length = 12) {
   return `draft-${Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("")}`;
 }
 
-export const NOTES_EDITOR_FORM_ID = "notes-editor-form";
+export const DIARY_EDITOR_FORM_ID = "diary-editor-form";
 
-export function NotesFocusModeButton({
+export function DiaryFocusModeButton({
   active,
   onClick,
 }: {
@@ -60,7 +60,7 @@ export function NotesFocusModeButton({
 }
 
 
-export type NotesEditorInitial = {
+export type DiaryEditorInitial = {
   slug: string;
   body_md: string;
   date: string;
@@ -70,9 +70,9 @@ export type NotesEditorInitial = {
   og_image: string;
 };
 
-export function NotesEditorForm({
+export function DiaryEditorForm({
   initial,
-  formId = NOTES_EDITOR_FORM_ID,
+  formId = DIARY_EDITOR_FORM_ID,
   hideSubmit = false,
   onSaved,
   onLoadingChange,
@@ -82,7 +82,7 @@ export function NotesEditorForm({
   showInlineFocusToggle = true,
   focusModeToggleRef,
 }: {
-  initial?: NotesEditorInitial;
+  initial?: DiaryEditorInitial;
   formId?: string;
   hideSubmit?: boolean;
   onSaved?: () => void;
@@ -192,7 +192,7 @@ export function NotesEditorForm({
       const form = new FormData();
       form.set("file", prepared);
       form.set("folder", mediaFolder);
-      const res = await fetch("/api/admin/notes/media/upload/", {
+      const res = await fetch("/api/admin/diary/media/upload/", {
         method: "POST",
         body: form,
       });
@@ -257,8 +257,8 @@ export function NotesEditorForm({
         status,
       };
       const url = isEdit
-        ? `/api/admin/notes/${savedSlug}/`
-        : "/api/admin/notes/";
+        ? `/api/admin/diary/${savedSlug}/`
+        : "/api/admin/diary/";
       const res = await fetch(url, {
         method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -313,7 +313,7 @@ export function NotesEditorForm({
             onUploadImage={uploadBodyImage}
             toolbarEnd={
               showInlineFocusToggle ? (
-                <NotesFocusModeButton
+                <DiaryFocusModeButton
                   active={false}
                   onClick={toggleFocusMode}
                 />
@@ -411,7 +411,7 @@ export function NotesEditorForm({
                   >
                     {loading ? "保存中…" : isEdit ? "更新" : "追加"}
                   </Button>
-                  <NotesFocusModeButton active onClick={toggleFocusMode} />
+                  <DiaryFocusModeButton active onClick={toggleFocusMode} />
                 </>
               }
             />

@@ -1,6 +1,5 @@
 /**
- * Notes（公開 URL は /diary/）向けの表示・メタ用ヘルパー。
- * DB カラム名 diary_* や URL パス /diary/ は仕様のため変えない。
+ * Diary（公開 URL / DB テーブルは diary）向けの表示・メタ用ヘルパー。
  */
 import type { Diary } from "@/types/content";
 import { htmlToPlainText } from "@/lib/content/html-plain";
@@ -9,7 +8,7 @@ import { htmlToPlainText } from "@/lib/content/html-plain";
  * diary_month または投稿日からの月キー（`YYYY-MM`）。
  * フィルタ・「続きを読む」の月指定で使う。
  */
-export function notesMonthKey(
+export function diaryMonthKey(
   item: Pick<Diary, "date" | "diary_month">,
 ): string {
   for (const month of item.diary_month ?? []) {
@@ -28,33 +27,33 @@ export function notesMonthKey(
   return `${year}-${month}`;
 }
 
-/** 公開パーマリンク。ルートは歴史的理由で `/diary/` のまま。 */
-export function notesPermalink(slug: string): string {
+/** 公開パーマリンク。 */
+export function diaryPermalink(slug: string): string {
   return `/diary/${slug}/`;
 }
 
-export function notesExcerpt(html: string, max = 140): string {
+export function diaryExcerpt(html: string, max = 140): string {
   const text = htmlToPlainText(html);
   if (text.length <= max) return text;
   return `${text.slice(0, max).trim()}…`;
 }
 
 /** ブラウザタブ・OGP 用タイトル（日付 + 冒頭抜粋）。 */
-export function notesTitle(item: Pick<Diary, "date" | "body_html">): string {
+export function diaryTitle(item: Pick<Diary, "date" | "body_html">): string {
   const parsed = new Date(item.date);
   const dateLabel = Number.isNaN(parsed.getTime())
-    ? "Notes"
+    ? "Diary"
     : parsed.toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
       });
-  const excerpt = notesExcerpt(item.body_html, 48);
+  const excerpt = diaryExcerpt(item.body_html, 48);
   return excerpt ? `${dateLabel} — ${excerpt}` : dateLabel;
 }
 
 /** パンくず・カード見出し用の日付ラベル */
-export function formatNotesDate(iso: string): string {
+export function formatDiaryDate(iso: string): string {
   const parsed = new Date(iso);
   if (Number.isNaN(parsed.getTime())) return "";
   return parsed.toLocaleDateString("en-US", {
@@ -65,7 +64,7 @@ export function formatNotesDate(iso: string): string {
 }
 
 /** 詳細ページ用の日時（分まで） */
-export function formatNotesDateTime(iso: string): string {
+export function formatDiaryDateTime(iso: string): string {
   const parsed = new Date(iso);
   if (Number.isNaN(parsed.getTime())) return "";
   return parsed.toLocaleString("en-US", {

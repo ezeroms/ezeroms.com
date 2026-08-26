@@ -8,8 +8,8 @@ export default async function DiaryMonthIndex() {
   if (months.length) redirect(`/diary_month/${months[months.length - 1]}/`);
   return (
     <main style={{ padding: "2rem" }}>
-      <h1>Notes</h1>
-      <p>まだ Notes がありません。</p>
+      <h1>Diary</h1>
+      <p>まだ Diary がありません。</p>
     </main>
   );
 }
