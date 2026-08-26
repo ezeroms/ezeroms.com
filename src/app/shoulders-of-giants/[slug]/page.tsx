@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { GiantsArticle } from "@/components/GiantsArticle";
+import {
+  ReadingTopicsAside,
+} from "@/components/ReadingTopicsAside";
 import { SiteShell } from "@/components/SiteShell";
 import {
   formatGiantsCitation,
   giantsExcerpt,
   giantsPermalink,
 } from "@/lib/content/giants-meta";
+import { giantsTagHref } from "@/lib/content/giants-filter";
 import {
   ogImageMetadata,
   resolveOgImageUrl,
@@ -15,7 +19,7 @@ import {
 import {
   getGiantsBySlug,
   listGiants,
-  listGiantsTopics,
+  listGiantsTags,
   listRelatedGiants,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
@@ -79,8 +83,8 @@ export default async function GiantsEntryPage({
   const citation = formatGiantsCitation(item);
   const bodyHtml = sanitizeBody(item.body_html);
 
-  const [topics, related] = await Promise.all([
-    listGiantsTopics().catch(() => [] as string[]),
+  const [tags, related] = await Promise.all([
+    listGiantsTags().catch(() => [] as string[]),
     listRelatedGiants(item).catch(() => []),
   ]);
 
@@ -93,17 +97,24 @@ export default async function GiantsEntryPage({
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
       showTagsAside={false}
+      showTagsRail
+      tagsRailDefaultOpen
       breadcrumbCurrent={citation || item.book_title || slug}
       mainClassName="layout-main--single"
-      mainContentClassName="min-[1080px]:flex min-[1080px]:flex-col min-[1080px]:overflow-hidden"
-      contentClassName={
-        "flex w-full flex-col p-4 min-[768px]:p-5 min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:overflow-hidden min-[1080px]:p-6"
+      aside={
+        tags.length ? (
+          <ReadingTopicsAside
+            tags={tags}
+            hrefFor={giantsTagHref}
+            allHref="/shoulders-of-giants/"
+            selected={item.giants_tag}
+          />
+        ) : undefined
       }
     >
       <GiantsArticle
         item={item}
         bodyHtml={bodyHtml}
-        topics={topics}
         related={relatedSanitized}
       />
     </SiteShell>

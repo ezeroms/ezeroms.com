@@ -1,3 +1,8 @@
+import {
+  emptyDiaryFilter,
+  serializeDiaryFilter,
+} from "@/lib/content/diary-filter";
+
 export function clipSourceHost(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
@@ -103,4 +108,18 @@ export function isYoutubeClipUrl(url: string): boolean {
 /** カード内埋め込み用（プライバシー強化ドメイン） */
 export function youtubeEmbedSrc(videoId: string): string {
   return `https://www.youtube-nocookie.com/embed/${videoId}`;
+}
+
+/** Clips 一覧（タグ・時期フィルタ）。 */
+export function clipListingHref(opts?: {
+  tag?: string | null;
+  from?: string | null;
+  to?: string | null;
+}): string {
+  return `/clips/${serializeDiaryFilter({
+    ...emptyDiaryFilter(),
+    from: opts?.from ?? null,
+    to: opts?.to ?? null,
+    tags: opts?.tag ? [opts.tag] : [],
+  })}`;
 }

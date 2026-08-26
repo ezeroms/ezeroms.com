@@ -29,7 +29,7 @@ export default async function AdminGiantsPage() {
     const { data, error } = await getSupabaseAdmin()
       .from("shoulders_of_giants")
       .select(
-        "slug, topic, book_title, author, publisher, published_year, citation_override, source_url, body_html, og_image, status, published_at, created_at",
+        "slug, giants_tag, book_title, author, publisher, published_year, citation_override, source_url, body_html, og_image, status, published_at, created_at",
       )
       .order("created_at", { ascending: false })
       .limit(200);
@@ -41,7 +41,7 @@ export default async function AdminGiantsPage() {
       items = ((data ?? []) as Record<string, unknown>[]).map((row) => {
         const slug = String(row.slug ?? "");
         const status = String(row.status ?? "draft");
-        const topics = (row.topic as string[] | null) ?? [];
+        const tags = (row.giants_tag as string[] | null) ?? [];
         const bodyHtml = String(row.body_html ?? "");
         const sourceUrl = String(row.source_url ?? "");
         const citationItem = {
@@ -58,11 +58,11 @@ export default async function AdminGiantsPage() {
           citation: formatGiantsCitation(citationItem),
           source_url: sourceUrl,
           status,
-          topics,
+          tags,
           editor: {
             slug,
             body_md: htmlToEditableMarkdown(bodyHtml),
-            topics: topics.join(", "),
+            tags: tags.join(", "),
             book_title: String(row.book_title ?? ""),
             author: String(row.author ?? ""),
             publisher: String(row.publisher ?? ""),

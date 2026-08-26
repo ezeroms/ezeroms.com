@@ -3,6 +3,10 @@ import { SiteShell } from "@/components/SiteShell";
 import { WorkFilterPanel } from "@/components/WorkFilterPanel";
 import { WorkList } from "@/components/WorkList";
 import {
+  ReadingTopicsAside,
+  workTagHref,
+} from "@/components/ReadingTopicsAside";
+import {
   parseWorkFilter,
   workFilterActive,
 } from "@/lib/content/work-filter";
@@ -72,12 +76,27 @@ export default async function CreativePage({
         />
       }
       showTagsAside
+      mainClassName="layout-main--single"
       breadcrumbFilter={filtering ? summarizeWorkFilter(filter) : null}
       breadcrumbSectionHref="/works/creative/"
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={workTagHref}
+            allHref="/works/creative/"
+            selected={filter.tags.length === 1 ? filter.tags[0] : filter.tags}
+          />
+        ) : undefined
+      }
     >
       <WorkList
         items={listed.items}
         fallbackThumbSrc={section.og_image || null}
+        currentCategory={
+          filter.categories.length === 1 ? filter.categories[0] : undefined
+        }
+        currentTag={filter.tags.length === 1 ? filter.tags[0] : undefined}
       />
     </SiteShell>
   );

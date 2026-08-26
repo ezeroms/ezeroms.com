@@ -3,6 +3,10 @@ import { ColumnFilterPanel } from "@/components/ColumnFilterPanel";
 import { ColumnList } from "@/components/ColumnList";
 import { SiteShell } from "@/components/SiteShell";
 import {
+  ReadingTopicsAside,
+  columnTagHref,
+} from "@/components/ReadingTopicsAside";
+import {
   columnFilterActive,
   parseColumnFilter,
 } from "@/lib/content/column-filter";
@@ -35,8 +39,8 @@ export default async function ColumnIndexPage({
   const section = await requirePublicWritingSection("column");
   const resolvedSearchParams = await searchParams;
   const parsed = parseColumnFilter(resolvedSearchParams);
-  // Column has no weekday facet
-  const filter = { ...parsed, weekdays: [] as number[] };
+  // Column has no weekday / category facet on the public site
+  const filter = { ...parsed, weekdays: [] as number[], categories: [] as string[] };
   const filtering = columnFilterActive(filter);
 
   const [taxonomy, listed] = await Promise.all([
@@ -46,7 +50,6 @@ export default async function ColumnIndexPage({
         ? {
             from: filter.from,
             to: filter.to,
-            categories: filter.categories,
             tags: filter.tags,
           }
         : undefined,
@@ -58,7 +61,6 @@ export default async function ColumnIndexPage({
       bodyClassName="is-column"
       secondary={
         <ColumnFilterPanel
-          categories={taxonomy.categories}
           tags={taxonomy.tags}
           initial={filter}
           basePath="/column/"
@@ -68,14 +70,21 @@ export default async function ColumnIndexPage({
       mainClassName="layout-main--single"
       breadcrumbFilter={filtering ? summarizeColumnFilter(filter) : null}
       breadcrumbSectionHref="/column/"
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={columnTagHref}
+            allHref="/column/"
+            selected={filter.tags.length === 1 ? filter.tags[0] : filter.tags}
+          />
+        ) : undefined
+      }
     >
       <ColumnList
         items={listed.items}
         listId="column-articles-list"
         fallbackThumbSrc={section.og_image || null}
-        currentCategory={
-          filter.categories.length === 1 ? filter.categories[0] : undefined
-        }
         currentTag={filter.tags.length === 1 ? filter.tags[0] : undefined}
       />
     </SiteShell>

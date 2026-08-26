@@ -195,7 +195,7 @@ export type Experience = {
 export type ShouldersOfGiants = {
   id: string;
   slug: string;
-  topic: string[];
+  giants_tag: string[];
   book_title: string | null;
   author: string | null;
   publisher: string | null;

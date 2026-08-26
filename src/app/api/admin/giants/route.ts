@@ -27,7 +27,7 @@ export async function GET() {
   const { data, error } = await getSupabaseAdmin()
     .from("shoulders_of_giants")
     .select(
-      "id, slug, topic, book_title, author, publisher, published_year, citation_override, source_url, status, published_at, updated_at, created_at",
+      "id, slug, giants_tag, book_title, author, publisher, published_year, citation_override, source_url, status, published_at, updated_at, created_at",
     )
     .order("created_at", { ascending: false })
     .limit(200);
@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       body_md?: string;
+      tags?: string;
       topics?: string;
       book_title?: string;
       author?: string;
@@ -77,12 +78,12 @@ export async function POST(request: NextRequest) {
       (body.slug?.trim() && /^[a-z0-9-]+$/i.test(body.slug.trim())
         ? body.slug.trim()
         : null) || generateContentSlug();
-    const topics = parseTagList(body.topics ?? "");
+    const tags = parseTagList(body.tags ?? body.topics ?? "");
     const now = new Date().toISOString();
 
     const row = {
       slug,
-      topic: topics,
+      giants_tag: tags,
       book_title: (body.book_title ?? "").trim() || null,
       author: (body.author ?? "").trim() || null,
       publisher: (body.publisher ?? "").trim() || null,

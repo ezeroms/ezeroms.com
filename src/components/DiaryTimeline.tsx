@@ -8,10 +8,10 @@ import {
   formatDiaryDate,
 } from "@/lib/content/diary-meta";
 import { cn } from "@/lib/cn";
-import { tagChipClass } from "@/lib/site/tag-styles";
+import { tagPillClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
+import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
-import { contentCard } from "@/lib/site/card-styles";
 
 type Props = {
   items: Diary[];
@@ -82,87 +82,67 @@ export function DiaryTimeline({
       ) : null}
 
       <div className="w-full font-sans" id="diary-list">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-          {items.map((item) => {
+        <div className="mx-auto flex w-full max-w-2xl flex-col">
+          {items.map((item, index) => {
             const isFocused = activeFocus === item.slug;
             const permalink = diaryPermalink(item.slug);
             const dateLabel = formatDiaryDate(item.date);
             return (
-              <article
-                key={item.id}
-                id={item.slug}
-                className={cn(
-                  contentCard({ className: "overflow-visible p-6" }),
-                  hasFocus && !isFocused && "opacity-40",
-                  isFocused && "ring-1 ring-[hsl(var(--foreground)/0.35)]",
-                )}
-              >
-                <div className="mb-4 flex items-start gap-3">
-                  <Link
-                    href="/about/me/"
-                    className="shrink-0"
-                    aria-label="プロフィール"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/images/about/profile.png"
-                      alt=""
-                      width={40}
-                      height={40}
-                      className="h-10 w-10 rounded-full object-cover"
-                    />
-                  </Link>
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      href="/about/me/"
-                      className="text-sm font-semibold leading-tight text-foreground no-underline hover:underline"
-                    >
-                      ezeroms
-                    </Link>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-sm leading-tight text-muted-foreground">
+              <div key={item.id}>
+                {index > 0 ? (
+                  <div className="h-px bg-border-subtle" aria-hidden />
+                ) : null}
+                <article
+                  id={item.slug}
+                  className={cn(
+                    "overflow-visible py-8",
+                    hasFocus && !isFocused && "opacity-40",
+                  )}
+                >
+                  <div className="mb-4">
+                    <h2 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
                       <Link
                         href={permalink}
-                        className="no-underline hover:underline"
+                        className="text-inherit no-underline hover:underline hover:underline-offset-4"
                       >
                         <time dateTime={item.date}>{dateLabel}</time>
                       </Link>
-                      {item.diary_place ? (
-                        <>
-                          <span aria-hidden>·</span>
-                          <Link
-                            href={`/diary_place/${encodeURIComponent(item.diary_place)}/`}
-                            className="truncate no-underline hover:underline"
-                          >
-                            {item.diary_place}
-                          </Link>
-                        </>
-                      ) : null}
-                    </div>
+                    </h2>
+                    {item.diary_place ? (
+                      <p className="m-0 mt-1.5 text-sm leading-tight text-muted-foreground">
+                        <Link
+                          href={`/diary_place/${encodeURIComponent(item.diary_place)}/`}
+                          className="truncate no-underline hover:underline"
+                        >
+                          {item.diary_place}
+                        </Link>
+                      </p>
+                    ) : null}
                   </div>
-                </div>
 
-                <div
-                  className={notesBodyClass}
-                  dangerouslySetInnerHTML={{ __html: item.body_html }}
-                />
+                  <ArticleProse
+                    className={notesBodyClass}
+                    html={item.body_html}
+                  />
 
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  {[...(item.diary_tag ?? [])].sort().map((tag) => {
-                    const active = currentTag === tag;
-                    return (
-                      <Link
-                        key={tag}
-                        href={`/diary_tag/${encodeURIComponent(tag)}/`}
-                        className={tagChipClass(active)}
-                        data-tag={tag}
-                      >
-                        {tag}
-                      </Link>
-                    );
-                  })}
-                  <ShareButton path={permalink} />
-                </div>
-              </article>
+                  <div className="mt-4 flex flex-wrap items-center gap-2">
+                    {[...(item.diary_tag ?? [])].sort().map((tag) => {
+                      const active = currentTag === tag;
+                      return (
+                        <Link
+                          key={tag}
+                          href={`/diary_tag/${encodeURIComponent(tag)}/`}
+                          className={tagPillClass(active)}
+                          data-tag={tag}
+                        >
+                          {tag}
+                        </Link>
+                      );
+                    })}
+                    <ShareButton path={permalink} />
+                  </div>
+                </article>
+              </div>
             );
           })}
         </div>

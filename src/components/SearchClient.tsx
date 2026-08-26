@@ -77,7 +77,7 @@ function SearchGroupResults({ group }: { group: SearchGroup }) {
     );
   }
   if (scope === "creative") {
-    return <WorkList items={records as unknown as Work[]} />;
+    return <WorkList items={records as unknown as Work[]} hideEmpty />;
   }
   if (scope === "experience") {
     return (
@@ -93,9 +93,14 @@ function SearchGroupResults({ group }: { group: SearchGroup }) {
   }
   if (scope === "giants") {
     return (
-      <div className="flex flex-col gap-6">
-        {(records as unknown as ShouldersOfGiants[]).map((item) => (
-          <GiantsQuoteCard key={item.id ?? item.slug} item={item} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col">
+        {(records as unknown as ShouldersOfGiants[]).map((item, index) => (
+          <div key={item.id ?? item.slug}>
+            {index > 0 ? (
+              <div className="h-px bg-border-subtle" aria-hidden />
+            ) : null}
+            <GiantsQuoteCard item={item} className="py-8" />
+          </div>
         ))}
       </div>
     );

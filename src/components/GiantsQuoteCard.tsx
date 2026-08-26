@@ -7,19 +7,19 @@ import {
   formatGiantsCitation,
   giantsPermalink,
 } from "@/lib/content/giants-meta";
-import { serializeGiantsFilter } from "@/lib/content/giants-filter";
+import { giantsTagHref } from "@/lib/content/giants-filter";
 import { cn } from "@/lib/cn";
-import { contentCard } from "@/lib/site/card-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
-import { tagChipClass } from "@/lib/site/tag-styles";
+import { tagPillClass } from "@/lib/site/tag-styles";
+import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
 
 type Props = {
   item: ShouldersOfGiants;
   /** Already sanitized body when provided (detail); otherwise raw body_html. */
   bodyHtml?: string;
-  selectedTopic?: string | null;
-  activeTopics?: string[];
+  selectedTag?: string | null;
+  activeTags?: string[];
   className?: string;
   articleClassName?: string;
 };
@@ -59,7 +59,6 @@ function citationWithBookLink(
     }
   }
 
-  // 書誌上書きなどで『書名』が取れないときは『…』を優先、なければ全文
   const bracket = citation.match(/『[^』]+』/);
   if (bracket?.index != null) {
     const { 0: book, index } = bracket;
@@ -76,21 +75,20 @@ function citationWithBookLink(
 }
 
 /**
- * Giants quote card — Diary list chrome (surface, body, tags) + share after tags.
- * 書誌行は購入リンク（source_url）があるとき、書名部分だけ外部リンク（別タブ）。
+ * Giants の引用。Diary と同じ枠なし紙面。
  */
 export function GiantsQuoteCard({
   item,
   bodyHtml,
-  selectedTopic = null,
-  activeTopics = [],
+  selectedTag = null,
+  activeTags = [],
   className,
   articleClassName,
 }: Props) {
   const permalink = giantsPermalink(item.slug);
   const citation = formatGiantsCitation(item);
   const purchaseUrl = item.source_url?.trim() || "";
-  const topics = [...(item.topic ?? [])].sort((a, b) =>
+  const tags = [...(item.giants_tag ?? [])].sort((a, b) =>
     a.localeCompare(b, "ja"),
   );
   const html = bodyHtml ?? item.body_html;
@@ -106,18 +104,9 @@ export function GiantsQuoteCard({
     <article
       id={item.slug}
       data-permalink={permalink}
-      className={contentCard({
-        className: cn(
-          "overflow-visible p-6",
-          className,
-          articleClassName,
-        ),
-      })}
+      className={cn("overflow-visible", className, articleClassName)}
     >
-      <div
-        className={notesBodyClass}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <ArticleProse className={notesBodyClass} html={html} />
 
       {citationNode ? (
         <p className="m-0 mt-4 text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base">
@@ -125,19 +114,17 @@ export function GiantsQuoteCard({
         </p>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        {topics.map((topic) => {
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        {tags.map((tag) => {
           const active =
-            selectedTopic === topic || activeTopics.includes(topic);
+            selectedTag === tag || activeTags.includes(tag);
           return (
             <Link
-              key={topic}
-              href={`/shoulders-of-giants/${serializeGiantsFilter({
-                topics: [topic],
-              })}`}
-              className={tagChipClass(active)}
+              key={tag}
+              href={giantsTagHref(tag)}
+              className={tagPillClass(active)}
             >
-              {topic}
+              {tag}
             </Link>
           );
         })}

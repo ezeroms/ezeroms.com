@@ -24,7 +24,7 @@ function clipsHref(tag: string | null, dateFilter?: Pick<DiaryFilterState, "from
 }
 
 /**
- * Clips 一覧のタグナビ（Giants トピックナビと同型）。
+ * Clips 一覧のタグナビ（Giants タグナビと同型）。
  */
 export function ClipsTagNav({
   tags,

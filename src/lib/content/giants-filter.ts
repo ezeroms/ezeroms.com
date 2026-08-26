@@ -6,43 +6,47 @@ import {
 } from "@/lib/content/filter-search-params";
 
 export type GiantsFilterState = {
-  topics: string[];
+  tags: string[];
 };
 
 export function emptyGiantsFilter(): GiantsFilterState {
-  return { topics: [] };
+  return { tags: [] };
 }
 
 export function giantsFilterActive(filter: GiantsFilterState): boolean {
-  return filter.topics.length > 0;
+  return filter.tags.length > 0;
 }
 
 /**
- * Parse `/shoulders-of-giants/?t=topic1|topic2`
+ * Parse `/shoulders-of-giants/?t=tag1|tag2`
  * 旧形式の `?topic=`（単一）も受け付ける。
  */
 export function parseGiantsFilter(
   searchParams: SearchParamsRecord,
 ): GiantsFilterState {
-  const fromTopicsParam = decodePipeSeparatedList(
+  const fromTagsParam = decodePipeSeparatedList(
     firstSearchParamValue(searchParams, "t"),
   );
-  if (fromTopicsParam.length) return { topics: fromTopicsParam };
+  if (fromTagsParam.length) return { tags: fromTagsParam };
 
   const legacyTopic = firstSearchParamValue(searchParams, "topic").trim();
   if (legacyTopic) {
     try {
-      return { topics: [decodeURIComponent(legacyTopic)] };
+      return { tags: [decodeURIComponent(legacyTopic)] };
     } catch {
-      return { topics: [legacyTopic] };
+      return { tags: [legacyTopic] };
     }
   }
   return emptyGiantsFilter();
 }
 
 export function serializeGiantsFilter(filter: GiantsFilterState): string {
-  if (!filter.topics.length) return "";
+  if (!filter.tags.length) return "";
   const query = new URLSearchParams();
-  query.set("t", encodePipeSeparatedList(filter.topics));
+  query.set("t", encodePipeSeparatedList(filter.tags));
   return `?${query.toString()}`;
+}
+
+export function giantsTagHref(tag: string): string {
+  return `/shoulders-of-giants/${serializeGiantsFilter({ tags: [tag] })}`;
 }

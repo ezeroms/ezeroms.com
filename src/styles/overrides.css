@@ -152,6 +152,17 @@ body.is-home .layout-body {
   background: #f9f9f7 !important;
 }
 
+/*
+ * Diary / Column / Photos / Library: paper-white canvas.
+ * Legacy `.layout-container` uses `--color-background` (#f9f9f7).
+ */
+.layout-container.reading-canvas {
+  --background: 0 0% 100%;
+  --color-background: #ffffff;
+  --ez-bg: #ffffff;
+  background: #fff;
+}
+
 /* Content density on phone / tablet (desktop page CSS untouched at ≥1080) */
 @media (max-width: 1079px) {
   .content-card {

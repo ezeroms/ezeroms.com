@@ -1,4 +1,3 @@
-import { COLUMN_CATEGORY_NAMES } from "@/components/ColumnHeaderNav";
 import {
   appendDateRangeToQuery,
   dateRangeActive,
@@ -35,7 +34,6 @@ export function columnFilterActive(filter: ColumnFilterState): boolean {
   return (
     dateRangeActive(filter) ||
     filter.weekdays.length > 0 ||
-    filter.categories.length > 0 ||
     filter.tags.length > 0
   );
 }
@@ -62,17 +60,10 @@ export function serializeColumnFilter(filter: ColumnFilterState): string {
   const query = new URLSearchParams();
   appendDateRangeToQuery(query, filter);
   if (filter.weekdays.length) query.set("w", filter.weekdays.join(","));
-  if (filter.categories.length) {
-    query.set("c", encodePipeSeparatedList(filter.categories));
-  }
   if (filter.tags.length) {
     query.set("t", encodePipeSeparatedList(filter.tags));
   }
   return toQueryString(query);
-}
-
-export function categoryLabel(cat: string): string {
-  return COLUMN_CATEGORY_NAMES[cat] ?? cat;
 }
 
 export {

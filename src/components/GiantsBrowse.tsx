@@ -2,15 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import type { ShouldersOfGiants } from "@/types/content";
-import { cn } from "@/lib/cn";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
-import { GiantsTopicNav } from "@/components/GiantsTopicNav";
 
 type Props = {
-  topics: string[];
   items: ShouldersOfGiants[];
   /** 単一選択。空なら全件。並びはサーバー側でシャッフル済み */
-  selectedTopic?: string | null;
+  selectedTag?: string | null;
 };
 
 type ScrollSnapshot = {
@@ -21,13 +18,13 @@ type ScrollSnapshot = {
 /** popstate（戻る／進む）直後だけ true。モジュール横断でマウントをまたぐ。 */
 let giantsNavWasPop = false;
 
-function scrollStorageKey(topic: string | null): string {
-  return `giants:list-scroll:${topic ?? ""}`;
+function scrollStorageKey(tag: string | null): string {
+  return `giants:list-scroll:${tag ?? ""}`;
 }
 
-function readSnapshot(topic: string | null): ScrollSnapshot | null {
+function readSnapshot(tag: string | null): ScrollSnapshot | null {
   try {
-    const raw = sessionStorage.getItem(scrollStorageKey(topic));
+    const raw = sessionStorage.getItem(scrollStorageKey(tag));
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<ScrollSnapshot>;
     return {
@@ -39,23 +36,20 @@ function readSnapshot(topic: string | null): ScrollSnapshot | null {
   }
 }
 
-function writeSnapshot(topic: string | null, snapshot: ScrollSnapshot) {
+function writeSnapshot(tag: string | null, snapshot: ScrollSnapshot) {
   try {
-    sessionStorage.setItem(scrollStorageKey(topic), JSON.stringify(snapshot));
+    sessionStorage.setItem(scrollStorageKey(tag), JSON.stringify(snapshot));
   } catch {
-    // quota / private mode
+    // ignore quota / private mode
   }
 }
 
 /**
- * 左: 50音順トピックナビ
- * 右: Diary と同型の引用カード
- * PC（≥1080）は左右を独立スクロール。
+ * Giants 一覧。タグは SiteShell 右レール。
  */
 export function GiantsBrowse({
-  topics,
   items,
-  selectedTopic = null,
+  selectedTag = null,
 }: Props) {
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -68,13 +62,13 @@ export function GiantsBrowse({
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  // 現在トピックのスクロール位置を記憶（離脱・切替の cleanup でも保存）
+  // 現在タグのスクロール位置を記憶（離脱・切替の cleanup でも保存）
   useEffect(() => {
     const list = listRef.current;
     const main = document.getElementById("main-content");
 
     function save() {
-      writeSnapshot(selectedTopic, {
+      writeSnapshot(selectedTag, {
         listTop: list?.scrollTop ?? 0,
         mainTop: main?.scrollTop ?? 0,
       });
@@ -87,7 +81,7 @@ export function GiantsBrowse({
       list?.removeEventListener("scroll", save);
       main?.removeEventListener("scroll", save);
     };
-  }, [selectedTopic]);
+  }, [selectedTag]);
 
   // リンク遷移 → 先頭／ブラウザバック・フォワード → 記憶位置へ
   useEffect(() => {
@@ -97,7 +91,7 @@ export function GiantsBrowse({
     giantsNavWasPop = false;
 
     if (wasPop) {
-      const saved = readSnapshot(selectedTopic);
+      const saved = readSnapshot(selectedTag);
       const restore = () => {
         list?.scrollTo({ top: saved?.listTop ?? 0, left: 0 });
         main?.scrollTo({ top: saved?.mainTop ?? 0, left: 0 });
@@ -111,7 +105,7 @@ export function GiantsBrowse({
     list?.scrollTo({ top: 0, left: 0 });
     main?.scrollTo({ top: 0, left: 0 });
     window.scrollTo({ top: 0, left: 0 });
-  }, [selectedTopic]);
+  }, [selectedTag]);
 
   return (
     <>
@@ -119,40 +113,29 @@ export function GiantsBrowse({
         リンクをコピーしました
       </div>
 
-      <div
-        className={cn(
-          "flex w-full flex-col gap-6",
-          "min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:flex-row min-[1080px]:gap-8 min-[1080px]:overflow-hidden",
-        )}
-      >
-        <GiantsTopicNav topics={topics} selectedTopic={selectedTopic} />
-
-        <div
-          ref={listRef}
-          className={cn(
-            "min-w-0 flex-1 font-sans",
-            "min-[1080px]:min-h-0 min-[1080px]:overflow-y-auto",
-          )}
-          id="giants-list"
-        >
-          {!items.length ? (
-            <p className="py-10 text-sm text-muted-foreground">
-              {selectedTopic
-                ? "このトピックのメモはまだありません。"
-                : "まだメモがありません。"}
-            </p>
-          ) : (
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-20 min-[1080px]:pb-6">
-              {items.map((item) => (
+      <div ref={listRef} className="w-full font-sans" id="giants-list">
+        {!items.length ? (
+          <p className="py-10 text-sm text-muted-foreground">
+            {selectedTag
+              ? "このタグのメモはまだありません。"
+              : "まだメモがありません。"}
+          </p>
+        ) : (
+          <div className="mx-auto flex w-full max-w-2xl flex-col">
+            {items.map((item, index) => (
+              <div key={item.id}>
+                {index > 0 ? (
+                  <div className="h-px bg-border-subtle" aria-hidden />
+                ) : null}
                 <GiantsQuoteCard
-                  key={item.id}
                   item={item}
-                  selectedTopic={selectedTopic}
+                  selectedTag={selectedTag}
+                  className="py-8"
                 />
-              ))}
-            </div>
-          )}
-        </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

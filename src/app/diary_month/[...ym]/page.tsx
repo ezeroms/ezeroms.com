@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
+import {
+  ReadingTopicsAside,
+  diaryTagHref,
+} from "@/components/ReadingTopicsAside";
 import { dateRangeFromYearMonths } from "@/lib/content/date-range";
 import { emptyDiaryFilter, formatMonthLabel } from "@/lib/content/diary-filter";
 import {
@@ -54,6 +58,15 @@ export default async function DiaryMonthPage({
       mainClassName="layout-main--single"
       breadcrumbCurrent={formatMonthLabel(month) || month}
       filterActive
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={diaryTagHref}
+            allHref="/diary/"
+          />
+        ) : undefined
+      }
     >
       <DiaryTimeline items={sanitized} />
     </SiteShell>

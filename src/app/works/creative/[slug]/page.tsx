@@ -16,9 +16,14 @@ import {
   getWorkBySlug,
   listRelatedWork,
   listWork,
+  listWorkTaxonomy,
   requirePublicWorksSection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
+import {
+  ReadingTopicsAside,
+  workTagHref,
+} from "@/components/ReadingTopicsAside";
 
 export const revalidate = 60;
 
@@ -79,10 +84,16 @@ export default async function CreativeDetailPage({
   if (!item) notFound();
 
   const bodyHtml = sanitizeBody(item.body_html ?? "");
-  const [related, adjacent, section] = await Promise.all([
+  const [related, adjacent, section, taxonomy] = await Promise.all([
     listRelatedWork(item).catch(() => []),
     getAdjacentWork(slug).catch(() => ({ previous: null, next: null })),
     requirePublicWorksSection("creative"),
+    listWorkTaxonomy().catch(() => ({
+      years: [] as string[],
+      categories: [] as string[],
+      tags: [] as string[],
+      clients: [] as string[],
+    })),
   ]);
 
   return (
@@ -92,9 +103,20 @@ export default async function CreativeDetailPage({
       breadcrumbCurrent={item.title}
       showLayoutHeader={false}
       mainClassName="layout-main--single"
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={workTagHref}
+            allHref="/works/creative/"
+            selected={item.work_tag}
+          />
+        ) : undefined
+      }
     >
       <WorkArticle item={item} bodyHtml={bodyHtml} />
       <ArticleNavigation
+        chrome="plain"
         previous={
           adjacent.previous
             ? {
@@ -113,7 +135,7 @@ export default async function CreativeDetailPage({
         }
       />
       {related.length > 0 ? (
-        <RelatedPostsSection>
+        <RelatedPostsSection className="max-w-2xl">
           <WorkList
             items={related}
             hideEmpty

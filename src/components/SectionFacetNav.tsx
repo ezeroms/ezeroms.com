@@ -20,7 +20,7 @@ export type SectionFacetNavProps = {
 
 /**
  * PC（≥1080）は左カラム縦リスト、スマホ／タブレットは右下 FAB → ボトムシート。
- * Giants トピック／Clips タグで共用。
+ * Giants / Clips のタグで共用。
  */
 export function SectionFacetNav({
   items,

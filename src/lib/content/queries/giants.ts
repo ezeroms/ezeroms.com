@@ -10,7 +10,7 @@ import type { ShouldersOfGiants } from "@/types/content";
 function normalizeGiantsRow(row: ShouldersOfGiants): ShouldersOfGiants {
   return {
     ...row,
-    topic: row.topic ?? [],
+    giants_tag: row.giants_tag ?? [],
     book_title: row.book_title ?? null,
     author: row.author ?? null,
     publisher: row.publisher ?? null,
@@ -23,22 +23,34 @@ function normalizeGiantsRow(row: ShouldersOfGiants): ShouldersOfGiants {
 }
 
 export async function listGiants(opts?: {
+  tag?: string;
+  tags?: string[];
+  /** @deprecated Use `tag` */
   topic?: string;
+  /** @deprecated Use `tags` */
   topics?: string[];
   limit?: number;
 }): Promise<{ items: ShouldersOfGiants[]; total: number }> {
   if (!hasSupabaseConfig()) return emptyList();
   try {
+    const tags =
+      opts?.tags ??
+      opts?.topics ??
+      (opts?.tag
+        ? [opts.tag]
+        : opts?.topic
+          ? [opts.topic]
+          : undefined);
+
     let q = getSupabaseAdmin()
       .from("shoulders_of_giants")
       .select("*", { count: "exact" })
       .eq("status", PUBLISHED)
       .order("created_at", { ascending: false });
-    if (opts?.topic) q = q.contains("topic", [opts.topic]);
-    if (opts?.topics?.length === 1) {
-      q = q.contains("topic", opts.topics);
-    } else if (opts?.topics && opts.topics.length > 1) {
-      q = q.overlaps("topic", opts.topics);
+    if (tags?.length === 1) {
+      q = q.contains("giants_tag", tags);
+    } else if (tags && tags.length > 1) {
+      q = q.overlaps("giants_tag", tags);
     }
     if (opts?.limit) q = q.limit(opts.limit);
 
@@ -52,23 +64,23 @@ export async function listGiants(opts?: {
   }
 }
 
-export async function listGiantsTopics(): Promise<string[]> {
+export async function listGiantsTags(): Promise<string[]> {
   if (!hasSupabaseConfig()) return [];
   try {
     const { data, error } = await getSupabaseAdmin()
       .from("shoulders_of_giants")
-      .select("topic")
+      .select("giants_tag")
       .eq("status", PUBLISHED);
     if (error) throw error;
     const set = new Set<string>();
     for (const row of data ?? []) {
-      for (const t of (row.topic as string[] | null) ?? []) {
+      for (const t of (row.giants_tag as string[] | null) ?? []) {
         if (t?.trim()) set.add(t.trim());
       }
     }
     return [...set].sort((a, b) => a.localeCompare(b, "ja"));
   } catch (e) {
-    console.error("[listGiantsTopics]", e);
+    console.error("[listGiantsTags]", e);
     return [];
   }
 }
@@ -93,22 +105,22 @@ export async function getGiantsBySlug(
   }
 }
 
-/** Same type (Giants) posts that share ≥1 topic, ranked by overlap then date. */
+/** Same type (Giants) posts that share ≥1 tag, ranked by overlap then date. */
 export async function listRelatedGiants(
-  item: Pick<ShouldersOfGiants, "slug" | "topic">,
+  item: Pick<ShouldersOfGiants, "slug" | "giants_tag">,
   limit = 6,
 ): Promise<ShouldersOfGiants[]> {
-  const topics = item.topic ?? [];
-  if (!topics.length) return [];
-  const { items } = await listGiants({ topics });
+  const tags = item.giants_tag ?? [];
+  if (!tags.length) return [];
+  const { items } = await listGiants({ tags });
   const ranked = rankBySharedTags({
     currentSlug: item.slug,
-    currentTags: topics,
+    currentTags: tags,
     candidates: items.map((entry) => ({
       ...entry,
       date: entry.published_at ?? entry.created_at,
     })),
-    getTags: (entry) => entry.topic,
+    getTags: (entry) => entry.giants_tag,
     limit,
   });
   return ranked.map(({ date: _date, ...rest }) => rest as ShouldersOfGiants);

@@ -18,12 +18,17 @@ import {
 import {
   getDiaryBySlug,
   listDiary,
+  listDiaryTaxonomy,
   listRelatedDiary,
   loadWritingSection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
+import {
+  ReadingTopicsAside,
+  diaryTagHref,
+} from "@/components/ReadingTopicsAside";
 
 export const revalidate = 60;
 
@@ -86,7 +91,10 @@ export default async function DiaryEntryPage({
 
   const bodyHtml = sanitizeBody(item.body_html);
   const breadcrumbLabel = formatDiaryDate(item.date) || "Diary";
-  const related = await listRelatedDiary(item).catch(() => []);
+  const [related, taxonomy] = await Promise.all([
+    listRelatedDiary(item).catch(() => []),
+    listDiaryTaxonomy().catch(() => ({ tags: [] as string[], places: [] })),
+  ]);
 
   return (
     <SiteShell
@@ -94,10 +102,20 @@ export default async function DiaryEntryPage({
       breadcrumbCurrent={breadcrumbLabel}
       showTagsAside={false}
       mainClassName="layout-main--single"
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={diaryTagHref}
+            allHref="/diary/"
+            selected={item.diary_tag}
+          />
+        ) : undefined
+      }
     >
       <DiaryArticle item={item} bodyHtml={bodyHtml} />
       {related.length > 0 ? (
-        <RelatedPostsSection>
+        <RelatedPostsSection className="max-w-2xl">
           <DiaryTimeline
             items={related.map((entry) => ({
               ...entry,

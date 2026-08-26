@@ -41,13 +41,14 @@ export function filterFieldClass(opts?: {
   );
 }
 
-/** Larger pill chips (e.g. Chronicle interest lenses). */
+/** Medium 風のカプセルタグ（読み物一覧・詳細・右レール）。 */
 export function tagPillClass(active: boolean) {
   return cn(
-    "rounded-full border border-solid px-3 py-1.5 text-sm no-underline transition-colors",
+    "inline-flex items-center rounded-full border border-solid px-3 py-1",
+    "bg-card text-xs leading-snug no-underline transition-colors",
     "appearance-none shadow-none",
     active
-      ? "!border !border-solid !border-foreground bg-muted !text-foreground"
-      : "border-border bg-card !text-muted-foreground hover:border-foreground/30 hover:!text-foreground",
+      ? "!border-foreground font-medium !text-foreground"
+      : "border-border !text-foreground hover:!border-[hsl(var(--foreground)/0.35)]",
   );
 }

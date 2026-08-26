@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { ClipsBrowse } from "@/components/ClipsBrowse";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
+import {
+  ReadingTopicsAside,
+} from "@/components/ReadingTopicsAside";
 import { SiteShell } from "@/components/SiteShell";
 import {
   diaryFilterActive,
@@ -13,6 +16,7 @@ import {
   listClipTags,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
+import { clipListingHref } from "@/lib/content/clip-meta";
 
 export const revalidate = 60;
 
@@ -70,12 +74,29 @@ export default async function ClipsIndexPage({
         />
       }
       showTagsAside={false}
+      showTagsRail
+      tagsRailDefaultOpen
       breadcrumbFilter={filtering ? summarizeDiaryFilter(clipFilter) : null}
       breadcrumbSectionHref="/clips/"
       filterActive={filtering}
-      mainContentClassName="min-[1080px]:flex min-[1080px]:flex-col min-[1080px]:overflow-hidden"
-      contentClassName={
-        "flex w-full flex-col p-4 min-[768px]:p-5 min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:overflow-hidden min-[1080px]:p-6"
+      aside={
+        tags.length ? (
+          <ReadingTopicsAside
+            tags={tags}
+            hrefFor={(tag) =>
+              clipListingHref({
+                tag,
+                from: clipFilter.from,
+                to: clipFilter.to,
+              })
+            }
+            allHref={clipListingHref({
+              from: clipFilter.from,
+              to: clipFilter.to,
+            })}
+            selected={selectedTag}
+          />
+        ) : undefined
       }
     >
       <ClipsBrowse

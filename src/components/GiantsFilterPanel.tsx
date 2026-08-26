@@ -15,13 +15,13 @@ import {
 } from "@/lib/content/giants-filter";
 
 type Props = {
-  topics: string[];
+  tags: string[];
   initial: GiantsFilterState;
   basePath?: string;
 };
 
 export function GiantsFilterPanel({
-  topics,
+  tags,
   initial,
   basePath = "/shoulders-of-giants/",
 }: Props) {
@@ -41,14 +41,14 @@ export function GiantsFilterPanel({
   return (
     <div className="space-y-5">
       <FilterSection
-        label="トピック"
+        label="タグ"
         contentClassName="max-h-56 overflow-y-auto"
       >
         <FilterOptionChips
-          options={topics.map((topic) => ({ value: topic, label: topic }))}
-          value={draft.topics}
-          onChange={(next) => setDraft((d) => ({ ...d, topics: next }))}
-          emptyMessage="トピックがありません"
+          options={tags.map((tag) => ({ value: tag, label: tag }))}
+          value={draft.tags}
+          onChange={(next) => setDraft((d) => ({ ...d, tags: next }))}
+          emptyMessage="タグがありません"
         />
       </FilterSection>
     </div>

@@ -13,6 +13,7 @@ import {
   getPhotoGallery,
   type PhotoGalleryId,
 } from "@/lib/content/photo-galleries";
+import { lightboxPreviewClass } from "@/lib/site/lightbox-preview";
 
 type Props = {
   items: Photo[];
@@ -127,7 +128,7 @@ export function PhotoGallery({
                     alt=""
                     className={cn(
                       "m-0 block h-auto w-full",
-                      "transition-opacity duration-200 ease-out hover:opacity-80",
+                      lightboxPreviewClass,
                     )}
                     loading="lazy"
                     decoding="async"

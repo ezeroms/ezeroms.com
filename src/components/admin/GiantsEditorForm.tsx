@@ -15,7 +15,7 @@ export const GIANTS_EDITOR_FORM_ID = "giants-editor-form";
 export type GiantsEditorInitial = {
   slug: string;
   body_md: string;
-  topics: string;
+  tags: string;
   book_title: string;
   author: string;
   publisher: string;
@@ -46,7 +46,7 @@ export function GiantsEditorForm({
 
   const [baseline] = useState(() => ({
     bodyMd: initial?.body_md ?? "",
-    topics: initial?.topics ?? "",
+    tags: initial?.tags ?? "",
     bookTitle: initial?.book_title ?? "",
     author: initial?.author ?? "",
     publisher: initial?.publisher ?? "",
@@ -58,7 +58,7 @@ export function GiantsEditorForm({
   }));
 
   const [bodyMd, setBodyMd] = useState(baseline.bodyMd);
-  const [topics, setTopics] = useState(baseline.topics);
+  const [tags, setTags] = useState(baseline.tags);
   const [bookTitle, setBookTitle] = useState(baseline.bookTitle);
   const [author, setAuthor] = useState(baseline.author);
   const [publisher, setPublisher] = useState(baseline.publisher);
@@ -74,7 +74,7 @@ export function GiantsEditorForm({
 
   const dirty =
     bodyMd !== baseline.bodyMd ||
-    topics !== baseline.topics ||
+    tags !== baseline.tags ||
     bookTitle !== baseline.bookTitle ||
     author !== baseline.author ||
     publisher !== baseline.publisher ||
@@ -103,7 +103,7 @@ export function GiantsEditorForm({
     try {
       const payload = {
         body_md: bodyMd,
-        topics,
+        tags,
         book_title: bookTitle,
         author,
         publisher,
@@ -156,11 +156,11 @@ export function GiantsEditorForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="giants-topics">トピック（カンマ区切り）</Label>
+        <Label htmlFor="giants-tags">タグ（カンマ区切り）</Label>
         <Input
-          id="giants-topics"
-          value={topics}
-          onChange={(e) => setTopics(e.target.value)}
+          id="giants-tags"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
           placeholder="暇, 労働, …"
         />
       </div>

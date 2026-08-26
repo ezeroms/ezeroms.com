@@ -4,11 +4,10 @@ import {
   diaryPermalink,
   formatDiaryDate,
 } from "@/lib/content/diary-meta";
-import { tagChipClass } from "@/lib/site/tag-styles";
+import { tagPillClass } from "@/lib/site/tag-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
 import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
-import { contentCard } from "@/lib/site/card-styles";
 
 type Props = {
   item: Diary;
@@ -17,8 +16,7 @@ type Props = {
 };
 
 /**
- * Diary の個別詳細。
- * カード内レイアウトは一覧（DiaryTimeline）に揃える。
+ * Diary の個別詳細。一覧（DiaryTimeline）と同じ枠なしの紙面。
  */
 export function DiaryArticle({ item, bodyHtml }: Props) {
   const tags = [...(item.diary_tag ?? [])].sort((a, b) =>
@@ -33,46 +31,21 @@ export function DiaryArticle({ item, bodyHtml }: Props) {
         リンクをコピーしました
       </div>
 
-      <article className={contentCard({ className: "mx-auto min-w-0 w-full max-w-3xl overflow-visible p-6" })}>
-        <div className="mb-4 flex items-start gap-3">
-          <Link
-            href="/about/me/"
-            className="shrink-0"
-            aria-label="プロフィール"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/about/profile.png"
-              alt=""
-              width={40}
-              height={40}
-              className="h-10 w-10 rounded-full object-cover"
-            />
-          </Link>
-          <div className="min-w-0 flex-1">
-            <Link
-              href="/about/me/"
-              className="text-sm font-semibold leading-tight text-foreground no-underline hover:underline"
-            >
-              ezeroms
-            </Link>
-            <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-sm leading-tight text-muted-foreground">
-              <Link href={permalink} className="no-underline hover:underline">
-                <time dateTime={item.date}>{dateLabel}</time>
+      <article className="mx-auto min-w-0 w-full max-w-2xl overflow-visible py-4">
+        <div className="mb-4">
+          <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+            <time dateTime={item.date}>{dateLabel}</time>
+          </h1>
+          {item.diary_place ? (
+            <p className="m-0 mt-1.5 text-sm leading-tight text-muted-foreground">
+              <Link
+                href={`/diary_place/${encodeURIComponent(item.diary_place)}/`}
+                className="truncate no-underline hover:underline"
+              >
+                {item.diary_place}
               </Link>
-              {item.diary_place ? (
-                <>
-                  <span aria-hidden>·</span>
-                  <Link
-                    href={`/diary_place/${encodeURIComponent(item.diary_place)}/`}
-                    className="truncate no-underline hover:underline"
-                  >
-                    {item.diary_place}
-                  </Link>
-                </>
-              ) : null}
-            </div>
-          </div>
+            </p>
+          ) : null}
         </div>
 
         <ArticleProse className={notesBodyClass} html={bodyHtml} />
@@ -82,7 +55,7 @@ export function DiaryArticle({ item, bodyHtml }: Props) {
             <Link
               key={tag}
               href={`/diary_tag/${encodeURIComponent(tag)}/`}
-              className={tagChipClass(false)}
+              className={tagPillClass(false)}
               data-tag={tag}
             >
               {tag}

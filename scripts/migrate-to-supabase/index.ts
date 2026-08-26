@@ -225,7 +225,7 @@ async function migrateGiants() {
     const slug = slugFromFile(file, data);
     rows.push({
       slug,
-      topic: asStringArray(data.topic),
+      giants_tag: asStringArray(data.giants_tag ?? data.topic),
       book_title: data.book_title ? String(data.book_title) : null,
       author: data.author ? String(data.author) : null,
       publisher: data.publisher ? String(data.publisher) : null,

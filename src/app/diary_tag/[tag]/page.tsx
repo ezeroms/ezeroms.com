@@ -1,6 +1,10 @@
 import { SiteShell } from "@/components/SiteShell";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
+import {
+  ReadingTopicsAside,
+  diaryTagHref,
+} from "@/components/ReadingTopicsAside";
 import { emptyDiaryFilter } from "@/lib/content/diary-filter";
 import {
   listDiary,
@@ -42,6 +46,16 @@ export default async function DiaryTagPage({
       mainClassName="layout-main--single"
       breadcrumbCurrent={`#${decoded}`}
       filterActive
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={diaryTagHref}
+            allHref="/diary/"
+            selected={decoded}
+          />
+        ) : undefined
+      }
     >
       <DiaryTimeline items={sanitized} currentTag={decoded} />
     </SiteShell>

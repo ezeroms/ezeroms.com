@@ -9,7 +9,6 @@ import {
 } from "@/components/filter/SearchFilterContext";
 import { useMemo, useState } from "react";
 import {
-  categoryLabel,
   columnFilterActive,
   emptyColumnFilter,
   serializeColumnFilter,
@@ -17,14 +16,12 @@ import {
 } from "@/lib/content/column-filter";
 
 type Props = {
-  categories: string[];
   tags: string[];
   initial: ColumnFilterState;
   basePath?: string;
 };
 
 export function ColumnFilterPanel({
-  categories,
   tags,
   initial,
   basePath = "/column/",
@@ -32,19 +29,12 @@ export function ColumnFilterPanel({
   const [draft, setDraft] = useState<ColumnFilterState>(() => ({
     ...initial,
     weekdays: [],
+    categories: [],
   }));
 
   const normalized = useMemo(
-    () => ({ ...draft, weekdays: [] as number[] }),
+    () => ({ ...draft, weekdays: [] as number[], categories: [] as string[] }),
     [draft],
-  );
-
-  const categoriesSorted = useMemo(
-    () =>
-      [...categories].sort((a, b) =>
-        categoryLabel(a).localeCompare(categoryLabel(b), "ja"),
-      ),
-    [categories],
   );
 
   const api = useMemo<SearchFilterApi>(
@@ -66,21 +56,6 @@ export function ColumnFilterPanel({
           onChange={(range) =>
             setDraft((d) => ({ ...d, from: range.from, to: range.to }))
           }
-        />
-      </FilterSection>
-
-      <FilterSection
-        label="カテゴリ"
-        contentClassName="max-h-40 overflow-y-auto"
-      >
-        <FilterOptionChips
-          options={categoriesSorted.map((cat) => ({
-            value: cat,
-            label: categoryLabel(cat),
-          }))}
-          value={draft.categories}
-          onChange={(next) => setDraft((d) => ({ ...d, categories: next }))}
-          emptyMessage="カテゴリがありません"
         />
       </FilterSection>
 

@@ -9,6 +9,6 @@ export default async function TopicPage({
   const { topic } = await params;
   const decoded = decodeURIComponent(topic);
   redirect(
-    `/shoulders-of-giants/${serializeGiantsFilter({ topics: [decoded] })}`,
+    `/shoulders-of-giants/${serializeGiantsFilter({ tags: [decoded] })}`,
   );
 }

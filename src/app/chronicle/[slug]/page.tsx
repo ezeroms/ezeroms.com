@@ -11,8 +11,10 @@ import {
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
+import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
 import { proseBodyClass } from "@/lib/site/prose-styles";
+import { tagPillClass } from "@/lib/site/tag-styles";
 
 export const revalidate = 60;
 
@@ -31,7 +33,7 @@ export default async function ChronicleEntryPage({
     <SiteShell
       bodyClassName="is-chronicle"
     >
-      <article className="mx-auto max-w-3xl font-sans text-foreground">
+      <article className="mx-auto max-w-2xl font-sans text-foreground">
         <p className="m-0 mb-4 text-sm text-muted-foreground">
           <Link
             href="/chronicle/"
@@ -65,7 +67,7 @@ export default async function ChronicleEntryPage({
                   ...emptyChronicleFilter(),
                   tags: [t],
                 })}`}
-                className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground no-underline hover:text-foreground"
+                className={tagPillClass(false)}
               >
                 {t}
               </Link>
@@ -74,12 +76,12 @@ export default async function ChronicleEntryPage({
         ) : null}
 
         {item.body_html?.trim() ? (
-          <div
+          <ArticleProse
+            html={sanitizeBody(item.body_html)}
             className={cn(
               "mt-6 max-w-none text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base",
               proseBodyClass,
             )}
-            dangerouslySetInnerHTML={{ __html: sanitizeBody(item.body_html) }}
           />
         ) : null}
       </article>

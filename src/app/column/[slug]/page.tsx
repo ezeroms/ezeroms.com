@@ -14,12 +14,17 @@ import {
   getAdjacentColumn,
   getColumnBySlug,
   listColumn,
+  listColumnTaxonomy,
   listRelatedColumn,
   loadWritingSection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
 import { ColumnList } from "@/components/ColumnList";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
+import {
+  ReadingTopicsAside,
+  columnTagHref,
+} from "@/components/ReadingTopicsAside";
 
 export const revalidate = 60;
 
@@ -81,10 +86,14 @@ export default async function ColumnPage({
   if (!item) notFound();
 
   const bodyHtml = sanitizeBody(item.body_html);
-  const [related, adjacent, section] = await Promise.all([
+  const [related, adjacent, section, taxonomy] = await Promise.all([
     listRelatedColumn(item).catch(() => []),
     getAdjacentColumn(slug).catch(() => ({ previous: null, next: null })),
     loadWritingSection("column"),
+    listColumnTaxonomy().catch(() => ({
+      categories: [] as string[],
+      tags: [] as string[],
+    })),
   ]);
 
   return (
@@ -94,9 +103,20 @@ export default async function ColumnPage({
       breadcrumbCurrent={item.title}
       showLayoutHeader={false}
       mainClassName="layout-main--single"
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={columnTagHref}
+            allHref="/column/"
+            selected={item.column_tag}
+          />
+        ) : undefined
+      }
     >
       <ColumnArticle item={item} bodyHtml={bodyHtml} />
       <ArticleNavigation
+        chrome="plain"
         previous={
           adjacent.previous
             ? {
@@ -115,7 +135,7 @@ export default async function ColumnPage({
         }
       />
       {related.length > 0 ? (
-        <RelatedPostsSection>
+        <RelatedPostsSection className="max-w-2xl">
           <ColumnList
             items={related}
             hideEmpty

@@ -24,7 +24,7 @@ export default async function MediaCoveragePage() {
   const section = await requirePublicLibrarySection("media-coverage");
   const items = await listMediaCoverage();
   return (
-    <AboutShell pathname="/about/media-coverage/" wide>
+    <AboutShell pathname="/about/media-coverage/" wide bodyClassName="is-media-coverage">
       <MediaCoverageList
         items={items}
         fallbackThumbSrc={section.og_image || null}

@@ -4,6 +4,7 @@ import { PhotoLightbox } from "@/components/photos/PhotoLightbox";
 import { usePhotoLightbox } from "@/components/photos/usePhotoLightbox";
 import { photoAccessibilityLabel } from "@/lib/content/photo-caption";
 import { cn } from "@/lib/cn";
+import { lightboxPreviewClass } from "@/lib/site/lightbox-preview";
 import type { Photo } from "@/types/content";
 
 type Props = {
@@ -56,7 +57,7 @@ export function PhotoDetailLightboxTrigger({
         <img
           src={photo.image_url}
           alt={imageAlt}
-          className="m-0 block h-auto w-full transition-opacity duration-200 ease-out hover:opacity-80"
+          className={cn("m-0 block h-auto w-full", lightboxPreviewClass)}
         />
       </button>
 

@@ -9,9 +9,8 @@ import {
 } from "@/lib/content/work-filter";
 import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
 import { cn } from "@/lib/cn";
-import { contentCard } from "@/lib/site/card-styles";
 import { notesBodyClass } from "@/lib/site/prose-styles";
-import { tagChipClass } from "@/lib/site/tag-styles";
+import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
   item: Work;
@@ -20,7 +19,7 @@ type Props = {
 };
 
 /**
- * Creative 詳細。Column 詳細と同型の読み物カード。
+ * Creative 詳細。一覧と同じ枠なしの紙面。
  */
 export function WorkArticle({ item, bodyHtml }: Props) {
   const period = formatWorkPeriod(item.start_date, item.end_date);
@@ -39,52 +38,28 @@ export function WorkArticle({ item, bodyHtml }: Props) {
 
   return (
     <div className="w-full font-sans text-foreground">
-      <article
-        className={contentCard({
-          className: "mx-auto min-w-0 w-full max-w-3xl p-6 sm:p-8",
-        })}
-      >
-        <div className="mb-4 flex items-start gap-3">
-          <Link
-            href="/about/me/"
-            className="shrink-0"
-            aria-label="プロフィール"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/about/profile.png"
-              alt=""
-              width={40}
-              height={40}
-              className="h-10 w-10 rounded-full object-cover"
-            />
-          </Link>
-          <div className="min-w-0 flex-1">
-            <Link
-              href="/about/me/"
-              className="text-sm font-semibold leading-tight text-foreground no-underline hover:underline"
-            >
-              ezeroms
-            </Link>
-            <div className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-sm leading-tight text-muted-foreground">
-              {period ? <span>{period}</span> : null}
-              {period && categoryLabel ? <span aria-hidden>·</span> : null}
-              {categoryLabel ? (
-                <Link
-                  href={`/works/creative/${serializeWorkFilter({
-                    ...emptyWorkFilter(),
-                    categories: [category!],
-                  })}`}
-                  className="truncate no-underline hover:underline"
-                >
-                  {categoryLabel}
-                </Link>
-              ) : null}
-            </div>
+      <article className="mx-auto min-w-0 w-full max-w-2xl overflow-visible py-4">
+        {period || categoryLabel ? (
+          <div className="mb-3 flex flex-wrap items-center gap-x-1.5 text-sm leading-tight text-muted-foreground">
+            {period ? (
+              <time dateTime={item.start_date || item.date}>{period}</time>
+            ) : null}
+            {period && categoryLabel ? <span aria-hidden>·</span> : null}
+            {categoryLabel ? (
+              <Link
+                href={`/works/creative/${serializeWorkFilter({
+                  ...emptyWorkFilter(),
+                  categories: [category!],
+                })}`}
+                className="truncate no-underline hover:underline"
+              >
+                {categoryLabel}
+              </Link>
+            ) : null}
           </div>
-        </div>
+        ) : null}
 
-        <h1 className="m-0 text-2xl font-semibold leading-relaxed tracking-tight text-foreground sm:text-3xl">
+        <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
           {item.title}
         </h1>
 
@@ -103,7 +78,7 @@ export function WorkArticle({ item, bodyHtml }: Props) {
                   ...emptyWorkFilter(),
                   tags: [tag],
                 })}`}
-                className={tagChipClass(false)}
+                className={tagPillClass(false)}
               >
                 {tag}
               </Link>

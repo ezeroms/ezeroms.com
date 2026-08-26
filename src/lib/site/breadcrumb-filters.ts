@@ -3,10 +3,7 @@ import {
   interestLabel,
   type ChronicleFilterState,
 } from "@/lib/content/chronicle-filter";
-import {
-  categoryLabel,
-  type ColumnFilterState,
-} from "@/lib/content/column-filter";
+import { type ColumnFilterState } from "@/lib/content/column-filter";
 import type { GiantsFilterState } from "@/lib/content/giants-filter";
 import {
   formatDateRangeSummary,
@@ -42,7 +39,6 @@ export function summarizeColumnFilter(
 ): string | null {
   return joinBreadcrumbParts([
     formatDateRangeSummary(filter) ?? "",
-    ...filter.categories.map(categoryLabel),
     ...filter.tags,
   ]);
 }
@@ -70,7 +66,7 @@ export function summarizeChronicleFilter(
 export function summarizeGiantsFilter(
   filter: GiantsFilterState,
 ): string | null {
-  return joinBreadcrumbParts(filter.topics);
+  return joinBreadcrumbParts(filter.tags);
 }
 
 /**

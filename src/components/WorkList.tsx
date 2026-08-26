@@ -2,7 +2,7 @@ import type { Work } from "@/types/content";
 import { WORK_CATEGORY_NAMES } from "@/components/WorkHeaderNav";
 import {
   ContentThumbCard,
-  contentThumbCardListClassName,
+  contentPlainListClassName,
 } from "@/components/ContentThumbCard";
 import {
   columnExcerpt,
@@ -11,10 +11,13 @@ import {
 } from "@/lib/content/column-meta";
 import { formatWorkPeriod } from "@/lib/content/work-filter";
 import { firstMediaUrl } from "@/lib/content/og-image";
-import { tagChipClass } from "@/lib/site/tag-styles";
+import { cn } from "@/lib/cn";
+import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
   items: Work[];
+  currentCategory?: string;
+  currentTag?: string;
   /** 関連記事など、空のときにメッセージを出さない */
   hideEmpty?: boolean;
   /** 記事 og / image 未設定時のサムネフォールバック（カテゴリ OGP） */
@@ -40,10 +43,12 @@ function workExcerpt(item: Work): string {
 }
 
 /**
- * Creative 一覧。Column と同じ ContentThumbCard の見た目・ホバー。
+ * Creative 一覧。枠なし。骨格は ContentThumbCard。
  */
 export function WorkList({
   items,
+  currentCategory,
+  currentTag,
   hideEmpty,
   fallbackThumbSrc = null,
 }: Props) {
@@ -57,8 +62,8 @@ export function WorkList({
   }
 
   return (
-    <div className={contentThumbCardListClassName()} id="work-articles-list">
-      {items.map((item) => {
+    <div className={contentPlainListClassName()} id="work-articles-list">
+      {items.map((item, index) => {
         const href = `/works/creative/${item.slug}/`;
         const period =
           formatWorkPeriod(item.start_date, item.end_date) ||
@@ -72,27 +77,46 @@ export function WorkList({
         );
 
         return (
-          <ContentThumbCard
-            key={item.id}
-            href={href}
-            title={item.title}
-            thumbSrc={workThumbSrc(item, fallbackThumbSrc)}
-            dateTime={item.start_date || item.date}
-            dateLabel={period || undefined}
-            metaSecondary={
-              categoryLabel ? <span>{categoryLabel}</span> : null
-            }
-            excerpt={workExcerpt(item)}
-            footer={
-              tags.length
-                ? tags.slice(0, 4).map((tag) => (
-                    <span key={tag} className={tagChipClass(false)}>
-                      {tag}
+          <div key={item.id}>
+            {index > 0 ? (
+              <div className="h-px bg-border-subtle" aria-hidden />
+            ) : null}
+            <div className="py-7">
+              <ContentThumbCard
+                href={href}
+                title={item.title}
+                thumbSrc={workThumbSrc(item, fallbackThumbSrc)}
+                dateTime={item.start_date || item.date}
+                dateLabel={period || undefined}
+                metaSecondary={
+                  categoryLabel ? (
+                    <span
+                      className={cn(
+                        currentCategory === category &&
+                          "font-semibold text-foreground",
+                      )}
+                    >
+                      {categoryLabel}
                     </span>
-                  ))
-                : null
-            }
-          />
+                  ) : null
+                }
+                excerpt={workExcerpt(item)}
+                footer={
+                  tags.length
+                    ? tags.slice(0, 4).map((tag) => (
+                        <span
+                          key={tag}
+                          className={tagPillClass(currentTag === tag)}
+                        >
+                          {tag}
+                        </span>
+                      ))
+                    : null
+                }
+                chrome="plain"
+              />
+            </div>
+          </div>
         );
       })}
     </div>

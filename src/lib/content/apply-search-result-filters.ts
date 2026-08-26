@@ -103,14 +103,6 @@ export function applySearchResultFilters(
     return records.filter((row) => {
       const date = String(row.date ?? "");
       if (!dateMatchesRange(date, filter)) return false;
-      if (
-        !overlaps(
-          row.column_category as string[] | undefined,
-          filter.categories,
-        )
-      ) {
-        return false;
-      }
       return overlaps(row.column_tag as string[] | undefined, filter.tags);
     });
   }

@@ -1,14 +1,13 @@
 import type { MediaCoverage } from "@/types/content";
 import {
   ContentThumbCard,
-  contentThumbCardListClassName,
+  contentPlainListClassName,
 } from "@/components/ContentThumbCard";
 import {
   columnExcerpt,
   firstImageSrc,
   formatColumnDate,
 } from "@/lib/content/column-meta";
-
 import { firstMediaUrl } from "@/lib/content/og-image";
 
 type Props = {
@@ -28,8 +27,7 @@ function mediaCoverageThumbSrc(
 }
 
 /**
- * Media coverage 一覧。
- * Column と同じ ContentThumbCard レイアウトを使う。
+ * Media coverage 一覧。Column と同じ枠なし行。
  */
 export function MediaCoverageList({
   items,
@@ -44,11 +42,8 @@ export function MediaCoverageList({
   }
 
   return (
-    <div
-      className={contentThumbCardListClassName()}
-      id="media-coverage-list"
-    >
-      {items.map((item) => {
+    <div className={contentPlainListClassName()} id="media-coverage-list">
+      {items.map((item, index) => {
         const isExternal = Boolean(item.external_url?.trim());
         const href = isExternal
           ? item.external_url!
@@ -58,19 +53,26 @@ export function MediaCoverageList({
         const dateLabel = item.date ? formatColumnDate(item.date) : "";
 
         return (
-          <ContentThumbCard
-            key={item.id}
-            href={href}
-            title={item.title}
-            thumbSrc={mediaCoverageThumbSrc(item, fallbackThumbSrc)}
-            dateTime={item.date}
-            dateLabel={dateLabel}
-            metaSecondary={lead ? <span>{lead}</span> : null}
-            excerpt={
-              excerpt || (isExternal ? "外部記事を見る →" : undefined)
-            }
-            external={isExternal}
-          />
+          <div key={item.id}>
+            {index > 0 ? (
+              <div className="h-px bg-border-subtle" aria-hidden />
+            ) : null}
+            <div className="py-7">
+              <ContentThumbCard
+                href={href}
+                title={item.title}
+                thumbSrc={mediaCoverageThumbSrc(item, fallbackThumbSrc)}
+                dateTime={item.date}
+                dateLabel={dateLabel}
+                metaSecondary={lead ? <span>{lead}</span> : null}
+                excerpt={
+                  excerpt || (isExternal ? "外部記事を見る →" : undefined)
+                }
+                external={isExternal}
+                chrome="plain"
+              />
+            </div>
+          </div>
         );
       })}
     </div>

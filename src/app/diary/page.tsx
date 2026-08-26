@@ -3,6 +3,10 @@ import Link from "next/link";
 import { SiteShell } from "@/components/SiteShell";
 import { DiaryTimeline } from "@/components/DiaryTimeline";
 import { DiaryFilterPanel } from "@/components/DiaryFilterPanel";
+import {
+  ReadingTopicsAside,
+  diaryTagHref,
+} from "@/components/ReadingTopicsAside";
 import { diaryMonthKey } from "@/lib/content/diary-meta";
 import {
   diaryFilterActive,
@@ -82,10 +86,20 @@ export default async function DiaryIndexPage({
       mainClassName="layout-main--single"
       breadcrumbFilter={filtering ? summarizeDiaryFilter(filter) : null}
       breadcrumbSectionHref="/diary/"
+      aside={
+        taxonomy.tags.length ? (
+          <ReadingTopicsAside
+            tags={taxonomy.tags}
+            hrefFor={diaryTagHref}
+            allHref="/diary/"
+            selected={filter.tags.length === 1 ? filter.tags[0] : filter.tags}
+          />
+        ) : undefined
+      }
     >
       <DiaryTimeline items={sanitized} />
       {hasMore && continueMonth ? (
-        <p className="notes-feed-more mx-auto max-w-3xl pb-8">
+        <p className="notes-feed-more mx-auto max-w-2xl pb-8">
           最新 {items.length} 件を表示しています。それ以前は{" "}
           <Link href={`/diary_month/${continueMonth}/`}>月別アーカイブ</Link>
           やヘッダーの Search から条件を指定してください。

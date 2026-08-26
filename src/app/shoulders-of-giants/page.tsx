@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { GiantsBrowse } from "@/components/GiantsBrowse";
+import {
+  ReadingTopicsAside,
+} from "@/components/ReadingTopicsAside";
 import { SiteShell } from "@/components/SiteShell";
 import {
   giantsFilterActive,
+  giantsTagHref,
   parseGiantsFilter,
 } from "@/lib/content/giants-filter";
 import { sectionListingMetadata } from "@/lib/content/section-listing-metadata";
 import { summarizeGiantsFilter } from "@/lib/site/breadcrumb-filters";
 import {
   listGiants,
-  listGiantsTopics,
+  listGiantsTags,
   requirePublicLibrarySection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
@@ -44,13 +48,13 @@ export default async function GiantsPage({
   const resolvedSearchParams = await searchParams;
   const filter = parseGiantsFilter(resolvedSearchParams);
   const filtering = giantsFilterActive(filter);
-  /** 左ロールは単一選択 UI。複数指定時は先頭を採用 */
-  const selectedTopic = filtering ? (filter.topics[0] ?? null) : null;
+  /** 右レールは単一選択 UI。複数指定時は先頭を採用 */
+  const selectedTag = filtering ? (filter.tags[0] ?? null) : null;
 
-  const [topics, listed] = await Promise.all([
-    listGiantsTopics().catch(() => [] as string[]),
+  const [tags, listed] = await Promise.all([
+    listGiantsTags().catch(() => [] as string[]),
     listGiants(
-      selectedTopic ? { topics: [selectedTopic] } : undefined,
+      selectedTag ? { tags: [selectedTag] } : undefined,
     ).catch(() => ({ items: [] as ShouldersOfGiants[], total: 0 })),
   ]);
 
@@ -65,20 +69,27 @@ export default async function GiantsPage({
     <SiteShell
       bodyClassName="is-shoulders-of-giants"
       showTagsAside={false}
-      breadcrumbFilter={selectedTopic ? summarizeGiantsFilter({
-        topics: [selectedTopic],
+      showTagsRail
+      tagsRailDefaultOpen
+      breadcrumbFilter={selectedTag ? summarizeGiantsFilter({
+        tags: [selectedTag],
       }) : null}
       breadcrumbSectionHref="/shoulders-of-giants/"
-      filterActive={Boolean(selectedTopic)}
-      mainContentClassName="min-[1080px]:flex min-[1080px]:flex-col min-[1080px]:overflow-hidden"
-      contentClassName={
-        "flex w-full flex-col p-4 min-[768px]:p-5 min-[1080px]:min-h-0 min-[1080px]:flex-1 min-[1080px]:overflow-hidden min-[1080px]:p-6"
+      filterActive={Boolean(selectedTag)}
+      aside={
+        tags.length ? (
+          <ReadingTopicsAside
+            tags={tags}
+            hrefFor={giantsTagHref}
+            allHref="/shoulders-of-giants/"
+            selected={selectedTag}
+          />
+        ) : undefined
       }
     >
       <GiantsBrowse
-        topics={topics}
         items={items}
-        selectedTopic={selectedTopic}
+        selectedTag={selectedTag}
       />
     </SiteShell>
   );

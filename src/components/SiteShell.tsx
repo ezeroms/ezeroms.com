@@ -16,12 +16,30 @@ import {
   listPublicLibrarySections,
 } from "@/lib/content/queries";
 import { cn } from "@/lib/cn";
+import { isPhotoGalleryId } from "@/lib/content/photo-galleries";
+import {
+  ReadingTopicsPanel,
+  ReadingTopicsProvider,
+  ReadingTopicsToggle,
+} from "@/components/ReadingTopicsRail";
 
 type Props = {
   children: React.ReactNode;
   bodyClassName?: string;
   mainClassName?: string;
   toc?: React.ReactNode;
+  /**
+   * PC（≥1080）でメインの右に出す Tags レールの中身。
+   * 表示するかは `showTagsRail`。スマホ／タブレットでは出さない。
+   */
+  aside?: React.ReactNode;
+  /**
+   * 右の Tags レールを出す。aside があっても false なら出さない。
+   * 既定は false（一時的に非表示）。Clips / Giants のみ true。
+   */
+  showTagsRail?: boolean;
+  /** Tags レールの初期開閉。Clips / Giants は true。 */
+  tagsRailDefaultOpen?: boolean;
   /**
    * 絞り込みパネル。ヘッダー検索モーダル内の「条件」として表示する。
    */
@@ -91,6 +109,9 @@ export async function SiteShell({
   bodyClassName = "",
   mainClassName = "layout-main--with-tags",
   toc,
+  aside,
+  showTagsRail = false,
+  tagsRailDefaultOpen = false,
   secondary,
   sectionHeader,
   mobileTitle,
@@ -153,6 +174,57 @@ export async function SiteShell({
   const isFilterActive =
     filterActive ?? Boolean(breadcrumbFilter?.trim());
 
+  const paperCanvas =
+    bodyClassName === "is-diary" ||
+    bodyClassName === "is-column" ||
+    bodyClassName === "is-clips" ||
+    bodyClassName === "is-shoulders-of-giants" ||
+    bodyClassName === "is-chronicle" ||
+    bodyClassName === "is-media-coverage" ||
+    bodyClassName === "is-works-creative" ||
+    isPhotoGalleryId(bodyClassName.replace(/^is-/, ""));
+  const hasAside = Boolean(aside) && showTagsRail;
+  const contentPad =
+    contentClassName ??
+    (paperCanvas
+      ? "px-6 py-4 min-[768px]:px-10 min-[768px]:py-5 min-[1080px]:px-12 min-[1080px]:py-6"
+      : "p-4 min-[768px]:p-5 min-[1080px]:p-6");
+
+  const pageHeader = showPageHeader ? (
+    <header
+      className={cn(
+        "z-20 flex h-14 w-full shrink-0 items-center gap-2.5",
+        "min-[1080px]:h-11",
+        "border-0 border-b border-solid border-border bg-background",
+        "px-4 min-[768px]:px-5 min-[1080px]:px-6",
+        hasAside ? "relative" : "sticky top-0",
+      )}
+    >
+      {showMobileChrome ? <MobileMenuButton /> : null}
+      {showBreadcrumbHeader && resolvedCrumbs ? (
+        <BreadcrumbHeader
+          items={resolvedCrumbs}
+          showSearch={!hideHeaderSearch}
+          infoDescription={breadcrumbInfo}
+          filterPanel={secondary}
+          filterActive={isFilterActive}
+          className="min-w-0 flex-1"
+        />
+      ) : null}
+      {showSectionHeader ? (
+        <div
+          className={cn(
+            "min-w-0 flex-1 truncate text-sm",
+            showBreadcrumbHeader && "ml-2 min-[1080px]:ml-4",
+          )}
+        >
+          {sectionHeader}
+        </div>
+      ) : null}
+      {hasAside ? <ReadingTopicsToggle /> : null}
+    </header>
+  ) : null;
+
   const fallbackMobileChrome =
     showMobileChrome &&
     !showPageHeader &&
@@ -172,6 +244,7 @@ export async function SiteShell({
         className={cn(
           "layout-container",
           "flex h-screen w-full overflow-hidden bg-background text-foreground",
+          paperCanvas && "reading-canvas",
           "max-[1079px]:flex-col",
         )}
       >
@@ -200,66 +273,58 @@ export async function SiteShell({
           {fallbackMobileChrome}
 
           <div className="relative flex min-h-0 flex-1 flex-col">
-            <div
-              className={cn(
-                "layout-main flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden",
-                resolvedMain,
-                "!flex !h-full !min-h-0 !flex-col",
-              )}
-            >
-              {toc}
-              <main
-                className={cn(
-                  "layout-main__content min-h-0 flex-1 overflow-y-auto font-sans",
-                  "!h-full !max-w-none !p-0",
-                  mainContentClassName,
-                )}
-                id="main-content"
-              >
-                {showPageHeader ? (
-                  <header
-                    className={cn(
-                      "sticky top-0 z-20 flex h-14 w-full shrink-0 items-center gap-2.5",
-                      "min-[1080px]:h-11",
-                      "border-0 border-b border-solid border-border bg-background",
-                      "px-4 min-[768px]:px-5 min-[1080px]:px-6",
-                    )}
-                  >
-                    {showMobileChrome ? <MobileMenuButton /> : null}
-                    {showBreadcrumbHeader && resolvedCrumbs ? (
-                      <BreadcrumbHeader
-                        items={resolvedCrumbs}
-                        showSearch={!hideHeaderSearch}
-                        infoDescription={breadcrumbInfo}
-                        filterPanel={secondary}
-                        filterActive={isFilterActive}
-                        className="min-w-0 flex-1"
-                      />
-                    ) : null}
-                    {showSectionHeader ? (
-                      <div
-                        className={cn(
-                          "min-w-0 flex-1 truncate text-sm",
-                          showBreadcrumbHeader && "ml-2 min-[1080px]:ml-4",
-                        )}
-                      >
-                        {sectionHeader}
-                      </div>
-                    ) : null}
-                  </header>
-                ) : null}
-
+            {hasAside ? (
+              <ReadingTopicsProvider defaultOpen={tagsRailDefaultOpen}>
+                {pageHeader}
                 <div
                   className={cn(
-                    "w-full",
-                    contentClassName ??
-                      "p-4 min-[768px]:p-5 min-[1080px]:p-6",
+                    "layout-main flex min-h-0 min-w-0 flex-1 overflow-hidden",
+                    resolvedMain,
+                    "!flex !h-full !min-h-0 !flex-col min-[1080px]:!flex-row",
                   )}
                 >
-                  {children}
+                  {toc}
+                  <main
+                    className={cn(
+                      "layout-main__content min-h-0 flex-1 overflow-y-auto font-sans",
+                      "!h-full !max-w-none !p-0 min-[1080px]:min-h-0",
+                      mainContentClassName,
+                    )}
+                    id="main-content"
+                  >
+                    <div className={cn("w-full", contentPad)}>
+                      {children}
+                    </div>
+                  </main>
+                  <ReadingTopicsPanel>{aside}</ReadingTopicsPanel>
                 </div>
-              </main>
-            </div>
+              </ReadingTopicsProvider>
+            ) : (
+              <>
+                <div
+                  className={cn(
+                    "layout-main flex min-h-0 min-w-0 flex-1 overflow-hidden",
+                    resolvedMain,
+                    "!flex !h-full !min-h-0 !flex-col",
+                  )}
+                >
+                  {toc}
+                  <main
+                    className={cn(
+                      "layout-main__content min-h-0 flex-1 overflow-y-auto font-sans",
+                      "!h-full !max-w-none !p-0",
+                      mainContentClassName,
+                    )}
+                    id="main-content"
+                  >
+                    {pageHeader}
+                    <div className={cn("w-full", contentPad)}>
+                      {children}
+                    </div>
+                  </main>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

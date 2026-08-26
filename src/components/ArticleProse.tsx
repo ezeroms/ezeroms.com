@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import hljs from "highlight.js/lib/core";
 import bash from "highlight.js/lib/languages/bash";
 import css from "highlight.js/lib/languages/css";
@@ -13,6 +13,8 @@ import xml from "highlight.js/lib/languages/xml";
 import yaml from "highlight.js/lib/languages/yaml";
 import "highlight.js/styles/atom-one-dark.css";
 import { cn } from "@/lib/cn";
+import { ImageLightbox, type LightboxImage } from "@/components/ImageLightbox";
+import { lightboxPreviewInProseClass } from "@/lib/site/lightbox-preview";
 
 hljs.registerLanguage("bash", bash);
 hljs.registerLanguage("sh", bash);
@@ -144,6 +146,16 @@ function enhanceCodeBlocks(root: HTMLElement) {
   });
 }
 
+function collectImages(root: HTMLElement): LightboxImage[] {
+  return [...root.querySelectorAll("img")]
+    .filter((img) => !img.closest(".code-block"))
+    .map((img) => ({
+      src: img.currentSrc || img.src,
+      alt: img.getAttribute("alt") ?? "",
+    }))
+    .filter((item) => Boolean(item.src));
+}
+
 type Props = {
   html: string;
   className?: string;
@@ -151,9 +163,17 @@ type Props = {
 
 /**
  * 記事本文 HTML。コードブロックに構文ハイライト・言語ラベル・コピーを付与する。
+ * 画像クリックで Photos と同じ黒背景ライトボックスを開く。
  */
 export function ArticleProse({ html, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [images, setImages] = useState<LightboxImage[]>([]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -161,11 +181,61 @@ export function ArticleProse({ html, className }: Props) {
     enhanceCodeBlocks(el);
   }, [html]);
 
+  const closeLightbox = useCallback(() => {
+    setActiveIndex(null);
+  }, []);
+
+  const showPrevious = useCallback(() => {
+    setActiveIndex((current) => {
+      if (current == null || images.length === 0) return current;
+      return (current - 1 + images.length) % images.length;
+    });
+  }, [images.length]);
+
+  const showNext = useCallback(() => {
+    setActiveIndex((current) => {
+      if (current == null || images.length === 0) return current;
+      return (current + 1) % images.length;
+    });
+  }, [images.length]);
+
+  function handleClick(event: MouseEvent<HTMLDivElement>) {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const img = target.closest("img");
+    const root = ref.current;
+    if (!img || !root || !root.contains(img)) return;
+    if (img.closest(".code-block")) return;
+    const src = img.currentSrc || img.src;
+    if (!src) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const nextImages = collectImages(root);
+    const index = nextImages.findIndex((item) => item.src === src);
+    if (index < 0) return;
+    setImages(nextImages);
+    setActiveIndex(index);
+  }
+
   return (
-    <div
-      ref={ref}
-      className={cn(className)}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <>
+      <div
+        ref={ref}
+        className={cn(lightboxPreviewInProseClass, className)}
+        dangerouslySetInnerHTML={{ __html: html }}
+        onClickCapture={handleClick}
+      />
+      {mounted && activeIndex != null ? (
+        <ImageLightbox
+          images={images}
+          index={activeIndex}
+          onClose={closeLightbox}
+          onShowPrevious={showPrevious}
+          onShowNext={showNext}
+        />
+      ) : null}
+    </>
   );
 }

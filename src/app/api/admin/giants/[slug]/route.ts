@@ -37,7 +37,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   const { data, error } = await getSupabaseAdmin()
     .from("shoulders_of_giants")
     .select(
-      "id, slug, topic, book_title, author, publisher, published_year, citation_override, source_url, body_html, og_image, status, published_at, updated_at, created_at",
+      "id, slug, giants_tag, book_title, author, publisher, published_year, citation_override, source_url, body_html, og_image, status, published_at, updated_at, created_at",
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -53,7 +53,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     item: {
       ...data,
       body_md: htmlToEditableMarkdown((data.body_html as string) ?? ""),
-      topics: ((data.topic as string[] | null) ?? []).join(", "),
+      tags: ((data.giants_tag as string[] | null) ?? []).join(", "),
     },
   });
 }
@@ -67,6 +67,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const body = (await request.json()) as {
       body_md?: string;
+      tags?: string;
       topics?: string;
       book_title?: string;
       author?: string;
@@ -94,7 +95,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         : body.status === "archived"
           ? "archived"
           : "published";
-    const topics = parseTagList(body.topics ?? "");
+    const tags = parseTagList(body.tags ?? body.topics ?? "");
     const now = new Date().toISOString();
 
     const { data: existing, error: findError } = await getSupabaseAdmin()
@@ -111,7 +112,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const row = {
-      topic: topics,
+      giants_tag: tags,
       book_title: (body.book_title ?? "").trim() || null,
       author: (body.author ?? "").trim() || null,
       publisher: (body.publisher ?? "").trim() || null,
@@ -157,7 +158,7 @@ export async function POST(_request: NextRequest, { params }: RouteParams) {
   const { data: existing, error: findError } = await getSupabaseAdmin()
     .from("shoulders_of_giants")
     .select(
-      "topic, book_title, author, publisher, published_year, citation_override, source_url, body_html, og_image",
+      "giants_tag, book_title, author, publisher, published_year, citation_override, source_url, body_html, og_image",
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -172,7 +173,7 @@ export async function POST(_request: NextRequest, { params }: RouteParams) {
   const now = new Date().toISOString();
   const newSlug = generateContentSlug();
   const bodyHtml = String(existing.body_html ?? "");
-  const topics = (existing.topic as string[] | null) ?? [];
+  const tags = (existing.giants_tag as string[] | null) ?? [];
   const sourceUrl = String(existing.source_url ?? "");
   const status = "draft" as const;
 
@@ -180,7 +181,7 @@ export async function POST(_request: NextRequest, { params }: RouteParams) {
     .from("shoulders_of_giants")
     .insert({
       slug: newSlug,
-      topic: topics,
+      giants_tag: tags,
       book_title: existing.book_title,
       author: existing.author,
       publisher: existing.publisher,
@@ -207,7 +208,7 @@ export async function POST(_request: NextRequest, { params }: RouteParams) {
     editor: {
       slug: newSlug,
       body_md: htmlToEditableMarkdown(bodyHtml),
-      topics: topics.join(", "),
+      tags: tags.join(", "),
       book_title: String(existing.book_title ?? ""),
       author: String(existing.author ?? ""),
       publisher: String(existing.publisher ?? ""),

@@ -3,21 +3,16 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ShareButton } from "@/components/ShareButton";
 import { useLightboxSwipe } from "@/components/useLightboxSwipe";
-import type { Photo } from "@/types/content";
-import {
-  formatPhotoCaption,
-  photoAccessibilityLabel,
-} from "@/lib/content/photo-caption";
-import { photoDetailHref } from "@/lib/content/photo-adjacent";
+
+export type LightboxImage = {
+  src: string;
+  alt: string;
+};
 
 type Props = {
-  photo: Photo;
-  /** 前後ナビ用。1件だけのときはナビを出さない。 */
-  photos: Photo[];
-  /** 詳細ページのベースパス（例: `/smile/`）。指定時キャプション横にシェアを出す。 */
-  detailBasePath?: string;
+  images: LightboxImage[];
+  index: number;
   onClose: () => void;
   onShowPrevious: () => void;
   onShowNext: () => void;
@@ -27,17 +22,23 @@ const navButtonClassName =
   "absolute top-1/2 z-10 hidden -translate-y-1/2 cursor-pointer items-center justify-center border-0 bg-transparent p-2 text-white/70 transition-colors hover:text-white min-[768px]:inline-flex";
 
 /**
- * 写真拡大表示。
- * layout の overflow に閉じ込められないよう document.body へ portal する。
+ * 記事本文などの画像拡大。Photos のライトボックスと同じ黒背景。
  */
-export function PhotoLightbox({
-  photo,
-  photos,
-  detailBasePath,
+export function ImageLightbox({
+  images,
+  index,
   onClose,
   onShowPrevious,
   onShowNext,
 }: Props) {
+  const image = images[index];
+  const showNavigation = images.length > 1;
+  const swipe = useLightboxSwipe({
+    enabled: showNavigation,
+    onPrevious: onShowPrevious,
+    onNext: onShowNext,
+  });
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
@@ -55,38 +56,20 @@ export function PhotoLightbox({
     };
   }, [onClose, onShowPrevious, onShowNext]);
 
-  const showNavigation = photos.length > 1;
-  const swipe = useLightboxSwipe({
-    enabled: showNavigation,
-    onPrevious: onShowPrevious,
-    onNext: onShowNext,
-  });
+  if (!image) return null;
 
-  if (!photo.image_url) return null;
-
-  const caption = formatPhotoCaption(photo);
-  const detailPath = detailBasePath
-    ? photoDetailHref(detailBasePath, photo.slug)
-    : null;
+  const caption = image.alt.trim();
 
   return createPortal(
     <div
       className="fixed inset-0 z-[200] flex touch-none items-center justify-center p-4 sm:p-8"
       role="dialog"
       aria-modal
-      aria-label={photoAccessibilityLabel(photo)}
+      aria-label={caption || "画像"}
       onPointerDown={swipe.onPointerDown}
       onPointerUp={swipe.onPointerUp}
       onPointerCancel={swipe.onPointerCancel}
     >
-      <div id="notification" className="notification">
-        リンクをコピーしました
-      </div>
-
-      {/*
-        黒オーバーレイは専用レイヤー。
-        Tailwind の bg-* がレガシー CSS に負けることがあるため inline style を使う。
-      */}
       <button
         type="button"
         aria-label="閉じる"
@@ -104,7 +87,7 @@ export function PhotoLightbox({
             type="button"
             className={`${navButtonClassName} left-1 sm:left-4`}
             onClick={onShowPrevious}
-            aria-label="前の写真"
+            aria-label="前の画像"
           >
             <ChevronLeft className="h-8 w-8" strokeWidth={1.75} aria-hidden />
           </button>
@@ -112,7 +95,7 @@ export function PhotoLightbox({
             type="button"
             className={`${navButtonClassName} right-1 sm:right-4`}
             onClick={onShowNext}
-            aria-label="次の写真"
+            aria-label="次の画像"
           >
             <ChevronRight className="h-8 w-8" strokeWidth={1.75} aria-hidden />
           </button>
@@ -122,19 +105,13 @@ export function PhotoLightbox({
       <figure className="relative z-10 m-0 flex max-h-full max-w-6xl flex-col items-center gap-6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={photo.image_url}
-          alt={photoAccessibilityLabel(photo)}
+          src={image.src}
+          alt={caption || ""}
           className="m-0 max-h-[85vh] w-auto max-w-full object-contain"
         />
-        {caption || detailPath ? (
-          <figcaption className="flex items-center justify-center gap-1.5 text-sm tracking-wide text-white/65">
-            {caption ? <span>{caption}</span> : null}
-            {detailPath ? (
-              <ShareButton
-                path={detailPath}
-                className="bg-transparent text-white opacity-40 hover:bg-white/20 hover:opacity-100"
-              />
-            ) : null}
+        {caption ? (
+          <figcaption className="text-sm tracking-wide text-white/65">
+            {caption}
           </figcaption>
         ) : null}
       </figure>

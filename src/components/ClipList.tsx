@@ -1,50 +1,59 @@
-import { PenLine } from "lucide-react";
 import type { Clip } from "@/types/content";
+import Link from "next/link";
 import {
   ContentThumbCard,
-  contentThumbCardListClassName,
+  contentPlainListClassName,
 } from "@/components/ContentThumbCard";
 import {
+  clipListingHref,
   clipSourceLabel,
   clipThumbSrc,
   formatClipDate,
 } from "@/lib/content/clip-meta";
-import { tagChipClass } from "@/lib/site/tag-styles";
+import type { DiaryFilterState } from "@/lib/content/diary-filter";
+import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
   items: Clip[];
   currentTag?: string | null;
   hideEmpty?: boolean;
   fallbackThumbSrc?: string | null;
+  dateFilter?: Pick<DiaryFilterState, "from" | "to">;
 };
 
 function ClipMemo({ children }: { children: string }) {
   return (
-    <div className="pt-2">
-      <div className="h-px bg-border" aria-hidden />
-      <div className="flex items-start gap-2 pt-3.5">
-        <PenLine
-          className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
-          aria-hidden
+    <div className="rounded-md border border-solid border-border px-3 py-2.5">
+      <div className="flex items-center gap-2">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/about/profile.png"
+          alt=""
+          width={20}
+          height={20}
+          className="h-5 w-5 shrink-0 rounded-full object-cover"
         />
-        <p className="m-0 min-w-0 whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
-          <span className="sr-only">メモ: </span>
-          {children}
-        </p>
+        <span className="text-xs font-medium leading-none text-foreground">
+          ezeroms
+        </span>
       </div>
+      <p className="m-0 mt-2 min-w-0 whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground">
+        <span className="sr-only">メモ: </span>
+        {children}
+      </p>
     </div>
   );
 }
 
 /**
- * Clips 一覧。Column / Creative と同じ ContentThumbCard。
- * 自分のメモは右カラム末尾の注釈。左のサムネはその高さに合わせて伸びる。
+ * Clips 一覧。Column と同じ枠なし行。
  */
 export function ClipList({
   items,
   currentTag = null,
   hideEmpty,
   fallbackThumbSrc = null,
+  dateFilter,
 }: Props) {
   if (!items.length) {
     if (hideEmpty) return null;
@@ -56,47 +65,65 @@ export function ClipList({
   }
 
   return (
-    <div
-      className={contentThumbCardListClassName("pb-20 min-[1080px]:pb-0")}
-      id="clips-list"
-    >
-      {items.map((item) => {
+    <div className={contentPlainListClassName()} id="clips-list">
+      {items.map((item, index) => {
         const tags = [...(item.clip_tag ?? [])].sort((a, b) =>
           a.localeCompare(b, "ja"),
         );
         const memo = item.memo?.trim() ?? "";
 
         return (
-          <ContentThumbCard
-            key={item.id}
-            href={item.source_url}
-            external
-            title={item.title}
-            thumbSrc={clipThumbSrc(item, fallbackThumbSrc)}
-            dateTime={item.date}
-            dateLabel={formatClipDate(item.date)}
-            metaSecondary={
-              <span className="truncate">
-                {clipSourceLabel(item.source_url, item.source_name)}
-              </span>
-            }
-            showExcerpt={false}
-            clampTitle={false}
-            fillBelowTitle
-            footer={
-              tags.length
-                ? tags.slice(0, 4).map((tag) => (
-                    <span
-                      key={tag}
-                      className={tagChipClass(currentTag === tag)}
-                    >
-                      {tag}
-                    </span>
-                  ))
-                : null
-            }
-            note={memo ? <ClipMemo>{memo}</ClipMemo> : null}
-          />
+          <div key={item.id}>
+            {index > 0 ? (
+              <div className="h-px bg-border-subtle" aria-hidden />
+            ) : null}
+            <div className="py-7">
+              <ContentThumbCard
+                href={item.source_url}
+                external
+                title={item.title}
+                thumbSrc={clipThumbSrc(item, fallbackThumbSrc)}
+                dateTime={item.date}
+                dateLabel={formatClipDate(item.date)}
+                metaSecondary={
+                  <span className="truncate">
+                    {clipSourceLabel(item.source_url, item.source_name)}
+                  </span>
+                }
+                showExcerpt={false}
+                clampTitle={false}
+                footer={
+                  tags.length
+                    ? tags.slice(0, 4).map((tag) => {
+                        const active = currentTag === tag;
+                        return (
+                          <Link
+                            key={tag}
+                            href={
+                              active
+                                ? clipListingHref({
+                                    from: dateFilter?.from,
+                                    to: dateFilter?.to,
+                                  })
+                                : clipListingHref({
+                                    tag,
+                                    from: dateFilter?.from,
+                                    to: dateFilter?.to,
+                                  })
+                            }
+                            className={tagPillClass(active)}
+                          >
+                            {tag}
+                          </Link>
+                        );
+                      })
+                    : null
+                }
+                note={memo ? <ClipMemo>{memo}</ClipMemo> : null}
+                chrome="plain"
+              />
+            </div>
+          </div>
         );
       })}
     </div>

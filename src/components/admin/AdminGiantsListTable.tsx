@@ -16,7 +16,7 @@ export type AdminGiantsTableItem = {
   citation: string;
   source_url: string;
   status: string;
-  topics: string[];
+  tags: string[];
   editor: GiantsEditorInitial;
 };
 
@@ -90,9 +90,9 @@ export function AdminGiantsListTable({ items, empty }: Props) {
                 <span className="line-clamp-2 text-foreground">
                   {item.excerpt || "—"}
                 </span>
-                {item.topics.length ? (
+                {item.tags.length ? (
                   <p className="m-0 mt-1 truncate text-xs text-muted-foreground">
-                    {item.topics.join(" · ")}
+                    {item.tags.join(" · ")}
                   </p>
                 ) : null}
               </td>
