@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   );
   return sectionListingMetadata({
     title: section?.label ?? "Media coverage",
-    description: "メディア掲載。",
+    description: section?.description || "メディア掲載。",
     ogImage: section?.og_image,
   });
 }

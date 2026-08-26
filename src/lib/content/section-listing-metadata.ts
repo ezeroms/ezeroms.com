@@ -20,5 +20,10 @@ export function sectionListingMetadata(opts: {
       title: opts.title,
       description: opts.description,
     },
+    twitter: {
+      ...images.twitter,
+      title: opts.title,
+      description: opts.description,
+    },
   };
 }

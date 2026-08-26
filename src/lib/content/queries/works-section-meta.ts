@@ -29,6 +29,10 @@ function parseOgImage(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function parseDescription(value: unknown, fallback: string): string {
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
 /**
  * DB の works_section を読み、無ければコード上の既定値にフォールバックする。
  */
@@ -43,14 +47,14 @@ export async function loadWorksSection(
     const db = getSupabaseAdmin();
     let { data, error } = await db
       .from("works_section")
-      .select("id, label, status, og_image")
+      .select("id, label, description, status, og_image")
       .eq("id", sectionId)
       .maybeSingle();
 
     if (error && isMissingColumnError(error)) {
       ({ data, error } = await db
         .from("works_section")
-        .select("id, label, status")
+        .select("id, label, description, status")
         .eq("id", sectionId)
         .maybeSingle());
     }
@@ -67,6 +71,12 @@ export async function loadWorksSection(
     return {
       ...defaults,
       label: (data.label as string)?.trim() || defaults.label,
+      description: parseDescription(
+        "description" in data
+          ? (data as { description?: unknown }).description
+          : "",
+        defaults.description,
+      ),
       status: parseStatus(data.status, defaults.status),
       og_image:
         parseOgImage(

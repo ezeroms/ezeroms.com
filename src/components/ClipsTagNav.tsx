@@ -38,7 +38,7 @@ export function ClipsTagNav({
       allHref={clipsHref(null, dateFilter)}
       hrefFor={(tag) => clipsHref(tag, dateFilter)}
       ariaLabel="タグ一覧"
-      sheetTitle="タグ"
+      sheetTitle="Tags"
       emptyLabel="タグがありません"
       chooseLabel="タグを選ぶ"
     />

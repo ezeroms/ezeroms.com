@@ -80,6 +80,7 @@ export default async function AdminExperienceListPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/works/experience/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
             />

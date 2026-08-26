@@ -88,6 +88,7 @@ export default async function AdminDiaryListPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/writing/diary/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
               ogUploadKind="diary-section"

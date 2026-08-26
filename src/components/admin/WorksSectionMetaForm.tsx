@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export const WORKS_SECTION_META_FORM_ID = "works-section-meta-form";
 
@@ -19,6 +20,8 @@ type Props = {
   /** PATCH 先（例: /api/admin/works/creative/meta/） */
   metaApiPath: string;
   initialLabel: string;
+  /** 一覧ページの OGP description */
+  initialDescription?: string;
   initialStatus?: SectionPublishStatus;
   initialOgImage?: string;
   /** OgImageField の upload kind */
@@ -29,10 +32,11 @@ type Props = {
   formId?: string;
 };
 
-/** セクションの表示名・公開状態・OGP を編集する（Works / Library / Writing 共通）。 */
+/** セクションのタイトル・説明文・公開状態・OGP を編集する（Works / Library / Writing 共通）。 */
 export function WorksSectionMetaForm({
   metaApiPath,
   initialLabel,
+  initialDescription = "",
   initialStatus = "published",
   initialOgImage = "",
   ogUploadKind = "section",
@@ -43,6 +47,7 @@ export function WorksSectionMetaForm({
 }: Props) {
   const router = useRouter();
   const [label, setLabel] = useState(initialLabel);
+  const [description, setDescription] = useState(initialDescription);
   const [status, setStatus] = useState<SectionPublishStatus>(initialStatus);
   const [ogImage, setOgImage] = useState(initialOgImage);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +68,12 @@ export function WorksSectionMetaForm({
       const res = await fetch(metaApiPath, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ label, status, og_image: ogImage }),
+        body: JSON.stringify({
+          label,
+          description,
+          status,
+          og_image: ogImage,
+        }),
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
@@ -91,12 +101,27 @@ export function WorksSectionMetaForm({
       {saved ? <Alert variant="success">ページ設定を保存しました</Alert> : null}
 
       <div className="space-y-2">
-        <Label htmlFor="works-section-label">表示名</Label>
+        <Label htmlFor="works-section-label">タイトル</Label>
         <Input
           id="works-section-label"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           required
+          {...ignorePasswordManagersProps}
+        />
+        <p className="m-0 text-xs text-muted-foreground">
+          ナビ・パンくず・OGP のタイトルに使います。
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="works-section-description">OGP 説明文</Label>
+        <Textarea
+          id="works-section-description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={3}
+          placeholder="SNS や検索結果に出る説明文"
           {...ignorePasswordManagersProps}
         />
       </div>

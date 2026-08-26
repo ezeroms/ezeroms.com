@@ -107,6 +107,7 @@ export default async function AdminChooningListPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/works/chooning/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
             />

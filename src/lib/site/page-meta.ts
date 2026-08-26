@@ -63,7 +63,7 @@ const ABOUT_CONTACT: SitePageMeta = {
 
 const GIANTS: SitePageMeta = {
   title: "The shoulders of Giants",
-  description: "影響を受けた人・作品・考え方のメモ。",
+  description: "先人の知恵を集めておこう。",
 };
 
 const CHRONICLE: SitePageMeta = {

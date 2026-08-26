@@ -88,6 +88,7 @@ export default async function AdminColumnListPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/writing/column/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
               ogUploadKind="column-section"

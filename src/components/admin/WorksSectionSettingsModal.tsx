@@ -14,6 +14,7 @@ import { cn } from "@/lib/cn";
 type Props = {
   metaApiPath: string;
   initialLabel: string;
+  initialDescription?: string;
   initialStatus?: SectionPublishStatus;
   initialOgImage?: string;
   ogUploadKind?: string;
@@ -23,6 +24,7 @@ type Props = {
 export function WorksSectionSettingsModal({
   metaApiPath,
   initialLabel,
+  initialDescription = "",
   initialStatus = "published",
   initialOgImage = "",
   ogUploadKind = "section",
@@ -100,6 +102,7 @@ export function WorksSectionSettingsModal({
                   <WorksSectionMetaForm
                     metaApiPath={metaApiPath}
                     initialLabel={initialLabel}
+                    initialDescription={initialDescription}
                     initialStatus={initialStatus}
                     initialOgImage={initialOgImage}
                     ogUploadKind={ogUploadKind}

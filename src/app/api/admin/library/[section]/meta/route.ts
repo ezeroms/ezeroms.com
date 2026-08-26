@@ -12,7 +12,7 @@ type RouteParams = { params: Promise<{ section: string }> };
 
 /**
  * PATCH /api/admin/library/[section]/meta/
- * Library セクションの表示名・公開状態・OGP を更新する。
+ * Library セクションの表示名・説明文・公開状態・OGP を更新する。
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   const user = await getSessionUser();
@@ -31,12 +31,17 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
     const body = (await request.json()) as {
       label?: string;
+      description?: string;
       status?: string;
       og_image?: string;
     };
 
     const defaults = getLibrarySection(sectionId);
     const label = (body.label ?? "").trim() || defaults.label;
+    const description =
+      typeof body.description === "string"
+        ? body.description.trim()
+        : undefined;
     const status = isLibrarySectionStatus(body.status ?? "")
       ? body.status!
       : defaults.status;
@@ -50,6 +55,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       status,
       og_image,
       updated_at: now,
+      ...(description !== undefined ? { description } : {}),
     };
 
     const { data: existing } = await getSupabaseAdmin()
@@ -58,17 +64,21 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       .eq("id", sectionId)
       .maybeSingle();
 
+    const selectCols = "id, label, description, status, og_image";
     const query = existing?.id
       ? getSupabaseAdmin()
           .from("library_section")
           .update(row)
           .eq("id", sectionId)
-          .select("id, label, status, og_image")
+          .select(selectCols)
           .single()
       : getSupabaseAdmin()
           .from("library_section")
-          .insert({ ...row, description: "" })
-          .select("id, label, status, og_image")
+          .insert({
+            ...row,
+            description: description ?? defaults.description,
+          })
+          .select(selectCols)
           .single();
 
     const { data, error } = await query;

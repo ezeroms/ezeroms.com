@@ -86,6 +86,7 @@ export default async function AdminGiantsPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/library/giants/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
             />

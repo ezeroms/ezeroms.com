@@ -29,7 +29,7 @@ export const revalidate = 60;
 
 /**
  * カード見出しと重複する先頭の h1 を本文から外す。
- * Column 詳細と同様、タイトルはカード側で出すため。
+ * Column 詳細と同様、タイトルはページ側で出すため。
  */
 function stripLeadingH1(html: string): string {
   return html.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
@@ -169,7 +169,7 @@ export default async function AboutPage({
 
   const page = await getAboutBySlug(contentSlug);
 
-  // Contact は title をカード見出しに使う。Here の title は OGP 用。
+  // Contact は title をページ見出しに使う。Here の title は OGP 用。
   const cardTitle = isMePage || requestedSlug === "here" ? undefined : page?.title;
   const rawBodyHtml = page?.body_html ?? "";
   const bodyForCard = cardTitle ? stripLeadingH1(rawBodyHtml) : rawBodyHtml;

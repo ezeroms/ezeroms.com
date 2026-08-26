@@ -12,6 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return sectionListingMetadata({
     title: section?.label ?? "Chooning",
     description:
+      section?.description ||
       "音楽への思いを記録するプロダクト Chooning。特筆して残したい作品です。",
     ogImage: section?.og_image,
   });

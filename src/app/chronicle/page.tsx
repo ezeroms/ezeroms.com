@@ -24,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return sectionListingMetadata({
     title: section?.label ?? "Chronicle",
     description:
+      section?.description ||
       "関心ごとの年表。テーマを横軸・時系列を縦軸に、出来事を横断して辿ります。",
     ogImage: section?.og_image,
   });

@@ -110,6 +110,7 @@ export default async function AdminCreativeListPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/works/creative/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
             />

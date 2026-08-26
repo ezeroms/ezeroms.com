@@ -29,6 +29,10 @@ function parseOgImage(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function parseDescription(value: unknown, fallback: string): string {
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
 /**
  * DB の writing_section を読み、無ければコード上の既定値にフォールバックする。
  */
@@ -82,10 +86,7 @@ export async function loadWritingSection(
     return {
       ...defaults,
       label: (data.label as string)?.trim() || defaults.label,
-      description:
-        typeof data.description === "string"
-          ? data.description
-          : defaults.description,
+      description: parseDescription(data.description, defaults.description),
       status: parseStatus(data.status, defaults.status),
       og_image:
         parseOgImage(

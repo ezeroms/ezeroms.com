@@ -175,6 +175,7 @@ export async function SiteShell({
     filterActive ?? Boolean(breadcrumbFilter?.trim());
 
   const paperCanvas =
+    bodyClassName === "is-about" ||
     bodyClassName === "is-diary" ||
     bodyClassName === "is-column" ||
     bodyClassName === "is-clips" ||

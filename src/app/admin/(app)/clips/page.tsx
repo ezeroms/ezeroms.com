@@ -77,6 +77,7 @@ export default async function AdminClipsListPage() {
             <WorksSectionSettingsModal
               metaApiPath="/api/admin/library/clips/meta/"
               initialLabel={section.label}
+              initialDescription={section.description}
               initialStatus={section.status}
               initialOgImage={section.og_image}
             />

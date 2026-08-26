@@ -31,8 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return sectionListingMetadata({
     title: section?.label ?? "Diary",
     description:
-      section?.description ??
-      "日々のできごとや考えたことの記録。",
+      section?.description || "日々のできごとや考えたことの記録。",
     ogImage: section?.og_image,
   });
 }

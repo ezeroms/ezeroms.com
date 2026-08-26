@@ -101,7 +101,7 @@ export function PhotoGalleryMetaForm({
       {saved ? <Alert variant="success">ページ設定を保存しました</Alert> : null}
 
       <div className="space-y-2">
-        <Label htmlFor="gallery-label">表示名</Label>
+        <Label htmlFor="gallery-label">タイトル</Label>
         <Input
           id="gallery-label"
           value={label}
@@ -109,18 +109,24 @@ export function PhotoGalleryMetaForm({
           required
           {...ignorePasswordManagersProps}
         />
+        <p className="m-0 text-xs text-muted-foreground">
+          ナビ・パンくず・OGP のタイトルに使います。
+        </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="gallery-description">説明文</Label>
+        <Label htmlFor="gallery-description">OGP 説明文</Label>
         <Textarea
           id="gallery-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          placeholder="公開ページの ? アイコンで表示される説明"
+          placeholder="SNS や検索結果に出る説明文"
           {...ignorePasswordManagersProps}
         />
+        <p className="m-0 text-xs text-muted-foreground">
+          公開ページの ? アイコンにも使います。
+        </p>
       </div>
 
       <div className="space-y-2">

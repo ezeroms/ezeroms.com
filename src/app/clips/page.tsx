@@ -25,6 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return sectionListingMetadata({
     title: section?.label ?? "Clips",
     description:
+      section?.description ||
       "Webのニュースや記事のクリップ。出典と短いメモだけを残す場所です。",
     ogImage: section?.og_image,
   });

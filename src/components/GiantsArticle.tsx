@@ -2,6 +2,7 @@
 
 import type { ShouldersOfGiants } from "@/types/content";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
+import { GiantsTopicNav } from "@/components/GiantsTopicNav";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   /** Already sanitized body HTML */
   bodyHtml: string;
   related?: ShouldersOfGiants[];
+  tags?: string[];
 };
 
 /**
@@ -18,9 +20,11 @@ export function GiantsArticle({
   item,
   bodyHtml,
   related = [],
+  tags = [],
 }: Props) {
   return (
     <>
+      <GiantsTopicNav tags={tags} />
       <div id="notification" className="notification">
         リンクをコピーしました
       </div>

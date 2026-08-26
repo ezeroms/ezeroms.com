@@ -1,5 +1,6 @@
 import type { Clip } from "@/types/content";
 import { ClipList } from "@/components/ClipList";
+import { ClipsTagNav } from "@/components/ClipsTagNav";
 import type { DiaryFilterState } from "@/lib/content/diary-filter";
 
 type Props = {
@@ -11,20 +12,29 @@ type Props = {
 };
 
 /**
- * Clips 一覧本体。タグは SiteShell 右レール（ReadingTopicsAside）。
+ * Clips 一覧本体。
+ * PC: SiteShell 右レール / スマホ: 右下 FAB → ボトムシート。
  */
 export function ClipsBrowse({
   items,
   selectedTag = null,
   dateFilter,
   fallbackThumbSrc = null,
+  tags,
 }: Props) {
   return (
-    <ClipList
-      items={items}
-      currentTag={selectedTag}
-      dateFilter={dateFilter}
-      fallbackThumbSrc={fallbackThumbSrc}
-    />
+    <>
+      <ClipsTagNav
+        tags={tags}
+        selectedTag={selectedTag}
+        dateFilter={dateFilter}
+      />
+      <ClipList
+        items={items}
+        currentTag={selectedTag}
+        dateFilter={dateFilter}
+        fallbackThumbSrc={fallbackThumbSrc}
+      />
+    </>
   );
 }

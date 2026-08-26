@@ -12,6 +12,8 @@ export type LibrarySectionMeta = {
   id: LibrarySectionId;
   /** UI 表示名 */
   label: string;
+  /** 一覧ページの OGP description（空ならコード上の既定） */
+  description: string;
   /** published = 公開 / private = 非公開（ナビ非表示・404） */
   status: LibrarySectionStatus;
   /** 一覧・記事フォールバック用 OGP（空なら未設定） */
@@ -26,6 +28,8 @@ export const LIBRARY_SECTIONS: Record<LibrarySectionId, LibrarySectionMeta> = {
   clips: {
     id: "clips",
     label: "Clips",
+    description:
+      "Webのニュースや記事のクリップ。出典と短いメモだけを残す場所です。",
     status: "published",
     og_image: "",
     basePath: "/clips/",
@@ -34,6 +38,7 @@ export const LIBRARY_SECTIONS: Record<LibrarySectionId, LibrarySectionMeta> = {
   giants: {
     id: "giants",
     label: "The shoulders of Giants",
+    description: "先人の知恵を集めておこう。",
     status: "published",
     og_image: "",
     basePath: "/shoulders-of-giants/",
@@ -42,6 +47,8 @@ export const LIBRARY_SECTIONS: Record<LibrarySectionId, LibrarySectionMeta> = {
   chronicle: {
     id: "chronicle",
     label: "Chronicle",
+    description:
+      "関心ごとの年表。テーマを横軸・時系列を縦軸に、出来事を横断して辿ります。",
     status: "published",
     og_image: "",
     basePath: "/chronicle/",
@@ -50,6 +57,7 @@ export const LIBRARY_SECTIONS: Record<LibrarySectionId, LibrarySectionMeta> = {
   "media-coverage": {
     id: "media-coverage",
     label: "Media coverage",
+    description: "メディア掲載。",
     status: "published",
     og_image: "",
     basePath: "/about/media-coverage/",

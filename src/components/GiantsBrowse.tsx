@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react";
 import type { ShouldersOfGiants } from "@/types/content";
 import { GiantsQuoteCard } from "@/components/GiantsQuoteCard";
+import { GiantsTopicNav } from "@/components/GiantsTopicNav";
 
 type Props = {
   items: ShouldersOfGiants[];
+  tags?: string[];
   /** 単一選択。空なら全件。並びはサーバー側でシャッフル済み */
   selectedTag?: string | null;
 };
@@ -45,10 +47,11 @@ function writeSnapshot(tag: string | null, snapshot: ScrollSnapshot) {
 }
 
 /**
- * Giants 一覧。タグは SiteShell 右レール。
+ * Giants 一覧。PC は SiteShell 右レール、スマホは右下 FAB。
  */
 export function GiantsBrowse({
   items,
+  tags = [],
   selectedTag = null,
 }: Props) {
   const listRef = useRef<HTMLDivElement>(null);
@@ -109,6 +112,7 @@ export function GiantsBrowse({
 
   return (
     <>
+      <GiantsTopicNav tags={tags} selectedTag={selectedTag} />
       <div id="notification" className="notification">
         リンクをコピーしました
       </div>

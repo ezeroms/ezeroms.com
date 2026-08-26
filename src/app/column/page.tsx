@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return sectionListingMetadata({
     title: section?.label ?? "Column",
     description:
-      section?.description ??
+      section?.description ||
       "長めの記事。技術・考察・エッセイなど、きちんと書き切る場所です。",
     ogImage: section?.og_image,
   });

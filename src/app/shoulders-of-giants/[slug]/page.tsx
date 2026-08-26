@@ -116,6 +116,7 @@ export default async function GiantsEntryPage({
         item={item}
         bodyHtml={bodyHtml}
         related={relatedSanitized}
+        tags={tags}
       />
     </SiteShell>
   );

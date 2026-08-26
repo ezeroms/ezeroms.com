@@ -25,7 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const section = await requirePublicLibrarySection("giants").catch(() => null);
   return sectionListingMetadata({
     title: section?.label ?? "The shoulders of Giants",
-    description: "影響を受けた人・作品・考え方のメモ。",
+    description:
+      section?.description || "先人の知恵を集めておこう。",
     ogImage: section?.og_image,
   });
 }
@@ -88,6 +89,7 @@ export default async function GiantsPage({
       }
     >
       <GiantsBrowse
+        tags={tags}
         items={items}
         selectedTag={selectedTag}
       />

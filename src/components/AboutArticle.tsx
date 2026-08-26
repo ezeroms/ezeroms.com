@@ -2,13 +2,12 @@ import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
 import type { AboutHereCard } from "@/lib/content/about-here";
 import { notesBodyClass } from "@/lib/site/prose-styles";
-import { contentCard } from "@/lib/site/card-styles";
 
 type Props = {
   /** Already sanitized body HTML */
   bodyHtml: string;
   title?: string;
-  /** Full-bleed cover at the top of the card (Me) */
+  /** Cover at the top of the page (Me fallback) */
   coverSrc?: string | null;
 };
 
@@ -26,7 +25,7 @@ const proseClassName = cn(
 
 /**
  * About（Me / Here / Contact）本文。
- * Column 詳細と同じ読み物カード・区切り（hr は余白のみ）に揃える。
+ * Column 詳細と同じ枠なし紙面。
  */
 export function AboutArticle({
   bodyHtml,
@@ -35,13 +34,9 @@ export function AboutArticle({
 }: Props) {
   return (
     <div className="w-full font-sans text-foreground">
-      <article
-        className={contentCard({
-          className: "mx-auto min-w-0 w-full max-w-3xl overflow-hidden",
-        })}
-      >
+      <article className="mx-auto min-w-0 w-full max-w-2xl overflow-visible py-4">
         {coverSrc ? (
-          <div className="bg-muted">
+          <div className="mb-6 overflow-hidden rounded-lg bg-muted">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={coverSrc}
@@ -51,18 +46,16 @@ export function AboutArticle({
           </div>
         ) : null}
 
-        <div className="px-6 py-6 sm:p-8">
-          {title ? (
-            <>
-              <h1 className="m-0 text-2xl font-semibold leading-snug tracking-tight text-foreground sm:text-3xl">
-                {title}
-              </h1>
-              <div className="my-6 h-px w-full bg-border" aria-hidden />
-            </>
-          ) : null}
+        {title ? (
+          <>
+            <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+              {title}
+            </h1>
+            <div className="my-6 h-px w-full bg-border" aria-hidden />
+          </>
+        ) : null}
 
-          <ArticleProse html={bodyHtml} className={proseClassName} />
-        </div>
+        <ArticleProse html={bodyHtml} className={proseClassName} />
       </article>
     </div>
   );
@@ -76,11 +69,18 @@ export function AboutHereArticles({
   pageTitle?: string;
 }) {
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-      {pageTitle ? <h1 className="sr-only">{pageTitle}</h1> : null}
-      {cards.map((card) => (
-        <AboutArticle key={card.key} bodyHtml={card.html} />
-      ))}
+    <div className="w-full font-sans text-foreground">
+      <article className="mx-auto min-w-0 w-full max-w-2xl overflow-visible py-4">
+        {pageTitle ? <h1 className="sr-only">{pageTitle}</h1> : null}
+        {cards.map((card, index) => (
+          <div key={card.key}>
+            {index > 0 ? (
+              <div className="my-8 h-px w-full bg-border-subtle" aria-hidden />
+            ) : null}
+            <ArticleProse html={card.html} className={proseClassName} />
+          </div>
+        ))}
+      </article>
     </div>
   );
 }

@@ -25,6 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return sectionListingMetadata({
     title: section?.label ?? "Creative",
     description:
+      section?.description ||
       "つくったもの・サイトのギャラリー。制作実績を並べて眺める場所です。",
     ogImage: section?.og_image,
   });

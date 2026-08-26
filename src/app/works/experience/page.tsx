@@ -10,7 +10,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const section = await requirePublicWorksSection("experience").catch(() => null);
   return sectionListingMetadata({
     title: section?.label ?? "Experience",
-    description: "いつ・どこで・何に関わったか。職歴と関与の年表です。",
+    description:
+      section?.description ||
+      "いつ・どこで・何に関わったか。職歴と関与の年表です。",
     ogImage: section?.og_image,
   });
 }

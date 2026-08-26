@@ -6,8 +6,10 @@ export type WorksSectionStatus = "published" | "private";
 
 export type WorksSectionMeta = {
   id: WorksSectionId;
-  /** UI 表示名 */
+  /** UI 表示名 / OGP タイトル */
   label: string;
+  /** 一覧ページの OGP description（空ならコード上の既定） */
+  description: string;
   /** published = 公開 / private = 非公開（ナビ非表示・404） */
   status: WorksSectionStatus;
   /** 一覧・記事フォールバック用 OGP（空なら未設定） */
@@ -22,6 +24,8 @@ export const WORKS_SECTIONS: Record<WorksSectionId, WorksSectionMeta> = {
   creative: {
     id: "creative",
     label: "Creative",
+    description:
+      "つくったもの・サイトのギャラリー。制作実績を並べて眺める場所です。",
     status: "published",
     og_image: "",
     basePath: "/works/creative/",
@@ -30,6 +34,7 @@ export const WORKS_SECTIONS: Record<WorksSectionId, WorksSectionMeta> = {
   experience: {
     id: "experience",
     label: "Experience",
+    description: "いつ・どこで・何に関わったか。職歴と関与の年表です。",
     status: "published",
     og_image: "",
     basePath: "/works/experience/",
@@ -38,6 +43,8 @@ export const WORKS_SECTIONS: Record<WorksSectionId, WorksSectionMeta> = {
   chooning: {
     id: "chooning",
     label: "Chooning",
+    description:
+      "音楽への思いを記録するプロダクト Chooning。特筆して残したい作品です。",
     status: "published",
     og_image: "",
     basePath: "/works/chooning/",
