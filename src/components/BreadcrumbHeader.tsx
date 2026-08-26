@@ -19,6 +19,8 @@ type Props = {
   filterPanel?: ReactNode;
   /** 絞り込み適用中インジケーター */
   filterActive?: boolean;
+  /** Search の左に出す（Tags トグルなど） */
+  beforeSearch?: ReactNode;
 };
 
 function HeaderSearchFallback({ className }: { className?: string }) {
@@ -35,7 +37,7 @@ function HeaderSearchFallback({ className }: { className?: string }) {
 
 /**
  * Smile / Jampai 見出しと同トーンのパンくず行。
- * 左: パンくず / 右: 検索（＋条件フィルター）
+ * 左: パンくず / 右: Tags（任意）・検索
  */
 export function BreadcrumbHeader({
   items,
@@ -44,6 +46,7 @@ export function BreadcrumbHeader({
   infoDescription,
   filterPanel,
   filterActive = false,
+  beforeSearch,
 }: Props) {
   if (!items.length) return null;
 
@@ -107,13 +110,23 @@ export function BreadcrumbHeader({
         </ol>
       </nav>
 
-      {showSearch ? (
-        <Suspense fallback={<HeaderSearchFallback />}>
-          <HeaderSearch
-            filterPanel={filterPanel}
-            filterActive={filterActive}
-          />
-        </Suspense>
+      {beforeSearch || showSearch ? (
+        <div
+          className={cn(
+            "flex shrink-0 items-center",
+            beforeSearch && "gap-5 min-[1080px]:gap-6",
+          )}
+        >
+          {beforeSearch}
+          {showSearch ? (
+            <Suspense fallback={<HeaderSearchFallback />}>
+              <HeaderSearch
+                filterPanel={filterPanel}
+                filterActive={filterActive}
+              />
+            </Suspense>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

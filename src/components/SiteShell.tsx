@@ -208,6 +208,7 @@ export async function SiteShell({
           infoDescription={breadcrumbInfo}
           filterPanel={secondary}
           filterActive={isFilterActive}
+          beforeSearch={hasAside ? <ReadingTopicsToggle /> : null}
           className="min-w-0 flex-1"
         />
       ) : null}
@@ -221,7 +222,6 @@ export async function SiteShell({
           {sectionHeader}
         </div>
       ) : null}
-      {hasAside ? <ReadingTopicsToggle /> : null}
     </header>
   ) : null;
 

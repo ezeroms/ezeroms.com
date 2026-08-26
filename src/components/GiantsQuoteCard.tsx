@@ -109,7 +109,7 @@ export function GiantsQuoteCard({
       <ArticleProse className={notesBodyClass} html={html} />
 
       {citationNode ? (
-        <p className="m-0 mt-4 text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base">
+        <p className="m-0 mt-5 text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base">
           {citationNode}
         </p>
       ) : null}

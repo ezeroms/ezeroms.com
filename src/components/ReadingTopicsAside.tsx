@@ -10,7 +10,6 @@ type Props = {
   /** 選択中ならそのタグをクリックで一覧へ戻す */
   allHref?: string;
   selected?: string | string[] | null;
-  title?: string;
 };
 
 export function diaryTagHref(tag: string) {
@@ -40,7 +39,6 @@ export function ReadingTopicsAside({
   hrefFor,
   allHref,
   selected = null,
-  title = "Tags",
 }: Props) {
   const sorted = [...tags].sort((a, b) => a.localeCompare(b, "ja"));
   if (!sorted.length) return null;
@@ -51,9 +49,6 @@ export function ReadingTopicsAside({
 
   return (
     <div>
-      <p className="m-0 mb-3 text-sm font-semibold tracking-tight text-foreground">
-        {title}
-      </p>
       <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
         {sorted.map((tag) => {
           const active = selectedSet.has(tag);

@@ -55,6 +55,19 @@ export function ReadingTopicsProvider({
   );
 }
 
+function TagsLabel() {
+  return (
+    <span className="inline-flex h-7 items-center gap-1.5 text-foreground">
+      <Tags
+        className="h-3.5 w-3.5 shrink-0"
+        strokeWidth={2}
+        aria-hidden
+      />
+      <span className="text-sm">Tags</span>
+    </span>
+  );
+}
+
 /** ヘッダー右。PC のみ。カラムが開いているときは出さない。 */
 export function ReadingTopicsToggle() {
   const { open, setOpen, panelId } = useReadingTopics();
@@ -64,23 +77,18 @@ export function ReadingTopicsToggle() {
     <button
       type="button"
       className={cn(
-        "relative hidden shrink-0 cursor-pointer items-center justify-center gap-1.5",
+        "relative hidden shrink-0 cursor-pointer items-center justify-center",
         "appearance-none border-0 bg-transparent p-0 shadow-none outline-none",
-        "text-foreground hover:opacity-60",
+        "hover:opacity-60",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        "min-[1080px]:inline-flex min-[1080px]:h-7 min-[1080px]:w-auto",
+        "min-[1080px]:inline-flex",
       )}
       aria-label="タグを開く"
       aria-expanded={false}
       aria-controls={panelId}
       onClick={() => setOpen(true)}
     >
-      <Tags
-        className="h-3.5 w-3.5 shrink-0"
-        strokeWidth={2}
-        aria-hidden
-      />
-      <span className="text-sm">Tags</span>
+      <TagsLabel />
     </button>
   );
 }
@@ -102,28 +110,37 @@ export function ReadingTopicsPanel({ children }: { children: ReactNode }) {
         className="pointer-events-none absolute inset-y-0 left-0 hidden w-px bg-border min-[1080px]:block"
         aria-hidden
       />
-      <button
-        type="button"
+      <div
         className={cn(
-          "absolute right-2 top-2 z-10 hidden h-7 w-7 items-center justify-center",
-          "appearance-none border-0 bg-transparent p-0 shadow-none outline-none",
-          "cursor-pointer text-foreground",
-          "opacity-0 transition-opacity hover:text-muted-foreground",
-          "group-hover/tags-rail:opacity-100 group-focus-within/tags-rail:opacity-100",
-          "focus-visible:opacity-100 focus-visible:outline-none",
-          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          "[@media(hover:none)]:opacity-100",
-          "min-[1080px]:inline-flex",
+          "flex shrink-0 items-center justify-between gap-2",
+          "min-[1080px]:px-4 min-[1080px]:pt-3 min-[1280px]:px-6 min-[1280px]:pt-4",
         )}
-        aria-label="タグを閉じる"
-        onClick={() => setOpen(false)}
       >
-        <X className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden />
-      </button>
+        <TagsLabel />
+        <button
+          type="button"
+          className={cn(
+            "hidden h-7 w-7 shrink-0 items-center justify-center",
+            "appearance-none border-0 bg-transparent p-0 shadow-none outline-none",
+            "cursor-pointer text-foreground",
+            "opacity-0 transition-opacity hover:text-muted-foreground",
+            "group-hover/tags-rail:opacity-100 group-focus-within/tags-rail:opacity-100",
+            "focus-visible:opacity-100 focus-visible:outline-none",
+            "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            "[@media(hover:none)]:opacity-100",
+            "min-[1080px]:inline-flex",
+          )}
+          aria-label="タグを閉じる"
+          onClick={() => setOpen(false)}
+        >
+          <X className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden />
+        </button>
+      </div>
       <div
         className={cn(
           "min-h-0 min-w-0 flex-1 overflow-y-auto",
-          "min-[1080px]:px-4 min-[1080px]:py-5 min-[1280px]:px-6 min-[1280px]:py-6",
+          "min-[1080px]:px-4 min-[1080px]:pb-5 min-[1080px]:pt-4",
+          "min-[1280px]:px-6 min-[1280px]:pb-6",
         )}
       >
         {children}
