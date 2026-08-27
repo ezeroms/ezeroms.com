@@ -10,13 +10,13 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Alert } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminMePage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   let loadError: string | null = null;
   let profile: AboutProfileEditorInitial | null = null;

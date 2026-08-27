@@ -8,7 +8,7 @@ import { TopImageCreateButton } from "@/components/admin/TopImageCreateButton";
 import { Alert } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { filenameFromImageUrl } from "@/lib/media/photo-name";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -58,7 +58,7 @@ function mapRows(data: Record<string, unknown>[] | null): AdminTopImageTableItem
 }
 
 export default async function AdminTopImagesPage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   let items: AdminTopImageTableItem[] = [];
   let loadError: string | null = null;

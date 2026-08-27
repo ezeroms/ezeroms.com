@@ -13,7 +13,7 @@ import { filenameFromImageUrl } from "@/lib/media/photo-name";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import { resolvePhotoDbTable } from "@/lib/content/photo-db";
 import { loadPhotoGallery } from "@/lib/content/queries/photo-gallery-meta";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 function mapRows(data: Record<string, unknown>[] | null): AdminPhotoTableItem[] {
@@ -60,7 +60,7 @@ export async function AdminPhotoListPage({
 }: {
   galleryId: PhotoGalleryId;
 }) {
-  await getSessionUser();
+  await requireAdminPage();
   const gallery = await loadPhotoGallery(galleryId);
 
   let items: AdminPhotoTableItem[] = [];

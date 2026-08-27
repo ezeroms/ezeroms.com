@@ -9,7 +9,7 @@ import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettings
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWorksSection } from "@/lib/content/queries";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 import { normalizeWorkRow } from "@/lib/content/work-filter";
 
@@ -24,7 +24,7 @@ function isCreativeWork(row: Record<string, unknown>): boolean {
 }
 
 export default async function AdminCreativeListPage() {
-  await getSessionUser();
+  await requireAdminPage();
   const section = await loadWorksSection("creative");
 
   let items: AdminWorkTableItem[] = [];

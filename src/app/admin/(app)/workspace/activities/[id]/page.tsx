@@ -4,7 +4,7 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
 import { ActivityDetailForm } from "@/components/contacts/ActivityDetailForm";
 import { Alert } from "@/components/ui/alert";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getActivityCalendarLink } from "@/lib/workspace/activity-calendar-links";
 import { getActivityWithContacts } from "@/lib/workspace/activities";
 import { listContacts } from "@/lib/workspace/contacts";
@@ -17,7 +17,7 @@ export default async function AdminWorkspaceActivityDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await getSessionUser();
+  await requireAdminPage();
   const { id } = await params;
 
   if (!hasWorkspaceConfig()) {

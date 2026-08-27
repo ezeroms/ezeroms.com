@@ -5,7 +5,7 @@ import {
   type TasksNavSelection,
 } from "@/components/tasks/TasksBoard";
 import { Alert } from "@/components/ui/alert";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { TASK_VIEWS, type TaskViewId } from "@/lib/workspace/labels";
 import { listProjects } from "@/lib/workspace/projects";
@@ -27,7 +27,7 @@ export default async function AdminWorkspaceTasksPage({
     task?: string;
   }>;
 }) {
-  await getSessionUser();
+  await requireAdminPage();
   const params = await searchParams;
 
   let loadError: string | null = null;

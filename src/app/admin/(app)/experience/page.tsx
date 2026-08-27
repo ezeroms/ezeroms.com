@@ -9,13 +9,13 @@ import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettings
 import { Card, CardContent } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWorksSection } from "@/lib/content/queries";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminExperienceListPage() {
-  await getSessionUser();
+  await requireAdminPage();
   const section = await loadWorksSection("experience");
 
   let items: AdminExperienceTableItem[] = [];

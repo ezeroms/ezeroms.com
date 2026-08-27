@@ -8,13 +8,13 @@ import { ClipsCreateButton } from "@/components/admin/ClipsCreateButton";
 import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { loadLibrarySection } from "@/lib/content/queries";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminClipsListPage() {
-  await getSessionUser();
+  await requireAdminPage();
   const section = await loadLibrarySection("clips");
 
   let items: AdminClipsTableItem[] = [];

@@ -5,7 +5,7 @@ import { CalendarBoard } from "@/components/calendar/CalendarBoard";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { findAdminNavItem } from "@/lib/admin/nav";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import {
   GOOGLE_CALENDAR_OAUTH_START_PATH,
   googleCalendarMessageNeedsReconnect,
@@ -45,7 +45,7 @@ export default async function AdminWorkspaceCalendarPage({
 }: {
   searchParams: Promise<{ error?: string; connected?: string }>;
 }) {
-  await getSessionUser();
+  await requireAdminPage();
   const sp = await searchParams;
   const connectError = sp.error
     ? ERROR_LABELS[sp.error] || sp.error

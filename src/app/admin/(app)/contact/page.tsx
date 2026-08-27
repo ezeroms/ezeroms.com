@@ -8,7 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { ABOUT_CONTACT_CONTENT_SLUG } from "@/lib/content/about-routes";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ const SELECT_FULL =
 const SELECT_WITHOUT_OG = "id, title, body_md, body_html, status";
 
 export default async function AdminContactPage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   let loadError: string | null = null;
   let loadWarn: string | null = null;

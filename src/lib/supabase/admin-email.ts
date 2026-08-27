@@ -7,6 +7,7 @@ export function isAdminEmail(email: string | null | undefined): boolean {
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
-  if (allowed.length === 0) return true;
+  // 値が書いてあるのにメールが1件も取れない（`ADMIN_EMAILS=,` など）は全員許可にしない。
+  if (allowed.length === 0) return false;
   return allowed.includes(email.toLowerCase());
 }

@@ -13,13 +13,13 @@ import {
   giantsExcerpt,
 } from "@/lib/content/giants-meta";
 import { loadLibrarySection } from "@/lib/content/queries";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminGiantsPage() {
-  await getSessionUser();
+  await requireAdminPage();
   const section = await loadLibrarySection("giants");
 
   let items: AdminGiantsTableItem[] = [];

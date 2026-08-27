@@ -12,14 +12,14 @@ import {
 } from "@/components/ui/card";
 import { flattenAdminNav } from "@/lib/admin/nav";
 import { loadLibrarySection } from "@/lib/content/queries";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 
 export const dynamic = "force-dynamic";
 
 const navItem = flattenAdminNav().find((i) => i.href === "/admin/chronicle/")!;
 
 export default async function AdminChroniclePage() {
-  await getSessionUser();
+  await requireAdminPage();
   const section = await loadLibrarySection("chronicle");
 
   return (

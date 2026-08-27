@@ -9,7 +9,7 @@ import {
 import { Alert } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import { findAdminNavItem } from "@/lib/admin/nav";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import {
   listActivities,
   listContactNamesByActivityIds,
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 const navItem = findAdminNavItem("/admin/workspace/activities/")!;
 
 export default async function AdminWorkspaceActivitiesPage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   let loadError: string | null = null;
   let items: ActivitiesTableItem[] = [];

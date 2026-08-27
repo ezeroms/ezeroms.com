@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createAuthClient } from "@/lib/supabase/auth";
+import { createAuthClient, isAdminEmail } from "@/lib/supabase/auth";
 
 export async function POST(request: Request) {
   try {
@@ -28,13 +28,21 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!isAdminEmail(data.user?.email)) {
+      await supabase.auth.signOut();
+      return NextResponse.json(
+        { error: "このアカウントでは管理画面に入れません" },
+        { status: 403 },
+      );
+    }
+
     return NextResponse.json({
       ok: true,
       user: { id: data.user?.id, email: data.user?.email },
     });
-  } catch (e) {
+  } catch {
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Login failed" },
+      { error: "ログインに失敗しました" },
       { status: 500 },
     );
   }

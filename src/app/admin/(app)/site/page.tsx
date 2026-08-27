@@ -4,13 +4,13 @@ import { SiteSettingsForm } from "@/components/admin/SiteSettingsForm";
 import { Alert } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadSiteSettings } from "@/lib/content/queries/site-settings";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminSiteSettingsPage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   const loadError = !hasSupabaseConfig()
     ? "Supabase が設定されていません（.env.local を確認してください）"

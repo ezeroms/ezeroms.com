@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 type PageProps = { params: Promise<{ slug: string }> };
 
 export default async function AdminDiaryEditPage({ params }: PageProps) {
-  await getSessionUser();
+  await requireAdminPage();
   const { slug } = await params;
 
   if (!hasSupabaseConfig()) {

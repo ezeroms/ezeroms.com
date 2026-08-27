@@ -6,7 +6,7 @@ import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice"
 import { TaskDetailForm } from "@/components/tasks/TaskDetailForm";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { getDoc, listDocs } from "@/lib/workspace/docs";
 import { listLinks } from "@/lib/workspace/links";
@@ -21,7 +21,7 @@ type PageProps = { params: Promise<{ id: string }> };
 export default async function AdminWorkspaceTaskDetailPage({
   params,
 }: PageProps) {
-  await getSessionUser();
+  await requireAdminPage();
   const { id } = await params;
 
   if (!hasWorkspaceConfig()) {

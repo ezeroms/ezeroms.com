@@ -4,7 +4,7 @@ import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice"
 import { ProjectsBoard } from "@/components/projects/ProjectsBoard";
 import { Alert } from "@/components/ui/alert";
 import { findAdminNavItem } from "@/lib/admin/nav";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { listProjects } from "@/lib/workspace/projects";
 
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 const navItem = findAdminNavItem("/admin/workspace/projects/")!;
 
 export default async function AdminWorkspaceProjectsPage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   let loadError: string | null = null;
   let projects: Awaited<ReturnType<typeof listProjects>> = [];

@@ -8,7 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { ABOUT_HERE_CONTENT_SLUG } from "@/lib/content/about-routes";
 import { parseAboutHereMarkdown } from "@/lib/content/about-here";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -50,7 +50,7 @@ function initialFromRow(row: Record<string, unknown>): AboutHereEditorInitial {
 }
 
 export default async function AdminHerePage() {
-  await getSessionUser();
+  await requireAdminPage();
 
   let loadError: string | null = null;
   let loadWarn: string | null = null;

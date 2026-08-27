@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { hasGaDataApiConfig } from "@/lib/analytics/config";
 import { fetchAnalyticsReport } from "@/lib/analytics/report";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import {
   listGoogleEventsCached,
   resolveMainCalendarId,
@@ -37,7 +37,7 @@ export const dynamic = "force-dynamic";
 const navItem = findAdminNavItem("/admin/workspace/")!;
 
 export default async function AdminWorkspaceDashboardPage() {
-  await getSessionUser();
+  await requireAdminPage();
   const todayLabel = new Intl.DateTimeFormat("ja-JP", {
     dateStyle: "full",
   }).format(new Date());

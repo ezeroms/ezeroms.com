@@ -16,7 +16,7 @@ import {
 } from "@/lib/content/photo-galleries";
 import { resolvePhotoDbTable } from "@/lib/content/photo-db";
 import { filenameFromImageUrl } from "@/lib/media/photo-name";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
 
 /** 写真ギャラリー共通の「編集」画面。 */
 export async function AdminPhotoEditPage({ galleryId, slug }: Props) {
-  await getSessionUser();
+  await requireAdminPage();
   const gallery = getPhotoGallery(galleryId);
 
   if (!hasSupabaseConfig()) notFound();

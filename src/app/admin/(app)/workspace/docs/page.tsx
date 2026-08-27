@@ -5,7 +5,7 @@ import {
   type DocsNavSelection,
 } from "@/components/docs/DocsBoard";
 import { Alert } from "@/components/ui/alert";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { listDocs } from "@/lib/workspace/docs";
 
@@ -16,7 +16,7 @@ export default async function AdminWorkspaceDocsPage({
 }: {
   searchParams: Promise<{ tag?: string; doc?: string }>;
 }) {
-  await getSessionUser();
+  await requireAdminPage();
   const params = await searchParams;
 
   let loadError: string | null = null;

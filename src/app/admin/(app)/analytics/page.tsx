@@ -8,7 +8,7 @@ import {
   hasGaMeasurementId,
 } from "@/lib/analytics/config";
 import { fetchAnalyticsReport } from "@/lib/analytics/report";
-import { getSessionUser } from "@/lib/supabase/auth";
+import { requireAdminPage } from "@/lib/supabase/auth";
 import type { AnalyticsRange, AnalyticsReport } from "@/types/analytics";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,7 @@ export default async function AdminAnalyticsPage({
 }: {
   searchParams: Promise<{ range?: string }>;
 }) {
-  await getSessionUser();
+  await requireAdminPage();
   const sp = await searchParams;
   const range = parseRange(sp.range);
   const configured = hasGaDataApiConfig();
