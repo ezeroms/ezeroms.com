@@ -5,7 +5,9 @@ import { useEffect } from "react";
 export function SiteScripts() {
   useEffect(() => {
     // External links in articles
-    const articleLinks = document.querySelectorAll(".article-item a[href]");
+    const articleLinks = document.querySelectorAll(
+      ".article-prose a[href], .article-item a[href]",
+    );
     articleLinks.forEach((node) => {
       const link = node as HTMLAnchorElement;
       const href = link.getAttribute("href");

@@ -10,8 +10,8 @@ import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { getDoc, listDocs } from "@/lib/workspace/docs";
 import { listLinks } from "@/lib/workspace/links";
-import { listProjects } from "@/lib/workspace/projects";
-import { getTask } from "@/lib/workspace/tasks";
+import { uniqueWorkspaceTags } from "@/lib/workspace/tags";
+import { getTask, listTasks } from "@/lib/workspace/tasks";
 import type { WorkspaceDoc } from "@/types/workspace";
 
 export const dynamic = "force-dynamic";
@@ -34,17 +34,17 @@ export default async function AdminWorkspaceTaskDetailPage({
   }
 
   let task: Awaited<ReturnType<typeof getTask>> = null;
-  let projects: Awaited<ReturnType<typeof listProjects>> = [];
+  let allTasks: Awaited<ReturnType<typeof listTasks>> = [];
   let links: Awaited<ReturnType<typeof listLinks>> = [];
   let allDocs: Awaited<ReturnType<typeof listDocs>> = [];
   let loadError: string | null = null;
 
   try {
-    [task, projects, links, allDocs] = await Promise.all([
+    [task, allTasks, links, allDocs] = await Promise.all([
       getTask(id),
-      listProjects(),
+      listTasks({ view: "all", limit: 500, includeArchived: true }),
       listLinks({ type: "task", id }),
-      listDocs({ limit: 100 }),
+      listDocs({ limit: 100, includeArchived: true }),
     ]);
   } catch (e) {
     loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
@@ -84,7 +84,7 @@ export default async function AdminWorkspaceTaskDetailPage({
     <AdminContent>
       <AdminPageHeader
         title={task.title}
-        description="Task の詳細・Project・関連 Docs"
+        description="Task の詳細・タグ・関連 Docs"
         actions={
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/workspace/tasks/">一覧</Link>
@@ -93,7 +93,7 @@ export default async function AdminWorkspaceTaskDetailPage({
       />
       <TaskDetailForm
         task={task}
-        projects={projects}
+        tagSuggestions={uniqueWorkspaceTags(allDocs, allTasks)}
         links={links}
         linkedDocs={linkedDocs}
         allDocs={allDocs}

@@ -1,17 +1,19 @@
 import "server-only";
 
 import { getWorkspaceAdmin } from "@/lib/workspace/db/server";
-import type {
-  TaskPriority,
-  TaskStatus,
-  WorkspaceTask,
+import {
+  parseWorkspaceTags,
+  type TaskPriority,
+  type TaskStatus,
+  type WorkspaceTask,
 } from "@/types/workspace";
 
 const SELECT =
-  "id, title, body_md, status, priority, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, created_at, updated_at, completed_at, archived_at";
+  "id, title, body_md, status, priority, tags, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, created_at, updated_at, completed_at, archived_at";
 
 export type TaskListFilter = {
   status?: TaskStatus;
+  tag?: string;
   projectId?: string;
   scheduledDate?: string;
   /** Include tasks whose work block overlaps [from, to). */
@@ -39,6 +41,9 @@ export async function listTasks(
 
   if (filter.status) {
     q = q.eq("status", filter.status);
+  }
+  if (filter.tag?.trim()) {
+    q = q.contains("tags", [filter.tag.trim()]);
   }
   if (filter.projectId) {
     q = q.eq("project_id", filter.projectId);
@@ -84,7 +89,15 @@ export async function listTasks(
 
   const { data, error } = await q;
   if (error) throw new Error(error.message);
-  return (data ?? []) as WorkspaceTask[];
+  return (data ?? []).map((row) => asTask(row as WorkspaceTask));
+}
+
+function asTask(row: WorkspaceTask): WorkspaceTask {
+  return {
+    ...row,
+    tags: parseWorkspaceTags(row.tags),
+    progress_percent: row.progress_percent ?? 0,
+  };
 }
 
 export async function getTask(id: string): Promise<WorkspaceTask | null> {
@@ -94,7 +107,7 @@ export async function getTask(id: string): Promise<WorkspaceTask | null> {
     .eq("id", id)
     .maybeSingle();
   if (error) throw new Error(error.message);
-  return (data as WorkspaceTask | null) ?? null;
+  return data ? asTask(data as WorkspaceTask) : null;
 }
 
 export type TaskWriteInput = {
@@ -102,6 +115,7 @@ export type TaskWriteInput = {
   body_md?: string | null;
   status?: TaskStatus;
   priority?: TaskPriority;
+  tags?: string[];
   project_id?: string | null;
   scheduled_date?: string | null;
   scheduled_at?: string | null;
@@ -133,6 +147,7 @@ export async function createTask(
       body_md: input.body_md ?? null,
       status,
       priority: input.priority ?? "none",
+      tags: parseWorkspaceTags(input.tags),
       project_id: input.project_id ?? null,
       scheduled_date: input.scheduled_date ?? null,
       scheduled_at: input.scheduled_at ?? null,
@@ -145,7 +160,7 @@ export async function createTask(
     .select(SELECT)
     .single();
   if (error) throw new Error(error.message);
-  return data as WorkspaceTask;
+  return asTask(data as WorkspaceTask);
 }
 
 export async function updateTask(
@@ -156,6 +171,9 @@ export async function updateTask(
   if (!existing) throw new Error("Not found");
 
   const row: Record<string, unknown> = { ...patch };
+  if (patch.tags !== undefined) {
+    row.tags = parseWorkspaceTags(patch.tags);
+  }
   const completedAt = completedAtForStatus(patch.status, existing.status);
   if (completedAt !== undefined) {
     row.completed_at = completedAt;
@@ -177,7 +195,7 @@ export async function updateTask(
     .select(SELECT)
     .single();
   if (error) throw new Error(error.message);
-  return data as WorkspaceTask;
+  return asTask(data as WorkspaceTask);
 }
 
 export async function archiveTask(id: string): Promise<WorkspaceTask> {

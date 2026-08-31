@@ -4,6 +4,7 @@ import { createTask, listTasks, type TaskListFilter } from "@/lib/workspace/task
 import {
   isTaskPriority,
   isTaskStatus,
+  parseWorkspaceTags,
   type TaskStatus,
 } from "@/types/workspace";
 
@@ -26,6 +27,7 @@ export async function GET(request: NextRequest) {
     const statusRaw = sp.get("status") ?? undefined;
     const filter: TaskListFilter = {
       includeArchived: sp.get("include_archived") === "1",
+      tag: sp.get("tag") ?? undefined,
       projectId: sp.get("project_id") ?? undefined,
       scheduledDate: sp.get("scheduled_date") ?? undefined,
       scheduledAtFrom: sp.get("scheduled_at_from") ?? undefined,
@@ -59,6 +61,7 @@ export async function POST(request: NextRequest) {
       body_md?: string | null;
       status?: string;
       priority?: string;
+      tags?: string | string[] | null;
       project_id?: string | null;
       scheduled_date?: string | null;
       scheduled_at?: string | null;
@@ -104,6 +107,7 @@ export async function POST(request: NextRequest) {
         body.priority && isTaskPriority(body.priority)
           ? body.priority
           : "none",
+      tags: parseWorkspaceTags(body.tags),
       project_id: body.project_id ?? null,
       scheduled_date: body.scheduled_date ?? null,
       scheduled_at: body.scheduled_at ?? null,

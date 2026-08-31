@@ -1,20 +1,12 @@
-import { parseDocTags, type WorkspaceDoc } from "@/types/workspace";
+import { itemHasTag, uniqueTagsFromItems } from "@/lib/workspace/tags";
+import type { WorkspaceDoc } from "@/types/workspace";
 
 export type DocsNavSelection =
   | { kind: "all" }
   | { kind: "tag"; tag: string };
 
 export function uniqueDocTags(docs: WorkspaceDoc[]): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const doc of docs) {
-    for (const tag of parseDocTags(doc.tags)) {
-      if (seen.has(tag)) continue;
-      seen.add(tag);
-      out.push(tag);
-    }
-  }
-  return out.sort((a, b) => a.localeCompare(b, "ja"));
+  return uniqueTagsFromItems(docs);
 }
 
 export function filterDocsForBoard(
@@ -22,11 +14,11 @@ export function filterDocsForBoard(
   selection: DocsNavSelection,
 ): WorkspaceDoc[] {
   if (selection.kind === "all") return docs;
-  return docs.filter((doc) => parseDocTags(doc.tags).includes(selection.tag));
+  return docs.filter((doc) => itemHasTag(doc, selection.tag));
 }
 
 export function countDocsForTag(docs: WorkspaceDoc[], tag: string): number {
-  return docs.filter((doc) => parseDocTags(doc.tags).includes(tag)).length;
+  return docs.filter((doc) => itemHasTag(doc, tag)).length;
 }
 
 export function docsBoardSelectionTitle(selection: DocsNavSelection): string {

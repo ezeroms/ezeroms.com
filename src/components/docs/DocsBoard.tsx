@@ -2,9 +2,11 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileText, Plus, Tag } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import { DocEditorPanel } from "@/components/docs/DocEditorPanel";
 import { Button } from "@/components/ui/button";
+import { TagBoardCrossLink } from "@/components/workspace/TagBoardCrossLink";
+import { WorkspaceTagsNav } from "@/components/workspace/WorkspaceTagsNav";
 import { cn } from "@/lib/cn";
 import { cardOutlineClass } from "@/lib/site/card-styles";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
@@ -12,57 +14,85 @@ import {
   countDocsForTag,
   docsBoardSelectionTitle,
   filterDocsForBoard,
-  uniqueDocTags,
   type DocsNavSelection,
 } from "@/lib/workspace/doc-views";
-import { parseDocTags, type WorkspaceDoc } from "@/types/workspace";
+import {
+  groupTagsForNav,
+  isArchivedDoc,
+  orderedTagNames,
+  sidebarTagsForItems,
+  uniqueWorkspaceTags,
+} from "@/lib/workspace/tags";
+import {
+  parseWorkspaceTags,
+  type WorkspaceDoc,
+  type WorkspaceTag,
+  type WorkspaceTagGroup,
+  type WorkspaceTask,
+} from "@/types/workspace";
 
 export type { DocsNavSelection };
 
 type Props = {
   initialDocs: WorkspaceDoc[];
+  initialTasks: WorkspaceTask[];
+  initialTagGroups?: WorkspaceTagGroup[];
+  initialCatalogTags?: WorkspaceTag[];
   initialSelection: DocsNavSelection;
   initialDocId?: string | null;
 };
 
 export function DocsBoard({
   initialDocs,
+  initialTasks,
+  initialTagGroups = [],
+  initialCatalogTags = [],
   initialSelection,
   initialDocId = null,
 }: Props) {
   const router = useRouter();
   const [docs, setDocs] = useState(initialDocs);
+  const [tasks] = useState(initialTasks);
   const [selection, setSelection] =
     useState<DocsNavSelection>(initialSelection);
   const [selectedDocId, setSelectedDocId] = useState<string | null>(
     initialDocId,
   );
-  const [extraTags, setExtraTags] = useState<string[]>(() =>
-    initialSelection.kind === "tag" &&
-    !uniqueDocTags(initialDocs).includes(initialSelection.tag)
-      ? [initialSelection.tag]
-      : [],
-  );
-  const [addingTag, setAddingTag] = useState(false);
-  const [newTag, setNewTag] = useState("");
   const [quickTitle, setQuickTitle] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const knownTags = useMemo(() => {
-    const fromDocs = uniqueDocTags(docs);
-    const extras = extraTags.filter((tag) => !fromDocs.includes(tag));
-    return [...fromDocs, ...extras];
-  }, [docs, extraTags]);
+  const liveDocs = useMemo(
+    () => docs.filter((doc) => !isArchivedDoc(doc)),
+    [docs],
+  );
+
+  const knownTags = useMemo(
+    () =>
+      groupTagsForNav(
+        sidebarTagsForItems(docs),
+        initialCatalogTags,
+        initialTagGroups,
+      ),
+    [docs, initialCatalogTags, initialTagGroups],
+  );
+
+  const tagSuggestions = useMemo(() => {
+    const ordered = orderedTagNames(initialCatalogTags, initialTagGroups);
+    const extras = uniqueWorkspaceTags(docs, tasks).filter(
+      (tag) => !ordered.includes(tag),
+    );
+    return [...ordered, ...extras];
+  }, [docs, tasks, initialCatalogTags, initialTagGroups]);
 
   const visibleDocs = useMemo(
-    () => filterDocsForBoard(docs, selection),
-    [docs, selection],
+    () => filterDocsForBoard(liveDocs, selection),
+    [liveDocs, selection],
   );
 
   const selectedDoc = useMemo(
-    () => docs.find((doc) => doc.id === selectedDocId) ?? null,
-    [docs, selectedDocId],
+    () => liveDocs.find((doc) => doc.id === selectedDocId) ?? null,
+    [liveDocs, selectedDocId],
   );
 
   useEffect(() => {
@@ -91,19 +121,10 @@ export function DocsBoard({
     setError(null);
   }
 
-  function commitNewTag() {
-    const tag = newTag.trim();
-    if (!tag) {
-      setAddingTag(false);
-      setNewTag("");
-      return;
-    }
-    const parsed = parseDocTags([tag])[0];
+  function addTag(tag: string) {
+    const parsed = parseWorkspaceTags([tag])[0];
     if (!parsed) return;
-    setExtraTags((prev) => (prev.includes(parsed) ? prev : [...prev, parsed]));
     selectNav({ kind: "tag", tag: parsed });
-    setAddingTag(false);
-    setNewTag("");
   }
 
   async function onQuickAdd(event: FormEvent) {
@@ -114,7 +135,7 @@ export function DocsBoard({
     setError(null);
     try {
       const tags =
-        selection.kind === "tag" ? parseDocTags([selection.tag]) : [];
+        selection.kind === "tag" ? parseWorkspaceTags([selection.tag]) : [];
       const response = await fetch("/api/admin/workspace/docs/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -156,75 +177,21 @@ export function DocsBoard({
             >
               <FileText className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
               <span className="min-w-0 flex-1 truncate">すべて</span>
-              {docs.length > 0 ? (
+              {liveDocs.length > 0 ? (
                 <span className="tabular-nums text-xs text-muted-foreground">
-                  {docs.length}
+                  {liveDocs.length}
                 </span>
               ) : null}
             </button>
           </nav>
 
-          <div className="mb-1.5 mt-5 flex items-center justify-between gap-2 px-2">
-            <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              タグ
-            </p>
-            <button
-              type="button"
-              className="inline-flex size-5 items-center justify-center border-0 bg-transparent p-0 text-muted-foreground shadow-none hover:text-foreground"
-              aria-label="タグを追加"
-              onClick={() => setAddingTag(true)}
-            >
-              <Plus className="size-3.5" aria-hidden />
-            </button>
-          </div>
-          <nav className="flex flex-col gap-0.5">
-            {addingTag ? (
-              <form
-                className="px-1 pb-1"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  commitNewTag();
-                }}
-              >
-                <input
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  onBlur={commitNewTag}
-                  placeholder="新しいタグ"
-                  className="admin-input-bare h-8 w-full rounded-md border border-border bg-card px-2 text-sm text-foreground outline-none"
-                  autoFocus
-                  autoComplete="off"
-                />
-              </form>
-            ) : null}
-            {knownTags.length === 0 && !addingTag ? (
-              <p className="px-2 py-1.5 text-xs text-muted-foreground">
-                まだありません
-              </p>
-            ) : (
-              knownTags.map((tag) => {
-                const active =
-                  selection.kind === "tag" && selection.tag === tag;
-                const count = countDocsForTag(docs, tag);
-                return (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => selectNav({ kind: "tag", tag })}
-                    className={sidebarNavItemClass(active)}
-                  >
-                    <Tag className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
-                    <span className="min-w-0 flex-1 truncate">{tag}</span>
-                    {count > 0 ? (
-                      <span className="tabular-nums text-xs text-muted-foreground">
-                        {count}
-                      </span>
-                    ) : null}
-                  </button>
-                );
-              })
-            )}
-          </nav>
+          <WorkspaceTagsNav
+            sections={knownTags}
+            selectedTag={selection.kind === "tag" ? selection.tag : null}
+            countForTag={(tag) => countDocsForTag(liveDocs, tag)}
+            onSelect={(tag) => selectNav({ kind: "tag", tag })}
+            onAddTag={addTag}
+          />
         </div>
       </aside>
 
@@ -243,6 +210,14 @@ export function DocsBoard({
               <p className="m-0 mt-1 text-xs text-muted-foreground">
                 {visibleDocs.length} 件
               </p>
+              {selection.kind === "tag" ? (
+                <TagBoardCrossLink
+                  tag={selection.tag}
+                  docs={docs}
+                  tasks={tasks}
+                  current="docs"
+                />
+              ) : null}
             </div>
 
             <form
@@ -327,7 +302,7 @@ export function DocsBoard({
               <DocEditorPanel
                 key={selectedDoc.id}
                 doc={selectedDoc}
-                tagSuggestions={knownTags}
+                tagSuggestions={tagSuggestions}
                 onSaved={(saved) => {
                   setDocs((previous) =>
                     previous.map((item) =>
@@ -337,7 +312,15 @@ export function DocsBoard({
                 }}
                 onArchived={(docId) => {
                   setDocs((previous) =>
-                    previous.filter((item) => item.id !== docId),
+                    previous.map((item) =>
+                      item.id === docId
+                        ? {
+                            ...item,
+                            status: "archived",
+                            archived_at: item.archived_at ?? new Date().toISOString(),
+                          }
+                        : item,
+                    ),
                   );
                   setSelectedDocId(null);
                 }}

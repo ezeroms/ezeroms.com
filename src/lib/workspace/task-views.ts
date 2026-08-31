@@ -1,10 +1,11 @@
 import { todayDateKey, type TaskViewId } from "@/lib/workspace/labels";
-import type { WorkspaceProject, WorkspaceTask } from "@/types/workspace";
+import { itemHasTag } from "@/lib/workspace/tags";
+import type { WorkspaceTask } from "@/types/workspace";
 
-/** タスクボード左ナビの選択状態（スマートビュー or プロジェクト） */
+/** タスクボード左ナビの選択状態（スマートビュー or タグ） */
 export type TasksNavSelection =
   | { kind: "view"; view: TaskViewId }
-  | { kind: "project"; projectId: string };
+  | { kind: "tag"; tag: string };
 
 /** ボード用スマートビューの日本語ラベル（URL 用の英語 TASK_VIEWS とは別） */
 export const TASK_BOARD_VIEW_LABELS: Record<TaskViewId, string> = {
@@ -43,11 +44,8 @@ export function filterTasksForBoard(
 ): WorkspaceTask[] {
   const today = todayDateKey(now);
 
-  if (selection.kind === "project") {
-    return tasks.filter(
-      (task) =>
-        task.project_id === selection.projectId && task.status !== "done",
-    );
+  if (selection.kind === "tag") {
+    return tasks.filter((task) => itemHasTag(task, selection.tag));
   }
 
   switch (selection.view) {
@@ -86,15 +84,11 @@ export function countTasksForView(
   return filterTasksForBoard(tasks, { kind: "view", view }, now).length;
 }
 
-export function tasksBoardSelectionTitle(
-  selection: TasksNavSelection,
-  projects: WorkspaceProject[],
-): string {
-  if (selection.kind === "project") {
-    return (
-      projects.find((project) => project.id === selection.projectId)?.name ??
-      "Project"
-    );
-  }
+export function countTasksForTag(tasks: WorkspaceTask[], tag: string): number {
+  return tasks.filter((task) => itemHasTag(task, tag)).length;
+}
+
+export function tasksBoardSelectionTitle(selection: TasksNavSelection): string {
+  if (selection.kind === "tag") return selection.tag;
   return TASK_BOARD_VIEW_LABELS[selection.view] ?? "Tasks";
 }

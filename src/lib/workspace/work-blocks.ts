@@ -3,10 +3,14 @@ import "server-only";
 import { getWorkspaceAdmin } from "@/lib/workspace/db/server";
 import { localDateKeyFromIso } from "@/lib/workspace/calendar/time";
 import { DEFAULT_TASK_MINUTES } from "@/types/calendar";
-import type { TaskWorkBlock, WorkspaceTask } from "@/types/workspace";
+import {
+  parseWorkspaceTags,
+  type TaskWorkBlock,
+  type WorkspaceTask,
+} from "@/types/workspace";
 
 const TASK_SELECT =
-  "id, title, body_md, status, priority, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, created_at, updated_at, completed_at, archived_at";
+  "id, title, body_md, status, priority, tags, project_id, scheduled_date, scheduled_at, due_at, estimated_minutes, progress_percent, created_at, updated_at, completed_at, archived_at";
 
 const SELECT =
   "id, task_id, starts_at, ends_at, calendar_link_id, note_md, created_at, updated_at";
@@ -100,7 +104,8 @@ async function patchTaskSchedule(
     .select(TASK_SELECT)
     .single();
   if (error) throw new Error(error.message);
-  return data as WorkspaceTask;
+  const task = data as WorkspaceTask;
+  return { ...task, tags: parseWorkspaceTags(task.tags) };
 }
 
 /** tasks.scheduled_at / scheduled_date を作業枠から同期（次の枠＝現在以降で最も早い開始）。 */

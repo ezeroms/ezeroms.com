@@ -8,6 +8,8 @@ import { Alert } from "@/components/ui/alert";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
 import { listDocs } from "@/lib/workspace/docs";
+import { loadTagCatalog } from "@/lib/workspace/tag-catalog";
+import { listTasks } from "@/lib/workspace/tasks";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +23,19 @@ export default async function AdminWorkspaceDocsPage({
 
   let loadError: string | null = null;
   let docs = [] as Awaited<ReturnType<typeof listDocs>>;
+  let tasks = [] as Awaited<ReturnType<typeof listTasks>>;
+  let tagGroups = [] as Awaited<ReturnType<typeof loadTagCatalog>>["groups"];
+  let catalogTags = [] as Awaited<ReturnType<typeof loadTagCatalog>>["tags"];
 
   if (hasWorkspaceConfig()) {
     try {
-      docs = await listDocs({ limit: 500 });
+      const catalog = await loadTagCatalog();
+      tagGroups = catalog.groups;
+      catalogTags = catalog.tags;
+      [docs, tasks] = await Promise.all([
+        listDocs({ limit: 500, includeArchived: true }),
+        listTasks({ view: "all", limit: 500, includeArchived: true }),
+      ]);
     } catch (e) {
       loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
     }
@@ -54,6 +65,9 @@ export default async function AdminWorkspaceDocsPage({
       {hasWorkspaceConfig() && !loadError ? (
         <DocsBoard
           initialDocs={docs}
+          initialTasks={tasks}
+          initialTagGroups={tagGroups}
+          initialCatalogTags={catalogTags}
           initialSelection={initialSelection}
           initialDocId={initialDocId}
         />

@@ -67,18 +67,18 @@ export const adminNavSections: AdminNavSection[] = [
         icon: "check-square",
       },
       {
-        href: "/admin/workspace/projects/",
-        label: "Projects",
-        description: "Project の名前・状態を管理",
-        status: "ready",
-        icon: "folder",
-      },
-      {
         href: "/admin/workspace/docs/",
         label: "Docs",
         description: "非公開メモ・資料",
         status: "ready",
         icon: "files",
+      },
+      {
+        href: "/admin/workspace/tags/",
+        label: "Tags",
+        description: "タグのグループと並び順",
+        status: "ready",
+        icon: "tags",
       },
       {
         href: "/admin/workspace/contacts/",

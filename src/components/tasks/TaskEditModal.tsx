@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
+import { DocTagsInput } from "@/components/docs/DocTagsInput";
 import { Button } from "@/components/ui/button";
 import {
   ClickToEditField,
@@ -25,9 +26,9 @@ import {
 import type {
   TaskStatus,
   TaskWorkBlock,
-  WorkspaceProject,
   WorkspaceTask,
 } from "@/types/workspace";
+import { parseWorkspaceTags } from "@/types/workspace";
 
 type Props = {
   open: boolean;
@@ -51,7 +52,7 @@ type FormState = {
   title: string;
   body_md: string;
   status: TaskStatus;
-  project_id: string;
+  tags: string[];
   due_at: string;
   estimated_minutes: string;
   progress_percent: string;
@@ -85,7 +86,7 @@ function formFromTask(
     title: task.title,
     body_md: task.body_md ?? "",
     status: task.status,
-    project_id: task.project_id ?? "",
+    tags: parseWorkspaceTags(task.tags),
     due_at: toDatetimeLocalValue(task.due_at),
     estimated_minutes: formatEstimatedMinutesInput(task.estimated_minutes),
     progress_percent: String(task.progress_percent ?? 0),
@@ -110,7 +111,7 @@ export function TaskEditModal({
   const titleId = useId();
   const editingWorkBlock = Boolean(workBlockId || initialWorkBlock);
   const [task, setTask] = useState<WorkspaceTask | null>(initialTask);
-  const [projects, setProjects] = useState<WorkspaceProject[]>([]);
+  const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [resolvedWorkBlockId, setResolvedWorkBlockId] = useState<string | null>(
     workBlockId,
   );
@@ -154,11 +155,10 @@ export function TaskEditModal({
     setError(null);
     setDeletingBlock(false);
     setResolvedWorkBlockId(workBlockId);
-    setProjects([]);
+    setTagSuggestions([]);
     setActualMinutes(0);
     setModalTab(editingWorkBlock ? "work" : "task");
     // タイトル表示用のみ先行セット。form は API 完了まで出さない
-    // （projects 未取得のまま Select を出すと value が「なし」に落ちることがある）
     if (initialTask && initialTask.id === taskId) {
       setTask(initialTask);
     } else {
@@ -172,23 +172,23 @@ export function TaskEditModal({
 
     void (async () => {
       try {
-        const [taskRes, projectsRes] = await Promise.all([
+        const [taskRes, tagsRes] = await Promise.all([
           fetch(`/api/admin/workspace/tasks/${taskId}/`),
-          fetch("/api/admin/workspace/projects/?include_archived=1"),
+          fetch("/api/admin/workspace/tags/"),
         ]);
         const taskData = (await taskRes.json()) as {
           item?: WorkspaceTask;
           error?: string;
         };
-        const projectsData = (await projectsRes.json()) as {
-          items?: WorkspaceProject[];
+        const tagsData = (await tagsRes.json()) as {
+          tags?: string[];
           error?: string;
         };
         if (!taskRes.ok || !taskData.item) {
           throw new Error(taskData.error || "タスクの取得に失敗しました");
         }
-        if (!projectsRes.ok) {
-          throw new Error(projectsData.error || "Project の取得に失敗しました");
+        if (!tagsRes.ok) {
+          throw new Error(tagsData.error || "タグの取得に失敗しました");
         }
 
         let work: WorkSeed | null | undefined = seedWorkBlock;
@@ -223,33 +223,16 @@ export function TaskEditModal({
 
         if (cancelled) return;
 
-        let projectItems = projectsData.items ?? [];
-        // タスクに紐づくプロジェクトがアーカイブ済みでも、選択肢に残す
-        const linkedProjectId = taskData.item.project_id;
-        if (
-          linkedProjectId &&
-          !projectItems.some((project) => project.id === linkedProjectId)
-        ) {
-          const projectRes = await fetch(
-            `/api/admin/workspace/projects/${linkedProjectId}/`,
-          );
-          const projectData = (await projectRes.json()) as {
-            item?: WorkspaceProject;
-          };
-          if (projectRes.ok && projectData.item) {
-            projectItems = [projectData.item, ...projectItems];
-          }
-        }
-
-        // 編集用はアーカイブ以外を優先表示（現在紐づいているものは残す）
-        const selectable = projectItems.filter(
-          (project) =>
-            project.status !== "archived" || project.id === linkedProjectId,
-        );
+        const suggestions = [
+          ...new Set([
+            ...(tagsData.tags ?? []),
+            ...parseWorkspaceTags(taskData.item.tags),
+          ]),
+        ];
 
         const next = formFromTask(taskData.item, work);
         setTask(taskData.item);
-        setProjects(selectable);
+        setTagSuggestions(suggestions);
         setResolvedWorkBlockId(blockId);
         setForm(next);
         setBaseline(next);
@@ -344,7 +327,7 @@ export function TaskEditModal({
           title: form.title.trim(),
           body_md: form.body_md,
           status: form.status,
-          project_id: form.project_id || null,
+          tags: parseWorkspaceTags(form.tags),
           due_at: fromDatetimeLocalValue(form.due_at),
           estimated_minutes: minutes,
           progress_percent:
@@ -578,20 +561,12 @@ export function TaskEditModal({
             </div>
           </ClickToEditRow>
 
-          <ClickToEditRow label="Project" align="center">
-            <Select
-              id="cal-task-project"
-              value={form.project_id}
-              className={bareControlClass}
-              onChange={(e) => patchForm("project_id", e.target.value)}
-            >
-              <option value="">（なし）</option>
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
-                </option>
-              ))}
-            </Select>
+          <ClickToEditRow label="タグ">
+            <DocTagsInput
+              value={form.tags}
+              suggestions={tagSuggestions}
+              onChange={(tags) => patchForm("tags", tags)}
+            />
           </ClickToEditRow>
         </section>
 

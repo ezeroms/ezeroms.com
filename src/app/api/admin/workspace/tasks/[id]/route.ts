@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireWorkspaceAdmin } from "@/lib/workspace/api-auth";
 import { archiveTask, getTask, updateTask } from "@/lib/workspace/tasks";
-import { isTaskPriority, isTaskStatus } from "@/types/workspace";
+import { isTaskPriority, isTaskStatus, parseWorkspaceTags } from "@/types/workspace";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -40,6 +40,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       body_md?: string | null;
       status?: string;
       priority?: string;
+      tags?: string | string[] | null;
       project_id?: string | null;
       scheduled_date?: string | null;
       scheduled_at?: string | null;
@@ -97,6 +98,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       ...(body.priority !== undefined && isTaskPriority(body.priority)
         ? { priority: body.priority }
         : {}),
+      ...(body.tags !== undefined ? { tags: parseWorkspaceTags(body.tags) } : {}),
       ...(body.project_id !== undefined ? { project_id: body.project_id } : {}),
       ...(body.scheduled_date !== undefined
         ? { scheduled_date: body.scheduled_date }

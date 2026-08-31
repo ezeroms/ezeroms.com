@@ -7,8 +7,9 @@ import {
 import { Alert } from "@/components/ui/alert";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
+import { listDocs } from "@/lib/workspace/docs";
 import { TASK_VIEWS, type TaskViewId } from "@/lib/workspace/labels";
-import { listProjects } from "@/lib/workspace/projects";
+import { loadTagCatalog } from "@/lib/workspace/tag-catalog";
 import { listTasks } from "@/lib/workspace/tasks";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,7 @@ export default async function AdminWorkspaceTasksPage({
 }: {
   searchParams: Promise<{
     view?: string;
-    project?: string;
+    tag?: string;
     task?: string;
   }>;
 }) {
@@ -32,26 +33,28 @@ export default async function AdminWorkspaceTasksPage({
 
   let loadError: string | null = null;
   let tasks = [] as Awaited<ReturnType<typeof listTasks>>;
-  let projects = [] as Awaited<ReturnType<typeof listProjects>>;
+  let docs = [] as Awaited<ReturnType<typeof listDocs>>;
+  let tagGroups = [] as Awaited<ReturnType<typeof loadTagCatalog>>["groups"];
+  let catalogTags = [] as Awaited<ReturnType<typeof loadTagCatalog>>["tags"];
 
   if (hasWorkspaceConfig()) {
     try {
-      // スマートリスト件数・クライアント絞り込み用に一括取得
-      [tasks, projects] = await Promise.all([
-        listTasks({ view: "all", limit: 500 }),
-        listProjects(),
+      const catalog = await loadTagCatalog();
+      tagGroups = catalog.groups;
+      catalogTags = catalog.tags;
+      [tasks, docs] = await Promise.all([
+        listTasks({ view: "all", limit: 500, includeArchived: true }),
+        listDocs({ limit: 500, includeArchived: true }),
       ]);
     } catch (e) {
       loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
     }
   }
 
-  const projectId = params.project?.trim() || "";
-  const projectExists = projects.some((project) => project.id === projectId);
-  const initialSelection: TasksNavSelection =
-    projectId && projectExists
-      ? { kind: "project", projectId }
-      : { kind: "view", view: parseView(params.view) };
+  const tag = params.tag?.trim() || "";
+  const initialSelection: TasksNavSelection = tag
+    ? { kind: "tag", tag }
+    : { kind: "view", view: parseView(params.view) };
 
   const initialTaskId = params.task?.trim() || null;
 
@@ -73,7 +76,9 @@ export default async function AdminWorkspaceTasksPage({
       {hasWorkspaceConfig() && !loadError ? (
         <TasksBoard
           initialTasks={tasks}
-          projects={projects}
+          initialDocs={docs}
+          initialTagGroups={tagGroups}
+          initialCatalogTags={catalogTags}
           initialSelection={initialSelection}
           initialTaskId={initialTaskId}
         />

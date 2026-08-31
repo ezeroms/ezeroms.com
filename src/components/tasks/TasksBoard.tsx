@@ -1,13 +1,11 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   AlertCircle,
   CalendarDays,
   CheckCircle2,
-  Folder,
   Inbox,
   ListTodo,
   Plus,
@@ -15,6 +13,8 @@ import {
 import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskEditorPanel } from "@/components/tasks/TaskEditorPanel";
 import { Button } from "@/components/ui/button";
+import { TagBoardCrossLink } from "@/components/workspace/TagBoardCrossLink";
+import { WorkspaceTagsNav } from "@/components/workspace/WorkspaceTagsNav";
 import { cn } from "@/lib/cn";
 import { cardOutlineClass } from "@/lib/site/card-styles";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
@@ -24,6 +24,14 @@ import {
   type TaskViewId,
 } from "@/lib/workspace/labels";
 import {
+  groupTagsForNav,
+  isArchivedTask,
+  orderedTagNames,
+  sidebarTagsForItems,
+  uniqueWorkspaceTags,
+} from "@/lib/workspace/tags";
+import {
+  countTasksForTag,
   countTasksForView,
   filterTasksForBoard,
   taskOverdueLabel,
@@ -31,7 +39,7 @@ import {
   tasksBoardSelectionTitle,
   type TasksNavSelection,
 } from "@/lib/workspace/task-views";
-import type { WorkspaceProject, WorkspaceTask } from "@/types/workspace";
+import { parseWorkspaceTags, type WorkspaceDoc, type WorkspaceTag, type WorkspaceTagGroup, type WorkspaceTask } from "@/types/workspace";
 
 export type { TasksNavSelection };
 
@@ -62,21 +70,25 @@ const SMART_VIEWS: {
 
 type Props = {
   initialTasks: WorkspaceTask[];
-  projects: WorkspaceProject[];
+  initialDocs: WorkspaceDoc[];
+  initialTagGroups?: WorkspaceTagGroup[];
+  initialCatalogTags?: WorkspaceTag[];
   initialSelection: TasksNavSelection;
   initialTaskId?: string | null;
 };
 
 export function TasksBoard({
   initialTasks,
-  projects: initialProjects,
+  initialDocs,
+  initialTagGroups = [],
+  initialCatalogTags = [],
   initialSelection,
   initialTaskId = null,
 }: Props) {
   const router = useRouter();
   const [now] = useState(() => new Date());
   const [tasks, setTasks] = useState(initialTasks);
-  const [projects] = useState(initialProjects);
+  const [docs] = useState(initialDocs);
   const [selection, setSelection] =
     useState<TasksNavSelection>(initialSelection);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(
@@ -86,14 +98,37 @@ export function TasksBoard({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const liveTasks = useMemo(
+    () => tasks.filter((task) => !isArchivedTask(task)),
+    [tasks],
+  );
+
+  const knownTags = useMemo(
+    () =>
+      groupTagsForNav(
+        sidebarTagsForItems(tasks),
+        initialCatalogTags,
+        initialTagGroups,
+      ),
+    [tasks, initialCatalogTags, initialTagGroups],
+  );
+
+  const tagSuggestions = useMemo(() => {
+    const ordered = orderedTagNames(initialCatalogTags, initialTagGroups);
+    const extras = uniqueWorkspaceTags(docs, tasks).filter(
+      (tag) => !ordered.includes(tag),
+    );
+    return [...ordered, ...extras];
+  }, [docs, tasks, initialCatalogTags, initialTagGroups]);
+
   const visibleTasks = useMemo(
-    () => filterTasksForBoard(tasks, selection, now),
-    [tasks, selection, now],
+    () => filterTasksForBoard(liveTasks, selection, now),
+    [liveTasks, selection, now],
   );
 
   const selectedTask = useMemo(
-    () => tasks.find((task) => task.id === selectedTaskId) ?? null,
-    [tasks, selectedTaskId],
+    () => liveTasks.find((task) => task.id === selectedTaskId) ?? null,
+    [liveTasks, selectedTaskId],
   );
 
   useEffect(() => {
@@ -111,7 +146,7 @@ export function TasksBoard({
     if (selection.kind === "view") {
       params.set("view", selection.view);
     } else {
-      params.set("project", selection.projectId);
+      params.set("tag", selection.tag);
     }
     if (selectedTaskId) params.set("task", selectedTaskId);
     const query = params.toString();
@@ -121,14 +156,15 @@ export function TasksBoard({
     );
   }, [selection, selectedTaskId, router]);
 
-  const activeProjects = useMemo(
-    () => projects.filter((project) => project.status !== "archived"),
-    [projects],
-  );
-
   function selectNav(next: TasksNavSelection) {
     setSelection(next);
     setError(null);
+  }
+
+  function addTag(tag: string) {
+    const parsed = parseWorkspaceTags([tag])[0];
+    if (!parsed) return;
+    selectNav({ kind: "tag", tag: parsed });
   }
 
   async function onQuickAdd(event: FormEvent) {
@@ -145,9 +181,8 @@ export function TasksBoard({
             ? "active"
             : "inbox",
       };
-      // 「今日」は作業枠で決まる。予定日だけの付与はしない。
-      if (selection.kind === "project") {
-        body.project_id = selection.projectId;
+      if (selection.kind === "tag") {
+        body.tags = parseWorkspaceTags([selection.tag]);
         body.status = "active";
       }
       const response = await fetch("/api/admin/workspace/tasks/", {
@@ -210,11 +245,10 @@ export function TasksBoard({
     }
   }
 
-  const listTitle = tasksBoardSelectionTitle(selection, projects);
+  const listTitle = tasksBoardSelectionTitle(selection);
 
   return (
     <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-background lg:flex-row">
-      {/* 左ペイン: スマートリスト / Projects（AdminSidebar と同じナビ見た目） */}
       <aside className="flex max-h-[40%] w-full shrink-0 flex-col border-b border-border bg-background lg:max-h-none lg:w-56 lg:border-b-0 lg:border-r">
         <div className="min-h-0 flex-1 overflow-y-auto px-2.5 py-4">
           <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -225,7 +259,7 @@ export function TasksBoard({
               const Icon = view.icon;
               const active =
                 selection.kind === "view" && selection.view === view.id;
-              const count = countTasksForView(tasks, view.id, now);
+              const count = countTasksForView(liveTasks, view.id, now);
               return (
                 <button
                   key={view.id}
@@ -245,67 +279,21 @@ export function TasksBoard({
             })}
           </nav>
 
-          <div className="mb-1.5 mt-5 flex items-center justify-between gap-2 px-2">
-            <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Projects
-            </p>
-            <Link
-              href="/admin/workspace/projects/"
-              className="border-0 bg-transparent p-0 text-[11px] text-muted-foreground shadow-none transition-colors hover:text-foreground"
-            >
-              管理
-            </Link>
-          </div>
-          <nav className="flex flex-col gap-0.5">
-            {activeProjects.length === 0 ? (
-              <p className="px-2 py-1.5 text-xs text-muted-foreground">
-                まだありません
-              </p>
-            ) : (
-              activeProjects.map((project) => {
-                const active =
-                  selection.kind === "project" &&
-                  selection.projectId === project.id;
-                const count = tasks.filter(
-                  (task) =>
-                    task.project_id === project.id && task.status !== "done",
-                ).length;
-                return (
-                  <button
-                    key={project.id}
-                    type="button"
-                    onClick={() =>
-                      selectNav({ kind: "project", projectId: project.id })
-                    }
-                    className={sidebarNavItemClass(active)}
-                  >
-                    <Folder
-                      className="h-4 w-4 shrink-0 opacity-80"
-                      aria-hidden
-                    />
-                    <span className="min-w-0 flex-1 truncate">
-                      {project.name}
-                    </span>
-                    {count > 0 ? (
-                      <span className="tabular-nums text-xs text-muted-foreground">
-                        {count}
-                      </span>
-                    ) : null}
-                  </button>
-                );
-              })
-            )}
-          </nav>
+          <WorkspaceTagsNav
+            sections={knownTags}
+            selectedTag={selection.kind === "tag" ? selection.tag : null}
+            countForTag={(tag) => countTasksForTag(liveTasks, tag)}
+            onSelect={(tag) => selectNav({ kind: "tag", tag })}
+            onAddTag={addTag}
+          />
         </div>
       </aside>
 
-      {/* 右領域: 背景上のカード（領域幅いっぱい＋適切な余白、中でスクロール） */}
       <div className="flex h-full min-h-0 min-w-0 flex-1 basis-0 flex-col p-3 sm:p-4">
         <div className={cn(
           "flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden rounded-lg bg-card lg:flex-row",
           cardOutlineClass,
         )}>
-          {/* タスク一覧（やや狭め・詳細側に余白を寄せる） */}
           <section className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col lg:max-w-[22rem] lg:flex-none lg:basis-[22rem] xl:max-w-[24rem] xl:basis-[24rem]">
             <div className="shrink-0 px-5 pb-3 pt-6">
               <h1 className="m-0 text-[1.35rem] font-semibold tracking-tight text-foreground">
@@ -314,6 +302,14 @@ export function TasksBoard({
               <p className="m-0 mt-1 text-xs text-muted-foreground">
                 {visibleTasks.length} 件
               </p>
+              {selection.kind === "tag" ? (
+                <TagBoardCrossLink
+                  tag={selection.tag}
+                  docs={docs}
+                  tasks={tasks}
+                  current="tasks"
+                />
+              ) : null}
             </div>
 
             <form
@@ -425,19 +421,17 @@ export function TasksBoard({
             </ul>
           </section>
 
-          {/* 一覧 / 詳細の区切り（section の border だと外枠と二重になる） */}
           <div
             className="h-px w-full shrink-0 bg-border lg:h-auto lg:w-px lg:self-stretch"
             aria-hidden
           />
 
-          {/* 詳細編集（一覧より広め） */}
           <section className="flex min-h-[42%] w-full min-w-0 flex-1 basis-0 flex-col lg:min-h-0">
             {selectedTask ? (
               <TaskEditorPanel
                 key={selectedTask.id}
                 task={selectedTask}
-                projects={projects}
+                tagSuggestions={tagSuggestions}
                 onSaved={(saved) => {
                   setTasks((previous) =>
                     previous.map((item) =>
@@ -447,7 +441,16 @@ export function TasksBoard({
                 }}
                 onArchived={(taskId) => {
                   setTasks((previous) =>
-                    previous.filter((item) => item.id !== taskId),
+                    previous.map((item) =>
+                      item.id === taskId
+                        ? {
+                            ...item,
+                            status: "archived",
+                            archived_at:
+                              item.archived_at ?? new Date().toISOString(),
+                          }
+                        : item,
+                    ),
                   );
                   setSelectedTaskId(null);
                 }}

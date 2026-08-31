@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskWorkBlocksSection } from "@/components/tasks/TaskWorkBlocksSection";
+import { DocTagsInput } from "@/components/docs/DocTagsInput";
 import { Button } from "@/components/ui/button";
 import {
   ClickToEditField,
@@ -22,10 +23,10 @@ import {
   parseProgressPercentInput,
 } from "@/lib/workspace/task-form";
 import { cn } from "@/lib/cn";
-import type {
-  TaskStatus,
-  WorkspaceProject,
-  WorkspaceTask,
+import {
+  parseWorkspaceTags,
+  type TaskStatus,
+  type WorkspaceTask,
 } from "@/types/workspace";
 
 const AUTOSAVE_MS = 700;
@@ -37,7 +38,7 @@ type Draft = {
   title: string;
   body_md: string;
   status: TaskStatus;
-  project_id: string;
+  tags: string[];
   due_at: string;
   estimated_minutes: string;
   progress_percent: string;
@@ -48,7 +49,7 @@ function draftFromTask(task: WorkspaceTask): Draft {
     title: task.title,
     body_md: task.body_md ?? "",
     status: task.status,
-    project_id: task.project_id ?? "",
+    tags: parseWorkspaceTags(task.tags),
     due_at: toDatetimeLocalValue(task.due_at),
     estimated_minutes: formatEstimatedMinutesInput(task.estimated_minutes),
     progress_percent: String(task.progress_percent ?? 0),
@@ -56,19 +57,27 @@ function draftFromTask(task: WorkspaceTask): Draft {
 }
 
 function draftsEqual(a: Draft, b: Draft): boolean {
-  return JSON.stringify(a) === JSON.stringify(b);
+  return (
+    a.title === b.title &&
+    a.body_md === b.body_md &&
+    a.status === b.status &&
+    a.tags.join("\0") === b.tags.join("\0") &&
+    a.due_at === b.due_at &&
+    a.estimated_minutes === b.estimated_minutes &&
+    a.progress_percent === b.progress_percent
+  );
 }
 
 type Props = {
   task: WorkspaceTask;
-  projects: WorkspaceProject[];
+  tagSuggestions: string[];
   onSaved: (task: WorkspaceTask) => void;
   onArchived: (taskId: string) => void;
 };
 
 export function TaskEditorPanel({
   task,
-  projects,
+  tagSuggestions,
   onSaved,
   onArchived,
 }: Props) {
@@ -131,7 +140,7 @@ export function TaskEditorPanel({
           title: current.title.trim(),
           body_md: current.body_md,
           status: current.status,
-          project_id: current.project_id || null,
+          tags: parseWorkspaceTags(current.tags),
           due_at: fromDatetimeLocalValue(current.due_at),
           estimated_minutes: minutesParsed.value,
           progress_percent: progressParsed.value,
@@ -372,19 +381,12 @@ export function TaskEditorPanel({
             </div>
           </ClickToEditRow>
 
-          <ClickToEditRow label="Project" align="center">
-            <Select
-              value={draft.project_id}
-              onChange={(e) => patchDraft("project_id", e.target.value)}
-              className={bareControlClass}
-            >
-              <option value="">（なし）</option>
-              {projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
-                </option>
-              ))}
-            </Select>
+          <ClickToEditRow label="タグ">
+            <DocTagsInput
+              value={draft.tags}
+              suggestions={tagSuggestions}
+              onChange={(tags) => patchDraft("tags", tags)}
+            />
           </ClickToEditRow>
 
           <ClickToEditRow label="作業枠">

@@ -203,6 +203,68 @@ export function repairLegacyCodeFencesInHtml(html: string): string {
   return repaired.replace(/<p>\s*(<pre>[\s\S]*?<\/pre>)\s*<\/p>/gi, "$1");
 }
 
+function internalHostnames(): Set<string> {
+  const hosts = new Set<string>(["ezeroms.com"]);
+  try {
+    const fromEnv = new URL(
+      process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+        "https://ezeroms.com",
+    )
+      .hostname.replace(/^www\./i, "")
+      .toLowerCase();
+    if (fromEnv) hosts.add(fromEnv);
+  } catch {
+    /* keep canonical fallback */
+  }
+  return hosts;
+}
+
+/**
+ * http(s) links that leave this site. Relative, hash, mailto, and tel stay in-tab.
+ */
+function isExternalHttpHref(href: string): boolean {
+  const trimmed = href.trim();
+  if (!trimmed) return false;
+  if (
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("/") ||
+    trimmed.startsWith("./") ||
+    trimmed.startsWith("../") ||
+    trimmed.startsWith("?") ||
+    trimmed.startsWith("mailto:") ||
+    trimmed.startsWith("tel:")
+  ) {
+    return false;
+  }
+  try {
+    const url = new URL(trimmed, "https://ezeroms.com");
+    if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+    const host = url.hostname.replace(/^www\./i, "").toLowerCase();
+    return !internalHostnames().has(host);
+  } catch {
+    return false;
+  }
+}
+
+function mergeRel(existing: string | undefined, extra: string[]): string {
+  const tokens = new Set(
+    `${existing ?? ""} ${extra.join(" ")}`.split(/\s+/).filter(Boolean),
+  );
+  return [...tokens].join(" ");
+}
+
+function decorateExternalAnchor(
+  attribs: Record<string, string>,
+): Record<string, string> {
+  if (!isExternalHttpHref(attribs.href ?? "")) return attribs;
+  const next = { ...attribs };
+  if (!next.target) next.target = "_blank";
+  if (next.target === "_blank") {
+    next.rel = mergeRel(next.rel, ["noopener", "noreferrer"]);
+  }
+  return next;
+}
+
 export function sanitizeBody(html: string): string {
   return sanitizeHtml(
     applyBlankParagraphClass(
@@ -245,6 +307,12 @@ export function sanitizeBody(html: string): string {
       "youtube-nocookie.com",
       "open.spotify.com",
     ],
+    transformTags: {
+      a: (_tagName, attribs) => ({
+        tagName: "a",
+        attribs: decorateExternalAnchor(attribs),
+      }),
+    },
   },
   );
 }

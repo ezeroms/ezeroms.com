@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { CreateWorkBlockPanel } from "@/components/calendar/CreateWorkBlockPanel";
+import { DocTagsInput } from "@/components/docs/DocTagsInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,18 +20,18 @@ import {
 } from "@/lib/workspace/labels";
 import { parseEstimatedMinutesInput } from "@/lib/workspace/task-form";
 import type { GoogleCalendarListItem } from "@/types/calendar";
-import type {
-  TaskPriority,
-  TaskStatus,
-  WorkspaceDoc,
-  WorkspaceItemLink,
-  WorkspaceProject,
-  WorkspaceTask,
+import {
+  parseWorkspaceTags,
+  type TaskPriority,
+  type TaskStatus,
+  type WorkspaceDoc,
+  type WorkspaceItemLink,
+  type WorkspaceTask,
 } from "@/types/workspace";
 
 type Props = {
   task: WorkspaceTask;
-  projects: WorkspaceProject[];
+  tagSuggestions: string[];
   links: WorkspaceItemLink[];
   linkedDocs: WorkspaceDoc[];
   allDocs: WorkspaceDoc[];
@@ -38,7 +39,7 @@ type Props = {
 
 export function TaskDetailForm({
   task,
-  projects,
+  tagSuggestions,
   links,
   linkedDocs,
   allDocs,
@@ -48,14 +49,12 @@ export function TaskDetailForm({
   const [bodyMd, setBodyMd] = useState(task.body_md ?? "");
   const [status, setStatus] = useState<TaskStatus>(task.status);
   const [priority, setPriority] = useState<TaskPriority>(task.priority);
-  const [projectId, setProjectId] = useState(task.project_id ?? "");
+  const [tags, setTags] = useState(() => parseWorkspaceTags(task.tags));
   const [scheduledDate, setScheduledDate] = useState(task.scheduled_date ?? "");
   const [dueAt, setDueAt] = useState(toDatetimeLocalValue(task.due_at));
   const [estimatedMinutes, setEstimatedMinutes] = useState(
     task.estimated_minutes != null ? String(task.estimated_minutes) : "",
   );
-  const [newProjectName, setNewProjectName] = useState("");
-  const [projectList, setProjectList] = useState(projects);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -120,7 +119,7 @@ export function TaskDetailForm({
           body_md: bodyMd,
           status,
           priority,
-          project_id: projectId || null,
+          tags: parseWorkspaceTags(tags),
           scheduled_date: scheduledDate || null,
           due_at: fromDatetimeLocalValue(dueAt),
           estimated_minutes: minutesParsed.value,
@@ -152,34 +151,6 @@ export function TaskDetailForm({
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "アーカイブに失敗しました");
-      setBusy(false);
-    }
-  }
-
-  async function createProject() {
-    const name = newProjectName.trim();
-    if (!name || busy) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/admin/workspace/projects/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-      const data = (await res.json()) as {
-        item?: WorkspaceProject;
-        error?: string;
-      };
-      if (!res.ok) throw new Error(data.error || "Project 作成に失敗しました");
-      if (data.item) {
-        setProjectList((prev) => [data.item!, ...prev]);
-        setProjectId(data.item.id);
-        setNewProjectName("");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Project 作成に失敗しました");
-    } finally {
       setBusy(false);
     }
   }
@@ -291,36 +262,12 @@ export function TaskDetailForm({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="task-project">Project</Label>
-          <Select
-            id="task-project"
-            value={projectId}
-            onChange={(e) => setProjectId(e.target.value)}
-          >
-            <option value="">（なし）</option>
-            {projectList.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </Select>
-          <div className="mt-1 flex gap-2">
-            <Input
-              value={newProjectName}
-              onChange={(e) => setNewProjectName(e.target.value)}
-              placeholder="新しい Project 名"
-              className="flex-1"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={createProject}
-              disabled={busy || !newProjectName.trim()}
-            >
-              作成
-            </Button>
-          </div>
+          <Label>タグ</Label>
+          <DocTagsInput
+            value={tags}
+            suggestions={tagSuggestions}
+            onChange={setTags}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5">

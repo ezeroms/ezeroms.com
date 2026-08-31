@@ -1,23 +1,26 @@
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
-import { ProjectsBoard } from "@/components/projects/ProjectsBoard";
+import { TagsManageBoard } from "@/components/workspace/TagsManageBoard";
 import { Alert } from "@/components/ui/alert";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasWorkspaceConfig } from "@/lib/workspace/db/server";
-import { listProjects } from "@/lib/workspace/projects";
+import { loadTagCatalog } from "@/lib/workspace/tag-catalog";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminWorkspaceProjectsPage() {
+export default async function AdminWorkspaceTagsPage() {
   await requireAdminPage();
 
   let loadError: string | null = null;
-  let projects: Awaited<ReturnType<typeof listProjects>> = [];
+  let groups: Awaited<ReturnType<typeof loadTagCatalog>>["groups"] = [];
+  let tags: Awaited<ReturnType<typeof loadTagCatalog>>["tags"] = [];
 
   if (hasWorkspaceConfig()) {
     try {
-      projects = await listProjects();
+      const catalog = await loadTagCatalog();
+      groups = catalog.groups;
+      tags = catalog.tags;
     } catch (e) {
       loadError = e instanceof Error ? e.message : "読み込みに失敗しました";
     }
@@ -26,8 +29,8 @@ export default async function AdminWorkspaceProjectsPage() {
   return (
     <AdminContent width="wide">
       <AdminPageHeader
-        title="Projects"
-        description="Project の名前・状態を管理（レガシー）"
+        title="Tags"
+        description="Docs / Tasks で共有するタグのグループと並び順"
       />
       {!hasWorkspaceConfig() ? <WorkspaceConfigNotice /> : null}
       {loadError ? (
@@ -36,7 +39,7 @@ export default async function AdminWorkspaceProjectsPage() {
         </Alert>
       ) : null}
       {hasWorkspaceConfig() && !loadError ? (
-        <ProjectsBoard initialProjects={projects} />
+        <TagsManageBoard initialGroups={groups} initialTags={tags} />
       ) : null}
     </AdminContent>
   );

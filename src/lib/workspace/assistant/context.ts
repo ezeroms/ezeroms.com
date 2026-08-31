@@ -14,7 +14,7 @@ import {
 } from "@/lib/workspace/calendar/tokens";
 import { hasGoogleCalendarOAuthConfig } from "@/lib/workspace/calendar/oauth";
 import { listDocs } from "@/lib/workspace/docs";
-import { listProjects } from "@/lib/workspace/projects";
+import { uniqueWorkspaceTags } from "@/lib/workspace/tags";
 import { listTasks } from "@/lib/workspace/tasks";
 import { todayDateKey } from "@/lib/workspace/labels";
 
@@ -44,7 +44,7 @@ export type AssistantContext = {
   }[];
   inboxTasks: { title: string; priority: string }[];
   recentDocs: { title: string; updated_at: string; excerpt: string }[];
-  projects: { name: string; status: string }[];
+  tags: string[];
 };
 
 /** Build a compact daily context — never dump the whole DB. */
@@ -56,14 +56,12 @@ export async function buildTodayAssistantContext(): Promise<AssistantContext> {
     upcomingTasks,
     inboxTasks,
     recentDocs,
-    projects,
   ] = await Promise.all([
     listTasks({ view: "today", limit: 20 }),
     listTasks({ view: "overdue", limit: 15 }),
     listTasks({ view: "upcoming", limit: 15 }),
     listTasks({ view: "inbox", limit: 15 }),
     listDocs({ limit: 8 }),
-    listProjects(),
   ]);
 
   let events: AssistantContext["events"] = [];
@@ -115,10 +113,12 @@ export async function buildTodayAssistantContext(): Promise<AssistantContext> {
       updated_at: d.updated_at,
       excerpt: d.body_md.replace(/\s+/g, " ").trim().slice(0, 160),
     })),
-    projects: projects
-      .filter((p) => p.status === "active")
-      .slice(0, 12)
-      .map((p) => ({ name: p.name, status: p.status })),
+    tags: uniqueWorkspaceTags(recentDocs, [
+      ...todayTasks,
+      ...overdueTasks,
+      ...upcomingTasks,
+      ...inboxTasks,
+    ]).slice(0, 20),
   };
 }
 
@@ -181,17 +181,17 @@ export function formatContextForPrompt(ctx: AssistantContext): string {
     }
   }
 
-  lines.push("", "## Active Projects");
-  if (ctx.projects.length === 0) lines.push("- （なし）");
+  lines.push("", "## タグ");
+  if (ctx.tags.length === 0) lines.push("- （なし）");
   else {
-    for (const p of ctx.projects) lines.push(`- ${p.name}`);
+    for (const tag of ctx.tags) lines.push(`- ${tag}`);
   }
 
   return lines.join("\n");
 }
 
 export const ASSISTANT_SYSTEM_PROMPT = `あなたは個人用 Workspace の日次アシスタントです。
-与えられた今日の予定・Tasks・Docs・Projects だけを根拠に、日本語で実務的な提案をしてください。
+与えられた今日の予定・Tasks・Docs・タグ だけを根拠に、日本語で実務的な提案をしてください。
 
 ルール:
 - 提案のみ。データベースやカレンダーを変更したと主張しない。

@@ -31,6 +31,7 @@ export type WorkspaceTask = {
   body_md: string | null;
   status: TaskStatus;
   priority: TaskPriority;
+  tags: string[];
   project_id: string | null;
   /**
    * 次の作業枠の日付（YYYY-MM-DD）。task_work_blocks から同期。
@@ -84,6 +85,23 @@ export type WorkspaceItemLink = {
   to_id: string;
   relation: ItemLinkRelation;
   created_at: string;
+};
+
+export type WorkspaceTagGroup = {
+  id: string;
+  name: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type WorkspaceTag = {
+  id: string;
+  name: string;
+  group_id: string | null;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export const PROJECT_STATUSES: ProjectStatus[] = [
@@ -148,7 +166,7 @@ export function isItemLinkRelation(v: unknown): v is ItemLinkRelation {
 }
 
 /** Parse comma / full-width comma / array tags. Preserve first-seen order. */
-export function parseDocTags(
+export function parseWorkspaceTags(
   raw: string | string[] | null | undefined,
 ): string[] {
   if (raw == null) return [];
@@ -163,3 +181,6 @@ export function parseDocTags(
   }
   return out;
 }
+
+/** Alias: Docs / Tasks で同じパーサを使う。 */
+export const parseDocTags = parseWorkspaceTags;
