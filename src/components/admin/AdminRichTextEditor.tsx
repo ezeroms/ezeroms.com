@@ -12,7 +12,6 @@ import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/r
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import Image from "@tiptap/extension-image";
 import {
   Bold,
   Code,
@@ -30,6 +29,7 @@ import {
   Strikethrough,
 } from "lucide-react";
 import { AdminRichTextLinkModal } from "@/components/admin/AdminRichTextLinkModal";
+import { EditorImage } from "@/components/admin/AdminRichTextImage";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import {
@@ -255,7 +255,7 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
           class: null,
         },
       }),
-      Image.configure({
+      EditorImage.configure({
         inline: false,
         allowBase64: false,
         HTMLAttributes: {
@@ -291,6 +291,7 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
           "[&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-md [&_pre]:bg-muted [&_pre]:p-3 [&_pre]:font-mono [&_pre]:text-xs",
           "[&_pre_code]:bg-transparent [&_pre_code]:p-0",
           "[&_img]:my-3 [&_img]:max-h-80 [&_img]:w-auto [&_img]:rounded-md",
+          "[&_figure.rt-figure]:my-3 [&_figure.rt-figure_img]:my-0",
           // ブログ本文と同じ muted 色。下線なし（admin-root a の inherit を打ち消す）
           "[&_a]:!text-muted-foreground [&_a]:!no-underline hover:[&_a]:!text-foreground",
           "[&_p.is-editor-empty:first-child::before]:pointer-events-none [&_p.is-editor-empty:first-child::before]:float-left [&_p.is-editor-empty:first-child::before]:h-0 [&_p.is-editor-empty:first-child::before]:text-muted-foreground [&_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]",

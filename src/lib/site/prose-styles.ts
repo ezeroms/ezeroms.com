@@ -36,8 +36,9 @@ export const articleHeadingClass = cn(
 
 /** 詳細本文の figure / figcaption。 */
 export const articleFigureClass = cn(
-  "[&_figure]:my-6",
-  "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground",
+  "[&_figure]:my-6 [&_figure]:mx-0",
+  "[&_figure_img]:mt-0 [&_figure_img]:mx-auto [&_figure_img]:block",
+  "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:leading-relaxed [&_figcaption]:text-muted-foreground",
 );
 
 /** 詳細本文のインライン code（見出し付き記事向け）。 */
@@ -68,6 +69,7 @@ export const articleBodyClass = cn(
   proseBodyClass,
   proseBlockquoteClass,
   "[&_img]:mt-4 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg",
+  articleFigureClass,
   "[&_p]:m-0 [&_p+p]:mt-3",
   // 空行スペーサーは段落マージンを付けず、1行分の高さだけ空ける
   "[&_p.rt-blank]:my-0 [&_p.rt-blank]:h-[1.8em] [&_p.rt-blank]:overflow-hidden",

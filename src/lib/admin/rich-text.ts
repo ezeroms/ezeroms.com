@@ -9,16 +9,50 @@ const turndown = new TurndownService({
   strongDelimiter: "**",
 });
 
-turndown.addRule("images", {
-  filter: "img",
+function markdownImageTitle(title: string): string {
+  return title.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function markdownFromImage(
+  img: HTMLImageElement,
+  captionOverride?: string,
+): string {
+  const src = img.getAttribute("src") ?? "";
+  if (!src) return "";
+  const alt = img.getAttribute("alt") ?? "";
+  const caption = (
+    captionOverride ??
+    img.getAttribute("title") ??
+    ""
+  ).trim();
+  const titlePart = caption ? ` "${markdownImageTitle(caption)}"` : "";
+  return `\n\n![${alt}](${src}${titlePart})\n\n`;
+}
+
+turndown.addRule("figures", {
+  filter: "figure",
   replacement(_content, node) {
-    const el = node as HTMLImageElement;
-    const alt = el.getAttribute("alt") ?? "";
-    const src = el.getAttribute("src") ?? "";
-    if (!src) return "";
-    const title = el.getAttribute("title");
-    const titlePart = title ? ` "${title}"` : "";
-    return `\n\n![${alt}](${src}${titlePart})\n\n`;
+    const el = node as HTMLElement;
+    const img = el.querySelector("img");
+    if (!img) return _content;
+    const caption = (
+      img.getAttribute("title") ||
+      el.querySelector("figcaption")?.textContent ||
+      ""
+    ).trim();
+    return markdownFromImage(img, caption);
+  },
+});
+
+turndown.addRule("images", {
+  filter(node) {
+    return (
+      node.nodeName === "IMG" &&
+      !(node as HTMLElement).closest("figure")
+    );
+  },
+  replacement(_content, node) {
+    return markdownFromImage(node as HTMLImageElement);
   },
 });
 
@@ -72,7 +106,7 @@ function isVisuallyEmptyParagraph(node: HTMLElement): boolean {
 function isImageLikeNode(node: ChildNode | null): boolean {
   if (!node || node.nodeType !== 1) return false;
   const el = node as HTMLElement;
-  if (el.nodeName === "IMG") return true;
+  if (el.nodeName === "IMG" || el.nodeName === "FIGURE") return true;
   if (el.nodeName !== "P") return false;
   const text = (el.textContent ?? "")
     .replace(/\u00a0/g, " ")
@@ -158,12 +192,20 @@ export function stripEmptyParagraphsBesideImagesInHtml(html: string): string {
       )
       // 画像直前の空段落
       .replace(
-        /<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>\s*(?=<img\b)/gi,
+        /<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>\s*(?=<img\b|<figure\b)/gi,
         "",
       )
       // 画像直後の空段落（保存・再読込時の余分なスペーサー）
       .replace(
         /(<img\b[^>]*>)\s*<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>/gi,
+        "$1",
+      )
+      .replace(
+        /(<\/figure>)\s*<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>/gi,
+        "$1",
+      )
+      .replace(
+        /<p\b[^>]*>\s*(<figure\b[\s\S]*?<\/figure>)\s*<\/p>/gi,
         "$1",
       )
   );

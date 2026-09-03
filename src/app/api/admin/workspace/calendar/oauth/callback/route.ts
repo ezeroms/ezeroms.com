@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
   try {
     const existing = await getStoredGoogleToken();
     const tokens = await exchangeCodeForTokens(code);
-    await upsertGoogleTokens(tokens, existing?.refresh_token);
+    await upsertGoogleTokens(tokens, existing);
     clearGoogleEventsCache();
   } catch {
     return redirectWithError("token_exchange");

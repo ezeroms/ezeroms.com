@@ -146,12 +146,22 @@ function enhanceCodeBlocks(root: HTMLElement) {
   });
 }
 
+function imageCaption(img: HTMLImageElement): string {
+  const fromFig = img
+    .closest("figure")
+    ?.querySelector("figcaption")
+    ?.textContent?.trim();
+  if (fromFig) return fromFig;
+  return (img.getAttribute("title") ?? "").trim();
+}
+
 function collectImages(root: HTMLElement): LightboxImage[] {
   return [...root.querySelectorAll("img")]
     .filter((img) => !img.closest(".code-block"))
     .map((img) => ({
       src: img.currentSrc || img.src,
       alt: img.getAttribute("alt") ?? "",
+      caption: imageCaption(img),
     }))
     .filter((item) => Boolean(item.src));
 }

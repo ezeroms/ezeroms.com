@@ -8,6 +8,7 @@ import { useLightboxSwipe } from "@/components/useLightboxSwipe";
 export type LightboxImage = {
   src: string;
   alt: string;
+  caption?: string;
 };
 
 type Props = {
@@ -58,14 +59,15 @@ export function ImageLightbox({
 
   if (!image) return null;
 
-  const caption = image.alt.trim();
+  const caption = image.caption?.trim() || "";
+  const alt = image.alt.trim() || caption;
 
   return createPortal(
     <div
       className="fixed inset-0 z-[200] flex touch-none items-center justify-center p-4 sm:p-8"
       role="dialog"
       aria-modal
-      aria-label={caption || "画像"}
+      aria-label={caption || alt || "画像"}
       onPointerDown={swipe.onPointerDown}
       onPointerUp={swipe.onPointerUp}
       onPointerCancel={swipe.onPointerCancel}
@@ -106,7 +108,7 @@ export function ImageLightbox({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={image.src}
-          alt={caption || ""}
+          alt={alt || ""}
           className="m-0 max-h-[85vh] w-auto max-w-full object-contain"
         />
         {caption ? (

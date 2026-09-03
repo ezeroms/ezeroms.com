@@ -63,34 +63,36 @@ async function googleGetOnce<T>(
   return data;
 }
 
-/** GET with one forced token refresh on 401. */
-async function googleGet<T>(url: string): Promise<T> {
-  const auth = await getValidGoogleAccessToken();
-  if (!auth) {
-    throw new GoogleCalendarAuthError();
-  }
-  try {
-    return await googleGetOnce<T>(auth.accessToken, url);
-  } catch (error) {
-    const unauthorized =
-      (error instanceof GoogleHttpError && error.status === 401) ||
-      isGoogleCalendarAuthError(error);
-    if (!unauthorized) throw error;
+function isUnauthorized(error: unknown): boolean {
+  return (
+    (error instanceof GoogleHttpError && error.status === 401) ||
+    isGoogleCalendarAuthError(error)
+  );
+}
 
+/** Run a Google API call; refresh once if the access token was rejected. */
+async function withGoogleAccessToken<T>(
+  fn: (accessToken: string) => Promise<T>,
+): Promise<T> {
+  const auth = await getValidGoogleAccessToken();
+  if (!auth) throw new GoogleCalendarAuthError();
+  try {
+    return await fn(auth.accessToken);
+  } catch (error) {
+    if (!isUnauthorized(error)) throw error;
     const refreshed = await getValidGoogleAccessToken({ forceRefresh: true });
     if (!refreshed) throw new GoogleCalendarAuthError();
     try {
-      return await googleGetOnce<T>(refreshed.accessToken, url);
+      return await fn(refreshed.accessToken);
     } catch (retryError) {
-      if (
-        (retryError instanceof GoogleHttpError && retryError.status === 401) ||
-        isGoogleCalendarAuthError(retryError)
-      ) {
-        throw new GoogleCalendarAuthError();
-      }
+      if (isUnauthorized(retryError)) throw new GoogleCalendarAuthError();
       throw retryError;
     }
   }
+}
+
+async function googleGet<T>(url: string): Promise<T> {
+  return withGoogleAccessToken((token) => googleGetOnce<T>(token, url));
 }
 
 export async function listGoogleCalendars(): Promise<GoogleCalendarListItem[]> {
@@ -235,27 +237,26 @@ function localTimeZone(): string {
   }
 }
 
-async function googleJson<T>(
-  accessToken: string,
-  url: string,
-  init?: RequestInit,
-): Promise<T> {
-  const res = await fetch(url, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      ...(init?.body ? { "Content-Type": "application/json" } : {}),
-      ...init?.headers,
-    },
-    next: { revalidate: 0 },
+async function googleJson<T>(url: string, init?: RequestInit): Promise<T> {
+  return withGoogleAccessToken(async (accessToken) => {
+    const res = await fetch(url, {
+      ...init,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        ...(init?.body ? { "Content-Type": "application/json" } : {}),
+        ...init?.headers,
+      },
+      next: { revalidate: 0 },
+    });
+    const data = (await res.json()) as T & { error?: { message?: string } };
+    if (!res.ok) {
+      throw new GoogleHttpError(
+        res.status,
+        data.error?.message || `Google Calendar API ${res.status}`,
+      );
+    }
+    return data;
   });
-  const data = (await res.json()) as T & { error?: { message?: string } };
-  if (!res.ok) {
-    throw new Error(
-      data.error?.message || `Google Calendar API ${res.status}`,
-    );
-  }
-  return data;
 }
 
 export type CreateWorkBlockInput = {
@@ -292,12 +293,9 @@ export type UpdateGoogleEventInput = {
 export async function createGoogleWorkBlock(
   input: CreateWorkBlockInput,
 ): Promise<CreatedGoogleEvent> {
-  const auth = await getValidGoogleAccessToken();
-  if (!auth) throw new Error("Google Calendar is not connected");
-
   const timeZone = input.timeZone || localTimeZone();
   const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(input.calendarId)}/events`;
-  const data = await googleJson<EventApiItem>(auth.accessToken, url, {
+  const data = await googleJson<EventApiItem>(url, {
     method: "POST",
     body: JSON.stringify({
       summary: input.summary,
@@ -327,13 +325,10 @@ export async function createGoogleWorkBlock(
 export async function updateGoogleEvent(
   input: UpdateGoogleEventInput,
 ): Promise<GoogleCalendarEvent> {
-  const auth = await getValidGoogleAccessToken();
-  if (!auth) throw new Error("Google Calendar is not connected");
-
   const calendar = await assertCalendarIsWritable(input.calendarId);
   const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(input.calendarId)}/events/${encodeURIComponent(input.eventId)}`;
   const timeZone = input.timeZone || localTimeZone();
-  const data = await googleJson<EventApiItem>(auth.accessToken, url, {
+  const data = await googleJson<EventApiItem>(url, {
     method: "PATCH",
     body: JSON.stringify({
       summary: input.summary,

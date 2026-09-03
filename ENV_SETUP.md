@@ -69,7 +69,11 @@ npm run dev
 
 1. [Google Cloud Console](https://console.cloud.google.com/) でプロジェクト作成（または既存）
 2. **API とサービス → ライブラリ** で **Google Calendar API** を有効化
-3. **OAuth 同意画面** を設定（外部 / テストユーザーに自分の Google アカウントを追加）
+3. **OAuth 同意画面** を設定
+   - 自分だけ使うなら **公開ステータスを「本番」（In production）にする**。
+     「テスト」のままだと refresh token が **7日で失効**し、毎週再接続が必要になる。
+   - 未検証のまま公開すると初回に「未検証のアプリ」警告が出る。Advanced → 続行で自分のアカウントは使える。
+   - テストのまま運用する場合は、テストユーザーに自分の Google アカウントを追加する。
 4. **認証情報 → OAuth 2.0 クライアント ID**（ウェブアプリケーション）
    - 承認済みのリダイレクト URI:
      - `http://localhost:3000/api/admin/workspace/calendar/oauth/callback/`

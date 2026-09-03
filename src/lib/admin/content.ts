@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import { preprocessMarkdownMedia } from "@/lib/html";
+import { preprocessMarkdownMedia, wrapTitledImagesAsFigures } from "@/lib/html";
 import {
   looksLikeLiteralMarkdownInHtml,
   normalizeLegacyMarkdown,
@@ -47,7 +47,7 @@ export function markdownToHtml(md: string): string {
   const html = marked.parse(preprocessMarkdownMedia(prepared), {
     async: false,
   }) as string;
-  return applyBlankParagraphClass(html);
+  return wrapTitledImagesAsFigures(applyBlankParagraphClass(html));
 }
 
 /** Markdown → HTML without wrapping block `<p>` (for list item bodies). */

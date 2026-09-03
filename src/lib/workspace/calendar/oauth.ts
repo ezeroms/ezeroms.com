@@ -76,6 +76,47 @@ export type GoogleTokenResponse = {
   token_type?: string;
 };
 
+type GoogleTokenErrorBody = {
+  error?: string;
+  error_description?: string;
+};
+
+/** Token endpoint failure. `invalid_grant` means the refresh token is dead. */
+export class GoogleOAuthError extends Error {
+  readonly code: string;
+  readonly status: number;
+
+  constructor(code: string, status: number, description?: string) {
+    super(description ? `${code}: ${description}` : code);
+    this.name = "GoogleOAuthError";
+    this.code = code;
+    this.status = status;
+  }
+
+  get isInvalidGrant(): boolean {
+    return this.code === "invalid_grant";
+  }
+
+  get isTransient(): boolean {
+    return this.status === 429 || this.status >= 500;
+  }
+}
+
+async function readTokenResponse(
+  res: Response,
+  fallback: string,
+): Promise<GoogleTokenResponse> {
+  const data = (await res.json()) as GoogleTokenResponse & GoogleTokenErrorBody;
+  if (!res.ok || !data.access_token) {
+    throw new GoogleOAuthError(
+      data.error || fallback,
+      res.status,
+      data.error_description,
+    );
+  }
+  return data;
+}
+
 export async function exchangeCodeForTokens(
   code: string,
 ): Promise<GoogleTokenResponse> {
@@ -91,11 +132,7 @@ export async function exchangeCodeForTokens(
       grant_type: "authorization_code",
     }),
   });
-  const data = (await res.json()) as GoogleTokenResponse & { error?: string };
-  if (!res.ok || !data.access_token) {
-    throw new Error(data.error || "Failed to exchange OAuth code");
-  }
-  return data;
+  return readTokenResponse(res, "token_exchange_failed");
 }
 
 export async function refreshAccessToken(
@@ -112,11 +149,7 @@ export async function refreshAccessToken(
       grant_type: "refresh_token",
     }),
   });
-  const data = (await res.json()) as GoogleTokenResponse & { error?: string };
-  if (!res.ok || !data.access_token) {
-    throw new Error(data.error || "Failed to refresh Google token");
-  }
-  return data;
+  return readTokenResponse(res, "token_refresh_failed");
 }
 
 export async function fetchGoogleAccountEmail(

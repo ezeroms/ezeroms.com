@@ -174,6 +174,47 @@ function escapeHtmlText(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function parseHtmlAttr(tag: string, name: string): string | null {
+  const re = new RegExp(
+    `(?:^|[\\s])${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`,
+    "i",
+  );
+  const match = tag.match(re);
+  if (!match) return null;
+  return decodeBasicHtmlEntities(match[1] ?? match[2] ?? "");
+}
+
+function wrapImgTagAsFigure(imgTag: string): string {
+  const title = parseHtmlAttr(imgTag, "title")?.trim();
+  if (!title) return imgTag;
+  return (
+    `<figure>${imgTag}<figcaption>${escapeHtmlText(title)}</figcaption></figure>`
+  );
+}
+
+/**
+ * `title` 付きの本文画像を `<figure>` / `<figcaption>` にする。
+ * 既存の figure は触らない。エディタ HTML（注釈なしの img）はそのまま。
+ */
+export function wrapTitledImagesAsFigures(html: string): string {
+  if (!html || !/\btitle\s*=/i.test(html)) return html;
+
+  const parts = html.split(/(<figure\b[\s\S]*?<\/figure>)/gi);
+  return parts
+    .map((part) => {
+      if (/^<figure\b/i.test(part)) return part;
+      return part.replace(
+        /<p>\s*(<img\b[^>]*>)\s*<\/p>|<img\b[^>]*>/gi,
+        (match, imgInP?: string) => {
+          const img = imgInP ?? match;
+          const wrapped = wrapImgTagAsFigure(img);
+          return wrapped === img ? match : wrapped;
+        },
+      );
+    })
+    .join("");
+}
+
 /**
  * 移行データで ```…``` が `<p>` 内に残っている場合を `<pre><code>` に直す。
  * （Markdown フェンスがエスケープされたまま HTML 化されたレガシー行向け）
@@ -267,10 +308,12 @@ function decorateExternalAnchor(
 
 export function sanitizeBody(html: string): string {
   return sanitizeHtml(
-    applyBlankParagraphClass(
-      embedSpotifyInHtml(
-        embedYoutubeInHtml(
-          repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+    wrapTitledImagesAsFigures(
+      applyBlankParagraphClass(
+        embedSpotifyInHtml(
+          embedYoutubeInHtml(
+            repairLegacyCodeFencesInHtml(repairLiteralMarkdownInHtml(html)),
+          ),
         ),
       ),
     ),
