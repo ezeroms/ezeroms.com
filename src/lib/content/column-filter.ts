@@ -22,12 +22,11 @@ export type ColumnFilterState = {
   from: string | null;
   to: string | null;
   weekdays: number[];
-  categories: string[];
   tags: string[];
 };
 
 export function emptyColumnFilter(): ColumnFilterState {
-  return { ...emptyDateRange(), weekdays: [], categories: [], tags: [] };
+  return { ...emptyDateRange(), weekdays: [], tags: [] };
 }
 
 export function columnFilterActive(filter: ColumnFilterState): boolean {
@@ -38,7 +37,7 @@ export function columnFilterActive(filter: ColumnFilterState): boolean {
   );
 }
 
-/** Parse `/column/?from=&to=&w=&c=&t=`（旧 `m=` も可） */
+/** Parse `/column/?from=&to=&w=&t=`（旧 `m=` / `c=` は無視） */
 export function parseColumnFilter(
   searchParams: SearchParamsRecord,
 ): ColumnFilterState {
@@ -49,9 +48,6 @@ export function parseColumnFilter(
     from: range.from,
     to: range.to,
     weekdays: parseWeekdayList(firstSearchParamValue(searchParams, "w")),
-    categories: decodePipeSeparatedList(
-      firstSearchParamValue(searchParams, "c"),
-    ),
     tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
   };
 }

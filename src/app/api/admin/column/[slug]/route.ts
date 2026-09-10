@@ -19,7 +19,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   const { data, error } = await getSupabaseAdmin()
     .from("column")
     .select(
-      "id, slug, title, date, column_category, column_tag, og_image, status, body_html, published_at, updated_at",
+      "id, slug, title, date, column_tag, og_image, status, body_html, published_at, updated_at",
     )
     .eq("slug", slug)
     .eq("is_deleted", false)
@@ -36,7 +36,6 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     item: {
       ...data,
       body_md: htmlToEditableMarkdown((data.body_html as string) ?? ""),
-      categories: ((data.column_category as string[] | null) ?? []).join(", "),
       tags: ((data.column_tag as string[] | null) ?? []).join(", "),
     },
   });
@@ -53,7 +52,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       title?: string;
       body_md?: string;
       date?: string;
-      categories?: string;
       tags?: string;
       og_image?: string;
       status?: "draft" | "published" | "archived";
@@ -82,7 +80,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           ? "archived"
           : "published";
     const month = monthKeyFromDate(dateIso);
-    const categories = parseTagList(body.categories ?? "");
     const tags = parseTagList(body.tags ?? "");
     const ogImage = (body.og_image ?? "").trim();
     const bodyHtml = markdownToHtml(bodyMd);
@@ -106,7 +103,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       title,
       date: dateIso,
       column_month: [month],
-      column_category: categories,
       column_tag: tags,
       og_image: ogImage,
       body_html: bodyHtml,

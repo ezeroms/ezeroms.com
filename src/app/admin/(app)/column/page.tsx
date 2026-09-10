@@ -25,7 +25,7 @@ export default async function AdminColumnListPage() {
     let { data, error } = await getSupabaseAdmin()
       .from("column")
       .select(
-        "slug, title, date, status, column_category, column_tag, body_html, og_image",
+        "slug, title, date, status, column_tag, body_html, og_image",
       )
       .eq("is_deleted", false)
       .order("date", { ascending: false })
@@ -35,7 +35,7 @@ export default async function AdminColumnListPage() {
       const fallback = await getSupabaseAdmin()
         .from("column")
         .select(
-          "slug, title, date, status, column_category, column_tag, body_html",
+          "slug, title, date, status, column_tag, body_html",
         )
         .eq("is_deleted", false)
         .order("date", { ascending: false })
@@ -53,7 +53,6 @@ export default async function AdminColumnListPage() {
         const title = String(row.title ?? "");
         const date = String(row.date ?? "");
         const status = String(row.status ?? "published");
-        const categories = (row.column_category as string[] | null) ?? [];
         const tags = (row.column_tag as string[] | null) ?? [];
         const bodyHtml = (row.body_html as string | null) ?? "";
         const bodyMd = htmlToEditableMarkdown(bodyHtml);
@@ -63,13 +62,11 @@ export default async function AdminColumnListPage() {
           title,
           date,
           status,
-          categories,
           editor: {
             slug,
             title,
             body_md: bodyMd,
             date,
-            categories: categories.join(", "),
             tags: tags.join(", "),
             status: status === "draft" ? "draft" : "published",
             og_image: (row.og_image as string | null) ?? "",

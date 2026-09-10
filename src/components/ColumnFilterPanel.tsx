@@ -32,11 +32,10 @@ export function ColumnFilterPanel({
   const [draft, setDraft] = useState<ColumnFilterState>(() => ({
     ...initial,
     weekdays: [],
-    categories: [],
   }));
 
   const normalized = useMemo(
-    () => ({ ...draft, weekdays: [] as number[], categories: [] as string[] }),
+    () => ({ ...draft, weekdays: [] as number[] }),
     [draft],
   );
 

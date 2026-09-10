@@ -110,7 +110,6 @@ export type Column = {
   title: string;
   date: string;
   column_month: string[];
-  column_category: string[];
   column_tag: string[];
   body_html: string;
   /** OGP image URL (recommended 1200×630). Also used as list thumb when set. */

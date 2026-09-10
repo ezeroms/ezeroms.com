@@ -34,12 +34,12 @@ export default async function ColumnIndexPage({
   const section = await requirePublicWritingSection("column");
   const resolvedSearchParams = await searchParams;
   const parsed = parseColumnFilter(resolvedSearchParams);
-  // Column has no weekday / category facet on the public site
-  const filter = { ...parsed, weekdays: [] as number[], categories: [] as string[] };
+  // Column has no weekday facet on the public site
+  const filter = { ...parsed, weekdays: [] as number[] };
   const filtering = columnFilterActive(filter);
 
   const [taxonomy, listed] = await Promise.all([
-    listColumnTaxonomy().catch(() => ({ categories: [], tags: [] })),
+    listColumnTaxonomy().catch(() => ({ tags: [] })),
     listColumn(
       filtering
         ? {

@@ -181,7 +181,6 @@ async function migrateColumn() {
       title: String(data.title ?? slug),
       date,
       column_month: asStringArray(data.column_month),
-      column_category: asStringArray(data.column_category),
       column_tag: asStringArray(data.column_tag),
       body_html: mdToHtml(content),
       status: "published",
