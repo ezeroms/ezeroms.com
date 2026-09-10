@@ -7,7 +7,7 @@ import {
   type ContactsTableItem,
 } from "@/components/contacts/ContactsListTable";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { listLastActivityByContactIds } from "@/lib/workspace/activities";
@@ -65,14 +65,12 @@ export default async function AdminWorkspaceFriendsPage() {
         </Alert>
       ) : null}
       {hasWorkspaceConfig() && !loadError ? (
-        <Card className="overflow-hidden">
-          <CardContent className="overflow-x-auto p-0">
-            <ContactsListTable
-              items={items}
-              emptyMessage="まだ友達がいません"
-            />
-          </CardContent>
-        </Card>
+        <AdminTableScroll>
+          <ContactsListTable
+            items={items}
+            emptyMessage="まだ友達がいません"
+          />
+        </AdminTableScroll>
       ) : null}
     </AdminContent>
   );

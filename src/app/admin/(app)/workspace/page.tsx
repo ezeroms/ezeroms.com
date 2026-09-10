@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminSection } from "@/components/admin/AdminSection";
 import { WorkspaceConfigNotice } from "@/components/admin/WorkspaceConfigNotice";
 import { BlogTrendsCard } from "@/components/workspace/BlogTrendsCard";
 import { WorkloadMeter } from "@/components/workspace/WorkloadMeter";
@@ -172,18 +173,17 @@ export default async function AdminWorkspaceDashboardPage() {
           error={gaError}
         />
 
-        <section className="space-y-2">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              今日の予定
-            </h2>
+        <AdminSection
+          title="今日の予定"
+          actions={
             <Link
               href="/admin/workspace/calendar/"
               className="text-xs text-muted-foreground no-underline hover:underline"
             >
               週表示
             </Link>
-          </div>
+          }
+        >
           {!oauthConfigured ? (
             <p className="m-0 text-sm text-muted-foreground">
               Google OAuth 未設定（ENV_SETUP.md）
@@ -206,7 +206,7 @@ export default async function AdminWorkspaceDashboardPage() {
               {todayEvents.map((ev) => (
                 <li
                   key={`${ev.calendarId}:${ev.id}`}
-                  className="rounded-md border border-border px-3 py-2 text-sm"
+                  className="border-b border-border-subtle py-2 text-sm last:border-b-0"
                 >
                   <span className="mr-2 text-xs tabular-nums text-muted-foreground">
                     {formatEventTimeRange(ev.start, ev.end, ev.allDay)}
@@ -227,7 +227,7 @@ export default async function AdminWorkspaceDashboardPage() {
               ))}
             </ul>
           )}
-        </section>
+        </AdminSection>
       </div>
     </AdminContent>
   );

@@ -2,7 +2,6 @@ import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { SiteSettingsForm } from "@/components/admin/SiteSettingsForm";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadSiteSettings } from "@/lib/content/queries/site-settings";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { hasSupabaseConfig } from "@/lib/supabase/server";
@@ -31,16 +30,9 @@ export default async function AdminSiteSettingsPage() {
           {loadError}
         </Alert>
       ) : null}
-      <Card>
-        <CardHeader>
-          <CardTitle>サイト設定</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <SiteSettingsForm
-            initialOgImage={settings.og_image}
-          />
-        </CardContent>
-      </Card>
+      <SiteSettingsForm
+        initialOgImage={settings.og_image}
+      />
     </AdminContent>
   );
 }

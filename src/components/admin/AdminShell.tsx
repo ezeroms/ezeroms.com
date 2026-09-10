@@ -11,7 +11,7 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
       {...ignorePasswordManagersProps}
     >
       <AdminSidebar userEmail={user.email ?? null} />
-      <main className="relative min-h-0 min-w-0 flex-1 overflow-y-auto px-6 py-8">
+      <main className="relative min-h-0 min-w-0 flex-1 overflow-y-auto bg-card px-6 py-8">
         {/* 幅はページ側の AdminContent（default / wide）で指定 */}
         {children}
       </main>

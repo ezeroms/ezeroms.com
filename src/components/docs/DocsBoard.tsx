@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { TagBoardCrossLink } from "@/components/workspace/TagBoardCrossLink";
 import { WorkspaceTagsNav } from "@/components/workspace/WorkspaceTagsNav";
 import { cn } from "@/lib/cn";
-import { cardOutlineClass } from "@/lib/site/card-styles";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 import {
   countDocsForTag,
@@ -160,8 +159,8 @@ export function DocsBoard({
   const listTitle = docsBoardSelectionTitle(selection);
 
   return (
-    <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-background lg:flex-row">
-      <aside className="flex max-h-[40%] w-full shrink-0 flex-col border-b border-border bg-background lg:max-h-none lg:w-56 lg:border-b-0 lg:border-r">
+    <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-card lg:flex-row">
+      <aside className="flex max-h-[40%] w-full shrink-0 flex-col border-b border-border bg-card lg:max-h-none lg:w-56 lg:border-b-0 lg:border-r">
         <div className="min-h-0 flex-1 overflow-y-auto px-2.5 py-4">
           <nav className="flex flex-col gap-0.5">
             <button
@@ -188,13 +187,8 @@ export function DocsBoard({
         </div>
       </aside>
 
-      <div className="flex h-full min-h-0 min-w-0 flex-1 basis-0 flex-col p-3 sm:p-4">
-        <div
-          className={cn(
-            "flex h-full min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden rounded-lg bg-card lg:flex-row",
-            cardOutlineClass,
-          )}
-        >
+      <div className="flex h-full min-h-0 min-w-0 flex-1 basis-0 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row">
           <section className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col lg:max-w-[22rem] lg:flex-none lg:basis-[22rem] xl:max-w-[24rem] xl:basis-[24rem]">
             <div className="shrink-0 px-5 pb-3 pt-6">
               <h1 className="m-0 text-[1.35rem] font-semibold tracking-tight text-foreground">

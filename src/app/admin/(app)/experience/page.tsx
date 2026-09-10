@@ -6,7 +6,7 @@ import {
 } from "@/components/admin/AdminExperienceListTable";
 import { ExperienceCreateButton } from "@/components/admin/ExperienceCreateButton";
 import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWorksSection } from "@/lib/content/queries";
 import { requireAdminPage } from "@/lib/supabase/auth";
@@ -88,11 +88,9 @@ export default async function AdminExperienceListPage() {
           </div>
         }
       />
-      <Card className="overflow-hidden">
-        <CardContent className="overflow-x-auto p-0">
-          <AdminExperienceListTable items={items} empty={!items.length} />
-        </CardContent>
-      </Card>
+      <AdminTableScroll>
+        <AdminExperienceListTable items={items} empty={!items.length} />
+      </AdminTableScroll>
     </AdminContent>
   );
 }

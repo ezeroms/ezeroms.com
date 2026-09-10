@@ -10,7 +10,7 @@ import { Select } from "@/components/ui/select";
 import { PROJECT_STATUS_LABELS } from "@/lib/workspace/labels";
 import type { ProjectStatus, WorkspaceProject } from "@/types/workspace";
 import { PROJECT_STATUSES } from "@/types/workspace";
-import { surfaceCard } from "@/lib/site/card-styles";
+import { AdminSection, AdminTableScroll } from "@/components/admin/AdminSection";
 
 type Props = {
   initialProjects: WorkspaceProject[];
@@ -172,17 +172,14 @@ export function ProjectsBoard({ initialProjects }: Props) {
   }
 
   return (
-    <div className="space-y-4">
-      <section className={surfaceCard({ className: "p-4" })}>
-        <h2 className="m-0 text-sm font-semibold text-foreground">
-          Project を追加
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Tasks / Docs から紐づけられるグループです。名前はあとから変更できます。
-        </p>
+    <div className="space-y-6">
+      <AdminSection
+        title="Project を追加"
+        description="Tasks / Docs から紐づけられるグループです。名前はあとから変更できます。"
+      >
         <form
           onSubmit={onCreate}
-          className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center"
+          className="flex flex-col gap-2 sm:flex-row sm:items-center"
         >
           <Input
             value={newName}
@@ -199,7 +196,7 @@ export function ProjectsBoard({ initialProjects }: Props) {
             {creating ? "作成中…" : "追加"}
           </Button>
         </form>
-      </section>
+      </AdminSection>
 
       {error ? (
         <p className="m-0 text-sm text-red-600" role="alert">
@@ -207,12 +204,12 @@ export function ProjectsBoard({ initialProjects }: Props) {
         </p>
       ) : null}
 
-      <section className={surfaceCard({ className: "overflow-hidden" })}>
-        {projects.length === 0 ? (
-          <p className="m-0 px-4 py-10 text-center text-sm text-muted-foreground">
-            Project はまだありません
-          </p>
-        ) : (
+      {projects.length === 0 ? (
+        <p className="m-0 py-6 text-sm text-muted-foreground">
+          Project はまだありません
+        </p>
+      ) : (
+        <AdminTableScroll>
           <table className="w-full min-w-[640px] border-collapse text-left text-sm">
             <thead>
               <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
@@ -322,8 +319,8 @@ export function ProjectsBoard({ initialProjects }: Props) {
               })}
             </tbody>
           </table>
-        )}
-      </section>
+        </AdminTableScroll>
+      )}
     </div>
   );
 }

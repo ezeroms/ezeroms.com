@@ -7,7 +7,7 @@ import {
   type ContactsTableItem,
 } from "@/components/contacts/ContactsListTable";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import {
@@ -66,17 +66,15 @@ export default async function AdminWorkspaceContactsPage() {
         </Alert>
       ) : null}
       {hasWorkspaceConfig() && !loadError ? (
-        <Card className="overflow-hidden">
-          <CardContent className="overflow-x-auto p-0">
-            <ContactsListTable
-              items={items}
-              showCompany
-              showTags
-              showBirthday={false}
-              showLastActivity={false}
-            />
-          </CardContent>
-        </Card>
+        <AdminTableScroll>
+          <ContactsListTable
+            items={items}
+            showCompany
+            showTags
+            showBirthday={false}
+            showLastActivity={false}
+          />
+        </AdminTableScroll>
       ) : null}
     </AdminContent>
   );

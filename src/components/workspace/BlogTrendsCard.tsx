@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { AdminSection, AdminTableScroll } from "@/components/admin/AdminSection";
 import { MetricCard } from "@/components/charts/MetricCard";
-import { surfaceCard } from "@/lib/site/card-styles";
 import type { AnalyticsReport } from "@/types/analytics";
 
 function formatNumber(n: number): string {
@@ -15,39 +15,33 @@ type Props = {
 
 export function BlogTrendsCard({ report, configured, error }: Props) {
   return (
-    <section className={surfaceCard({ className: "p-4" })}>
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div>
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            ブログ動向（GA・直近24時間）
-          </h2>
-          <p className="m-0 mt-1 text-sm text-muted-foreground">
-            公開サイトの閲覧トレンド
-          </p>
-        </div>
+    <AdminSection
+      title="ブログ動向（GA・直近24時間）"
+      description="公開サイトの閲覧トレンド"
+      actions={
         <Link
           href="/admin/analytics/?range=1"
           className="text-xs text-muted-foreground no-underline hover:underline"
         >
           Analytics を開く
         </Link>
-      </div>
-
+      }
+    >
       {!configured ? (
-        <p className="mt-3 m-0 text-sm text-muted-foreground">
+        <p className="m-0 text-sm text-muted-foreground">
           GA Data API が未設定です。ENV_SETUP.md の{" "}
           <code className="text-xs">GA_PROPERTY_ID</code> などを設定するとここに表示されます。
         </p>
       ) : error ? (
-        <p className="mt-3 m-0 text-sm text-red-600" role="alert">
+        <p className="m-0 text-sm text-red-600" role="alert">
           {error}
         </p>
       ) : !report ? (
-        <p className="mt-3 m-0 text-sm text-muted-foreground">
+        <p className="m-0 text-sm text-muted-foreground">
           レポートを読み込めませんでした。
         </p>
       ) : (
-        <div className="mt-4 space-y-4">
+        <div className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-3">
             <MetricCard
               label="Views"
@@ -66,16 +60,13 @@ export function BlogTrendsCard({ report, configured, error }: Props) {
             />
           </div>
 
-          <div className={surfaceCard({ className: "overflow-hidden" })}>
-            <h3 className="m-0 border-b border-border px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              人気ページ
-            </h3>
+          <AdminSection title="人気ページ">
             {report.pages.length === 0 ? (
-              <p className="m-0 px-3 py-4 text-sm text-muted-foreground">
+              <p className="m-0 text-sm text-muted-foreground">
                 データなし
               </p>
             ) : (
-              <div className="overflow-x-auto">
+              <AdminTableScroll>
                 <table className="w-full border-collapse text-left text-sm">
                   <thead>
                     <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
@@ -112,15 +103,15 @@ export function BlogTrendsCard({ report, configured, error }: Props) {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </AdminTableScroll>
             )}
-          </div>
+          </AdminSection>
 
           <p className="m-0 text-xs text-muted-foreground">
             {report.startDate} 〜 {report.endDate}
           </p>
         </div>
       )}
-    </section>
+    </AdminSection>
   );
 }

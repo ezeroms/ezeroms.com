@@ -6,7 +6,7 @@ import {
 } from "@/components/admin/AdminWorkListTable";
 import { WorkCreateButton } from "@/components/admin/WorkCreateButton";
 import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWorksSection } from "@/lib/content/queries";
 import { requireAdminPage } from "@/lib/supabase/auth";
@@ -120,11 +120,9 @@ export default async function AdminChooningListPage() {
           一覧の取得に失敗しました: {loadError}
         </p>
       ) : null}
-      <Card className="overflow-hidden">
-        <CardContent className="overflow-x-auto p-0">
-          <AdminWorkListTable items={items} empty={!items.length} />
-        </CardContent>
-      </Card>
+      <AdminTableScroll>
+        <AdminWorkListTable items={items} empty={!items.length} />
+      </AdminTableScroll>
     </AdminContent>
   );
 }

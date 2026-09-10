@@ -5,7 +5,7 @@ import { useState } from "react";
 import { MetricCard } from "@/components/charts/MetricCard";
 import { TimeSeriesChart } from "@/components/charts/TimeSeriesChart";
 import { Button } from "@/components/ui/button";
-import { surfaceCard } from "@/lib/site/card-styles";
+import { AdminSection, AdminTableScroll } from "@/components/admin/AdminSection";
 import { cn } from "@/lib/cn";
 import type { AnalyticsRange, AnalyticsReport } from "@/types/analytics";
 
@@ -75,7 +75,7 @@ export function AnalyticsBoard({
 
   if (!configured) {
     return (
-      <div className={surfaceCard({ className: "space-y-3 p-4 text-sm text-muted-foreground" })}>
+      <div className="space-y-3 text-sm text-muted-foreground">
         <p className="m-0">
           Analytics Data API が未設定です。ENV_SETUP.md の手順で次を設定してください。
         </p>
@@ -178,28 +178,22 @@ export function AnalyticsBoard({
         />
       </div>
 
-      <section className={surfaceCard({ className: "p-4" })}>
-        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          日別 Views
-        </h2>
+      <AdminSection title="日別 Views">
         <TimeSeriesChart
           data={report.trend}
           xKey="date"
           series={[{ key: "views", label: "Views" }]}
         />
-      </section>
+      </AdminSection>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className={surfaceCard({ className: "overflow-hidden" })}>
-          <h2 className="m-0 border-b border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            人気ページ
-          </h2>
+        <AdminSection title="人気ページ">
           {report.pages.length === 0 ? (
-            <p className="m-0 px-4 py-6 text-sm text-muted-foreground">
+            <p className="m-0 text-sm text-muted-foreground">
               データなし
             </p>
           ) : (
-            <div className="overflow-x-auto">
+            <AdminTableScroll>
               <table className="w-full min-w-[420px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
@@ -236,20 +230,17 @@ export function AnalyticsBoard({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </AdminTableScroll>
           )}
-        </section>
+        </AdminSection>
 
-        <section className={surfaceCard({ className: "overflow-hidden" })}>
-          <h2 className="m-0 border-b border-border px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            主な流入元
-          </h2>
+        <AdminSection title="主な流入元">
           {report.sources.length === 0 ? (
-            <p className="m-0 px-4 py-6 text-sm text-muted-foreground">
+            <p className="m-0 text-sm text-muted-foreground">
               データなし
             </p>
           ) : (
-            <div className="overflow-x-auto">
+            <AdminTableScroll>
               <table className="w-full min-w-[360px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
@@ -279,9 +270,9 @@ export function AnalyticsBoard({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </AdminTableScroll>
           )}
-        </section>
+        </AdminSection>
       </div>
     </div>
   );

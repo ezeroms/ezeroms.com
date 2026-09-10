@@ -5,7 +5,6 @@ import {
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { ABOUT_CONTACT_CONTENT_SLUG } from "@/lib/content/about-routes";
 import { requireAdminPage } from "@/lib/supabase/auth";
@@ -78,14 +77,7 @@ export default async function AdminContactPage() {
         </Alert>
       ) : null}
       {loadWarn ? <Alert className="mb-4">{loadWarn}</Alert> : null}
-      <Card>
-        <CardHeader>
-          <CardTitle>記事を編集</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AboutContactEditor initial={initial} />
-        </CardContent>
-      </Card>
+      <AboutContactEditor initial={initial} />
     </AdminContent>
   );
 }

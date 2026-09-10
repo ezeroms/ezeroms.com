@@ -6,7 +6,7 @@ import {
 } from "@/components/admin/AdminColumnListTable";
 import { ColumnCreateButton } from "@/components/admin/ColumnCreateButton";
 import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { loadWritingSection } from "@/lib/content/queries";
 import { requireAdminPage } from "@/lib/supabase/auth";
@@ -102,11 +102,9 @@ export default async function AdminColumnListPage() {
           一覧の取得に失敗しました: {loadError}
         </p>
       ) : null}
-      <Card className="overflow-hidden">
-        <CardContent className="overflow-x-auto p-0">
-          <AdminColumnListTable items={items} empty={!items.length} />
-        </CardContent>
-      </Card>
+      <AdminTableScroll>
+        <AdminColumnListTable items={items} empty={!items.length} />
+      </AdminTableScroll>
     </AdminContent>
   );
 }

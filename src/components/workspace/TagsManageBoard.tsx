@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { surfaceCard } from "@/lib/site/card-styles";
+import { AdminSection } from "@/components/admin/AdminSection";
 import type { WorkspaceTag, WorkspaceTagGroup } from "@/types/workspace";
 
 type Catalog = {
@@ -468,10 +468,9 @@ export function TagsManageBoard({ initialGroups, initialTags }: Props) {
   const ungrouped = tagsInGroup(null);
 
   return (
-    <div className="space-y-4">
-      <section className={surfaceCard({ className: "p-4" })}>
-        <h2 className="m-0 text-sm font-semibold text-foreground">追加</h2>
-        <div className="mt-4 flex flex-col gap-3">
+    <div className="space-y-6">
+      <AdminSection title="追加">
+        <div className="flex flex-col gap-3">
           <form
             onSubmit={onCreateGroup}
             className="flex flex-col gap-2 sm:flex-row sm:items-center"
@@ -524,7 +523,7 @@ export function TagsManageBoard({ initialGroups, initialTags }: Props) {
             </Button>
           </form>
         </div>
-      </section>
+      </AdminSection>
 
       {error ? (
         <p className="m-0 text-sm text-red-600" role="alert">
@@ -536,8 +535,8 @@ export function TagsManageBoard({ initialGroups, initialTags }: Props) {
         const busy = busyKey === `group:${group.id}`;
         const draft = draftGroups[group.id] ?? group.name;
         return (
-          <section key={group.id} className={surfaceCard({ className: "overflow-hidden" })}>
-            <div className="flex flex-col gap-2 px-3 py-3 sm:flex-row sm:items-center">
+          <section key={group.id}>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               {renderMoveButtons({
                 busy,
                 disableUp: groupIndex === 0,
@@ -589,21 +588,18 @@ export function TagsManageBoard({ initialGroups, initialTags }: Props) {
         );
       })}
 
-      <section className={surfaceCard({ className: "overflow-hidden" })}>
-        <div className="px-4 py-3">
-          <h2 className="m-0 text-sm font-semibold text-foreground">無所属</h2>
-          <p className="m-0 mt-1 text-xs text-muted-foreground">
-            グループに入っていないタグ
-          </p>
-        </div>
+      <AdminSection
+        title="無所属"
+        description="グループに入っていないタグ"
+      >
         {ungrouped.length === 0 && orderedGroups.length === 0 && tags.length === 0 ? (
-          <p className="m-0 px-4 pb-6 text-sm text-muted-foreground">
+          <p className="m-0 text-sm text-muted-foreground">
             タグはまだありません。Docs / Tasks で使っているタグは自動でここに集まります。
           </p>
         ) : (
           renderTagList(null)
         )}
-      </section>
+      </AdminSection>
     </div>
   );
 }
