@@ -108,7 +108,7 @@ export async function AdminPhotoListPage({
       {usingLegacySnap ? (
         <Alert className="mb-4">
           旧テーブル <code>snap</code> のデータを表示しています。正式な{" "}
-          <code>smile</code> / <code>jumpai</code> / <code>tabekake</code>{" "}
+          <code>smile</code> / <code>jampai</code> / <code>tabekake</code>{" "}
           テーブルを作るには、Supabase SQL Editor で{" "}
           <code>supabase/migrations/20260719030000_photo_galleries_safe.sql</code>{" "}
           を実行し、続けて{" "}

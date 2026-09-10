@@ -72,6 +72,36 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/jumpai",
+        destination: "/jampai/",
+        permanent: true,
+      },
+      {
+        source: "/jumpai/:slug*",
+        destination: "/jampai/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/admin/jumpai",
+        destination: "/admin/jampai/",
+        permanent: true,
+      },
+      {
+        source: "/admin/jumpai/:path*",
+        destination: "/admin/jampai/:path*",
+        permanent: true,
+      },
+      {
+        source: "/api/admin/photos/jumpai",
+        destination: "/api/admin/photos/jampai/",
+        permanent: true,
+      },
+      {
+        source: "/api/admin/photos/jumpai/:path*",
+        destination: "/api/admin/photos/jampai/:path*",
+        permanent: true,
+      },
+      {
         source: "/admin/notes",
         destination: "/admin/diary/",
         permanent: true,

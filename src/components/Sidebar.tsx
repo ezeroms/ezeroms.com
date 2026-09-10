@@ -66,7 +66,7 @@ type NavSection = {
 
 const PHOTO_ICONS: Record<PhotoGalleryId, LucideIcon> = {
   smile: Smile,
-  jumpai: Bird,
+  jampai: Bird,
   tabekake: Pizza,
 };
 
@@ -137,7 +137,7 @@ export function Sidebar({
 
   const resolvedPhotoNav: SidebarPhotoNavItem[] = photoNav ?? [
     { id: "smile", href: "/smile/", label: "Smile" },
-    { id: "jumpai", href: "/jumpai/", label: "Jampai" },
+    { id: "jampai", href: "/jampai/", label: "Jampai" },
     { id: "tabekake", href: "/tabekake/", label: "Tabekake" },
   ];
 

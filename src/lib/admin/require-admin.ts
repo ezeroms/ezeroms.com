@@ -4,7 +4,7 @@
 
 import type { User } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-import { isPhotoGalleryId, type PhotoGalleryId } from "@/lib/content/photo-galleries";
+import { resolvePhotoGalleryId, type PhotoGalleryId } from "@/lib/content/photo-galleries";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { hasSupabaseConfig } from "@/lib/supabase/server";
 
@@ -38,10 +38,11 @@ export async function requirePhotoGalleryAdmin(
 > {
   const auth = await requireAdminSession();
   if (auth.error) return auth;
-  if (!isPhotoGalleryId(galleryParam)) {
+  const galleryId = resolvePhotoGalleryId(galleryParam);
+  if (!galleryId) {
     return {
       error: NextResponse.json({ error: "Unknown gallery" }, { status: 404 }),
     };
   }
-  return { galleryId: galleryParam };
+  return { galleryId };
 }
