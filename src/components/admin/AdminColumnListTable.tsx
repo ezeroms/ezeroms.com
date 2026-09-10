@@ -52,13 +52,8 @@ export function AdminColumnListTable({ items, empty }: Props) {
               <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
                 {formatAdminListDate(item.date)}
               </td>
-              <td className="max-w-[360px] px-4 py-2.5 align-middle">
-                <span className="font-medium text-foreground">
-                  {item.title || "（無題）"}
-                </span>
-                <p className="m-0 truncate text-xs text-muted-foreground">
-                  {item.slug}
-                </p>
+              <td className="max-w-[360px] px-4 py-2.5 align-middle font-medium text-foreground">
+                {item.title || "（無題）"}
               </td>
               <td className="max-w-[180px] truncate px-4 py-2.5 align-middle text-muted-foreground">
                 {item.categories.length ? item.categories.join(", ") : "—"}
