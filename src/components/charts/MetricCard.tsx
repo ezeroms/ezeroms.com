@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { adminSectionTitleClass } from "@/components/admin/AdminSection";
+import { adminSectionTitleClass } from "@/lib/site/admin-styles";
 
 export function MetricCard({
   label,

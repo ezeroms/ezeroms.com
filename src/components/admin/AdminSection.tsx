@@ -1,8 +1,7 @@
-import { cn } from "@/lib/cn";
+"use client";
 
-/** Shared admin block heading — same as dashboard 「今日の予定」. */
-export const adminSectionTitleClass =
-  "m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground";
+import { cn } from "@/lib/cn";
+import { adminSectionTitleClass } from "@/lib/site/admin-styles";
 
 export function AdminSection({
   title,

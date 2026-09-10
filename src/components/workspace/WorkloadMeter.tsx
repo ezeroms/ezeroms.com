@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { AdminSection, adminSectionTitleClass } from "@/components/admin/AdminSection";
+import { AdminSection } from "@/components/admin/AdminSection";
+import { adminSectionTitleClass } from "@/lib/site/admin-styles";
 import { formatEventTimeRange, localDateKeyFromIso } from "@/lib/workspace/calendar/time";
 import type {
   HorizonLoad,
