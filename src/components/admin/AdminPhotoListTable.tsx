@@ -94,13 +94,8 @@ export function AdminPhotoListTable({
                     </div>
                   )}
                 </td>
-                <td className="max-w-[220px] px-4 py-2.5 align-middle">
-                  <span className="font-medium text-foreground">
-                    {item.filename || item.slug}
-                  </span>
-                  <p className="m-0 truncate text-xs text-muted-foreground">
-                    {item.slug}
-                  </p>
+                <td className="max-w-[220px] px-4 py-2.5 align-middle font-medium text-foreground">
+                  {item.filename || item.slug}
                 </td>
                 <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
                   {formatListDate(item.date)}
