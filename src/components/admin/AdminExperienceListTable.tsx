@@ -4,10 +4,16 @@ import { useCallback, useState } from "react";
 import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
 import { ExperienceEditModal } from "@/components/admin/ExperienceEditModal";
 import type { ExperienceEditorInitial } from "@/components/admin/ExperienceEditorForm";
-import { OpenContentButton } from "@/components/admin/OpenContentButton";
 import {
-  adminStatusLabel,
-} from "@/lib/admin/list-format";
+  AdminListActionsCell,
+  AdminListEmptyRow,
+  AdminListStatus,
+  adminListHeadRowClassName,
+  adminListTableClassName,
+  adminListTdClassName,
+  adminListThClassName,
+} from "@/components/admin/AdminListTable";
+import { OpenContentButton } from "@/components/admin/OpenContentButton";
 
 export type AdminExperienceTableItem = {
   slug: string;
@@ -36,14 +42,14 @@ export function AdminExperienceListTable({ items, empty }: Props) {
 
   return (
     <>
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+      <table className={adminListTableClassName}>
         <thead>
-          <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
-            <th className="w-48 px-4 py-3 font-medium">期間</th>
-            <th className="px-4 py-3 font-medium">組織</th>
-            <th className="px-4 py-3 font-medium">肩書き</th>
-            <th className="w-24 px-4 py-3 font-medium">ステータス</th>
-            <th className="w-16 px-4 py-3 font-medium text-right">
+          <tr className={adminListHeadRowClassName}>
+            <th className={`w-48 ${adminListThClassName}`}>期間</th>
+            <th className={adminListThClassName}>組織</th>
+            <th className={adminListThClassName}>肩書き</th>
+            <th className={`w-24 ${adminListThClassName}`}>ステータス</th>
+            <th className={`w-16 ${adminListThClassName} text-right`}>
               <span className="sr-only">操作</span>
             </th>
           </tr>
@@ -55,47 +61,31 @@ export function AdminExperienceListTable({ items, empty }: Props) {
               className="hover:bg-muted/30"
               onActivate={() => setEditing(item.editor)}
             >
-              <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
+              <td
+                className={`whitespace-nowrap ${adminListTdClassName} text-muted-foreground`}
+              >
                 {periodLabel(item.start_date, item.end_date)}
               </td>
-              <td className="max-w-[280px] px-4 py-2.5 align-middle">
-                <span className="font-medium text-foreground">
-                  {item.organization || "（無題）"}
-                </span>
-                <p className="m-0 truncate text-xs text-muted-foreground">
-                  {item.slug}
-                </p>
+              <td
+                className={`max-w-[280px] ${adminListTdClassName} font-medium text-foreground`}
+              >
+                {item.organization || "（無題）"}
               </td>
-              <td className="max-w-[200px] truncate px-4 py-2.5 align-middle text-muted-foreground">
+              <td
+                className={`max-w-[200px] truncate ${adminListTdClassName} text-muted-foreground`}
+              >
                 {item.title?.trim() || "—"}
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <span
-                  className={
-                    item.status === "published"
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {adminStatusLabel(item.status)}
-                </span>
+              <td className={adminListTdClassName}>
+                <AdminListStatus status={item.status} />
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <div className="flex justify-end">
-                  <OpenContentButton href="/works/experience/" />
-                </div>
-              </td>
+              <AdminListActionsCell>
+                <OpenContentButton href="/works/experience/" />
+              </AdminListActionsCell>
             </AdminClickableRow>
           ))}
           {empty ? (
-            <tr>
-              <td
-                colSpan={5}
-                className="px-4 py-10 text-center text-muted-foreground"
-              >
-                まだ投稿がありません
-              </td>
-            </tr>
+            <AdminListEmptyRow colSpan={5}>まだ投稿がありません</AdminListEmptyRow>
           ) : null}
         </tbody>
       </table>

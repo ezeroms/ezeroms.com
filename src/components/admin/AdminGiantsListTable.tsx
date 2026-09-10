@@ -6,8 +6,16 @@ import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
 import { DuplicateContentButton } from "@/components/admin/DuplicateContentButton";
 import { GiantsEditModal } from "@/components/admin/GiantsEditModal";
 import type { GiantsEditorInitial } from "@/components/admin/GiantsEditorForm";
+import {
+  AdminListActionsCell,
+  AdminListEmptyRow,
+  AdminListStatus,
+  adminListHeadRowClassName,
+  adminListTableClass,
+  adminListTdClassName,
+  adminListThClassName,
+} from "@/components/admin/AdminListTable";
 import { OpenContentButton } from "@/components/admin/OpenContentButton";
-import { adminStatusLabel } from "@/lib/admin/list-format";
 import { giantsPermalink } from "@/lib/content/giants-meta";
 
 export type AdminGiantsTableItem = {
@@ -67,14 +75,14 @@ export function AdminGiantsListTable({ items, empty }: Props) {
           {duplicateError}
         </p>
       ) : null}
-      <table className="w-full min-w-[800px] border-collapse text-left text-sm">
+      <table className={adminListTableClass("min-w-[800px]")}>
         <thead>
-          <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
-            <th className="px-4 py-3 font-medium">引用</th>
-            <th className="px-4 py-3 font-medium">書誌</th>
-            <th className="w-28 px-4 py-3 font-medium">購入リンク</th>
-            <th className="w-24 px-4 py-3 font-medium">ステータス</th>
-            <th className="w-24 px-4 py-3 font-medium text-right">
+          <tr className={adminListHeadRowClassName}>
+            <th className={adminListThClassName}>引用</th>
+            <th className={adminListThClassName}>書誌</th>
+            <th className={`w-28 ${adminListThClassName}`}>購入リンク</th>
+            <th className={`w-24 ${adminListThClassName}`}>ステータス</th>
+            <th className={`w-24 ${adminListThClassName} text-right`}>
               <span className="sr-only">操作</span>
             </th>
           </tr>
@@ -83,10 +91,10 @@ export function AdminGiantsListTable({ items, empty }: Props) {
           {items.map((item) => (
             <AdminClickableRow
               key={item.slug}
-              className="bg-card hover:bg-muted/30"
+              className="hover:bg-muted/30"
               onActivate={() => setEditing(item.editor)}
             >
-              <td className="max-w-[280px] px-4 py-2.5 align-middle">
+              <td className={`max-w-[280px] ${adminListTdClassName}`}>
                 <span className="line-clamp-2 text-foreground">
                   {item.excerpt || "—"}
                 </span>
@@ -96,48 +104,35 @@ export function AdminGiantsListTable({ items, empty }: Props) {
                   </p>
                 ) : null}
               </td>
-              <td className="max-w-[260px] px-4 py-2.5 align-middle text-muted-foreground">
+              <td
+                className={`max-w-[260px] ${adminListTdClassName} text-muted-foreground`}
+              >
                 <span className="line-clamp-2">{item.citation || "—"}</span>
               </td>
-              <td className="px-4 py-2.5 align-middle">
+              <td className={adminListTdClassName}>
                 {item.source_url ? (
                   <span className="text-foreground">あり</span>
                 ) : (
                   <span className="text-muted-foreground">なし</span>
                 )}
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <span
-                  className={
-                    item.status === "published"
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {adminStatusLabel(item.status)}
-                </span>
+              <td className={adminListTdClassName}>
+                <AdminListStatus status={item.status} />
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <div className="flex justify-end gap-0.5">
-                  <DuplicateContentButton
-                    loading={duplicatingSlug === item.slug}
-                    disabled={Boolean(duplicatingSlug)}
-                    onClick={() => void duplicate(item.slug)}
-                  />
-                  <OpenContentButton href={giantsPermalink(item.slug)} />
-                </div>
-              </td>
+              <AdminListActionsCell>
+                <DuplicateContentButton
+                  loading={duplicatingSlug === item.slug}
+                  disabled={Boolean(duplicatingSlug)}
+                  onClick={() => void duplicate(item.slug)}
+                />
+                <OpenContentButton href={giantsPermalink(item.slug)} />
+              </AdminListActionsCell>
             </AdminClickableRow>
           ))}
           {empty ? (
-            <tr className="bg-card">
-              <td
-                colSpan={5}
-                className="px-4 py-10 text-center text-muted-foreground"
-              >
-                まだエントリがありません
-              </td>
-            </tr>
+            <AdminListEmptyRow colSpan={5}>
+              まだエントリがありません
+            </AdminListEmptyRow>
           ) : null}
         </tbody>
       </table>
