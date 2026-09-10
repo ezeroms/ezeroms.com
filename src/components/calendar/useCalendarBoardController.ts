@@ -356,7 +356,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
       workBlockId: optimisticId,
       taskId,
       taskTitle: task?.title ?? titleFromLane ?? "（無題）",
-      taskStatus: task?.status ?? "inbox",
+      taskStatus: task?.status ?? "active",
       taskPriority: task?.priority ?? "none",
       start: startsAt,
       end: endsAt,
@@ -775,7 +775,7 @@ export function useCalendarBoardController(input: CalendarBoardControllerInput) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: values.title,
-          status: "inbox",
+          status: "active",
           estimated_minutes: minutes,
         }),
       });

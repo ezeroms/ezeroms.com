@@ -97,8 +97,8 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid hsl(var(--border));
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   gap: 0.75rem;
 }
 
@@ -125,9 +125,9 @@
   align-items: center;
   height: 2rem;
   padding: 0 0.625rem;
-  border: 1px solid hsl(var(--border));
+  border: 0;
   border-radius: 6px;
-  background-color: hsl(var(--card));
+  background-color: transparent;
   color: hsl(var(--foreground));
   font-size: 0.8125rem;
   font-weight: 500;
@@ -138,8 +138,7 @@
 .workspace-calendar .sx__calendar-header .sx__today-button:hover,
 .workspace-calendar .sx__view-selection-selected-item:hover,
 .workspace-calendar .sx-cal-date__button:hover {
-  border-color: hsl(var(--border-hover));
-  background-color: hsl(var(--card));
+  background-color: hsl(var(--muted) / 0.7);
 }
 
 /* Floating labels ("View" / "Date") are redundant in this compact header. */
@@ -345,29 +344,25 @@
   position: relative;
 }
 
-/* Events: softer corners, tighter text, trial outline */
+/* Events: quiet fills, no card chrome */
 .workspace-calendar .sx__time-grid-event,
 .workspace-calendar .sx__date-grid-event,
 .workspace-calendar .sx__month-grid-event {
-  border-radius: 6px;
-  /* TRIAL: outline using table header border color */
-  border: 1px solid #e8eaed !important;
-  border-inline-start: 1px solid #e8eaed !important;
+  border-radius: 4px;
+  border: 0 !important;
+  border-inline-start: 2px solid hsl(var(--foreground) / 0.18) !important;
   font-size: 0.75rem;
   line-height: 1.3;
   box-shadow: none;
   min-width: 0;
-  transition:
-    filter 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
+  transition: filter 0.15s ease;
 }
 
 .workspace-calendar .sx__time-grid-event:hover,
 .workspace-calendar .sx__date-grid-event:hover,
 .workspace-calendar .sx__month-grid-event:hover {
   filter: brightness(0.97);
-  box-shadow: 0 1px 3px hsl(var(--foreground) / 0.14);
+  box-shadow: none;
 }
 
 .workspace-calendar .sx__time-grid-event-inner {
@@ -431,7 +426,7 @@
   position: absolute;
   z-index: 4;
   pointer-events: none;
-  border-radius: 6px;
+  border-radius: 4px;
   box-sizing: border-box;
 }
 
@@ -513,7 +508,7 @@
   min-height: 1.35rem;
   padding: 3px 6px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 4px;
   background-color: hsl(var(--brand) / 0.14);
   color: hsl(var(--foreground));
   font: inherit;
@@ -526,7 +521,6 @@
   touch-action: none;
   transition:
     background-color 0.15s ease,
-    box-shadow 0.15s ease,
     opacity 0.15s ease;
 }
 
@@ -551,7 +545,6 @@
 
 .workspace-calendar .sx-task-lane__chip:hover {
   background-color: hsl(var(--brand) / 0.22);
-  box-shadow: 0 1px 3px hsl(var(--foreground) / 0.14);
 }
 
 .workspace-calendar .sx-task-lane__chip--high {

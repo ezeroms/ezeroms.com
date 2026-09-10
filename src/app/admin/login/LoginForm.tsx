@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +23,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
     configError
-      ? "NEXT_PUBLIC_SUPABASE_ANON_KEY が未設定です。.env.local に anon key を追加してサーバーを再起動してください。"
+      ? "NEXT_PUBLIC_SUPABASE_ANON_KEY is not set. Add the anon key to .env.local and restart the server."
       : null,
   );
   const [loading, setLoading] = useState(false);
@@ -41,13 +40,13 @@ export function LoginForm() {
       });
       const data = (await res.json()) as { error?: string };
       if (!res.ok) {
-        setError(data.error || "ログインに失敗しました");
+        setError(data.error || "Sign-in failed");
         return;
       }
       router.replace(next);
       router.refresh();
     } catch {
-      setError("通信エラーが発生しました");
+      setError("A network error occurred");
     } finally {
       setLoading(false);
     }
@@ -58,15 +57,12 @@ export function LoginForm() {
       <div className="w-full max-w-md">
       <Card>
         <CardHeader>
-          <CardTitle>Admin ログイン</CardTitle>
-          <CardDescription>
-            Supabase Auth のユーザーID（メール）とパスワードで入ってください。
-          </CardDescription>
+          <CardTitle>Admin Login</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-4" onSubmit={onSubmit}>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="admin-email">ユーザーID（メール）</Label>
+              <Label htmlFor="admin-email">Email</Label>
               <Input
                 id="admin-email"
                 type="email"
@@ -77,7 +73,7 @@ export function LoginForm() {
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="admin-password">パスワード</Label>
+              <Label htmlFor="admin-password">Password</Label>
               <Input
                 id="admin-password"
                 type="password"
@@ -89,7 +85,7 @@ export function LoginForm() {
             </div>
             {error ? <Alert variant="destructive">{error}</Alert> : null}
             <Button type="submit" disabled={loading}>
-              {loading ? "ログイン中…" : "ログイン"}
+              {loading ? "Logging in…" : "Log in"}
             </Button>
           </form>
         </CardContent>

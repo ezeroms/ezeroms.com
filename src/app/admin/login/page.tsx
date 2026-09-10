@@ -19,7 +19,7 @@ export default async function AdminLoginPage({
     <Suspense
       fallback={
         <div className="flex min-h-screen items-start justify-center px-6 pt-[12vh] text-sm text-muted-foreground">
-          読み込み中…
+          Loading…
         </div>
       }
     >

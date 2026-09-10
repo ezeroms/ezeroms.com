@@ -13,6 +13,10 @@ export function itemHasTag(
   return parseWorkspaceTags(item.tags).includes(tag);
 }
 
+export function itemHasNoTags(item: { tags?: string[] | null }): boolean {
+  return parseWorkspaceTags(item.tags).length === 0;
+}
+
 export function uniqueTagsFromItems(
   items: Array<{ tags?: string[] | null }>,
 ): string[] {

@@ -89,9 +89,8 @@ export default async function AdminWorkspaceCalendarPage({
     email = stored?.google_email ?? null;
     canWrite = tokenHasCalendarWriteScope(stored?.scope);
 
-    const [prefs, inbox, active, waiting] = await Promise.all([
+    const [prefs, active, waiting] = await Promise.all([
       getCalendarPreferences(),
-      listTasks({ view: "inbox", limit: 50 }),
       listTasks({ status: "active", limit: 50 }),
       listTasks({ status: "waiting", limit: 50 }),
     ]);
@@ -106,8 +105,8 @@ export default async function AdminWorkspaceCalendarPage({
     secondaryTimezone = prefs.secondary_timezone;
     secondaryLabel = prefs.secondary_timezone_label;
 
-    // サイドバー: 未完了（Inbox / Active / Waiting）を期限が近い順
-    unscheduledTasks = [...inbox, ...active, ...waiting]
+    // サイドバー: 未完了（Active / Waiting）を期限が近い順
+    unscheduledTasks = [...active, ...waiting]
       .filter((t) => t.status !== "done" && t.status !== "archived")
       .filter((t, i, arr) => arr.findIndex((x) => x.id === t.id) === i)
       .sort((a, b) => {
@@ -153,7 +152,7 @@ export default async function AdminWorkspaceCalendarPage({
   return (
     <AdminContent
       width="wide"
-      className="flex h-[calc(100dvh-4rem)] flex-col overflow-hidden"
+      className="absolute inset-0 mx-0 flex w-auto max-w-none flex-col overflow-hidden bg-card px-6 py-5"
     >
       {loadError ? (
         <>

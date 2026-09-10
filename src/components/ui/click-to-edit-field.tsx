@@ -78,7 +78,7 @@ export function ClickToEditField({
   onEditEnd,
 }: ClickToEditFieldProps) {
   const multiline = inputType === "textarea";
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(autoFocusEdit);
   const [draft, setDraft] = useState(value);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);

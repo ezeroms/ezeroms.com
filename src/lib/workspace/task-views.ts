@@ -1,5 +1,5 @@
 import { todayDateKey, type TaskViewId } from "@/lib/workspace/labels";
-import { itemHasTag } from "@/lib/workspace/tags";
+import { itemHasNoTags, itemHasTag } from "@/lib/workspace/tags";
 import type { WorkspaceTask } from "@/types/workspace";
 
 /** タスクボード左ナビの選択状態（スマートビュー or タグ） */
@@ -41,19 +41,29 @@ export function filterTasksForBoard(
   tasks: WorkspaceTask[],
   selection: TasksNavSelection,
   now: Date,
+  options?: { includeCompleted?: boolean },
 ): WorkspaceTask[] {
   const today = todayDateKey(now);
+  const includeCompleted = options?.includeCompleted ?? false;
 
   if (selection.kind === "tag") {
-    return tasks.filter((task) => itemHasTag(task, selection.tag));
+    return tasks.filter((task) => {
+      if (!itemHasTag(task, selection.tag)) return false;
+      return includeCompleted || task.status !== "done";
+    });
   }
 
   switch (selection.view) {
     case "inbox":
-      return tasks.filter((task) => task.status === "inbox");
+      return tasks.filter((task) => {
+        if (!itemHasNoTags(task)) return false;
+        return includeCompleted || task.status !== "done";
+      });
     case "today":
       return tasks.filter(
-        (task) => task.scheduled_date === today && task.status !== "done",
+        (task) =>
+          task.scheduled_date === today &&
+          (includeCompleted || task.status !== "done"),
       );
     case "upcoming":
       return tasks
@@ -61,7 +71,7 @@ export function filterTasksForBoard(
           (task) =>
             task.scheduled_date != null &&
             task.scheduled_date > today &&
-            task.status !== "done",
+            (includeCompleted || task.status !== "done"),
         )
         .sort((a, b) =>
           (a.scheduled_date ?? "").localeCompare(b.scheduled_date ?? ""),
@@ -72,8 +82,23 @@ export function filterTasksForBoard(
       return tasks.filter((task) => task.status === "done");
     case "all":
     default:
-      return tasks.filter((task) => task.status !== "done");
+      return includeCompleted
+        ? tasks
+        : tasks.filter((task) => task.status !== "done");
   }
+}
+
+export function filterDoneTasksForBoard(
+  tasks: WorkspaceTask[],
+  selection: TasksNavSelection,
+  now: Date,
+): WorkspaceTask[] {
+  if (selection.kind === "view" && selection.view === "completed") {
+    return [];
+  }
+  return filterTasksForBoard(tasks, selection, now, {
+    includeCompleted: true,
+  }).filter((task) => task.status === "done");
 }
 
 export function countTasksForView(
@@ -85,7 +110,9 @@ export function countTasksForView(
 }
 
 export function countTasksForTag(tasks: WorkspaceTask[], tag: string): number {
-  return tasks.filter((task) => itemHasTag(task, tag)).length;
+  return tasks.filter(
+    (task) => itemHasTag(task, tag) && task.status !== "done",
+  ).length;
 }
 
 export function tasksBoardSelectionTitle(selection: TasksNavSelection): string {

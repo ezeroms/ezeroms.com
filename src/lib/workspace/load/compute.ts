@@ -86,7 +86,7 @@ export type WorkloadSnapshot = {
 /** Default focus capacity per local day (meetings + deep work). */
 export const DEFAULT_CAPACITY_MINUTES_PER_DAY = 8 * 60;
 
-const OPEN_STATUSES = new Set(["inbox", "active", "waiting"]);
+const OPEN_STATUSES = new Set(["active", "waiting"]);
 
 function addLocalDays(d: Date, n: number): Date {
   const x = new Date(d);

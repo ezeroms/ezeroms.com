@@ -47,7 +47,6 @@ import { TimezoneAxisLabels } from "@/components/calendar/TimezoneAxisLabels";
 import { useHybridCurrentTimeColumn } from "@/components/calendar/useHybridCurrentTimeColumn";
 import { useTaskLaneHosts } from "@/components/calendar/useTaskLaneHosts";
 import { cn } from "@/lib/cn";
-import { cardOutlineClass } from "@/lib/site/card-styles";
 import {
   calendarColors,
   calendarKey,
@@ -1014,8 +1013,7 @@ export function WorkspaceCalendar({
         );
       }}
       className={cn(
-        "workspace-calendar flex min-h-0 flex-col overflow-hidden rounded-lg bg-card",
-        cardOutlineClass,
+        "workspace-calendar flex min-h-0 flex-col overflow-hidden bg-card",
         secondaryTimezoneEnabled && "workspace-calendar--dual-tz",
         draggingTask && "ring-2 ring-brand/40",
         dragCreate && "workspace-calendar--creating",

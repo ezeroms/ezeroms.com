@@ -1,6 +1,6 @@
 export type ProjectStatus = "active" | "paused" | "completed" | "archived";
 
-export type TaskStatus = "inbox" | "active" | "waiting" | "done" | "archived";
+export type TaskStatus = "active" | "waiting" | "done" | "archived";
 
 export type TaskPriority = "none" | "low" | "medium" | "high";
 
@@ -112,7 +112,6 @@ export const PROJECT_STATUSES: ProjectStatus[] = [
 ];
 
 export const TASK_STATUSES: TaskStatus[] = [
-  "inbox",
   "active",
   "waiting",
   "done",

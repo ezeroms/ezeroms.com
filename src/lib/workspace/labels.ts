@@ -47,7 +47,6 @@ export function dateOnlyValue(raw?: string | null): string {
 }
 
 export const TASK_STATUS_LABELS: Record<string, string> = {
-  inbox: "Inbox",
   active: "Active",
   waiting: "Waiting",
   done: "Done",

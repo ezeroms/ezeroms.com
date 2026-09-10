@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
     const item = await createTask({
       title,
       body_md: body.body_md ?? null,
-      status: (body.status as TaskStatus | undefined) ?? "inbox",
+      status: (body.status as TaskStatus | undefined) ?? "active",
       priority:
         body.priority && isTaskPriority(body.priority)
           ? body.priority

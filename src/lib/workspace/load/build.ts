@@ -48,10 +48,9 @@ export async function buildWorkloadSnapshot(): Promise<WorkloadBuildResult> {
       ? next3End.toISOString()
       : week.timeMax;
 
-  const [prefs, stored, inbox, active, waiting, overdue] = await Promise.all([
+  const [prefs, stored, active, waiting, overdue] = await Promise.all([
     getCalendarPreferences(),
     oauthConfigured ? getStoredGoogleToken() : Promise.resolve(null),
-    listTasks({ status: "inbox", limit: 200 }),
     listTasks({ status: "active", limit: 200 }),
     listTasks({ status: "waiting", limit: 200 }),
     listTasks({ view: "overdue", limit: 100 }),
@@ -59,7 +58,7 @@ export async function buildWorkloadSnapshot(): Promise<WorkloadBuildResult> {
 
   const calendarConnected = Boolean(stored);
   const taskMap = new Map(
-    [...inbox, ...active, ...waiting, ...overdue].map((t) => [t.id, t]),
+    [...active, ...waiting, ...overdue].map((t) => [t.id, t]),
   );
   const tasks = [...taskMap.values()];
 

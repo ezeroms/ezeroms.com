@@ -63,7 +63,7 @@ export async function listTasks(
 
   switch (filter.view) {
     case "inbox":
-      q = q.eq("status", "inbox");
+      q = q.filter("tags", "eq", "{}").neq("status", "done");
       break;
     case "today":
       q = q.eq("scheduled_date", today).neq("status", "done");
@@ -89,7 +89,11 @@ export async function listTasks(
 
   const { data, error } = await q;
   if (error) throw new Error(error.message);
-  return (data ?? []).map((row) => asTask(row as WorkspaceTask));
+  let items = (data ?? []).map((row) => asTask(row as WorkspaceTask));
+  if (filter.view === "inbox") {
+    items = items.filter((task) => parseWorkspaceTags(task.tags).length === 0);
+  }
+  return items;
 }
 
 function asTask(row: WorkspaceTask): WorkspaceTask {
@@ -137,7 +141,7 @@ function completedAtForStatus(
 export async function createTask(
   input: TaskWriteInput,
 ): Promise<WorkspaceTask> {
-  const status = input.status ?? "inbox";
+  const status = input.status ?? "active";
   const progressPercent =
     status === "done" ? 100 : (input.progress_percent ?? 0);
   const { data, error } = await getWorkspaceAdmin()

@@ -50,8 +50,8 @@ create table if not exists public.tasks (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   body_md text,
-  status text not null default 'inbox'
-    check (status in ('inbox', 'active', 'waiting', 'done', 'archived')),
+  status text not null default 'active'
+    check (status in ('active', 'waiting', 'done', 'archived')),
   priority text not null default 'none'
     check (priority in ('none', 'low', 'medium', 'high')),
   project_id uuid references public.projects (id) on delete set null,

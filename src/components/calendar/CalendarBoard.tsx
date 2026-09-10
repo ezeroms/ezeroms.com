@@ -17,7 +17,6 @@ import { TaskEditModal } from "@/components/tasks/TaskEditModal";
 import { isPersistedWorkBlockId } from "@/components/calendar/TaskLane";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
-import { surfaceCard } from "@/lib/site/card-styles";
 import {
   GOOGLE_CALENDAR_OAUTH_START_PATH,
   googleCalendarMessageNeedsReconnect,
@@ -115,7 +114,7 @@ export function CalendarBoard({
     return (
       <>
         <AdminPageHeader title={title} description={description} />
-        <div className={surfaceCard({ className: "p-4 text-sm text-muted-foreground" })}>
+        <div className="max-w-xl text-sm leading-relaxed text-muted-foreground">
           Google OAuth が未設定です。.env.local に{" "}
           <code className="text-xs">GOOGLE_CLIENT_ID</code> と{" "}
           <code className="text-xs">GOOGLE_CLIENT_SECRET</code>{" "}
@@ -142,8 +141,8 @@ export function CalendarBoard({
             </Button>
           }
         />
-        <div className={surfaceCard({ className: "flex flex-col gap-3 p-4" })}>
-          <p className="m-0 text-sm text-muted-foreground">
+        <div className="flex max-w-xl flex-col gap-3">
+          <p className="m-0 text-sm leading-relaxed text-muted-foreground">
             Googleカレンダーを接続すると、予定の表示と Task
             からの作業枠作成ができます。書き込みは承認後のみです。
           </p>
@@ -183,7 +182,7 @@ export function CalendarBoard({
     <>
       <Button
         type="button"
-        variant="outline"
+        variant="ghost"
         aria-haspopup="dialog"
         onClick={() => board.setOptionsOpen(true)}
       >
@@ -192,7 +191,7 @@ export function CalendarBoard({
       </Button>
       <Button
         type="button"
-        variant="outline"
+        variant="ghost"
         aria-pressed={board.sidebarOpen}
         aria-label={
           board.sidebarOpen ? "未完了タスクを閉じる" : "未完了タスクを表示"
@@ -288,8 +287,8 @@ export function CalendarBoard({
         onWorkBlockDeleted={board.handleWorkBlockDeleted}
       />
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden lg:flex-row lg:items-stretch">
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row lg:items-stretch">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden">
           {email ? (
             <p className="m-0 shrink-0 text-xs text-muted-foreground">{email}</p>
           ) : null}
@@ -338,14 +337,14 @@ export function CalendarBoard({
         </div>
 
         {board.sidebarOpen ? (
-          <aside className="flex max-h-full w-full shrink-0 flex-col space-y-3 overflow-y-auto lg:w-64">
-            <div className="flex shrink-0 items-center justify-between gap-2">
+          <aside className="flex max-h-full w-full shrink-0 flex-col overflow-y-auto border-t border-[rgba(0,0,0,0.08)] pt-4 lg:w-64 lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
+            <div className="mb-3 flex shrink-0 items-center justify-between gap-2">
               <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 未完了タスク
               </h2>
               <Button
                 type="button"
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 className="h-8"
                 onClick={() => board.setSidebar(false)}
@@ -358,7 +357,7 @@ export function CalendarBoard({
                 未完了の Task はありません。
               </p>
             ) : (
-              <ul className="m-0 flex list-none flex-col gap-2 p-0">
+              <ul className="m-0 flex list-none flex-col p-0">
                 {board.unscheduledTasks.map((task) => {
                   const hasEstimate =
                     task.estimated_minutes != null &&
@@ -385,8 +384,8 @@ export function CalendarBoard({
                       }}
                       onDragEnd={() => board.setDraggingTaskId(null)}
                       className={cn(
-                        "cursor-grab rounded-lg border border-border bg-card px-3 py-2.5 shadow-sm",
-                        "hover:border-border-hover active:cursor-grabbing",
+                        "cursor-grab border-0 border-b border-solid border-border-subtle px-0 py-3 last:border-b-0",
+                        "hover:bg-muted/25 active:cursor-grabbing",
                         board.draggingTaskId === task.id && "opacity-50",
                       )}
                     >

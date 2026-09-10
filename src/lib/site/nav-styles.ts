@@ -12,3 +12,7 @@ export function sidebarNavItemClass(active: boolean) {
       : "bg-transparent text-foreground hover:bg-muted/70",
   );
 }
+
+/** サイドバーのセクション見出し（スマートリスト / タググループ） */
+export const sidebarSectionLabelClass =
+  "m-0 mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground";

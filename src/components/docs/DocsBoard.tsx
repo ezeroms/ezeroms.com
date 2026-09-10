@@ -121,12 +121,6 @@ export function DocsBoard({
     setError(null);
   }
 
-  function addTag(tag: string) {
-    const parsed = parseWorkspaceTags([tag])[0];
-    if (!parsed) return;
-    selectNav({ kind: "tag", tag: parsed });
-  }
-
   async function onQuickAdd(event: FormEvent) {
     event.preventDefault();
     const title = quickTitle.trim();
@@ -190,7 +184,6 @@ export function DocsBoard({
             selectedTag={selection.kind === "tag" ? selection.tag : null}
             countForTag={(tag) => countDocsForTag(liveDocs, tag)}
             onSelect={(tag) => selectNav({ kind: "tag", tag })}
-            onAddTag={addTag}
           />
         </div>
       </aside>

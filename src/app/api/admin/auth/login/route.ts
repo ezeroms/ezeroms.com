@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const password = body.password ?? "";
     if (!email || !password) {
       return NextResponse.json(
-        { error: "ユーザーIDとパスワードを入力してください" },
+        { error: "Enter your email and password" },
         { status: 400 },
       );
     }
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     });
     if (error) {
       return NextResponse.json(
-        { error: "ログインに失敗しました。IDまたはパスワードを確認してください" },
+        { error: "Sign-in failed. Check your email or password." },
         { status: 401 },
       );
     }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     if (!isAdminEmail(data.user?.email)) {
       await supabase.auth.signOut();
       return NextResponse.json(
-        { error: "このアカウントでは管理画面に入れません" },
+        { error: "This account cannot access the admin" },
         { status: 403 },
       );
     }
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     });
   } catch {
     return NextResponse.json(
-      { error: "ログインに失敗しました" },
+      { error: "Sign-in failed" },
       { status: 500 },
     );
   }
