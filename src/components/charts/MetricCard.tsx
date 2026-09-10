@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { surfaceCard } from "@/lib/site/card-styles";
+import { adminSectionTitleClass } from "@/components/admin/AdminSection";
 
 export function MetricCard({
   label,
@@ -13,10 +13,8 @@ export function MetricCard({
   hint?: string;
 }) {
   return (
-    <div className={surfaceCard({ className: "px-4 py-3" })}>
-      <p className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        {label}
-      </p>
+    <div>
+      <p className={adminSectionTitleClass}>{label}</p>
       <p className="m-0 mt-1 text-2xl font-semibold tabular-nums tracking-tight">
         {value}
       </p>

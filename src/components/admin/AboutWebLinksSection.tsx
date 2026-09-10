@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
+import { AdminSection, AdminTableScroll } from "@/components/admin/AdminSection";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -111,14 +112,15 @@ export function AboutWebLinksSection({ items }: { items: AboutWebLinkItem[] }) {
   }
 
   return (
-    <section className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="m-0 text-base font-semibold">Around the Web</h2>
+    <AdminSection
+      title="Around the Web"
+      actions={
         <Button type="button" size="sm" onClick={() => setCreating(true)}>
           ＋ 追加
         </Button>
-      </div>
-      <div className="overflow-x-auto overflow-hidden rounded-lg border border-border">
+      }
+    >
+      <AdminTableScroll>
         <table className="w-full min-w-[560px] border-collapse text-left text-sm">
           <thead>
             <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
@@ -153,7 +155,7 @@ export function AboutWebLinksSection({ items }: { items: AboutWebLinkItem[] }) {
             ) : null}
           </tbody>
         </table>
-      </div>
+      </AdminTableScroll>
 
       <AdminContentModal
         open={open}
@@ -200,6 +202,6 @@ export function AboutWebLinksSection({ items }: { items: AboutWebLinkItem[] }) {
           </div>
         </form>
       </AdminContentModal>
-    </section>
+    </AdminSection>
   );
 }

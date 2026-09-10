@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import { surfaceCard } from "@/lib/site/card-styles";
+import { AdminSection, adminSectionTitleClass } from "@/components/admin/AdminSection";
 import { formatEventTimeRange, localDateKeyFromIso } from "@/lib/workspace/calendar/time";
 import type {
   HorizonLoad,
@@ -94,17 +94,10 @@ export function WorkloadMeter({
   const pressurePct = Math.min(100, Math.round(data.pressureRatio * 100));
 
   return (
-    <section className={surfaceCard({ className: "p-4" })}>
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            負荷メーター
-          </h2>
-          <p className="m-0 mt-1 text-sm text-muted-foreground">
-            予定・作業枠・期限付き見積もりから、期間の密度を表示
-            （可処分 {formatHours(snapshot.capacityMinutesPerDay)}/日）
-          </p>
-        </div>
+    <AdminSection
+      title="負荷メーター"
+      description={`予定・作業枠・期限付き見積もりから、期間の密度を表示（可処分 ${formatHours(snapshot.capacityMinutesPerDay)}/日）`}
+      actions={
         <div className="flex flex-wrap gap-1.5">
           {HORIZONS.map((h) => (
             <button
@@ -122,7 +115,8 @@ export function WorkloadMeter({
             </button>
           ))}
         </div>
-      </div>
+      }
+    >
 
       {!oauthConfigured ? (
         <p className="mt-3 m-0 text-sm text-muted-foreground">
@@ -141,8 +135,8 @@ export function WorkloadMeter({
       ) : null}
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-md border border-border bg-background px-3 py-2.5 sm:col-span-2 lg:col-span-1">
-          <p className="m-0 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="sm:col-span-2 lg:col-span-1">
+          <p className={adminSectionTitleClass}>
             予定
           </p>
           {data.meetingByLabel.length === 0 ? (
@@ -283,7 +277,7 @@ export function WorkloadMeter({
       {data.workBlocks.length > 0 ? (
         <div className="mt-5 border-t border-border pt-4">
           <div className="mb-2 flex items-center justify-between gap-2">
-            <h3 className="m-0 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <h3 className={adminSectionTitleClass}>
               作業予定枠
             </h3>
             <Link
@@ -319,7 +313,7 @@ export function WorkloadMeter({
           この期間に作業予定枠はありません。
         </p>
       )}
-    </section>
+    </AdminSection>
   );
 }
 
@@ -333,10 +327,8 @@ function Stat({
   hint?: ReactNode;
 }) {
   return (
-    <div className="rounded-md border border-border bg-background px-3 py-2.5">
-      <p className="m-0 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        {label}
-      </p>
+    <div>
+      <p className={adminSectionTitleClass}>{label}</p>
       <p className="m-0 mt-0.5 text-xl font-semibold tabular-nums tracking-tight">
         {value}
       </p>

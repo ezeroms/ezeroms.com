@@ -7,7 +7,7 @@ import {
 import { PhotoCreateButton } from "@/components/admin/PhotoCreateButton";
 import { PhotoGallerySettingsModal } from "@/components/admin/PhotoGallerySettingsModal";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { filenameFromImageUrl } from "@/lib/media/photo-name";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
@@ -132,16 +132,14 @@ export async function AdminPhotoListPage({
         </Alert>
       ) : null}
 
-      <Card className="overflow-hidden">
-        <CardContent className="overflow-x-auto p-0">
-          <AdminPhotoListTable
-            galleryId={galleryId}
-            basePath={gallery.basePath}
-            items={items}
-            empty={!items.length && !loadError}
-          />
-        </CardContent>
-      </Card>
+      <AdminTableScroll>
+        <AdminPhotoListTable
+          galleryId={galleryId}
+          basePath={gallery.basePath}
+          items={items}
+          empty={!items.length && !loadError}
+        />
+      </AdminTableScroll>
     </AdminContent>
   );
 }

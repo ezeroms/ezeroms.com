@@ -6,7 +6,7 @@ import {
 } from "@/components/admin/AdminTopImageListTable";
 import { TopImageCreateButton } from "@/components/admin/TopImageCreateButton";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { filenameFromImageUrl } from "@/lib/media/photo-name";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
@@ -94,14 +94,12 @@ export default async function AdminTopImagesPage() {
         </Alert>
       ) : null}
 
-      <Card className="overflow-hidden">
-        <CardContent className="overflow-x-auto p-0">
-          <AdminTopImageListTable
-            items={items}
-            empty={!items.length && !loadError}
-          />
-        </CardContent>
-      </Card>
+      <AdminTableScroll>
+        <AdminTopImageListTable
+          items={items}
+          empty={!items.length && !loadError}
+        />
+      </AdminTableScroll>
     </AdminContent>
   );
 }

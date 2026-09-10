@@ -7,7 +7,7 @@ import {
   type ActivitiesTableItem,
 } from "@/components/contacts/ActivitiesListTable";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { findAdminNavItem } from "@/lib/admin/nav";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import {
@@ -65,11 +65,9 @@ export default async function AdminWorkspaceActivitiesPage() {
         </Alert>
       ) : null}
       {hasWorkspaceConfig() && !loadError ? (
-        <Card className="overflow-hidden">
-          <CardContent className="overflow-x-auto p-0">
-            <ActivitiesListTable items={items} />
-          </CardContent>
-        </Card>
+        <AdminTableScroll>
+          <ActivitiesListTable items={items} />
+        </AdminTableScroll>
       ) : null}
     </AdminContent>
   );

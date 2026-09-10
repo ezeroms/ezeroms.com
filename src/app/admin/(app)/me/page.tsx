@@ -7,8 +7,8 @@ import {
 import { AboutWebLinksSection } from "@/components/admin/AboutWebLinksSection";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminSection } from "@/components/admin/AdminSection";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
@@ -116,14 +116,9 @@ export default async function AdminMePage() {
       ) : null}
 
       <div className="flex flex-col gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">プロフィール</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AboutProfileEditor initial={profile} />
-          </CardContent>
-        </Card>
+        <AdminSection title="プロフィール">
+          <AboutProfileEditor initial={profile} />
+        </AdminSection>
 
         {!loadError ? (
           <>

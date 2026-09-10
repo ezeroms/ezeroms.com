@@ -7,13 +7,6 @@ import {
   type DiaryEditorInitial,
 } from "@/components/admin/DiaryEditorForm";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { htmlToEditableMarkdown } from "@/lib/admin/content";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
@@ -70,15 +63,7 @@ export default async function AdminDiaryEditPage({ params }: PageProps) {
           </Button>
         }
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>編集</CardTitle>
-          <CardDescription>Markdown で更新できます。</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DiaryEditorForm initial={initial} />
-        </CardContent>
-      </Card>
+      <DiaryEditorForm initial={initial} />
     </AdminContent>
   );
 }

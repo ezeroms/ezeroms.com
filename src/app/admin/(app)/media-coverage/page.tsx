@@ -1,15 +1,9 @@
 import Link from "next/link";
+import { AdminComingSoon } from "@/components/admin/AdminComingSoon";
 import { AdminContent } from "@/components/admin/AdminContent";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { flattenAdminNav } from "@/lib/admin/nav";
 import { loadLibrarySection } from "@/lib/content/queries";
 import { requireAdminPage } from "@/lib/supabase/auth";
@@ -39,19 +33,13 @@ export default async function AdminMediaCoveragePage() {
           />
         }
       />
-      <Card>
-        <CardHeader>
-          <CardTitle>準備中</CardTitle>
-          <CardDescription>
-            このセクションの編集 UI はこれから実装します。公開／非公開は上の「編集」から設定できます。
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-2">
+      <AdminComingSoon>
+        <div className="flex flex-wrap gap-2">
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/workspace/">Workspace へ</Link>
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </AdminComingSoon>
     </AdminContent>
   );
 }

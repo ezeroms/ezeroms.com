@@ -6,7 +6,7 @@ import {
 } from "@/components/admin/AdminClipsListTable";
 import { ClipsCreateButton } from "@/components/admin/ClipsCreateButton";
 import { SectionPageSettingsModal } from "@/components/admin/SectionPageSettingsModal";
-import { Card, CardContent } from "@/components/ui/card";
+import { AdminTableScroll } from "@/components/admin/AdminSection";
 import { loadLibrarySection } from "@/lib/content/queries";
 import { requireAdminPage } from "@/lib/supabase/auth";
 import { getSupabaseAdmin, hasSupabaseConfig } from "@/lib/supabase/server";
@@ -90,11 +90,9 @@ export default async function AdminClipsListPage() {
           読み込みエラー: {loadError}
         </p>
       ) : null}
-      <Card>
-        <CardContent className="overflow-x-auto p-0">
-          <AdminClipsListTable items={items} empty={!items.length} />
-        </CardContent>
-      </Card>
+      <AdminTableScroll>
+        <AdminClipsListTable items={items} empty={!items.length} />
+      </AdminTableScroll>
     </AdminContent>
   );
 }

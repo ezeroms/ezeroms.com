@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AdminSection } from "@/components/admin/AdminSection";
 
 export type AboutHereEditorInitial = {
   id: string;
@@ -150,62 +150,44 @@ export function AboutHereEditor({ initial }: Props) {
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       {ok ? <Alert>Here を保存しました</Alert> : null}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{HERE_INTRO_LABEL}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AdminRichTextEditor
-            id="here-intro"
-            value={introMd}
-            onChange={setIntroMd}
-            disabled={loading}
-            placeholder="このサイトについての本文…"
-            minHeightClassName="min-h-[200px]"
-            onUploadImage={upload}
-          />
-        </CardContent>
-      </Card>
+      <AdminSection title={HERE_INTRO_LABEL}>
+        <AdminRichTextEditor
+          id="here-intro"
+          value={introMd}
+          onChange={setIntroMd}
+          disabled={loading}
+          placeholder="このサイトについての本文…"
+          minHeightClassName="min-h-[200px]"
+          onUploadImage={upload}
+        />
+      </AdminSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{HERE_RIGHTS_LABEL}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AdminRichTextEditor
-            id="here-rights"
-            value={rightsMd}
-            onChange={setRightsMd}
-            disabled={loading}
-            placeholder="権利表記・引用について…"
-            minHeightClassName="min-h-[240px]"
-            onUploadImage={upload}
-          />
-        </CardContent>
-      </Card>
+      <AdminSection title={HERE_RIGHTS_LABEL}>
+        <AdminRichTextEditor
+          id="here-rights"
+          value={rightsMd}
+          onChange={setRightsMd}
+          disabled={loading}
+          placeholder="権利表記・引用について…"
+          minHeightClassName="min-h-[240px]"
+          onUploadImage={upload}
+        />
+      </AdminSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{HERE_UPDATES_LABEL}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AdminRichTextEditor
-            id="here-updates"
-            value={updatesMd}
-            onChange={setUpdatesMd}
-            disabled={loading}
-            placeholder="LINE / Feedly / RSS など…"
-            minHeightClassName="min-h-[160px]"
-            onUploadImage={upload}
-          />
-        </CardContent>
-      </Card>
+      <AdminSection title={HERE_UPDATES_LABEL}>
+        <AdminRichTextEditor
+          id="here-updates"
+          value={updatesMd}
+          onChange={setUpdatesMd}
+          disabled={loading}
+          placeholder="LINE / Feedly / RSS など…"
+          minHeightClassName="min-h-[160px]"
+          onUploadImage={upload}
+        />
+      </AdminSection>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">公開・OGP</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+      <AdminSection title="公開・OGP">
+        <div className="flex flex-col gap-4">
           <div className="space-y-2">
             <Label htmlFor="here-title">OGP タイトル</Label>
             <Input
@@ -244,8 +226,8 @@ export function AboutHereEditor({ initial }: Props) {
               {loading ? "保存中…" : "保存"}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </AdminSection>
     </form>
   );
 }
