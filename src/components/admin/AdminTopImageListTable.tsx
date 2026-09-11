@@ -5,7 +5,16 @@ import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
 import { OpenContentButton } from "@/components/admin/OpenContentButton";
 import { TopImageEditModal } from "@/components/admin/TopImageEditModal";
 import type { TopImageEditorInitial } from "@/components/admin/TopImageEditorForm";
-import { adminStatusLabel } from "@/lib/admin/list-format";
+import {
+  AdminListActionsCell,
+  AdminListEmptyRow,
+  AdminListStatus,
+  AdminListThumb,
+  adminListHeadRowClassName,
+  adminListTableClassName,
+  adminListTdClassName,
+  adminListThClassName,
+} from "@/components/admin/AdminListTable";
 
 export type AdminTopImageTableItem = {
   slug: string;
@@ -38,15 +47,15 @@ export function AdminTopImageListTable({ items, empty }: Props) {
 
   return (
     <>
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+      <table className={adminListTableClassName}>
         <thead>
-          <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
-            <th className="w-16 px-4 py-3 font-medium">画像</th>
-            <th className="px-4 py-3 font-medium">ファイル名</th>
-            <th className="px-4 py-3 font-medium">場所・年</th>
-            <th className="w-20 px-4 py-3 font-medium">表示順</th>
-            <th className="w-24 px-4 py-3 font-medium">ステータス</th>
-            <th className="w-16 px-4 py-3 font-medium text-right">
+          <tr className={adminListHeadRowClassName}>
+            <th className={`w-16 ${adminListThClassName}`}>画像</th>
+            <th className={adminListThClassName}>ファイル名</th>
+            <th className={adminListThClassName}>場所・年</th>
+            <th className={`w-20 ${adminListThClassName}`}>表示順</th>
+            <th className={`w-24 ${adminListThClassName}`}>ステータス</th>
+            <th className={`w-16 ${adminListThClassName} text-right`}>
               <span className="sr-only">操作</span>
             </th>
           </tr>
@@ -58,61 +67,34 @@ export function AdminTopImageListTable({ items, empty }: Props) {
               className="hover:bg-muted/30"
               onActivate={() => setEditing(item.editor)}
             >
-              <td className="px-4 py-2.5 align-middle">
-                {item.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={item.image_url}
-                    alt=""
-                    className="m-0 h-12 w-12 rounded-md object-cover"
-                  />
-                ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted text-xs text-muted-foreground">
-                    —
-                  </div>
-                )}
+              <td className={adminListTdClassName}>
+                <AdminListThumb src={item.image_url} />
               </td>
-              <td className="max-w-[220px] px-4 py-2.5 align-middle">
-                <span className="font-medium text-foreground">
-                  {item.filename || item.slug}
-                </span>
-                <p className="m-0 truncate text-xs text-muted-foreground">
-                  {item.slug}
-                </p>
+              <td
+                className={`max-w-[220px] ${adminListTdClassName} font-medium text-foreground`}
+              >
+                {item.filename || item.slug}
               </td>
-              <td className="max-w-[200px] truncate px-4 py-2.5 align-middle text-muted-foreground">
+              <td
+                className={`max-w-[200px] truncate ${adminListTdClassName} text-muted-foreground`}
+              >
                 {captionLabel(item)}
               </td>
-              <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
+              <td
+                className={`whitespace-nowrap ${adminListTdClassName} text-muted-foreground`}
+              >
                 {item.sort_order}
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <span
-                  className={
-                    item.status === "published"
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {adminStatusLabel(item.status)}
-                </span>
+              <td className={adminListTdClassName}>
+                <AdminListStatus status={item.status} />
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <div className="flex justify-end">
-                  <OpenContentButton href="/" />
-                </div>
-              </td>
+              <AdminListActionsCell>
+                <OpenContentButton href="/" />
+              </AdminListActionsCell>
             </AdminClickableRow>
           ))}
           {empty ? (
-            <tr>
-              <td
-                colSpan={6}
-                className="px-4 py-10 text-center text-muted-foreground"
-              >
-                まだ画像がありません
-              </td>
-            </tr>
+            <AdminListEmptyRow colSpan={6}>まだ画像がありません</AdminListEmptyRow>
           ) : null}
         </tbody>
       </table>

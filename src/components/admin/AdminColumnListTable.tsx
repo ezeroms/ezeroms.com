@@ -4,11 +4,17 @@ import { useCallback, useState } from "react";
 import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
 import { ColumnEditModal } from "@/components/admin/ColumnEditModal";
 import type { ColumnEditorInitial } from "@/components/admin/ColumnEditorForm";
-import { OpenContentButton } from "@/components/admin/OpenContentButton";
 import {
-  adminStatusLabel,
-  formatAdminListDate,
-} from "@/lib/admin/list-format";
+  AdminListActionsCell,
+  AdminListEmptyRow,
+  AdminListStatus,
+  adminListHeadRowClassName,
+  adminListTableClassName,
+  adminListTdClassName,
+  adminListThClassName,
+} from "@/components/admin/AdminListTable";
+import { OpenContentButton } from "@/components/admin/OpenContentButton";
+import { formatAdminListDate } from "@/lib/admin/list-format";
 
 export type AdminColumnTableItem = {
   slug: string;
@@ -29,13 +35,13 @@ export function AdminColumnListTable({ items, empty }: Props) {
 
   return (
     <>
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+      <table className={adminListTableClassName}>
         <thead>
-          <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
-            <th className="w-40 px-4 py-3 font-medium">日時</th>
-            <th className="px-4 py-3 font-medium">タイトル</th>
-            <th className="w-24 px-4 py-3 font-medium">ステータス</th>
-            <th className="w-16 px-4 py-3 font-medium text-right">
+          <tr className={adminListHeadRowClassName}>
+            <th className={`w-40 ${adminListThClassName}`}>日時</th>
+            <th className={adminListThClassName}>タイトル</th>
+            <th className={`w-24 ${adminListThClassName}`}>ステータス</th>
+            <th className={`w-16 ${adminListThClassName} text-right`}>
               <span className="sr-only">操作</span>
             </th>
           </tr>
@@ -47,39 +53,26 @@ export function AdminColumnListTable({ items, empty }: Props) {
               className="hover:bg-muted/30"
               onActivate={() => setEditing(item.editor)}
             >
-              <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
+              <td
+                className={`whitespace-nowrap ${adminListTdClassName} text-muted-foreground`}
+              >
                 {formatAdminListDate(item.date)}
               </td>
-              <td className="max-w-[360px] px-4 py-2.5 align-middle font-medium text-foreground">
+              <td
+                className={`max-w-[360px] ${adminListTdClassName} font-medium text-foreground`}
+              >
                 {item.title || "（無題）"}
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <span
-                  className={
-                    item.status === "published"
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {adminStatusLabel(item.status)}
-                </span>
+              <td className={adminListTdClassName}>
+                <AdminListStatus status={item.status} />
               </td>
-              <td className="px-4 py-2.5 align-middle">
-                <div className="flex justify-end">
-                  <OpenContentButton href={`/column/${item.slug}/`} />
-                </div>
-              </td>
+              <AdminListActionsCell>
+                <OpenContentButton href={`/column/${item.slug}/`} />
+              </AdminListActionsCell>
             </AdminClickableRow>
           ))}
           {empty ? (
-            <tr>
-              <td
-                colSpan={4}
-                className="px-4 py-10 text-center text-muted-foreground"
-              >
-                まだ投稿がありません
-              </td>
-            </tr>
+            <AdminListEmptyRow colSpan={4}>まだ投稿がありません</AdminListEmptyRow>
           ) : null}
         </tbody>
       </table>
