@@ -16,7 +16,7 @@ export async function GET() {
   const { data, error } = await getSupabaseAdmin()
     .from("column")
     .select(
-      "id, slug, title, date, column_category, column_tag, status, published_at, updated_at",
+      "id, slug, title, date, column_tag, status, published_at, updated_at",
     )
     .eq("is_deleted", false)
     .order("date", { ascending: false })
@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
       title?: string;
       body_md?: string;
       date?: string;
-      categories?: string;
       tags?: string;
       og_image?: string;
       status?: "draft" | "published" | "archived";
@@ -66,7 +65,6 @@ export async function POST(request: NextRequest) {
         ? body.slug.trim()
         : null) || generateContentSlug();
     const month = monthKeyFromDate(dateIso);
-    const categories = parseTagList(body.categories ?? "");
     const tags = parseTagList(body.tags ?? "");
     const ogImage = (body.og_image ?? "").trim();
     const bodyHtml = markdownToHtml(bodyMd);
@@ -77,7 +75,6 @@ export async function POST(request: NextRequest) {
       title,
       date: dateIso,
       column_month: [month],
-      column_category: categories,
       column_tag: tags,
       og_image: ogImage,
       body_html: bodyHtml,

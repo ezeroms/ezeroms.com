@@ -24,7 +24,6 @@ export type ColumnEditorInitial = {
   title: string;
   body_md: string;
   date: string;
-  categories: string;
   tags: string;
   status: "published" | "draft";
   og_image: string;
@@ -58,7 +57,6 @@ export function ColumnEditorForm({
     date: initial?.date
       ? toDatetimeLocalValue(initial.date)
       : nowDatetimeLocalValue(),
-    categories: initial?.categories ?? "",
     tags: initial?.tags ?? "",
     ogImage: initial?.og_image ?? "",
     status: (initial?.status ?? "published") as "published" | "draft",
@@ -67,7 +65,6 @@ export function ColumnEditorForm({
   const [title, setTitle] = useState(baseline.title);
   const [bodyMd, setBodyMd] = useState(baseline.bodyMd);
   const [date, setDate] = useState(baseline.date);
-  const [categories, setCategories] = useState(baseline.categories);
   const [tags, setTags] = useState(baseline.tags);
   const [ogImage, setOgImage] = useState(baseline.ogImage);
   const [status, setStatus] = useState<"published" | "draft">(baseline.status);
@@ -78,7 +75,6 @@ export function ColumnEditorForm({
     title !== baseline.title ||
     bodyMd !== baseline.bodyMd ||
     date !== baseline.date ||
-    categories !== baseline.categories ||
     tags !== baseline.tags ||
     ogImage !== baseline.ogImage ||
     status !== baseline.status;
@@ -148,7 +144,6 @@ export function ColumnEditorForm({
         title,
         body_md: bodyMd,
         date: new Date(date).toISOString(),
-        categories,
         tags,
         og_image: ogImage,
         status,
@@ -247,27 +242,15 @@ export function ColumnEditorForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="column-categories">カテゴリ（カンマ区切り）</Label>
-          <Input
-            id="column-categories"
-            value={categories}
-            onChange={(e) => setCategories(e.target.value)}
-            placeholder="エッセイ, 技術"
-            {...ignorePasswordManagersProps}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="column-tags">タグ（カンマ区切り）</Label>
-          <Input
-            id="column-tags"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            placeholder="思考, 日常"
-            {...ignorePasswordManagersProps}
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="column-tags">タグ（カンマ区切り）</Label>
+        <Input
+          id="column-tags"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          placeholder="思考, 日常"
+          {...ignorePasswordManagersProps}
+        />
       </div>
 
       {!hideSubmit ? (

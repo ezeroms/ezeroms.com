@@ -89,7 +89,6 @@ export default async function ColumnPage({
     getAdjacentColumn(slug).catch(() => ({ previous: null, next: null })),
     loadWritingSection("column"),
     listColumnTaxonomy().catch(() => ({
-      categories: [] as string[],
       tags: [] as string[],
     })),
   ]);

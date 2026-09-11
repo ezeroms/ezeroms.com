@@ -15,7 +15,6 @@ export type AdminColumnTableItem = {
   title: string;
   date: string;
   status: string;
-  categories: string[];
   editor: ColumnEditorInitial;
 };
 
@@ -35,7 +34,6 @@ export function AdminColumnListTable({ items, empty }: Props) {
           <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
             <th className="w-40 px-4 py-3 font-medium">日時</th>
             <th className="px-4 py-3 font-medium">タイトル</th>
-            <th className="px-4 py-3 font-medium">カテゴリ</th>
             <th className="w-24 px-4 py-3 font-medium">ステータス</th>
             <th className="w-16 px-4 py-3 font-medium text-right">
               <span className="sr-only">操作</span>
@@ -52,16 +50,8 @@ export function AdminColumnListTable({ items, empty }: Props) {
               <td className="whitespace-nowrap px-4 py-2.5 align-middle text-muted-foreground">
                 {formatAdminListDate(item.date)}
               </td>
-              <td className="max-w-[360px] px-4 py-2.5 align-middle">
-                <span className="font-medium text-foreground">
-                  {item.title || "（無題）"}
-                </span>
-                <p className="m-0 truncate text-xs text-muted-foreground">
-                  {item.slug}
-                </p>
-              </td>
-              <td className="max-w-[180px] truncate px-4 py-2.5 align-middle text-muted-foreground">
-                {item.categories.length ? item.categories.join(", ") : "—"}
+              <td className="max-w-[360px] px-4 py-2.5 align-middle font-medium text-foreground">
+                {item.title || "（無題）"}
               </td>
               <td className="px-4 py-2.5 align-middle">
                 <span
@@ -84,7 +74,7 @@ export function AdminColumnListTable({ items, empty }: Props) {
           {empty ? (
             <tr>
               <td
-                colSpan={5}
+                colSpan={4}
                 className="px-4 py-10 text-center text-muted-foreground"
               >
                 まだ投稿がありません

@@ -5,7 +5,6 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const data = await listColumn({
-      category: searchParams.get("category") ?? undefined,
       tag: searchParams.get("tag") ?? undefined,
       limit: searchParams.get("limit")
         ? Number(searchParams.get("limit"))
