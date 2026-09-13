@@ -44,6 +44,7 @@ export function DiaryRelatedList({
             excerpt={diaryExcerpt(item.body_html, 160)}
             showTitle={false}
             excerptLines={3}
+            thumbAspect="og"
           />
         );
       })}

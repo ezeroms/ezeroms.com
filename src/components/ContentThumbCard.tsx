@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { contentCard } from "@/lib/site/card-styles";
+import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
 
 const CARD_LINK_LAYOUT =
   "grid grid-cols-1 items-stretch text-inherit no-underline min-[480px]:grid-cols-[minmax(0,38%)_minmax(0,1fr)] sm:grid-cols-[minmax(0,40%)_minmax(0,1fr)]";
@@ -42,6 +43,11 @@ type Props = {
   chrome?: "card" | "plain";
   /** 外部リンクなら true（target=_blank） */
   external?: boolean;
+  /**
+   * og: 1200×630 の枠でサムネを出す（Diary Related など OGP 用）。
+   * 未指定は従来どおり（一覧の stretch / 3:2）。
+   */
+  thumbAspect?: "og";
 };
 
 function EntryLink({
@@ -98,8 +104,10 @@ export function ContentThumbCard({
   fillBelowTitle = false,
   chrome = "card",
   external = false,
+  thumbAspect,
 }: Props) {
   const plain = chrome === "plain";
+  const ogThumb = thumbAspect === "og";
   const metaRow =
     dateLabel || metaSecondary ? (
       <div className="flex flex-wrap items-center gap-x-2 overflow-hidden text-sm leading-tight text-muted-foreground">
@@ -115,16 +123,26 @@ export function ContentThumbCard({
 
   return (
     <article className={plain ? "min-w-0" : contentCard({ link: true })}>
-      <div className={plain ? PLAIN_LINK_LAYOUT : CARD_LINK_LAYOUT}>
+      <div
+        className={cn(
+          plain ? PLAIN_LINK_LAYOUT : CARD_LINK_LAYOUT,
+          ogThumb && "min-[480px]:items-center",
+        )}
+      >
         <EntryLink
           href={href}
           external={external}
           aria-label={title}
           className={cn(
-            "relative min-h-[11rem] overflow-hidden bg-muted text-inherit no-underline",
-            plain && "rounded-md",
-            !fillBelowTitle && !plain && "min-[480px]:min-h-0",
-            plain && "min-[480px]:min-h-0 min-[480px]:aspect-[3/2]",
+            "relative overflow-hidden bg-muted text-inherit no-underline",
+            ogThumb
+              ? cn("w-full self-start min-[480px]:self-center", OG_IMAGE_ASPECT_CLASS)
+              : cn(
+                  "min-h-[11rem]",
+                  plain && "rounded-md",
+                  !fillBelowTitle && !plain && "min-[480px]:min-h-0",
+                  plain && "min-[480px]:min-h-0 min-[480px]:aspect-[3/2]",
+                ),
           )}
         >
           {thumbSrc ? (
