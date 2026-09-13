@@ -137,13 +137,6 @@ export function ActivityDetailForm({
 
   return (
     <form onSubmit={onSave} className="flex flex-col gap-4">
-      {activity.title_source === "calendar" ? (
-        <p className="m-0 text-xs text-muted-foreground">
-          タイトルはカレンダーから作成されました。ここで変更しても Google
-          カレンダーには反映されません。
-        </p>
-      ) : null}
-
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="activity-title">タイトル</Label>
         <Input
