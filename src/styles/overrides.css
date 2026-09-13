@@ -25,6 +25,15 @@ input[type="search"]::-webkit-search-decoration {
   line-height: inherit;
 }
 
+/* 本文画像は元サイズに関わらず本文幅いっぱいに広げる（HTML width 属性より優先） */
+.article-prose img,
+.article-item img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
 /* Detail body: same 16px as PC feels large on narrow screens — nudge down ≤1079 */
 @media (max-width: 1079px) {
   .article-item p,
@@ -173,12 +182,6 @@ body.is-home .layout-body {
 @media (max-width: 1079px) {
   .content-card {
     border-radius: 0.75rem;
-  }
-
-  .article-item img,
-  .article-prose img {
-    max-width: 100%;
-    height: auto;
   }
 }
 

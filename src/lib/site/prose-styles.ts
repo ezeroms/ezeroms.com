@@ -34,10 +34,10 @@ export const articleHeadingClass = cn(
   "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:tracking-tight",
 );
 
-/** 詳細本文の figure / figcaption。 */
+/** 詳細本文の figure / figcaption。画像は本文幅いっぱいに広げる。 */
 export const articleFigureClass = cn(
-  "[&_figure]:my-6 [&_figure]:mx-0",
-  "[&_figure_img]:mt-0 [&_figure_img]:mx-auto [&_figure_img]:block",
+  "[&_figure]:my-6 [&_figure]:mx-0 [&_figure]:w-full",
+  "[&_figure_img]:mt-0 [&_figure_img]:block [&_figure_img]:w-full",
   "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:leading-relaxed [&_figcaption]:text-muted-foreground",
 );
 
@@ -68,7 +68,7 @@ export const articleBodyClass = cn(
   "overflow-hidden",
   proseBodyClass,
   proseBlockquoteClass,
-  "[&_img]:mt-4 [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg",
+  "[&_img]:mt-4 [&_img]:block [&_img]:h-auto [&_img]:w-full [&_img]:max-w-full [&_img]:rounded-lg",
   articleFigureClass,
   "[&_p]:m-0 [&_p+p]:mt-3",
   // 空行スペーサーは段落マージンを付けず、1行分の高さだけ空ける
