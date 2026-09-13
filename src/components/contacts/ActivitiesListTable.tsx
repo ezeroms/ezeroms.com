@@ -23,9 +23,9 @@ type Props = {
   showContacts?: boolean;
   /**
    * tags = アクティビティ名 + タグ列（デフォルト）
-   * what = 日付 + アクティビティ（名 / 何をしたか を縦積み・インライン編集）
+   * memo = 日付 + アクティビティ（名 / メモ を縦積み・インライン編集）
    */
-  detailColumn?: "tags" | "what";
+  detailColumn?: "tags" | "memo";
   onActivityUpdated?: (activity: WorkspaceActivity) => void;
 };
 
@@ -46,7 +46,7 @@ function ChipList({ values }: { values: string[] }) {
 
 async function patchActivity(
   id: string,
-  body: { title?: string; what_md?: string | null },
+  body: { title?: string; notes_md?: string | null },
 ): Promise<WorkspaceActivity> {
   const res = await fetch(`/api/admin/workspace/activities/${id}/`, {
     method: "PATCH",
@@ -63,16 +63,16 @@ async function patchActivity(
   return data.item;
 }
 
-function ActivityWhatCell({
+function ActivityMemoCell({
   activity,
   onActivityUpdated,
 }: {
   activity: WorkspaceActivity;
   onActivityUpdated?: (activity: WorkspaceActivity) => void;
 }) {
-  const hasWhat = Boolean(activity.what_md?.trim());
-  const [addingWhat, setAddingWhat] = useState(false);
-  const showWhatEditor = hasWhat || addingWhat;
+  const hasMemo = Boolean(activity.notes_md?.trim());
+  const [addingMemo, setAddingMemo] = useState(false);
+  const showMemoEditor = hasMemo || addingMemo;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -93,7 +93,7 @@ function ActivityWhatCell({
             }}
           />
         </div>
-        {!showWhatEditor ? (
+        {!showMemoEditor ? (
           <button
             type="button"
             className={cn(
@@ -102,33 +102,33 @@ function ActivityWhatCell({
               "group-hover/cte:inline-flex group-focus-within/cte:inline-flex focus-visible:inline-flex",
               "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-border",
             )}
-            aria-label="何をしたかを編集"
+            aria-label="メモを編集"
             onClick={(event) => {
               event.stopPropagation();
-              setAddingWhat(true);
+              setAddingMemo(true);
             }}
           >
             メモを追加
           </button>
         ) : null}
       </div>
-      {showWhatEditor ? (
+      {showMemoEditor ? (
         <ClickToEditField
-          value={activity.what_md ?? ""}
+          value={activity.notes_md ?? ""}
           inputType="textarea"
-          emptyLabel="何をしたかを入力…"
-          ariaLabel="何をしたかを編集"
+          emptyLabel="メモを入力…"
+          ariaLabel="メモを編集"
           displayClassName="text-xs leading-relaxed text-muted-foreground"
-          autoFocusEdit={addingWhat && !hasWhat}
+          autoFocusEdit={addingMemo && !hasMemo}
           onEditEnd={() => {
-            if (!activity.what_md?.trim()) setAddingWhat(false);
+            if (!activity.notes_md?.trim()) setAddingMemo(false);
           }}
           onSave={async (next) => {
             const item = await patchActivity(activity.id, {
-              what_md: next || null,
+              notes_md: next || null,
             });
             onActivityUpdated?.(item);
-            if (!next.trim()) setAddingWhat(false);
+            if (!next.trim()) setAddingMemo(false);
           }}
         />
       ) : null}
@@ -144,13 +144,13 @@ export function ActivitiesListTable({
   onActivityUpdated,
 }: Props) {
   const router = useRouter();
-  const showWhat = detailColumn === "what";
-  const colSpan = showWhat ? 2 : showContacts ? 4 : 3;
+  const showMemo = detailColumn === "memo";
+  const colSpan = showMemo ? 2 : showContacts ? 4 : 3;
 
   return (
     <table
       className={
-        showWhat
+        showMemo
           ? "w-full border-collapse text-left text-sm"
           : "w-full min-w-[720px] border-collapse text-left text-sm"
       }
@@ -158,7 +158,7 @@ export function ActivitiesListTable({
       <thead>
         <tr className="bg-card text-xs uppercase tracking-wide text-muted-foreground">
           <th className="w-28 px-4 py-3 font-medium">日付</th>
-          {showWhat ? (
+          {showMemo ? (
             <th className="px-4 py-3 font-medium">アクティビティ</th>
           ) : (
             <>
@@ -183,9 +183,9 @@ export function ActivitiesListTable({
                   {formatActivityDate(activity.occurred_at) || "—"}
                 </div>
               </td>
-              {showWhat ? (
+              {showMemo ? (
                 <td className="px-4 py-2.5 align-top">
-                  <ActivityWhatCell
+                  <ActivityMemoCell
                     activity={activity}
                     onActivityUpdated={onActivityUpdated}
                   />
@@ -210,7 +210,7 @@ export function ActivitiesListTable({
             </>
           );
 
-          if (showWhat) {
+          if (showMemo) {
             return (
               <tr key={activity.id} className="group/cte hover:bg-muted/30">
                 {cells}

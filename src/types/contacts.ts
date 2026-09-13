@@ -87,7 +87,6 @@ export type WorkspaceActivity = {
   title_source: ActivityTitleSource;
   occurred_at: string | null;
   ended_at: string | null;
-  what_md: string | null;
   notes_md: string | null;
   location: string | null;
   tags: string[];

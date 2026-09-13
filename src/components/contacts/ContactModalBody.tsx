@@ -47,7 +47,7 @@ export function ContactModalBody({
                 contactNames: [],
               }))}
               showContacts={false}
-              detailColumn="what"
+              detailColumn="memo"
               emptyMessage="まだ一緒にした Activity がありません"
               onActivityUpdated={onActivityUpdated}
             />

@@ -41,7 +41,6 @@ export async function POST(request: NextRequest) {
       title_source?: string;
       occurred_at?: string | null;
       ended_at?: string | null;
-      what_md?: string | null;
       notes_md?: string | null;
       location?: string | null;
       tags?: string | string[] | null;
@@ -70,7 +69,6 @@ export async function POST(request: NextRequest) {
         : "manual",
       occurred_at: body.occurred_at ?? null,
       ended_at: body.ended_at ?? null,
-      what_md: body.what_md ?? null,
       notes_md: body.notes_md ?? null,
       location: body.location ?? null,
       tags: body.tags ?? null,

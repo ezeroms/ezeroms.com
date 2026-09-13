@@ -13,7 +13,7 @@ import {
 } from "@/types/contacts";
 
 const SELECT =
-  "id, title, title_source, occurred_at, ended_at, what_md, notes_md, location, tags, created_at, updated_at, deleted_at";
+  "id, title, title_source, occurred_at, ended_at, notes_md, location, tags, created_at, updated_at, deleted_at";
 
 export type ActivityListFilter = {
   contactId?: string;
@@ -29,7 +29,6 @@ export type ActivityWriteInput = {
   title_source?: ActivityTitleSource;
   occurred_at?: string | null;
   ended_at?: string | null;
-  what_md?: string | null;
   notes_md?: string | null;
   location?: string | null;
   tags?: string[] | string | null;
@@ -106,14 +105,19 @@ function normalizeActivity(row: WorkspaceActivity): WorkspaceActivity {
   };
 }
 
+function emptyToNull(value: string | null | undefined): string | null {
+  if (value == null) return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+}
+
 function toRow(input: Partial<ActivityWriteInput>): Record<string, unknown> {
   const row: Record<string, unknown> = {};
   if (input.title !== undefined) row.title = input.title.trim();
   if (input.title_source !== undefined) row.title_source = input.title_source;
   if (input.occurred_at !== undefined) row.occurred_at = input.occurred_at;
   if (input.ended_at !== undefined) row.ended_at = input.ended_at;
-  if (input.what_md !== undefined) row.what_md = input.what_md;
-  if (input.notes_md !== undefined) row.notes_md = input.notes_md;
+  if (input.notes_md !== undefined) row.notes_md = emptyToNull(input.notes_md);
   if (input.location !== undefined) {
     row.location =
       input.location == null ? null : input.location.trim() || null;
@@ -137,8 +141,7 @@ export async function createActivity(
       title_source: input.title_source ?? "manual",
       occurred_at: input.occurred_at ?? null,
       ended_at: input.ended_at ?? null,
-      what_md: input.what_md ?? null,
-      notes_md: input.notes_md ?? null,
+      notes_md: emptyToNull(input.notes_md),
       location: input.location?.trim() || null,
       tags: parseActivityTags(input.tags),
     })

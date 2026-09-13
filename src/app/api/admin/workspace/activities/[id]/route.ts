@@ -44,7 +44,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       title_source?: string;
       occurred_at?: string | null;
       ended_at?: string | null;
-      what_md?: string | null;
       notes_md?: string | null;
       location?: string | null;
       tags?: string | string[] | null;
@@ -73,7 +72,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         ? { occurred_at: body.occurred_at }
         : {}),
       ...(body.ended_at !== undefined ? { ended_at: body.ended_at } : {}),
-      ...(body.what_md !== undefined ? { what_md: body.what_md } : {}),
       ...(body.notes_md !== undefined ? { notes_md: body.notes_md } : {}),
       ...(body.location !== undefined ? { location: body.location } : {}),
       ...(body.tags !== undefined ? { tags: body.tags } : {}),
