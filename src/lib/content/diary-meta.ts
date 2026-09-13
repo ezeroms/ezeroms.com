@@ -44,6 +44,7 @@ export function diaryThumbSrc(
   return firstMediaUrl(ogImage, firstImageSrc(html), sectionOgImage);
 }
 
+/** 本文の冒頭テキスト。写真・キャプションは含めない。 */
 export function diaryExcerpt(html: string, max = 140): string {
   const text = htmlToPlainText(html);
   if (text.length <= max) return text;
