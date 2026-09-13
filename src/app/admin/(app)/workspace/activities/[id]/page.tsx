@@ -49,7 +49,6 @@ export default async function AdminWorkspaceActivityDetailPage({
     <AdminContent width="wide">
       <AdminPageHeader
         title={activity?.title ?? "Activity"}
-        description="メモとコンタクト"
       />
       <WorkspaceConfigNotice />
       {loadError ? (
