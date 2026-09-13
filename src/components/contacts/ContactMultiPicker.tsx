@@ -128,9 +128,12 @@ export function ContactMultiPicker({
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
+      // 親フォームの送信も、先頭候補の確定もしない。追加はクリックのみ。
       e.preventDefault();
+      if (!open) setOpen(true);
+      return;
     }
-    if (!open && (e.key === "ArrowDown" || e.key === "Enter")) {
+    if (!open && e.key === "ArrowDown") {
       setOpen(true);
       return;
     }
@@ -154,9 +157,6 @@ export function ContactMultiPicker({
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setHighlight((i) => Math.max(i - 1, 0));
-    } else if (e.key === "Enter") {
-      const pick = candidates[highlight];
-      if (pick) addContact(pick.id);
     }
   }
 
