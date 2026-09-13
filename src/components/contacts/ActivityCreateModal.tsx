@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
+import { ContactMultiPicker } from "@/components/contacts/ContactMultiPicker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,11 +11,7 @@ import {
   fromDatetimeLocalValue,
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
-import {
-  compareContactsByKana,
-  contactDisplayName,
-  type WorkspaceContact,
-} from "@/types/contacts";
+import { type WorkspaceContact } from "@/types/contacts";
 
 const FORM_ID = "activity-create-form";
 
@@ -30,7 +27,6 @@ type FormState = {
   ended_at: string;
   location: string;
   tags: string;
-  what_md: string;
   notes_md: string;
   contactIds: string[];
 };
@@ -43,7 +39,6 @@ function emptyForm(): FormState {
     ended_at: "",
     location: "",
     tags: "",
-    what_md: "",
     notes_md: "",
     contactIds: [],
   };
@@ -78,26 +73,13 @@ export function ActivityCreateModal({ open, onClose, contacts }: Props) {
     [form, baseline],
   );
 
-  const contactOptions = useMemo(
-    () =>
-      [...contacts]
-        .filter((f) => !f.deleted_at)
-        .sort(compareContactsByKana)
-        .map((f) => ({ id: f.id, label: contactDisplayName(f) })),
-    [contacts],
+  const selectedIds = useMemo(
+    () => new Set(form.contactIds),
+    [form.contactIds],
   );
 
   function patch<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function toggleContact(id: string) {
-    setForm((prev) => {
-      const set = new Set(prev.contactIds);
-      if (set.has(id)) set.delete(id);
-      else set.add(id);
-      return { ...prev, contactIds: [...set] };
-    });
   }
 
   async function onSubmit(e: FormEvent) {
@@ -121,7 +103,6 @@ export function ActivityCreateModal({ open, onClose, contacts }: Props) {
           ended_at: fromDatetimeLocalValue(form.ended_at),
           location: form.location.trim() || null,
           tags: form.tags,
-          what_md: form.what_md || null,
           notes_md: form.notes_md || null,
           contact_ids: form.contactIds,
         }),
@@ -215,50 +196,25 @@ export function ActivityCreateModal({ open, onClose, contacts }: Props) {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="activity-create-what">何をしたか</Label>
-          <Textarea
-            id="activity-create-what"
-            value={form.what_md}
-            disabled={saving}
-            className="min-h-[80px]"
-            onChange={(e) => patch("what_md", e.target.value)}
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
           <Label htmlFor="activity-create-notes">メモ</Label>
           <Textarea
             id="activity-create-notes"
             value={form.notes_md}
             disabled={saving}
-            className="min-h-[80px]"
+            className="min-h-[120px]"
+            placeholder="何をしたか、どんな話をしたかなど"
             onChange={(e) => patch("notes_md", e.target.value)}
           />
         </div>
 
         <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
           <legend className="mb-1 text-sm font-medium">一緒にいた人</legend>
-          {contactOptions.length === 0 ? (
-            <p className="m-0 text-xs text-muted-foreground">
-              まだコンタクトがいません。Contacts から追加できます。
-            </p>
-          ) : (
-            <ul className="m-0 grid max-h-40 list-none gap-2 overflow-y-auto p-0 sm:grid-cols-2">
-              {contactOptions.map((f) => (
-                <li key={f.id}>
-                  <label className="flex cursor-pointer items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={form.contactIds.includes(f.id)}
-                      disabled={saving}
-                      onChange={() => toggleContact(f.id)}
-                    />
-                    {f.label}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ContactMultiPicker
+            contacts={contacts}
+            selectedIds={selectedIds}
+            onChange={(next) => patch("contactIds", [...next])}
+            disabled={saving}
+          />
         </fieldset>
       </form>
     </AdminContentModal>

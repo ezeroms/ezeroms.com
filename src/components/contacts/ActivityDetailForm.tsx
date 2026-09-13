@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
+import { ContactMultiPicker } from "@/components/contacts/ContactMultiPicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +13,6 @@ import {
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
 import {
-  contactDisplayName,
   formatActivityTags,
   type WorkspaceActivity,
   type WorkspaceContact,
@@ -22,10 +22,6 @@ type Props = {
   activity: WorkspaceActivity;
   contacts: WorkspaceContact[];
   allContacts: WorkspaceContact[];
-  calendarLink: {
-    google_calendar_id: string;
-    google_event_id: string;
-  } | null;
 };
 
 /** 作成モーダルと同じ API 形の編集状態 */
@@ -35,7 +31,6 @@ type FormState = {
   ended_at: string;
   location: string;
   tags: string;
-  what_md: string;
   notes_md: string;
 };
 
@@ -46,7 +41,6 @@ function formFromActivity(activity: WorkspaceActivity): FormState {
     ended_at: toDatetimeLocalValue(activity.ended_at),
     location: activity.location ?? "",
     tags: formatActivityTags(activity.tags),
-    what_md: activity.what_md ?? "",
     notes_md: activity.notes_md ?? "",
   };
 }
@@ -55,11 +49,9 @@ export function ActivityDetailForm({
   activity,
   contacts: initialContacts,
   allContacts,
-  calendarLink,
 }: Props) {
   const router = useRouter();
   const [form, setForm] = useState(() => formFromActivity(activity));
-  // チェックボックス切替用。API の contact_ids 配列とは別で Set のまま扱う
   const [contactIds, setContactIds] = useState(
     () => new Set(initialContacts.filter((c) => !c.deleted_at).map((c) => c.id)),
   );
@@ -68,25 +60,12 @@ export function ActivityDetailForm({
   const [error, setError] = useState<string | null>(null);
 
   const contactOptions = useMemo(
-    () =>
-      allContacts.map((contact) => ({
-        id: contact.id,
-        label: contactDisplayName(contact),
-      })),
+    () => allContacts.filter((contact) => !contact.deleted_at),
     [allContacts],
   );
 
   function patchForm<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
-  }
-
-  function toggleContact(id: string) {
-    setContactIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
   }
 
   async function onSave(e: FormEvent) {
@@ -105,7 +84,6 @@ export function ActivityDetailForm({
             title: form.title.trim(),
             occurred_at: fromDatetimeLocalValue(form.occurred_at),
             ended_at: fromDatetimeLocalValue(form.ended_at),
-            what_md: form.what_md,
             notes_md: form.notes_md,
             location: form.location.trim() || null,
             tags: form.tags,
@@ -222,70 +200,26 @@ export function ActivityDetailForm({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="activity-what">何をしたか</Label>
-        <Textarea
-          id="activity-what"
-          value={form.what_md}
-          disabled={busy}
-          className="min-h-[100px]"
-          onChange={(e) => patchForm("what_md", e.target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="activity-notes">どんな話をしたかなど</Label>
+        <Label htmlFor="activity-notes">メモ</Label>
         <Textarea
           id="activity-notes"
           value={form.notes_md}
           disabled={busy}
-          className="min-h-[120px]"
+          className="min-h-[160px]"
+          placeholder="何をしたか、どんな話をしたかなど"
           onChange={(e) => patchForm("notes_md", e.target.value)}
         />
       </div>
 
       <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
         <legend className="mb-1 text-sm font-medium">一緒にいた人</legend>
-        {contactOptions.length === 0 ? (
-          <p className="m-0 text-sm text-muted-foreground">
-            まだコンタクトがいません。{" "}
-            <Link
-              href="/admin/workspace/contacts/"
-              className="underline-offset-2 hover:underline"
-            >
-              Contacts
-            </Link>{" "}
-            で追加してください。
-          </p>
-        ) : (
-          <ul className="m-0 grid list-none gap-2 p-0 sm:grid-cols-2">
-            {contactOptions.map((option) => (
-              <li key={option.id}>
-                <label className="flex cursor-pointer items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={contactIds.has(option.id)}
-                    disabled={busy}
-                    onChange={() => toggleContact(option.id)}
-                  />
-                  {option.label}
-                </label>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ContactMultiPicker
+          contacts={contactOptions}
+          selectedIds={contactIds}
+          onChange={setContactIds}
+          disabled={busy}
+        />
       </fieldset>
-
-      {calendarLink ? (
-        <p className="m-0 text-xs text-muted-foreground">
-          Googleカレンダーに紐づいています（
-          {calendarLink.google_calendar_id} / {calendarLink.google_event_id}
-          ）。タイトルやメモの変更はカレンダーには書き戻しません。
-        </p>
-      ) : (
-        <p className="m-0 text-xs text-muted-foreground">
-          カレンダー未リンク。カレンダーの予定詳細からコンタクトを付けると自動で紐づきます。
-        </p>
-      )}
 
       {error ? (
         <p className="m-0 text-sm text-red-600" role="alert">
