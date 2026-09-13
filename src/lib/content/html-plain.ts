@@ -1,8 +1,23 @@
 /** HTML / Markdown 本文からプレーンテキストや画像 URL を取り出す共通処理。 */
 
+/** Markdown 画像 `![alt](url "title")` */
+const MARKDOWN_IMAGE_RE =
+  /!\[[^\]]*]\(\s*<?[^)\s>]+>?\s*(?:["'][^"']*["'])?\s*\)/g;
+
+/**
+ * 抜粋用に写真を落とす。figure / img / Markdown 画像は本文に出さない。
+ */
+export function stripMediaBlocks(html: string): string {
+  return html
+    .replace(/<figure\b[\s\S]*?<\/figure>/gi, " ")
+    .replace(/<p>\s*<img\b[^>]*>\s*<\/p>/gi, " ")
+    .replace(/<img\b[^>]*>/gi, " ")
+    .replace(MARKDOWN_IMAGE_RE, " ");
+}
+
 /** Strip HTML for OGP / titles / excerpts */
 export function htmlToPlainText(html: string): string {
-  return html
+  return stripMediaBlocks(html)
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<figcaption\b[\s\S]*?<\/figcaption>/gi, " ")
