@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "日付が不正です" }, { status: 400 });
     }
 
-    const status = body.status === "draft" ? "draft" : "published";
+    const status = body.status === "published" ? "published" : "draft";
     const slug =
       (body.slug?.trim() && /^[a-z0-9-]+$/i.test(body.slug.trim())
         ? body.slug.trim()

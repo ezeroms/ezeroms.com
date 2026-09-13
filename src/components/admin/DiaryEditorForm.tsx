@@ -111,7 +111,7 @@ export function DiaryEditorForm({
       : nowDatetimeLocalValue(),
     tags: initial?.tags ?? "",
     place: initial?.place ?? "",
-    status: (initial?.status ?? "published") as "published" | "draft",
+    status: (initial?.status ?? "draft") as "published" | "draft",
   }));
 
   const [bodyMd, setBodyMd] = useState(baseline.bodyMd);
