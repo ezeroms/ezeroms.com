@@ -23,6 +23,10 @@ type Props = {
   excerpt?: string;
   /** false なら抜粋行を出さない（Clips） */
   showExcerpt?: boolean;
+  /** 抜粋の行数（既定 2） */
+  excerptLines?: 2 | 3;
+  /** false なら見出しを出さず、日付＋抜粋だけにする（Diary 関連など） */
+  showTitle?: boolean;
   /** false ならタイトルを折り返して全文表示（Clips） */
   clampTitle?: boolean;
   /** タイトル下のタグ列など */
@@ -74,8 +78,8 @@ function EntryLink({
 }
 
 /**
- * Column / Clips / Media coverage 共通の一覧行。
- * カード全体はリンクにしない。タイトルと画像だけ記事へ飛ぶ。
+ * Column / Clips / Media coverage / Diary 関連 共通の一覧行。
+ * 画像と日付・タイトル・抜粋が記事へ飛ぶ。タグ（footer）はカード内の別リンク。
  */
 export function ContentThumbCard({
   href,
@@ -86,6 +90,8 @@ export function ContentThumbCard({
   metaSecondary,
   excerpt,
   showExcerpt = true,
+  excerptLines = 2,
+  showTitle = true,
   clampTitle = true,
   footer,
   note,
@@ -108,7 +114,7 @@ export function ContentThumbCard({
     ) : null;
 
   return (
-    <article className={plain ? "min-w-0" : contentCard()}>
+    <article className={plain ? "min-w-0" : contentCard({ link: true })}>
       <div className={plain ? PLAIN_LINK_LAYOUT : CARD_LINK_LAYOUT}>
         <EntryLink
           href={href}
@@ -152,29 +158,37 @@ export function ContentThumbCard({
                 : "justify-center"),
           )}
         >
-          {metaRow}
-
-          <h2
-            className={cn(
-              "m-0 font-semibold leading-normal tracking-tight text-foreground",
-              plain ? "text-lg" : "text-base",
-              clampTitle && "line-clamp-2",
-            )}
+          <EntryLink
+            href={href}
+            external={external}
+            className="group flex min-w-0 flex-col gap-2 text-inherit no-underline"
           >
-            <EntryLink
-              href={href}
-              external={external}
-              className="text-inherit no-underline hover:underline hover:underline-offset-2"
-            >
-              {title}
-            </EntryLink>
-          </h2>
+            {metaRow}
 
-          {showExcerpt ? (
-            <p className="m-0 mt-1 line-clamp-2 text-sm leading-normal text-muted-foreground">
-              {excerpt?.trim() ? excerpt : "\u00A0"}
-            </p>
-          ) : null}
+            {showTitle ? (
+              <h2
+                className={cn(
+                  "m-0 font-semibold leading-normal tracking-tight text-foreground group-hover:underline group-hover:underline-offset-2",
+                  plain ? "text-lg" : "text-base",
+                  clampTitle && "line-clamp-2",
+                )}
+              >
+                {title}
+              </h2>
+            ) : null}
+
+            {showExcerpt ? (
+              <p
+                className={cn(
+                  "m-0 text-sm leading-normal text-muted-foreground",
+                  showTitle && "mt-1",
+                  excerptLines === 3 ? "line-clamp-3" : "line-clamp-2",
+                )}
+              >
+                {excerpt?.trim() ? excerpt : "\u00A0"}
+              </p>
+            ) : null}
+          </EntryLink>
 
           {fillBelowTitle ? (
             <div className="min-h-0 flex-1" aria-hidden />

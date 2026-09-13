@@ -25,7 +25,7 @@ type Props = {
 };
 
 /**
- * Diary 一覧・関連投稿のタイムライン。
+ * Diary 一覧のタイムライン。
  * DB / URL は diary のままなので、DOM id も互換のため diary-list を維持する。
  */
 export function DiaryTimeline({

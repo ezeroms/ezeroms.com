@@ -2,7 +2,8 @@
  * Diary（公開 URL / DB テーブルは diary）向けの表示・メタ用ヘルパー。
  */
 import type { Diary } from "@/types/content";
-import { htmlToPlainText } from "@/lib/content/html-plain";
+import { firstImageSrc, htmlToPlainText } from "@/lib/content/html-plain";
+import { firstMediaUrl } from "@/lib/content/og-image";
 
 /**
  * diary_month または投稿日からの月キー（`YYYY-MM`）。
@@ -30,6 +31,17 @@ export function diaryMonthKey(
 /** 公開パーマリンク。 */
 export function diaryPermalink(slug: string): string {
   return `/diary/${slug}/`;
+}
+
+/**
+ * カード左のサムネ。記事 OGP → 本文先頭画像 → セクション OGP。
+ */
+export function diaryThumbSrc(
+  html: string,
+  ogImage?: string | null,
+  sectionOgImage?: string | null,
+): string | null {
+  return firstMediaUrl(ogImage, firstImageSrc(html), sectionOgImage);
 }
 
 export function diaryExcerpt(html: string, max = 140): string {
