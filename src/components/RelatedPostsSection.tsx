@@ -3,17 +3,17 @@ import { cn } from "@/lib/cn";
 
 type Props = {
   children: ReactNode;
-  /** 見出し文言（既定: Related posts） */
+  /** スクリーンリーダー用（既定: Related）。画面には出さない。 */
   title?: string;
   /** aria / 見出し id（未指定時は title から生成） */
   headingId?: string;
   className?: string;
 };
 
-/** Detail-page block: heading + post card list under the article. */
+/** Detail-page block: related posts under the article. Heading is screen-reader only. */
 export function RelatedPostsSection({
   children,
-  title = "Related posts",
+  title = "Related",
   headingId,
   className,
 }: Props) {
@@ -26,10 +26,7 @@ export function RelatedPostsSection({
       className={cn("mx-auto mt-10 w-full max-w-3xl", className)}
       aria-labelledby={id}
     >
-      <h2
-        id={id}
-        className="mb-4 text-base font-semibold tracking-tight text-foreground"
-      >
+      <h2 id={id} className="sr-only">
         {title}
       </h2>
       {children}
