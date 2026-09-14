@@ -30,7 +30,6 @@ export function summarizeDiaryFilter(
     formatDateRangeSummary(filter) ?? "",
     ...filter.weekdays.map((d) => WEEKDAY_LABELS[d]),
     ...filter.tags,
-    ...filter.places,
   ]);
 }
 

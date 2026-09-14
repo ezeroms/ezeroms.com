@@ -91,7 +91,7 @@ export default async function DiaryEntryPage({
   const breadcrumbLabel = formatDiaryDate(item.date) || "Diary";
   const [related, taxonomy, section] = await Promise.all([
     listRelatedDiary(item).catch(() => []),
-    listDiaryTaxonomy().catch(() => ({ tags: [] as string[], places: [] })),
+    listDiaryTaxonomy().catch(() => ({ tags: [] as string[] })),
     loadWritingSection("diary"),
   ]);
 

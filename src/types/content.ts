@@ -92,7 +92,6 @@ export type Diary = {
   date: string;
   diary_month: string[];
   diary_tag: string[];
-  diary_place: string | null;
   body_html: string;
   /** Markdown source for admin editing (may be empty for legacy rows). */
   body_md?: string;

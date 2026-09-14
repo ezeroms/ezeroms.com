@@ -132,8 +132,7 @@ export function resolveSearchScope(pathname: string): SearchScope {
   if (
     path.startsWith("/diary/") ||
     path.startsWith("/diary_month/") ||
-    path.startsWith("/diary_tag/") ||
-    path.startsWith("/diary_place/")
+    path.startsWith("/diary_tag/")
   ) {
     return getSearchScope("diary");
   }

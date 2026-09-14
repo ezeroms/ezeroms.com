@@ -74,10 +74,6 @@ export function applySearchResultFilters(
       if (!overlaps(row.diary_tag as string[] | undefined, filter.tags)) {
         return false;
       }
-      if (filter.places.length) {
-        const place = (row.diary_place as string | null) ?? "";
-        if (!filter.places.includes(place)) return false;
-      }
       return true;
     });
   }
@@ -86,7 +82,6 @@ export function applySearchResultFilters(
     const filter = parseDiaryFilter(params);
     const clipFilter = {
       ...filter,
-      places: [] as string[],
       weekdays: [] as number[],
     };
     if (!diaryFilterActive(clipFilter)) return records;

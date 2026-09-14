@@ -117,8 +117,7 @@ export function Sidebar({
   const isDiary =
     pathname.startsWith("/diary") ||
     pathname.startsWith("/diary_month") ||
-    pathname.startsWith("/diary_tag") ||
-    pathname.startsWith("/diary_place");
+    pathname.startsWith("/diary_tag");
   const isColumn =
     pathname.startsWith("/column") || pathname.startsWith("/column_");
   const isMe =

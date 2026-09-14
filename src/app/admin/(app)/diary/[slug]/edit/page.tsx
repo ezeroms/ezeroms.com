@@ -26,7 +26,7 @@ export default async function AdminDiaryEditPage({ params }: PageProps) {
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
     .select(
-      "slug, date, diary_tag, diary_place, og_image, status, body_html, body_md",
+      "slug, date, diary_tag, og_image, status, body_html, body_md",
     )
     .eq("slug", slug)
     .eq("is_deleted", false)
@@ -47,7 +47,6 @@ export default async function AdminDiaryEditPage({ params }: PageProps) {
     body_md: bodyMd,
     date: data.date as string,
     tags: ((data.diary_tag as string[] | null) ?? []).join(", "),
-    place: (data.diary_place as string | null) ?? "",
     og_image: (data.og_image as string | null) ?? "",
     status,
   };

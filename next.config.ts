@@ -96,6 +96,11 @@ const nextConfig: NextConfig = {
         destination: "/api/admin/writing/diary/meta/",
         permanent: true,
       },
+      {
+        source: "/diary_place/:place*",
+        destination: "/diary/",
+        permanent: true,
+      },
     ];
   },
 };

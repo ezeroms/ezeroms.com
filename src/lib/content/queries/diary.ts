@@ -19,8 +19,6 @@ export async function listDiary(opts?: {
   to?: string | null;
   tag?: string;
   tags?: string[];
-  place?: string;
-  places?: string[];
   weekdays?: number[];
   limit?: number;
 }): Promise<{ items: Diary[]; total: number }> {
@@ -37,11 +35,6 @@ export async function listDiary(opts?: {
   if (opts?.tags?.length === 1) q = q.contains("diary_tag", opts.tags);
   else if (opts?.tags && opts.tags.length > 1) {
     q = q.overlaps("diary_tag", opts.tags);
-  }
-  if (opts?.place) q = q.eq("diary_place", opts.place);
-  if (opts?.places?.length === 1) q = q.eq("diary_place", opts.places[0]);
-  else if (opts?.places && opts.places.length > 1) {
-    q = q.in("diary_place", opts.places);
   }
 
   const range: DateRangeValue = {
@@ -121,29 +114,24 @@ export async function listDiaryMonths(): Promise<string[]> {
   return [...set].sort();
 }
 
-/** Tags / places for Diary secondary nav (lightweight select). */
+/** Tags for Diary secondary nav (lightweight select). */
 export async function listDiaryTaxonomy(): Promise<{
   tags: string[];
-  places: string[];
 }> {
-  if (!hasSupabaseConfig()) return { tags: [], places: [] };
+  if (!hasSupabaseConfig()) return { tags: [] };
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
-    .select("diary_tag, diary_place")
+    .select("diary_tag")
     .eq("status", PUBLISHED)
     .eq("is_deleted", false);
   if (error) throw error;
   const tags = new Set<string>();
-  const places = new Set<string>();
   for (const row of data ?? []) {
     for (const t of (row.diary_tag as string[] | null) ?? []) {
       if (t) tags.add(t);
     }
-    const place = row.diary_place as string | null;
-    if (place) places.add(place);
   }
   return {
     tags: [...tags].sort((a, b) => a.localeCompare(b, "ja")),
-    places: [...places].sort((a, b) => a.localeCompare(b, "ja")),
   };
 }

@@ -20,7 +20,6 @@ export type AdminDiaryTableItem = {
   slug: string;
   date: string;
   status: string;
-  place: string | null;
   tags: string[];
   excerpt: string;
   editor: DiaryEditorInitial;
@@ -42,7 +41,6 @@ export function AdminDiaryListTable({ items, empty }: Props) {
           <tr className={adminListHeadRowClassName}>
             <th className={`w-40 ${adminListThClassName}`}>日時</th>
             <th className={adminListThClassName}>本文</th>
-            <th className={adminListThClassName}>場所</th>
             <th className={`w-24 ${adminListThClassName}`}>ステータス</th>
             <th className={`w-16 ${adminListThClassName} text-right`}>
               <span className="sr-only">操作</span>
@@ -66,11 +64,6 @@ export function AdminDiaryListTable({ items, empty }: Props) {
               >
                 {item.excerpt || "（本文なし）"}
               </td>
-              <td
-                className={`max-w-[140px] truncate ${adminListTdClassName} text-muted-foreground`}
-              >
-                {item.place?.trim() || "—"}
-              </td>
               <td className={adminListTdClassName}>
                 <AdminListStatus status={item.status} />
               </td>
@@ -80,7 +73,7 @@ export function AdminDiaryListTable({ items, empty }: Props) {
             </AdminClickableRow>
           ))}
           {empty ? (
-            <AdminListEmptyRow colSpan={5}>まだ投稿がありません</AdminListEmptyRow>
+            <AdminListEmptyRow colSpan={4}>まだ投稿がありません</AdminListEmptyRow>
           ) : null}
         </tbody>
       </table>

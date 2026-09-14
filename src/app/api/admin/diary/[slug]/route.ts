@@ -19,7 +19,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   const { data, error } = await getSupabaseAdmin()
     .from("diary")
     .select(
-      "id, slug, date, diary_tag, diary_place, og_image, status, body_html, body_md, published_at, updated_at",
+      "id, slug, date, diary_tag, og_image, status, body_html, body_md, published_at, updated_at",
     )
     .eq("slug", slug)
     .eq("is_deleted", false)
@@ -41,7 +41,6 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
       ...data,
       body_md: bodyMd,
       tags: ((data.diary_tag as string[] | null) ?? []).join(", "),
-      place: (data.diary_place as string | null) ?? "",
     },
   });
 }
@@ -57,7 +56,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       body_md?: string;
       date?: string;
       tags?: string;
-      place?: string;
       og_image?: string;
       status?: "draft" | "published" | "archived";
     };
@@ -81,7 +79,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           : "published";
     const month = monthKeyFromDate(dateIso);
     const tags = parseTagList(body.tags ?? "");
-    const place = body.place?.trim() || null;
     const ogImage = (body.og_image ?? "").trim();
     const bodyHtml = markdownToHtml(bodyMd);
     const now = new Date().toISOString();
@@ -106,7 +103,6 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       date: dateIso,
       diary_month: [month],
       diary_tag: tags,
-      diary_place: place,
       og_image: ogImage,
       body_md: bodyMd,
       body_html: bodyHtml,

@@ -27,7 +27,7 @@ export default async function AdminDiaryListPage() {
     let { data, error } = await getSupabaseAdmin()
       .from("diary")
       .select(
-        "slug, date, status, diary_tag, diary_place, body_html, body_md, og_image",
+        "slug, date, status, diary_tag, body_html, body_md, og_image",
       )
       .eq("is_deleted", false)
       .order("date", { ascending: false })
@@ -36,7 +36,7 @@ export default async function AdminDiaryListPage() {
     if (error) {
       const fallback = await getSupabaseAdmin()
         .from("diary")
-        .select("slug, date, status, diary_tag, diary_place, body_html")
+        .select("slug, date, status, diary_tag, body_html")
         .eq("is_deleted", false)
         .order("date", { ascending: false })
         .limit(200);
@@ -53,7 +53,6 @@ export default async function AdminDiaryListPage() {
         const date = String(row.date ?? "");
         const status = String(row.status ?? "published");
         const tags = (row.diary_tag as string[] | null) ?? [];
-        const place = (row.diary_place as string | null) ?? null;
         const bodyHtml = (row.body_html as string | null) ?? "";
         const bodyMd =
           String(row.body_md ?? "").trim() || htmlToEditableMarkdown(bodyHtml);
@@ -62,7 +61,6 @@ export default async function AdminDiaryListPage() {
           slug,
           date,
           status,
-          place,
           tags,
           excerpt: excerptFromHtml(bodyHtml),
           editor: {
@@ -70,7 +68,6 @@ export default async function AdminDiaryListPage() {
             body_md: bodyMd,
             date,
             tags: tags.join(", "),
-            place: place ?? "",
             status: status === "draft" ? "draft" : "published",
             og_image: (row.og_image as string | null) ?? "",
           },
