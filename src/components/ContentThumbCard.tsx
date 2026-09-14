@@ -44,7 +44,7 @@ type Props = {
   /** 外部リンクなら true（target=_blank） */
   external?: boolean;
   /**
-   * og: 1200×630 の枠でサムネを出す（Diary Related など OGP 用）。
+   * og: 1200×630 の枠でサムネを出す（Diary / Column Related など OGP 用）。
    * 未指定は従来どおり（一覧の stretch / 3:2）。
    */
   thumbAspect?: "og";

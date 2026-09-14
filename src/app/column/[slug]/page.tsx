@@ -19,7 +19,7 @@ import {
   loadWritingSection,
 } from "@/lib/content/queries";
 import { sanitizeBody } from "@/lib/html";
-import { ColumnList } from "@/components/ColumnList";
+import { ColumnRelatedList } from "@/components/ColumnRelatedList";
 import { RelatedPostsSection } from "@/components/RelatedPostsSection";
 import { ReadingTagsAside } from "@/components/ReadingTagsAside";
 import { columnTagHref } from "@/lib/content/column-filter";
@@ -132,9 +132,8 @@ export default async function ColumnPage({
       />
       {related.length > 0 ? (
         <RelatedPostsSection className="max-w-2xl">
-          <ColumnList
+          <ColumnRelatedList
             items={related}
-            hideEmpty
             fallbackThumbSrc={section.og_image || null}
           />
         </RelatedPostsSection>
