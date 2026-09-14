@@ -38,7 +38,6 @@ export default async function ClipsIndexPage({
   const filter = parseDiaryFilter(resolvedSearchParams);
   const clipFilter = {
     ...filter,
-    places: [] as string[],
     weekdays: [] as number[],
   };
   const filtering = diaryFilterActive(clipFilter);
@@ -65,8 +64,6 @@ export default async function ClipsIndexPage({
       secondary={
         <DiaryFilterPanel
           tags={tags}
-          places={[]}
-          showPlaces={false}
           showWeekdays={false}
           showTags={false}
           initial={clipFilter}

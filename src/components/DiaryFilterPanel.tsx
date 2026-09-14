@@ -21,12 +21,9 @@ import {
 
 type Props = {
   tags: string[];
-  places?: string[];
   initial: DiaryFilterState;
   /** Base path for filter apply (default /diary/) */
   basePath?: string;
-  /** Hide place filter (e.g. Clips). Default true when places provided. */
-  showPlaces?: boolean;
   /** Hide weekday filter (e.g. Clips). Default true. */
   showWeekdays?: boolean;
   /** Hide tag chips when a left-rail tag list is used (Clips). */
@@ -35,10 +32,8 @@ type Props = {
 
 export function DiaryFilterPanel({
   tags,
-  places = [],
   initial,
   basePath = "/diary/",
-  showPlaces = true,
   showWeekdays = true,
   showTags = true,
 }: Props) {
@@ -103,20 +98,6 @@ export function DiaryFilterPanel({
             value={draft.tags}
             onChange={(next) => setDraft((d) => ({ ...d, tags: next }))}
             emptyMessage="タグがありません"
-          />
-        </FilterSection>
-      ) : null}
-
-      {showPlaces ? (
-        <FilterSection
-          label="場所"
-          contentClassName="max-h-40 overflow-y-auto"
-        >
-          <FilterOptionChips
-            options={sameLabelOptions(places)}
-            value={draft.places}
-            onChange={(next) => setDraft((d) => ({ ...d, places: next }))}
-            emptyMessage="場所がありません"
           />
         </FilterSection>
       ) : null}

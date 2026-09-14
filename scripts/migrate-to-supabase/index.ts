@@ -161,7 +161,6 @@ async function migrateDiary() {
       date,
       diary_month: normalizeDiaryMonths(data.diary_month),
       diary_tag: asStringArray(data.diary_tag),
-      diary_place: data.diary_place ? String(data.diary_place) : null,
       body_html: mdToHtml(content),
       status: "published",
       published_at: date,

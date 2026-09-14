@@ -36,16 +36,6 @@ export function DiaryArticle({ item, bodyHtml }: Props) {
           <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
             <time dateTime={item.date}>{dateLabel}</time>
           </h1>
-          {item.diary_place ? (
-            <p className="m-0 mt-1.5 text-sm leading-tight text-muted-foreground">
-              <Link
-                href={`/diary_place/${encodeURIComponent(item.diary_place)}/`}
-                className="truncate no-underline hover:underline"
-              >
-                {item.diary_place}
-              </Link>
-            </p>
-          ) : null}
         </div>
 
         <ArticleProse className={articleBodyClass} html={bodyHtml} />

@@ -107,8 +107,7 @@ export function resolveSitePageMeta(pathname: string): SitePageMeta | null {
   if (
     path.startsWith("/diary/") ||
     path.startsWith("/diary_month/") ||
-    path.startsWith("/diary_tag/") ||
-    path.startsWith("/diary_place/")
+    path.startsWith("/diary_tag/")
   ) {
     // Permalink detail still shows Diary chrome (timeline context)
     return DIARY;

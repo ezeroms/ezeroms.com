@@ -20,7 +20,7 @@ export default async function DiaryTagPage({
   const decoded = decodeURIComponent(tag);
   const [{ items }, taxonomy] = await Promise.all([
     listDiary({ tag: decoded }),
-    listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
+    listDiaryTaxonomy().catch(() => ({ tags: [] })),
   ]);
   const sanitized = items.map((item) => ({
     ...item,
@@ -35,7 +35,6 @@ export default async function DiaryTagPage({
       secondary={
         <DiaryFilterPanel
           tags={taxonomy.tags}
-          places={taxonomy.places}
           initial={initial}
         />
       }

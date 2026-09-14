@@ -20,6 +20,7 @@ import {
   nowDatetimeLocalValue,
   toDatetimeLocalValue,
 } from "@/lib/workspace/labels";
+import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,7 +66,6 @@ export type DiaryEditorInitial = {
   body_md: string;
   date: string;
   tags: string;
-  place: string;
   status: "published" | "draft";
   og_image: string;
 };
@@ -110,14 +110,14 @@ export function DiaryEditorForm({
       ? toDatetimeLocalValue(initial.date)
       : nowDatetimeLocalValue(),
     tags: initial?.tags ?? "",
-    place: initial?.place ?? "",
+    ogImage: initial?.og_image ?? "",
     status: (initial?.status ?? "draft") as "published" | "draft",
   }));
 
   const [bodyMd, setBodyMd] = useState(baseline.bodyMd);
   const [date, setDate] = useState(baseline.date);
   const [tags, setTags] = useState(baseline.tags);
-  const [place, setPlace] = useState(baseline.place);
+  const [ogImage, setOgImage] = useState(baseline.ogImage);
   const [status, setStatus] = useState<"published" | "draft">(baseline.status);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -126,7 +126,7 @@ export function DiaryEditorForm({
     bodyMd !== baseline.bodyMd ||
     date !== baseline.date ||
     tags !== baseline.tags ||
-    place !== baseline.place ||
+    ogImage !== baseline.ogImage ||
     status !== baseline.status;
 
   useEffect(() => {
@@ -238,7 +238,7 @@ export function DiaryEditorForm({
       markdown !== baseline.bodyMd ||
       date !== baseline.date ||
       tags !== baseline.tags ||
-      place !== baseline.place ||
+      ogImage !== baseline.ogImage ||
       status !== baseline.status;
     if (!nextDirty) return;
     if (!markdown.trim()) {
@@ -252,8 +252,7 @@ export function DiaryEditorForm({
         body_md: markdown,
         date: new Date(date).toISOString(),
         tags,
-        place,
-        og_image: initial?.og_image ?? "",
+        og_image: ogImage,
         status,
       };
       const url = isEdit
@@ -277,7 +276,7 @@ export function DiaryEditorForm({
         bodyMd: markdown,
         date,
         tags,
-        place,
+        ogImage,
         status,
       });
       router.refresh();
@@ -351,28 +350,24 @@ export function DiaryEditorForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="note-tags">タグ（カンマ区切り）</Label>
-          <Input
-            id="note-tags"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            placeholder="散歩, 音楽"
-            {...ignorePasswordManagersProps}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="note-place">場所</Label>
-          <Input
-            id="note-place"
-            value={place}
-            onChange={(e) => setPlace(e.target.value)}
-            placeholder="高円寺"
-            {...ignorePasswordManagersProps}
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="note-tags">タグ（カンマ区切り）</Label>
+        <Input
+          id="note-tags"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          placeholder="散歩, 音楽"
+          {...ignorePasswordManagersProps}
+        />
       </div>
+
+      <OgImageField
+        id="note-og-image"
+        value={ogImage}
+        onChange={setOgImage}
+        uploadKind="diary"
+        disabled={loading}
+      />
 
       {!hideSubmit ? (
         <div className="pt-1">

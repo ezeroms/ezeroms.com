@@ -44,7 +44,7 @@ export default async function DiaryIndexPage({
   const filtering = diaryFilterActive(filter);
 
   const [taxonomy, listed] = await Promise.all([
-    listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
+    listDiaryTaxonomy().catch(() => ({ tags: [] })),
     listDiary(
       filtering
         ? {
@@ -52,7 +52,6 @@ export default async function DiaryIndexPage({
             to: filter.to,
             weekdays: filter.weekdays,
             tags: filter.tags,
-            places: filter.places,
           }
         : { limit: DIARY_FEED_LIMIT },
     ).catch(() => ({ items: [], total: 0 })),
@@ -74,7 +73,6 @@ export default async function DiaryIndexPage({
       secondary={
         <DiaryFilterPanel
           tags={taxonomy.tags}
-          places={taxonomy.places}
           initial={filter}
         />
       }

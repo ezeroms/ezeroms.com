@@ -35,7 +35,7 @@ export default async function DiaryMonthPage({
 
   const [{ items }, taxonomy] = await Promise.all([
     listDiary({ month }),
-    listDiaryTaxonomy().catch(() => ({ tags: [], places: [] })),
+    listDiaryTaxonomy().catch(() => ({ tags: [] })),
   ]);
   const sanitized = items.map((item) => ({
     ...item,
@@ -51,7 +51,6 @@ export default async function DiaryMonthPage({
       secondary={
         <DiaryFilterPanel
           tags={taxonomy.tags}
-          places={taxonomy.places}
           initial={initial}
         />
       }

@@ -32,23 +32,21 @@ export type DiaryFilterState = {
   to: string | null;
   weekdays: number[];
   tags: string[];
-  places: string[];
 };
 
 export function emptyDiaryFilter(): DiaryFilterState {
-  return { ...emptyDateRange(), weekdays: [], tags: [], places: [] };
+  return { ...emptyDateRange(), weekdays: [], tags: [] };
 }
 
 export function diaryFilterActive(filter: DiaryFilterState): boolean {
   return (
     dateRangeActive(filter) ||
     filter.weekdays.length > 0 ||
-    filter.tags.length > 0 ||
-    filter.places.length > 0
+    filter.tags.length > 0
   );
 }
 
-/** Parse `/diary/?from=&to=&w=&t=&p=`（旧 `m=` 年月も可） */
+/** Parse `/diary/?from=&to=&w=&t=`（旧 `m=` 年月も可） */
 export function parseDiaryFilter(
   searchParams: SearchParamsRecord,
 ): DiaryFilterState {
@@ -60,7 +58,6 @@ export function parseDiaryFilter(
     to: range.to,
     weekdays: parseWeekdayList(firstSearchParamValue(searchParams, "w")),
     tags: decodePipeSeparatedList(firstSearchParamValue(searchParams, "t")),
-    places: decodePipeSeparatedList(firstSearchParamValue(searchParams, "p")),
   };
 }
 
@@ -70,9 +67,6 @@ export function serializeDiaryFilter(filter: DiaryFilterState): string {
   if (filter.weekdays.length) query.set("w", filter.weekdays.join(","));
   if (filter.tags.length) {
     query.set("t", encodePipeSeparatedList(filter.tags));
-  }
-  if (filter.places.length) {
-    query.set("p", encodePipeSeparatedList(filter.places));
   }
   return toQueryString(query);
 }

@@ -10,7 +10,7 @@ export type FilterChipOption<T extends string | number = string> = {
   description?: string;
 };
 
-/** ラベルと値が同じチップ（タグ・場所など）。 */
+/** ラベルと値が同じチップ（タグなど）。 */
 export function sameLabelOptions<T extends string>(
   values: readonly T[],
 ): FilterChipOption<T>[] {

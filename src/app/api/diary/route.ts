@@ -6,12 +6,10 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const month = searchParams.get("month") ?? undefined;
     const tag = searchParams.get("tag") ?? undefined;
-    const place = searchParams.get("place") ?? undefined;
     const limit = searchParams.get("limit");
     const data = await listDiary({
       month,
       tag,
-      place,
       limit: limit ? Number(limit) : undefined,
     });
     return jsonOk(data);
