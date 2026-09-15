@@ -505,7 +505,7 @@
   overflow: hidden;
   box-sizing: border-box;
   min-width: 0;
-  min-height: 1.35rem;
+  min-height: 0;
   padding: 3px 6px;
   border: 0;
   border-radius: 4px;
@@ -558,6 +558,19 @@
 
 .workspace-calendar .sx-task-lane__chip--done .sx-task-lane__title {
   text-decoration: line-through;
+}
+
+/* 15分枠: 折り返しで高さが食い込まないよう1行に収める */
+.workspace-calendar .sx-task-lane__chip--compact {
+  gap: 0;
+  padding: 2px 6px;
+  justify-content: center;
+}
+
+.workspace-calendar .sx-task-lane__chip--compact .sx-task-lane__title,
+.workspace-calendar .sx-task-lane__chip--compact .sx-task-lane__time {
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .workspace-calendar .sx-task-lane__title {

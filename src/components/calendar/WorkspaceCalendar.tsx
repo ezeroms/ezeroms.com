@@ -52,7 +52,7 @@ import {
   calendarKey,
   eventKey,
 } from "@/lib/workspace/calendar/colors";
-import { layoutTaskLane } from "@/lib/workspace/calendar/lane";
+import { layoutTaskLane, WEEK_GRID_HEIGHT_PX } from "@/lib/workspace/calendar/lane";
 import {
   toScheduleXDayBoundaries,
   toScheduleXFirstDay,
@@ -256,11 +256,11 @@ export function WorkspaceCalendar({
       calendars: scheduleXCalendars,
       events: scheduleXEventsRef.current,
       dayBoundaries: toScheduleXDayBoundaries(dayStartsHour),
-      // 300px/時。15分の予定でもタイトルと時刻が収まる（旧 150px/時だと枠が重なった）
+      // 360px/時。15分枠が約90pxになり、タイトルと時刻が隣に食い込まない
       weekOptions: {
         eventOverlap: true,
         gridStep: 30,
-        gridHeight: 7200,
+        gridHeight: WEEK_GRID_HEIGHT_PX,
         eventWidth: SCHEDULE_LANE_WIDTH_PERCENT,
         nDays: 7,
         // en-US でも 24h 軸（6:00…）を維持
@@ -907,7 +907,7 @@ export function WorkspaceCalendar({
           )}
           style={{
             top: `${topPct}%`,
-            height: `${Math.max(heightPct, 1.2)}%`,
+            height: `${heightPct}%`,
           }}
         />,
         dragCreate.column,
@@ -938,7 +938,7 @@ export function WorkspaceCalendar({
               )}
               style={{
                 top: `${topPct}%`,
-                height: `${Math.max(heightPct, 1.2)}%`,
+                height: `${heightPct}%`,
               }}
             />,
             blockMove.column,
@@ -967,7 +967,7 @@ export function WorkspaceCalendar({
               )}
               style={{
                 top: `${topPct}%`,
-                height: `${Math.max(heightPct, 1.2)}%`,
+                height: `${heightPct}%`,
               }}
             />,
             blockResize.column,

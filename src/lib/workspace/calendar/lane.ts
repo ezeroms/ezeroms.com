@@ -1,9 +1,13 @@
 import type { CalendarTaskBlock } from "@/types/calendar";
 import { localDateKey } from "@/lib/workspace/calendar/time";
 
-const MINUTES_PER_DAY = 24 * 60;
-/** Keeps very short blocks readable (~18px on a 1440px grid). */
-const MIN_HEIGHT_PCT = 1.25;
+export const MINUTES_PER_DAY = 24 * 60;
+/**
+ * 15分の予定でもタイトルと時刻が隣の枠に食い込まない高さ。
+ * （旧 150px/時だと 15分=37px、最小高さで押し広げて重なっていた）
+ */
+export const WEEK_GRID_PX_PER_HOUR = 360;
+export const WEEK_GRID_HEIGHT_PX = WEEK_GRID_PX_PER_HOUR * 24;
 
 export type PlacedTaskBlock = {
   block: CalendarTaskBlock;
@@ -146,7 +150,7 @@ function packDay(
       block: span.block,
       dateKey,
       topPct,
-      heightPct: Math.min(Math.max(rawHeight, MIN_HEIGHT_PCT), 100 - topPct),
+      heightPct: Math.min(Math.max(rawHeight, 0), 100 - topPct),
       column,
       columnCount: 1,
       continuesBefore: span.continuesBefore,

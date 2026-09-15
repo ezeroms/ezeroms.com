@@ -86,6 +86,7 @@ export function TaskLane({
         const movable = Boolean(onTaskMoveStart) && persisted;
         const resizable = Boolean(onTaskResizeStart) && persisted;
         const moving = movingWorkBlockId === p.block.workBlockId;
+        const compact = p.heightPct <= (15 / (24 * 60)) * 100 + 1e-6;
         return (
           <button
             key={`${p.block.workBlockId}-${p.dateKey}-${p.column}`}
@@ -95,6 +96,7 @@ export function TaskLane({
             aria-busy={!persisted}
             className={cn(
               "sx-task-lane__chip",
+              compact && "sx-task-lane__chip--compact",
               done && "sx-task-lane__chip--done",
               p.block.taskPriority === "high" && "sx-task-lane__chip--high",
               movable && "sx-task-lane__chip--movable",
