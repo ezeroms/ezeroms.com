@@ -10,14 +10,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  return photoDetailMetadata("jumpai", slug);
+  return photoDetailMetadata("jampai", slug);
 }
 
-export default async function JumpaiPhotoPage({
+export default async function JampaiPhotoPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <PhotoDetailPage galleryId="jumpai" slug={slug} />;
+  return <PhotoDetailPage galleryId="jampai" slug={slug} />;
 }

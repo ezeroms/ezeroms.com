@@ -1,5 +1,5 @@
 /** Photos 配下のギャラリー ID（Smile / Jampai / Tabekake）。 */
-export type PhotoGalleryId = "smile" | "jumpai" | "tabekake";
+export type PhotoGalleryId = "smile" | "jampai" | "tabekake";
 
 /** 公開サイトでのページ公開状態 */
 export type PhotoGalleryStatus = "published" | "private";
@@ -33,17 +33,16 @@ export const PHOTO_GALLERIES: Record<PhotoGalleryId, PhotoGalleryMeta> = {
     basePath: "/smile/",
     adminPath: "/admin/smile/",
   },
-  jumpai: {
-    id: "jumpai",
-    table: "jumpai",
-    // UI 表記は Jampai。URL・DB id は歴史的経緯で jumpai のまま。
+  jampai: {
+    id: "jampai",
+    table: "jampai",
     label: "Jampai",
     description:
       "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
     status: "published",
     og_image: "",
-    basePath: "/jumpai/",
-    adminPath: "/admin/jumpai/",
+    basePath: "/jampai/",
+    adminPath: "/admin/jampai/",
   },
   tabekake: {
     id: "tabekake",
@@ -60,6 +59,13 @@ export const PHOTO_GALLERIES: Record<PhotoGalleryId, PhotoGalleryMeta> = {
 
 export function isPhotoGalleryId(v: string): v is PhotoGalleryId {
   return Object.keys(PHOTO_GALLERIES).includes(v);
+}
+
+/** 旧 ID `jumpai` も Jampai として扱う。 */
+export function resolvePhotoGalleryId(v: string): PhotoGalleryId | null {
+  if (v === "jumpai") return "jampai";
+  if (isPhotoGalleryId(v)) return v;
+  return null;
 }
 
 export function isPhotoGalleryStatus(v: string): v is PhotoGalleryStatus {

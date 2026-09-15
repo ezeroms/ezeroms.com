@@ -96,10 +96,10 @@ export function resolveBreadcrumbs(
     }
     return [{ label: "Photos" }, { label: "Smile" }];
   }
-  if (path.startsWith("/jumpai/")) {
-    if (isDetailUnder("/jumpai/", path)) {
+  if (path.startsWith("/jampai/")) {
+    if (isDetailUnder("/jampai/", path)) {
       return withCurrent(
-        [{ label: "Photos" }, { label: "Jampai", href: "/jumpai/" }],
+        [{ label: "Photos" }, { label: "Jampai", href: "/jampai/" }],
         "Photo",
       );
     }

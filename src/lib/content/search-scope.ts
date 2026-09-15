@@ -7,7 +7,7 @@ export type SearchScopeId =
   | "diary"
   | "column"
   | "smile"
-  | "jumpai"
+  | "jampai"
   | "tabekake"
   | "creative"
   | "experience"
@@ -31,7 +31,7 @@ const SCOPE_LABELS: Record<SearchScopeId, string> = {
   diary: "Diary",
   column: "Column",
   smile: "Smile",
-  jumpai: "Jampai",
+  jampai: "Jampai",
   tabekake: "Tabekake",
   creative: "Creative",
   experience: "Experience",
@@ -52,7 +52,7 @@ export const SEARCH_PATH_BY_SCOPE: Record<SearchScopeId, string> = {
   diary: "/diary/search/",
   column: "/column/search/",
   smile: "/smile/search/",
-  jumpai: "/jumpai/search/",
+  jampai: "/jampai/search/",
   tabekake: "/tabekake/search/",
   creative: "/works/creative/search/",
   experience: "/works/experience/search/",
@@ -72,7 +72,7 @@ export const SECTION_INDEX_BY_SCOPE: Record<SearchScopeId, string> = {
   diary: "/diary/",
   column: "/column/",
   smile: "/smile/",
-  jumpai: "/jumpai/",
+  jampai: "/jampai/",
   tabekake: "/tabekake/",
   creative: "/works/creative/",
   experience: "/works/experience/",
@@ -90,6 +90,7 @@ const VALID_SCOPES = new Set<string>(Object.keys(SCOPE_LABELS));
 
 export function coerceSearchScopeId(value: string): SearchScopeId | null {
   if (value === "notes") return "diary";
+  if (value === "jumpai") return "jampai";
   if (VALID_SCOPES.has(value)) return value as SearchScopeId;
   return null;
 }
@@ -140,7 +141,9 @@ export function resolveSearchScope(pathname: string): SearchScope {
     return getSearchScope("column");
   }
   if (path.startsWith("/smile/")) return getSearchScope("smile");
-  if (path.startsWith("/jumpai/")) return getSearchScope("jumpai");
+  if (path.startsWith("/jampai/") || path.startsWith("/jumpai/")) {
+    return getSearchScope("jampai");
+  }
   if (path.startsWith("/tabekake/")) return getSearchScope("tabekake");
   if (path.startsWith("/works/creative/") || path.startsWith("/work/")) {
     return getSearchScope("creative");

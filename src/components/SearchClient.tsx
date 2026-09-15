@@ -67,7 +67,7 @@ function SearchGroupResults({ group }: { group: SearchGroup }) {
   if (scope === "column") {
     return <ColumnList items={records as unknown as Column[]} hideEmpty />;
   }
-  if (scope === "smile" || scope === "jumpai" || scope === "tabekake") {
+  if (scope === "smile" || scope === "jampai" || scope === "tabekake") {
     return (
       <PhotoGallery
         items={records as unknown as Photo[]}
