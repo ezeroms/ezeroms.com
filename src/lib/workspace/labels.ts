@@ -76,7 +76,6 @@ export const PROJECT_STATUS_LABELS: Record<string, string> = {
 export const TASK_VIEWS = [
   { id: "inbox", label: "Inbox" },
   { id: "today", label: "Today" },
-  { id: "upcoming", label: "Upcoming" },
   { id: "overdue", label: "Overdue" },
   { id: "all", label: "All" },
   { id: "completed", label: "Done" },

@@ -11,7 +11,6 @@ export type TasksNavSelection =
 export const TASK_BOARD_VIEW_LABELS: Record<TaskViewId, string> = {
   all: "すべて",
   today: "今日",
-  upcoming: "近日",
   inbox: "Inbox",
   overdue: "期限切れ",
   completed: "完了",
@@ -65,17 +64,6 @@ export function filterTasksForBoard(
           task.scheduled_date === today &&
           (includeCompleted || task.status !== "done"),
       );
-    case "upcoming":
-      return tasks
-        .filter(
-          (task) =>
-            task.scheduled_date != null &&
-            task.scheduled_date > today &&
-            (includeCompleted || task.status !== "done"),
-        )
-        .sort((a, b) =>
-          (a.scheduled_date ?? "").localeCompare(b.scheduled_date ?? ""),
-        );
     case "overdue":
       return tasks.filter((task) => isTaskOverdue(task, now));
     case "completed":

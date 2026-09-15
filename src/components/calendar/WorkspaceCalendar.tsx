@@ -256,11 +256,11 @@ export function WorkspaceCalendar({
       calendars: scheduleXCalendars,
       events: scheduleXEventsRef.current,
       dayBoundaries: toScheduleXDayBoundaries(dayStartsHour),
-      // ~150px/時。eventWidth で右レーン（Task）の余白を確保する
+      // 300px/時。15分の予定でもタイトルと時刻が収まる（旧 150px/時だと枠が重なった）
       weekOptions: {
         eventOverlap: true,
         gridStep: 30,
-        gridHeight: 3600,
+        gridHeight: 7200,
         eventWidth: SCHEDULE_LANE_WIDTH_PERCENT,
         nDays: 7,
         // en-US でも 24h 軸（6:00…）を維持

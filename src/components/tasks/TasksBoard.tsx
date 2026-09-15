@@ -117,11 +117,6 @@ const SMART_VIEWS: {
 }[] = [
   { id: "all", label: TASK_BOARD_VIEW_LABELS.all, icon: ListTodo },
   { id: "today", label: TASK_BOARD_VIEW_LABELS.today, icon: CalendarDays },
-  {
-    id: "upcoming",
-    label: TASK_BOARD_VIEW_LABELS.upcoming,
-    icon: CalendarDays,
-  },
   { id: "inbox", label: TASK_BOARD_VIEW_LABELS.inbox, icon: Inbox },
   {
     id: "overdue",
