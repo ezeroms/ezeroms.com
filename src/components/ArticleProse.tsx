@@ -154,8 +154,25 @@ function enhanceCodeBlocks(root: HTMLElement) {
 }
 
 const DESKTOP_VIDEO_QUERY = "(min-width: 1080px)";
+const VIDEO_FRAME_CLASS = "article-video-frame";
 
-/** 本文動画はループ。縦型だけ PC で幅 60%。 */
+function syncPortraitVideoFrame(video: HTMLVideoElement) {
+  const parent = video.parentElement;
+  const inFrame = parent?.classList.contains(VIDEO_FRAME_CLASS) ?? false;
+  if (video.classList.contains("is-portrait")) {
+    if (inFrame) return;
+    const frame = document.createElement("div");
+    frame.className = VIDEO_FRAME_CLASS;
+    video.before(frame);
+    frame.appendChild(video);
+    return;
+  }
+  if (!inFrame || !parent) return;
+  parent.before(video);
+  parent.remove();
+}
+
+/** 本文動画はループ。縦型だけ PC で幅 60%、左右の空きは黒。 */
 function enhanceBodyVideos(root: HTMLElement): () => void {
   const desktop = window.matchMedia(DESKTOP_VIDEO_QUERY);
 
@@ -165,6 +182,7 @@ function enhanceBodyVideos(root: HTMLElement): () => void {
       const portrait =
         video.videoWidth > 0 && video.videoHeight > video.videoWidth;
       video.classList.toggle("is-portrait", portrait && desktop.matches);
+      syncPortraitVideoFrame(video);
     }
   }
 
