@@ -150,7 +150,7 @@ export async function searchContent(
     };
   }
 
-  if (scope === "smile" || scope === "jumpai" || scope === "tabekake") {
+  if (scope === "smile" || scope === "jampai" || scope === "tabekake") {
     return {
       query: trimmed,
       scope,

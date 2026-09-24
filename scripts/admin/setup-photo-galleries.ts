@@ -1,7 +1,7 @@
 /**
- * After applying supabase/migrations/20260719030000_photo_galleries_safe.sql:
+ * After applying photo gallery migrations:
  * 1) Copy rows from legacy `snap` → `smile`
- * 2) Upsert local Markdown into smile / jumpai
+ * 2) Upsert local Markdown into smile / jampai / tabekake
  *
  * Usage: npx tsx scripts/admin/setup-photo-galleries.ts
  */
@@ -74,16 +74,16 @@ function runMigrate(name: string) {
 async function main() {
   console.log("Checking photo gallery tables…\n");
   const smileOk = await tableExists("smile");
-  const jumpaiOk = await tableExists("jumpai");
+  const jampaiOk = await tableExists("jampai");
   const tabekakeOk = await tableExists("tabekake");
 
-  if (!smileOk || !jumpaiOk || !tabekakeOk) {
+  if (!smileOk || !jampaiOk || !tabekakeOk) {
     console.error("Missing tables:");
     if (!smileOk) console.error("  - smile");
-    if (!jumpaiOk) console.error("  - jumpai");
+    if (!jampaiOk) console.error("  - jampai");
     if (!tabekakeOk) console.error("  - tabekake");
     console.error(
-      "\nApply supabase/migrations/20260719030000_photo_galleries_safe.sql in the Supabase SQL Editor, then re-run this script.",
+      "\nApply supabase/migrations/ (including 20260910120000_rename_jumpai_to_jampai.sql) in the Supabase SQL Editor, then re-run this script.",
     );
     process.exit(1);
   }
@@ -93,10 +93,10 @@ async function main() {
 
   console.log("\nMigrating local Markdown…");
   runMigrate("smile");
-  runMigrate("jumpai");
+  runMigrate("jampai");
   runMigrate("tabekake");
 
-  console.log("\nDone. Admin Photos should now read from smile / jumpai / tabekake.");
+  console.log("\nDone. Admin Photos should now read from smile / jampai / tabekake.");
 }
 
 main().catch((error) => {

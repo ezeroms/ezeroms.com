@@ -286,7 +286,7 @@ async function migrateExperience() {
   await upsert("experience", rows);
 }
 
-async function migratePhotoGallery(table: "smile" | "jumpai" | "tabekake") {
+async function migratePhotoGallery(table: "smile" | "jampai" | "tabekake") {
   const rows = [];
   for (const file of listMdFiles(path.join(CONTENT, table))) {
     const { data, content } = readEntry(file);
@@ -319,8 +319,8 @@ async function migrateSmile() {
   await migratePhotoGallery("smile");
 }
 
-async function migrateJumpai() {
-  await migratePhotoGallery("jumpai");
+async function migrateJampai() {
+  await migratePhotoGallery("jampai");
 }
 
 async function migrateTabekake() {
@@ -404,7 +404,7 @@ async function main() {
   await run("giants", migrateGiants);
   await run("experience", migrateExperience);
   await run("smile", migrateSmile);
-  await run("jumpai", migrateJumpai);
+  await run("jampai", migrateJampai);
   await run("tabekake", migrateTabekake);
   await run("chronicle", migrateChronicle);
   await run("uidg", migrateUidg);

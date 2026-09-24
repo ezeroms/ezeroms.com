@@ -1,6 +1,6 @@
 -- Sample Smile / Jampai rows
--- 1) Run supabase/migrations/20260717100000_smile_jumpai.sql first
--- 2) Then this file, or: npm run migrate:smile && npm run migrate:jumpai
+-- Apply supabase/migrations/ (including 20260910120000_rename_jumpai_to_jampai.sql) first.
+-- Or: npm run migrate:smile && npm run migrate:jampai
 
 insert into public.smile (
   slug, title, date, location, camera, image_url, photo_tag, body_html, status, published_at
@@ -53,7 +53,7 @@ on conflict (slug) do update set
   published_at = excluded.published_at,
   updated_at = now();
 
-insert into public.jumpai (
+insert into public.jampai (
   slug, title, date, location, camera, image_url, photo_tag, body_html, status, published_at
 ) values
 (
