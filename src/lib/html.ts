@@ -11,7 +11,10 @@ import {
   type SpotifyEmbed,
 } from "@/lib/content/spotify-embed";
 import { repairLiteralMarkdownInHtml } from "@/lib/content/legacy-markdown";
-import { applyBlankParagraphClass } from "@/lib/admin/rich-text";
+import {
+  applyBlankParagraphClass,
+  expandAlignBlocks,
+} from "@/lib/admin/rich-text";
 
 /** Responsive 16:9 YouTube block for body HTML. */
 export function youtubeEmbedBlock(videoId: string): string {
@@ -142,7 +145,7 @@ export function embedSpotifyInHtml(html: string): string {
 
 /** Expand `[](youtube:ID)` / `[](spotify:type/ID)` (and labeled variants) before markdown parse. */
 export function preprocessMarkdownMedia(md: string): string {
-  let out = md.replace(
+  let out = expandAlignBlocks(md).replace(
     /\[([^\]]*)\]\(youtube:([\w-]{11})\)/g,
     (_m, _text, id: string) => youtubeEmbedBlock(id),
   );
@@ -320,6 +323,7 @@ export function sanitizeBody(html: string): string {
     {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
       "img",
+      "video",
       "h1",
       "h2",
       "iframe",
@@ -329,6 +333,7 @@ export function sanitizeBody(html: string): string {
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "title", "width", "height", "loading"],
+      video: ["src", "controls", "playsinline", "preload", "poster"],
       a: ["href", "name", "target", "rel"],
       iframe: [
         "src",
@@ -341,7 +346,12 @@ export function sanitizeBody(html: string): string {
         "referrerpolicy",
         "title",
       ],
-      "*": ["class", "id"],
+      "*": ["class", "id", "style"],
+    },
+    allowedStyles: {
+      "*": {
+        "text-align": [/^(?:left|center|right)$/],
+      },
     },
     allowedIframeHostnames: [
       "www.youtube.com",

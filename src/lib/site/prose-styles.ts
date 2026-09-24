@@ -38,7 +38,7 @@ export const articleHeadingClass = cn(
 export const articleFigureClass = cn(
   "[&_figure]:my-6 [&_figure]:mx-0 [&_figure]:w-full",
   "[&_figure_img]:mt-0 [&_figure_img]:block [&_figure_img]:w-full",
-  "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:leading-relaxed [&_figcaption]:text-muted-foreground",
+  "[&_figcaption]:mt-2 [&_figcaption]:text-center [&_figcaption]:text-sm [&_figcaption]:leading-relaxed [&_figcaption]:text-muted-foreground",
 );
 
 /** 詳細本文のインライン code（見出し付き記事向け）。 */
@@ -69,6 +69,7 @@ export const articleBodyClass = cn(
   proseBodyClass,
   proseBlockquoteClass,
   "[&_img]:mt-4 [&_img]:block [&_img]:h-auto [&_img]:w-full [&_img]:max-w-full [&_img]:rounded-lg",
+  "[&_video]:mt-4 [&_video]:block [&_video]:w-full [&_video]:max-w-full [&_video]:rounded-lg [&_video]:bg-black",
   articleFigureClass,
   "[&_p]:m-0 [&_p+p]:mt-3",
   // 空行スペーサーは段落マージンを付けず、1行分の高さだけ空ける

@@ -44,6 +44,16 @@ turndown.addRule("figures", {
   },
 });
 
+turndown.addRule("videos", {
+  filter: "video",
+  replacement(_content, node) {
+    const src = (node as HTMLElement).getAttribute("src") ?? "";
+    if (!src) return "";
+    const safe = src.replace(/"/g, "%22");
+    return `\n\n<video src="${safe}" controls playsinline preload="metadata"></video>\n\n`;
+  },
+});
+
 turndown.addRule("images", {
   filter(node) {
     return (
@@ -53,6 +63,33 @@ turndown.addRule("images", {
   },
   replacement(_content, node) {
     return markdownFromImage(node as HTMLImageElement);
+  },
+});
+
+function readBlockAlign(node: HTMLElement): "center" | "right" | null {
+  const style = node.getAttribute("style") ?? "";
+  const match = style.match(/text-align\s*:\s*(center|right)/i);
+  if (!match) return null;
+  return match[1].toLowerCase() as "center" | "right";
+}
+
+turndown.addRule("alignedBlock", {
+  filter(node) {
+    if (node.nodeType !== 1) return false;
+    const name = (node as HTMLElement).nodeName;
+    if (name !== "P" && name !== "H1" && name !== "H2" && name !== "H3") {
+      return false;
+    }
+    return readBlockAlign(node as HTMLElement) != null;
+  },
+  replacement(content, node) {
+    const align = readBlockAlign(node as HTMLElement);
+    const name = (node as HTMLElement).nodeName;
+    let body = content.trim();
+    if (name === "H1") body = `# ${body}`;
+    else if (name === "H2") body = `## ${body}`;
+    else if (name === "H3") body = `### ${body}`;
+    return `\n\n:::align-${align}\n${body}\n:::\n\n`;
   },
 });
 
@@ -106,7 +143,9 @@ function isVisuallyEmptyParagraph(node: HTMLElement): boolean {
 function isImageLikeNode(node: ChildNode | null): boolean {
   if (!node || node.nodeType !== 1) return false;
   const el = node as HTMLElement;
-  if (el.nodeName === "IMG" || el.nodeName === "FIGURE") return true;
+  if (el.nodeName === "IMG" || el.nodeName === "FIGURE" || el.nodeName === "VIDEO") {
+    return true;
+  }
   if (el.nodeName !== "P") return false;
   const text = (el.textContent ?? "")
     .replace(/\u00a0/g, " ")
@@ -190,14 +229,22 @@ export function stripEmptyParagraphsBesideImagesInHtml(html: string): string {
         /<p\b[^>]*>(?:\s|&nbsp;|\u00a0)*<img\b([^>]*)>(?:\s|&nbsp;|\u00a0)*<\/p>/gi,
         "<img$1>",
       )
+      .replace(
+        /<p\b[^>]*>(?:\s|&nbsp;|\u00a0)*(<video\b[\s\S]*?<\/video>)(?:\s|&nbsp;|\u00a0)*<\/p>/gi,
+        "$1",
+      )
       // 画像直前の空段落
       .replace(
-        /<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>\s*(?=<img\b|<figure\b)/gi,
+        /<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>\s*(?=<img\b|<figure\b|<video\b)/gi,
         "",
       )
       // 画像直後の空段落（保存・再読込時の余分なスペーサー）
       .replace(
         /(<img\b[^>]*>)\s*<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>/gi,
+        "$1",
+      )
+      .replace(
+        /(<\/video>)\s*<p>(?:\s|&nbsp;|\u00a0)*(?:<br\b[^>]*>\s*)*<\/p>/gi,
         "$1",
       )
       .replace(
@@ -222,9 +269,29 @@ export function applyBlankParagraphClass(html: string): string {
   );
 }
 
+/**
+ * `:::align-center` ブロックを `style="text-align"` 付き HTML にする。
+ * 中の Markdown（太字・リンクなど）は先に HTML へ展開する。
+ */
+export function expandAlignBlocks(md: string): string {
+  return md.replace(
+    /^:::align-(center|right)\n([\s\S]*?)\n:::$/gm,
+    (_match, align: string, inner: string) => {
+      const html = marked.parse(inner.trim(), { async: false }) as string;
+      return html.replace(
+        /<(p|h[1-3])\b([^>]*)>/gi,
+        (full, tag: string, rest: string) => {
+          if (/text-align\s*:/i.test(rest)) return full;
+          return `<${tag}${rest} style="text-align: ${align}">`;
+        },
+      );
+    },
+  );
+}
+
 /** Markdown → HTML for TipTap initial / sync content. */
 export function markdownToEditorHtml(md: string): string {
-  const trimmed = stripNbspBesideImagesInMarkdown(md.trim());
+  const trimmed = stripNbspBesideImagesInMarkdown(expandAlignBlocks(md.trim()));
   if (!trimmed) return "";
   const parsed = marked.parse(trimmed, { async: false }) as string;
   return stripEmptyParagraphsBesideImagesInHtml(

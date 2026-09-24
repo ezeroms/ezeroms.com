@@ -15,7 +15,7 @@ import {
   type AdminRichTextEditorHandle,
 } from "@/components/admin/AdminRichTextEditor";
 import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
-import { compressImageForUpload } from "@/lib/media/client-compress-image";
+import { uploadBodyMedia } from "@/lib/media/upload-body-media";
 import {
   nowDatetimeLocalValue,
   toDatetimeLocalValue,
@@ -187,46 +187,13 @@ export function DiaryEditorForm({
   }, [focusMode]);
 
   async function uploadBodyImage(file: File): Promise<string | null> {
-    try {
-      const prepared = await compressImageForUpload(file);
-      const form = new FormData();
-      form.set("file", prepared);
-      form.set("folder", mediaFolder);
-      const res = await fetch("/api/admin/diary/media/upload/", {
-        method: "POST",
-        body: form,
-      });
-      const rawText = await res.text();
-      let data: { error?: string; image_url?: string; path?: string } = {};
-      try {
-        data = JSON.parse(rawText) as typeof data;
-      } catch {
-        const tooLarge =
-          res.status === 413 ||
-          /request entity too large|payload too large|body.*limit/i.test(
-            rawText,
-          );
-        setError(
-          tooLarge
-            ? "画像が大きすぎてアップロードできませんでした。もう少し小さい画像でお試しください。"
-            : `画像アップロードの応答が不正です（HTTP ${res.status}）`,
-        );
-        return null;
-      }
-      if (!res.ok || !data.image_url) {
-        setError(data.error || "画像のアップロードに失敗しました");
-        return null;
-      }
-      setError(null);
-      return data.image_url;
-    } catch (error) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "画像のアップロードに失敗しました",
-      );
+    const result = await uploadBodyMedia(file, mediaFolder);
+    if ("error" in result) {
+      setError(result.error);
       return null;
     }
+    setError(null);
+    return result.url;
   }
 
   async function onSubmit(e: FormEvent) {
@@ -309,6 +276,7 @@ export function DiaryEditorForm({
             disabled={loading}
             placeholder="今日あったこと、考えたこと…"
             minHeightClassName="min-h-[240px]"
+            allowVideo
             onUploadImage={uploadBodyImage}
             toolbarEnd={
               showInlineFocusToggle ? (
@@ -393,6 +361,7 @@ export function DiaryEditorForm({
               placeholder="今日あったこと、考えたこと…"
               variant="document"
               minHeightClassName="min-h-[12rem]"
+              allowVideo
               onUploadImage={uploadBodyImage}
               scrollInnerClassName="mx-auto w-full max-w-3xl px-6 pb-20 pt-8 sm:px-10"
               className="admin-rich-text--focus h-full max-h-none min-h-0 flex-1 !border-0 !rounded-none !shadow-none"

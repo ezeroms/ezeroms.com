@@ -12,12 +12,17 @@ import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/r
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
   Code,
   Heading1,
   Heading2,
   Heading3,
+  Film,
   ImageIcon,
   Italic,
   Link2,
@@ -30,6 +35,8 @@ import {
 } from "lucide-react";
 import { AdminRichTextLinkModal } from "@/components/admin/AdminRichTextLinkModal";
 import { EditorImage } from "@/components/admin/AdminRichTextImage";
+import { EditorVideo } from "@/components/admin/AdminRichTextVideo";
+import { isVideoFile } from "@/lib/media/body-video";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import {
@@ -51,7 +58,7 @@ function pruneEmptyParagraphsBeforeImages(editor: Editor): number {
     const parent = $pos.node($pos.depth);
     const next =
       index < parent.childCount - 1 ? parent.child(index + 1) : null;
-    if (next?.type.name === "image") {
+    if (next?.type.name === "image" || next?.type.name === "video") {
       ranges.push({ from: pos, to: pos + node.nodeSize });
     }
   });
@@ -82,6 +89,8 @@ type Props = {
   minHeightClassName?: string;
   /** 指定時にツールバー／ペースト／ドロップで本文画像を挿入できる */
   onUploadImage?: (file: File) => Promise<string | null>;
+  /** 画像と同じアップロード先に動画も置ける */
+  allowVideo?: boolean;
   /**
    * document: ツールバーを上部ヘッダーに固定し、beforeContent と本文を
    * まとめてスクロールする（Docs 集中モード向け）
@@ -144,6 +153,7 @@ type ToolbarState = {
   isBulletList: boolean;
   isOrderedList: boolean;
   isBlockquote: boolean;
+  align: "left" | "center" | "right";
   linkHref: string;
 };
 
@@ -160,6 +170,7 @@ const emptyToolbar: ToolbarState = {
   isBulletList: false,
   isOrderedList: false,
   isBlockquote: false,
+  align: "left",
   linkHref: "",
 };
 
@@ -178,6 +189,11 @@ function readToolbarState(editor: Editor | null): ToolbarState {
     isBulletList: editor.isActive("bulletList"),
     isOrderedList: editor.isActive("orderedList"),
     isBlockquote: editor.isActive("blockquote"),
+    align: editor.isActive({ textAlign: "center" })
+      ? "center"
+      : editor.isActive({ textAlign: "right" })
+        ? "right"
+        : "left",
     linkHref: (editor.getAttributes("link").href as string | undefined) ?? "",
   };
 }
@@ -193,6 +209,7 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
       className,
       minHeightClassName = "min-h-[180px]",
       onUploadImage,
+      allowVideo = false,
       variant = "default",
       toolbarEnd,
       beforeContent,
@@ -206,6 +223,8 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
   const [linkModalHref, setLinkModalHref] = useState("");
   const uploadRef = useRef(onUploadImage);
   uploadRef.current = onUploadImage;
+  const allowVideoRef = useRef(allowVideo);
+  allowVideoRef.current = allowVideo;
   const editorRef = useRef<Editor | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
@@ -229,7 +248,14 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
       for (const file of files) {
         const url = await upload(file);
         if (!url) continue;
-        ed.chain().focus().setImage({ src: url }).run();
+        if (isVideoFile(file)) {
+          ed.chain()
+            .focus()
+            .insertContent({ type: "video", attrs: { src: url } })
+            .run();
+        } else {
+          ed.chain().focus().setImage({ src: url }).run();
+        }
       }
       pruneEmptyParagraphsBeforeImages(ed);
       emitMarkdown(ed);
@@ -255,12 +281,18 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
           class: null,
         },
       }),
+      EditorVideo,
       EditorImage.configure({
         inline: false,
         allowBase64: false,
         HTMLAttributes: {
           class: "max-h-80 w-auto rounded-md",
         },
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right"],
+        defaultAlignment: "left",
       }),
       Placeholder.configure({
         placeholder,
@@ -300,8 +332,10 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
       },
       handlePaste(_view, event) {
         if (!uploadRef.current || !event.clipboardData) return false;
-        const files = Array.from(event.clipboardData.files).filter((f) =>
-          f.type.startsWith("image/"),
+        const files = Array.from(event.clipboardData.files).filter(
+          (f) =>
+            f.type.startsWith("image/") ||
+            (allowVideoRef.current && isVideoFile(f)),
         );
         if (!files.length) return false;
         event.preventDefault();
@@ -310,8 +344,10 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
       },
       handleDrop(_view, event) {
         if (!uploadRef.current || !event.dataTransfer) return false;
-        const files = Array.from(event.dataTransfer.files).filter((f) =>
-          f.type.startsWith("image/"),
+        const files = Array.from(event.dataTransfer.files).filter(
+          (f) =>
+            f.type.startsWith("image/") ||
+            (allowVideoRef.current && isVideoFile(f)),
         );
         if (!files.length) return false;
         event.preventDefault();
@@ -443,7 +479,11 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
         <input
           ref={imageInputRef}
           type="file"
-          accept="image/*,.heic,.heif,image/heic,image/heif"
+          accept={
+            allowVideo
+              ? "image/*,.heic,.heif,image/heic,image/heif,video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov,.m4v"
+              : "image/*,.heic,.heif,image/heic,image/heif"
+          }
           className="sr-only"
           disabled={toolbarDisabled}
           onChange={(e) => {
@@ -510,11 +550,21 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
           </ToolbarButton>
           {onUploadImage ? (
             <ToolbarButton
-              label={uploadingImage ? "画像アップロード中" : "画像を挿入"}
+              label={
+                uploadingImage
+                  ? "アップロード中"
+                  : allowVideo
+                    ? "画像・動画を挿入"
+                    : "画像を挿入"
+              }
               disabled={toolbarDisabled}
               onClick={() => imageInputRef.current?.click()}
             >
-              <ImageIcon className="h-4 w-4" />
+              {allowVideo ? (
+                <Film className="h-4 w-4" />
+              ) : (
+                <ImageIcon className="h-4 w-4" />
+              )}
             </ToolbarButton>
           ) : null}
           <span className="mx-1 h-4 w-px bg-border" aria-hidden />
@@ -564,6 +614,31 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
           >
             <ListOrdered className="h-4 w-4" />
           </ToolbarButton>
+          <span className="mx-1 h-4 w-px bg-border" aria-hidden />
+          <ToolbarButton
+            label="左揃え"
+            disabled={toolbarDisabled}
+            active={toolbar.align === "left"}
+            onClick={() => editor?.chain().focus().setTextAlign("left").run()}
+          >
+            <AlignLeft className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="中央揃え"
+            disabled={toolbarDisabled}
+            active={toolbar.align === "center"}
+            onClick={() => editor?.chain().focus().setTextAlign("center").run()}
+          >
+            <AlignCenter className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            label="右揃え"
+            disabled={toolbarDisabled}
+            active={toolbar.align === "right"}
+            onClick={() => editor?.chain().focus().setTextAlign("right").run()}
+          >
+            <AlignRight className="h-4 w-4" />
+          </ToolbarButton>
           <ToolbarButton
             label="引用"
             disabled={toolbarDisabled}
@@ -602,7 +677,7 @@ export const AdminRichTextEditor = forwardRef<AdminRichTextEditorHandle, Props>(
       </div>
       {uploadingImage ? (
         <p className="m-0 shrink-0 border-t border-border px-3 py-1.5 text-xs text-muted-foreground">
-          画像をアップロード中…
+          アップロード中…
         </p>
       ) : null}
       <AdminRichTextLinkModal
