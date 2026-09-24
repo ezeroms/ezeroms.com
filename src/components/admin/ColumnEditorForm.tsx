@@ -212,7 +212,6 @@ export function ColumnEditorForm({
       title !== baseline.title ||
       markdown !== baseline.bodyMd ||
       date !== baseline.date ||
-      categories !== baseline.categories ||
       tags !== baseline.tags ||
       ogImage !== baseline.ogImage ||
       status !== baseline.status;
@@ -253,7 +252,6 @@ export function ColumnEditorForm({
         title,
         bodyMd: markdown,
         date,
-        categories,
         tags,
         ogImage,
         status,
