@@ -50,7 +50,7 @@ turndown.addRule("videos", {
     const src = (node as HTMLElement).getAttribute("src") ?? "";
     if (!src) return "";
     const safe = src.replace(/"/g, "%22");
-    return `\n\n<video src="${safe}" controls playsinline preload="metadata"></video>\n\n`;
+    return `\n\n<video src="${safe}" controls playsinline preload="metadata" loop></video>\n\n`;
   },
 });
 

@@ -333,7 +333,7 @@ export function sanitizeBody(html: string): string {
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
       img: ["src", "alt", "title", "width", "height", "loading"],
-      video: ["src", "controls", "playsinline", "preload", "poster"],
+      video: ["src", "controls", "playsinline", "preload", "poster", "loop"],
       a: ["href", "name", "target", "rel"],
       iframe: [
         "src",

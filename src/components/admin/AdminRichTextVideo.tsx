@@ -42,6 +42,7 @@ export const EditorVideo = Node.create({
         controls: "true",
         playsinline: "true",
         preload: "metadata",
+        loop: "true",
       }),
     ];
   },

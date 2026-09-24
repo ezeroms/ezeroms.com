@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
 import hljs from "highlight.js/lib/core";
 import bash from "highlight.js/lib/languages/bash";
 import css from "highlight.js/lib/languages/css";
@@ -146,6 +153,38 @@ function enhanceCodeBlocks(root: HTMLElement) {
   });
 }
 
+const DESKTOP_VIDEO_QUERY = "(min-width: 1080px)";
+
+/** 本文動画はループ。縦型だけ PC で幅 60%。 */
+function enhanceBodyVideos(root: HTMLElement): () => void {
+  const desktop = window.matchMedia(DESKTOP_VIDEO_QUERY);
+
+  function applyAll() {
+    for (const video of root.querySelectorAll("video")) {
+      video.loop = true;
+      const portrait =
+        video.videoWidth > 0 && video.videoHeight > video.videoWidth;
+      video.classList.toggle("is-portrait", portrait && desktop.matches);
+    }
+  }
+
+  applyAll();
+  const onMeta = (event: Event) => {
+    if (event.target instanceof HTMLVideoElement) applyAll();
+  };
+  root.addEventListener("loadedmetadata", onMeta, true);
+  desktop.addEventListener("change", applyAll);
+  // 本文 HTML の再適用で属性が戻ることがあるので、動画ノードの入れ替えも見る
+  const observer = new MutationObserver(applyAll);
+  observer.observe(root, { childList: true, subtree: true });
+
+  return () => {
+    root.removeEventListener("loadedmetadata", onMeta, true);
+    desktop.removeEventListener("change", applyAll);
+    observer.disconnect();
+  };
+}
+
 function imageCaption(img: HTMLImageElement): string {
   const fromFig = img
     .closest("figure")
@@ -185,10 +224,11 @@ export function ArticleProse({ html, className }: Props) {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     enhanceCodeBlocks(el);
+    return enhanceBodyVideos(el);
   }, [html]);
 
   const closeLightbox = useCallback(() => {

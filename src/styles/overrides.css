@@ -25,6 +25,15 @@ input[type="search"]::-webkit-search-decoration {
   line-height: inherit;
 }
 
+/* 縦型の本文動画は PC だけ幅を抑え、一画面に収める。横型と SP は全幅のまま。 */
+@media (min-width: 1080px) {
+  .article-prose video.is-portrait {
+    width: 60%;
+    max-width: 60%;
+    margin-inline: auto;
+  }
+}
+
 /* 本文画像は元サイズに関わらず本文幅いっぱいに広げる（HTML width 属性より優先） */
 .article-prose img,
 .article-item img {
