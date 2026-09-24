@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminContentModal } from "@/components/admin/AdminContentModal";
 import {
@@ -7,6 +8,7 @@ import {
   ColumnEditorForm,
   type ColumnEditorInitial,
 } from "@/components/admin/ColumnEditorForm";
+import { DiaryFocusModeButton } from "@/components/admin/DiaryEditorForm";
 import {
   deleteAdminItem,
   useAdminEditorModal,
@@ -31,7 +33,13 @@ export function ColumnEditModal({ initial = null, open, onClose }: Props) {
     deleteError,
     setDeleteError,
   } = useAdminEditorModal(open);
+  const [focusMode, setFocusMode] = useState(false);
+  const focusModeToggleRef = useRef<(() => void) | null>(null);
   const isEdit = Boolean(initial?.slug);
+
+  useEffect(() => {
+    if (!open) setFocusMode(false);
+  }, [open]);
 
   async function onDelete() {
     if (!initial?.slug) return;
@@ -61,6 +69,13 @@ export function ColumnEditModal({ initial = null, open, onClose }: Props) {
       deleting={deleting}
       deleteError={deleteError}
       onDelete={isEdit ? onDelete : undefined}
+      closeOnEscape={!focusMode}
+      headerRight={
+        <DiaryFocusModeButton
+          active={focusMode}
+          onClick={() => focusModeToggleRef.current?.()}
+        />
+      }
     >
       <ColumnEditorForm
         key={initial?.slug ?? "new"}
@@ -69,6 +84,10 @@ export function ColumnEditModal({ initial = null, open, onClose }: Props) {
         onLoadingChange={setSaving}
         onDirtyChange={setDirty}
         onSaved={onClose}
+        focusMode={focusMode}
+        onFocusModeChange={setFocusMode}
+        showInlineFocusToggle={false}
+        focusModeToggleRef={focusModeToggleRef}
       />
     </AdminContentModal>
   );

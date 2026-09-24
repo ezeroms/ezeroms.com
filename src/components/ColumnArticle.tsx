@@ -52,11 +52,16 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
           </div>
         ) : null}
 
-        <div className="my-6 h-px w-full bg-border" aria-hidden />
+        <div className="my-4 h-px w-full bg-border-subtle" aria-hidden />
 
         <ArticleProse
           html={html}
-          className={cn(articleBodyClass, articleDetailClass)}
+          className={cn(
+            articleBodyClass,
+            articleDetailClass,
+            // 見出し margin を区切り線の余白に足さない（Diary の hr と同じ上下 1rem）
+            "[&_hr+h2]:mt-0 [&_hr+h3]:mt-0 [&_h2:has(+hr)]:mb-0 [&_h3:has(+hr)]:mb-0",
+          )}
         />
       </article>
     </div>

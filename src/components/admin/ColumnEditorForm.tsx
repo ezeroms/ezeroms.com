@@ -1,8 +1,19 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import {
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { AdminRichTextEditor } from "@/components/admin/AdminRichTextEditor";
+import {
+  AdminRichTextEditor,
+  type AdminRichTextEditorHandle,
+} from "@/components/admin/AdminRichTextEditor";
+import { DiaryFocusModeButton } from "@/components/admin/DiaryEditorForm";
 import { ignorePasswordManagersProps } from "@/lib/admin/password-managers";
 import { compressImageForUpload } from "@/lib/media/client-compress-image";
 import {
@@ -11,6 +22,7 @@ import {
 } from "@/lib/workspace/labels";
 import { OgImageField } from "@/components/admin/OgImageField";
 import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -36,6 +48,10 @@ export function ColumnEditorForm({
   onSaved,
   onLoadingChange,
   onDirtyChange,
+  focusMode: focusModeProp,
+  onFocusModeChange,
+  showInlineFocusToggle = true,
+  focusModeToggleRef,
 }: {
   initial?: ColumnEditorInitial;
   formId?: string;
@@ -43,15 +59,23 @@ export function ColumnEditorForm({
   onSaved?: () => void;
   onLoadingChange?: (loading: boolean) => void;
   onDirtyChange?: (dirty: boolean) => void;
+  focusMode?: boolean;
+  onFocusModeChange?: (next: boolean) => void;
+  showInlineFocusToggle?: boolean;
+  focusModeToggleRef?: MutableRefObject<(() => void) | null>;
 }) {
   const router = useRouter();
-  const isEdit = Boolean(initial?.slug);
+  const editorRef = useRef<AdminRichTextEditorHandle>(null);
+  const [internalFocusMode, setInternalFocusMode] = useState(false);
+  const focusMode = focusModeProp ?? internalFocusMode;
+  const [savedSlug, setSavedSlug] = useState(initial?.slug ?? "");
+  const isEdit = Boolean(savedSlug);
 
   const [mediaFolder] = useState(
     () => initial?.slug || `draft-${generateContentSlug(12)}`,
   );
 
-  const [baseline] = useState(() => ({
+  const [baseline, setBaseline] = useState(() => ({
     title: initial?.title ?? "",
     bodyMd: initial?.body_md ?? "",
     date: initial?.date
@@ -86,6 +110,55 @@ export function ColumnEditorForm({
   useEffect(() => {
     onDirtyChange?.(dirty);
   }, [dirty, onDirtyChange]);
+
+  function setFocusMode(next: boolean) {
+    const latest = editorRef.current?.getMarkdown();
+    if (latest != null) setBodyMd(latest);
+    if (onFocusModeChange) onFocusModeChange(next);
+    else setInternalFocusMode(next);
+  }
+
+  function toggleFocusMode() {
+    setFocusMode(!focusMode);
+  }
+
+  useEffect(() => {
+    if (!focusModeToggleRef) return;
+    focusModeToggleRef.current = toggleFocusMode;
+    return () => {
+      if (focusModeToggleRef.current === toggleFocusMode) {
+        focusModeToggleRef.current = null;
+      }
+    };
+  }, [focusModeToggleRef, focusMode, onFocusModeChange]);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      const key = event.key.toLowerCase();
+      if ((event.metaKey || event.ctrlKey) && event.shiftKey && key === "f") {
+        event.preventDefault();
+        toggleFocusMode();
+        return;
+      }
+      if (event.key === "Escape" && focusMode) {
+        event.preventDefault();
+        event.stopPropagation();
+        setFocusMode(false);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- toggle uses latest focusMode via closure
+  }, [focusMode, onFocusModeChange]);
+
+  useEffect(() => {
+    if (!focusMode) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [focusMode]);
 
   async function uploadBodyImage(file: File): Promise<string | null> {
     try {
@@ -132,8 +205,19 @@ export function ColumnEditorForm({
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!dirty || loading) return;
-    if (!bodyMd.trim()) {
+    if (loading) return;
+    const markdown = editorRef.current?.getMarkdown() ?? bodyMd;
+    if (markdown !== bodyMd) setBodyMd(markdown);
+    const nextDirty =
+      title !== baseline.title ||
+      markdown !== baseline.bodyMd ||
+      date !== baseline.date ||
+      categories !== baseline.categories ||
+      tags !== baseline.tags ||
+      ogImage !== baseline.ogImage ||
+      status !== baseline.status;
+    if (!nextDirty) return;
+    if (!markdown.trim()) {
       setError("本文を入力してください");
       return;
     }
@@ -142,14 +226,14 @@ export function ColumnEditorForm({
     try {
       const payload = {
         title,
-        body_md: bodyMd,
+        body_md: markdown,
         date: new Date(date).toISOString(),
         tags,
         og_image: ogImage,
         status,
       };
       const res = await fetch(
-        isEdit ? `/api/admin/column/${initial!.slug}/` : "/api/admin/column/",
+        isEdit ? `/api/admin/column/${savedSlug}/` : "/api/admin/column/",
         {
           method: isEdit ? "PATCH" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -164,8 +248,18 @@ export function ColumnEditorForm({
         setError(data.error || "保存に失敗しました");
         return;
       }
+      if (data.item?.slug) setSavedSlug(data.item.slug);
+      setBaseline({
+        title,
+        bodyMd: markdown,
+        date,
+        categories,
+        tags,
+        ogImage,
+        status,
+      });
       router.refresh();
-      onSaved?.();
+      if (!focusMode) onSaved?.();
     } catch {
       setError("通信エラーが発生しました");
     } finally {
@@ -173,7 +267,20 @@ export function ColumnEditorForm({
     }
   }
 
+  const focusTitle = (
+    <input
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      placeholder="記事タイトル"
+      aria-label="タイトル"
+      required
+      className="m-0 w-full border-0 bg-transparent p-0 text-[1.65rem] font-semibold leading-snug tracking-tight text-foreground outline-none placeholder:text-muted-foreground"
+      {...ignorePasswordManagersProps}
+    />
+  );
+
   return (
+    <>
     <form
       id={formId}
       className="flex flex-col gap-4"
@@ -196,15 +303,26 @@ export function ColumnEditorForm({
 
       <div className="space-y-2">
         <Label htmlFor="column-body">本文</Label>
-        <AdminRichTextEditor
-          id="column-body"
-          value={bodyMd}
-          onChange={setBodyMd}
-          disabled={loading}
-          placeholder="本文を書く…"
-          minHeightClassName="min-h-[280px]"
-          onUploadImage={uploadBodyImage}
-        />
+        {focusMode ? null : (
+          <AdminRichTextEditor
+            ref={editorRef}
+            id="column-body"
+            value={bodyMd}
+            onChange={setBodyMd}
+            disabled={loading}
+            placeholder="本文を書く…"
+            minHeightClassName="min-h-[280px]"
+            onUploadImage={uploadBodyImage}
+            toolbarEnd={
+              showInlineFocusToggle ? (
+                <DiaryFocusModeButton
+                  active={false}
+                  onClick={toggleFocusMode}
+                />
+              ) : undefined
+            }
+          />
+        )}
       </div>
 
       <OgImageField
@@ -259,5 +377,42 @@ export function ColumnEditorForm({
         </button>
       ) : null}
     </form>
+    {focusMode && typeof document !== "undefined"
+      ? createPortal(
+          <div className="fixed inset-0 z-[220] flex flex-col border-0 bg-card">
+            <AdminRichTextEditor
+              ref={editorRef}
+              id="column-body-focus"
+              value={bodyMd}
+              onChange={setBodyMd}
+              disabled={loading}
+              placeholder="本文を書く…"
+              variant="document"
+              minHeightClassName="min-h-[12rem]"
+              onUploadImage={uploadBodyImage}
+              beforeContent={<div className="pb-3">{focusTitle}</div>}
+              scrollInnerClassName="mx-auto w-full max-w-3xl px-6 pb-20 pt-8 sm:px-10"
+              className="admin-rich-text--focus h-full max-h-none min-h-0 flex-1 !border-0 !rounded-none !shadow-none"
+              toolbarEnd={
+                <>
+                  <Button
+                    type="submit"
+                    form={formId}
+                    size="sm"
+                    disabled={loading || !dirty}
+                  >
+                    {loading ? "保存中…" : isEdit ? "更新" : "追加"}
+                  </Button>
+                  <DiaryFocusModeButton active onClick={toggleFocusMode} />
+                </>
+              }
+            />
+          </div>,
+          document.querySelector(".admin-app") ??
+            document.querySelector(".admin-root") ??
+            document.body,
+        )
+      : null}
+    </>
   );
 }
