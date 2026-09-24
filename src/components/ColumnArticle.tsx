@@ -36,7 +36,7 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
         </h1>
 
         {tags.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-6 flex flex-wrap gap-2">
             {tags.map((tag) => (
               <Link
                 key={tag}
@@ -52,11 +52,10 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
           </div>
         ) : null}
 
-        <div className="my-4 h-px w-full bg-border-subtle" aria-hidden />
-
         <ArticleProse
           html={html}
           className={cn(
+            "mt-8",
             articleBodyClass,
             articleDetailClass,
             // 見出し margin を区切り線の余白に足さない（Diary の hr と同じ上下 1rem）
