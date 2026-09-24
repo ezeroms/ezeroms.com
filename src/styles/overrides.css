@@ -25,15 +25,19 @@ input[type="search"]::-webkit-search-decoration {
   line-height: inherit;
 }
 
-/* 縦型の本文動画は PC だけ幅を抑え、空いた左右は黒で埋める。横型と SP は全幅のまま。 */
+/* 縦型の本文動画は PC だけ幅を抑え、空いた左右は黒で埋める。横型と SP は全幅のまま。
+   黒帯の角は本文画像と同じ 8px。中の動画は直角にして、角が二重に丸まらないようにする。 */
 @media (min-width: 1080px) {
   .article-prose .article-video-frame:has(> video.is-portrait) {
+    overflow: hidden;
+    border-radius: 0.5rem;
     background: #000;
   }
   .article-prose video.is-portrait {
     width: 60%;
     max-width: 60%;
     margin-inline: auto;
+    border-radius: 0;
   }
 }
 
