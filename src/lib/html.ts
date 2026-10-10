@@ -16,6 +16,35 @@ import {
   expandAlignBlocks,
 } from "@/lib/admin/rich-text";
 
+/**
+ * Paragraph whose only child is a single anchor.
+ * The match must stay inside one `<p>`. A pattern that reaches the next
+ * `</a></p>` swallows a later media URL when an earlier paragraph starts
+ * with a link and continues with text.
+ */
+function standaloneAnchorHref(paragraph: string): string | null {
+  const inner = paragraph
+    .replace(/^<p\b[^>]*>/i, "")
+    .replace(/<\/p>$/i, "")
+    .trim();
+  const match = inner.match(/^<a\b([^>]*)>([\s\S]*)<\/a>$/i);
+  if (!match) return null;
+  if (/<\/a\s*>/i.test(match[2])) return null;
+  const hrefMatch = match[1].match(/\bhref\s*=\s*(["'])([^"']+)\1/i);
+  return hrefMatch ? hrefMatch[2] : null;
+}
+
+function mapStandaloneAnchorParagraphs(
+  html: string,
+  convert: (href: string) => string | null,
+): string {
+  return html.replace(/<p\b[^>]*>[\s\S]*?<\/p>/gi, (paragraph) => {
+    const href = standaloneAnchorHref(paragraph);
+    if (!href) return paragraph;
+    return convert(href) ?? paragraph;
+  });
+}
+
 /** Responsive 16:9 YouTube block for body HTML. */
 export function youtubeEmbedBlock(videoId: string): string {
   const src = youtubeEmbedSrc(videoId);
@@ -36,20 +65,14 @@ export function youtubeEmbedBlock(videoId: string): string {
 export function embedYoutubeInHtml(html: string): string {
   if (!html) return html;
 
-  let out = html;
-
-  // Paragraph whose only content is a YouTube link → embed
-  out = out.replace(
-    /<p>\s*<a\b[^>]*\bhref=(["'])([^"']+)\1[^>]*>[\s\S]*?<\/a>\s*<\/p>/gi,
-    (match, _q, href: string) => {
-      if (href.startsWith("youtube:")) {
-        const id = href.slice("youtube:".length);
-        if (/^[\w-]{11}$/.test(id)) return youtubeEmbedBlock(id);
-      }
-      const id = parseYoutubeVideoId(href);
-      return id ? youtubeEmbedBlock(id) : match;
-    },
-  );
+  let out = mapStandaloneAnchorParagraphs(html, (href) => {
+    if (href.startsWith("youtube:")) {
+      const id = href.slice("youtube:".length);
+      if (/^[\w-]{11}$/.test(id)) return youtubeEmbedBlock(id);
+    }
+    const id = parseYoutubeVideoId(href);
+    return id ? youtubeEmbedBlock(id) : null;
+  });
 
   // Empty legacy `youtube:ID` anchors (often from `[](youtube:…)`)
   out = out.replace(
@@ -103,15 +126,10 @@ export function spotifyEmbedBlock(embed: SpotifyEmbed): string {
 export function embedSpotifyInHtml(html: string): string {
   if (!html) return html;
 
-  let out = html;
-
-  out = out.replace(
-    /<p>\s*<a\b[^>]*\bhref=(["'])([^"']+)\1[^>]*>[\s\S]*?<\/a>\s*<\/p>/gi,
-    (match, _q, href: string) => {
-      const parsed = parseSpotifyEmbed(href);
-      return parsed ? spotifyEmbedBlock(parsed) : match;
-    },
-  );
+  let out = mapStandaloneAnchorParagraphs(html, (href) => {
+    const parsed = parseSpotifyEmbed(href);
+    return parsed ? spotifyEmbedBlock(parsed) : null;
+  });
 
   out = out.replace(
     /<a\b[^>]*\bhref=(["'])(spotify:(?:track|album|playlist|episode|show|artist|podcast)[:/][0-9A-Za-z]+)\1[^>]*>\s*<\/a>/gi,
