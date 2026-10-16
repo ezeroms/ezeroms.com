@@ -52,6 +52,16 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/jumpai",
+        destination: "/jampai/",
+        permanent: true,
+      },
+      {
+        source: "/jumpai/:slug*",
+        destination: "/jampai/:slug*",
+        permanent: true,
+      },
+      {
         source: "/kuikake",
         destination: "/tabekake/",
         permanent: true,

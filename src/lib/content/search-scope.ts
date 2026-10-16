@@ -52,7 +52,7 @@ export const SEARCH_PATH_BY_SCOPE: Record<SearchScopeId, string> = {
   diary: "/diary/search/",
   column: "/column/search/",
   smile: "/smile/search/",
-  jumpai: "/jumpai/search/",
+  jumpai: "/jampai/search/",
   tabekake: "/tabekake/search/",
   creative: "/works/creative/search/",
   experience: "/works/experience/search/",
@@ -72,7 +72,7 @@ export const SECTION_INDEX_BY_SCOPE: Record<SearchScopeId, string> = {
   diary: "/diary/",
   column: "/column/",
   smile: "/smile/",
-  jumpai: "/jumpai/",
+  jumpai: "/jampai/",
   tabekake: "/tabekake/",
   creative: "/works/creative/",
   experience: "/works/experience/",
@@ -140,7 +140,9 @@ export function resolveSearchScope(pathname: string): SearchScope {
     return getSearchScope("column");
   }
   if (path.startsWith("/smile/")) return getSearchScope("smile");
-  if (path.startsWith("/jumpai/")) return getSearchScope("jumpai");
+  if (path.startsWith("/jampai/") || path.startsWith("/jumpai/")) {
+    return getSearchScope("jumpai");
+  }
   if (path.startsWith("/tabekake/")) return getSearchScope("tabekake");
   if (path.startsWith("/works/creative/") || path.startsWith("/work/")) {
     return getSearchScope("creative");

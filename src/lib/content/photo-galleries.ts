@@ -36,13 +36,13 @@ export const PHOTO_GALLERIES: Record<PhotoGalleryId, PhotoGalleryMeta> = {
   jumpai: {
     id: "jumpai",
     table: "jumpai",
-    // UI 表記は Jampai。URL・DB id は歴史的経緯で jumpai のまま。
+    // UI・公開 URL は Jampai。DB id は歴史的経緯で jumpai のまま。
     label: "Jampai",
     description:
       "作品として見せたい写真のギャラリー。Jampai に収めた一枚です。",
     status: "published",
     og_image: "",
-    basePath: "/jumpai/",
+    basePath: "/jampai/",
     adminPath: "/admin/jumpai/",
   },
   tabekake: {
