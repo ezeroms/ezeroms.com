@@ -14,7 +14,7 @@ type Props = {
 
 /**
  * Structured About / Me page (name as h1, sub_name below).
- * Column 詳細と同じ枠なし紙面。Favorite things / Based in は本文に含める。
+ * Column 詳細と同じ枠なし紙面。Around the Web だけ構造化リスト。
  */
 export function AboutMeProfile({ data }: Props) {
   const { profile, web_links: links } = data;

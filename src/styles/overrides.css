@@ -56,6 +56,7 @@ input[type="search"]::-webkit-search-decoration {
   .article-item ul > li,
   .article-item ol > li,
   .article-item blockquote p,
+  .article-item h3,
   .article-prose {
     font-size: 0.9375rem; /* 15px */
   }

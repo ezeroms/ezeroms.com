@@ -200,11 +200,11 @@
   padding: 0;
   max-width: 100%;
   color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
+  font-size: inherit;
   font-style: normal;
   font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-relaxed);
-  letter-spacing: var(--letter-spacing-tight);
+  line-height: inherit;
+  letter-spacing: normal;
   display: block;
   text-decoration: none;
 }

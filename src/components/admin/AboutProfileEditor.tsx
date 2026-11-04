@@ -286,7 +286,7 @@ export function AboutProfileEditor({
           value={bioMd}
           onChange={setBioMd}
           disabled={busy}
-          placeholder="プロフィール本文を入力。Favorite things や Based in も見出し付きでここに書けます…"
+          placeholder="プロフィール本文を入力…"
         />
       </div>
 

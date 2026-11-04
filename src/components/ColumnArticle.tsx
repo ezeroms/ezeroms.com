@@ -58,7 +58,7 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
             "mt-8",
             articleBodyClass,
             articleDetailClass,
-            // 見出し margin を区切り線の余白に足さない（Diary の hr と同じ上下 1rem）
+            // 見出し margin を区切り線の余白に足さない（Diary の hr と同じ上下 1.5rem）
             "[&_hr+h2]:mt-0 [&_hr+h3]:mt-0 [&_h2:has(+hr)]:mb-0 [&_h3:has(+hr)]:mb-0",
           )}
         />
