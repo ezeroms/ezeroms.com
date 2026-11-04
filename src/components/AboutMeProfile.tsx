@@ -1,6 +1,11 @@
 import { ArticleProse } from "@/components/ArticleProse";
 import { cn } from "@/lib/cn";
-import { articleBodyClass, proseBodyClass } from "@/lib/site/prose-styles";
+import { aboutWebLinkIcon } from "@/lib/content/about-web-icons";
+import { contentCard } from "@/lib/site/card-styles";
+import {
+  articleBodyClass,
+  articleDetailClass,
+} from "@/lib/site/prose-styles";
 import type { MeProfilePayload } from "@/types/content";
 
 type Props = {
@@ -9,10 +14,10 @@ type Props = {
 
 /**
  * Structured About / Me page (name as h1, sub_name below).
- * Column 詳細と同じ枠なし紙面。
+ * Column 詳細と同じ枠なし紙面。Favorite things / Based in は本文に含める。
  */
 export function AboutMeProfile({ data }: Props) {
-  const { profile, favorites, based_in: basedIn, web_links: links } = data;
+  const { profile, web_links: links } = data;
   const cover = profile.cover_image?.trim() || "/images/about/profile.webp";
 
   return (
@@ -36,55 +41,17 @@ export function AboutMeProfile({ data }: Props) {
           </p>
         ) : null}
 
-        <div className="my-6 h-px w-full bg-border" aria-hidden />
-
         {profile.bio_html?.trim() ? (
           <ArticleProse
             html={profile.bio_html}
             className={cn(
+              "mt-8",
               articleBodyClass,
+              articleDetailClass,
               "about-me__bio",
-              "[&_p]:m-0 [&_p+p]:mt-4",
+              "[&_hr+h2]:mt-0 [&_hr+h3]:mt-0 [&_h2:has(+hr)]:mb-0 [&_h3:has(+hr)]:mb-0",
             )}
           />
-        ) : null}
-
-        {favorites.length > 0 ? (
-          <section className="mt-10">
-            <h2 className="mb-3 mt-0 scroll-mt-6 text-xl font-semibold tracking-tight">
-              😍 Favorite things
-            </h2>
-            <p className="m-0 text-[0.9375rem] leading-[1.8] text-foreground min-[1080px]:text-base">
-              {favorites.map((f) => f.label).join("、")}
-            </p>
-          </section>
-        ) : null}
-
-        {basedIn.length > 0 ? (
-          <section className="mt-10">
-            <h2 className="mb-3 mt-0 scroll-mt-6 text-xl font-semibold tracking-tight">
-              🏠 Based in
-            </h2>
-            <ul className="m-0 list-disc space-y-2 pl-5 text-[0.9375rem] leading-relaxed min-[1080px]:text-base">
-              {basedIn.map((item) => (
-                <li key={item.id}>
-                  <strong className="font-semibold">{item.location}</strong>
-                  {item.body_html?.trim() ? (
-                    <>
-                      ：
-                      <span
-                        className={cn(
-                          proseBodyClass,
-                          "[&_p]:m-0 [&_p]:inline",
-                        )}
-                        dangerouslySetInnerHTML={{ __html: item.body_html }}
-                      />
-                    </>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </section>
         ) : null}
 
         {links.length > 0 ? (
@@ -92,16 +59,30 @@ export function AboutMeProfile({ data }: Props) {
             <h2 className="mb-3 mt-0 scroll-mt-6 text-xl font-semibold tracking-tight">
               🌏 Around the Web
             </h2>
-            <ul className="m-0 list-disc space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed min-[1080px]:text-base">
+            <ul className="m-0 grid list-none grid-cols-2 gap-2.5 p-0 min-[520px]:grid-cols-3">
               {links.map((link) => (
-                <li key={link.id}>
+                <li key={link.id} className="m-0 min-w-0">
                   <a
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-2"
+                    className={contentCard({
+                      link: true,
+                      className:
+                        "group flex items-center gap-2.5 px-3 py-2.5 text-inherit no-underline",
+                    })}
                   >
-                    {link.label}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={aboutWebLinkIcon(link.label, link.url)}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="m-0 size-7 shrink-0 grayscale opacity-60 transition-[filter,opacity] duration-200 group-hover:grayscale-0 group-hover:opacity-100 group-focus-visible:grayscale-0 group-focus-visible:opacity-100"
+                    />
+                    <span className="min-w-0 truncate text-sm font-medium leading-tight">
+                      {link.label}
+                    </span>
                   </a>
                 </li>
               ))}

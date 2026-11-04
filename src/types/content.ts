@@ -36,24 +36,6 @@ export type AboutProfile = {
   updated_at: string;
 };
 
-export type AboutFavorite = {
-  id: string;
-  label: string;
-  sort_order: number;
-  created_at: string;
-  updated_at: string;
-};
-
-export type AboutBasedIn = {
-  id: string;
-  location: string;
-  body_md: string;
-  body_html: string;
-  sort_order: number;
-  created_at: string;
-  updated_at: string;
-};
-
 export type AboutWebLink = {
   id: string;
   label: string;
@@ -65,8 +47,6 @@ export type AboutWebLink = {
 
 export type MeProfilePayload = {
   profile: AboutProfile;
-  favorites: AboutFavorite[];
-  based_in: AboutBasedIn[];
   web_links: AboutWebLink[];
 };
 

@@ -5,8 +5,6 @@ import {
 } from "@/lib/content/queries/_shared";
 import type {
   About,
-  AboutBasedIn,
-  AboutFavorite,
   AboutProfile,
   AboutWebLink,
   MediaCoverage,
@@ -60,7 +58,7 @@ export async function getMeProfile(): Promise<MeProfilePayload | null> {
   if (!hasSupabaseConfig()) return null;
   try {
     const sb = getSupabaseAdmin();
-    const [profileRes, favRes, basedRes, linkRes] = await Promise.all([
+    const [profileRes, linkRes] = await Promise.all([
       sb
         .from("about_profile")
         .select("*")
@@ -69,16 +67,6 @@ export async function getMeProfile(): Promise<MeProfilePayload | null> {
         .order("created_at", { ascending: true })
         .limit(1)
         .maybeSingle(),
-      sb
-        .from("about_favorite")
-        .select("*")
-        .eq("is_deleted", false)
-        .order("sort_order", { ascending: true }),
-      sb
-        .from("about_based_in")
-        .select("*")
-        .eq("is_deleted", false)
-        .order("sort_order", { ascending: true }),
       sb
         .from("about_web_link")
         .select("*")
@@ -97,8 +85,6 @@ export async function getMeProfile(): Promise<MeProfilePayload | null> {
 
     return {
       profile: profileRes.data as AboutProfile,
-      favorites: (favRes.data ?? []) as AboutFavorite[],
-      based_in: (basedRes.data ?? []) as AboutBasedIn[],
       web_links: (linkRes.data ?? []) as AboutWebLink[],
     };
   } catch (e) {

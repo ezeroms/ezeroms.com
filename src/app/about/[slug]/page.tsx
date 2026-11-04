@@ -150,10 +150,6 @@ export default async function AboutPage({
                 ...meProfile.profile,
                 bio_html: sanitizeBody(meProfile.profile.bio_html),
               },
-              based_in: meProfile.based_in.map((row) => ({
-                ...row,
-                body_html: sanitizeBody(row.body_html),
-              })),
             }}
           />
         </AboutShell>

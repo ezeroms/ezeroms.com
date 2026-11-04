@@ -280,13 +280,13 @@ export function AboutProfileEditor({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="about-bio">紹介文</Label>
+        <Label htmlFor="about-bio">本文</Label>
         <AdminRichTextEditor
           id="about-bio"
           value={bioMd}
           onChange={setBioMd}
           disabled={busy}
-          placeholder="プロフィールの紹介文を入力…"
+          placeholder="プロフィール本文を入力。Favorite things や Based in も見出し付きでここに書けます…"
         />
       </div>
 

@@ -1,5 +1,3 @@
-import { AboutBasedInSection } from "@/components/admin/AboutBasedInSection";
-import { AboutFavoritesSection } from "@/components/admin/AboutFavoritesSection";
 import {
   AboutProfileEditor,
   type AboutProfileEditorInitial,
@@ -20,13 +18,6 @@ export default async function AdminMePage() {
 
   let loadError: string | null = null;
   let profile: AboutProfileEditorInitial | null = null;
-  let favorites: { id: string; label: string; sort_order: number }[] = [];
-  let basedIn: {
-    id: string;
-    location: string;
-    body_md: string;
-    sort_order: number;
-  }[] = [];
   let webLinks: {
     id: string;
     label: string;
@@ -38,7 +29,7 @@ export default async function AdminMePage() {
     loadError = "Supabase が設定されていません";
   } else {
     const sb = getSupabaseAdmin();
-    const [profileRes, favRes, basedRes, linkRes] = await Promise.all([
+    const [profileRes, linkRes] = await Promise.all([
       sb
         .from("about_profile")
         .select("*")
@@ -47,27 +38,15 @@ export default async function AdminMePage() {
         .limit(1)
         .maybeSingle(),
       sb
-        .from("about_favorite")
-        .select("id, label, sort_order")
-        .eq("is_deleted", false)
-        .order("sort_order", { ascending: true }),
-      sb
-        .from("about_based_in")
-        .select("id, location, body_md, body_html, sort_order")
-        .eq("is_deleted", false)
-        .order("sort_order", { ascending: true }),
-      sb
         .from("about_web_link")
         .select("id, label, url, sort_order")
         .eq("is_deleted", false)
         .order("sort_order", { ascending: true }),
     ]);
 
-    if (profileRes.error || favRes.error || basedRes.error || linkRes.error) {
+    if (profileRes.error || linkRes.error) {
       const msg =
         profileRes.error?.message ||
-        favRes.error?.message ||
-        basedRes.error?.message ||
         linkRes.error?.message ||
         "読み込みに失敗しました";
       loadError = /does not exist|schema cache/i.test(msg)
@@ -90,17 +69,6 @@ export default async function AdminMePage() {
           og_image: String(row.og_image ?? ""),
         };
       }
-      favorites = (favRes.data ?? []) as typeof favorites;
-      basedIn = ((basedRes.data ?? []) as Record<string, unknown>[]).map(
-        (row) => ({
-          id: String(row.id),
-          location: String(row.location ?? ""),
-          body_md:
-            String(row.body_md ?? "").trim() ||
-            htmlToEditableMarkdown(String(row.body_html ?? "")),
-          sort_order: Number(row.sort_order ?? 0),
-        }),
-      );
       webLinks = (linkRes.data ?? []) as typeof webLinks;
     }
   }
@@ -120,13 +88,7 @@ export default async function AdminMePage() {
           <AboutProfileEditor initial={profile} />
         </AdminSection>
 
-        {!loadError ? (
-          <>
-            <AboutFavoritesSection items={favorites} />
-            <AboutBasedInSection items={basedIn} />
-            <AboutWebLinksSection items={webLinks} />
-          </>
-        ) : null}
+        {!loadError ? <AboutWebLinksSection items={webLinks} /> : null}
       </div>
     </AdminContent>
   );
