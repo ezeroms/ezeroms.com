@@ -28,10 +28,18 @@ export const proseBodyClass = `prose-body ${proseBodyLinkClass} ${proseBodyListC
 export const proseBlockquoteClass =
   "[&_blockquote]:my-4 [&_blockquote]:mx-0 [&_blockquote]:border-0 [&_blockquote]:border-l-[3px] [&_blockquote]:border-solid [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground";
 
-/** 詳細本文の h2 / h3（Column / Work / About）。h3 の字サイズ・太さは articleBodyClass。 */
+/**
+ * 記事ページのタイトル（h1）。
+ * text-2xl / text-3xl 付属の行間は折り返しで窮屈なので、サイズだけ指定する。
+ */
+export const articlePageTitleClass =
+  "m-0 text-[1.5rem] font-semibold leading-[1.4] tracking-tight text-foreground min-[768px]:text-[1.875rem]";
+
+/** 詳細本文の h2 / h3 の見た目（余白は articleBodyClass）。 */
 export const articleHeadingClass = cn(
-  "[&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:scroll-mt-6 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight",
-  "[&_h3]:mb-2 [&_h3]:mt-8 [&_h3]:scroll-mt-6",
+  // text-xl 付属の行間は折り返しで窮屈なので、サイズだけ指定する
+  "[&_h2]:scroll-mt-6 [&_h2]:text-[1.25rem] [&_h2]:font-semibold [&_h2]:leading-[1.5] [&_h2]:tracking-tight",
+  "[&_h3]:scroll-mt-6",
 );
 
 /** 詳細本文の figure / figcaption。画像は本文幅いっぱいに広げる。 */
@@ -68,16 +76,23 @@ export const articleBodyClass = cn(
   "overflow-hidden",
   proseBodyClass,
   proseBlockquoteClass,
-  "[&_img]:mt-4 [&_img]:block [&_img]:h-auto [&_img]:w-full [&_img]:max-w-full [&_img]:rounded-lg",
-  "[&_video]:mt-4 [&_video]:block [&_video]:w-full [&_video]:max-w-full [&_video]:rounded-lg [&_video]:bg-black",
+  "[&_img]:my-0 [&_img]:block [&_img]:h-auto [&_img]:w-full [&_img]:max-w-full [&_img]:rounded-lg",
+  "[&_video]:my-0 [&_video]:block [&_video]:w-full [&_video]:max-w-full [&_video]:rounded-lg [&_video]:bg-black",
   articleFigureClass,
   "[&_p]:m-0 [&_p+p]:mt-3",
+  // 縦リズム: 段落 12px < 写真 24px < 区切り 40px < h3 48px < h2 56px
+  // 空の区切りは同じ px の見出し上より広く見えるので、見出し側を一段大きくする
+  "[&_p:has(>img:only-child)]:my-6 [&_p:has(>video:only-child)]:my-6",
+  "[&_h3]:mt-12 [&_h3]:mb-2",
+  "[&_h2]:mt-14 [&_h2]:mb-3",
+  "[&_h2+h3]:mt-8",
   // 記事 h3 は本文と同サイズの太字だけ（UA の拡大を打ち消す）
   "[&_h3]:text-[length:inherit] [&_h3]:leading-[inherit] [&_h3]:font-bold [&_h3]:tracking-normal",
   // 空行スペーサーは段落マージンを付けず、1行分の高さだけ空ける
   "[&_p.rt-blank]:my-0 [&_p.rt-blank]:h-[1.8em] [&_p.rt-blank]:overflow-hidden",
   "[&_p:has(+p.rt-blank)]:mb-0 [&_p.rt-blank+p]:mt-0",
-  "[&_hr]:my-6 [&_hr]:h-0 [&_hr]:border-0 [&_hr]:bg-transparent",
+  "[&_hr]:my-5 [&_hr]:h-0 [&_hr]:border-0 [&_hr]:bg-transparent",
+  "[&_hr+h2]:mt-0 [&_hr+h3]:mt-0 [&_h2:has(+hr)]:mb-0 [&_h3:has(+hr)]:mb-0",
 );
 
 /** 一覧末尾の続き案内。見た目は `.listing-more`（legacy CSS）。 */

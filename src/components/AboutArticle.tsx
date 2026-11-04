@@ -5,6 +5,7 @@ import {
   articleBodyClass,
   articleFigureClass,
   articleHeadingClass,
+  articlePageTitleClass,
 } from "@/lib/site/prose-styles";
 
 type Props = {
@@ -50,7 +51,7 @@ export function AboutArticle({
 
         {title ? (
           <>
-            <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+            <h1 className={articlePageTitleClass}>
               {title}
             </h1>
             <div className="my-6 h-px w-full bg-border" aria-hidden />

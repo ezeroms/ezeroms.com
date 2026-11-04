@@ -93,14 +93,12 @@ function SearchGroupResults({ group }: { group: SearchGroup }) {
   }
   if (scope === "giants") {
     return (
-      <div className="mx-auto flex w-full max-w-2xl flex-col">
-        {(records as unknown as ShouldersOfGiants[]).map((item, index) => (
-          <div key={item.id ?? item.slug}>
-            {index > 0 ? (
-              <div className="h-px bg-border-subtle" aria-hidden />
-            ) : null}
-            <GiantsQuoteCard item={item} className="py-8" />
-          </div>
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-16 pt-8">
+        {(records as unknown as ShouldersOfGiants[]).map((item) => (
+          <GiantsQuoteCard
+            key={item.id ?? item.slug}
+            item={item}
+          />
         ))}
       </div>
     );

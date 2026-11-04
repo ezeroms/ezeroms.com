@@ -22,6 +22,7 @@ type Props = {
   hideEmpty?: boolean;
   /** 記事 og / image 未設定時のサムネフォールバック（カテゴリ OGP） */
   fallbackThumbSrc?: string | null;
+  className?: string;
 };
 
 function workThumbSrc(
@@ -51,6 +52,7 @@ export function WorkList({
   currentTag,
   hideEmpty,
   fallbackThumbSrc = null,
+  className,
 }: Props) {
   if (!items.length) {
     if (hideEmpty) return null;
@@ -62,8 +64,8 @@ export function WorkList({
   }
 
   return (
-    <div className={contentPlainListClassName()} id="work-articles-list">
-      {items.map((item, index) => {
+    <div className={contentPlainListClassName(className)} id="work-articles-list">
+      {items.map((item) => {
         const href = `/works/creative/${item.slug}/`;
         const period =
           formatWorkPeriod(item.start_date, item.end_date) ||
@@ -77,46 +79,40 @@ export function WorkList({
         );
 
         return (
-          <div key={item.id}>
-            {index > 0 ? (
-              <div className="h-px bg-border-subtle" aria-hidden />
-            ) : null}
-            <div className="py-7">
-              <ContentThumbCard
-                href={href}
-                title={item.title}
-                thumbSrc={workThumbSrc(item, fallbackThumbSrc)}
-                dateTime={item.start_date || item.date}
-                dateLabel={period || undefined}
-                metaSecondary={
-                  categoryLabel ? (
+          <ContentThumbCard
+            key={item.id}
+            href={href}
+            title={item.title}
+            thumbSrc={workThumbSrc(item, fallbackThumbSrc)}
+            dateTime={item.start_date || item.date}
+            dateLabel={period || undefined}
+            metaSecondary={
+              categoryLabel ? (
+                <span
+                  className={cn(
+                    currentCategory === category &&
+                      "font-semibold text-foreground",
+                  )}
+                >
+                  {categoryLabel}
+                </span>
+              ) : null
+            }
+            excerpt={workExcerpt(item)}
+            footer={
+              tags.length
+                ? tags.slice(0, 4).map((tag) => (
                     <span
-                      className={cn(
-                        currentCategory === category &&
-                          "font-semibold text-foreground",
-                      )}
+                      key={tag}
+                      className={tagPillClass(currentTag === tag)}
                     >
-                      {categoryLabel}
+                      {tag}
                     </span>
-                  ) : null
-                }
-                excerpt={workExcerpt(item)}
-                footer={
-                  tags.length
-                    ? tags.slice(0, 4).map((tag) => (
-                        <span
-                          key={tag}
-                          className={tagPillClass(currentTag === tag)}
-                        >
-                          {tag}
-                        </span>
-                      ))
-                    : null
-                }
-                chrome="plain"
-              />
-            </div>
-          </div>
+                  ))
+                : null
+            }
+            chrome="plain"
+          />
         );
       })}
     </div>

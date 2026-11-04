@@ -1,7 +1,7 @@
 import type { Diary } from "@/types/content";
 import {
   ContentThumbCard,
-  contentThumbCardListClassName,
+  contentPlainListClassName,
 } from "@/components/ContentThumbCard";
 import {
   diaryExcerpt,
@@ -9,6 +9,7 @@ import {
   diaryThumbSrc,
   formatDiaryDate,
 } from "@/lib/content/diary-meta";
+import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
   items: Diary[];
@@ -17,7 +18,7 @@ type Props = {
 };
 
 /**
- * Diary 詳細の Related posts。枠付きカードで、左に OGP、右に日付と冒頭抜粋。
+ * Diary 詳細の Related posts。Column 一覧と同じ枠なし行。
  */
 export function DiaryRelatedList({
   items,
@@ -26,9 +27,12 @@ export function DiaryRelatedList({
   if (!items.length) return null;
 
   return (
-    <div className={contentThumbCardListClassName("max-w-none")}>
+    <div className={contentPlainListClassName("pt-0")}>
       {items.map((item) => {
         const dateLabel = formatDiaryDate(item.date);
+        const tags = [...(item.diary_tag ?? [])].sort((a, b) =>
+          a.localeCompare(b, "ja"),
+        );
         return (
           <ContentThumbCard
             key={item.id}
@@ -42,8 +46,19 @@ export function DiaryRelatedList({
             dateTime={item.date}
             dateLabel={dateLabel}
             excerpt={diaryExcerpt(item.body_html, 160)}
-            showTitle={false}
             excerptLines={3}
+            excerptClassName="text-[0.9375rem] leading-[1.7]"
+            showTitle={false}
+            footer={
+              tags.length
+                ? tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className={tagPillClass(false)}>
+                      {tag}
+                    </span>
+                  ))
+                : null
+            }
+            chrome="plain"
             thumbAspect="og"
           />
         );

@@ -9,7 +9,11 @@ import {
 } from "@/lib/content/work-filter";
 import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
 import { cn } from "@/lib/cn";
-import { articleBodyClass, articleDetailClass } from "@/lib/site/prose-styles";
+import {
+  articleBodyClass,
+  articleDetailClass,
+  articlePageTitleClass,
+} from "@/lib/site/prose-styles";
 import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
@@ -59,7 +63,7 @@ export function WorkArticle({ item, bodyHtml }: Props) {
           </div>
         ) : null}
 
-        <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+        <h1 className={articlePageTitleClass}>
           {item.title}
         </h1>
 

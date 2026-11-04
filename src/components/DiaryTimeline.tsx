@@ -9,7 +9,7 @@ import {
 } from "@/lib/content/diary-meta";
 import { cn } from "@/lib/cn";
 import { tagPillClass } from "@/lib/site/tag-styles";
-import { articleBodyClass } from "@/lib/site/prose-styles";
+import { articleBodyClass, articlePageTitleClass } from "@/lib/site/prose-styles";
 import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
 
@@ -82,57 +82,53 @@ export function DiaryTimeline({
       ) : null}
 
       <div className="w-full font-sans" id="diary-list">
-        <div className="mx-auto flex w-full max-w-2xl flex-col">
-          {items.map((item, index) => {
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-16 pt-8">
+          {items.map((item) => {
             const isFocused = activeFocus === item.slug;
             const permalink = diaryPermalink(item.slug);
             const dateLabel = formatDiaryDate(item.date);
             return (
-              <div key={item.id}>
-                {index > 0 ? (
-                  <div className="h-px bg-border-subtle" aria-hidden />
-                ) : null}
-                <article
-                  id={item.slug}
-                  className={cn(
-                    "overflow-visible py-8",
-                    hasFocus && !isFocused && "opacity-40",
-                  )}
-                >
-                  <div className="mb-4">
-                    <h2 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+              <article
+                key={item.id}
+                id={item.slug}
+                className={cn(
+                  "overflow-visible",
+                  hasFocus && !isFocused && "opacity-40",
+                )}
+              >
+                <div className="mb-4">
+                  <h2 className={articlePageTitleClass}>
+                    <Link
+                      href={permalink}
+                      className="text-inherit no-underline hover:underline hover:underline-offset-4"
+                    >
+                      <time dateTime={item.date}>{dateLabel}</time>
+                    </Link>
+                  </h2>
+                </div>
+
+                <ArticleProse
+                  className={articleBodyClass}
+                  html={item.body_html}
+                />
+
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {[...(item.diary_tag ?? [])].sort().map((tag) => {
+                    const active = currentTag === tag;
+                    return (
                       <Link
-                        href={permalink}
-                        className="text-inherit no-underline hover:underline hover:underline-offset-4"
+                        key={tag}
+                        href={`/diary_tag/${encodeURIComponent(tag)}/`}
+                        className={tagPillClass(active)}
+                        data-tag={tag}
                       >
-                        <time dateTime={item.date}>{dateLabel}</time>
+                        {tag}
                       </Link>
-                    </h2>
-                  </div>
-
-                  <ArticleProse
-                    className={articleBodyClass}
-                    html={item.body_html}
-                  />
-
-                  <div className="mt-4 flex flex-wrap items-center gap-2">
-                    {[...(item.diary_tag ?? [])].sort().map((tag) => {
-                      const active = currentTag === tag;
-                      return (
-                        <Link
-                          key={tag}
-                          href={`/diary_tag/${encodeURIComponent(tag)}/`}
-                          className={tagPillClass(active)}
-                          data-tag={tag}
-                        >
-                          {tag}
-                        </Link>
-                      );
-                    })}
-                    <ShareButton path={permalink} />
-                  </div>
-                </article>
-              </div>
+                    );
+                  })}
+                  <ShareButton path={permalink} />
+                </div>
+              </article>
             );
           })}
         </div>

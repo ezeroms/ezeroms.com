@@ -39,14 +39,9 @@ export function GiantsArticle({
 
           {related.length > 0 ? (
             <RelatedPostsSection className="max-w-2xl">
-              <div className="flex flex-col">
-                {related.map((entry, index) => (
-                  <div key={entry.id}>
-                    {index > 0 ? (
-                      <div className="h-px bg-border-subtle" aria-hidden />
-                    ) : null}
-                    <GiantsQuoteCard item={entry} className="py-8" />
-                  </div>
+              <div className="flex flex-col gap-16">
+                {related.map((entry) => (
+                  <GiantsQuoteCard key={entry.id} item={entry} />
                 ))}
               </div>
             </RelatedPostsSection>

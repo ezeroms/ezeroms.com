@@ -5,7 +5,7 @@ import {
   formatDiaryDate,
 } from "@/lib/content/diary-meta";
 import { tagPillClass } from "@/lib/site/tag-styles";
-import { articleBodyClass } from "@/lib/site/prose-styles";
+import { articleBodyClass, articlePageTitleClass } from "@/lib/site/prose-styles";
 import { ArticleProse } from "@/components/ArticleProse";
 import { ShareButton } from "@/components/ShareButton";
 
@@ -33,7 +33,7 @@ export function DiaryArticle({ item, bodyHtml }: Props) {
 
       <article className="mx-auto min-w-0 w-full max-w-2xl overflow-visible py-4">
         <div className="mb-4">
-          <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+          <h1 className={articlePageTitleClass}>
             <time dateTime={item.date}>{dateLabel}</time>
           </h1>
         </div>

@@ -43,7 +43,7 @@ export function MediaCoverageList({
 
   return (
     <div className={contentPlainListClassName()} id="media-coverage-list">
-      {items.map((item, index) => {
+      {items.map((item) => {
         const isExternal = Boolean(item.external_url?.trim());
         const href = isExternal
           ? item.external_url!
@@ -53,26 +53,20 @@ export function MediaCoverageList({
         const dateLabel = item.date ? formatColumnDate(item.date) : "";
 
         return (
-          <div key={item.id}>
-            {index > 0 ? (
-              <div className="h-px bg-border-subtle" aria-hidden />
-            ) : null}
-            <div className="py-7">
-              <ContentThumbCard
-                href={href}
-                title={item.title}
-                thumbSrc={mediaCoverageThumbSrc(item, fallbackThumbSrc)}
-                dateTime={item.date}
-                dateLabel={dateLabel}
-                metaSecondary={lead ? <span>{lead}</span> : null}
-                excerpt={
-                  excerpt || (isExternal ? "外部記事を見る →" : undefined)
-                }
-                external={isExternal}
-                chrome="plain"
-              />
-            </div>
-          </div>
+          <ContentThumbCard
+            key={item.id}
+            href={href}
+            title={item.title}
+            thumbSrc={mediaCoverageThumbSrc(item, fallbackThumbSrc)}
+            dateTime={item.date}
+            dateLabel={dateLabel}
+            metaSecondary={lead ? <span>{lead}</span> : null}
+            excerpt={
+              excerpt || (isExternal ? "外部記事を見る →" : undefined)
+            }
+            external={isExternal}
+            chrome="plain"
+          />
         );
       })}
     </div>

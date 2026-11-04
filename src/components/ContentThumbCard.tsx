@@ -5,10 +5,14 @@ import { contentCard } from "@/lib/site/card-styles";
 import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
 
 const CARD_LINK_LAYOUT =
-  "grid grid-cols-1 items-stretch text-inherit no-underline min-[480px]:grid-cols-[minmax(0,38%)_minmax(0,1fr)] sm:grid-cols-[minmax(0,40%)_minmax(0,1fr)]";
+  "grid grid-cols-1 items-stretch gap-3 p-3 text-inherit no-underline min-[480px]:grid-cols-[minmax(0,38%)_minmax(0,1fr)] min-[480px]:gap-4 sm:grid-cols-[minmax(0,40%)_minmax(0,1fr)] sm:gap-5 sm:p-4";
 
 const PLAIN_LINK_LAYOUT =
   "grid grid-cols-1 items-start gap-4 text-inherit no-underline min-[480px]:grid-cols-[minmax(0,34%)_minmax(0,1fr)] min-[480px]:gap-6 sm:grid-cols-[minmax(0,32%)_minmax(0,1fr)]";
+
+/** 枠なし一覧で OGP（1200×630）を切らずに置く。横長なので画像列を広げる。 */
+const PLAIN_OG_LINK_LAYOUT =
+  "grid grid-cols-1 items-start gap-4 text-inherit no-underline min-[480px]:grid-cols-[minmax(0,44%)_minmax(0,1fr)] min-[480px]:gap-6 sm:grid-cols-[minmax(0,42%)_minmax(0,1fr)]";
 
 type Props = {
   href: string;
@@ -26,6 +30,8 @@ type Props = {
   showExcerpt?: boolean;
   /** 抜粋の行数（既定 2） */
   excerptLines?: 2 | 3;
+  /** 抜粋の字サイズ・行間など（未指定は text-sm / leading-normal） */
+  excerptClassName?: string;
   /** false なら見出しを出さず、日付＋抜粋だけにする（Diary 関連など） */
   showTitle?: boolean;
   /** false ならタイトルを折り返して全文表示（Clips） */
@@ -97,6 +103,7 @@ export function ContentThumbCard({
   excerpt,
   showExcerpt = true,
   excerptLines = 2,
+  excerptClassName,
   showTitle = true,
   clampTitle = true,
   footer,
@@ -125,8 +132,12 @@ export function ContentThumbCard({
     <article className={plain ? "min-w-0" : contentCard({ link: true })}>
       <div
         className={cn(
-          plain ? PLAIN_LINK_LAYOUT : CARD_LINK_LAYOUT,
-          ogThumb && "min-[480px]:items-center",
+          plain
+            ? ogThumb
+              ? PLAIN_OG_LINK_LAYOUT
+              : PLAIN_LINK_LAYOUT
+            : CARD_LINK_LAYOUT,
+          ogThumb && !plain && "min-[480px]:items-center",
         )}
       >
         <EntryLink
@@ -135,11 +146,15 @@ export function ContentThumbCard({
           aria-label={title}
           className={cn(
             "relative overflow-hidden bg-muted text-inherit no-underline",
+            plain ? "rounded-md" : "rounded-lg",
             ogThumb
-              ? cn("w-full self-start min-[480px]:self-center", OG_IMAGE_ASPECT_CLASS)
+              ? cn(
+                  "w-full self-start",
+                  !plain && "min-[480px]:self-center",
+                  OG_IMAGE_ASPECT_CLASS,
+                )
               : cn(
                   "min-h-[11rem]",
-                  plain && "rounded-md",
                   !fillBelowTitle && !plain && "min-[480px]:min-h-0",
                   plain && "min-[480px]:min-h-0 min-[480px]:aspect-[3/2]",
                 ),
@@ -168,7 +183,7 @@ export function ContentThumbCard({
             "flex min-w-0 flex-col gap-2",
             plain
               ? "justify-start px-0 py-0"
-              : "px-4 py-4 sm:gap-2.5 sm:px-6 sm:py-5",
+              : "px-1 py-1 sm:gap-2.5 sm:px-2 sm:py-1",
             !plain && (clampTitle ? "overflow-hidden" : "overflow-x-hidden"),
             !plain &&
               (fillBelowTitle || note
@@ -198,7 +213,8 @@ export function ContentThumbCard({
             {showExcerpt ? (
               <p
                 className={cn(
-                  "m-0 text-sm leading-normal text-muted-foreground",
+                  "m-0 text-muted-foreground",
+                  excerptClassName ?? "text-sm leading-normal",
                   showTitle && "mt-1",
                   excerptLines === 3 ? "line-clamp-3" : "line-clamp-2",
                 )}
@@ -227,9 +243,9 @@ export function ContentThumbCard({
   );
 }
 
-/** 枠なし一覧の外枠（余白と仕切り線でまとめる） */
+/** 枠なし一覧の外枠（余白で記事間を分ける） */
 export function contentPlainListClassName(className?: string) {
-  return cn("mx-auto flex w-full max-w-2xl flex-col", className);
+  return cn("mx-auto flex w-full max-w-2xl flex-col gap-14 pt-8", className);
 }
 
 /** 一覧の外枠（中央寄せ・カード縦積み） */

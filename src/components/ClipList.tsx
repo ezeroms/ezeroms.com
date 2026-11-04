@@ -58,64 +58,58 @@ export function ClipList({
 
   return (
     <div className={contentPlainListClassName()} id="clips-list">
-      {items.map((item, index) => {
+      {items.map((item) => {
         const tags = [...(item.clip_tag ?? [])].sort((a, b) =>
           a.localeCompare(b, "ja"),
         );
         const memo = item.memo?.trim() ?? "";
 
         return (
-          <div key={item.id}>
-            {index > 0 ? (
-              <div className="h-px bg-border-subtle" aria-hidden />
-            ) : null}
-            <div className="py-7">
-              <ContentThumbCard
-                href={item.source_url}
-                external
-                title={item.title}
-                thumbSrc={clipThumbSrc(item, fallbackThumbSrc)}
-                dateTime={item.date}
-                dateLabel={formatClipDate(item.date)}
-                metaSecondary={
-                  <span className="truncate">
-                    {clipSourceLabel(item.source_url, item.source_name)}
-                  </span>
-                }
-                showExcerpt={false}
-                clampTitle={false}
-                footer={
-                  tags.length
-                    ? tags.slice(0, 4).map((tag) => {
-                        const active = currentTag === tag;
-                        return (
-                          <Link
-                            key={tag}
-                            href={
-                              active
-                                ? clipListingHref({
-                                    from: dateFilter?.from,
-                                    to: dateFilter?.to,
-                                  })
-                                : clipListingHref({
-                                    tag,
-                                    from: dateFilter?.from,
-                                    to: dateFilter?.to,
-                                  })
-                            }
-                            className={tagPillClass(active)}
-                          >
-                            {tag}
-                          </Link>
-                        );
-                      })
-                    : null
-                }
-                note={memo ? <ClipMemo>{memo}</ClipMemo> : null}
-                chrome="plain"
-              />
-            </div>
-          </div>
+          <ContentThumbCard
+            key={item.id}
+            href={item.source_url}
+            external
+            title={item.title}
+            thumbSrc={clipThumbSrc(item, fallbackThumbSrc)}
+            dateTime={item.date}
+            dateLabel={formatClipDate(item.date)}
+            metaSecondary={
+              <span className="truncate">
+                {clipSourceLabel(item.source_url, item.source_name)}
+              </span>
+            }
+            showExcerpt={false}
+            clampTitle={false}
+            footer={
+              tags.length
+                ? tags.slice(0, 4).map((tag) => {
+                    const active = currentTag === tag;
+                    return (
+                      <Link
+                        key={tag}
+                        href={
+                          active
+                            ? clipListingHref({
+                                from: dateFilter?.from,
+                                to: dateFilter?.to,
+                              })
+                            : clipListingHref({
+                                tag,
+                                from: dateFilter?.from,
+                                to: dateFilter?.to,
+                              })
+                        }
+                        className={tagPillClass(active)}
+                      >
+                        {tag}
+                      </Link>
+                    );
+                  })
+                : null
+            }
+            note={memo ? <ClipMemo>{memo}</ClipMemo> : null}
+            chrome="plain"
+          />
         );
       })}
     </div>

@@ -5,7 +5,11 @@ import { formatColumnDate } from "@/lib/content/column-meta";
 import { serializeColumnFilter, emptyColumnFilter } from "@/lib/content/column-filter";
 import { prepareColumnToc } from "@/lib/content/column-toc";
 import { cn } from "@/lib/cn";
-import { articleBodyClass, articleDetailClass } from "@/lib/site/prose-styles";
+import {
+  articleBodyClass,
+  articleDetailClass,
+  articlePageTitleClass,
+} from "@/lib/site/prose-styles";
 import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
@@ -31,7 +35,7 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
           <time dateTime={item.date}>{formatColumnDate(item.date)}</time>
         </div>
 
-        <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+        <h1 className={articlePageTitleClass}>
           {item.title}
         </h1>
 
@@ -58,8 +62,6 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
             "mt-8",
             articleBodyClass,
             articleDetailClass,
-            // 見出し margin を区切り線の余白に足さない（Diary の hr と同じ上下 1.5rem）
-            "[&_hr+h2]:mt-0 [&_hr+h3]:mt-0 [&_h2:has(+hr)]:mb-0 [&_h3:has(+hr)]:mb-0",
           )}
         />
       </article>

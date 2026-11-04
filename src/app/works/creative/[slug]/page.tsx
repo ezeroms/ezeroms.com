@@ -137,6 +137,7 @@ export default async function CreativeDetailPage({
             items={related}
             hideEmpty
             fallbackThumbSrc={section.og_image || null}
+            className="pt-0"
           />
         </RelatedPostsSection>
       ) : null}

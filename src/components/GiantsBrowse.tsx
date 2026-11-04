@@ -125,18 +125,13 @@ export function GiantsBrowse({
               : "まだメモがありません。"}
           </p>
         ) : (
-          <div className="mx-auto flex w-full max-w-2xl flex-col">
-            {items.map((item, index) => (
-              <div key={item.id}>
-                {index > 0 ? (
-                  <div className="h-px bg-border-subtle" aria-hidden />
-                ) : null}
-                <GiantsQuoteCard
-                  item={item}
-                  selectedTag={selectedTag}
-                  className="py-8"
-                />
-              </div>
+          <div className="mx-auto flex w-full max-w-2xl flex-col gap-16 pt-8">
+            {items.map((item) => (
+              <GiantsQuoteCard
+                key={item.id}
+                item={item}
+                selectedTag={selectedTag}
+              />
             ))}
           </div>
         )}

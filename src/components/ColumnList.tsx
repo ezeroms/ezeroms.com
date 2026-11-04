@@ -19,6 +19,7 @@ type Props = {
   listId?: string;
   /** 記事 og_image 未設定時のサムネフォールバック（カテゴリ OGP） */
   fallbackThumbSrc?: string | null;
+  className?: string;
 };
 
 /**
@@ -30,6 +31,7 @@ export function ColumnList({
   hideEmpty,
   listId,
   fallbackThumbSrc = null,
+  className,
 }: Props) {
   if (!items.length) {
     if (hideEmpty) return null;
@@ -41,8 +43,8 @@ export function ColumnList({
   }
 
   return (
-    <div className={contentPlainListClassName()} id={listId}>
-      {items.map((item, index) => {
+    <div className={contentPlainListClassName(className)} id={listId}>
+      {items.map((item) => {
         const href = `/column/${item.slug}/`;
         const thumb = columnThumbSrc(
           item.body_html,
@@ -50,40 +52,37 @@ export function ColumnList({
           item.slug,
           fallbackThumbSrc,
         );
-        const excerpt = columnExcerpt(item.body_html, 120);
+        const excerpt = columnExcerpt(item.body_html, 160);
         const tags = [...(item.column_tag ?? [])].sort((a, b) =>
           a.localeCompare(b, "ja"),
         );
 
         return (
-          <div key={item.id}>
-            {index > 0 ? (
-              <div className="h-px bg-border-subtle" aria-hidden />
-            ) : null}
-            <div className="py-7">
-              <ContentThumbCard
-                href={href}
-                title={item.title}
-                thumbSrc={thumb}
-                dateTime={item.date}
-                dateLabel={formatColumnDate(item.date)}
-                excerpt={excerpt}
-                footer={
-                  tags.length
-                    ? tags.slice(0, 4).map((tag) => (
-                        <span
-                          key={tag}
-                          className={tagPillClass(currentTag === tag)}
-                        >
-                          {tag}
-                        </span>
-                      ))
-                    : null
-                }
-                chrome="plain"
-              />
-            </div>
-          </div>
+          <ContentThumbCard
+            key={item.id}
+            href={href}
+            title={item.title}
+            thumbSrc={thumb}
+            dateTime={item.date}
+            dateLabel={formatColumnDate(item.date)}
+            excerpt={excerpt}
+            excerptLines={3}
+            excerptClassName="text-[0.9375rem] leading-[1.7]"
+            footer={
+              tags.length
+                ? tags.slice(0, 4).map((tag) => (
+                    <span
+                      key={tag}
+                      className={tagPillClass(currentTag === tag)}
+                    >
+                      {tag}
+                    </span>
+                  ))
+                : null
+            }
+            chrome="plain"
+            thumbAspect="og"
+          />
         );
       })}
     </div>

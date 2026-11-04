@@ -5,6 +5,7 @@ import { contentCard } from "@/lib/site/card-styles";
 import {
   articleBodyClass,
   articleDetailClass,
+  articlePageTitleClass,
 } from "@/lib/site/prose-styles";
 import type { MeProfilePayload } from "@/types/content";
 
@@ -32,7 +33,7 @@ export function AboutMeProfile({ data }: Props) {
           />
         </div>
 
-        <h1 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-foreground min-[768px]:text-3xl">
+        <h1 className={articlePageTitleClass}>
           {profile.name}
         </h1>
         {profile.sub_name?.trim() ? (
@@ -49,7 +50,6 @@ export function AboutMeProfile({ data }: Props) {
               articleBodyClass,
               articleDetailClass,
               "about-me__bio",
-              "[&_hr+h2]:mt-0 [&_hr+h3]:mt-0 [&_h2:has(+hr)]:mb-0 [&_h3:has(+hr)]:mb-0",
             )}
           />
         ) : null}
