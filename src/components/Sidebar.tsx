@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import {
   Bird,
   BookOpen,
@@ -6,6 +9,7 @@ import {
   Briefcase,
   FileText,
   Pizza,
+  Home as HomeIcon,
   House,
   Landmark,
   Mail,
@@ -96,6 +100,19 @@ const LIBRARY_ICONS: Record<LibrarySectionId, LucideIcon> = {
   "media-coverage": Newspaper,
 };
 
+/** 右のロゴが見えているあいだ、左のロゴをここまで落とす。 */
+const SIDEBAR_LOGO_FAINT = 0.22;
+
+function sidebarLogoOpacity(root: HTMLElement, logo: HTMLElement): number {
+  const remaining = logo.getBoundingClientRect().bottom - root.getBoundingClientRect().top;
+  if (remaining <= 0) return 1;
+  const traveled = root.scrollTop;
+  const span = remaining + traveled;
+  if (span <= 0) return SIDEBAR_LOGO_FAINT;
+  const t = Math.min(1, Math.max(0, traveled / span));
+  return SIDEBAR_LOGO_FAINT + (1 - SIDEBAR_LOGO_FAINT) * t;
+}
+
 const LIBRARY_ACTIVE: Record<
   LibrarySectionId,
   (pathname: string) => boolean
@@ -115,6 +132,43 @@ export function Sidebar({
   worksNav,
   libraryNav,
 }: Props) {
+  const isHome = pathname === "/";
+  const logoLinkRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const link = logoLinkRef.current;
+    if (!link) return;
+    if (!isHome) {
+      link.style.opacity = "1";
+      return;
+    }
+
+    const root = document.querySelector(".layout-main__content");
+    const logo = document.getElementById("home-masthead-logo");
+    if (!(root instanceof HTMLElement) || !logo) {
+      link.style.opacity = "1";
+      return;
+    }
+
+    const desktop = window.matchMedia("(min-width: 1080px)");
+    const update = () => {
+      if (!desktop.matches) {
+        link.style.opacity = "1";
+        return;
+      }
+      link.style.opacity = String(sidebarLogoOpacity(root, logo));
+    };
+    update();
+    root.addEventListener("scroll", update, { passive: true });
+    desktop.addEventListener("change", update);
+    window.addEventListener("resize", update);
+    return () => {
+      root.removeEventListener("scroll", update);
+      desktop.removeEventListener("change", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [isHome]);
+
   const isDiary =
     pathname.startsWith("/diary") ||
     pathname.startsWith("/diary_month") ||
@@ -266,10 +320,12 @@ export function Sidebar({
         tabIndex={-1}
       />
 
-      <div className="w-full shrink-0 border-b border-border px-4 pb-5 pt-6">
+      <div className="w-full shrink-0 border-b border-border px-4 py-6">
         <Link
+          ref={logoLinkRef}
           href="/"
-          className="block opacity-100 transition-opacity hover:opacity-60"
+          style={{ opacity: isHome ? SIDEBAR_LOGO_FAINT : 1 }}
+          className="sidebar-brand-logo block hover:!opacity-60"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -278,15 +334,26 @@ export function Sidebar({
             className="block h-auto w-[10.5rem] max-w-full"
           />
         </Link>
-        <p className="m-0 mt-4 whitespace-nowrap font-sans text-[11px] font-normal italic leading-[1.35] text-foreground">
-          One thing I can tell you is you got to be free!
-        </p>
       </div>
 
       <nav
         className="w-full flex-1 overflow-y-auto px-2.5 py-4"
         aria-label="グローバルナビゲーション"
       >
+        <ul className="m-0 mb-5 flex w-full list-none flex-col gap-2 p-0">
+          <li className="w-full">
+            <Link
+              href="/"
+              className={cn(
+                sidebarNavItemClass(isHome),
+                "text-[length:var(--font-size-base)]",
+              )}
+            >
+              <HomeIcon className="h-4 w-4 shrink-0 opacity-80" />
+              <span className="min-w-0 flex-1 truncate">Home</span>
+            </Link>
+          </li>
+        </ul>
         {sections.map((section) => (
           <div key={section.id} className="mb-5 w-full last:mb-0">
             <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">

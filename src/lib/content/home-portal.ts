@@ -26,7 +26,6 @@ import {
 import { photoDetailHref } from "@/lib/content/photo-adjacent";
 import { photoGridSrc } from "@/lib/content/photo-caption";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
-import { getPhotoGallery } from "@/lib/content/photo-galleries";
 import {
   listClip,
   listColumn,
@@ -81,6 +80,12 @@ export type HomePhotoItem = {
   id: string;
   href: string;
   src: string;
+  /** ビューワー用のオリジナル。無ければ一覧と同じ URL。 */
+  imageUrl: string;
+  slug: string;
+  title: string;
+  date: string;
+  location: string | null;
   alt: string;
   galleryLabel: string;
   galleryHref: string;
@@ -91,6 +96,8 @@ export type HomeClipItem = {
   id: string;
   href: string;
   title: string;
+  /** 自分の意見・感想。空なら出さない。 */
+  memo: string | null;
   image: string | null;
   tags: HomeTag[];
   source: string;
@@ -111,7 +118,10 @@ export type HomePortalData = {
   columns: HomeWritingItem[];
   diaryHref: string | null;
   columnHref: string | null;
-  photos: HomePhotoItem[];
+  smile: HomePhotoItem[];
+  smileHref: string | null;
+  jampai: HomePhotoItem[];
+  jampaiHref: string | null;
   clips: HomeClipItem[];
   clipsHref: string | null;
   giants: HomeGiantItem[];
@@ -221,9 +231,11 @@ export async function loadHomePortal(): Promise<HomePortalData> {
     .filter((item) => item.kind === "column")
     .sort((a, b) => b.time - a.time);
 
-  const photos: Array<HomePhotoItem & { time: number }> = [];
-  for (const group of photoLists) {
-    const gallery = getPhotoGallery(group.galleryId as PhotoGalleryId);
+  const photosFor = (galleryId: PhotoGalleryId) => {
+    const group = photoLists.find((item) => item.galleryId === galleryId);
+    const gallery = photoGalleries.find((item) => item.id === galleryId);
+    if (!group || !gallery) return [];
+    const photos: Array<HomePhotoItem & { time: number }> = [];
     for (const photo of group.items) {
       const src = photoGridSrc(photo);
       if (!src) continue;
@@ -231,9 +243,14 @@ export async function loadHomePortal(): Promise<HomePortalData> {
       const location = photo.location?.trim() || "";
       const title = photo.title.trim();
       photos.push({
-        id: `${group.galleryId}-${photo.id}`,
+        id: `${galleryId}-${photo.id}`,
         href: photoDetailHref(gallery.basePath, photo.slug),
         src,
+        imageUrl: photo.image_url?.trim() || src,
+        slug: photo.slug,
+        title: photo.title,
+        date: photo.date,
+        location: photo.location,
         alt: title || location || gallery.label,
         galleryLabel: gallery.label,
         galleryHref: gallery.basePath,
@@ -241,8 +258,11 @@ export async function loadHomePortal(): Promise<HomePortalData> {
         time: stamp.time,
       });
     }
-  }
-  photos.sort((a, b) => b.time - a.time);
+    photos.sort((a, b) => b.time - a.time);
+    return photos.slice(0, PHOTO_COUNT).map(({ time: _time, ...item }) => item);
+  };
+  const smile = photosFor("smile");
+  const jampai = photosFor("jumpai");
 
   const clipItems: Array<HomeClipItem & { time: number }> = clips.items
     .filter((item) => item.title.trim() && item.source_url.trim())
@@ -252,11 +272,12 @@ export async function loadHomePortal(): Promise<HomePortalData> {
         id: item.id,
         href: item.source_url,
         title: item.title.trim(),
+        memo: item.memo.trim() || null,
         image: clipThumbSrc(item),
         tags: homeTags(item.clip_tag, (tag) => clipListingHref({ tag })),
         source: clipSourceLabel(item.source_url, item.source_name),
-        dateLabel: formatStamp(stamp.iso, "clip"),
-        dateTime: stamp.iso,
+        dateLabel: formatClipDate(item.date),
+        dateTime: item.date,
         time: stamp.time,
       };
     });
@@ -283,7 +304,10 @@ export async function loadHomePortal(): Promise<HomePortalData> {
     columns: columns.slice(0, COLUMN_COUNT).map(({ time: _time, ...item }) => item),
     diaryHref: diarySection?.basePath ?? null,
     columnHref: columnSection?.basePath ?? null,
-    photos: photos.slice(0, PHOTO_COUNT).map(({ time: _time, ...item }) => item),
+    smile,
+    smileHref: photoGalleries.find((item) => item.id === "smile")?.basePath ?? null,
+    jampai,
+    jampaiHref: photoGalleries.find((item) => item.id === "jumpai")?.basePath ?? null,
     clips: clipItems.slice(0, CLIP_COUNT).map(({ time: _time, ...item }) => item),
     clipsHref: clipsSection?.basePath ?? null,
     giants: giantItems.slice(0, GIANT_COUNT).map(({ time: _time, ...item }) => item),

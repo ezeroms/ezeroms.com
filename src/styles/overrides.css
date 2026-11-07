@@ -97,6 +97,11 @@ input[type="search"]::-webkit-search-decoration {
     box-shadow: 8px 0 32px rgba(5, 3, 23, 0.12) !important;
   }
 
+  /* ハンバーガーで開くメニューでは、ロゴを薄くしない。 */
+  .layout-sidebar .sidebar-brand-logo {
+    opacity: 1 !important;
+  }
+
   .sidebar__overlay {
     display: none;
     position: fixed;

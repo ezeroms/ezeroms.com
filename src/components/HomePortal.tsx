@@ -1,5 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { RefreshCw } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ClipMemo } from "@/components/ClipList";
 import { MobileMenuButton } from "@/components/MobileMenuButton";
+import { PhotoLightbox } from "@/components/photos/PhotoLightbox";
+import { usePhotoLightbox } from "@/components/photos/usePhotoLightbox";
+import { photoAccessibilityLabel } from "@/lib/content/photo-caption";
+import { lightboxPreviewClass } from "@/lib/site/lightbox-preview";
+import type { Photo } from "@/types/content";
 import type {
   HomeClipItem,
   HomeGiantItem,
@@ -13,38 +23,243 @@ import { contentCard } from "@/lib/site/card-styles";
 import { tagPillClass } from "@/lib/site/tag-styles";
 import { cn } from "@/lib/cn";
 
-const linkClass =
-  "text-inherit no-underline hover:underline hover:underline-offset-4";
+/** 記事全体のホバー面。中の余白と同じだけ外へ広げ、並びの位置は変えない。 */
+const homeArticleClass =
+  "relative -mx-3 -my-4 rounded-xl px-3 py-4 transition-colors hover:bg-muted focus-within:bg-muted";
+
+/** 先頭記事の上にはみ出しを見出しの下で受け止める。 */
+const homeListClass = "pt-4";
+
+const columnClass =
+  "mx-auto w-full max-w-5xl px-5 min-[768px]:px-10 min-[1080px]:px-12";
+
+/**
+ * 見出しの上余白。固定の前後で同じにして、固まった瞬間に下がらないようにする。
+ * ページ上端とセクション間は、この分だけ詰めて見出しの位置を保つ。
+ */
+const headingStickPadClass = "pt-6 pb-8";
+
+/** セクション見出しと Diary の日付で共有する表示用の文字。 */
+const displayTitleClass =
+  "text-[1.75rem] font-normal leading-none tracking-tight text-foreground min-[768px]:text-4xl";
 
 function SectionRule({
   id,
   title,
   dek,
+  moreHref,
 }: {
   id: string;
   title: string;
   dek: string;
+  moreHref?: string | null;
 }) {
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const root = sentinel.closest(".layout-main__content");
+    if (!(root instanceof HTMLElement)) return;
+
+    const update = () => {
+      const sticky = sentinel.nextElementSibling;
+      const stickLine =
+        sticky instanceof HTMLElement
+          ? Number.parseFloat(getComputedStyle(sticky).top) || 0
+          : 0;
+      const rootTop = root.getBoundingClientRect().top + stickLine;
+      const next = sentinel.getBoundingClientRect().top <= rootTop;
+      setStuck((current) => (current === next ? current : next));
+    };
+
+    update();
+    root.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      root.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
   return (
-    <div className="mb-10">
-      <h2
-        id={id}
-        className="m-0 text-[1.75rem] font-normal leading-none tracking-tight text-foreground min-[768px]:text-4xl"
-      >
-        {title}
-      </h2>
-      <p className="m-0 mt-2 text-sm leading-snug text-muted-foreground">{dek}</p>
-    </div>
+    <>
+      <div ref={sentinelRef} aria-hidden className="h-0" />
+      <div className="sticky top-14 z-10 bg-white min-[1080px]:top-0">
+        <div className={cn(columnClass, headingStickPadClass)}>
+          <h2 id={id} className={cn("m-0", displayTitleClass)}>
+            {title}
+          </h2>
+          <p className="m-0 mt-2 text-sm leading-snug text-muted-foreground">
+            {dek}
+          </p>
+        </div>
+        {stuck && moreHref ? (
+          <div
+            className={cn(
+              columnClass,
+              "pointer-events-none absolute inset-0 flex items-center justify-end",
+            )}
+          >
+            <Link
+              href={moreHref}
+              className="pointer-events-auto inline-flex items-center rounded-full px-3 py-1 text-sm leading-none text-muted-foreground no-underline transition-colors hover:bg-muted hover:text-foreground"
+            >
+              All
+            </Link>
+          </div>
+        ) : null}
+        <div
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-x-0 bottom-0 h-px bg-border",
+            !stuck && "hidden",
+          )}
+        />
+      </div>
+    </>
   );
 }
 
-function SectionMore({ href }: { href: string }) {
+type TopHeroImage = {
+  image_url: string;
+  alt: string;
+  slug: string;
+  location: string | null;
+  captured_year: number | null;
+};
+
+function topHeroCaption(
+  location: string | null | undefined,
+  year: number | null | undefined,
+): string | null {
+  const place = (location ?? "").trim();
+  const y = typeof year === "number" && Number.isFinite(year) ? String(year) : "";
+  if (place && y) return `${place}, ${y}`;
+  if (place) return place;
+  if (y) return y;
+  return null;
+}
+
+function readTopImage(data: Partial<TopHeroImage> | null): TopHeroImage | null {
+  if (!data?.image_url) return null;
+  return {
+    image_url: data.image_url,
+    alt: data.alt || "",
+    slug: data.slug || data.image_url,
+    location: data.location ?? null,
+    captured_year:
+      typeof data.captured_year === "number" ? data.captured_year : null,
+  };
+}
+
+async function fetchTopImage(avoidSlug?: string): Promise<TopHeroImage | null> {
+  const once = async () => {
+    const res = await fetch("/api/top-image/", { cache: "no-store" });
+    if (!res.ok) return null;
+    return readTopImage((await res.json()) as Partial<TopHeroImage>);
+  };
+  const first = await once();
+  if (!first || !avoidSlug || first.slug !== avoidSlug) return first;
+  const second = await once();
+  return second ?? first;
+}
+
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => reject(new Error("image"));
+    img.src = src;
+  });
+}
+
+/** ロゴの下に置く一枚。押したときだけ別の写真を取り直す。 */
+function HomeMemory() {
+  const requestRef = useRef(0);
+  const [image, setImage] = useState<TopHeroImage | null>(null);
+  const [phase, setPhase] = useState<"loading" | "ready" | "empty">("loading");
+  const [busy, setBusy] = useState(false);
+
+  const recall = async () => {
+    const request = requestRef.current + 1;
+    requestRef.current = request;
+    setBusy(true);
+    try {
+      const next = await fetchTopImage(image?.slug);
+      if (request !== requestRef.current) return;
+      if (!next) {
+        if (!image) setPhase("empty");
+        return;
+      }
+      try {
+        await preloadImage(next.image_url);
+      } catch {
+        if (!image) setPhase("empty");
+        return;
+      }
+      if (request !== requestRef.current) return;
+      setImage(next);
+      setPhase("ready");
+    } catch {
+      if (request === requestRef.current && !image) setPhase("empty");
+    } finally {
+      if (request === requestRef.current) setBusy(false);
+    }
+  };
+
+  useEffect(() => {
+    void recall();
+    return () => {
+      requestRef.current += 1;
+    };
+    // 初回だけ取る。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (phase === "empty") return null;
+
+  const caption = image
+    ? topHeroCaption(image.location, image.captured_year)
+    : null;
+
   return (
-    <p className="m-0 mt-12 text-base">
-      <Link href={href} className={linkClass}>
-        すべて
-      </Link>
-    </p>
+    <figure className="m-0 mt-12 w-full text-left min-[768px]:mt-16">
+      {phase !== "ready" || !image ? (
+        <div className="aspect-video w-full rounded-lg bg-muted" aria-hidden />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={image.image_url}
+          alt={image.alt || caption || ""}
+          className="m-0 block h-auto w-full rounded-lg"
+        />
+      )}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        {caption ? (
+          <figcaption className="m-0 text-sm leading-none text-muted-foreground">
+            {caption}
+          </figcaption>
+        ) : (
+          <span />
+        )}
+        <button
+          type="button"
+          onClick={() => void recall()}
+          disabled={busy || phase !== "ready"}
+          aria-busy={busy}
+          className="inline-flex -mr-3 cursor-pointer items-center gap-2 rounded-full border-0 bg-transparent px-3 py-1 font-[inherit] text-sm leading-none text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-default disabled:opacity-60"
+        >
+          <RefreshCw
+            aria-hidden
+            className={cn("size-3.5", busy && "animate-spin")}
+            strokeWidth={1.75}
+          />
+          Another moment
+        </button>
+      </div>
+    </figure>
   );
 }
 
@@ -57,7 +272,7 @@ function HomeTags({
 }) {
   if (!tags.length) return null;
   return (
-    <p className={cn("m-0 mt-3 flex flex-wrap gap-2", className)}>
+    <p className={cn("relative z-[1] m-0 mt-3 flex flex-wrap gap-2", className)}>
       {tags.map((tag) => (
         <Link key={tag.href} href={tag.href} className={tagPillClass(false)}>
           {tag.label}
@@ -84,52 +299,57 @@ function Dateline({
 
 function OgFrame({
   src,
-  href,
-  external,
   rounded,
   className,
 }: {
   src: string;
-  href: string;
-  external?: boolean;
   rounded?: boolean;
   className?: string;
 }) {
-  const image = (
+  return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt=""
       className={cn(
         OG_IMAGE_ASPECT_CLASS,
-        "m-0 block w-full object-cover transition-opacity hover:opacity-80",
+        "pointer-events-none m-0 block w-full object-cover",
         rounded && "rounded-lg",
+        className,
       )}
     />
   );
+}
+
+function HomeArticleLink({
+  href,
+  external,
+  label,
+}: {
+  href: string;
+  external?: boolean;
+  label: string;
+}) {
+  const className = "absolute inset-0 z-0 cursor-pointer rounded-[inherit]";
   if (external) {
     return (
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={cn("block no-underline", className)}
-      >
-        {image}
-      </a>
+        aria-label={label}
+        className={className}
+      />
     );
   }
-  return (
-    <Link href={href} className={cn("block no-underline", className)}>
-      {image}
-    </Link>
-  );
+  return <Link href={href} aria-label={label} className={className} />;
 }
 
-function DiaryDateTitle({ iso, href }: { iso: string; href: string }) {
+function DiaryDateTitle({ iso }: { iso: string }) {
   const parsed = new Date(iso);
   if (Number.isNaN(parsed.getTime())) return null;
-  const day = String(parsed.getDate());
+  const monthNum = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
   const weekday = parsed
     .toLocaleDateString("en-US", { weekday: "short" })
     .toUpperCase();
@@ -140,45 +360,44 @@ function DiaryDateTitle({ iso, href }: { iso: string; href: string }) {
 
   return (
     <h3 className="m-0 font-normal">
-      <Link href={href} className={linkClass}>
-        <time dateTime={iso} className="flex items-end gap-3">
-          <span className="text-4xl font-medium tabular-nums leading-none tracking-tight min-[768px]:text-5xl">
-            {day}
+      <time dateTime={iso} className="flex items-end gap-3">
+        <span className={cn(displayTitleClass, "tabular-nums")}>
+          {monthNum}/{day}
+        </span>
+        <span className="mb-1 flex flex-col text-[0.7rem] font-normal uppercase leading-tight tracking-[0.14em] text-muted-foreground">
+          <span>{weekday}</span>
+          <span>
+            {month} {year}
           </span>
-          <span className="mb-1 flex flex-col text-[0.7rem] font-medium uppercase leading-tight tracking-[0.14em] text-muted-foreground">
-            <span>{weekday}</span>
-            <span>
-              {month} {year}
-            </span>
-          </span>
-        </time>
-      </Link>
+        </span>
+      </time>
     </h3>
   );
 }
 
 function DiaryList({ items }: { items: HomeWritingItem[] }) {
   return (
-    <ul className="m-0 flex list-none flex-col gap-12 p-0">
+    <ul className={cn("m-0 flex list-none flex-col gap-12 p-0", homeListClass)}>
       {items.map((item) => (
         <li key={item.id}>
-          <article className="flex items-center gap-4 min-[768px]:gap-8">
+          <article className={cn(homeArticleClass, "flex items-center gap-4 min-[768px]:gap-8")}>
+            <HomeArticleLink
+              href={item.href}
+              label={item.headline ? `${item.dateLabel} ${item.headline}` : item.dateLabel}
+            />
             {item.image ? (
               <OgFrame
                 src={item.image}
-                href={item.href}
                 rounded
                 /* 1200/630。この幅のとき高さが日付＋3行＋タグと揃う。 */
-                className="w-32 shrink-0 min-[768px]:w-[21.071rem]"
+                className="w-32 shrink-0 min-[768px]:w-[20.119rem]"
               />
             ) : null}
             <div className="min-w-0 flex-1">
-              <DiaryDateTitle iso={item.dateTime} href={item.href} />
+              <DiaryDateTitle iso={item.dateTime} />
               {item.headline ? (
                 <p className="m-0 mt-3 line-clamp-3 text-base font-normal leading-relaxed text-foreground">
-                  <Link href={item.href} className={linkClass}>
-                    {item.headline}
-                  </Link>
+                  {item.headline}
                 </p>
               ) : null}
               <HomeTags tags={item.tags} />
@@ -193,25 +412,19 @@ function DiaryList({ items }: { items: HomeWritingItem[] }) {
 function WritingIndex({ items }: { items: HomeWritingItem[] }) {
   if (!items.length) return null;
   return (
-    <ul className="m-0 grid list-none grid-cols-1 gap-x-12 gap-y-12 p-0 min-[768px]:grid-cols-2">
+    <ul className={cn("m-0 grid list-none grid-cols-1 gap-x-12 gap-y-12 p-0 min-[768px]:grid-cols-2", homeListClass)}>
       {items.map((item) => (
         <li key={item.id}>
-          <article>
+          <article className={homeArticleClass}>
+            <HomeArticleLink href={item.href} label={item.headline} />
             {item.image ? (
-              <OgFrame
-                src={item.image}
-                href={item.href}
-                rounded
-                className="mb-3"
-              />
+              <OgFrame src={item.image} rounded className="mb-3" />
             ) : null}
             <Dateline dateLabel={item.dateLabel} dateTime={item.dateTime} />
-            <h3 className="m-0 mt-1.5 line-clamp-3 text-base font-medium leading-snug text-foreground">
-              <Link href={item.href} className={linkClass}>
-                {item.headline}
-              </Link>
+            <h3 className="m-0 mt-3 line-clamp-3 text-xl font-medium leading-normal text-foreground">
+              {item.headline}
             </h3>
-            <HomeTags tags={item.tags} />
+            <HomeTags tags={item.tags} className="mt-4" />
           </article>
         </li>
       ))}
@@ -219,68 +432,117 @@ function WritingIndex({ items }: { items: HomeWritingItem[] }) {
   );
 }
 
+function lightboxPhoto(item: HomePhotoItem): Photo {
+  return {
+    id: item.id,
+    slug: item.slug,
+    title: item.title,
+    date: item.date,
+    location: item.location,
+    camera: null,
+    image_url: item.imageUrl,
+    image_thumb_url: item.src,
+    photo_tag: [],
+    body_html: "",
+    status: "published",
+    published_at: null,
+    created_at: item.date,
+    updated_at: item.date,
+  };
+}
+
 function PhotoBlock({ items }: { items: HomePhotoItem[] }) {
+  const photos = useMemo(() => items.map(lightboxPhoto), [items]);
+  const {
+    displayPhotos,
+    isClientMounted,
+    activePhoto,
+    openLightbox,
+    closeLightbox,
+    showPreviousPhoto,
+    showNextPhoto,
+  } = usePhotoLightbox(photos);
+  const detailBasePath = items[0]?.galleryHref;
+
   return (
-    <ul className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-8 p-0 min-[900px]:grid-cols-3 min-[900px]:gap-x-6">
-      {items.map((item) => (
-        <li key={item.id}>
-          <figure className="m-0">
-            <Link href={item.href} className="block no-underline">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.src}
-                alt={item.alt}
-                className="m-0 block aspect-[4/3] w-full object-cover transition-opacity hover:opacity-80"
-              />
-            </Link>
-            <figcaption className="mt-2 text-sm leading-snug text-muted-foreground">
-              <Link href={item.galleryHref} className={linkClass}>
-                {item.galleryLabel}
-              </Link>
-              {item.caption ? <span> · {item.caption}</span> : null}
-            </figcaption>
-          </figure>
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-8 p-0 min-[900px]:grid-cols-3 min-[900px]:gap-x-6">
+        {items.map((item) => (
+          <li key={item.id}>
+            <figure className="m-0">
+              <button
+                type="button"
+                className="block w-full cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onClick={() => openLightbox(item.id)}
+                aria-label={`${photoAccessibilityLabel(lightboxPhoto(item))} を拡大表示`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.src}
+                  alt=""
+                  className={cn(
+                    "m-0 block aspect-[4/3] w-full object-cover",
+                    lightboxPreviewClass,
+                  )}
+                />
+              </button>
+              {item.caption ? (
+                <figcaption className="mt-2 text-sm leading-snug text-muted-foreground">
+                  {item.caption}
+                </figcaption>
+              ) : null}
+            </figure>
+          </li>
+        ))}
+      </ul>
+      {isClientMounted && activePhoto ? (
+        <PhotoLightbox
+          photo={activePhoto}
+          photos={displayPhotos}
+          detailBasePath={detailBasePath}
+          onClose={closeLightbox}
+          onShowPrevious={showPreviousPhoto}
+          onShowNext={showNextPhoto}
+        />
+      ) : null}
+    </>
   );
 }
 
 function ClipIndex({ items }: { items: HomeClipItem[] }) {
   return (
-    <ul className="m-0 flex list-none flex-col gap-12 p-0">
+    <ul className={cn("m-0 flex list-none flex-col gap-12 p-0", homeListClass)}>
       {items.map((item) => (
         <li key={item.id}>
-          <article className="flex items-center gap-4 min-[768px]:gap-8">
+          <article className={cn(homeArticleClass, "flex items-center gap-4 min-[768px]:gap-8")}>
+            <HomeArticleLink href={item.href} external label={item.title} />
             {item.image ? (
               <OgFrame
                 src={item.image}
-                href={item.href}
-                external
                 rounded
                 className="w-32 shrink-0 min-[768px]:w-64"
               />
             ) : null}
             <div className="min-w-0 flex-1">
-              <p className="m-0 text-sm text-muted-foreground">
-                {item.source}
+              <div className="flex flex-wrap items-center gap-x-2 overflow-hidden text-sm leading-tight text-muted-foreground">
                 {item.dateLabel ? (
-                  <>
-                    <span aria-hidden> · </span>
-                    <time dateTime={item.dateTime}>{item.dateLabel}</time>
-                  </>
+                  <time dateTime={item.dateTime}>{item.dateLabel}</time>
                 ) : null}
-              </p>
+                {item.dateLabel && item.source ? (
+                  <span aria-hidden>·</span>
+                ) : null}
+                {item.source ? (
+                  <span className="truncate">{item.source}</span>
+                ) : null}
+              </div>
               <h3 className="m-0 mt-1.5 line-clamp-3 text-base font-medium leading-snug">
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={linkClass}
-                >
-                  {item.title}
-                </a>
+                {item.title}
               </h3>
+              {item.memo ? (
+                <div className="mt-3">
+                  <ClipMemo>{item.memo}</ClipMemo>
+                </div>
+              ) : null}
               <HomeTags tags={item.tags} />
             </div>
           </article>
@@ -313,7 +575,7 @@ function GiantIndex({ items }: { items: HomeGiantItem[] }) {
                 {item.citation}
               </p>
             ) : null}
-            <HomeTags tags={item.tags} className="relative z-10" />
+            <HomeTags tags={item.tags} />
             <Link
               href={item.href}
               aria-label={item.citation || "引用"}
@@ -329,10 +591,12 @@ function GiantIndex({ items }: { items: HomeGiantItem[] }) {
 export function HomePortal({ data }: { data: HomePortalData }) {
   const hasDiary = data.diaries.length > 0;
   const hasColumn = data.columns.length > 0;
-  const hasPhotos = data.photos.length > 0;
+  const hasSmile = data.smile.length > 0;
+  const hasJampai = data.jampai.length > 0;
   const hasClips = data.clips.length > 0;
   const hasGiants = data.giants.length > 0;
-  const empty = !hasDiary && !hasColumn && !hasPhotos && !hasClips && !hasGiants;
+  const empty =
+    !hasDiary && !hasColumn && !hasSmile && !hasJampai && !hasClips && !hasGiants;
 
   return (
     <div className="bg-white text-foreground">
@@ -340,14 +604,32 @@ export function HomePortal({ data }: { data: HomePortalData }) {
         <MobileMenuButton />
       </div>
 
-      <div className="mx-auto w-full max-w-5xl px-5 py-8 min-[768px]:px-10 min-[768px]:py-12 min-[1080px]:px-12 min-[1080px]:py-14">
-        <h1 className="sr-only">ezeroms.com</h1>
-
-        {empty ? (
-          <p className="m-0 text-base text-muted-foreground">
-            まだ公開されているものがありません。
+      <div className="bg-white pb-8 min-[768px]:pb-12 min-[1080px]:pb-14">
+        <div
+          className={cn(
+            columnClass,
+            "pb-16 pt-14 text-center min-[768px]:pb-20 min-[768px]:pt-16",
+          )}
+        >
+          <h1 className="m-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              id="home-masthead-logo"
+              src="/images/common/logo.svg"
+              alt="ezeroms.com"
+              className="mx-auto block h-auto w-[13rem] min-[768px]:w-[16.5rem]"
+            />
+          </h1>
+          <p className="m-0 mt-5 text-base italic leading-relaxed text-muted-foreground">
+            One thing I can tell you is you got to be free!
           </p>
-        ) : null}
+          <HomeMemory />
+          {empty ? (
+            <p className="m-0 mt-10 text-base text-muted-foreground">
+              まだ公開されているものがありません。
+            </p>
+          ) : null}
+        </div>
 
         {hasDiary ? (
           <section aria-labelledby="home-diary">
@@ -355,53 +637,79 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               id="home-diary"
               title="Diary"
               dek="考えたこと、感じたこと"
+              moreHref={data.diaryHref}
             />
-            <DiaryList items={data.diaries} />
-            {data.diaryHref ? <SectionMore href={data.diaryHref} /> : null}
+            <div className={columnClass}>
+              <DiaryList items={data.diaries} />
+            </div>
           </section>
         ) : null}
 
         {hasColumn ? (
           <section
             aria-labelledby="home-column"
-            className={cn(hasDiary && "mt-24")}
+            className={cn(hasDiary && "mt-[4.5rem]")}
           >
             <SectionRule
               id="home-column"
               title="Column"
               dek="コラム"
+              moreHref={data.columnHref}
             />
-            <WritingIndex items={data.columns} />
-            {data.columnHref ? <SectionMore href={data.columnHref} /> : null}
+            <div className={columnClass}>
+              <WritingIndex items={data.columns} />
+            </div>
           </section>
         ) : null}
 
-        {hasPhotos ? (
+        {hasSmile ? (
           <section
-            aria-labelledby="home-photos"
-            className={cn((hasDiary || hasColumn) && "mt-24")}
+            aria-labelledby="home-smile"
+            className={cn((hasDiary || hasColumn) && "mt-[4.5rem]")}
           >
             <SectionRule
-              id="home-photos"
-              title="Photos"
-              dek="笑顔と麻雀牌の写真"
+              id="home-smile"
+              title="Smile"
+              dek="笑顔の写真"
+              moreHref={data.smileHref}
             />
-            <PhotoBlock items={data.photos} />
+            <div className={columnClass}>
+              <PhotoBlock items={data.smile} />
+            </div>
+          </section>
+        ) : null}
+
+        {hasJampai ? (
+          <section
+            aria-labelledby="home-jampai"
+            className={cn((hasDiary || hasColumn || hasSmile) && "mt-[4.5rem]")}
+          >
+            <SectionRule
+              id="home-jampai"
+              title="Jampai"
+              dek="麻雀牌の写真"
+              moreHref={data.jampaiHref}
+            />
+            <div className={columnClass}>
+              <PhotoBlock items={data.jampai} />
+            </div>
           </section>
         ) : null}
 
         {hasClips ? (
           <section
             aria-labelledby="home-clips"
-            className={cn((hasDiary || hasColumn || hasPhotos) && "mt-24")}
+            className={cn((hasDiary || hasColumn || hasSmile || hasJampai) && "mt-[4.5rem]")}
           >
             <SectionRule
               id="home-clips"
               title="Clips"
               dek="気になるニュース、話題"
+              moreHref={data.clipsHref}
             />
-            <ClipIndex items={data.clips} />
-            {data.clipsHref ? <SectionMore href={data.clipsHref} /> : null}
+            <div className={columnClass}>
+              <ClipIndex items={data.clips} />
+            </div>
           </section>
         ) : null}
 
@@ -409,16 +717,18 @@ export function HomePortal({ data }: { data: HomePortalData }) {
           <section
             aria-labelledby="home-giants"
             className={cn(
-              (hasDiary || hasColumn || hasPhotos || hasClips) && "mt-24",
+              (hasDiary || hasColumn || hasSmile || hasJampai || hasClips) && "mt-[4.5rem]",
             )}
           >
             <SectionRule
               id="home-giants"
               title="The shoulders of Giants"
               dek="先人たちの知恵"
+              moreHref={data.giantsHref}
             />
-            <GiantIndex items={data.giants} />
-            {data.giantsHref ? <SectionMore href={data.giantsHref} /> : null}
+            <div className={columnClass}>
+              <GiantIndex items={data.giants} />
+            </div>
           </section>
         ) : null}
       </div>

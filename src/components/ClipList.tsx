@@ -22,7 +22,7 @@ type Props = {
   dateFilter?: Pick<DiaryFilterState, "from" | "to">;
 };
 
-function ClipMemo({ children }: { children: string }) {
+export function ClipMemo({ children }: { children: string }) {
   return (
     <div className="flex items-start gap-2 rounded-md border border-solid border-border px-3 py-2.5">
       <PenLine
