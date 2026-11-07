@@ -1,34 +1,11 @@
+import { HomePortal } from "@/components/HomePortal";
 import { SiteShell } from "@/components/SiteShell";
-import { HomeRandomImage } from "@/components/HomeRandomImage";
-import {
-  listPublicLibrarySections,
-  listPublicPhotoGalleries,
-  listPublicWorksSections,
-} from "@/lib/content/queries";
+import { loadHomePortal } from "@/lib/content/home-portal";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [publicPhotos, publicWorks, publicLibrary] = await Promise.all([
-    listPublicPhotoGalleries().catch(() => []),
-    listPublicWorksSections().catch(() => []),
-    listPublicLibrarySections().catch(() => []),
-  ]);
-  const photoNav = publicPhotos.map((g) => ({
-    id: g.id,
-    href: g.basePath,
-    label: g.label,
-  }));
-  const worksNav = publicWorks.map((s) => ({
-    id: s.id,
-    href: s.basePath,
-    label: s.label,
-  }));
-  const libraryNav = publicLibrary.map((s) => ({
-    id: s.id,
-    href: s.basePath,
-    label: s.label,
-  }));
+  const portal = await loadHomePortal();
 
   return (
     <SiteShell
@@ -39,12 +16,7 @@ export default async function HomePage() {
       showMobileChrome={false}
       contentClassName="p-0"
     >
-      <HomeRandomImage
-        diaryHref="/diary/"
-        photoNav={photoNav}
-        worksNav={worksNav}
-        libraryNav={libraryNav}
-      />
+      <HomePortal data={portal} />
     </SiteShell>
   );
 }

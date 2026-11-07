@@ -37,3 +37,38 @@ export function giantsExcerpt(html: string, max = 160): string {
   if (text.length <= max) return text;
   return `${text.slice(0, max).trim()}…`;
 }
+
+function decodeQuoteText(text: string): string {
+  return text
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) =>
+      String.fromCodePoint(parseInt(code, 16)),
+    );
+}
+
+/** 引用の全文。段落の区切りと、段落内の改行は残す。 */
+export function giantsQuoteParagraphs(html: string): string[] {
+  const text = decodeQuoteText(
+    html
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/(p|div|blockquote|li|h[1-6])>/gi, "\n\n")
+      .replace(/<[^>]+>/g, ""),
+  );
+  return text
+    .split(/\n{2,}/)
+    .map((paragraph) =>
+      paragraph
+        .replace(/[ \t]*\n[ \t]*/g, "\n")
+        .replace(/[ \t]{2,}/g, " ")
+        .trim(),
+    )
+    .filter(Boolean);
+}

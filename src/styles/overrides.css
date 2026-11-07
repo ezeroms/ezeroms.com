@@ -77,7 +77,7 @@ input[type="search"]::-webkit-search-decoration {
  * -------------------------------------------------------------------------- */
 
 @media (max-width: 1079px) {
-  /* Off-canvas drawer — widths/padding owned here so legacy + !w-56 cannot fight */
+  /* Off-canvas drawer — widths/padding owned here so legacy + desktop !w-64 cannot fight */
   .layout-sidebar {
     position: fixed !important;
     top: 0 !important;
@@ -163,7 +163,7 @@ body.is-home .layout-main--centered {
   height: 100% !important;
   min-height: 0 !important;
   overflow: hidden !important;
-  background: #f9f9f7 !important;
+  background: #fff !important;
 }
 
 body.is-home .layout-main__content {
@@ -180,8 +180,9 @@ body.is-home .layout-main__content {
   overflow-y: auto !important;
 }
 
+body.is-home .layout-container,
 body.is-home .layout-body {
-  background: #f9f9f7 !important;
+  background: #fff !important;
 }
 
 /*

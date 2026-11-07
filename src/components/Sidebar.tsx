@@ -17,6 +17,7 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import { cn } from "@/lib/cn";
 import { sidebarNavItemClass } from "@/lib/site/nav-styles";
 import type { PhotoGalleryId } from "@/lib/content/photo-galleries";
 import type { WorksSectionId } from "@/lib/content/works-sections";
@@ -265,7 +266,7 @@ export function Sidebar({
         tabIndex={-1}
       />
 
-      <div className="w-full shrink-0 border-b border-border px-4 pb-4 pt-6">
+      <div className="w-full shrink-0 border-b border-border px-4 pb-5 pt-6">
         <Link
           href="/"
           className="block opacity-100 transition-opacity hover:opacity-60"
@@ -274,9 +275,12 @@ export function Sidebar({
           <img
             src="/images/common/logo.svg"
             alt="ezeroms.com"
-            className="block h-auto w-[132px] max-w-full"
+            className="block h-auto w-[10.5rem] max-w-full"
           />
         </Link>
+        <p className="m-0 mt-4 whitespace-nowrap font-sans text-[11px] font-normal italic leading-[1.35] text-foreground">
+          One thing I can tell you is you got to be free!
+        </p>
       </div>
 
       <nav
@@ -288,14 +292,17 @@ export function Sidebar({
             <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {section.label}
             </p>
-            <ul className="m-0 flex w-full list-none flex-col gap-0.5 p-0">
+            <ul className="m-0 flex w-full list-none flex-col gap-2 p-0">
               {section.items.map((item) => {
                 const Icon = item.icon;
                 return (
                   <li key={item.href} className="w-full">
                     <Link
                       href={item.href}
-                      className={sidebarNavItemClass(item.active)}
+                      className={cn(
+                        sidebarNavItemClass(item.active),
+                        "text-[length:var(--font-size-base)]",
+                      )}
                     >
                       <Icon className="h-4 w-4 shrink-0 opacity-80" />
                       <span className="min-w-0 flex-1 truncate">{item.label}</span>

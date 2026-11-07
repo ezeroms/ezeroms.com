@@ -201,7 +201,7 @@ export function HomeRandomImage({
     : null;
 
   return (
-    <div className="home-page relative w-full bg-[#f9f9f7] text-[#050317]">
+    <div className="home-page relative w-full bg-white text-[#050317]">
       {/*
         Hero: logo → catchphrase → photo (natural height, never cropped).
         Desktop: vertically centered in the viewport (sidebar already has nav).

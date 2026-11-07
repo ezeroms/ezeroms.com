@@ -229,8 +229,9 @@ export async function SiteShell({
             "layout-sidebar",
             "flex h-screen shrink-0 flex-col border-r border-border bg-card",
             "!items-stretch !p-0",
-            /* Desktop: in-flow rail — !w-56 beats legacy --sidebar-width (240px) */
-            "min-[1080px]:relative min-[1080px]:!w-56 min-[1080px]:translate-x-0",
+            /* Desktop: wide enough for "The shoulders of Giants" at the body size.
+               !w-64 beats legacy --sidebar-width (240px). */
+            "min-[1080px]:relative min-[1080px]:!w-64 min-[1080px]:translate-x-0",
             /* ≤1079: off-canvas drawer — open via .is-open (see overrides.css) */
             "max-[1079px]:fixed max-[1079px]:inset-y-0 max-[1079px]:left-0 max-[1079px]:z-[1000]",
           )}
