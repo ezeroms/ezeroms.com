@@ -636,7 +636,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
             <SectionRule
               id="home-diary"
               title="Diary"
-              dek="考えたこと、感じたこと"
+              dek="日記"
               moreHref={data.diaryHref}
             />
             <div className={columnClass}>
@@ -723,7 +723,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
             <SectionRule
               id="home-giants"
               title="The shoulders of Giants"
-              dek="先人たちの知恵"
+              dek="先人の知恵"
               moreHref={data.giantsHref}
             />
             <div className={columnClass}>
