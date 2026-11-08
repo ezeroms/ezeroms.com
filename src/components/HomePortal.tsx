@@ -225,7 +225,7 @@ function HomeMemory() {
     : null;
 
   return (
-    <figure className="m-0 mt-12 w-full text-left min-[768px]:mt-16">
+    <figure id="home-memory" className="m-0 mt-12 w-full text-left min-[768px]:mt-16">
       {phase !== "ready" || !image ? (
         <div className="aspect-video w-full rounded-lg bg-muted" aria-hidden />
       ) : (

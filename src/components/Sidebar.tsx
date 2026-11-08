@@ -100,11 +100,12 @@ const LIBRARY_ICONS: Record<LibrarySectionId, LucideIcon> = {
   "media-coverage": Newspaper,
 };
 
-/** 右のロゴが見えているあいだ、左のロゴをここまで落とす。 */
-const SIDEBAR_LOGO_FAINT = 0.22;
+/** トップの先頭で、左のロゴをここまで落とす。 */
+const SIDEBAR_LOGO_FAINT = 0.1;
 
-function sidebarLogoOpacity(root: HTMLElement, logo: HTMLElement): number {
-  const remaining = logo.getBoundingClientRect().bottom - root.getBoundingClientRect().top;
+/** 思い出の写真の上端がカラム先頭に着くまでの進み具合。 */
+function sidebarLogoOpacity(root: HTMLElement, photo: HTMLElement): number {
+  const remaining = photo.getBoundingClientRect().top - root.getBoundingClientRect().top;
   if (remaining <= 0) return 1;
   const traveled = root.scrollTop;
   const span = remaining + traveled;
@@ -144,8 +145,8 @@ export function Sidebar({
     }
 
     const root = document.querySelector(".layout-main__content");
-    const logo = document.getElementById("home-masthead-logo");
-    if (!(root instanceof HTMLElement) || !logo) {
+    const photo = document.getElementById("home-memory");
+    if (!(root instanceof HTMLElement) || !photo) {
       link.style.opacity = "1";
       return;
     }
@@ -156,7 +157,7 @@ export function Sidebar({
         link.style.opacity = "1";
         return;
       }
-      link.style.opacity = String(sidebarLogoOpacity(root, logo));
+      link.style.opacity = String(sidebarLogoOpacity(root, photo));
     };
     update();
     root.addEventListener("scroll", update, { passive: true });
