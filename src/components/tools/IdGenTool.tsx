@@ -447,6 +447,10 @@ const pageColumnClass = "mx-auto w-full max-w-2xl px-5 min-[768px]:px-10";
 /** Home の記事行と同じ、ホバーで bg-muted になるコピー面。余白は外へ広げて文字位置は動かさない。 */
 const copySurfaceClass =
   "m-0 cursor-pointer appearance-none border-0 bg-transparent text-left font-[inherit] text-foreground shadow-none outline-none transition-colors hover:bg-muted focus-visible:bg-muted";
+const checkboxClass =
+  "m-0 h-4 w-4 shrink-0 cursor-pointer appearance-none rounded border border-solid border-border bg-white bg-center bg-no-repeat bg-[length:12px_12px] shadow-none transition-colors hover:border-border-hover checked:border-foreground checked:bg-foreground checked:hover:border-[hsl(var(--border-hover))] checked:hover:bg-[hsl(var(--border-hover))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-hover focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-default";
+const checkboxTick =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.2 6.4 11.1 12.5 4.8' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")";
 const displayTitleClass =
   "text-[1.75rem] font-normal leading-none tracking-tight text-foreground min-[768px]:text-4xl";
 
@@ -552,6 +556,7 @@ export function IdGenTool() {
         <MobileMenuButton />
       </div>
 
+      <div aria-hidden className="h-6 min-[1080px]:h-10" />
       <div className="sticky top-14 z-10 bg-white min-[1080px]:top-0">
         <div className={cn(pageColumnClass, "pt-6 pb-8")}>
           <h1 className={cn("m-0", displayTitleClass)}>
@@ -570,7 +575,7 @@ export function IdGenTool() {
         />
       </div>
 
-      <div className={cn(pageColumnClass, "pb-8 [&>section:first-child>h2]:mt-0")}>
+      <div className={cn(pageColumnClass, "pt-10 pb-16 min-[1080px]:pb-24 [&>section:first-child>h2]:mt-0")}>
         <Field title="Email">
           <SecretValue
             text={account?.email ?? null}
@@ -644,7 +649,8 @@ export function IdGenTool() {
               checked={symbols}
               disabled={!ready}
               onChange={(event) => changeSymbols(event.target.checked)}
-              className="m-0 h-4 w-4 shrink-0 accent-[hsl(var(--foreground))] disabled:cursor-default"
+              className={checkboxClass}
+              style={symbols ? { backgroundImage: checkboxTick } : undefined}
             />
             Include symbols ({PASSWORD_SYMBOLS})
           </label>
@@ -780,7 +786,10 @@ export function IdGenTool() {
                   checked={decades.includes(decade)}
                   disabled={!ready}
                   onChange={(event) => changeDecade(decade, event.target.checked)}
-                  className="m-0 h-4 w-4 shrink-0 accent-[hsl(var(--foreground))] disabled:cursor-default"
+                  className={checkboxClass}
+                  style={
+                    decades.includes(decade) ? { backgroundImage: checkboxTick } : undefined
+                  }
                 />
                 {decade}s
               </label>
