@@ -4,6 +4,7 @@ import { requireAdminSession } from "@/lib/admin/require-admin";
 import {
   buildTopImageAlt,
   parseCapturedYear,
+  parseTopImageMessage,
 } from "@/lib/admin/top-images";
 import { getSupabaseAdmin } from "@/lib/supabase/server";
 
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest) {
       alt?: string;
       location?: string;
       captured_year?: string | number | null;
+      message?: string | null;
       sort_order?: number | string;
       status?: "draft" | "published" | "archived";
     };
@@ -73,6 +75,7 @@ export async function POST(request: NextRequest) {
     }
 
     const location = (body.location ?? "").trim() || null;
+    const message = parseTopImageMessage(body.message);
     const status = body.status === "draft" ? "draft" : "published";
     const sortOrder = Number(body.sort_order ?? 0);
     const now = new Date().toISOString();
@@ -84,6 +87,7 @@ export async function POST(request: NextRequest) {
       alt,
       location,
       captured_year: capturedYear,
+      message,
       sort_order: Number.isFinite(sortOrder) ? Math.trunc(sortOrder) : 0,
       status,
       published_at: status === "published" ? now : null,

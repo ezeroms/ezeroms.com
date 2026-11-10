@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { RefreshCw } from "lucide-react";
+import { ChevronRight, RefreshCw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ClipMemo } from "@/components/ClipList";
 import { MobileMenuButton } from "@/components/MobileMenuButton";
@@ -104,9 +104,14 @@ function SectionRule({
           >
             <Link
               href={moreHref}
-              className="pointer-events-auto inline-flex items-center rounded-full px-3 py-1 text-sm leading-none text-muted-foreground no-underline transition-colors hover:bg-muted hover:text-foreground"
+              className="pointer-events-auto inline-flex items-center gap-0.5 rounded-full px-3 py-2 text-sm leading-none text-muted-foreground no-underline transition-colors hover:bg-muted hover:text-foreground"
             >
               All
+              <ChevronRight
+                aria-hidden
+                className="home-all-chevron size-3.5"
+                strokeWidth={1.75}
+              />
             </Link>
           </div>
         ) : null}
@@ -128,6 +133,7 @@ type TopHeroImage = {
   slug: string;
   location: string | null;
   captured_year: number | null;
+  message: string | null;
 };
 
 function topHeroCaption(
@@ -151,19 +157,27 @@ function readTopImage(data: Partial<TopHeroImage> | null): TopHeroImage | null {
     location: data.location ?? null,
     captured_year:
       typeof data.captured_year === "number" ? data.captured_year : null,
+    message: data.message?.trim() || null,
   };
 }
 
-async function fetchTopImage(avoidSlug?: string): Promise<TopHeroImage | null> {
-  const once = async () => {
-    const res = await fetch("/api/top-image/", { cache: "no-store" });
-    if (!res.ok) return null;
-    return readTopImage((await res.json()) as Partial<TopHeroImage>);
-  };
-  const first = await once();
-  if (!first || !avoidSlug || first.slug !== avoidSlug) return first;
-  const second = await once();
-  return second ?? first;
+/** このページで直近に出した枚数。API の上限と揃える。 */
+const RECENT_TOP_IMAGES = 8;
+
+function rememberTopImage(recent: string[], slug: string): string[] {
+  const next = [slug, ...recent.filter((item) => item !== slug)];
+  return next.slice(0, RECENT_TOP_IMAGES);
+}
+
+async function fetchTopImage(avoid: readonly string[]): Promise<TopHeroImage | null> {
+  const params = new URLSearchParams();
+  if (avoid.length) params.set("avoid", avoid.join(","));
+  const query = params.toString();
+  const res = await fetch(query ? `/api/top-image/?${query}` : "/api/top-image/", {
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  return readTopImage((await res.json()) as Partial<TopHeroImage>);
 }
 
 function preloadImage(src: string): Promise<void> {
@@ -178,6 +192,7 @@ function preloadImage(src: string): Promise<void> {
 /** ロゴの下に置く一枚。押したときだけ別の写真を取り直す。 */
 function HomeMemory() {
   const requestRef = useRef(0);
+  const recentRef = useRef<string[]>([]);
   const [image, setImage] = useState<TopHeroImage | null>(null);
   const [phase, setPhase] = useState<"loading" | "ready" | "empty">("loading");
   const [busy, setBusy] = useState(false);
@@ -187,7 +202,7 @@ function HomeMemory() {
     requestRef.current = request;
     setBusy(true);
     try {
-      const next = await fetchTopImage(image?.slug);
+      const next = await fetchTopImage(recentRef.current);
       if (request !== requestRef.current) return;
       if (!next) {
         if (!image) setPhase("empty");
@@ -200,6 +215,7 @@ function HomeMemory() {
         return;
       }
       if (request !== requestRef.current) return;
+      recentRef.current = rememberTopImage(recentRef.current, next.slug);
       setImage(next);
       setPhase("ready");
     } catch {
@@ -223,6 +239,7 @@ function HomeMemory() {
   const caption = image
     ? topHeroCaption(image.location, image.captured_year)
     : null;
+  const message = image?.message ?? null;
 
   return (
     <figure id="home-memory" className="m-0 mt-12 w-full text-left min-[768px]:mt-16">
@@ -236,20 +253,25 @@ function HomeMemory() {
           className="m-0 block h-auto w-full rounded-lg"
         />
       )}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        {caption ? (
-          <figcaption className="m-0 text-sm leading-none text-muted-foreground">
-            {caption}
+      <div className="mt-3 flex flex-col gap-2 min-[768px]:flex-row min-[768px]:items-center min-[768px]:justify-between min-[768px]:gap-3">
+        {caption || message ? (
+          <figcaption className="m-0 min-w-0 text-sm leading-snug text-muted-foreground min-[768px]:flex-1 min-[768px]:leading-none">
+            {caption ? <span>{caption}</span> : null}
+            {message ? (
+              <span className={caption ? "ml-3 min-[768px]:ml-3.5" : undefined}>
+                {message}
+              </span>
+            ) : null}
           </figcaption>
         ) : (
-          <span />
+          <span className="hidden min-[768px]:block min-[768px]:min-w-0 min-[768px]:flex-1" />
         )}
         <button
           type="button"
           onClick={() => void recall()}
           disabled={busy || phase !== "ready"}
           aria-busy={busy}
-          className="inline-flex -mr-3 cursor-pointer items-center gap-2 rounded-full border-0 bg-transparent px-3 py-1 font-[inherit] text-sm leading-none text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-default disabled:opacity-60"
+          className="inline-flex -mr-3 shrink-0 cursor-pointer items-center gap-2 self-end rounded-full border-0 bg-transparent px-3 py-1 font-[inherit] text-sm leading-none text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-default disabled:opacity-60"
         >
           <RefreshCw
             aria-hidden

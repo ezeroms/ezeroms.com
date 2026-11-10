@@ -50,6 +50,7 @@ function mapRows(data: Record<string, unknown>[] | null): AdminTopImageTableItem
           alt: String(row.alt ?? "Random Image"),
           location: location ?? "",
           captured_year: yearOk != null ? String(yearOk) : "",
+          message: String(row.message ?? ""),
           sort_order: String(sort_order),
           status: status === "draft" ? "draft" : "published",
         },

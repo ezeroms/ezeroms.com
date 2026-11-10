@@ -1,3 +1,10 @@
+/** トップ画像の短いメッセージ。空なら null。 */
+export function parseTopImageMessage(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const text = raw.trim();
+  return text || null;
+}
+
 /** トップ画像の撮影年。空や範囲外なら null。 */
 export function parseCapturedYear(raw: unknown): number | null {
   if (raw === null || raw === undefined || raw === "") return null;

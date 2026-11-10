@@ -32,6 +32,7 @@ export type TopImageEditorInitial = {
   alt: string;
   location: string;
   captured_year: string;
+  message: string;
   sort_order: string;
   status: "published" | "draft";
 };
@@ -64,6 +65,7 @@ export function TopImageEditorForm({
       alt: initial?.alt ?? "Random Image",
       location: initial?.location ?? "",
       capturedYear: initial?.captured_year ?? "",
+      message: initial?.message ?? "",
       sortOrder: initial?.sort_order ?? "0",
       status: (initial?.status ?? "published") as "published" | "draft",
     };
@@ -84,6 +86,7 @@ export function TopImageEditorForm({
   const [alt, setAlt] = useState(baseline.alt);
   const [location, setLocation] = useState(baseline.location);
   const [capturedYear, setCapturedYear] = useState(baseline.capturedYear);
+  const [message, setMessage] = useState(baseline.message);
   const [sortOrder, setSortOrder] = useState(baseline.sortOrder);
   const [status, setStatus] = useState<"published" | "draft">(baseline.status);
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +101,7 @@ export function TopImageEditorForm({
     alt !== baseline.alt ||
     location !== baseline.location ||
     capturedYear !== baseline.capturedYear ||
+    message !== baseline.message ||
     sortOrder !== baseline.sortOrder ||
     status !== baseline.status;
 
@@ -208,6 +212,7 @@ export function TopImageEditorForm({
         alt,
         location,
         captured_year: yearTrim === "" ? null : yearTrim,
+        message,
         sort_order: sortOrder.trim() === "" ? 0 : Number(sortOrder),
         status,
       };
@@ -407,6 +412,16 @@ export function TopImageEditorForm({
             placeholder="例: 2013"
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="top-image-message">Message</Label>
+        <Input
+          id="top-image-message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="空なら表示しない"
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

@@ -49,6 +49,7 @@ function mapTopImage(row: Record<string, unknown>): TopImage {
       captured_year != null && Number.isFinite(captured_year)
         ? captured_year
         : null,
+    message: String(row.message ?? "").trim() || null,
     sort_order: Number(row.sort_order ?? 0) || 0,
     status: (row.status as TopImage["status"]) ?? "published",
     published_at: (row.published_at as string | null) ?? null,
@@ -87,10 +88,18 @@ export async function listTopImages(): Promise<TopImage[]> {
   }
 }
 
-export async function getRandomTopImage(): Promise<TopImage | null> {
+/** 直近に返した枚数。これ以上はクエリでも受け取らない。 */
+export const TOP_IMAGE_AVOID_LIMIT = 8;
+
+export async function getRandomTopImage(
+  avoidSlugs: readonly string[] = [],
+): Promise<TopImage | null> {
   const items = await listTopImages();
   if (!items.length) return null;
-  return items[Math.floor(Math.random() * items.length)] ?? null;
+  const blocked = new Set(avoidSlugs);
+  const pool = items.filter((item) => item.slug && !blocked.has(item.slug));
+  const pickFrom = pool.length > 0 ? pool : items;
+  return pickFrom[Math.floor(Math.random() * pickFrom.length)] ?? null;
 }
 
 export function listLocalTopImageUrls(): string[] {
@@ -114,11 +123,14 @@ export type RandomTopImagePayload = {
   slug: string;
   location: string | null;
   captured_year: number | null;
+  message: string | null;
 };
 
-export async function getRandomTopImageUrl(): Promise<RandomTopImagePayload | null> {
+export async function getRandomTopImageUrl(
+  avoidSlugs: readonly string[] = [],
+): Promise<RandomTopImagePayload | null> {
   try {
-    const fromDb = await getRandomTopImage();
+    const fromDb = await getRandomTopImage(avoidSlugs);
     if (fromDb) {
       return {
         image_url: fromDb.image_url,
@@ -126,19 +138,26 @@ export async function getRandomTopImageUrl(): Promise<RandomTopImagePayload | nu
         slug: fromDb.slug,
         location: fromDb.location,
         captured_year: fromDb.captured_year,
+        message: fromDb.message,
       };
     }
   } catch {
     /* table may not exist yet */
   }
-  const local = listLocalTopImageUrls();
-  if (!local.length) return null;
-  const pick = local[Math.floor(Math.random() * local.length)]!;
+  const blocked = new Set(avoidSlugs);
+  const local = listLocalTopImageUrls().filter((url) => {
+    const slug = url.split("/").pop()?.replace(/\.[^.]+$/, "") ?? "";
+    return slug && !blocked.has(slug);
+  });
+  const pickFrom = local.length > 0 ? local : listLocalTopImageUrls();
+  if (!pickFrom.length) return null;
+  const pick = pickFrom[Math.floor(Math.random() * pickFrom.length)]!;
   return {
     image_url: pick,
     alt: "Random Image",
     slug: pick.split("/").pop()?.replace(/\.[^.]+$/, "") ?? "local",
     location: null,
     captured_year: null,
+    message: null,
   };
 }

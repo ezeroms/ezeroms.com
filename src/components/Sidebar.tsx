@@ -332,7 +332,7 @@ export function Sidebar({
           <img
             src="/images/common/logo.svg"
             alt="ezeroms.com"
-            className="block h-auto w-[10.5rem] max-w-full"
+            className="block h-auto w-[9.25rem] max-w-full"
           />
         </Link>
       </div>

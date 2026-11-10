@@ -4,6 +4,7 @@ import { requireAdminSession } from "@/lib/admin/require-admin";
 import {
   buildTopImageAlt,
   parseCapturedYear,
+  parseTopImageMessage,
 } from "@/lib/admin/top-images";
 import { getSupabaseAdmin } from "@/lib/supabase/server";
 
@@ -42,6 +43,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
       alt?: string;
       location?: string;
       captured_year?: string | number | null;
+      message?: string | null;
       sort_order?: number | string;
       status?: "draft" | "published" | "archived";
     };
@@ -80,6 +82,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     const location = (body.location ?? "").trim() || null;
+    const message = parseTopImageMessage(body.message);
     const status =
       body.status === "draft"
         ? "draft"
@@ -124,6 +127,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         alt,
         location,
         captured_year: capturedYear,
+        message,
         sort_order: Number.isFinite(sortOrder) ? Math.trunc(sortOrder) : 0,
         status,
         published_at:

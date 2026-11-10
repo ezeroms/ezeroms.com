@@ -352,3 +352,25 @@ body.is-id-gen .layout-container {
   font-size: 0.875rem;
   line-height: 1.55;
 }
+
+/* 固定見出しの All。矢印だけ、たまに少し右へ寄る。 */
+@keyframes home-all-chevron {
+  0%,
+  55%,
+  100% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+.home-all-chevron {
+  animation: home-all-chevron 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-all-chevron {
+    animation: none;
+  }
+}

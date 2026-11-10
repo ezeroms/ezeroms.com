@@ -260,6 +260,8 @@ export type TopImage = {
   alt: string | null;
   location: string | null;
   captured_year: number | null;
+  /** 場所・年の右に出す短い一文。空なら出さない。 */
+  message: string | null;
   sort_order: number;
   status: ContentStatus;
   published_at: string | null;
