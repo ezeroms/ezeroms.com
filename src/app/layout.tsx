@@ -38,8 +38,12 @@ export default async function RootLayout({
     pathname === "/admin" ||
     pathname === "/admin/" ||
     pathname.startsWith("/admin/");
+  const isPrivateTool =
+    pathname === "/tools" ||
+    pathname === "/tools/" ||
+    pathname.startsWith("/tools/");
   const gaId = process.env.NEXT_PUBLIC_GA_ID?.trim();
-  const enableGa = Boolean(gaId) && !isAdmin;
+  const enableGa = Boolean(gaId) && !isAdmin && !isPrivateTool;
 
   return (
     <html lang="ja">

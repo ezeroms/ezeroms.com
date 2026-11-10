@@ -190,6 +190,14 @@ body.is-home .layout-body {
   background: #fff !important;
 }
 
+/* Private generator: one white canvas, matching the sidebar and cards. */
+body.is-id-gen .layout-container {
+  --background: 0 0% 100%;
+  --color-background: #ffffff;
+  --ez-bg: #ffffff;
+  background: #fff;
+}
+
 /*
  * Diary / Column / Photos / Library: paper-white canvas.
  * Legacy `.layout-container` uses `--color-background` (#f9f9f7).

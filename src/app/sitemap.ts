@@ -41,6 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             : 0.5,
   }));
 
+  // 個人用 /tools/ は noindex。サイトマップには載せない。
   const entries: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/diary/`, changeFrequency: "daily", priority: 0.9 },
