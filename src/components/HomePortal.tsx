@@ -554,13 +554,18 @@ function ClipIndex({ items }: { items: HomeClipItem[] }) {
     <ul className={cn("m-0 flex list-none flex-col gap-12 p-0", homeListClass)}>
       {items.map((item) => (
         <li key={item.id}>
-          <article className={cn(homeArticleClass, "flex items-center gap-4 min-[768px]:gap-8")}>
+          <article
+            className={cn(
+              homeArticleClass,
+              "flex flex-col gap-3 min-[768px]:flex-row min-[768px]:items-center min-[768px]:gap-8",
+            )}
+          >
             <HomeArticleLink href={item.href} external label={item.title} />
             {item.image ? (
               <OgFrame
                 src={item.image}
                 rounded
-                className="w-32 shrink-0 min-[768px]:w-64"
+                className="w-full min-[768px]:w-64 min-[768px]:shrink-0"
               />
             ) : null}
             <div className="min-w-0 flex-1">
