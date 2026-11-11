@@ -241,37 +241,50 @@ function HomeMemory() {
     : null;
   const message = image?.message ?? null;
 
+  const memoryFrameClass =
+    "-mx-5 block h-auto w-[calc(100%+2.5rem)] max-w-none rounded-none min-[768px]:mx-0 min-[768px]:w-full min-[768px]:rounded-lg";
+
   return (
-    <figure id="home-memory" className="m-0 mt-12 w-full text-left min-[768px]:mt-16">
+    <figure id="home-memory" className="m-0 mt-12 w-full min-[768px]:mt-16">
       {phase !== "ready" || !image ? (
-        <div className="aspect-video w-full rounded-lg bg-muted" aria-hidden />
+        <div className={cn("aspect-video bg-muted", memoryFrameClass)} aria-hidden />
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={image.image_url}
           alt={image.alt || caption || ""}
-          className="m-0 block h-auto w-full rounded-lg"
+          className={cn("m-0", memoryFrameClass)}
         />
       )}
-      <div className="mt-3 flex flex-col gap-2 min-[768px]:flex-row min-[768px]:items-center min-[768px]:justify-between min-[768px]:gap-3">
-        {caption || message ? (
-          <figcaption className="m-0 min-w-0 text-sm leading-snug text-muted-foreground min-[768px]:flex-1 min-[768px]:leading-none">
-            {caption ? <span>{caption}</span> : null}
-            {message ? (
-              <span className={caption ? "ml-3 min-[768px]:ml-3.5" : undefined}>
-                {message}
-              </span>
-            ) : null}
-          </figcaption>
-        ) : (
-          <span className="hidden min-[768px]:block min-[768px]:min-w-0 min-[768px]:flex-1" />
-        )}
+      <div className="mt-3 min-[768px]:flex min-[768px]:items-center min-[768px]:justify-between min-[768px]:gap-3">
+        <figcaption className="m-0 min-w-0 max-w-full text-right text-sm leading-relaxed text-muted-foreground min-[768px]:flex-1 min-[768px]:text-left min-[768px]:leading-none">
+          {caption ? <span>{caption}</span> : null}
+          {message ? (
+            <span className={caption ? "ml-3 min-[768px]:ml-2.5" : undefined}>
+              {message}
+            </span>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => void recall()}
+            disabled={busy || phase !== "ready"}
+            aria-busy={busy}
+            aria-label="Another moment"
+            className="relative ml-1.5 inline-flex -mr-1.5 -translate-y-[2px] cursor-pointer items-center rounded-full border-0 bg-transparent p-1.5 align-middle font-[inherit] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-default disabled:opacity-60 min-[768px]:hidden"
+          >
+            <RefreshCw
+              aria-hidden
+              className={cn("size-3.5", busy && "animate-spin")}
+              strokeWidth={1.75}
+            />
+          </button>
+        </figcaption>
         <button
           type="button"
           onClick={() => void recall()}
           disabled={busy || phase !== "ready"}
           aria-busy={busy}
-          className="inline-flex -mr-3 shrink-0 cursor-pointer items-center gap-2 self-end rounded-full border-0 bg-transparent px-3 py-1 font-[inherit] text-sm leading-none text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-default disabled:opacity-60"
+          className="hidden shrink-0 cursor-pointer items-center gap-2 rounded-full border-0 bg-transparent px-3 py-1 font-[inherit] text-sm leading-none text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:cursor-default disabled:opacity-60 min-[768px]:-mr-3 min-[768px]:inline-flex"
         >
           <RefreshCw
             aria-hidden
@@ -386,7 +399,7 @@ function DiaryDateTitle({ iso }: { iso: string }) {
         <span className={cn(displayTitleClass, "tabular-nums")}>
           {monthNum}/{day}
         </span>
-        <span className="mb-1 flex flex-col text-[0.7rem] font-normal uppercase leading-tight tracking-[0.14em] text-muted-foreground">
+        <span className="mb-1 flex flex-row items-baseline gap-1.5 text-[0.7rem] font-normal uppercase leading-tight tracking-[0.14em] text-muted-foreground min-[768px]:flex-col min-[768px]:gap-0">
           <span>{weekday}</span>
           <span>
             {month} {year}
@@ -402,7 +415,12 @@ function DiaryList({ items }: { items: HomeWritingItem[] }) {
     <ul className={cn("m-0 flex list-none flex-col gap-12 p-0", homeListClass)}>
       {items.map((item) => (
         <li key={item.id}>
-          <article className={cn(homeArticleClass, "flex items-center gap-4 min-[768px]:gap-8")}>
+          <article
+            className={cn(
+              homeArticleClass,
+              "flex flex-col gap-3 min-[768px]:flex-row min-[768px]:items-center min-[768px]:gap-8",
+            )}
+          >
             <HomeArticleLink
               href={item.href}
               label={item.headline ? `${item.dateLabel} ${item.headline}` : item.dateLabel}
@@ -411,8 +429,8 @@ function DiaryList({ items }: { items: HomeWritingItem[] }) {
               <OgFrame
                 src={item.image}
                 rounded
-                /* 1200/630。この幅のとき高さが日付＋3行＋タグと揃う。 */
-                className="w-32 shrink-0 min-[768px]:w-[20.119rem]"
+                /* 768px以上は 1200/630。この幅のとき高さが日付＋3行＋タグと揃う。 */
+                className="w-full min-[768px]:w-[20.119rem] min-[768px]:shrink-0"
               />
             ) : null}
             <div className="min-w-0 flex-1">
@@ -443,7 +461,7 @@ function WritingIndex({ items }: { items: HomeWritingItem[] }) {
               <OgFrame src={item.image} rounded className="mb-3" />
             ) : null}
             <Dateline dateLabel={item.dateLabel} dateTime={item.dateTime} />
-            <h3 className="m-0 mt-3 line-clamp-3 text-xl font-medium leading-normal text-foreground">
+            <h3 className="m-0 mt-3 line-clamp-3 text-lg font-medium leading-normal text-foreground min-[768px]:text-xl">
               {item.headline}
             </h3>
             <HomeTags tags={item.tags} className="mt-4" />
@@ -642,7 +660,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               className="mx-auto block h-auto w-[13rem] min-[768px]:w-[16.5rem]"
             />
           </h1>
-          <p className="m-0 mt-5 text-base italic leading-relaxed text-muted-foreground">
+          <p className="m-0 mt-5 text-sm italic leading-relaxed text-muted-foreground min-[768px]:text-base">
             One thing I can tell you is you got to be free!
           </p>
           <HomeMemory />

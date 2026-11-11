@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { cn } from "@/lib/cn";
 import { AdminClickableRow } from "@/components/admin/AdminClickableRow";
 import { OpenContentButton } from "@/components/admin/OpenContentButton";
 import { TopImageEditModal } from "@/components/admin/TopImageEditModal";
@@ -22,6 +23,7 @@ export type AdminTopImageTableItem = {
   image_url: string | null;
   location: string | null;
   captured_year: number | null;
+  message: string | null;
   sort_order: number;
   status: string;
   editor: TopImageEditorInitial;
@@ -47,14 +49,19 @@ export function AdminTopImageListTable({ items, empty }: Props) {
 
   return (
     <>
-      <table className={adminListTableClassName}>
+      <table className={cn(adminListTableClassName, "min-w-[60rem]")}>
         <thead>
           <tr className={adminListHeadRowClassName}>
             <th className={`w-16 ${adminListThClassName}`}>画像</th>
             <th className={adminListThClassName}>ファイル名</th>
             <th className={adminListThClassName}>場所・年</th>
-            <th className={`w-20 ${adminListThClassName}`}>表示順</th>
-            <th className={`w-24 ${adminListThClassName}`}>ステータス</th>
+            <th className={`min-w-[14rem] ${adminListThClassName}`}>Message</th>
+            <th className={`w-20 whitespace-nowrap ${adminListThClassName}`}>
+              表示順
+            </th>
+            <th className={`w-24 whitespace-nowrap ${adminListThClassName}`}>
+              ステータス
+            </th>
             <th className={`w-16 ${adminListThClassName} text-right`}>
               <span className="sr-only">操作</span>
             </th>
@@ -81,11 +88,22 @@ export function AdminTopImageListTable({ items, empty }: Props) {
                 {captionLabel(item)}
               </td>
               <td
+                className={`min-w-[14rem] max-w-[20rem] ${adminListTdClassName} text-muted-foreground`}
+              >
+                {item.message ? (
+                  <span className="line-clamp-2" title={item.message}>
+                    {item.message}
+                  </span>
+                ) : (
+                  "—"
+                )}
+              </td>
+              <td
                 className={`whitespace-nowrap ${adminListTdClassName} text-muted-foreground`}
               >
                 {item.sort_order}
               </td>
-              <td className={adminListTdClassName}>
+              <td className={`whitespace-nowrap ${adminListTdClassName}`}>
                 <AdminListStatus status={item.status} />
               </td>
               <AdminListActionsCell>
@@ -94,7 +112,7 @@ export function AdminTopImageListTable({ items, empty }: Props) {
             </AdminClickableRow>
           ))}
           {empty ? (
-            <AdminListEmptyRow colSpan={6}>まだ画像がありません</AdminListEmptyRow>
+            <AdminListEmptyRow colSpan={7}>まだ画像がありません</AdminListEmptyRow>
           ) : null}
         </tbody>
       </table>

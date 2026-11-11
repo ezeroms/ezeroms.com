@@ -32,6 +32,7 @@ function mapRows(data: Record<string, unknown>[] | null): AdminTopImageTableItem
         captured_year != null && Number.isFinite(captured_year)
           ? captured_year
           : null;
+      const message = String(row.message ?? "").trim() || null;
       const sort_order = Number(row.sort_order ?? 0) || 0;
       const status = String(row.status ?? "published");
 
@@ -41,6 +42,7 @@ function mapRows(data: Record<string, unknown>[] | null): AdminTopImageTableItem
         image_url,
         location,
         captured_year: yearOk,
+        message,
         sort_order,
         status,
         editor: {
