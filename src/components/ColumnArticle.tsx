@@ -2,6 +2,7 @@ import { ArticleProse } from "@/components/ArticleProse";
 import Link from "next/link";
 import type { Column } from "@/types/content";
 import { formatColumnDate } from "@/lib/content/column-meta";
+import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
 import { serializeColumnFilter, emptyColumnFilter } from "@/lib/content/column-filter";
 import { prepareColumnToc } from "@/lib/content/column-toc";
 import { cn } from "@/lib/cn";
@@ -27,6 +28,7 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
   const tags = [...(item.column_tag ?? [])].sort((a, b) =>
     a.localeCompare(b, "ja"),
   );
+  const ogImage = item.og_image.trim();
 
   return (
     <div className="w-full font-sans text-foreground">
@@ -53,6 +55,22 @@ export function ColumnArticle({ item, bodyHtml }: Props) {
                 {tag}
               </Link>
             ))}
+          </div>
+        ) : null}
+
+        {ogImage ? (
+          <div
+            className={cn(
+              "mt-8 overflow-hidden rounded-lg bg-muted",
+              OG_IMAGE_ASPECT_CLASS,
+            )}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={ogImage}
+              alt=""
+              className="m-0 block h-full w-full object-cover"
+            />
           </div>
         ) : null}
 
