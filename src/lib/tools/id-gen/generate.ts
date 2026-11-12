@@ -14,7 +14,7 @@ const DIGITS = "0123456789";
 export const PASSWORD_SYMBOLS = "!@#$%^&*_-";
 const EMAIL_BODY = `${LOWER}${DIGITS}`;
 const EMAIL_LOCAL_LENGTH = 16;
-export const DEFAULT_EMAIL_DOMAIN = "ezeroms.com";
+export const DEFAULT_EMAIL_DOMAIN = "example.com";
 const EMAIL_DOMAIN_PATTERN =
   /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/;
 
