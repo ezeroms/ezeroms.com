@@ -54,6 +54,11 @@ type Props = {
    * 未指定は従来どおり（一覧の stretch / 3:2）。
    */
   thumbAspect?: "og";
+  /**
+   * トップのコラムと同じ、記事全体が bg-muted になるホバー。
+   * 余白は外へ広げて、文字や画像の位置は動かさない。
+   */
+  hoverSurface?: boolean;
 };
 
 function EntryLink({
@@ -112,6 +117,7 @@ export function ContentThumbCard({
   chrome = "card",
   external = false,
   thumbAspect,
+  hoverSurface = false,
 }: Props) {
   const plain = chrome === "plain";
   const ogThumb = thumbAspect === "og";
@@ -129,7 +135,15 @@ export function ContentThumbCard({
     ) : null;
 
   return (
-    <article className={plain ? "min-w-0" : contentCard({ link: true })}>
+    <article
+      className={
+        hoverSurface
+          ? "relative -mx-3 -my-4 min-w-0 rounded-xl px-3 py-4 transition-colors hover:bg-muted focus-within:bg-muted"
+          : plain
+            ? "min-w-0"
+            : contentCard({ link: true })
+      }
+    >
       <div
         className={cn(
           plain
@@ -201,7 +215,9 @@ export function ContentThumbCard({
             {showTitle ? (
               <h2
                 className={cn(
-                  "m-0 font-semibold leading-normal tracking-tight text-foreground group-hover:underline group-hover:underline-offset-2",
+                  "m-0 font-semibold leading-normal tracking-tight text-foreground",
+                  !hoverSurface &&
+                    "group-hover:underline group-hover:underline-offset-2",
                   plain ? "text-lg" : "text-base",
                   clampTitle && "line-clamp-2",
                 )}

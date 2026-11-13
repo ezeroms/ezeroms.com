@@ -82,6 +82,7 @@ export function ColumnList({
             }
             chrome="plain"
             thumbAspect="og"
+            hoverSurface
           />
         );
       })}
