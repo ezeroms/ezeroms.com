@@ -8,6 +8,7 @@ import {
 import { Upload, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
+import { compressImageForUpload } from "@/lib/media/client-compress-image";
 import { cn } from "@/lib/cn";
 
 type Props = {
@@ -63,24 +64,42 @@ export function OgImageField({
     setUploadError(null);
     setUploading(true);
     try {
+      const prepared = await compressImageForUpload(file);
       const fd = new FormData();
-      fd.set("file", file);
+      fd.set("file", prepared);
       fd.set("kind", uploadKind);
       const res = await fetch("/api/admin/media/og/upload/", {
         method: "POST",
         body: fd,
       });
-      const data = (await res.json()) as {
-        error?: string;
-        image_url?: string;
-      };
+      const rawText = await res.text();
+      let data: { error?: string; image_url?: string } = {};
+      try {
+        data = JSON.parse(rawText) as typeof data;
+      } catch {
+        const tooLarge =
+          res.status === 413 ||
+          /request entity too large|payload too large|body.*limit/i.test(
+            rawText,
+          );
+        setUploadError(
+          tooLarge
+            ? "画像が大きすぎてアップロードできませんでした。もう少し小さい画像でお試しください。"
+            : `画像アップロードの応答が不正です（HTTP ${res.status}）`,
+        );
+        return;
+      }
       if (!res.ok || !data.image_url) {
         setUploadError(data.error || "アップロードに失敗しました");
         return;
       }
       onChange(data.image_url);
-    } catch {
-      setUploadError("通信エラーが発生しました");
+    } catch (error) {
+      setUploadError(
+        error instanceof Error
+          ? error.message
+          : "通信エラーが発生しました",
+      );
     } finally {
       setUploading(false);
     }
