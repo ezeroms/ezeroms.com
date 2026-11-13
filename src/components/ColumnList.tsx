@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Column } from "@/types/content";
 import {
   ContentThumbCard,
@@ -8,6 +9,7 @@ import {
   columnThumbSrc,
   formatColumnDate,
 } from "@/lib/content/column-meta";
+import { columnTagHref } from "@/lib/content/column-filter";
 import { tagPillClass } from "@/lib/site/tag-styles";
 
 type Props = {
@@ -71,12 +73,13 @@ export function ColumnList({
             footer={
               tags.length
                 ? tags.slice(0, 4).map((tag) => (
-                    <span
+                    <Link
                       key={tag}
+                      href={columnTagHref(tag)}
                       className={tagPillClass(currentTag === tag)}
                     >
                       {tag}
-                    </span>
+                    </Link>
                   ))
                 : null
             }
