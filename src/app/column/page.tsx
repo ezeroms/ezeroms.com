@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
 import { ColumnFilterPanel } from "@/components/ColumnFilterPanel";
-import { ColumnList } from "@/components/ColumnList";
 import { SiteShell } from "@/components/SiteShell";
 import { ReadingTagsAside } from "@/components/ReadingTagsAside";
+import {
+  writingColumnClass,
+  WritingIndexList,
+} from "@/components/WritingIndexList";
+import {
+  columnExcerpt,
+  columnThumbSrc,
+  formatColumnDate,
+} from "@/lib/content/column-meta";
+import { cn } from "@/lib/cn";
 import {
   columnFilterActive,
   columnTagHref,
@@ -62,6 +71,7 @@ export default async function ColumnIndexPage({
         />
       }
       mainClassName="layout-main--single"
+      contentClassName="p-0"
       breadcrumbFilter={filtering ? summarizeColumnFilter(filter) : null}
       breadcrumbSectionHref="/column/"
       aside={
@@ -75,12 +85,37 @@ export default async function ColumnIndexPage({
         ) : undefined
       }
     >
-      <ColumnList
-        items={listed.items}
-        listId="column-articles-list"
-        fallbackThumbSrc={section.og_image || null}
-        currentTag={filter.tags.length === 1 ? filter.tags[0] : undefined}
-      />
+      <div className={cn(writingColumnClass, "pb-16 pt-8")}>
+        <WritingIndexList
+          listId="column-articles-list"
+          empty="まだ記事がありません。"
+          items={listed.items.map((item) => {
+            const tags = [...(item.column_tag ?? [])].sort((a, b) =>
+              a.localeCompare(b, "ja"),
+            );
+            return {
+              id: item.id,
+              href: `/column/${item.slug}/`,
+              label: item.title,
+              image: columnThumbSrc(
+                item.body_html,
+                item.og_image,
+                item.slug,
+                section.og_image || null,
+              ),
+              dateLabel: formatColumnDate(item.date),
+              dateTime: item.date,
+              title: item.title,
+              excerpt: columnExcerpt(item.body_html, 160),
+              tags: tags.slice(0, 4).map((tag) => ({
+                label: tag,
+                href: columnTagHref(tag),
+                active: filter.tags.length === 1 && filter.tags[0] === tag,
+              })),
+            };
+          })}
+        />
+      </div>
     </SiteShell>
   );
 }

@@ -59,7 +59,7 @@ function homeTags(
 }
 
 const DIARY_COUNT = 5;
-const COLUMN_COUNT = 4;
+const COLUMN_COUNT = 6;
 const PHOTO_COUNT = 6;
 const CLIP_COUNT = 5;
 const GIANT_COUNT = 4;

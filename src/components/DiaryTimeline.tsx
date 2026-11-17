@@ -22,6 +22,8 @@ type Props = {
   hideEmpty?: boolean;
   /** ページ側に #notification があるとき二重に出さない */
   showNotification?: boolean;
+  /** カレンダーの下など、上余白を差し替える */
+  listClassName?: string;
 };
 
 /**
@@ -34,6 +36,7 @@ export function DiaryTimeline({
   focusSlug,
   hideEmpty,
   showNotification = true,
+  listClassName,
 }: Props) {
   const [activeFocus, setActiveFocus] = useState<string | undefined>(focusSlug);
 
@@ -82,7 +85,12 @@ export function DiaryTimeline({
       ) : null}
 
       <div className="w-full font-sans" id="diary-list">
-        <div className="mx-auto flex w-full max-w-2xl flex-col gap-16 pt-8">
+        <div
+          className={cn(
+            "mx-auto flex w-full max-w-2xl flex-col gap-16 pt-8",
+            listClassName,
+          )}
+        >
           {items.map((item) => {
             const isFocused = activeFocus === item.slug;
             const permalink = diaryPermalink(item.slug);
@@ -92,7 +100,7 @@ export function DiaryTimeline({
                 key={item.id}
                 id={item.slug}
                 className={cn(
-                  "overflow-visible",
+                  "scroll-mt-[4.5rem] overflow-visible min-[1080px]:scroll-mt-[3.75rem]",
                   hasFocus && !isFocused && "opacity-40",
                 )}
               >

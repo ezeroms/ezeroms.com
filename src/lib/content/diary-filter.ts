@@ -109,6 +109,14 @@ export function dateMatchesWeekdays(iso: string, weekdays: number[]): boolean {
   return weekdays.includes(day);
 }
 
+/** 一覧のタグ。コラムと同じく、ダイアリー一覧をそのタグで絞り込む。 */
+export function diaryListTagHref(tag: string): string {
+  return `/diary/${serializeDiaryFilter({
+    ...emptyDiaryFilter(),
+    tags: [tag],
+  })}`;
+}
+
 export function diaryTagHref(tag: string): string {
   return `/diary_tag/${encodeURIComponent(tag)}/`;
 }

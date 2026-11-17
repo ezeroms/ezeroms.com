@@ -21,6 +21,7 @@ import type {
 import { OG_IMAGE_ASPECT_CLASS } from "@/lib/content/og-image";
 import { contentCard } from "@/lib/site/card-styles";
 import { tagPillClass } from "@/lib/site/tag-styles";
+import { writingColumnClass } from "@/components/WritingIndexList";
 import { cn } from "@/lib/cn";
 
 /** 記事全体のホバー面。中の余白と同じだけ外へ広げ、並びの位置は変えない。 */
@@ -29,9 +30,6 @@ const homeArticleClass =
 
 /** 先頭記事の上にはみ出しを見出しの下で受け止める。 */
 const homeListClass = "pt-4";
-
-const columnClass =
-  "mx-auto w-full max-w-5xl px-5 min-[768px]:px-10 min-[1080px]:px-12";
 
 /**
  * 見出しの上余白。固定の前後で同じにして、固まった瞬間に下がらないようにする。
@@ -87,7 +85,7 @@ function SectionRule({
     <>
       <div ref={sentinelRef} aria-hidden className="h-0" />
       <div className="sticky top-14 z-10 bg-white min-[1080px]:top-0">
-        <div className={cn(columnClass, headingStickPadClass)}>
+        <div className={cn(writingColumnClass, headingStickPadClass)}>
           <h2 id={id} className={cn("m-0", displayTitleClass)}>
             {title}
           </h2>
@@ -98,7 +96,7 @@ function SectionRule({
         {stuck && moreHref ? (
           <div
             className={cn(
-              columnClass,
+              writingColumnClass,
               "pointer-events-none absolute inset-0 flex items-center justify-end",
             )}
           >
@@ -652,7 +650,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
       <div className="bg-white pb-8 min-[768px]:pb-12 min-[1080px]:pb-14">
         <div
           className={cn(
-            columnClass,
+            writingColumnClass,
             "pb-16 pt-14 text-center min-[768px]:pb-20 min-[768px]:pt-16",
           )}
         >
@@ -684,7 +682,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               dek="日記"
               moreHref={data.diaryHref}
             />
-            <div className={columnClass}>
+            <div className={writingColumnClass}>
               <DiaryList items={data.diaries} />
             </div>
           </section>
@@ -701,7 +699,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               dek="コラム"
               moreHref={data.columnHref}
             />
-            <div className={columnClass}>
+            <div className={writingColumnClass}>
               <WritingIndex items={data.columns} />
             </div>
           </section>
@@ -718,7 +716,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               dek="笑顔の写真"
               moreHref={data.smileHref}
             />
-            <div className={columnClass}>
+            <div className={writingColumnClass}>
               <PhotoBlock items={data.smile} />
             </div>
           </section>
@@ -735,7 +733,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               dek="麻雀牌の写真"
               moreHref={data.jampaiHref}
             />
-            <div className={columnClass}>
+            <div className={writingColumnClass}>
               <PhotoBlock items={data.jampai} />
             </div>
           </section>
@@ -752,7 +750,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               dek="気になるニュース、話題"
               moreHref={data.clipsHref}
             />
-            <div className={columnClass}>
+            <div className={writingColumnClass}>
               <ClipIndex items={data.clips} />
             </div>
           </section>
@@ -771,7 +769,7 @@ export function HomePortal({ data }: { data: HomePortalData }) {
               dek="先人の知恵"
               moreHref={data.giantsHref}
             />
-            <div className={columnClass}>
+            <div className={writingColumnClass}>
               <GiantIndex items={data.giants} />
             </div>
           </section>
